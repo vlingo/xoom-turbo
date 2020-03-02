@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Management endpoint for step flows">
+    <meta name="author" content="Vlingo">
+
+    <title>Vlingo Step Flows</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:300&display=swap">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/main.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Angular -->
+    <script src="static/js/util/angular-1.4.8.min.js"></script>
+    <script src="static/js/util/angular-route-1.4.8.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="static/js/util/jquery-2.2.4.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/js/util/bootstrap.min.js"></script>
+</head>
+<body ng-app="myApp">
+
+<!-- Page Content -->
+<div class="container">
+    <div class="ng-view"></div>
+</div>
+
+<!-- Modal Dialog -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="errorLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="errorLabel">Error</h4></div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
+
+<!-- JS clients -->
+<script src="static/js/client/dispatcher/dispatcher.js"></script>
+<script src="static/js/client/api/flow-client.js"></script>
+
+<!-- D3 -->
+<script src="static/js/util/d3.v3.min.js" charset="utf-8"></script>
+<script src="static/js/util/dagre-d3.min.js"></script>
+
+<!-- Angular Root -->
+<script src="static/js/root.js"></script>
+
+</body>
+</html>
