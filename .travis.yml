@@ -1,0 +1,34 @@
+language: java
+jdk:
+  - openjdk11
+dist: trusty
+before_install:
+  - cd ${TRAVIS_BUILD_DIR}/..
+  - git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-common.git
+  - cd vlingo-common && mvn install -DskipTests=true
+  - cd ${TRAVIS_BUILD_DIR}/..
+  - git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-actors.git
+  - cd vlingo-actors && mvn install -DskipTests=true
+  - cd ${TRAVIS_BUILD_DIR}/..
+  - git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-wire.git
+  - cd vlingo-wire && mvn install -DskipTests=true
+  - cd ${TRAVIS_BUILD_DIR}
+  - git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-http.git
+  - cd vlingo-http && mvn install -DskipTests=true
+  - cd ${TRAVIS_BUILD_DIR}
+script:
+- mvn install -PTravisCI
+deploy:
+  provider: bintray
+  file: bintray.json
+  skip_cleanup: true
+  user: vaughnvernon
+  on:
+    branch: master
+  key:
+    secure: F0dI4NaYjj1e4D0BXMOvs3SmHcQS14vFP3uZ1xB5nu3xz7RuKuD98/N7/inclY4NTSKsLwz3JhO64PV8SPLbNDXUIKNRyuyQwQ69SyVDnhgEQoLBHLewbLJzC49eeY3rvmVRJc4hzWZqEoy4cxILqKdz17xyYJB+3gxQ5Na+YAUwtmVebzZT20y4nLY1ssY4CwjEiTZhSwW42qiRRb6NUf3Aotawfa5kLHO4qAzUc1UibpY1vnsTVp6ZkWKZgtWJLAUZqntES1MczF9BA9oWQf42WGCCrmIxG8ik4DDYaoy+YC0d3BifTdDhsi57T+nXrH+V4sXfyI0bBLediMsUstC+2omWMQd9xCr3HtdS4vRjHrutH/fCi2C9FhIFK1MyrlWbMvzH9W2yJ7xIktKPpp+tQttUNnfxtejwY5kkLgYuldFfrBwFRW4F/CZ0f5FLEqA4rDQ0kM/Dbs+KR+DIKilK/GYw9ZSsGcNDFhj84CrqsKgWZlUUA8DtAcqo30L2gEf5CND9aHbrj4m9P7LTgfSnoh1m1KivC/fOsl0A4K6bN2ZyS7ncE1QKXL85Me9Fglmgt7kbH3zu2ulBheJY9RjmfPjyuGMlkaBwJ/10fbOeSot/JZ2WDXTQ2PNWS0Ih0KC5M+bBYo7UMtWfNV7oVRuxmfjYuVxt6jJSdmJ+vTo=
+  passphrase:
+    secure: DWcRNjvNOjEB3iTIEmCIipVSPX12SXUiUgHzF4CtH7ZxyQzzsJzUsVweycrPcOe65SLZXZT4pkCMZiqd7joad3sG/J3s8SK8RAnuqqcPCn0or3yQrXqWJI6ux8QRV6vVb9DsRJNWQfu+PbsFCoQ1FqEaa60psjBwMeC2lbWU5ZwLxyuumuCDGlTrCJQHPZ6kVSevf/lCU2MO2KHSS76zTSKgPrE9p93Wfq4UswZWy+WRzBqYKosiu9pM0N1YExQxkLPZm128X8a+2C/nhCXSkEN9c2IOHim7w73eihAiQC63B4xKFpsyoZaPURdeEArDS0n5FvFOAlOF1wvIujqwBwsD+3AOMTNhM19iuSZ8S91LVewXEfbCj1VCXknnq3kYSm7w6IUdEfjDX4wYBwaIlyIv8tBHU9qD04u4aUFqA+BpykhfYXXtLW+scWedjbA4ALbK79sz1BIG/pBFP6Vch6dMAA2MF2z2Qtyq/hEZhItuDi+rl9iiwvUfbDRHnBvbPr7+qygNvaGIl/hflaQLejckdJ7nw8TJf5IXmJpZMsjtKYW29t66W2Bipbllc0HqzMwfG1+WAkIItNJKRSHkbbL7ggkgED9py8sLKs+ITFMUKBghfeOEv420v31r5x7MjN3hK+mokxz0IDmWseXKeZ+6EYEDefmia17hEkCJiiM=
+notifications:
+  slack:
+    secure: AgEmeaQl5W+pb11ThGexSGdjQGHnkpOmRiQRBQbpcbG+B9JrItWirboKbLN4MlLMFz+sAX3IBI9LY09IcWT/ycmn4rXDIdfdfzH3edS5PXUkUZ3Ew8IaQ641OqZqhg/CbvacD/Pyv2gGCvF5UfRfKVrsNa7rQkGefP1mkQ4Z71bVxe+sokVDZYyInwVD5VuxIDCsmuM6AsbpQo8vGa6LvMlnqNhC5AYuOwWRntqrb6ncNYwuPUw5zT5cG43qr3iIlBP9uOr7+wgg1cAysMs3kd2uyq5g0hKvKY/HqW++BO7qWNLwnBdTcU0ibbr17znXfbgSfhG0shHWrzVE81hkAMpVD5uxWA1O6+VFnXvhicGQyZPR9zD4tyO1cge9KulU3xW2ZSO+vWJ0LahaszngFRaMETl7JtVddYJ8uT0Bsq8YyEaP9yOrXggt+MTp2XxtmTFCFdLs2T2BG7Ujz6+DsxbghYdTYN6lmhyZZSzPKqz/5/gpyo6HbP0byc4LQUM59RsG+sLckh9/FQHBAPwKgplcwiszMik/a2KnAlBrTasoXFWkfqeXrQJnZuDZp+JMs5Z9UMZeaGKrn+si8olBcMYEKOeoGsy2UrbSOMvwlew94C+6gSLfKOKhDswsCuMEj6B4ZAl4L1T3cvRRrVyViilTKbzhs9b2QBNXBBktJ2k=
