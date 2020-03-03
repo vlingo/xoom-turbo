@@ -6,15 +6,17 @@
   <artifactId>vlingo-xoom-server</artifactId>
   <version>1.2.6</version>
 
-  <description>Reactive, scalable, and resilient HTTP servers and RESTful services running on vlingo/cluster and vlingo/actors.</description>
+  <description>The vlingo/xoom server provides a JVM microframework for the vlingo/PLATFORM that helps in building high-performance reactive microservices.</description>
   <name>vlingo-xoom-server</name>
   <url>https://github.com/vlingo/vlingo-xoom-server</url>
+  
   <licenses>
     <license>
       <name>Mozilla Public License 2.0</name>
       <url>https://mozilla.org/MPL/2.0/</url>
     </license>
   </licenses>
+  
   <developers>
     <developer>
       <id>kbastani</id>
