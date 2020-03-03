@@ -22,6 +22,14 @@
       <email>kennybastani@gmail.com</email>
     </developer>
   </developers>
+
+  <repositories>
+    <repository>
+      <id>jcenter.bintray.com</id>
+      <url>https://jcenter.bintray.com</url>
+    </repository>
+  </repositories>
+
   <scm>
     <connection>scm:git:git://github.com/vlingo/vlingo-xoom-server.git</connection>
     <developerConnection>scm:git:ssh://github.com/vlingo/vlingo-xoom-server.git</developerConnection>
