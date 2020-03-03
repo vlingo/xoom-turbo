@@ -1,21 +1,21 @@
 language: java
 jdk:
-  - openjdk11
+- openjdk11
 dist: trusty
 before_install:
-  - cd ${TRAVIS_BUILD_DIR}/..
-  - git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-common.git
-  - cd vlingo-common && mvn install -DskipTests=true
-  - cd ${TRAVIS_BUILD_DIR}/..
-  - git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-actors.git
-  - cd vlingo-actors && mvn install -DskipTests=true
-  - cd ${TRAVIS_BUILD_DIR}/..
-  - git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-wire.git
-  - cd vlingo-wire && mvn install -DskipTests=true
-  - cd ${TRAVIS_BUILD_DIR}
-  - git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-http.git
-  - cd vlingo-http && mvn install -DskipTests=true
-  - cd ${TRAVIS_BUILD_DIR}
+- cd ${TRAVIS_BUILD_DIR}/..
+- git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-common.git
+- cd vlingo-common && mvn install -DskipTests=true
+- cd ${TRAVIS_BUILD_DIR}/..
+- git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-actors.git
+- cd vlingo-actors && mvn install -DskipTests=true
+- cd ${TRAVIS_BUILD_DIR}/..
+- git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-wire.git
+- cd vlingo-wire && mvn install -DskipTests=true
+- cd ${TRAVIS_BUILD_DIR}
+- git clone --depth=50 --branch=master https://github.com/vlingo/vlingo-http.git
+- cd vlingo-http && mvn install -DskipTests=true
+- cd ${TRAVIS_BUILD_DIR}
 script:
 - mvn install -PTravisCI
 deploy:
@@ -26,7 +26,7 @@ deploy:
   on:
     branch: master
   key:
-    secure: F0dI4NaYjj1e4D0BXMOvs3SmHcQS14vFP3uZ1xB5nu3xz7RuKuD98/N7/inclY4NTSKsLwz3JhO64PV8SPLbNDXUIKNRyuyQwQ69SyVDnhgEQoLBHLewbLJzC49eeY3rvmVRJc4hzWZqEoy4cxILqKdz17xyYJB+3gxQ5Na+YAUwtmVebzZT20y4nLY1ssY4CwjEiTZhSwW42qiRRb6NUf3Aotawfa5kLHO4qAzUc1UibpY1vnsTVp6ZkWKZgtWJLAUZqntES1MczF9BA9oWQf42WGCCrmIxG8ik4DDYaoy+YC0d3BifTdDhsi57T+nXrH+V4sXfyI0bBLediMsUstC+2omWMQd9xCr3HtdS4vRjHrutH/fCi2C9FhIFK1MyrlWbMvzH9W2yJ7xIktKPpp+tQttUNnfxtejwY5kkLgYuldFfrBwFRW4F/CZ0f5FLEqA4rDQ0kM/Dbs+KR+DIKilK/GYw9ZSsGcNDFhj84CrqsKgWZlUUA8DtAcqo30L2gEf5CND9aHbrj4m9P7LTgfSnoh1m1KivC/fOsl0A4K6bN2ZyS7ncE1QKXL85Me9Fglmgt7kbH3zu2ulBheJY9RjmfPjyuGMlkaBwJ/10fbOeSot/JZ2WDXTQ2PNWS0Ih0KC5M+bBYo7UMtWfNV7oVRuxmfjYuVxt6jJSdmJ+vTo=
+    secure: Rd0XotOW2kvUK7hQ/nFJle4VpaBkDkOeWHIDArLRX1OoLuQU5nQS3vUPlZWWqiy82aSa6Ra0ODpdSX+WuO5kDbGXviEVYjSYKvaLZQAldASfSaUV3sMJzpmgCPW56IXY0iCnSE5evbPIVpYvgc8pe/KRafUxRWhywtBesHIucBZzW8YK9dc1XjI+t3xYw05Oji0lvHoVTbouNw1xbnpae56vwzKNhXhnjA1jIeNruRo5Pgz1oGoF1n/olV1SHdXI6l6amarzjm2CbAN8WIW+6+S29Tx541OSp4QoEKD3fgiwM6OnfMOAuopJvD1KG11qlIldhDhq+Dzh8BYDZxC7H0L2EnNRe1f9xyIAF7xFIah5+v1rpIR5wy6Nmi5VTSlrFdfuPszHhoOk+V6a34KZWwGgDt8Na7f1JtwqPCaYNPfmzzmfOr6EMjfnfeXgx5eomFAtBgJRKT8IELYQ5UcsFfmD88kvU33CPETSCzSyror+YUZlW+at/IjkV57PFSYkVuOfAaeHBEiHeOgdZJufUygT1KFrhDUIgt31CliVmLSy0W8WhMPulZzz2RLA8F+dnOYBECvFoQ6/F6Yg3+w+Hw2xR/gK7BnDhtY16HG7DamH0SoILoE+4NlAJh9RP0deIshjBZ4cQtNqddqyeYKMCE+5UxlI9cvvTfRmXdOBFsc=
   passphrase:
     secure: DWcRNjvNOjEB3iTIEmCIipVSPX12SXUiUgHzF4CtH7ZxyQzzsJzUsVweycrPcOe65SLZXZT4pkCMZiqd7joad3sG/J3s8SK8RAnuqqcPCn0or3yQrXqWJI6ux8QRV6vVb9DsRJNWQfu+PbsFCoQ1FqEaa60psjBwMeC2lbWU5ZwLxyuumuCDGlTrCJQHPZ6kVSevf/lCU2MO2KHSS76zTSKgPrE9p93Wfq4UswZWy+WRzBqYKosiu9pM0N1YExQxkLPZm128X8a+2C/nhCXSkEN9c2IOHim7w73eihAiQC63B4xKFpsyoZaPURdeEArDS0n5FvFOAlOF1wvIujqwBwsD+3AOMTNhM19iuSZ8S91LVewXEfbCj1VCXknnq3kYSm7w6IUdEfjDX4wYBwaIlyIv8tBHU9qD04u4aUFqA+BpykhfYXXtLW+scWedjbA4ALbK79sz1BIG/pBFP6Vch6dMAA2MF2z2Qtyq/hEZhItuDi+rl9iiwvUfbDRHnBvbPr7+qygNvaGIl/hflaQLejckdJ7nw8TJf5IXmJpZMsjtKYW29t66W2Bipbllc0HqzMwfG1+WAkIItNJKRSHkbbL7ggkgED9py8sLKs+ITFMUKBghfeOEv420v31r5x7MjN3hK+mokxz0IDmWseXKeZ+6EYEDefmia17hEkCJiiM=
 notifications:
