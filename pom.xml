@@ -8,7 +8,7 @@
 
   <description>Reactive, scalable, and resilient HTTP servers and RESTful services running on vlingo/cluster and vlingo/actors.</description>
   <name>vlingo-xoom-server</name>
-  <url>https://github.com/vlingo/vlingo-xoom</url>
+  <url>https://github.com/vlingo/vlingo-xoom-server</url>
   <licenses>
     <license>
       <name>Mozilla Public License 2.0</name>
@@ -23,9 +23,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/vlingo/vlingo-xoom.git</connection>
-    <developerConnection>scm:git:ssh://github.com/vlingo/vlingo-xoom.git</developerConnection>
-    <url>http://github.com/vlingo/vlingo-xoom/tree/master</url>
+    <connection>scm:git:git://github.com/vlingo/vlingo-xoom-server.git</connection>
+    <developerConnection>scm:git:ssh://github.com/vlingo/vlingo-xoom-server.git</developerConnection>
+    <url>http://github.com/vlingo/vlingo-xoom-server/tree/master</url>
   </scm>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
