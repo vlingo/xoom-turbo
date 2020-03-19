@@ -12,13 +12,6 @@
       <url>https://mozilla.org/MPL/2.0/</url>
     </license>
   </licenses>
-  <developers>
-    <developer>
-      <id>kbastani</id>
-      <name>Kenny Bastani</name>
-      <email>kennybastani@gmail.com</email>
-    </developer>
-  </developers>
   <repositories>
     <repository>
       <id>jcenter.bintray.com</id>
