@@ -1,24 +1,32 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.resource;
 
-import com.google.gson.GsonBuilder;
-import io.vlingo.http.Version;
-import io.vlingo.http.resource.ObjectResponse;
-import io.vlingo.xoom.VlingoServer;
-import io.vlingo.common.Completes;
-import io.vlingo.xoom.resource.error.ErrorInfo;
-import io.vlingo.http.Header;
-import io.vlingo.http.Response;
-import io.vlingo.http.ResponseHeader;
-import io.vlingo.http.media.ContentMediaType;
-import io.vlingo.http.resource.RequestHandler;
-import io.vlingo.http.resource.Resource;
-import io.vlingo.http.resource.ResourceBuilder;
+import static io.vlingo.common.Completes.withSuccess;
+import static io.vlingo.http.Response.of;
+import static io.vlingo.http.Response.Status.BadRequest;
 
 import java.util.Collections;
 
-import static io.vlingo.common.Completes.withSuccess;
-import static io.vlingo.http.Response.Status.BadRequest;
-import static io.vlingo.http.Response.of;
+import com.google.gson.GsonBuilder;
+
+import io.vlingo.common.Completes;
+import io.vlingo.http.Header;
+import io.vlingo.http.Response;
+import io.vlingo.http.ResponseHeader;
+import io.vlingo.http.Version;
+import io.vlingo.http.media.ContentMediaType;
+import io.vlingo.http.resource.ObjectResponse;
+import io.vlingo.http.resource.RequestHandler;
+import io.vlingo.http.resource.Resource;
+import io.vlingo.http.resource.ResourceBuilder;
+import io.vlingo.xoom.VlingoServer;
+import io.vlingo.xoom.resource.error.ErrorInfo;
 
 /**
  * The {@link Endpoint} interface provides a way to implement an endpoint definition that can be annotated with
@@ -37,6 +45,7 @@ public interface Endpoint {
 
     RequestHandler[] getHandlers();
 
+    @SuppressWarnings("rawtypes")
     default Resource getResource() {
         assert getName() != null;
         assert getHandlers() != null;

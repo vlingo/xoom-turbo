@@ -1,12 +1,19 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.stepflow;
+
+import java.util.List;
 
 import io.vlingo.actors.Actor;
 import io.vlingo.actors.Definition;
 import io.vlingo.actors.Stage;
 import io.vlingo.actors.Stoppable;
 import io.vlingo.common.Completes;
-
-import java.util.List;
 
 /**
  * <p>A {@link StepFlow} is a distributed task executor that dereferences actors to a lower-level library. Processors
@@ -70,9 +77,8 @@ import java.util.List;
  * <p>
  * Backpressure can be applied by consumers as a part of the subscription to a producer using server-sent events.
  * </p>
- *
- * @author Kenny Bastani
  */
+@SuppressWarnings("rawtypes")
 public interface StepFlow extends Stoppable {
 
     Completes<Boolean> shutDown();
@@ -102,7 +108,6 @@ public interface StepFlow extends Stoppable {
         return processor;
     }
 
-    @SuppressWarnings("unchecked")
     public static <A extends Actor, P> StepFlow startWith(Stage stage, Class<A> clazz, String actorName,
                                                           List<Object> params) {
         StepFlow processor = stage.actorFor(StepFlow.class, Definition.has(

@@ -1,4 +1,17 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.server;
+
+import java.util.Optional;
+import java.util.StringJoiner;
+
+import javax.annotation.Nonnull;
+import javax.inject.Singleton;
 
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.context.env.Environment;
@@ -7,13 +20,8 @@ import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.ServiceInstanceIdGenerator;
 import io.micronaut.runtime.server.EmbeddedServerInstance;
 
-import javax.annotation.Nonnull;
-import javax.inject.Singleton;
-import java.util.Optional;
-import java.util.StringJoiner;
-
-@Replaces(DefaultServiceInstanceIdGenerator.class)
 @Singleton
+@Replaces(DefaultServiceInstanceIdGenerator.class)
 public class VlingoServiceInstanceIdGenerator implements ServiceInstanceIdGenerator {
     @Nonnull
     @Override

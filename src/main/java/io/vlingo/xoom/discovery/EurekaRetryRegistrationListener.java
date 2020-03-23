@@ -1,4 +1,19 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.discovery;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.inject.Singleton;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.event.ApplicationEventListener;
@@ -11,18 +26,10 @@ import io.vlingo.common.Scheduled;
 import io.vlingo.common.Scheduler;
 import io.vlingo.xoom.VlingoServer;
 import io.vlingo.xoom.server.VlingoServiceInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.inject.Singleton;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This event handler is responsible for healing a load-balanced discovery client that uses Eureka for its service
  * registry.
- *
- * @author Kenny Bastani
  */
 @Singleton
 @Requires(property = "eureka.client.registration.enabled", value = "true")
@@ -42,6 +49,7 @@ public class EurekaRetryRegistrationListener implements ApplicationEventListener
                                                                VlingoServiceInstance serviceInstance) {
         return (scheduled, data) -> {
             try {
+                @SuppressWarnings("unused")
                 List<String> instances = Single.fromPublisher(data.getServiceIds())
                         .timeout(2000, TimeUnit.MILLISECONDS)
                         .doOnError(throwable -> {

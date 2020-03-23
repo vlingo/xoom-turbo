@@ -1,3 +1,10 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.stepflow;
 
 import io.vlingo.actors.Logger;
@@ -5,9 +12,8 @@ import io.vlingo.actors.Logger;
 /**
  * A {@link Transition} is a base interface for a {@link StateTransition} and describes the identity of a source
  * state and a target state.
- *
- * @author Kenny Bastani
  */
+@SuppressWarnings("rawtypes")
 public interface Transition {
 
     String getSourceName();

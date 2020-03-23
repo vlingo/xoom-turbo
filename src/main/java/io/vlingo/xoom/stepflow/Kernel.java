@@ -1,9 +1,16 @@
-package io.vlingo.xoom.stepflow;
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
 
-import io.vlingo.common.Completes;
+package io.vlingo.xoom.stepflow;
 
 import java.util.List;
 import java.util.Map;
+
+import io.vlingo.common.Completes;
 
 /**
  * <p>Kernels implement state machines and validate state mutations by comparing the current state of an object to a
@@ -29,9 +36,8 @@ import java.util.Map;
  * When no input state is provided, the logical state will remain the same while the versioned state will be
  * incremented.
  * </p>
- *
- * @author Kenny Bastani
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public interface Kernel {
 
     Completes<String> getName();
