@@ -1,18 +1,21 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.resource.handlers;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.cache.RemovalNotification;
-import io.vlingo.common.Completes;
-import io.vlingo.http.Body;
-import io.vlingo.http.Header;
-import io.vlingo.http.Response;
-import io.vlingo.http.ResponseHeader;
-import io.vlingo.http.resource.*;
+import static io.vlingo.http.RequestHeader.ContentType;
+import static io.vlingo.http.Response.Status.InternalServerError;
+import static io.vlingo.http.Response.Status.MovedPermanently;
+import static io.vlingo.http.Response.Status.NotFound;
+import static io.vlingo.http.Response.Status.Ok;
+import static io.vlingo.http.ResponseHeader.ContentLength;
+import static io.vlingo.http.resource.ResourceBuilder.get;
+import static io.vlingo.http.resource.ResourceBuilder.resource;
 
-import javax.activation.MimetypesFileTypeMap;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,19 +26,31 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.http.RequestHeader.ContentType;
-import static io.vlingo.http.Response.Status.*;
-import static io.vlingo.http.ResponseHeader.ContentLength;
-import static io.vlingo.http.resource.ResourceBuilder.get;
-import static io.vlingo.http.resource.ResourceBuilder.resource;
+import javax.activation.MimetypesFileTypeMap;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalNotification;
+
+import io.vlingo.common.Completes;
+import io.vlingo.http.Body;
+import io.vlingo.http.Header;
+import io.vlingo.http.Response;
+import io.vlingo.http.ResponseHeader;
+import io.vlingo.http.resource.RequestHandler0;
+import io.vlingo.http.resource.RequestHandler1;
+import io.vlingo.http.resource.RequestHandler2;
+import io.vlingo.http.resource.RequestHandler3;
+import io.vlingo.http.resource.RequestHandler4;
+import io.vlingo.http.resource.Resource;
+import io.vlingo.http.resource.ResourceHandler;
+import io.vlingo.http.resource.StaticFilesResource;
 
 /**
  * The {@link StaticFilesResource} serves static content from the /src/main/resources/static directory of the Xoom
  * application.
- *
- * @author Kenny Bastani
- * @author Wolfgang Werner
- * @author Vaughn Vernon
  */
 public class CachedStaticFilesResource extends ResourceHandler {
 

@@ -1,20 +1,31 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.stepflow;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import io.vlingo.actors.Actor;
 import io.vlingo.common.Completes;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 /**
  * The default {@link Kernel} {@link Actor} implementation.
  *
- * @author Kenny Bastani
  * @see Actor
  * @see Kernel
  * @see StepFlow
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class KernelActor extends Actor implements Kernel {
     private final Map<String, TransitionHandler> transitionHandlerMap;
     private final Map<String, State<? extends State>> stateMap;

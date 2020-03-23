@@ -1,14 +1,27 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.stepflow;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * A {@link State} is an interface definition that should describe a collection of input states and output states.
- *
- * @author Kenny Bastani
  */
+@SuppressWarnings("rawtypes")
 public abstract class State<T extends State> {
 
     private Long createdAt;

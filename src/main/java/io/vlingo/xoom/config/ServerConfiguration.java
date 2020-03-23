@@ -1,12 +1,20 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.micronaut.context.annotation.BootstrapContextCompatible;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Context;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.core.io.socket.SocketUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The {@link ServerConfiguration} class loads application properties from the application.yml file on the
@@ -220,7 +228,7 @@ public class ServerConfiguration {
             " |_|_|   _|_|_  \\ \\ / / | | '_ \\ / _` |/ _ \\\n" +
             "     |_|_|       \\ V /| | | | | | (_| | (_) |\n" +
             "      |_|         \\_/ |_|_|_| |_|\\__, |\\___/\n" +
-            "                                  __/ | Xoom v0.1.0\n" +
+            "                                  __/ | xoom v1.3.0\n" +
             "                                 |___/";
 
     public static String getBanner() {

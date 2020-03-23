@@ -1,4 +1,26 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
+import javax.annotation.PreDestroy;
+import javax.inject.Singleton;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.env.Environment;
@@ -16,23 +38,10 @@ import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
 import io.vlingo.xoom.config.ServerConfiguration;
 import io.vlingo.xoom.events.SceneStartedEvent;
-import io.vlingo.xoom.resource.handlers.CachedStaticFilesResource;
 import io.vlingo.xoom.resource.Endpoint;
+import io.vlingo.xoom.resource.handlers.CachedStaticFilesResource;
 import io.vlingo.xoom.server.VlingoScene;
 import io.vlingo.xoom.server.VlingoServiceInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nonnull;
-import javax.annotation.PreDestroy;
-import javax.inject.Singleton;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The {@link VlingoServer} is a Micronaut bootstrapper for loading and auto-configuring a vlingo/http server.
@@ -40,11 +49,9 @@ import java.util.stream.Stream;
  * for building light-weight compile-time native JVM applications. This class implements an
  * {@link EmbeddedServer} and provides lifecycle application context management and configuration classes at
  * startup.
- *
- * @author Kenny Bastani
- * @author Graeme Rocher
  */
 @Singleton
+@SuppressWarnings("rawtypes")
 public class VlingoServer implements EmbeddedServer {
     private static final Logger log = LoggerFactory.getLogger(VlingoServer.class);
     private final String host;

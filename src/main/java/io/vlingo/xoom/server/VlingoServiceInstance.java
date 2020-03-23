@@ -1,4 +1,17 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.server;
+
+import java.net.URI;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Prototype;
@@ -10,17 +23,8 @@ import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.EmbeddedServerInstance;
 import io.vlingo.xoom.VlingoServer;
 
-import java.net.URI;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 /**
  * Implements the {@link EmbeddedServerInstance} interface for Vlingo.
- *
- * @author graemerocher
- * @since 1.0
  */
 @Prototype
 public class VlingoServiceInstance implements EmbeddedServerInstance {

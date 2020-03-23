@@ -1,6 +1,21 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.management.endpoints;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.gson.GsonBuilder;
+
 import io.micronaut.management.endpoint.annotation.Endpoint;
 import io.micronaut.management.endpoint.annotation.Read;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -17,13 +32,6 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.vlingo.xoom.VlingoServer;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 @Endpoint(id = "openapi", prefix = "custom", defaultEnabled = true, defaultSensitive = false)
 public class OpenApiEndpoint {
     private final VlingoServer server;
@@ -33,7 +41,7 @@ public class OpenApiEndpoint {
     }
 
     @Read
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public Object getSpecification() {
 
         OpenAPI spec = new OpenAPI();

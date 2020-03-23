@@ -1,4 +1,16 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.server;
+
+import javax.annotation.Nonnull;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.LifeCycle;
@@ -6,15 +18,9 @@ import io.micronaut.context.annotation.Context;
 import io.micronaut.runtime.ApplicationConfiguration;
 import io.vlingo.actors.World;
 import io.vlingo.xoom.config.ServerConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nonnull;
 
 /**
  * The {@link VlingoScene} is a lifecycle management class for the vlingo/actors context used in vlingo/http.
- *
- * @author Kenny Bastani
  */
 @Context
 public class VlingoScene implements LifeCycle<VlingoScene> {
