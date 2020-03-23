@@ -162,8 +162,6 @@ public class VlingoServer implements EmbeddedServer {
                             65535 * 2),
                     Configuration.Timing.define());
 
-            System.out.println("Hey! Now running with 7, 3, 100");
-
             serviceInstance = applicationContext.createBean(VlingoServiceInstance.class, this);
             applicationContext.publishEvent(new ServerStartupEvent(this));
             if(serviceInstance.getHealthStatus() == HealthStatus.DOWN)
