@@ -160,7 +160,7 @@ public class VlingoServer implements EmbeddedServer {
                     vlingoScene.getServerConfiguration().getPort(),
                     Configuration.Sizing.defineWith(10, 16, 100,
                             65535 * 2),
-                    Configuration.Timing.defineWith(7, 3, 100));
+                    Configuration.Timing.define());
 
             System.out.println("Hey! Now running with 7, 3, 100");
 
