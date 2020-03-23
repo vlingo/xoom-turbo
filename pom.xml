@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
   <artifactId>vlingo-xoom-server</artifactId>
-  <version>1.2.9</version>
+  <version>1.2.12</version>
   <description>The vlingo/xoom server provides a JVM microframework for the vlingo/PLATFORM that helps in building high-performance reactive microservices.</description>
   <name>vlingo-xoom-server</name>
   <url>https://github.com/vlingo/vlingo-xoom-server</url>
@@ -12,6 +12,20 @@
       <url>https://mozilla.org/MPL/2.0/</url>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <name>Vaughn Vernon</name>
+      <email>vaughn@kalele.io</email>
+      <organization>Kalele</organization>
+      <organizationUrl>http://kalele.io</organizationUrl>
+    </developer>
+    <developer>
+      <name>Danilo Ambrosio</name>
+      <email>danilo.ambrosio@gmail.com</email>
+      <organization>Kalele</organization>
+      <organizationUrl>http://kalele.io</organizationUrl>
+    </developer>
+  </developers>
   <repositories>
     <repository>
       <id>jcenter.bintray.com</id>

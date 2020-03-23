@@ -153,7 +153,9 @@ public class VlingoServer implements EmbeddedServer {
                     vlingoScene.getServerConfiguration().getPort(),
                     Configuration.Sizing.defineWith(10, 16, 100,
                             65535 * 2),
-                    Configuration.Timing.define());
+                    Configuration.Timing.defineWith(7, 3, 100));
+
+            System.out.println("Hey! Now running with 7, 3, 100");
 
             serviceInstance = applicationContext.createBean(VlingoServiceInstance.class, this);
             applicationContext.publishEvent(new ServerStartupEvent(this));
