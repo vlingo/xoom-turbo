@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.PreDestroy;
 import javax.inject.Singleton;
 
+import io.vlingo.wire.channel.RefreshableSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -152,6 +153,11 @@ public class VlingoServer implements EmbeddedServer {
         if (!isRunning) {
             if (!vlingoScene.isRunning()) {
                 vlingoScene.start();
+            }
+
+            if (System.getProperty("os.name").toLowerCase().indexOf("linux") >= 0) {
+                System.out.println("Starting Refreshable Selector: 10 select");
+                RefreshableSelector.withCountedThreshold(10, vlingoScene.getWorld().defaultLogger());
             }
 
             // Start the server with auto-configured settings
