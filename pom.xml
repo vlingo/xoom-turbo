@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
   <artifactId>vlingo-xoom-server</artifactId>
-  <version>1.2.16-SNAPSHOT</version>
+  <version>1.2.16</version>
   <description>The vlingo/xoom server provides a JVM microframework for the vlingo/PLATFORM that helps in building high-performance reactive microservices.</description>
   <name>vlingo-xoom-server</name>
   <url>https://github.com/vlingo/vlingo-xoom-server</url>
@@ -65,19 +65,19 @@
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-http</artifactId>
-      <version>1.2.16-SNAPSHOT</version>
+      <version>1.2.16</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-actors</artifactId>
-      <version>1.2.16-SNAPSHOT</version>
+      <version>1.2.16</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-symbio</artifactId>
-      <version>1.2.16-SNAPSHOT</version>
+      <version>1.2.16</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
