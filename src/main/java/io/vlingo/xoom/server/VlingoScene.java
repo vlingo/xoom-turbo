@@ -37,6 +37,7 @@ public class VlingoScene implements LifeCycle<VlingoScene> {
         this.applicationConfiguration = applicationConfiguration;
         this.serverConfiguration = serverConfiguration;
         this.applicationContext = applicationContext;
+        this.world = World.startWithDefaults(applicationConfiguration.getName().orElse("application"));
     }
 
     public World getWorld() {
@@ -64,7 +65,6 @@ public class VlingoScene implements LifeCycle<VlingoScene> {
     @Override
     public VlingoScene start() {
         if (!isRunning) {
-            this.world = World.startWithDefaults(applicationConfiguration.getName().orElse("application"));
             log.info("New scene created: " + this.world.stage().name());
             this.isRunning = true;
         } else {
