@@ -7,21 +7,6 @@
 
 package io.vlingo.xoom;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-import javax.annotation.PreDestroy;
-import javax.inject.Singleton;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.env.Environment;
 import io.micronaut.core.io.socket.SocketUtils;
@@ -39,9 +24,21 @@ import io.vlingo.http.resource.Server;
 import io.vlingo.xoom.config.ServerConfiguration;
 import io.vlingo.xoom.events.SceneStartedEvent;
 import io.vlingo.xoom.resource.Endpoint;
-import io.vlingo.xoom.resource.handlers.CachedStaticFilesResource;
 import io.vlingo.xoom.server.VlingoScene;
 import io.vlingo.xoom.server.VlingoServiceInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.Nonnull;
+import javax.annotation.PreDestroy;
+import javax.inject.Singleton;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The {@link VlingoServer} is a Micronaut bootstrapper for loading and auto-configuring a vlingo/http server.
@@ -77,7 +74,6 @@ public class VlingoServer implements EmbeddedServer {
         // Load the world context with auto-configured settings
         this.endpoints = endpoints.collect(Collectors.toSet());
         this.resources = this.endpoints.stream().map(Endpoint::getResource).collect(Collectors.toSet());
-        this.resources.add(new CachedStaticFilesResource().routes());
         this.applicationContext = applicationContext;
         this.applicationConfiguration = applicationConfiguration;
         this.vlingoScene = vlingoScene;
