@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.actors.plugin.mailbox.blocking;
+package io.vlingo.xoom.scooter.plugin.mailbox.blocking;
 
 import io.vlingo.actors.Configuration;
 import io.vlingo.actors.Dispatcher;
