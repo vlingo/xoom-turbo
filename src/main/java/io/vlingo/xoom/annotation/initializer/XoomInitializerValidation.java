@@ -45,4 +45,15 @@ public interface XoomInitializerValidation {
         };
     }
 
-}
+     static XoomInitializerValidation addressFactoryValidation() {
+         return annotatedElements -> {
+             annotatedElements.forEach(element -> {
+                 final Xoom xoom = element.getAnnotation(Xoom.class);
+                 final AddressFactory addressFactory = xoom.addressFactory();
+                 if(addressFactory.type().isBasic() && !addressFactory.generator().isDefault()) {
+                     throw new ProcessingAnnotationException("The BasicAddressFactory only supports the Default generator.");
+                 }
+             });
+         };
+     }
+ }

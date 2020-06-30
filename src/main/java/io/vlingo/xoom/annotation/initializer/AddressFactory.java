@@ -50,5 +50,20 @@ public @interface AddressFactory {
         IdentityGenerator(final IdentityGeneratorType generatorType) {
             this.generatorType = generatorType;
         }
+
+        public IdentityGeneratorType resolveWith(final AddressFactory.Type addressFactoryType) {
+            if(addressFactoryType.isBasic()) {
+                return DEFAULT.generatorType;
+            }
+            if(isDefault()) {
+                return RANDOM.generatorType;
+            }
+            return this.generatorType;
+        }
+
+        public boolean isDefault() {
+            return equals(DEFAULT);
+        }
+
     }
 }

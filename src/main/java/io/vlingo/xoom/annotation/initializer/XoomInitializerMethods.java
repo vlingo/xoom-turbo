@@ -15,6 +15,7 @@ import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
+import io.vlingo.xoom.annotation.initializer.AddressFactory.IdentityGenerator;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
@@ -79,11 +80,16 @@ public class XoomInitializerMethods {
                     new Object[]{Stage.class, xoomAnnotation.name()});
         }
 
+        final IdentityGenerator generator =
+                xoomAnnotation.addressFactory().generator();
+
+        final IdentityGeneratorType identityGeneratorType =
+                generator.resolveWith(xoomAnnotation.addressFactory().type());
+
         return new SimpleEntry(STAGE_INSTANCE_STATEMENT,
                 new Object[]{Stage.class, xoomAnnotation.name(), Stage.class,
                         xoomAnnotation.addressFactory().type().clazz,
-                        IdentityGeneratorType.class,
-                        xoomAnnotation.addressFactory().generator().generatorType.name()});
+                        IdentityGeneratorType.class, identityGeneratorType});
     }
 
 }

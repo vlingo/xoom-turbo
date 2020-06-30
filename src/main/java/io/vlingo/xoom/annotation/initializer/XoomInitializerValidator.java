@@ -26,7 +26,8 @@ public class XoomInitializerValidator {
     }
 
     public void validate(final Set<? extends Element> annotatedElements) {
-        Arrays.asList(singularityValidation(), targetValidation(), classVisibilityValidation())
+        Arrays.asList(singularityValidation(), targetValidation(),
+                classVisibilityValidation(), addressFactoryValidation())
                 .forEach(validator -> validator.validate(annotatedElements));
     }
 
