@@ -6,13 +6,14 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation.initializer;
 
-import io.vlingo.xoom.annotation.initializer.AddressFactory;
-import io.vlingo.xoom.annotation.initializer.Xoom;
-
 import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.BASIC;
 
 /**
- * This test class ensures {@link Xoom} compile-time annotation
+ * This test class ensures that auto-generated code, from
+ * the {@link Xoom} compile-time annotation, is successfully
+ * compiled.
+ *
+ * @author Danilo Ambrosio
  */
 @Xoom(name = "annotated-boot", addressFactory = @AddressFactory(type = BASIC))
 public class AnnotatedBootTest {
