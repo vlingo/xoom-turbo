@@ -10,6 +10,7 @@ import com.google.auto.service.AutoService;
 import io.vlingo.xoom.annotation.ProcessingAnnotationException;
 
 import javax.annotation.processing.*;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.Set;
@@ -31,7 +32,12 @@ public class XoomInitializerProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(final Set<? extends TypeElement> set, final RoundEnvironment roundEnvironment) {
-        generate(roundEnvironment.getElementsAnnotatedWith(Xoom.class));
+        final Set<? extends Element> annotatedElements = roundEnvironment.getElementsAnnotatedWith(Xoom.class);
+
+        if(!annotatedElements.isEmpty()) {
+            generate(annotatedElements);
+        }
+
         return true;
     }
 
@@ -56,6 +62,11 @@ public class XoomInitializerProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return Stream.of(Xoom.class.getCanonicalName()).collect(Collectors.toSet());
+    }
+
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latestSupported();
     }
 
 }

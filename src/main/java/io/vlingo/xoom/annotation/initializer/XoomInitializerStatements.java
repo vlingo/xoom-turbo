@@ -9,28 +9,23 @@ package io.vlingo.xoom.annotation.initializer;
 
 public class XoomInitializerStatements {
 
-    public static final String WORLD_INSTANCE_STATEMENT = "world = World.startWithDefaults(\"$S\");";
-    public static final String BASIC_STAGE_INSTANCE_STATEMENT = "final Stage stage = world.stageNamed(\"$S\");";
-    public static final String STAGE_INSTANCE_STATEMENT = "final Stage stage = world.stageNamed(\"$S\", $T.class, new $T($T.RANDOM));";
-    public static final String SERVER_INSTANCE_STATEMENT = "server = Server.startWith(stage, allResources, port, $T.define(), $T.define());";
+    public static final String WORLD_INSTANCE_STATEMENT = "world = $T.startWithDefaults($S)";
+    public static final String BASIC_STAGE_INSTANCE_STATEMENT = "final $T stage = world.stageNamed($S)";
+    public static final String STAGE_INSTANCE_STATEMENT = "final $T stage = world.stageNamed($S, $T.class, new $T($T.$L))";
+    public static final String SERVER_INSTANCE_STATEMENT = "server = $T.startWith(stage, $T.are(), port, $T.define(), $T.define())";
 
-    public static final String INITIALIZER_INSTANCE_STATEMENT = "System.out.println(\"=========================\");" +
-            "System.out.println(\"service: $S.\");" +
-            "System.out.println(\"=========================\");" +
-            "instance = new Bootstrap(resolvePort(args));";
+    public static final String INITIALIZER_INSTANCE_STATEMENT = "System.out.println(\"=========================\");\n" +
+            "System.out.println(\"service: $L.\");\n" +
+            "System.out.println(\"=========================\");\n" +
+            "instance = new XoomInitializer(resolvePort(args));\n";
 
-    public static final String SHUTDOWN_HOOK_STATEMENT = "Runtime.getRuntime().addShutdownHook(new Thread(() -> { " +
-            " if (instance != null) { " +
-            "instance.server.stop(); " +
-            "System.out.println(\"\n\"); " +
-            "System.out.println(\"=========================\");" +
-            "System.out.println(\"Stopping $S.\");" +
-            "System.out.println(\"=========================\");" +
-            "} " +
-            "}))";
+    public static final String SHUTDOWN_HOOK_STATEMENT = "Runtime.getRuntime().addShutdownHook(new Thread(() -> { \n" +
+            " if (instance != null) { \n" +
+            "instance.server.stop(); \n" +
+            "System.out.println(\"=========================\");\n" +
+            "System.out.println(\"Stopping $L.\");\n" +
+            "System.out.println(\"=========================\");\n" +
+            "} \n" +
+            "}))\n";
 
-    public static final String PORT_EXCEPTION_HANDLING = "catch (final Exception e) { " +
-            " System.out.println(\"$S: Command line does not provide a valid port; defaulting to: \" + DEFAULT_PORT); " +
-            " return DEFAULT_PORT; " +
-            "}";
 }

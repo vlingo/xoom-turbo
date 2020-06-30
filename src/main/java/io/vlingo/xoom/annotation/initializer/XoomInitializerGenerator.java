@@ -45,8 +45,7 @@ public class XoomInitializerGenerator {
                     XoomInitializerPackage.from(environment, bootstrapClass);
 
             final TypeSpec typeSpec =
-                    XoomInitializerType.from(XoomInitializerFields.from(basePackage),
-                            XoomInitializerMethods.from(xoomAnnotation));
+                    XoomInitializerType.from(basePackage, xoomAnnotation);
 
             JavaFile.builder(basePackage, typeSpec)
                     .build().writeTo(environment.getFiler());

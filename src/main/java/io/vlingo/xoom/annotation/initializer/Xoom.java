@@ -7,16 +7,11 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
-import io.vlingo.actors.AddressFactory;
-import io.vlingo.actors.GridAddressFactory;
-import io.vlingo.actors.UUIDAddressFactory;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static io.vlingo.xoom.annotation.initializer.Xoom.AddressFactoryType.BASIC;
 import static io.vlingo.xoom.annotation.initializer.Xoom.StorageType.NONE;
 
 @Target(ElementType.TYPE)
@@ -25,7 +20,7 @@ public @interface Xoom {
 
     String name();
 
-    AddressFactoryType addressFactory() default BASIC;
+    AddressFactory addressFactory();
 
     StorageType storageType() default NONE;
 
@@ -33,23 +28,6 @@ public @interface Xoom {
 
     enum StorageType {
         NONE, JOURNAL, STATE_STORE, OBJECT_STORE;
-    }
-
-    enum AddressFactoryType {
-        BASIC(AddressFactory.class),
-        UUID(UUIDAddressFactory.class),
-        GRID(GridAddressFactory.class);
-
-        public final Class<?> clazz;
-
-        AddressFactoryType(final Class<?> clazz) {
-            this.clazz = clazz;
-        }
-
-        boolean isBasic() {
-            return equals(BASIC);
-        }
-
     }
 
 }

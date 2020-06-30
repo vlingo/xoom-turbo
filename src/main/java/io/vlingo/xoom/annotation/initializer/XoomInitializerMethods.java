@@ -10,16 +10,17 @@ package io.vlingo.xoom.annotation.initializer;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import io.vlingo.actors.Stage;
+import io.vlingo.actors.World;
 import io.vlingo.common.identity.IdentityGeneratorType;
-import io.vlingo.http.resource.Configuration.Sizing;
-import io.vlingo.http.resource.Configuration.Timing;
+import io.vlingo.http.resource.Configuration;
+import io.vlingo.http.resource.Resources;
+import io.vlingo.http.resource.Server;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
-import static io.vlingo.xoom.annotation.initializer.XoomInitializerGenerator.XOOM_INITIALIZER_CLASS_NAME;
 import static io.vlingo.xoom.annotation.initializer.XoomInitializerStatements.*;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
@@ -49,36 +50,40 @@ public class XoomInitializerMethods {
     }
 
     private MethodSpec resolvePortMethod() {
-        return MethodSpec.methodBuilder("main")
+        return MethodSpec.methodBuilder("resolvePort")
                 .addModifiers(PUBLIC, STATIC).returns(TypeName.INT)
                 .addParameter(String[].class, "args")
                 .beginControlFlow("try")
-                .addStatement("return Integer.parseInt(args[0]);")
-                .endControlFlow(PORT_EXCEPTION_HANDLING, xoomAnnotation.name())
+                .addStatement("return Integer.parseInt(args[0])")
+                .nextControlFlow("catch (final $T e)", Exception.class)
+                .addStatement("System.out.println(\"$L: Command line does not provide a valid port; defaulting to: \" + DEFAULT_PORT)", xoomAnnotation.name())
+                .addStatement("return DEFAULT_PORT")
+                .endControlFlow()
                 .build();
     }
 
     private MethodSpec constructorMethod() {
         final Entry<String, Object[]> stageInstanceStatement = resolveStageInstanceStatement();
-        return MethodSpec.methodBuilder(XOOM_INITIALIZER_CLASS_NAME)
+        return MethodSpec.constructorBuilder()
                 .addModifiers(PUBLIC).addParameter(Integer.class, "port")
-                .addStatement(WORLD_INSTANCE_STATEMENT, xoomAnnotation.name())
+                .addStatement(WORLD_INSTANCE_STATEMENT, World.class, xoomAnnotation.name())
                 .addStatement(stageInstanceStatement.getKey(), stageInstanceStatement.getValue())
-                .addStatement(SERVER_INSTANCE_STATEMENT, Timing.class, Sizing.class)
+                .addStatement(SERVER_INSTANCE_STATEMENT, Server.class, Resources.class, Configuration.Sizing.class, Configuration.Timing.class)
                 .addStatement(SHUTDOWN_HOOK_STATEMENT, xoomAnnotation.name())
                 .build();
     }
 
     private Entry<String, Object[]> resolveStageInstanceStatement() {
-        if(xoomAnnotation.addressFactory().isBasic()) {
+        if(xoomAnnotation.addressFactory().type().isBasic()) {
             return new SimpleEntry(BASIC_STAGE_INSTANCE_STATEMENT,
-                    new Object[]{xoomAnnotation.name()});
+                    new Object[]{Stage.class, xoomAnnotation.name()});
         }
 
         return new SimpleEntry(STAGE_INSTANCE_STATEMENT,
-                new Object[]{xoomAnnotation.name(), Stage.class,
-                        xoomAnnotation.addressFactory().clazz,
-                        IdentityGeneratorType.class});
+                new Object[]{Stage.class, xoomAnnotation.name(), Stage.class,
+                        xoomAnnotation.addressFactory().type().clazz,
+                        IdentityGeneratorType.class,
+                        xoomAnnotation.addressFactory().generator().generatorType.name()});
     }
 
 }

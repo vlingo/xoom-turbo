@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
@@ -17,10 +18,12 @@ import static io.vlingo.xoom.annotation.initializer.XoomInitializerGenerator.XOO
 
 public class XoomInitializerType {
 
-    public static TypeSpec from(final List<FieldSpec> fieldSpecs,
-                                final List<MethodSpec> methodSpecs) {
+    public static TypeSpec from(final String basePackage,
+                                final Xoom xoomAnnotation) {
         return TypeSpec.classBuilder(XOOM_INITIALIZER_CLASS_NAME)
-                .addFields(fieldSpecs).addMethods(methodSpecs).build();
+                .addFields(XoomInitializerFields.from(basePackage))
+                .addMethods(XoomInitializerMethods.from(xoomAnnotation))
+                .build();
     }
 
 }
