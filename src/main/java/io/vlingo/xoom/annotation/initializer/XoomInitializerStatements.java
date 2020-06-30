@@ -17,7 +17,7 @@ public class XoomInitializerStatements {
     public static final String INITIALIZER_INSTANCE_STATEMENT = "System.out.println(\"=========================\");\n" +
             "System.out.println(\"service: $L.\");\n" +
             "System.out.println(\"=========================\");\n" +
-            "instance = new XoomInitializer(resolvePort(args));\n";
+            "instance = new XoomInitializer(resolvePort(args))";
 
     public static final String SHUTDOWN_HOOK_STATEMENT = "Runtime.getRuntime().addShutdownHook(new Thread(() -> { \n" +
             " if (instance != null) { \n" +
@@ -26,6 +26,6 @@ public class XoomInitializerStatements {
             "System.out.println(\"Stopping $L.\");\n" +
             "System.out.println(\"=========================\");\n" +
             "} \n" +
-            "}))\n";
+            "}))";
 
 }

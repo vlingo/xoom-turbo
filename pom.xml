@@ -118,12 +118,33 @@
         </executions>
       </plugin>
         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-                <source>9</source>
-                <target>9</target>
-            </configuration>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.7.0</version>
+          <configuration>
+            <source>9</source>
+            <target>9</target>
+          </configuration>
+          <executions>
+            <execution>
+              <id>test-compile</id>
+              <goals>
+                <goal>testCompile</goal>
+              </goals>
+              <configuration>
+                <compilerArgs>
+                  <arg>-parameters</arg>
+                </compilerArgs>
+                <annotationProcessorPaths>
+                  <path>
+                    <groupId>io.vlingo</groupId>
+                    <artifactId>vlingo-xoom-server</artifactId>
+                    <version>${version}</version>
+                  </path>
+                </annotationProcessorPaths>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
     </plugins>
   </build>
