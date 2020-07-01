@@ -7,9 +7,13 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
+import java.lang.annotation.Annotation;
+
 public class XoomInitializerStatements {
 
-    public static final String WORLD_INSTANCE_STATEMENT = "world = $T.startWithDefaults($S)";
+    public static final String BLOCKING_MAILBOX_ENABLING_STATEMENT = "$T.enableBlockingMailbox()";
+    public static final String BLOCKING_MAILBOX_DISABLING_STATEMENT = "$T.disableBlockingMailbox()";
+    public static final String WORLD_INSTANCE_STATEMENT = "world = $T.start($S, $T.properties())";
     public static final String BASIC_STAGE_INSTANCE_STATEMENT = "final $T stage = world.stageNamed($S)";
     public static final String STAGE_INSTANCE_STATEMENT = "final $T stage = world.stageNamed($S, $T.class, new $T($T.$L))";
     public static final String SERVER_INSTANCE_STATEMENT = "server = $T.startWith(stage, $T.are(), port, $T.define(), $T.define())";

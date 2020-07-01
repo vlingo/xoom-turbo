@@ -15,6 +15,7 @@ import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
+import io.vlingo.xoom.actors.Settings;
 import io.vlingo.xoom.annotation.initializer.AddressFactory.IdentityGenerator;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -64,10 +65,16 @@ public class XoomInitializerMethods {
     }
 
     private MethodSpec constructorMethod() {
+        final String blockingMailboxStatement =
+                xoomAnnotation.blocking() ? BLOCKING_MAILBOX_ENABLING_STATEMENT :
+                        BLOCKING_MAILBOX_DISABLING_STATEMENT;
+
         final Entry<String, Object[]> stageInstanceStatement = resolveStageInstanceStatement();
+
         return MethodSpec.constructorBuilder()
                 .addModifiers(PUBLIC).addParameter(Integer.class, "port")
-                .addStatement(WORLD_INSTANCE_STATEMENT, World.class, xoomAnnotation.name())
+                .addStatement(blockingMailboxStatement, Settings.class)
+                .addStatement(WORLD_INSTANCE_STATEMENT, World.class, xoomAnnotation.name(), Settings.class)
                 .addStatement(stageInstanceStatement.getKey(), stageInstanceStatement.getValue())
                 .addStatement(SERVER_INSTANCE_STATEMENT, Server.class, Resources.class, Configuration.Sizing.class, Configuration.Timing.class)
                 .addStatement(SHUTDOWN_HOOK_STATEMENT, xoomAnnotation.name())

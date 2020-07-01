@@ -8,6 +8,7 @@
 package io.vlingo.xoom;
 
 import io.vlingo.actors.World;
+import io.vlingo.xoom.actors.Settings;
 
 public class Boot {
 
@@ -30,7 +31,7 @@ public class Boot {
      * @return {@code World}
      */
     public static World start(final String name) {
-        xoomBootWorld = World.start(name, io.vlingo.xoom.actors.Properties.properties);
+        xoomBootWorld = World.start(name, Settings.properties());
 
         return xoomBootWorld;
     }

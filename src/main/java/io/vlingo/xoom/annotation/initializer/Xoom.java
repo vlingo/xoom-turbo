@@ -7,12 +7,13 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
+import javax.annotation.Nullable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static io.vlingo.xoom.annotation.initializer.Xoom.StorageType.NONE;
+import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.BASIC;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
@@ -20,14 +21,8 @@ public @interface Xoom {
 
     String name();
 
-    AddressFactory addressFactory();
+    AddressFactory addressFactory() default @AddressFactory(type = BASIC);
 
-    StorageType storageType() default NONE;
-
-    boolean CQRS() default false;
-
-    enum StorageType {
-        NONE, JOURNAL, STATE_STORE, OBJECT_STORE;
-    }
+    boolean blocking() default false;
 
 }
