@@ -1,4 +1,4 @@
-# vlingo-xoom-server
+#vlingo-xoom-server
 
 [![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-xoom-server.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-xoom-server) [![Build Status](https://travis-ci.org/vlingo/vlingo-xoom-server.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-xoom-server) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-xoom-server/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-xoom-server/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/xoom-server)
 
