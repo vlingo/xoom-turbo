@@ -38,14 +38,11 @@ public class XoomInitializerGenerator {
             final Element bootstrapClass =
                     annotatedElements.stream().findFirst().get();
 
-            final Xoom xoomAnnotation =
-                    bootstrapClass.getAnnotation(Xoom.class);
-
             final String basePackage =
                     XoomInitializerPackage.from(environment, bootstrapClass);
 
             final TypeSpec typeSpec =
-                    XoomInitializerType.from(basePackage, xoomAnnotation);
+                    XoomInitializerType.from(environment, basePackage, bootstrapClass);
 
             JavaFile.builder(basePackage, typeSpec)
                     .build().writeTo(environment.getFiler());

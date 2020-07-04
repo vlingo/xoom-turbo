@@ -64,6 +64,4 @@ public @interface AddressFactory {
 
     }
 
-
-
 }

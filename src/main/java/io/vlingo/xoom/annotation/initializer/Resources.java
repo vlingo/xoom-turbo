@@ -7,21 +7,17 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
+import io.vlingo.xoom.Endpoint;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.BASIC;
-
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
-public @interface Xoom {
+public @interface Resources {
 
-    String name();
-
-    AddressFactory addressFactory() default @AddressFactory(type = BASIC);
-
-    boolean blocking() default false;
+    Class<? extends Endpoint>[] value();
 
 }

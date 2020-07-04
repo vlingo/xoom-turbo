@@ -4,9 +4,11 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.annotation.initializer;
 
-import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.BASIC;
+import io.vlingo.actors.Stage;
+import io.vlingo.xoom.actors.StageInitializationAware;
 
 /**
  * This test class ensures that auto-generated code, from
@@ -15,7 +17,13 @@ import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.BASIC;
  *
  * @author Danilo Ambrosio
  */
-@Xoom(name = "annotated-boot", addressFactory = @AddressFactory(type = BASIC))
-public class AnnotatedBootTest {
+@Xoom(name = "annotated-boot")
+@Resources({FirstResource.class, SecondResource.class})
+public class AnnotatedBootTest implements StageInitializationAware {
+
+    @Override
+    public void onInit(final Stage stage) {
+        //To be invoked after Stage initialization...
+    }
 
 }
