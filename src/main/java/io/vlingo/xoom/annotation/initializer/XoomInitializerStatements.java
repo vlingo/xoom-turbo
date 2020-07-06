@@ -11,21 +11,24 @@ import java.lang.annotation.Annotation;
 
 public class XoomInitializerStatements {
 
-    public static final String INSTANTIATION_STATEMENT = "new $T()";
+    public static final String ROUTES_STATEMENT = "new $T(stage).routes()";
+    public static final String ON_INIT_STATEMENT = "initializer.onInit(stage)";
+    public static final String RESOURCES_STATEMENT_PATTERN = "final $T resources = $T.are(%s)";
     public static final String BLOCKING_MAILBOX_ENABLING_STATEMENT = "$T.enableBlockingMailbox()";
     public static final String BLOCKING_MAILBOX_DISABLING_STATEMENT = "$T.disableBlockingMailbox()";
     public static final String WORLD_INSTANCE_STATEMENT = "world = $T.start($S, $T.properties())";
     public static final String BASIC_STAGE_INSTANCE_STATEMENT = "final $T stage = world.stageNamed($S)";
+    public static final String INITIALIZER_INSTANTIATION_STATEMENT = "final $T initializer = new $T()";
     public static final String STAGE_INSTANCE_STATEMENT = "final $T stage = world.stageNamed($S, $T.class, new $T($T.$L))";
-    public static final String SERVER_INSTANCE_STATEMENT = "server = $T.startWith(stage, resources, port, $T.define(), $T.define())";
-    public static final String RESOURCES_STATEMENT_PATTERN = "final $T resources = $T.are(%s)";
-    public static final String ROUTES_STATEMENT = "new $T(stage).routes()";
-    public static final String STAGE_INITIALIZER_STATEMENT = ".onInit(stage)";
+    public static final String SERVER_CONFIGURATION_STATEMENT = "final $T serverConfiguration = initializer.configureServer(stage, args)";
+
+    public static final String SERVER_INSTANCE_STATEMENT = "server = $T.startWith(stage, resources, " +
+            "serverConfiguration.port(), serverConfiguration.sizing(), serverConfiguration.timing())";
 
     public static final String INITIALIZER_INSTANCE_STATEMENT = "System.out.println(\"=========================\");\n" +
             "System.out.println(\"service: $L.\");\n" +
             "System.out.println(\"=========================\");\n" +
-            "instance = new XoomInitializer(resolvePort(args))";
+            "instance = new XoomInitializer(args)";
 
     public static final String SHUTDOWN_HOOK_STATEMENT = "Runtime.getRuntime().addShutdownHook(new Thread(() -> { \n" +
             " if (instance != null) { \n" +

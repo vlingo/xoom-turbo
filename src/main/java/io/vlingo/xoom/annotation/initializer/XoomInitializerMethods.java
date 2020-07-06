@@ -16,12 +16,13 @@ import java.util.List;
 
 public class XoomInitializerMethods {
 
-    public static List<MethodSpec> from(final ProcessingEnvironment environment,
+    public static List<MethodSpec> from(final String basePackage,
+                                        final ProcessingEnvironment environment,
                                         final Element bootstrapClass) {
 
         return Arrays.asList(MainMethod.from(bootstrapClass),
-                PortResolverMethod.from(bootstrapClass),
-                ConstructorMethod.from(environment, bootstrapClass));
+                ConstructorMethod.from(basePackage, environment, bootstrapClass),
+                OnInitMethod.from(bootstrapClass));
     }
 
 }

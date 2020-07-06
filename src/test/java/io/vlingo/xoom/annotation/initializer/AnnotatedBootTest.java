@@ -8,7 +8,7 @@
 package io.vlingo.xoom.annotation.initializer;
 
 import io.vlingo.actors.Stage;
-import io.vlingo.xoom.actors.StageInitializationAware;
+import io.vlingo.xoom.XoomInitializationAware;
 
 /**
  * This test class ensures that auto-generated code, from
@@ -19,7 +19,7 @@ import io.vlingo.xoom.actors.StageInitializationAware;
  */
 @Xoom(name = "annotated-boot")
 @ResourceHandlers({FirstResource.class, SecondResource.class})
-public class AnnotatedBootTest implements StageInitializationAware {
+public class AnnotatedBootTest implements XoomInitializationAware {
 
     @Override
     public void onInit(final Stage stage) {

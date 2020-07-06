@@ -15,7 +15,7 @@ import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
 import io.vlingo.xoom.actors.Settings;
-import io.vlingo.xoom.actors.StageInitializationAware;
+import io.vlingo.xoom.XoomInitializationAware;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -29,25 +29,30 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.annotation.initializer.XoomInitializerGenerator.XOOM_INITIALIZER_CLASS_NAME;
 import static io.vlingo.xoom.annotation.initializer.XoomInitializerStatements.*;
 import static javax.lang.model.element.Modifier.PUBLIC;
 
 public class ConstructorMethod {
 
     private final Elements elements;
+    private final String basePackage;
     private final Xoom xoomAnnotation;
     private final TypeElement bootstrapClass;
 
-    private ConstructorMethod(final Elements elements,
+    private ConstructorMethod(final String basePackage,
+                              final Elements elements,
                               final TypeElement bootstrapClass) {
         this.elements = elements;
+        this.basePackage = basePackage;
         this.bootstrapClass = bootstrapClass;
         this.xoomAnnotation = bootstrapClass.getAnnotation(Xoom.class);
     }
 
-    public static MethodSpec from(final ProcessingEnvironment environment,
+    public static MethodSpec from(final String basePackage,
+                                  final ProcessingEnvironment environment,
                                   final Element bootstrapClass) {
-        return new ConstructorMethod(environment.getElementUtils(),
+        return new ConstructorMethod(basePackage, environment.getElementUtils(),
                 (TypeElement) bootstrapClass).build();
     }
 
@@ -59,28 +64,32 @@ public class ConstructorMethod {
                 xoomAnnotation.blocking() ? BLOCKING_MAILBOX_ENABLING_STATEMENT :
                         BLOCKING_MAILBOX_DISABLING_STATEMENT;
 
-        final String onInitInvocation = resolveInitializerAwareInvocation();
+        final Object[] initializationAwareClass = resolveInitializationAwareClass();
         final Map.Entry<String, Object[]> resourcesStatement = resolveResourcesStatement();
         final Map.Entry<String, Object[]> stageInstanceStatement = resolveStageInstanceStatement();
 
         return MethodSpec.constructorBuilder()
-                .addModifiers(PUBLIC).addParameter(Integer.class, "port")
+                .addModifiers(PUBLIC).addParameter(String[].class, "args")
                 .addStatement(blockingMailboxStatement, Settings.class)
                 .addStatement(WORLD_INSTANCE_STATEMENT, World.class, xoomAnnotation.name(), Settings.class)
                 .addStatement(stageInstanceStatement.getKey(), stageInstanceStatement.getValue())
-                .addStatement(onInitInvocation, ClassName.get(bootstrapClass.asType()))
+                .addStatement(INITIALIZER_INSTANTIATION_STATEMENT, initializationAwareClass)
+                .addStatement(ON_INIT_STATEMENT).addStatement(SERVER_CONFIGURATION_STATEMENT, Configuration.class)
                 .addStatement(resourcesStatement.getKey(), resourcesStatement.getValue())
-                .addStatement(SERVER_INSTANCE_STATEMENT, Server.class, Configuration.Sizing.class, Configuration.Timing.class)
+                .addStatement(SERVER_INSTANCE_STATEMENT, Server.class)
                 .addStatement(SHUTDOWN_HOOK_STATEMENT, xoomAnnotation.name())
                 .build();
     }
 
-    private String resolveInitializerAwareInvocation() {
+    private Object[] resolveInitializationAwareClass() {
         final TypeMirror stageInitializerAwareInterface =
-                elements.getTypeElement(StageInitializationAware.class.getCanonicalName()).asType();
+                elements.getTypeElement(XoomInitializationAware.class.getCanonicalName()).asType();
 
-        return bootstrapClass.getInterfaces().contains(stageInitializerAwareInterface) ?
-                INSTANTIATION_STATEMENT + STAGE_INITIALIZER_STATEMENT : INSTANTIATION_STATEMENT;
+        final Object initializerClass =
+                bootstrapClass.getInterfaces().contains(stageInitializerAwareInterface) ?
+                        bootstrapClass : ClassName.get(basePackage, XOOM_INITIALIZER_CLASS_NAME);
+
+        return new Object[]{initializerClass, initializerClass};
     }
 
     private Map.Entry<String, Object[]> resolveStageInstanceStatement() {
