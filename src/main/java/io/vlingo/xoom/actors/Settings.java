@@ -56,13 +56,13 @@ public class Settings {
         return PROPERTIES;
     }
 
-    private static final Map<Object, Object> BLOCKING_MAILBOX_PROPERTIES = new HashMap<>() {{
+    private static final Map<Object, Object> BLOCKING_MAILBOX_PROPERTIES = new HashMap<Object, Object>() {{
         put("plugin.name.blockingMailbox", "true");
         put("plugin.blockingMailbox.classname", "io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin");
         put("plugin.blockingMailbox.defaultMailbox", "true");
     }};
 
-    private static final Map<Object, Object> DEFAULT_MAILBOX_PROPERTIES = new HashMap<>() {{
+    private static final Map<Object, Object> DEFAULT_MAILBOX_PROPERTIES = new HashMap<Object, Object>() {{
         put("plugin.name.queueMailbox", "true");
         put("plugin.queueMailbox.classname", "io.vlingo.actors.plugin.mailbox.concurrentqueue.ConcurrentQueueMailboxPlugin");
         put("plugin.queueMailbox.defaultMailbox", "true");
