@@ -31,7 +31,7 @@ public @interface AddressFactory {
             this.clazz = clazz;
         }
 
-        boolean isBasic() {
+        public boolean isBasic() {
             return equals(BASIC);
         }
     }

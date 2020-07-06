@@ -10,16 +10,16 @@ import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
 import io.vlingo.http.resource.ObjectResponse;
 import io.vlingo.http.resource.Resource;
-import io.vlingo.xoom.Endpoint;
+import io.vlingo.http.resource.ResourceHandler;
 
 import static io.vlingo.http.Response.Status.Ok;
 import static io.vlingo.http.resource.ResourceBuilder.get;
 import static io.vlingo.http.resource.ResourceBuilder.resource;
 
-public class FirstResource extends Endpoint {
+public class FirstResource extends ResourceHandler {
+
 
     public FirstResource(final Stage stage) {
-        super(stage);
     }
 
     public Completes<ObjectResponse<String>> retrieveResource() {

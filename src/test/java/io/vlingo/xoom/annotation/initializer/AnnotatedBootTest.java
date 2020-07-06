@@ -18,7 +18,7 @@ import io.vlingo.xoom.actors.StageInitializationAware;
  * @author Danilo Ambrosio
  */
 @Xoom(name = "annotated-boot")
-@Resources({FirstResource.class, SecondResource.class})
+@ResourceHandlers({FirstResource.class, SecondResource.class})
 public class AnnotatedBootTest implements StageInitializationAware {
 
     @Override

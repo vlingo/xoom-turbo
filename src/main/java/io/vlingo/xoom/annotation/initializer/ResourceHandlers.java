@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
-import io.vlingo.xoom.Endpoint;
+import io.vlingo.http.resource.ResourceHandler;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -16,8 +16,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
-public @interface Resources {
+public @interface ResourceHandlers {
 
-    Class<? extends Endpoint>[] value();
+    Class<? extends ResourceHandler>[] value();
 
 }
