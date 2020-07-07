@@ -7,29 +7,21 @@
 
 package io.vlingo.xoom.management.endpoints;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
-
-import io.micronaut.context.event.ApplicationEventListener;
-import io.micronaut.management.endpoint.annotation.Endpoint;
-import io.micronaut.management.endpoint.annotation.Read;
-import io.vlingo.xoom.events.FlowCreatedEvent;
 import io.vlingo.xoom.stepflow.Kernel;
 import io.vlingo.xoom.stepflow.State;
 import io.vlingo.xoom.stepflow.StepFlow;
 import io.vlingo.xoom.stepflow.TransitionHandler;
 
-@Endpoint(id = "flows", prefix = "custom", defaultEnabled = true, defaultSensitive = false)
+import java.util.*;
+import java.util.stream.Stream;
+
+//@Endpoint(id = "flows", prefix = "custom", defaultEnabled = true, defaultSensitive = false)
 @SuppressWarnings("rawtypes")
-public class StepFlowEndpoint implements ApplicationEventListener<FlowCreatedEvent> {
+public class StepFlowEndpoint {
+//    implements ApplicationEventListener<FlowCreatedEvent> {
     private Map<String, StepFlow> stepFlow = new HashMap<>();
 
-    @Read
+//    @Read
     public Map<String, Object> getMap(String flowName) {
         Set<String> nodes = new HashSet<>();
         Map<String, Integer> portCount = new HashMap<>();
@@ -90,8 +82,8 @@ public class StepFlowEndpoint implements ApplicationEventListener<FlowCreatedEve
         links.add(link);
     }
 
-    @Override
-    public void onApplicationEvent(FlowCreatedEvent event) {
-        stepFlow.put(event.getFlowName(), event.getSource());
-    }
+//    @Override
+//    public void onApplicationEvent(FlowCreatedEvent event) {
+//        stepFlow.put(event.getFlowName(), event.getSource());
+//    }
 }

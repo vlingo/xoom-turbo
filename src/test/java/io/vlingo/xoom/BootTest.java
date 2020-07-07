@@ -19,7 +19,7 @@ public class BootTest {
     public void testThatWorldBoots() {
         Boot.main(new String[] { BootWorldName });
 
-        final World world = Boot.zoomBootWorld();
+        final World world = Boot.xoomBootWorld();
 
         assertEquals(BootWorldName, world.name());
     }

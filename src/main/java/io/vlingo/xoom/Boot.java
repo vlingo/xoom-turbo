@@ -8,19 +8,20 @@
 package io.vlingo.xoom;
 
 import io.vlingo.actors.World;
+import io.vlingo.xoom.actors.Settings;
 
 public class Boot {
 
-    private static World zoomBootWorld;
+    private static World xoomBootWorld;
 
     public static void main(final String[] args) {
         final String name = args.length > 0 ? args[0] : "vlingo-xoom";
 
-        zoomBootWorld = start(name);
+        xoomBootWorld = start(name);
     }
 
-    public static World zoomBootWorld() {
-        return zoomBootWorld;
+    public static World xoomBootWorld() {
+        return xoomBootWorld;
     }
 
     /**
@@ -30,9 +31,9 @@ public class Boot {
      * @return {@code World}
      */
     public static World start(final String name) {
-        zoomBootWorld = World.start(name, io.vlingo.xoom.actors.Properties.properties);
+        xoomBootWorld = World.start(name, Settings.properties());
 
-        return zoomBootWorld;
+        return xoomBootWorld;
     }
 
 }

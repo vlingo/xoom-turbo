@@ -5,9 +5,12 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.resource;
+package io.vlingo.xoom.actors;
 
-@FunctionalInterface
-public interface Procedure {
-    void invoke();
+public class PropertiesLoadingException extends RuntimeException {
+
+    public PropertiesLoadingException(final String message, final Exception cause) {
+        super(message, cause);
+    }
+
 }
