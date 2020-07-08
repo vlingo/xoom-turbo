@@ -26,7 +26,7 @@ public class XoomInitializerFields {
         return Arrays.asList(
                 FieldSpec.builder(className, "instance", PRIVATE, STATIC).build(),
                 FieldSpec.builder(Integer.class, "DEFAULT_PORT", PRIVATE, STATIC, FINAL).initializer("18080").build(),
-                FieldSpec.builder(Server.class, "server", PRIVATE, FINAL).build(),
-                FieldSpec.builder(World.class, "world", PRIVATE, FINAL).build());
+                FieldSpec.builder(Server.class, "server", PUBLIC, FINAL).build(),
+                FieldSpec.builder(World.class, "world", PUBLIC, FINAL).build());
     }
 }

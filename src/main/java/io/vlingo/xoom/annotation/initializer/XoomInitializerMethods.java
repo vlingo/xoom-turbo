@@ -19,10 +19,9 @@ public class XoomInitializerMethods {
     public static List<MethodSpec> from(final String basePackage,
                                         final ProcessingEnvironment environment,
                                         final Element bootstrapClass) {
-
         return Arrays.asList(MainMethod.from(bootstrapClass),
                 ConstructorMethod.from(basePackage, environment, bootstrapClass),
-                OnInitMethod.from(bootstrapClass));
+                OnInitMethod.from(bootstrapClass), InstanceMethod.from(basePackage));
     }
 
 }
