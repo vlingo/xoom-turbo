@@ -150,7 +150,7 @@
                   <path>
                     <groupId>io.vlingo</groupId>
                     <artifactId>vlingo-xoom-server</artifactId>
-                    <version>${version}</version>
+                    <version>${project.version}</version>
                   </path>
                 </annotationProcessorPaths>
               </configuration>

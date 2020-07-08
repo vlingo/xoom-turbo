@@ -4,7 +4,7 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.annotation.initializer;
+package io.vlingo.xoom.annotation.initializer.methods;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;

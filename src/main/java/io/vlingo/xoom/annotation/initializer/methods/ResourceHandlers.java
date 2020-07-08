@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.annotation.initializer;
+package io.vlingo.xoom.annotation.initializer.methods;
 
 import io.vlingo.http.resource.ResourceHandler;
 
@@ -18,6 +18,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface ResourceHandlers {
 
-    Class<? extends ResourceHandler>[] value();
+    Class<? extends ResourceHandler>[] value() default {};
 
+    String[] packages() default {""};
 }

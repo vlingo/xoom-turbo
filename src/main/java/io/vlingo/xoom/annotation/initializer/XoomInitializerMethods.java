@@ -8,6 +8,10 @@
 package io.vlingo.xoom.annotation.initializer;
 
 import com.squareup.javapoet.MethodSpec;
+import io.vlingo.xoom.annotation.initializer.methods.ConstructorMethod;
+import io.vlingo.xoom.annotation.initializer.methods.InstanceMethod;
+import io.vlingo.xoom.annotation.initializer.methods.MainMethod;
+import io.vlingo.xoom.annotation.initializer.methods.OnInitMethod;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;

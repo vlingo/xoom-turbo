@@ -9,6 +9,9 @@ package io.vlingo.xoom.annotation.initializer;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.xoom.XoomInitializationAware;
+import io.vlingo.xoom.annotation.initializer.methods.ResourceHandlers;
+import io.vlingo.xoom.annotation.initializer.resources.FirstResource;
+import io.vlingo.xoom.annotation.initializer.resources.SecondResource;
 
 /**
  * This test class ensures that auto-generated code, from
@@ -18,7 +21,7 @@ import io.vlingo.xoom.XoomInitializationAware;
  * @author Danilo Ambrosio
  */
 @Xoom(name = "annotated-boot")
-@ResourceHandlers({FirstResource.class, SecondResource.class})
+@ResourceHandlers(packages = "io.vlingo.xoom.annotation.initializer.resources")
 public class AnnotatedBootTest implements XoomInitializationAware {
 
     @Override

@@ -8,11 +8,14 @@ package io.vlingo.xoom.annotation.initializer;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.PackageElement;
+import java.util.List;
 
 public class XoomInitializerPackage {
 
     public static String from(final ProcessingEnvironment environment,
                               final Element bootstrapClass) {
+
         return environment.getElementUtils()
                 .getPackageOf(bootstrapClass)
                 .toString();
