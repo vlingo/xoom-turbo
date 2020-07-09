@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
-  <artifactId>vlingo-xoom-server</artifactId>
+  <artifactId>vlingo-xoom</artifactId>
   <version>1.3.1-SNAPSHOT</version>
-  <description>The vlingo/xoom server provides a JVM microframework for the vlingo/PLATFORM that helps in building high-performance reactive microservices.</description>
-  <name>vlingo-xoom-server</name>
-  <url>https://github.com/vlingo/vlingo-xoom-server</url>
+  <description>The vlingo/xoom provides a JVM microframework for the vlingo/PLATFORM that helps in building high-performance reactive microservices.</description>
+  <name>vlingo-xoom</name>
+  <url>https://github.com/vlingo/vlingo-xoom</url>
   <licenses>
     <license>
       <name>Mozilla Public License 2.0</name>
@@ -22,9 +22,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/vlingo/vlingo-xoom-server.git</connection>
-    <developerConnection>scm:git:ssh://github.com/vlingo/vlingo-xoom-server.git</developerConnection>
-    <url>http://github.com/vlingo/vlingo-xoom-server/tree/master</url>
+    <connection>scm:git:git://github.com/vlingo/vlingo-xoom.git</connection>
+    <developerConnection>scm:git:ssh://github.com/vlingo/vlingo-xoom.git</developerConnection>
+    <url>http://github.com/vlingo/vlingo-xoom/tree/master</url>
   </scm>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -149,7 +149,7 @@
                 <annotationProcessorPaths>
                   <path>
                     <groupId>io.vlingo</groupId>
-                    <artifactId>vlingo-xoom-server</artifactId>
+                    <artifactId>vlingo-xoom</artifactId>
                     <version>${project.version}</version>
                   </path>
                 </annotationProcessorPaths>
@@ -181,8 +181,8 @@
   <distributionManagement>
     <repository>
       <id>bintray-deploy</id>
-      <name>vlingo-vlingo-platform-java</name>
-      <url>https://api.bintray.com/maven/vlingo/vlingo-platform-java/vlingo-xoom-server/;publish=1</url>
+      <name>vlingo-platform-java</name>
+      <url>https://api.bintray.com/maven/vlingo/vlingo-platform-java/vlingo-xoom/;publish=1</url>
     </repository>
 
     <snapshotRepository>

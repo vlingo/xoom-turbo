@@ -1,6 +1,6 @@
-#vlingo-xoom-server
+#vlingo-xoom
 
-[![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-xoom-server.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-xoom-server) [![Build Status](https://travis-ci.org/vlingo/vlingo-xoom-server.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-xoom-server) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-xoom-server/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-xoom-server/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/xoom-server)
+[![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-xoom.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-xoom) [![Build Status](https://travis-ci.org/vlingo/vlingo-xoom.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-xoom) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-xoom/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-xoom/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/xoom)
 
 The VLINGO/XOOM server provides a JVM microframework for the VLINGO/PLATFORM that accelerates building high-performance reactive microservices.
 
@@ -18,7 +18,7 @@ Docs: https://docs.vlingo.io/vlingo-xoom
   <dependencies>
     <dependency>
       <groupId>io.vlingo</groupId>
-      <artifactId>vlingo-xoom-server</artifactId>
+      <artifactId>vlingo-xoom</artifactId>
       <version>1.3.0</version>
       <scope>compile</scope>
     </dependency>
@@ -27,7 +27,7 @@ Docs: https://docs.vlingo.io/vlingo-xoom
 
 ```gradle
 dependencies {
-    compile 'io.vlingo:vlingo-xoom-server:1.3.0'
+    compile 'io.vlingo:vlingo-xoom:1.3.0'
 }
 
 repositories {

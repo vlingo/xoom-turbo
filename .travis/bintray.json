@@ -1,12 +1,12 @@
 {
     "package": {
-        "name": "vlingo-xoom-server",
+        "name": "vlingo-xoom",
         "repo": "vlingo-platform-java",
         "subject": "vlingo",
-        "desc": "The vlingo/xoom server provides a JVM microframework for the vlingo/PLATFORM that helps in building high-performance reactive microservices.",
-        "website_url": "https://github.com/vlingo/vlingo-xoom-server",
-        "issue_tracker_url": "https://github.com/vlingo/vlingo-xoom-server/issues",
-        "vcs_url": "https://github.com/vlingo/vlingo-xoom-server.git",
+        "desc": "The vlingo/xoom provides a JVM microframework for the vlingo/PLATFORM that helps in building high-performance reactive microservices.",
+        "website_url": "https://github.com/vlingo/vlingo-xoom",
+        "issue_tracker_url": "https://github.com/vlingo/vlingo-xoom/issues",
+        "vcs_url": "https://github.com/vlingo/vlingo-xoom.git",
         "licenses": ["MPL-2.0"],
         "public_download_numbers": true,
         "public_stats": true
@@ -20,14 +20,14 @@
     "files": [
         {
             "includePattern": "target/(.*).jar",
-            "uploadPattern": "/io/vlingo/vlingo-xoom-server/1.2.9/$1.jar",
+            "uploadPattern": "/io/vlingo/vlingo-xoom/1.2.9/$1.jar",
             "matrixParams": {
                 "override": 1
             }
         },
         {
             "includePattern": "pom.xml",
-            "uploadPattern": "/io/vlingo/vlingo-xoom-server/1.2.9/vlingo-xoom-server-1.2.9.pom",
+            "uploadPattern": "/io/vlingo/vlingo-xoom/1.2.9/vlingo-xoom-server-1.2.9.pom",
             "matrixParams": {
                 "override": 1
             }
