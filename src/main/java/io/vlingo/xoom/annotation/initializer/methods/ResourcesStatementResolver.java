@@ -10,6 +10,7 @@ package io.vlingo.xoom.annotation.initializer.methods;
 import io.vlingo.http.resource.ResourceHandler;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.xoom.annotation.ClassRetriever;
+import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.lang.model.element.TypeElement;

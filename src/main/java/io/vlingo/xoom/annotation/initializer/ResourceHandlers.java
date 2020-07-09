@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.annotation.initializer.methods;
+package io.vlingo.xoom.annotation.initializer;
 
 import io.vlingo.http.resource.ResourceHandler;
 
