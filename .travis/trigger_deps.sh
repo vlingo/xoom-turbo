@@ -41,7 +41,7 @@ MINOR=$(echo $VERSION | cut -f 2 -d '.')
 PATCH=$(echo $VERSION | cut -f 3 -d '.')
 NEW_VERSION=$MAJOR.$MINOR.$(($PATCH + 1))-SNAPSHOT
 
-for dependency in "vlingo-xoom-data";
+for dependency in "vlingo-schemata";
 do
     trigger_dependency $dependency $VERSION $NEW_VERSION
 done
