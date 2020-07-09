@@ -20,6 +20,10 @@
       <organization>vlingo</organization>
       <organizationUrl>https://vlingo.io/contributors/</organizationUrl>
     </developer>
+    <developer>
+      <name>Danilo Ambrosio</name>
+      <email>danilo.ambrosio@gmail.com</email>
+    </developer>
   </developers>
   <scm>
     <connection>scm:git:git://github.com/vlingo/vlingo-xoom.git</connection>
