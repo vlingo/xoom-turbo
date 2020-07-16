@@ -10,25 +10,25 @@ import javax.lang.model.element.Element;
 import java.util.Arrays;
 import java.util.Set;
 
-import static io.vlingo.xoom.annotation.initializer.XoomInitializerValidation.*;
+import static io.vlingo.xoom.annotation.Validation.*;
 
-public class XoomInitializerValidator {
+public class XoomValidator {
 
-    private static XoomInitializerValidator instance;
+    private static XoomValidator instance;
 
-    private XoomInitializerValidator() {}
+    private XoomValidator() {}
 
-    public static XoomInitializerValidator instance() {
+    public static XoomValidator instance() {
         if(instance == null) {
-            instance = new XoomInitializerValidator();
+            instance = new XoomValidator();
         }
         return instance;
     }
 
     public void validate(final Set<? extends Element> annotatedElements) {
         Arrays.asList(singularityValidation(), targetValidation(),
-                classVisibilityValidation(), addressFactoryValidation())
-                .forEach(validator -> validator.validate(annotatedElements));
+                classVisibilityValidation(), new AddressFactoryValidation())
+                .forEach(validator -> validator.validate(Xoom.class, annotatedElements));
     }
 
 }

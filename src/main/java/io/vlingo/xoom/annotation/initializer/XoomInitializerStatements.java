@@ -19,6 +19,7 @@ public class XoomInitializerStatements {
     public static final String WORLD_INSTANCE_STATEMENT = "world = $T.start($S, $T.properties())";
     public static final String BASIC_STAGE_INSTANCE_STATEMENT = "final $T stage = world.stageNamed($S)";
     public static final String INITIALIZER_INSTANTIATION_STATEMENT = "final $T initializer = new $T()";
+    public static final String INITIALIZER_ASSIGNMENT_STATEMENT = "final $T initializer = this";
     public static final String STAGE_INSTANCE_STATEMENT = "final $T stage = world.stageNamed($S, $T.class, new $T($T.$L))";
     public static final String SERVER_CONFIGURATION_STATEMENT = "final $T serverConfiguration = initializer.configureServer(stage, args)";
 

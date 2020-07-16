@@ -5,12 +5,14 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.annotation.initializer;
+package io.vlingo.xoom.annotation;
 
-import com.google.auto.service.AutoService;
-import io.vlingo.xoom.annotation.ProcessingAnnotationException;
+import io.vlingo.xoom.annotation.initializer.Xoom;
 
-import javax.annotation.processing.*;
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Messager;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -20,10 +22,9 @@ import java.util.stream.Stream;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 
-@AutoService(Processor.class)
-public class XoomInitializerProcessor extends AbstractProcessor {
+public abstract class AnnotationProcessor extends AbstractProcessor {
 
-    private ProcessingEnvironment environment;
+    protected ProcessingEnvironment environment;
 
     @Override
     public synchronized void init(final ProcessingEnvironment environment) {
@@ -36,20 +37,17 @@ public class XoomInitializerProcessor extends AbstractProcessor {
         final Set<? extends Element> annotatedElements = roundEnvironment.getElementsAnnotatedWith(Xoom.class);
 
         if(!annotatedElements.isEmpty()) {
-            generate(annotatedElements);
+            try {
+                generate(annotatedElements);
+            } catch (final ProcessingAnnotationException exception) {
+                printError(environment.getMessager(), exception);
+            }
         }
 
         return true;
     }
 
-    private void generate(final Set<? extends Element> annotatedElements) {
-        try {
-            XoomInitializerValidator.instance().validate(annotatedElements);
-            XoomInitializerGenerator.instance().generateFrom(environment, annotatedElements);
-        } catch (final ProcessingAnnotationException exception) {
-            printError(environment.getMessager(), exception);
-        }
-    }
+    protected abstract void generate(final Set<? extends Element> annotatedElements);
 
     private void printError(final Messager messager,
                             final ProcessingAnnotationException exception) {
@@ -62,12 +60,14 @@ public class XoomInitializerProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return Stream.of(Xoom.class.getCanonicalName()).collect(Collectors.toSet());
+        return Stream.of(annotationClass().getCanonicalName()).collect(Collectors.toSet());
     }
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
         return SourceVersion.latestSupported();
     }
+
+    public abstract Class<?> annotationClass();
 
 }
