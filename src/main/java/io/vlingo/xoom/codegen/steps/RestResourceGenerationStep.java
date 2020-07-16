@@ -21,14 +21,14 @@ public class RestResourceGenerationStep extends TemplateProcessingStep {
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
         final String projectPath = context.projectPath();
-        final String basePackage = context.propertyOf(PACKAGE);
-        final String restResourcesData = context.propertyOf(REST_RESOURCES);
+        final String basePackage = context.parameterOf(PACKAGE);
+        final String restResourcesData = context.parameterOf(REST_RESOURCES);
         return RestResourceTemplateDataFactory.build(basePackage, projectPath, restResourcesData);
     }
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        return context.hasProperty(REST_RESOURCES);
+        return context.hasParameter(REST_RESOURCES);
     }
 
 }

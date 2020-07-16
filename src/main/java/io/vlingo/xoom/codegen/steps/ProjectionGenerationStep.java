@@ -23,17 +23,17 @@ public class ProjectionGenerationStep extends TemplateProcessingStep {
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
         final String projectPath = context.projectPath();
-        final String basePackage = context.propertyOf(CodeGenerationParameter.PACKAGE);
-        final ProjectionType projectionType = context.propertyOf(PROJECTIONS, ProjectionType::valueOf);
+        final String basePackage = context.parameterOf(CodeGenerationParameter.PACKAGE);
+        final ProjectionType projectionType = context.parameterOf(PROJECTIONS, ProjectionType::valueOf);
         return ProjectionTemplateDataFactory.build(basePackage, projectPath,
                         projectionType, context.contents());
     }
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        if(context.hasProperty(AGGREGATES)) {
+        if(context.hasParameter(AGGREGATES)) {
             final ProjectionType projectionType =
-                    context.propertyOf(PROJECTIONS, ProjectionType::valueOf);
+                    context.parameterOf(PROJECTIONS, ProjectionType::valueOf);
             return projectionType.isProjectionEnabled();
         }
         return false;

@@ -51,7 +51,7 @@ public class ProjectionGenerationStepTest {
     }
 
     private void performAssertion(final CodeGenerationContext context) {
-        final ProjectionType projectionType = context.propertyOf(PROJECTIONS, ProjectionType::valueOf);
+        final ProjectionType projectionType = context.parameterOf(PROJECTIONS, ProjectionType::valueOf);
         final String expectedProjectionComment = projectionType.isEventBased() ? "replace with event" : "replace with operation text";
 
         Assert.assertEquals(9, context.contents().size());

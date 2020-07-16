@@ -45,11 +45,11 @@ public class CodeGenerationContext {
         this.contents.add(Content.with(subject, file, text));
     }
 
-    public <T> T propertyOf(final CodeGenerationParameter codeGenerationParameter) {
-        return (T) propertyOf(codeGenerationParameter, value -> value);
+    public <T> T parameterOf(final CodeGenerationParameter codeGenerationParameter) {
+        return (T) parameterOf(codeGenerationParameter, value -> value);
     }
 
-    public <T> T propertyOf(final CodeGenerationParameter codeGenerationParameter, final Function<String, T> mapper) {
+    public <T> T parameterOf(final CodeGenerationParameter codeGenerationParameter, final Function<String, T> mapper) {
         final String value = parameters.get(codeGenerationParameter);
         return (T) mapper.apply(value);
     }
@@ -61,21 +61,22 @@ public class CodeGenerationContext {
     public Map<ModelClassification, DatabaseType> databases() {
         return Maps.immutableEnumMap(
                 new HashMap<ModelClassification, DatabaseType>(){{
-                    put(ModelClassification.SINGLE, propertyOf(DATABASE, DatabaseType::valueOf));
-                    put(ModelClassification.COMMAND, propertyOf(COMMAND_MODEL_DATABASE, DatabaseType::valueOf));
-                    put(ModelClassification.QUERY, propertyOf(QUERY_MODEL_DATABASE, DatabaseType::valueOf));
+                    put(ModelClassification.SINGLE, parameterOf(DATABASE, DatabaseType::valueOf));
+                    put(ModelClassification.COMMAND, parameterOf(COMMAND_MODEL_DATABASE, DatabaseType::valueOf));
+                    put(ModelClassification.QUERY, parameterOf(QUERY_MODEL_DATABASE, DatabaseType::valueOf));
                 }}
         );
     }
 
     public String projectPath() {
-        final String targetFolder = propertyOf(TARGET_FOLDER);
-        final String appName = propertyOf(APPLICATION_NAME);
+        final String targetFolder = parameterOf(TARGET_FOLDER);
+        final String appName = parameterOf(APPLICATION_NAME);
         return Paths.get(targetFolder, appName).toString();
     }
 
-    public boolean hasProperty(final CodeGenerationParameter codeGenerationParameter) {
-        return this.propertyOf(codeGenerationParameter) != null && !this.<String>propertyOf(codeGenerationParameter).trim().isEmpty();
+    public boolean hasParameter(final CodeGenerationParameter codeGenerationParameter) {
+        return this.parameterOf(codeGenerationParameter) != null &&
+                !this.<String>parameterOf(codeGenerationParameter).trim().isEmpty();
     }
 
 }

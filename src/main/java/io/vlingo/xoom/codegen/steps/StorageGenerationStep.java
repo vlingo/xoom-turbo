@@ -21,10 +21,10 @@ public class StorageGenerationStep extends TemplateProcessingStep {
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
         final String projectPath = context.projectPath();
-        final String basePackage = context.propertyOf(CodeGenerationParameter.PACKAGE);
-        final Boolean enableCQRS = context.propertyOf(CodeGenerationParameter.CQRS, Boolean::valueOf);
-        final StorageType storageType = context.propertyOf(CodeGenerationParameter.STORAGE_TYPE, StorageType::of);
-        final ProjectionType projectionType = context.propertyOf(CodeGenerationParameter.PROJECTIONS, ProjectionType::valueOf);
+        final String basePackage = context.parameterOf(CodeGenerationParameter.PACKAGE);
+        final Boolean enableCQRS = context.parameterOf(CodeGenerationParameter.CQRS, Boolean::valueOf);
+        final StorageType storageType = context.parameterOf(CodeGenerationParameter.STORAGE_TYPE, StorageType::of);
+        final ProjectionType projectionType = context.parameterOf(CodeGenerationParameter.PROJECTIONS, ProjectionType::valueOf);
         return StorageTemplateDataFactory.build(basePackage, projectPath, enableCQRS,
                         context.contents(), storageType, context.databases(), projectionType);
     }

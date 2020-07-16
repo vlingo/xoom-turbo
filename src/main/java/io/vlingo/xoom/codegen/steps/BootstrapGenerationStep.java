@@ -24,12 +24,12 @@ public class BootstrapGenerationStep extends TemplateProcessingStep {
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
         final String projectPath = context.projectPath();
-        final String basePackage = context.propertyOf(PACKAGE);
-        final String artifactId = context.propertyOf(APPLICATION_NAME);
-        final Boolean useCQRS = context.propertyOf(CQRS, Boolean::valueOf);
-        final Boolean useAnnotations = context.propertyOf(ANNOTATIONS, Boolean::valueOf);
-        final StorageType storageType = context.propertyOf(STORAGE_TYPE, StorageType::valueOf);
-        final ProjectionType projectionType = context.propertyOf(PROJECTIONS, ProjectionType::valueOf);
+        final String basePackage = context.parameterOf(PACKAGE);
+        final String artifactId = context.parameterOf(APPLICATION_NAME);
+        final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
+        final Boolean useAnnotations = context.parameterOf(ANNOTATIONS, Boolean::valueOf);
+        final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
+        final ProjectionType projectionType = context.parameterOf(PROJECTIONS, ProjectionType::valueOf);
 
         final TemplateData templateData =
                 BootstrapTemplateData.from(basePackage, projectPath, artifactId,
