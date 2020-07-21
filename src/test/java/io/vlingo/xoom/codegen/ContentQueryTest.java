@@ -6,16 +6,15 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen;
 
+import io.vlingo.xoom.codegen.template.TemplateFileMocker;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.CodeTemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.codegen.CodeTemplateStandard.STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
 
 public class ContentQueryTest {
 
@@ -61,9 +60,9 @@ public class ContentQueryTest {
 
     private List<Content> contents() {
         return Arrays.asList(
-            Content.with(STATE, new File(Paths.get("/Projects/", "AuthorState.java").toString()), AUTHOR_STATE_CONTENT_TEXT),
-            Content.with(STATE, new File(Paths.get("/Projects/", "BookState.java").toString()), BOOK_STATE_CONTENT_TEXT),
-            Content.with(AGGREGATE, new File(Paths.get("/Projects/", "Author.java").toString()), AGGREGATE_CONTENT_TEXT)
+            Content.with(STATE, TemplateFileMocker.mock("/Projects/", "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT),
+            Content.with(STATE, TemplateFileMocker.mock("/Projects/", "BookState.java"), BOOK_STATE_CONTENT_TEXT),
+            Content.with(AGGREGATE, TemplateFileMocker.mock("/Projects/", "Author.java"), AGGREGATE_CONTENT_TEXT)
         );
     }
 

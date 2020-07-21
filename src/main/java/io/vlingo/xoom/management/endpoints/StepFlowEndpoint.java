@@ -22,7 +22,7 @@ public class StepFlowEndpoint {
     private Map<String, StepFlow> stepFlow = new HashMap<>();
 
 //    @Read
-    public Map<String, Object> getMap(String flowName) {
+    public Map<String, Object> map(String flowName) {
         Set<String> nodes = new HashSet<>();
         Map<String, Integer> portCount = new HashMap<>();
         Set<Map<String, Object>> links = new HashSet<>();

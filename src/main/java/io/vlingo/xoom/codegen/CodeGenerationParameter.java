@@ -20,7 +20,8 @@ public enum CodeGenerationParameter {
     DATABASE("database"),
     REST_RESOURCES("resources"),
     COMMAND_MODEL_DATABASE("command.model.database"),
-    QUERY_MODEL_DATABASE("query.model.database");
+    QUERY_MODEL_DATABASE("query.model.database"),
+    GENERATION_LOCATION("generation.location");
 
     private final String key;
 

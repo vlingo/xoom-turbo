@@ -17,14 +17,14 @@ import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.UUID;
 </#if>
 public class Bootstrap implements XoomInitializationAware {
 
-   @Override
-   public void onInit(final Stage stage) {
-     <#list registries as registry>
-         final ${registry.className} ${registry.objectName} = new ${registry.className}(stage.world());
-     </#list>
-     <#list providers as provider>
-         ${provider.initialization}.using(${provider.arguments});
-     </#list>
-   }
+  @Override
+  public void onInit(final Stage stage) {
+   <#list registries as registry>
+       final ${registry.className} ${registry.objectName} = new ${registry.className}(stage.world());
+   </#list>
+   <#list providers as provider>
+       ${provider.initialization}.using(${provider.arguments});
+   </#list>
+  }
 
 }

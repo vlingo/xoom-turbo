@@ -1,27 +1,32 @@
 package io.vlingo.xoom.codegen;
 
+import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Content {
 
-    public final Object subject;
+    public final TemplateStandard standard;
     public final File file;
     public final String text;
 
-    private Content(final Object subject,
-                    final File file,
+    private Content(final TemplateStandard standard,
+                    final TemplateFile templatefile,
                     final String text) {
-        this.subject = subject;
-        this.file = file;
         this.text = text;
+        this.standard = standard;
+        this.file = new File(Paths.get(templatefile.absolutePath(),
+                        templatefile.filename()).toString());
     }
 
-    public static Content with(final Object subject,
-                               final File file,
+    public static Content with(final TemplateStandard standard,
+                               final TemplateFile templatefile,
                                final String text) {
-        return new Content(subject, file, text);
+        return new Content(standard, templatefile, text);
     }
 
     public void create() {
@@ -35,7 +40,7 @@ public class Content {
     }
 
     public boolean isAbout(final Object subject) {
-        return this.subject.equals(subject);
+        return this.standard.equals(subject);
     }
 
 }

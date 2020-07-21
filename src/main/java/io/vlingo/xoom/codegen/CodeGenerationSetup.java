@@ -8,14 +8,16 @@
 package io.vlingo.xoom.codegen;
 
 import com.google.common.collect.Maps;
-import io.vlingo.xoom.codegen.storage.DatabaseType;
-import io.vlingo.xoom.codegen.storage.ModelClassification;
-import io.vlingo.xoom.codegen.storage.StorageType;
+import io.vlingo.xoom.codegen.template.projections.ProjectionType;
+import io.vlingo.xoom.codegen.template.storage.DatabaseType;
+import io.vlingo.xoom.codegen.template.storage.ModelClassification;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.vlingo.xoom.codegen.CodeTemplateFile.*;
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.template.Template.*;
 
 public class CodeGenerationSetup {
 
@@ -54,6 +56,8 @@ public class CodeGenerationSetup {
                     }}
             );
 
+    public static final String TEST_CLASSES_FOLDER_NAME = "test-classes";
+
     public static final String STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN = "io.vlingo.symbio.store.state.jdbc.%s.%s";
 
     public static final Map<DatabaseType, String> STORAGE_DELEGATE_CLASS_NAME =
@@ -75,7 +79,6 @@ public class CodeGenerationSetup {
                     }}
             );
 
-
     private static final Map<StorageType, String> QUERY_MODEL_STORE_TEMPLATES =
             Maps.immutableEnumMap(
                     new HashMap<StorageType, String>(){{
@@ -84,7 +87,6 @@ public class CodeGenerationSetup {
                         put(StorageType.JOURNAL, STATE_STORE_PROVIDER.filename);
                     }}
             );
-
 
     public static Map<StorageType, String> storeProviderTemplatesFrom(final ModelClassification modelClassification) {
         if(modelClassification.isQueryModel()) {
