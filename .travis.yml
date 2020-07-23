@@ -15,16 +15,14 @@ cache:
   - "$HOME/.m2/repository"
 
 deploy:
-  - provider: script
-    script: mvn deploy -DskipTests
-    skip_cleanup: true
-    on:
-      tags: true
-  - provider: script
-    script: mvn deploy -DskipTests
-    skip_cleanup: true
-    on:
-      branch: master
+  key:
+    secure: Uq730TD2RhwTuuytaMUO4Ywk2/SaW4My2oyr0GohLDiXgzqeBvYObHjRw05anlXyzSbfnp3NlK2e8BI7Lb5fOUJ9XjuzEewNfxteN/Riqj+gabFJwQcIOoBTUMXQrhtlNymblwP6tLZjLCH5IFrLiWNCguJPgt48GdhRcONTrMqCVBCFDtFeYBZMVSBeY/rpVCi6Yv7YRA4naOOjCOP7I6C60OejcFoC0dQA4ePxWMie9gV4GfDUmVktuJ3wOFuKjxk7SQLP8Id/ydFNu/xqUVvhCI1AzuYtK6O/ezWOX72WDYj/WV1k8YMDRFXmUF69QXMigCbKN3siZ9rpqd8UbDgAwL94fW+G7tHiUpxuUKfUGMW0dYJO6K+Q1jkuhX33SsJoM4hPmdx+LLGF9TYYL+PZdxEORjWJ3xuuFAbAK5RfiEZINh4cO6cWbTkxmEif0mPLKABs1ScZj0jYtJ658jk5fcc1ZdQ+DlQYFFOiSXisMJj3t70K1ycEoWR5I/Sbq3Bhm+IssxcQVpySsj8/z4KVPTcY2vrVLaJjyvAOLOTDSkbZVJOeiWBB+8Gr/qK+yXT3yfTz8reM1Er8dHHFWpe+gSDQhxf+SdUdMZrxXix0SlCRJCb4ggsM/vUsL+eLOHtzJanCMgCOVaaG9KXvDFildpBh5ZSn0nq+qS1QW1c=
+  provider: script
+  script: mvn deploy -DskipTests
+  skip_cleanup: true
+  on:
+    tags: true
+    branch: master
 
 after_deploy:
 - chmod u+x .travis/trigger_deps.sh
