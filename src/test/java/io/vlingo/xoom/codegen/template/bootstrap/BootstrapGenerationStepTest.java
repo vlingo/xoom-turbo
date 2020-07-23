@@ -9,7 +9,8 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.template.TemplateFileMocker;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
+import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,15 +33,15 @@ public class BootstrapGenerationStepTest {
         new BootstrapGenerationStep().process(context);
 
         Assert.assertEquals(6, context.contents().size());
-        Assert.assertEquals("Bootstrap.java", context.contents().get(5).file.getName());
-        Assert.assertTrue(context.contents().get(5).text.contains("final ProjectionDispatcherProvider projectionDispatcherProvider"));
-        Assert.assertTrue(context.contents().get(5).text.contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher)"));
-        Assert.assertTrue(context.contents().get(5).text.contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
-        Assert.assertTrue(context.contents().get(5).text.contains("final AuthorResource authorResource = new AuthorResource(stage);"));
-        Assert.assertTrue(context.contents().get(5).text.contains("final BookResource bookResource = new BookResource(stage);"));
-        Assert.assertTrue(context.contents().get(5).text.contains("authorResource.routes(),"));
-        Assert.assertTrue(context.contents().get(5).text.contains("bookResource.routes()"));
-        Assert.assertFalse(context.contents().get(5).text.contains("bookResource.routes(),"));
+        Assert.assertEquals("Bootstrap", context.contents().get(5).retrieveClassName());
+        Assert.assertTrue(context.contents().get(5).contains("final ProjectionDispatcherProvider projectionDispatcherProvider"));
+        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher)"));
+        Assert.assertTrue(context.contents().get(5).contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
+        Assert.assertTrue(context.contents().get(5).contains("final AuthorResource authorResource = new AuthorResource(stage);"));
+        Assert.assertTrue(context.contents().get(5).contains("final BookResource bookResource = new BookResource(stage);"));
+        Assert.assertTrue(context.contents().get(5).contains("authorResource.routes(),"));
+        Assert.assertTrue(context.contents().get(5).contains("bookResource.routes()"));
+        Assert.assertFalse(context.contents().get(5).contains("bookResource.routes(),"));
     }
 
     @Test
@@ -54,12 +55,12 @@ public class BootstrapGenerationStepTest {
         new BootstrapGenerationStep().process(context);
 
         Assert.assertEquals(6, context.contents().size());
-        Assert.assertEquals("Bootstrap.java", context.contents().get(5).file.getName());
-        Assert.assertTrue(context.contents().get(5).text.contains("final ProjectionDispatcherProvider projectionDispatcherProvider"));
-        Assert.assertTrue(context.contents().get(5).text.contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher)"));
-        Assert.assertTrue(context.contents().get(5).text.contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
-        Assert.assertTrue(context.contents().get(5).text.contains("@ResourceHandlers(packages = \"io.vlingo.xoomapp.resource\")"));
-        Assert.assertEquals(Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "Bootstrap.java").toString(), context.contents().get(5).file.getAbsolutePath());
+        Assert.assertEquals("Bootstrap", context.contents().get(5).retrieveClassName());
+        Assert.assertTrue(context.contents().get(5).contains("final ProjectionDispatcherProvider projectionDispatcherProvider"));
+        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher)"));
+        Assert.assertTrue(context.contents().get(5).contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
+        Assert.assertTrue(context.contents().get(5).contains("@ResourceHandlers(packages = \"io.vlingo.xoomapp.resource\")"));
+        Assert.assertEquals(Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "Bootstrap.java").toString(), ((TextBasedContent) context.contents().get(5)).file.getAbsolutePath());
     }
 
     private void loadParameters(final CodeGenerationContext context, final Boolean useAnnotation) {
@@ -70,11 +71,11 @@ public class BootstrapGenerationStepTest {
     }
 
     private void loadContents(final CodeGenerationContext context) {
-        context.addContent(REST_RESOURCE, TemplateFileMocker.mock(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT);
-        context.addContent(REST_RESOURCE, TemplateFileMocker.mock(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT);
-        context.addContent(STORAGE_PROVIDER, TemplateFileMocker.mock(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT);
-        context.addContent(STORAGE_PROVIDER, TemplateFileMocker.mock(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT);
-        context.addContent(PROJECTION_DISPATCHER_PROVIDER, TemplateFileMocker.mock(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT);
+        context.addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT);
+        context.addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT);
+        context.addContent(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT);
+        context.addContent(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT);
+        context.addContent(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT);
     }
 
     private static final String HOME_DIRECTORY = OperatingSystem.detect().isWindows() ? "D:\\projects" : "/home";

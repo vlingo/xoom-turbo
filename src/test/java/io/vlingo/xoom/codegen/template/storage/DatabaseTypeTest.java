@@ -8,7 +8,7 @@
 package io.vlingo.xoom.codegen.template.storage;
 
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.codegen.template.ImportParameter;
+import io.vlingo.xoom.codegen.file.ImportParameter;
 import org.junit.Assert;
 import org.junit.Test;
 

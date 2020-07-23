@@ -9,7 +9,6 @@ package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.resource.RestResourceGenerationStep;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,18 +21,16 @@ public class RestResourceGenerationStepTest {
 
     @Test
     public void testRestResourceGeneration() {
-        final CodeGenerationContext context = CodeGenerationContext.empty();
-        context.onParameters(loadProperties());
+        final CodeGenerationContext context = CodeGenerationContext.with(loadProperties());
         new RestResourceGenerationStep().process(context);
 
-        System.out.println(context.contents().get(0).file.getAbsolutePath());
         Assert.assertEquals(2, context.contents().size());
-        Assert.assertEquals("OrderResource.java", context.contents().get(0).file.getName());
-        Assert.assertEquals("ProductResource.java", context.contents().get(1).file.getName());
-        Assert.assertTrue(context.contents().get(0).text.contains("class OrderResource"));
-        Assert.assertTrue(context.contents().get(0).text.contains("package com.company.context.logistics.resource;"));
-        Assert.assertTrue(context.contents().get(1).text.contains("class ProductResource"));
-        Assert.assertTrue(context.contents().get(1).text.contains("package com.company.context.logistics.resource;"));
+        Assert.assertEquals("OrderResource", context.contents().get(0).retrieveClassName());
+        Assert.assertEquals("ProductResource", context.contents().get(1).retrieveClassName());
+        Assert.assertTrue(context.contents().get(0).contains("class OrderResource"));
+        Assert.assertTrue(context.contents().get(0).contains("package com.company.context.logistics.resource;"));
+        Assert.assertTrue(context.contents().get(1).contains("class ProductResource"));
+        Assert.assertTrue(context.contents().get(1).contains("package com.company.context.logistics.resource;"));
     }
 
     private Map<CodeGenerationParameter, String> loadProperties() {

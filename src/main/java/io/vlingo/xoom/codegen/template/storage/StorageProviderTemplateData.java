@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.codegen.template.storage;
 
-import io.vlingo.xoom.codegen.Content;
-import io.vlingo.xoom.codegen.template.ImportParameter;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.file.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.ContentQuery.findFullyQualifiedClassNames;
+import static io.vlingo.xoom.codegen.content.ContentQuery.findFullyQualifiedClassNames;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STORAGE_PROVIDER;
 

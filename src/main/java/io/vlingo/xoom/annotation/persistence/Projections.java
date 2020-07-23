@@ -7,15 +7,13 @@
 
 package io.vlingo.xoom.annotation.persistence;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public @interface Projections {
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.CLASS)
-public @interface StateAdapters {
+    ProjectionType type();
+    Class<?>[] aggregateProtocols();
 
-    StateAdapter[] values();
+    enum ProjectionType {
+        EVENT_BASED, OPERATION_BASED
+    }
 
 }

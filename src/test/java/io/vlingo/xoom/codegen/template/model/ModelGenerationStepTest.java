@@ -21,29 +21,29 @@ public class ModelGenerationStepTest {
         new ModelGenerationStep().process(context);
 
         Assert.assertEquals(11, context.contents().size());
-        Assert.assertEquals("Order.java", context.contents().get(0).file.getName());
-        Assert.assertEquals("OrderEntity.java", context.contents().get(1).file.getName());
-        Assert.assertEquals("OrderState.java", context.contents().get(2).file.getName());
-        Assert.assertEquals("OrderPlaceholderDefined.java", context.contents().get(3).file.getName());
-        Assert.assertEquals("OrderCreated.java", context.contents().get(4).file.getName());
-        Assert.assertEquals("OrderCancelled.java", context.contents().get(5).file.getName());
-        Assert.assertEquals("Product.java", context.contents().get(6).file.getName());
-        Assert.assertEquals("ProductEntity.java", context.contents().get(7).file.getName());
-        Assert.assertEquals("ProductState.java", context.contents().get(8).file.getName());
-        Assert.assertEquals("ProductPlaceholderDefined.java", context.contents().get(9).file.getName());
-        Assert.assertEquals("ProductSoldOut.java", context.contents().get(10).file.getName());
+        Assert.assertEquals("Order", context.contents().get(0).retrieveClassName());
+        Assert.assertEquals("OrderEntity", context.contents().get(1).retrieveClassName());
+        Assert.assertEquals("OrderState", context.contents().get(2).retrieveClassName());
+        Assert.assertEquals("OrderPlaceholderDefined", context.contents().get(3).retrieveClassName());
+        Assert.assertEquals("OrderCreated", context.contents().get(4).retrieveClassName());
+        Assert.assertEquals("OrderCancelled", context.contents().get(5).retrieveClassName());
+        Assert.assertEquals("Product", context.contents().get(6).retrieveClassName());
+        Assert.assertEquals("ProductEntity", context.contents().get(7).retrieveClassName());
+        Assert.assertEquals("ProductState", context.contents().get(8).retrieveClassName());
+        Assert.assertEquals("ProductPlaceholderDefined", context.contents().get(9).retrieveClassName());
+        Assert.assertEquals("ProductSoldOut", context.contents().get(10).retrieveClassName());
 
-        Assert.assertTrue(context.contents().get(0).text.contains("interface Order "));
-        Assert.assertTrue(context.contents().get(1).text.contains("class OrderEntity extends StatefulEntity"));
-        Assert.assertTrue(context.contents().get(2).text.contains("class OrderState extends StateObject"));
-        Assert.assertTrue(context.contents().get(3).text.contains("class OrderPlaceholderDefined extends DomainEvent"));
-        Assert.assertTrue(context.contents().get(4).text.contains("class OrderCreated extends DomainEvent"));
-        Assert.assertTrue(context.contents().get(5).text.contains("class OrderCancelled extends DomainEvent"));
-        Assert.assertTrue(context.contents().get(6).text.contains("interface Product "));
-        Assert.assertTrue(context.contents().get(7).text.contains("class ProductEntity extends StatefulEntity"));
-        Assert.assertTrue(context.contents().get(8).text.contains("class ProductState extends StateObject"));
-        Assert.assertTrue(context.contents().get(9).text.contains("class ProductPlaceholderDefined extends DomainEvent"));
-        Assert.assertTrue(context.contents().get(10).text.contains("class ProductSoldOut extends DomainEvent"));
+        Assert.assertTrue(context.contents().get(0).contains("interface Order "));
+        Assert.assertTrue(context.contents().get(1).contains("class OrderEntity extends StatefulEntity"));
+        Assert.assertTrue(context.contents().get(2).contains("class OrderState extends StateObject"));
+        Assert.assertTrue(context.contents().get(3).contains("class OrderPlaceholderDefined extends DomainEvent"));
+        Assert.assertTrue(context.contents().get(4).contains("class OrderCreated extends DomainEvent"));
+        Assert.assertTrue(context.contents().get(5).contains("class OrderCancelled extends DomainEvent"));
+        Assert.assertTrue(context.contents().get(6).contains("interface Product "));
+        Assert.assertTrue(context.contents().get(7).contains("class ProductEntity extends StatefulEntity"));
+        Assert.assertTrue(context.contents().get(8).contains("class ProductState extends StateObject"));
+        Assert.assertTrue(context.contents().get(9).contains("class ProductPlaceholderDefined extends DomainEvent"));
+        Assert.assertTrue(context.contents().get(10).contains("class ProductSoldOut extends DomainEvent"));
     }
 
     private Map<CodeGenerationParameter, String> loadParameters() {

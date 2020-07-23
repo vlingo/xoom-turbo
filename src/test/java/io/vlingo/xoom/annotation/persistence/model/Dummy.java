@@ -4,17 +4,7 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+package io.vlingo.xoom.annotation.persistence.model;
 
-package io.vlingo.xoom.annotation.persistence;
-
-public @interface Persistence {
-
-    String basePackage();
-    StorageType storageType();
-    boolean cqrs() default false;
-
-    enum StorageType {
-        STATE_STORE, OBJECT_STORE, JOURNAL
-    }
-
+public interface Dummy {
 }

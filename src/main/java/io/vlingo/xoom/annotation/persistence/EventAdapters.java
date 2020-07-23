@@ -7,8 +7,14 @@
 
 package io.vlingo.xoom.annotation.persistence;
 
-public class PersistenceConfigurationStatements {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    public static final String PERSISTENCE_CONFIGURATION_CLASSNAME = "XoomPersistenceConfiguration";
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.CLASS)
+public @interface EventAdapters {
 
+    EventAdapter[] values();
 }

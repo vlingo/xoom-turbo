@@ -21,7 +21,7 @@ import static io.vlingo.xoom.annotation.initializer.XoomInitializerGenerator.XOO
 import static io.vlingo.xoom.annotation.initializer.XoomInitializerStatements.INITIALIZER_ASSIGNMENT_STATEMENT;
 import static io.vlingo.xoom.annotation.initializer.XoomInitializerStatements.INITIALIZER_INSTANTIATION_STATEMENT;
 
-public class InitializationAwareStatementeResolver {
+public class InitializationAwareStatementResolver {
 
     public static Entry<String, Object[]> resolve(final String basePackage,
                                                       final Elements elements,

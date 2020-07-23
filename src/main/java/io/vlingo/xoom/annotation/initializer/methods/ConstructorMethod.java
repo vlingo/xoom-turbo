@@ -60,7 +60,7 @@ public class ConstructorMethod {
                 StageInstanceStatementResolver.resolve(xoomAnnotation);
 
         final Entry<String, Object[]> initializationStatement =
-                InitializationAwareStatementeResolver.resolve(basePackage, elements, bootstrapClass);
+                InitializationAwareStatementResolver.resolve(basePackage, elements, bootstrapClass);
 
         return MethodSpec.constructorBuilder()
                 .addModifiers(PUBLIC).addParameter(String[].class, "args")

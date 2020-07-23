@@ -9,9 +9,13 @@ package io.vlingo.xoom.annotation.persistence;
 
 import com.google.auto.service.AutoService;
 import io.vlingo.xoom.annotation.AnnotationProcessor;
+import io.vlingo.xoom.annotation.initializer.XoomInitializerGenerator;
+import io.vlingo.xoom.annotation.initializer.XoomValidator;
 
 import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
+import javax.tools.JavaFileObject;
+import java.io.IOException;
 import java.util.Set;
 
 @AutoService(Processor.class)
@@ -19,7 +23,8 @@ public class PersistenceProcessor extends AnnotationProcessor {
 
     @Override
     protected void generate(final Set<? extends Element> annotatedElements) {
-
+        PersistenceValidator.instance().validate(annotatedElements);
+        PersistenceConfigurationGenerator.instance().generateFrom(environment, annotatedElements);
     }
 
     @Override

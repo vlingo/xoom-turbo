@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.codegen.template.storage;
 
-import io.vlingo.xoom.codegen.template.storage.DatabaseType;
 import org.junit.Assert;
 import org.junit.Test;
 

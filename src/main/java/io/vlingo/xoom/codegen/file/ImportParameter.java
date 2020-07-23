@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template;
+package io.vlingo.xoom.codegen.file;
 
 import java.util.Collection;
 import java.util.List;

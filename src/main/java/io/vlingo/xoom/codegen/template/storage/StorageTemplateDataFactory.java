@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.storage;
 
-import io.vlingo.xoom.codegen.Content;
+import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.TemplateData;
 

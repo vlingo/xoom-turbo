@@ -34,7 +34,8 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(final Set<? extends TypeElement> set, final RoundEnvironment roundEnvironment) {
-        final Set<? extends Element> annotatedElements = roundEnvironment.getElementsAnnotatedWith(Xoom.class);
+        final Set<? extends Element> annotatedElements =
+                roundEnvironment.getElementsAnnotatedWith(annotationClass());
 
         if(!annotatedElements.isEmpty()) {
             try {
@@ -68,6 +69,6 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
         return SourceVersion.latestSupported();
     }
 
-    public abstract Class<?> annotationClass();
+    public abstract Class annotationClass();
 
 }
