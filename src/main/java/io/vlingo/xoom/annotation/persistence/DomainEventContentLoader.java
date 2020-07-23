@@ -19,10 +19,10 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 
-public class DomainEventTypeBasedContentLoader extends TypeBasedContentLoader {
+public class DomainEventContentLoader extends TypeBasedContentLoader {
 
-    protected DomainEventTypeBasedContentLoader(final Element annotatedClass,
-                                                final ProcessingEnvironment environment) {
+    protected DomainEventContentLoader(final Element annotatedClass,
+                                       final ProcessingEnvironment environment) {
         super(annotatedClass, environment);
     }
 

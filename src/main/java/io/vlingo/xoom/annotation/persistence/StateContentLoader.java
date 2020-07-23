@@ -4,6 +4,7 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.annotation.persistence;
 
 import io.vlingo.xoom.codegen.content.TypeBasedContentLoader;
@@ -14,32 +15,35 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
 
-public class AggregateProtocolTypeBasedContentLoader extends TypeBasedContentLoader {
+public class StateContentLoader extends TypeBasedContentLoader {
 
-    protected AggregateProtocolTypeBasedContentLoader(final Element annotatedClass,
-                                                      final ProcessingEnvironment environment) {
+    protected StateContentLoader(final Element annotatedClass,
+                                 final ProcessingEnvironment environment) {
         super(annotatedClass, environment);
     }
 
     @Override
     protected List<TypeElement> retrieveTypes() {
-        final Projections projections =
-                annotatedClass.getAnnotation(Projections.class);
+        final StateAdapters stateAdapters =
+                annotatedClass.getAnnotation(StateAdapters.class);
 
-        if(projections == null) {
+        if(stateAdapters == null) {
             return Collections.emptyList();
         }
 
-        return retrieveTypes(projections,
-                annotation -> projections.aggregateProtocols());
+        return Stream.of(stateAdapters.values())
+                .map(adapter -> retrieveType(adapter, anAdapter -> adapter.from()))
+                .collect(Collectors.toList());
     }
 
     @Override
     protected TemplateStandard standard() {
-        return AGGREGATE_PROTOCOL;
+        return STATE;
     }
 
 }

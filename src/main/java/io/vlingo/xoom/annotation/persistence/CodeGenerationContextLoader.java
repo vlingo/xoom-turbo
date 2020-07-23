@@ -45,9 +45,9 @@ public class CodeGenerationContextLoader {
                 InternalTargetPathLocator.find(environment);
 
         final List<TypeBasedContentLoader> contentLoaders =
-                Arrays.asList(new AggregateProtocolTypeBasedContentLoader(annotatedClass, environment),
-                        new DomainEventTypeBasedContentLoader(annotatedClass, environment),
-                        new StateTypeBasedContentLoader(annotatedClass, environment));
+                Arrays.asList(new AggregateProtocolContentLoader(annotatedClass, environment),
+                        new DomainEventContentLoader(annotatedClass, environment),
+                        new StateContentLoader(annotatedClass, environment));
 
         return CodeGenerationContext.generateInternallyTo(targetFolder)
                 .with(contentLoaders).on(resolveParameters());
