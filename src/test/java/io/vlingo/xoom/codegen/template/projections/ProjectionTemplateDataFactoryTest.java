@@ -8,10 +8,10 @@
 package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.OperatingSystem;
-import io.vlingo.xoom.codegen.Content;
-import io.vlingo.xoom.codegen.template.ImportParameter;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.file.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateFileMocker;
+import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import org.junit.Assert;
 import org.junit.Test;
@@ -122,10 +122,10 @@ public class ProjectionTemplateDataFactoryTest {
 
     private List<Content> contents() {
         return Arrays.asList(
-                Content.with(STATE, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT),
-                Content.with(STATE, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT),
-                Content.with(AGGREGATE_PROTOCOL, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), AUTHOR_CONTENT_TEXT),
-                Content.with(AGGREGATE_PROTOCOL, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT)
+                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT),
+                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT),
+                Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), AUTHOR_CONTENT_TEXT),
+                Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT)
         );
     }
 

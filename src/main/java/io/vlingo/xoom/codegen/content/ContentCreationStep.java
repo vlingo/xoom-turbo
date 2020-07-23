@@ -5,13 +5,16 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen;
+package io.vlingo.xoom.codegen.content;
+
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationStep;
 
 public class ContentCreationStep implements CodeGenerationStep {
 
     @Override
     public void process(final CodeGenerationContext context) {
-        context.contents().forEach(content -> content.create());
+        context.contents().stream().filter(Content::canWrite).forEach(Content::create);
     }
 
 }

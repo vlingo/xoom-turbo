@@ -8,11 +8,9 @@
 package io.vlingo.xoom.codegen.template.storage;
 
 import io.vlingo.xoom.OperatingSystem;
-import io.vlingo.xoom.codegen.Content;
-import io.vlingo.xoom.codegen.template.ImportParameter;
-import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateFileMocker;
-import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.file.ImportParameter;
+import io.vlingo.xoom.codegen.template.*;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
 import org.junit.Test;
@@ -190,13 +188,13 @@ public class StorageTemplateDataFactoryTest {
 
     private List<Content> contents() {
         return Arrays.asList(
-                    Content.with(STATE, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT),
-                    Content.with(STATE, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT),
-                    Content.with(DOMAIN_EVENT, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookRented.java"), BOOK_RENTED_TEXT),
-                    Content.with(DOMAIN_EVENT, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), BOOK_PURCHASED_TEXT),
-                    Content.with(AGGREGATE_PROTOCOL, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), AUTHOR_CONTENT_TEXT),
-                    Content.with(AGGREGATE_PROTOCOL, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT),
-                    Content.with(PROJECTION_DISPATCHER_PROVIDER, TemplateFileMocker.mock(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT_TEXT)
+                    Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT),
+                    Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT),
+                    Content.with(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookRented.java"), BOOK_RENTED_TEXT),
+                    Content.with(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), BOOK_PURCHASED_TEXT),
+                    Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), AUTHOR_CONTENT_TEXT),
+                    Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT),
+                    Content.with(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT_TEXT)
                 );
     }
 

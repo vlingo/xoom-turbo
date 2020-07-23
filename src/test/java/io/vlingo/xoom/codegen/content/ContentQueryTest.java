@@ -4,9 +4,11 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.codegen;
+package io.vlingo.xoom.codegen.content;
 
-import io.vlingo.xoom.codegen.template.TemplateFileMocker;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.template.TemplateFile;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -60,9 +62,9 @@ public class ContentQueryTest {
 
     private List<Content> contents() {
         return Arrays.asList(
-            Content.with(STATE, TemplateFileMocker.mock("/Projects/", "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT),
-            Content.with(STATE, TemplateFileMocker.mock("/Projects/", "BookState.java"), BOOK_STATE_CONTENT_TEXT),
-            Content.with(AGGREGATE, TemplateFileMocker.mock("/Projects/", "Author.java"), AGGREGATE_CONTENT_TEXT)
+            Content.with(STATE, new TemplateFile("/Projects/", "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT),
+            Content.with(STATE, new TemplateFile("/Projects/", "BookState.java"), BOOK_STATE_CONTENT_TEXT),
+            Content.with(AGGREGATE, new TemplateFile("/Projects/", "Author.java"), AGGREGATE_CONTENT_TEXT)
         );
     }
 

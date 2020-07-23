@@ -7,11 +7,13 @@
 
 package io.vlingo.xoom.codegen;
 
+import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
 import io.vlingo.xoom.codegen.template.storage.ModelClassification;
 
+import javax.lang.model.element.TypeElement;
 import java.util.*;
 import java.util.function.Function;
 
@@ -21,7 +23,7 @@ import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
 
 public class CodeGenerationContext {
 
-    private String internalRequesterPath;
+    private String internalTargetFolder;
     private final List<Content> contents = new ArrayList<>();
     private final Map<CodeGenerationParameter, String> parameters = new HashMap<>();
 
@@ -29,27 +31,27 @@ public class CodeGenerationContext {
         return new CodeGenerationContext();
     }
 
-    public static CodeGenerationContext from(final String internalRequesterPath) {
-        return new CodeGenerationContext(internalRequesterPath);
+    public static CodeGenerationContext generateInternallyTo(final String internalTargetFolder) {
+        return new CodeGenerationContext(internalTargetFolder);
     }
 
     public static CodeGenerationContext with(final Map<CodeGenerationParameter, String> parameters) {
-        return new CodeGenerationContext().onParameters(parameters);
+        return new CodeGenerationContext().on(parameters);
     }
 
     private CodeGenerationContext() {
         this(null);
     }
 
-    private CodeGenerationContext(final String internalRequesterPath) {
-        this.internalRequesterPath = internalRequesterPath;
-
+    private CodeGenerationContext(final String internalTargetFolder) {
+        this.internalTargetFolder = internalTargetFolder;
         parameters.put(GENERATION_LOCATION,
-                internalRequesterPath == null ? EXTERNAL.name() : INTERNAL.name());
+                internalTargetFolder == null ? EXTERNAL.name() : INTERNAL.name());
     }
 
-    public CodeGenerationContext onParameters(final Map<CodeGenerationParameter, String> parameters) {
-        this.parameters.putAll(parameters);
+    public CodeGenerationContext on(final Map<CodeGenerationParameter, String> parameters) {
+        parameters.forEach((key, value) -> this.parameters.put(key, value));
+        //this.parameters.putAll(parameters);
         return this;
     }
 
@@ -73,6 +75,11 @@ public class CodeGenerationContext {
         this.contents.add(Content.with(standard, file, text));
     }
 
+    public void addContent(final TemplateStandard standard,
+                           final TypeElement typeElement) {
+        this.contents.add(Content.with(standard, typeElement));
+    }
+
     public boolean hasParameter(final CodeGenerationParameter codeGenerationParameter) {
         return this.parameterOf(codeGenerationParameter) != null &&
                 !this.<String>parameterOf(codeGenerationParameter).trim().isEmpty();
@@ -90,8 +97,8 @@ public class CodeGenerationContext {
         }};
     }
 
-    public String internalRequesterPath() {
-        return internalRequesterPath;
+    public String internalTargetFolder() {
+        return internalTargetFolder;
     }
 
     public List<Content> contents() {

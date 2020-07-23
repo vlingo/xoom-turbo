@@ -7,14 +7,17 @@
 
 package io.vlingo.xoom.annotation.persistence;
 
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.TypeSpec;
 import io.vlingo.xoom.annotation.ProcessingAnnotationException;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationException;
+import io.vlingo.xoom.codegen.content.ContentCreationStep;
+import io.vlingo.xoom.codegen.template.projections.ProjectionGenerationStep;
+import io.vlingo.xoom.codegen.template.storage.StorageGenerationStep;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
-import java.io.IOException;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class PersistenceConfigurationGenerator {
 
@@ -22,25 +25,28 @@ public class PersistenceConfigurationGenerator {
 
     private PersistenceConfigurationGenerator() { }
 
+    public static PersistenceConfigurationGenerator instance() {
+        if(instance == null) {
+            instance = new PersistenceConfigurationGenerator();
+        }
+        return instance;
+    }
+
     public void generateFrom(final ProcessingEnvironment environment,
                              final Set<? extends Element> annotatedElements) {
         try {
             final Element annotatedClass =
                     annotatedElements.stream().findFirst().get();
 
-            final String basePackage =
-                    PersistenceConfigurationPackage.from(environment, annotatedClass);
+            final CodeGenerationContext context =
+                    CodeGenerationContextLoader.from(environment, annotatedClass);
 
-            final TypeSpec typeSpec =
-                    PersistenceConfigurationType.from(environment,
-                            basePackage, annotatedClass);
-
-            JavaFile.builder(basePackage, typeSpec)
-                    .build().writeTo(environment.getFiler());
-        } catch (final IOException exception) {
+            Stream.of(new ProjectionGenerationStep(), new StorageGenerationStep(), new ContentCreationStep())
+                    .filter(step -> step.shouldProcess(context))
+                    .forEach(step -> step.process(context));
+        } catch (final CodeGenerationException exception) {
             throw new ProcessingAnnotationException(exception);
         }
     }
-
 
 }

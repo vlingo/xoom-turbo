@@ -9,7 +9,7 @@ package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.template.TemplateFileMocker;
+import io.vlingo.xoom.codegen.template.TemplateFile;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -54,26 +54,26 @@ public class ProjectionGenerationStepTest {
         final String expectedProjectionComment = projectionType.isEventBased() ? "replace with event" : "replace with operation text";
 
         Assert.assertEquals(9, context.contents().size());
-        Assert.assertEquals("ProjectionDispatcherProvider.java", context.contents().get(4).file.getName());
-        Assert.assertEquals("AuthorData.java", context.contents().get(5).file.getName());
-        Assert.assertEquals("AuthorProjectionActor.java", context.contents().get(6).file.getName());
-        Assert.assertEquals("BookData.java", context.contents().get(7).file.getName());
-        Assert.assertEquals("BookProjectionActor.java", context.contents().get(8).file.getName());
+        Assert.assertEquals("ProjectionDispatcherProvider", context.contents().get(4).retrieveClassName());
+        Assert.assertEquals("AuthorData", context.contents().get(5).retrieveClassName());
+        Assert.assertEquals("AuthorProjectionActor", context.contents().get(6).retrieveClassName());
+        Assert.assertEquals("BookData", context.contents().get(7).retrieveClassName());
+        Assert.assertEquals("BookProjectionActor", context.contents().get(8).retrieveClassName());
 
-        Assert.assertTrue(context.contents().get(4).text.contains("class ProjectionDispatcherProvider"));
-        Assert.assertTrue(context.contents().get(5).text.contains("class AuthorData"));
-        Assert.assertTrue(context.contents().get(6).text.contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
-        Assert.assertTrue(context.contents().get(6).text.contains(expectedProjectionComment));
-        Assert.assertTrue(context.contents().get(7).text.contains("class BookData"));
-        Assert.assertTrue(context.contents().get(8).text.contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
-        Assert.assertTrue(context.contents().get(8).text.contains(expectedProjectionComment));
+        Assert.assertTrue(context.contents().get(4).contains("class ProjectionDispatcherProvider"));
+        Assert.assertTrue(context.contents().get(5).contains("class AuthorData"));
+        Assert.assertTrue(context.contents().get(6).contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
+        Assert.assertTrue(context.contents().get(6).contains(expectedProjectionComment));
+        Assert.assertTrue(context.contents().get(7).contains("class BookData"));
+        Assert.assertTrue(context.contents().get(8).contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
+        Assert.assertTrue(context.contents().get(8).contains(expectedProjectionComment));
     }
 
     private void loadContents(final CodeGenerationContext context) {
-        context.addContent(STATE, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT);
-        context.addContent(STATE, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT);
-        context.addContent(AGGREGATE_PROTOCOL, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), AUTHOR_CONTENT_TEXT);
-        context.addContent(AGGREGATE_PROTOCOL, TemplateFileMocker.mock(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT);
+        context.addContent(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT);
+        context.addContent(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT);
+        context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), AUTHOR_CONTENT_TEXT);
+        context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT);
     }
 
     private void loadParameters(final CodeGenerationContext context, final String projections) {

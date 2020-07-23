@@ -8,12 +8,9 @@
 package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.OperatingSystem;
-import io.vlingo.xoom.codegen.Content;
-import io.vlingo.xoom.codegen.template.TemplateFileMocker;
-import io.vlingo.xoom.codegen.template.ImportParameter;
-import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateParameter;
-import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.file.ImportParameter;
+import io.vlingo.xoom.codegen.template.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,11 +28,11 @@ public class AnnotatedBootstrapTemplateDataTest {
     public void testBootstrapTemplateDataGenerationWithCQRSAndProjections() {
         final List<Content> contents =
                 Arrays.asList(
-                        Content.with(REST_RESOURCE, TemplateFileMocker.mock(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT),
-                        Content.with(REST_RESOURCE, TemplateFileMocker.mock(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT),
-                        Content.with(STORAGE_PROVIDER, TemplateFileMocker.mock(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT),
-                        Content.with(STORAGE_PROVIDER, TemplateFileMocker.mock(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT),
-                        Content.with(PROJECTION_DISPATCHER_PROVIDER, TemplateFileMocker.mock(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT)
+                        Content.with(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT),
+                        Content.with(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT),
+                        Content.with(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT),
+                        Content.with(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT),
+                        Content.with(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT)
                 );
 
         final TemplateData bootstrapTemplateData =
@@ -75,8 +72,8 @@ public class AnnotatedBootstrapTemplateDataTest {
     public void testBootstrapTemplateDataGenerationWithoutCQRSAndProjections() {
         final List<Content> contents =
                 Arrays.asList(
-                        Content.with(REST_RESOURCE, TemplateFileMocker.mock(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT),
-                        Content.with(STORAGE_PROVIDER, TemplateFileMocker.mock(PERSISTENCE_PACKAGE_PATH, "StateStoreProvider.java"), SINGLE_MODEL_STORE_PROVIDER_CONTENT)
+                        Content.with(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT),
+                        Content.with(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "StateStoreProvider.java"), SINGLE_MODEL_STORE_PROVIDER_CONTENT)
                 );
 
         final TemplateData bootstrapTemplateData =

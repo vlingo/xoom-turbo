@@ -45,7 +45,7 @@ public class ResourcesStatementResolver {
         final ResourceHandlers resourceHandlersAnnotation =
                 bootstrapClass.getAnnotation(ResourceHandlers.class);
 
-        if(shouldIgnore(resourceHandlersAnnotation)){
+        if(shouldIgnore(resourceHandlersAnnotation)) {
             final String defaultStatement =
                     String.format(RESOURCES_STATEMENT_PATTERN, "");
 

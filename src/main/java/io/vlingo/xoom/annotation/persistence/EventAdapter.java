@@ -4,8 +4,10 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-
 package io.vlingo.xoom.annotation.persistence;
+
+import io.vlingo.lattice.model.DomainEvent;
+import io.vlingo.symbio.Entry;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,8 +16,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
-public @interface StateAdapters {
+public @interface EventAdapter {
 
-    StateAdapter[] values();
+    Class<? extends DomainEvent> from();
+    Class<? extends Entry> to();
 
 }

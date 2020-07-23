@@ -7,8 +7,8 @@
 package io.vlingo.xoom.codegen.template.bootstrap;
 
 
-import io.vlingo.xoom.codegen.Content;
-import io.vlingo.xoom.codegen.ContentQuery;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.List;

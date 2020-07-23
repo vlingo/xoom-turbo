@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.codegen.template.projections;
 
-import io.vlingo.xoom.codegen.Content;
-import io.vlingo.xoom.codegen.ContentQuery;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;

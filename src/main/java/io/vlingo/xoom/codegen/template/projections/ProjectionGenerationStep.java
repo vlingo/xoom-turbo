@@ -9,13 +9,16 @@ package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.List;
 
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.AGGREGATES;
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.PROJECTIONS;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 
 public class ProjectionGenerationStep extends TemplateProcessingStep {
 
@@ -28,7 +31,7 @@ public class ProjectionGenerationStep extends TemplateProcessingStep {
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        if(context.hasParameter(AGGREGATES)) {
+        if(ContentQuery.exists(AGGREGATE_PROTOCOL, context.contents())) {
             final ProjectionType projectionType =
                     context.parameterOf(PROJECTIONS, ProjectionType::valueOf);
             return projectionType.isProjectionEnabled();

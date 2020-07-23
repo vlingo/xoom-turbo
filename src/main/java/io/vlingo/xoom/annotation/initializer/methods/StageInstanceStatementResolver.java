@@ -12,6 +12,7 @@ import io.vlingo.xoom.annotation.initializer.AddressFactory;
 import io.vlingo.xoom.annotation.initializer.Xoom;
 
 import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 
 import static io.vlingo.xoom.annotation.initializer.XoomInitializerStatements.BASIC_STAGE_INSTANCE_STATEMENT;
@@ -21,7 +22,7 @@ public class StageInstanceStatementResolver {
 
     public static Entry<String, Object[]> resolve(final Xoom xoomAnnotation) {
         if(xoomAnnotation.addressFactory().type().isBasic()) {
-            return new AbstractMap.SimpleEntry(BASIC_STAGE_INSTANCE_STATEMENT,
+            return new SimpleEntry(BASIC_STAGE_INSTANCE_STATEMENT,
                     new Object[]{Stage.class, xoomAnnotation.name()});
         }
 
@@ -31,7 +32,7 @@ public class StageInstanceStatementResolver {
         final IdentityGeneratorType identityGeneratorType =
                 generator.resolveWith(xoomAnnotation.addressFactory().type());
 
-        return new AbstractMap.SimpleEntry(STAGE_INSTANCE_STATEMENT,
+        return new SimpleEntry(STAGE_INSTANCE_STATEMENT,
                 new Object[]{Stage.class, xoomAnnotation.name(), Stage.class,
                         xoomAnnotation.addressFactory().type().clazz,
                         IdentityGeneratorType.class, identityGeneratorType});

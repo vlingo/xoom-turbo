@@ -5,10 +5,11 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template;
+package io.vlingo.xoom.codegen.file;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationLocation;
+import io.vlingo.xoom.codegen.template.TemplateData;
 
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.GENERATION_LOCATION;
 
