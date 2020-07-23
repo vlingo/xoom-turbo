@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen;
 
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TypeBasedContentLoader;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
@@ -50,8 +51,12 @@ public class CodeGenerationContext {
     }
 
     public CodeGenerationContext on(final Map<CodeGenerationParameter, String> parameters) {
-        parameters.forEach((key, value) -> this.parameters.put(key, value));
-        //this.parameters.putAll(parameters);
+        this.parameters.putAll(parameters);
+        return this;
+    }
+
+    public CodeGenerationContext with(final List<TypeBasedContentLoader> loaders) {
+        loaders.forEach(loader -> loader.load(this));
         return this;
     }
 
