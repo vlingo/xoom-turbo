@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
   <artifactId>vlingo-xoom</artifactId>
-  <version>1.3.3-SNAPSHOT</version>
+  <version>1.3.3</version>
   <description>The vlingo/xoom provides a JVM microframework for the vlingo/PLATFORM that helps in building high-performance reactive microservices.</description>
   <name>vlingo-xoom</name>
   <url>https://github.com/vlingo/vlingo-xoom</url>
@@ -40,25 +40,25 @@
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-http</artifactId>
-      <version>1.3.3-SNAPSHOT</version>
+      <version>1.3.3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-actors</artifactId>
-      <version>1.3.3-SNAPSHOT</version>
+      <version>1.3.3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-symbio</artifactId>
-      <version>1.3.3-SNAPSHOT</version>
+      <version>1.3.3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-lattice</artifactId>
-      <version>1.3.3-SNAPSHOT</version>
+      <version>1.3.3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
