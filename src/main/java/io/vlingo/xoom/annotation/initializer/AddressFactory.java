@@ -37,7 +37,7 @@ public @interface AddressFactory {
     }
 
     enum IdentityGenerator {
-        DEFAULT(null),
+        DEFAULT(IdentityGeneratorType.RANDOM),
         TIME_BASED(IdentityGeneratorType.TIME_BASED),
         NAME_BASED(IdentityGeneratorType.NAME_BASED),
         RANDOM(IdentityGeneratorType.RANDOM);
