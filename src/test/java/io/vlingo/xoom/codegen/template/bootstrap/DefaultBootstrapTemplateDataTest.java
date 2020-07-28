@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.file.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,7 +42,7 @@ public class DefaultBootstrapTemplateDataTest {
                     put(APPLICATION_NAME, "xoom-app");
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.TRUE.toString());
-                    put(PROJECTIONS, Boolean.TRUE.toString());
+                    put(PROJECTIONS, ProjectionType.EVENT_BASED.name());
                     put(ANNOTATIONS, Boolean.FALSE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                 }};
@@ -98,7 +99,7 @@ public class DefaultBootstrapTemplateDataTest {
                     put(APPLICATION_NAME, "xoom-app");
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.FALSE.toString());
-                    put(PROJECTIONS, Boolean.FALSE.toString());
+                    put(PROJECTIONS, ProjectionType.NONE.name());
                     put(ANNOTATIONS, Boolean.FALSE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                 }};

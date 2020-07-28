@@ -23,7 +23,7 @@ public interface FileLocationResolver {
                         value -> CodeGenerationLocation.valueOf(value));
 
         if(location.isInternal()) {
-            return new InternalFileLocationResolver().resolve(context, templateData);
+            throw new UnsupportedOperationException("Unable to resolve internal file location");
         }
 
         return new ExternalFileLocationResolver().resolve(context, templateData);

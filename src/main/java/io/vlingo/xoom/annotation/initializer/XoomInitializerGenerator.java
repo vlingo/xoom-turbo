@@ -18,6 +18,7 @@ import io.vlingo.xoom.codegen.template.storage.StorageGenerationStep;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -42,8 +43,8 @@ public class XoomInitializerGenerator {
                              final Map<Class, Set<Element>> annotatedElements) {
 
         try {
-            final Element bootstrapClass =
-                    annotatedElements.get(Xoom.class)
+            final TypeElement bootstrapClass =
+                    (TypeElement) annotatedElements.get(Xoom.class)
                             .stream().findFirst().get();
 
             final Element persistenceSetupClass =
@@ -54,13 +55,14 @@ public class XoomInitializerGenerator {
                     XoomInitializerPackage.from(environment, bootstrapClass);
 
             final CodeGenerationContext context =
-                    CodeGenerationContextLoader.from(basePackage, bootstrapClass,
-                            persistenceSetupClass, environment);
+                    CodeGenerationContextLoader.from(environment.getFiler(), basePackage,
+                            bootstrapClass, persistenceSetupClass, environment);
 
             Stream.of(new ProjectionGenerationStep(), new StorageGenerationStep(),
                     new BootstrapGenerationStep(), new ContentCreationStep())
                     .filter(step -> step.shouldProcess(context))
                     .forEach(step -> step.process(context));
+
         } catch (final CodeGenerationException exception) {
             throw new ProcessingAnnotationException(exception);
         }

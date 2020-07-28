@@ -9,8 +9,8 @@ package io.vlingo.xoom.annotation.initializer;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.TypeBasedContentLoader;
-import io.vlingo.xoom.codegen.file.InternalTargetPathLocator;
 
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -20,23 +20,27 @@ import java.util.List;
 
 public class CodeGenerationContextLoader {
 
+    private final Filer filer;
     private final String basePackage;
     private final TypeElement bootstrapClass;
     private final TypeElement persistenceSetupClass;
     private final ProcessingEnvironment environment;
 
-    public static CodeGenerationContext from(final String basePackage,
+    public static CodeGenerationContext from(final Filer filer,
+                                             final String basePackage,
                                              final Element bootstrapClass,
                                              final Element persistenceSetupClass,
                                              final ProcessingEnvironment environment) {
-        return new CodeGenerationContextLoader(basePackage, bootstrapClass,
+        return new CodeGenerationContextLoader(filer, basePackage, bootstrapClass,
                 persistenceSetupClass, environment).load();
     }
 
-    public CodeGenerationContextLoader(final String basePackage,
+    public CodeGenerationContextLoader(final Filer filer,
+                                       final String basePackage,
                                        final Element bootstrapClass,
                                        final Element persistenceSetupClass,
                                        final ProcessingEnvironment environment) {
+        this.filer = filer;
         this.environment = environment;
         this.basePackage = basePackage;
         this.bootstrapClass = (TypeElement) bootstrapClass;
@@ -44,14 +48,11 @@ public class CodeGenerationContextLoader {
     }
 
     public CodeGenerationContext load() {
-        final String targetFolder =
-                InternalTargetPathLocator.find(environment);
-
         final CodeGenerationParameterResolver parameterResolver =
                 CodeGenerationParameterResolver.from(basePackage, bootstrapClass,
                         persistenceSetupClass, environment);
 
-        return CodeGenerationContext.generateInternallyTo(targetFolder)
+        return CodeGenerationContext.using(filer, bootstrapClass)
                 .with(resolveContentLoaders()).on(parameterResolver.resolve());
     }
 

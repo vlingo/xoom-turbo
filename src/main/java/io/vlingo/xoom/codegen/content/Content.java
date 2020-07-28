@@ -3,6 +3,8 @@ package io.vlingo.xoom.codegen.content;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
+import javax.annotation.processing.Filer;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 public abstract class Content {
@@ -15,8 +17,10 @@ public abstract class Content {
 
     public static Content with(final TemplateStandard standard,
                                final TemplateFile templatefile,
+                               final Filer filer,
+                               final Element source,
                                final String text) {
-        return new TextBasedContent(standard, templatefile, text);
+        return new TextBasedContent(standard, templatefile, source, filer, text);
     }
 
     public static Content with(final TemplateStandard standard,
