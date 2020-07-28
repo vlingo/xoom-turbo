@@ -27,4 +27,8 @@ public class StorageGenerationStep extends TemplateProcessingStep {
                 context.databases(), projectionType);
     }
 
+    @Override
+    public boolean shouldProcess(final CodeGenerationContext context) {
+        return context.parameterOf(STORAGE_TYPE, StorageType::of).isEnabled();
+    }
 }

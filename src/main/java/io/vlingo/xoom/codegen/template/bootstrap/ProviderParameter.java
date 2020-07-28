@@ -36,18 +36,17 @@ public class ProviderParameter {
                                                final Boolean useCQRS,
                                                final Boolean useProjections) {
         final List<ProviderParameter> providers = new ArrayList<>();
-
-        if(useProjections) {
-            providers.add(new ProviderParameter(PROJECTION_DISPATCHER_PROVIDER));
+        if(storageType.isEnabled()) {
+            if (useProjections) {
+                providers.add(new ProviderParameter(PROJECTION_DISPATCHER_PROVIDER));
+            }
+            if (!useCQRS) {
+                providers.add(new ProviderParameter(STORAGE_PROVIDER, storageType, SINGLE, useProjections));
+            } else {
+                providers.add(0, new ProviderParameter(STORAGE_PROVIDER, storageType, QUERY, useProjections));
+                providers.add(new ProviderParameter(STORAGE_PROVIDER, storageType, COMMAND, useProjections));
+            }
         }
-
-        if(!useCQRS) {
-            providers.add(new ProviderParameter(STORAGE_PROVIDER, storageType, SINGLE, useProjections));
-        } else {
-            providers.add(0, new ProviderParameter(STORAGE_PROVIDER, storageType, QUERY, useProjections));
-            providers.add(new ProviderParameter(STORAGE_PROVIDER, storageType, COMMAND, useProjections));
-        }
-
         return providers;
     }
 

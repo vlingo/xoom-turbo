@@ -92,6 +92,9 @@ public enum StorageType {
     }
 
     public Stream<StorageType> findRelatedStorageTypes(final Boolean useCQRS) {
+        if(!isEnabled()) {
+            return Stream.empty();
+        }
         if(!useCQRS || isStateful()) {
             return Stream.of(this);
         }
@@ -102,8 +105,8 @@ public enum StorageType {
         return !modelClassification.isQueryModel() || isStateful();
     }
 
-    public boolean isNone() {
-        return equals(NONE);
+    public boolean isEnabled() {
+        return !equals(NONE);
     }
 
     public Boolean isStateful() {

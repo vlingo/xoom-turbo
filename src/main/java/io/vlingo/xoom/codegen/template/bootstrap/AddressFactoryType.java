@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 public enum AddressFactoryType {
 
     BASIC(AddressFactory.class.getCanonicalName(),
-            "\"%s\", Stage.class",
+            "\"%s\"",
             (appName, identityGeneratorType) -> new String[]{appName}),
 
     UUID(UUIDAddressFactory.class.getCanonicalName(),
