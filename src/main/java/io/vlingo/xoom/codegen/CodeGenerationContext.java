@@ -8,12 +8,14 @@
 package io.vlingo.xoom.codegen;
 
 import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.TypeBasedContentLoader;
+import io.vlingo.xoom.annotation.initializer.contentloader.TypeBasedContentLoader;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
 import io.vlingo.xoom.codegen.template.storage.ModelClassification;
 
+import javax.annotation.processing.Filer;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.*;
 import java.util.function.Function;
@@ -24,7 +26,8 @@ import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
 
 public class CodeGenerationContext {
 
-    private String internalTargetFolder;
+    private Filer filer;
+    private Element source;
     private final List<Content> contents = new ArrayList<>();
     private final Map<CodeGenerationParameter, String> parameters = new HashMap<>();
 
@@ -32,8 +35,8 @@ public class CodeGenerationContext {
         return new CodeGenerationContext();
     }
 
-    public static CodeGenerationContext generateInternallyTo(final String internalTargetFolder) {
-        return new CodeGenerationContext(internalTargetFolder);
+    public static CodeGenerationContext using(final Filer filer, final Element source) {
+        return new CodeGenerationContext(filer, source);
     }
 
     public static CodeGenerationContext with(final Map<CodeGenerationParameter, String> parameters) {
@@ -41,13 +44,14 @@ public class CodeGenerationContext {
     }
 
     private CodeGenerationContext() {
-        this(null);
+        this(null, null);
     }
 
-    private CodeGenerationContext(final String internalTargetFolder) {
-        this.internalTargetFolder = internalTargetFolder;
+    private CodeGenerationContext(final Filer filer, final Element source) {
+        this.filer = filer;
+        this.source = source;
         parameters.put(GENERATION_LOCATION,
-                internalTargetFolder == null ? EXTERNAL.name() : INTERNAL.name());
+                filer == null ? EXTERNAL.name() : INTERNAL.name());
     }
 
     public CodeGenerationContext on(final Map<CodeGenerationParameter, String> parameters) {
@@ -74,15 +78,17 @@ public class CodeGenerationContext {
         return (T) mapper.apply(value);
     }
 
-    public void addContent(final TemplateStandard standard,
+    public CodeGenerationContext addContent(final TemplateStandard standard,
                            final TemplateFile file,
                            final String text) {
-        this.contents.add(Content.with(standard, file, text));
+        this.contents.add(Content.with(standard, file, filer, source, text));
+        return this;
     }
 
-    public void addContent(final TemplateStandard standard,
+    public CodeGenerationContext addContent(final TemplateStandard standard,
                            final TypeElement typeElement) {
         this.contents.add(Content.with(standard, typeElement));
+        return this;
     }
 
     public boolean hasParameter(final CodeGenerationParameter codeGenerationParameter) {
@@ -102,12 +108,14 @@ public class CodeGenerationContext {
         }};
     }
 
-    public String internalTargetFolder() {
-        return internalTargetFolder;
+    public boolean isInternalGeneration() {
+        return parameterOf(GENERATION_LOCATION, CodeGenerationLocation::valueOf).isInternal();
     }
 
     public List<Content> contents() {
         return Collections.unmodifiableList(contents);
     }
+
+
 
 }

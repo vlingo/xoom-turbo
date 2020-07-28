@@ -4,9 +4,9 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.annotation.persistence;
+package io.vlingo.xoom.annotation.initializer.contentloader;
 
-import io.vlingo.xoom.codegen.content.TypeBasedContentLoader;
+import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;

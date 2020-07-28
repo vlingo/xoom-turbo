@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.template;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.file.FileLocationResolver;
 
+import java.io.File;
 import java.nio.file.Paths;
 
 public class TemplateFile {
@@ -18,17 +19,14 @@ public class TemplateFile {
 
     public TemplateFile(final CodeGenerationContext context,
                         final TemplateData templateData) {
-        this(FileLocationResolver.from(context, templateData), templateData.filename());
+        this(context.isInternalGeneration() ? "" : FileLocationResolver.from(context, templateData),
+                templateData.filename());
     }
 
     public TemplateFile(final String absolutePath,
                         final String filename) {
         this.absolutePath = absolutePath;
         this.filename = filename;
-    }
-
-    public String absolutePath() {
-        return absolutePath;
     }
 
     public String filename() {
@@ -38,4 +36,9 @@ public class TemplateFile {
     public String filePath() {
         return Paths.get(absolutePath, filename).toString();
     }
+
+    public File toFile() {
+        return new File(filePath());
+    }
+
 }

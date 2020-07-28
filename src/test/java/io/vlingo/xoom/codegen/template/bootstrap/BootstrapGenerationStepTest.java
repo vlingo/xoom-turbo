@@ -64,10 +64,10 @@ public class BootstrapGenerationStepTest {
     }
 
     private void loadParameters(final CodeGenerationContext context, final Boolean useAnnotation) {
-        context.with(PACKAGE, "io.vlingo.xoomapp").with(APPLICATION_NAME, "xoom-app").with(CQRS, "true")
+        context.with(PACKAGE, "io.vlingo.xoomapp").with(APPLICATION_NAME, "xoom-app")
                 .with(TARGET_FOLDER, HOME_DIRECTORY).with(STORAGE_TYPE, "STATE_STORE")
-                .with(PROJECTIONS, ProjectionType.OPERATION_BASED.name())
-                .with(ANNOTATIONS, useAnnotation.toString());
+                .with(PROJECTIONS, ProjectionType.OPERATION_BASED.name()).with(CQRS, "true")
+                .with(BLOCKING_MESSAGING, "false").with(ANNOTATIONS, useAnnotation.toString());
     }
 
     private void loadContents(final CodeGenerationContext context) {

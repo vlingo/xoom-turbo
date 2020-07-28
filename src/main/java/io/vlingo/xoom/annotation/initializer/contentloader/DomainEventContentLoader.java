@@ -4,10 +4,9 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+package io.vlingo.xoom.annotation.initializer.contentloader;
 
-package io.vlingo.xoom.annotation.persistence;
-
-import io.vlingo.xoom.codegen.content.TypeBasedContentLoader;
+import io.vlingo.xoom.annotation.persistence.EventAdapters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -18,32 +17,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 
-public class StateContentLoader extends TypeBasedContentLoader {
+public class DomainEventContentLoader extends TypeBasedContentLoader {
 
-    protected StateContentLoader(final Element annotatedClass,
-                                 final ProcessingEnvironment environment) {
+    protected DomainEventContentLoader(final Element annotatedClass,
+                                       final ProcessingEnvironment environment) {
         super(annotatedClass, environment);
     }
 
     @Override
     protected List<TypeElement> retrieveTypes() {
-        final StateAdapters stateAdapters =
-                annotatedClass.getAnnotation(StateAdapters.class);
+        final EventAdapters eventAdapters =
+                annotatedClass.getAnnotation(EventAdapters.class);
 
-        if(stateAdapters == null) {
+        if(eventAdapters == null) {
             return Collections.emptyList();
         }
 
-        return Stream.of(stateAdapters.values())
+        return Stream.of(eventAdapters.values())
                 .map(adapter -> retrieveType(adapter, anAdapter -> adapter.from()))
                 .collect(Collectors.toList());
     }
 
     @Override
     protected TemplateStandard standard() {
-        return STATE;
+        return DOMAIN_EVENT;
     }
 
 }

@@ -7,33 +7,25 @@
 
 package io.vlingo.xoom.codegen.template.bootstrap;
 
-
-import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.template.storage.StorageType;
 
-import java.util.List;
-
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.ANNOTATIONS;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCES;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
 
 public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
-    public DefaultBootstrapTemplateData(final String basePackage,
-                                        final String artifactId,
-                                        final StorageType storageType,
-                                        final Boolean useCQRS,
-                                        final Boolean useProjections,
-                                        final Boolean useAnnotations,
-                                        final List<Content> contents) {
-        super(basePackage, artifactId, storageType, useCQRS,
-                useProjections, useAnnotations, contents);
+    @Override
+    protected void enrichParameters(final CodeGenerationContext context) {
+        parameters().and(REST_RESOURCES, RestResourcesParameter.from(context.contents()))
+                .addImports(ContentQuery.findFullyQualifiedClassNames(REST_RESOURCE, context.contents()));
     }
 
     @Override
-    protected void enrichParameters(final List<Content> contents) {
-        parameters().and(REST_RESOURCES, RestResourcesParameter.from(contents))
-                .addImports(ContentQuery.findFullyQualifiedClassNames(REST_RESOURCE, contents));
+    protected boolean support(final CodeGenerationContext context) {
+        return !context.isInternalGeneration() &&
+                !context.parameterOf(ANNOTATIONS, Boolean::valueOf);
     }
 
 }

@@ -7,8 +7,6 @@
 
 package io.vlingo.xoom.annotation;
 
-import io.vlingo.xoom.annotation.initializer.Xoom;
-
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -16,7 +14,11 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,9 +35,10 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     }
 
     @Override
-    public boolean process(final Set<? extends TypeElement> set, final RoundEnvironment roundEnvironment) {
-        final Set<? extends Element> annotatedElements =
-                roundEnvironment.getElementsAnnotatedWith(annotationClass());
+    public boolean process(final Set<? extends TypeElement> set,
+                           final RoundEnvironment roundEnvironment) {
+        final Map<Class, Set<Element>> annotatedElements =
+                filterAnnotatedElements(roundEnvironment);
 
         if(!annotatedElements.isEmpty()) {
             try {
@@ -48,7 +51,19 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
         return true;
     }
 
-    protected abstract void generate(final Set<? extends Element> annotatedElements);
+    private Map<Class, Set<Element>> filterAnnotatedElements(final RoundEnvironment environment) {
+        final Function<Class, SimpleEntry<Class, Set<Element>>> mapper =
+                annotationClass ->
+                        new SimpleEntry<Class, Set<Element>>(
+                                annotationClass, environment.getElementsAnnotatedWith(annotationClass));
+
+        return supportedAnnotationClasses().map(mapper)
+                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    }
+
+    protected abstract void generate(final Map<Class, Set<Element>> annotatedElements);
+
+    public abstract Stream<Class> supportedAnnotationClasses();
 
     private void printError(final Messager messager,
                             final ProcessingAnnotationException exception) {
@@ -61,14 +76,12 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return Stream.of(annotationClass().getCanonicalName()).collect(Collectors.toSet());
+        return supportedAnnotationClasses().map(Class::getCanonicalName).collect(Collectors.toSet());
     }
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
         return SourceVersion.latestSupported();
     }
-
-    public abstract Class annotationClass();
 
 }

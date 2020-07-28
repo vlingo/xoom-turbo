@@ -28,6 +28,7 @@ public enum Template {
     ENTRY_ADAPTER("EntryAdapter"),
     STATE_ADAPTER("StateAdapter"),
     REST_RESOURCE("RestResource"),
+    XOOM_INITIALIZER("XoomInitializer"),
     PROJECTION_DISPATCHER_PROVIDER("ProjectionDispatcherProvider"),
     OPERATION_BASED_PROJECTION("OperationBasedProjection"),
     EVENT_BASED_PROJECTION("EventBasedProjection"),

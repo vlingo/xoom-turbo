@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.content;
+package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -15,6 +15,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.MirroredTypesException;
+import javax.lang.model.type.TypeMirror;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -34,6 +35,10 @@ public abstract class TypeBasedContentLoader {
     public void load(final CodeGenerationContext context) {
         this.retrieveTypes()
                 .forEach(typeElement -> context.addContent(standard(), typeElement));
+    }
+
+    protected TypeElement toType(final TypeMirror typeMirror) {
+        return (TypeElement) environment.getTypeUtils().asElement(typeMirror);
     }
 
     protected TypeElement retrieveType(final Object annotation, final Function<Object, Class<?>> retriever) {

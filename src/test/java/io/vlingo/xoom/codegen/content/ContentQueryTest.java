@@ -62,9 +62,9 @@ public class ContentQueryTest {
 
     private List<Content> contents() {
         return Arrays.asList(
-            Content.with(STATE, new TemplateFile("/Projects/", "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT),
-            Content.with(STATE, new TemplateFile("/Projects/", "BookState.java"), BOOK_STATE_CONTENT_TEXT),
-            Content.with(AGGREGATE, new TemplateFile("/Projects/", "Author.java"), AGGREGATE_CONTENT_TEXT)
+            Content.with(STATE, new TemplateFile("/Projects/", "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+            Content.with(STATE, new TemplateFile("/Projects/", "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
+            Content.with(AGGREGATE, new TemplateFile("/Projects/", "Author.java"), null, null, AGGREGATE_CONTENT_TEXT)
         );
     }
 

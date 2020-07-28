@@ -8,16 +8,25 @@
 package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.OperatingSystem;
-import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.file.ImportParameter;
-import io.vlingo.xoom.codegen.template.*;
+import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.TemplateParameter;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.APPLICATION_NAME;
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.BLOCKING_MESSAGING;
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.storage.StorageType.STATE_STORE;
@@ -26,21 +35,27 @@ public class AnnotatedBootstrapTemplateDataTest {
 
     @Test
     public void testBootstrapTemplateDataGenerationWithCQRSAndProjections() {
-        final List<Content> contents =
-                Arrays.asList(
-                        Content.with(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT),
-                        Content.with(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT),
-                        Content.with(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT),
-                        Content.with(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT),
-                        Content.with(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT)
-                );
+        final Map<CodeGenerationParameter, String> codeGenerationParameters =
+                new HashMap<CodeGenerationParameter, String>() {{
+                    put(PACKAGE, "io.vlingo.xoomapp");
+                    put(APPLICATION_NAME, "xoom-app");
+                    put(STORAGE_TYPE, STATE_STORE.name());
+                    put(CQRS, Boolean.TRUE.toString());
+                    put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
+                    put(PROJECTIONS, ProjectionType.EVENT_BASED.name());
+                    put(ANNOTATIONS, Boolean.TRUE.toString());
+                }};
 
-        final TemplateData bootstrapTemplateData =
-                BootstrapTemplateData.from("io.vlingo.xoomapp", "xoom-app",
-                        STATE_STORE, true, true, true, contents);
+        final CodeGenerationContext context =
+                CodeGenerationContext.with(codeGenerationParameters)
+                        .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT)
+                        .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT)
+                        .addContent(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT)
+                        .addContent(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT)
+                        .addContent(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT);
 
         final TemplateParameters parameters =
-                bootstrapTemplateData.parameters();
+                BootstrapTemplateData.from(context).parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
         Assert.assertEquals(5, parameters.<List>find(IMPORTS).size());
@@ -65,23 +80,29 @@ public class AnnotatedBootstrapTemplateDataTest {
         Assert.assertEquals("statefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getObjectName());
 
         Assert.assertEquals(true, parameters.find(USE_PROJECTIONS));
-        Assert.assertEquals("xoom-app", parameters.find(APPLICATION_NAME));
+        Assert.assertEquals("xoom-app", parameters.find(TemplateParameter.APPLICATION_NAME));
     }
 
     @Test
     public void testBootstrapTemplateDataGenerationWithoutCQRSAndProjections() {
-        final List<Content> contents =
-                Arrays.asList(
-                        Content.with(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT),
-                        Content.with(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "StateStoreProvider.java"), SINGLE_MODEL_STORE_PROVIDER_CONTENT)
-                );
+        final Map<CodeGenerationParameter, String> codeGenerationParameters =
+                new HashMap<CodeGenerationParameter, String>() {{
+                    put(PACKAGE, "io.vlingo.xoomapp");
+                    put(APPLICATION_NAME, "xoom-app");
+                    put(STORAGE_TYPE, STATE_STORE.name());
+                    put(CQRS, Boolean.FALSE.toString());
+                    put(PROJECTIONS, ProjectionType.NONE.name());
+                    put(ANNOTATIONS, Boolean.TRUE.toString());
+                    put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
+                }};
 
-        final TemplateData bootstrapTemplateData =
-                BootstrapTemplateData.from("io.vlingo.xoomapp", "xoom-app", STATE_STORE,
-                        false, false, true, contents);
+        final CodeGenerationContext context =
+                CodeGenerationContext.with(codeGenerationParameters)
+                        .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT)
+                        .addContent(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "StateStoreProvider.java"), SINGLE_MODEL_STORE_PROVIDER_CONTENT);
 
         final TemplateParameters parameters =
-                bootstrapTemplateData.parameters();
+                BootstrapTemplateData.from(context).parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
         Assert.assertEquals(3, parameters.<List>find(IMPORTS).size());
@@ -100,7 +121,7 @@ public class AnnotatedBootstrapTemplateDataTest {
         Assert.assertEquals("statefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getObjectName());
 
         Assert.assertEquals(false, parameters.find(USE_PROJECTIONS));
-        Assert.assertEquals("xoom-app", parameters.find(APPLICATION_NAME));
+        Assert.assertEquals("xoom-app", parameters.find(TemplateParameter.APPLICATION_NAME));
     }
 
     private static final String EXPECTED_PACKAGE = "io.vlingo.xoomapp.infrastructure";

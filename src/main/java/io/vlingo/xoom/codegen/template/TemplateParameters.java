@@ -50,7 +50,9 @@ public class TemplateParameters {
         if(this.find(TemplateParameter.IMPORTS) == null) {
             this.and(TemplateParameter.IMPORTS, new ArrayList<ImportParameter>());
         }
-        this.<List>find(TemplateParameter.IMPORTS).add(new ImportParameter(qualifiedClassName));
+        if(qualifiedClassName != null && !qualifiedClassName.trim().isEmpty()) {
+            this.<List>find(TemplateParameter.IMPORTS).add(new ImportParameter(qualifiedClassName.trim()));
+        }
         return this;
     }
 

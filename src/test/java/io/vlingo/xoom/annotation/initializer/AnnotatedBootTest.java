@@ -17,7 +17,7 @@ import io.vlingo.xoom.XoomInitializationAware;
  *
  * @author Danilo Ambrosio
  */
-@Xoom(name = "annotated-boot")
+@Xoom(name = "annotated-boot", addressFactory = @AddressFactory(type = AddressFactory.Type.UUID, generator = AddressFactory.IdentityGenerator.RANDOM))
 @ResourceHandlers(packages = "io.vlingo.xoom.annotation.initializer.resources")
 public class AnnotatedBootTest implements XoomInitializationAware {
 

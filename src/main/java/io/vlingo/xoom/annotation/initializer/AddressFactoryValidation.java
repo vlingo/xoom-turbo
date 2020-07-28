@@ -10,14 +10,14 @@ import io.vlingo.xoom.annotation.ProcessingAnnotationException;
 import io.vlingo.xoom.annotation.Validation;
 
 import javax.lang.model.element.Element;
+import java.util.Map;
 import java.util.Set;
 
 public class AddressFactoryValidation implements Validation {
 
     @Override
-    public void validate(final Class annotation,
-                         final Set<? extends Element> annotatedElements) {
-        annotatedElements.forEach(element -> {
+    public void validate(final Class annotation, final Map<Class, Set<Element>> annotatedElements) {
+        annotatedElements.get(Xoom.class).forEach(element -> {
             final Xoom xoom = element.getAnnotation(Xoom.class);
             final AddressFactory addressFactory = xoom.addressFactory();
             if(addressFactory.type().isBasic() && !addressFactory.generator().isDefault()) {
@@ -25,5 +25,4 @@ public class AddressFactoryValidation implements Validation {
             }
         });
     }
-
 }
