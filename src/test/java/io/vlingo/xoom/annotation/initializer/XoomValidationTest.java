@@ -16,6 +16,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -30,48 +32,48 @@ public class XoomValidationTest {
 
     @Test
     public void testThatSingularityValidationPasses() {
-        final Set<? extends Element> annotatedElements = Mockito.mock(Set.class);
+        final Set<Element> annotatedElements = Mockito.mock(Set.class);
         when(annotatedElements.size()).thenReturn(1);
-        Validation.singularityValidation().validate(Xoom.class, annotatedElements);
+        Validation.singularityValidation().validate(Xoom.class, new HashMap<Class, Set<Element>>(){{put(Xoom.class, annotatedElements);}});
     }
 
     @Test(expected = ProcessingAnnotationException.class)
     public void testThatSingularityValidationFails() {
-        final Set<? extends Element> annotatedElements = Mockito.mock(Set.class);
+        final Set<Element> annotatedElements = Mockito.mock(Set.class);
         when(annotatedElements.size()).thenReturn(2);
-        Validation.singularityValidation().validate(Xoom.class, annotatedElements);
+        Validation.singularityValidation().validate(Xoom.class, new HashMap<Class, Set<Element>>(){{put(Xoom.class, annotatedElements);}});
     }
 
     @Test
     public void testThatTargetValidationPasses() {
         final Element element = Mockito.mock(Element.class);
-        final Set<? extends Element> annotatedElements = Stream.of(element).collect(toSet());
+        final Set<Element> annotatedElements = Stream.of(element).collect(toSet());
         when(element.getKind()).thenReturn(ElementKind.CLASS);
-        Validation.targetValidation().validate(Xoom.class, annotatedElements);
+        Validation.targetValidation().validate(Xoom.class, new HashMap<Class, Set<Element>>(){{put(Xoom.class, annotatedElements);}});
     }
 
     @Test(expected = ProcessingAnnotationException.class)
     public void testThatTargetValidationFails() {
         final Element element = Mockito.mock(Element.class);
-        final Set<? extends Element> annotatedElements = Stream.of(element).collect(toSet());
+        final Set<Element> annotatedElements = Stream.of(element).collect(toSet());
         when(element.getKind()).thenReturn(ElementKind.METHOD);
-        Validation.targetValidation().validate(Xoom.class, annotatedElements);
+        Validation.targetValidation().validate(Xoom.class, new HashMap<Class, Set<Element>>(){{put(Xoom.class, annotatedElements);}});
     }
 
     @Test
     public void testThatClassVisibilityValidationPasses() {
         final Element element = Mockito.mock(Element.class);
-        final Set<? extends Element> annotatedElements = Stream.of(element).collect(toSet());
+        final Set<Element> annotatedElements = Stream.of(element).collect(toSet());
         when(element.getModifiers()).thenReturn(Stream.of(Modifier.PUBLIC).collect(toSet()));
-        Validation.classVisibilityValidation().validate(Xoom.class, annotatedElements);
+        Validation.classVisibilityValidation().validate(Xoom.class, new HashMap<Class, Set<Element>>(){{put(Xoom.class, annotatedElements);}});
     }
 
     @Test(expected = ProcessingAnnotationException.class)
     public void testThatClassVisibilityValidationFails() {
         final Element element = Mockito.mock(Element.class);
-        final Set<? extends Element> annotatedElements = Stream.of(element).collect(toSet());
+        final Set<Element> annotatedElements = Stream.of(element).collect(toSet());
         when(element.getModifiers()).thenReturn(Stream.of(Modifier.PRIVATE).collect(toSet()));
-        Validation.classVisibilityValidation().validate(Xoom.class, annotatedElements);
+        Validation.classVisibilityValidation().validate(Xoom.class, new HashMap<Class, Set<Element>>(){{put(Xoom.class, annotatedElements);}});
     }
 
     @Test
@@ -79,8 +81,8 @@ public class XoomValidationTest {
         final Element element = Mockito.mock(Element.class);
         final Xoom xoom = createXoomAnnotation("annotation-test", true, BASIC, DEFAULT);
         when(element.getAnnotation(eq(Xoom.class))).thenReturn(xoom);
-        final Set<? extends Element> annotatedElements = Stream.of(element).collect(toSet());
-        new AddressFactoryValidation().validate(Xoom.class, annotatedElements);
+        final Set<Element> annotatedElements = Stream.of(element).collect(toSet());
+        new AddressFactoryValidation().validate(Xoom.class, new HashMap<Class, Set<Element>>(){{put(Xoom.class, annotatedElements);}});
     }
 
     @Test(expected = ProcessingAnnotationException.class)
@@ -88,8 +90,8 @@ public class XoomValidationTest {
         final Element element = Mockito.mock(Element.class);
         final Xoom xoom = createXoomAnnotation("annotation-test", false, BASIC, RANDOM);
         when(element.getAnnotation(eq(Xoom.class))).thenReturn(xoom);
-        final Set<? extends Element> annotatedElements = Stream.of(element).collect(toSet());
-        new AddressFactoryValidation().validate(Xoom.class, annotatedElements);
+        final Set<Element> annotatedElements = Stream.of(element).collect(toSet());
+        new AddressFactoryValidation().validate(Xoom.class, new HashMap<Class, Set<Element>>(){{put(Xoom.class, annotatedElements);}});
     }
 
     private Xoom createXoomAnnotation(final String name,

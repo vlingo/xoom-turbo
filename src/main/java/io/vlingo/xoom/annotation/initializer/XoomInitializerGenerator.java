@@ -7,14 +7,20 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.TypeSpec;
 import io.vlingo.xoom.annotation.ProcessingAnnotationException;
+import io.vlingo.xoom.annotation.persistence.Persistence;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationException;
+import io.vlingo.xoom.codegen.content.ContentCreationStep;
+import io.vlingo.xoom.codegen.template.bootstrap.BootstrapGenerationStep;
+import io.vlingo.xoom.codegen.template.projections.ProjectionGenerationStep;
+import io.vlingo.xoom.codegen.template.storage.StorageGenerationStep;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
-import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class XoomInitializerGenerator {
 
@@ -33,20 +39,29 @@ public class XoomInitializerGenerator {
     }
 
     public void generateFrom(final ProcessingEnvironment environment,
-                             final Set<? extends Element> annotatedElements) {
+                             final Map<Class, Set<Element>> annotatedElements) {
+
         try {
             final Element bootstrapClass =
-                    annotatedElements.stream().findFirst().get();
+                    annotatedElements.get(Xoom.class)
+                            .stream().findFirst().get();
+
+            final Element persistenceSetupClass =
+                    annotatedElements.get(Persistence.class)
+                            .stream().findFirst().orElse(null);
 
             final String basePackage =
                     XoomInitializerPackage.from(environment, bootstrapClass);
 
-            final TypeSpec typeSpec =
-                    XoomInitializerType.from(environment, basePackage, bootstrapClass);
+            final CodeGenerationContext context =
+                    CodeGenerationContextLoader.from(basePackage, bootstrapClass,
+                            persistenceSetupClass, environment);
 
-            JavaFile.builder(basePackage, typeSpec)
-                    .build().writeTo(environment.getFiler());
-        } catch (final IOException exception) {
+            Stream.of(new ProjectionGenerationStep(), new StorageGenerationStep(),
+                    new BootstrapGenerationStep(), new ContentCreationStep())
+                    .filter(step -> step.shouldProcess(context))
+                    .forEach(step -> step.process(context));
+        } catch (final CodeGenerationException exception) {
             throw new ProcessingAnnotationException(exception);
         }
     }

@@ -19,6 +19,10 @@ public enum CodeGenerationParameter {
     PROJECTIONS("projections"),
     DATABASE("database"),
     REST_RESOURCES("resources"),
+    ADDRESS_FACTORY("address.factory"),
+    IDENTITY_GENERATOR("identity.generator"),
+    BLOCKING_MESSAGING("blocking.messaging"),
+    XOOM_INITIALIZER_NAME("xoom.initialization.classname"),
     COMMAND_MODEL_DATABASE("command.model.database"),
     QUERY_MODEL_DATABASE("query.model.database"),
     GENERATION_LOCATION("generation.location");

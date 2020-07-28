@@ -26,4 +26,5 @@ public enum ProjectionType {
     public boolean isProjectionEnabled() {
         return !equals(NONE);
     }
+
 }

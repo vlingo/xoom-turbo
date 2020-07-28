@@ -10,8 +10,9 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
 
-
 public enum StorageType {
+
+    NONE(),
 
     JOURNAL("JOURNAL", "Journal", "SourcedTypeRegistry",
             "io.vlingo.lattice.model.sourcing",
@@ -40,6 +41,10 @@ public enum StorageType {
     private final String defaultStoreActorQualifiedName;
     private final String inMemoryStoreActorQualifiedName;
     public final TemplateStandard adapterSourceClassStandard;
+
+    StorageType() {
+        this(null, null, null, null, null, null, null);
+    }
 
     StorageType(final String key,
                 final String title,
@@ -97,6 +102,10 @@ public enum StorageType {
         return !modelClassification.isQueryModel() || isStateful();
     }
 
+    public boolean isNone() {
+        return equals(NONE);
+    }
+
     public Boolean isStateful() {
         return equals(STATE_STORE);
     }
@@ -108,4 +117,6 @@ public enum StorageType {
     private String typeRegistryQualifiedClassName() {
         return typeRegistryPackage + "." + typeRegistryClassName;
     }
+
+
 }

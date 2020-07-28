@@ -8,6 +8,7 @@ package io.vlingo.xoom.annotation.persistence;
 
 import javax.lang.model.element.Element;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 
 import static io.vlingo.xoom.annotation.Validation.*;
@@ -25,7 +26,7 @@ public class PersistenceValidator {
         return instance;
     }
 
-    public void validate(final Set<? extends Element> annotatedElements) {
+    public void validate(final Map<Class, Set<Element>> annotatedElements) {
         Arrays.asList(singularityValidation(), targetValidation(), classVisibilityValidation())
                 .forEach(validator -> validator.validate(Persistence.class, annotatedElements));
     }

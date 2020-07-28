@@ -74,15 +74,17 @@ public class CodeGenerationContext {
         return (T) mapper.apply(value);
     }
 
-    public void addContent(final TemplateStandard standard,
+    public CodeGenerationContext addContent(final TemplateStandard standard,
                            final TemplateFile file,
                            final String text) {
         this.contents.add(Content.with(standard, file, text));
+        return this;
     }
 
-    public void addContent(final TemplateStandard standard,
+    public CodeGenerationContext addContent(final TemplateStandard standard,
                            final TypeElement typeElement) {
         this.contents.add(Content.with(standard, typeElement));
+        return this;
     }
 
     public boolean hasParameter(final CodeGenerationParameter codeGenerationParameter) {
@@ -104,6 +106,10 @@ public class CodeGenerationContext {
 
     public String internalTargetFolder() {
         return internalTargetFolder;
+    }
+
+    public boolean isInternalGeneration() {
+        return parameterOf(GENERATION_LOCATION, CodeGenerationLocation::valueOf).isInternal();
     }
 
     public List<Content> contents() {

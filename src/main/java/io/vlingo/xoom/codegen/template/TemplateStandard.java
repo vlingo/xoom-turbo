@@ -39,6 +39,9 @@ public enum TemplateStandard {
     PROJECTION_DISPATCHER_PROVIDER(parameters -> Template.PROJECTION_DISPATCHER_PROVIDER.filename,
             (name, parameters) -> "ProjectionDispatcherProvider"),
 
+    XOOM_INITIALIZER(templateParameters -> Template.XOOM_INITIALIZER.filename,
+            (name, parameters) -> "XoomInitializer"),
+
     BOOTSTRAP(parameters -> parameters.find(USE_ANNOTATIONS) ?
             ANNOTATED_BOOTSTRAP.filename : DEFAULT_BOOTSTRAP.filename,
             (name, parameters) -> "Bootstrap"),
@@ -79,6 +82,10 @@ public enum TemplateStandard {
 
     public String retrieveTemplateFilename(final TemplateParameters parameters) {
         return templateFileRetriever.apply(parameters);
+    }
+
+    public String resolveClassname() {
+        return resolveClassname("");
     }
 
     public String resolveClassname(final String name) {

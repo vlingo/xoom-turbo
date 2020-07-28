@@ -17,7 +17,6 @@ import static io.vlingo.xoom.annotation.persistence.Persistence.StorageType.STAT
 import static io.vlingo.xoom.annotation.persistence.Projections.ProjectionType.EVENT_BASED;
 
 @Persistence(basePackage = "io.vlingo.xoom.annotation", storageType = STATE_STORE, cqrs = true)
-@Projections(type = EVENT_BASED, aggregateProtocols = {Dummy.class, OtherDummy.class})
 @StateAdapters(values = {
         @StateAdapter(from = DummyState.class, to= TextState.class),
         @StateAdapter(from = OtherDummyState.class, to= TextState.class)
