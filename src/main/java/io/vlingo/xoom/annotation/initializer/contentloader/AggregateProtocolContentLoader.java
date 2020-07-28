@@ -4,10 +4,9 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+package io.vlingo.xoom.annotation.initializer.contentloader;
 
-package io.vlingo.xoom.annotation.initializer;
-
-import io.vlingo.xoom.codegen.content.TypeBasedContentLoader;
+import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -16,28 +15,31 @@ import javax.lang.model.element.TypeElement;
 import java.util.Collections;
 import java.util.List;
 
-public class RestResourceContentLoader extends TypeBasedContentLoader {
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 
-    protected RestResourceContentLoader(final Element annotatedClass,
-                                        final ProcessingEnvironment environment) {
+public class AggregateProtocolContentLoader extends TypeBasedContentLoader {
+
+    protected AggregateProtocolContentLoader(final Element annotatedClass,
+                                             final ProcessingEnvironment environment) {
         super(annotatedClass, environment);
     }
 
     @Override
     protected List<TypeElement> retrieveTypes() {
-        final ResourceHandlers resourceHandlers =
-                annotatedClass.getAnnotation(ResourceHandlers.class);
+        final Projections projections =
+                annotatedClass.getAnnotation(Projections.class);
 
-        if(resourceHandlers == null) {
+        if(projections == null) {
             return Collections.emptyList();
         }
 
-        return retrieveTypes(resourceHandlers, annotation -> resourceHandlers.value());
+        return retrieveTypes(projections,
+                annotation -> projections.aggregateProtocols());
     }
 
     @Override
     protected TemplateStandard standard() {
-        return TemplateStandard.REST_RESOURCE;
+        return AGGREGATE_PROTOCOL;
     }
 
 }

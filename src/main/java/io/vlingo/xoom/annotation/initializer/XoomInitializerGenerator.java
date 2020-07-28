@@ -8,6 +8,7 @@
 package io.vlingo.xoom.annotation.initializer;
 
 import io.vlingo.xoom.annotation.ProcessingAnnotationException;
+import io.vlingo.xoom.annotation.initializer.contentloader.CodeGenerationContextLoader;
 import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationException;

@@ -8,7 +8,7 @@
 package io.vlingo.xoom.codegen;
 
 import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.TypeBasedContentLoader;
+import io.vlingo.xoom.annotation.initializer.contentloader.TypeBasedContentLoader;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;

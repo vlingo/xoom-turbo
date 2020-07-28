@@ -5,10 +5,10 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.annotation.initializer;
+package io.vlingo.xoom.annotation.initializer.contentloader;
 
+import io.vlingo.xoom.annotation.initializer.CodeGenerationParameterResolver;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.content.TypeBasedContentLoader;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
