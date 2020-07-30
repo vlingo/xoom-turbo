@@ -7,14 +7,20 @@
 
 package io.vlingo.xoom.codegen.template.bootstrap;
 
+import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.xoom.OperatingSystem;
+import io.vlingo.xoom.actors.Settings;
+import io.vlingo.xoom.annotation.initializer.AnnotatedBootTest;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import javax.annotation.processing.Filer;
+import javax.lang.model.element.Element;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
@@ -25,7 +31,7 @@ public class BootstrapGenerationStepTest {
     @Test
     public void testDefaultBootstrapGeneration() {
         final CodeGenerationContext context =
-                CodeGenerationContext.empty();
+                CodeGenerationContext.empty().with(PROJECTIONS, ProjectionType.OPERATION_BASED.name());
 
         loadParameters(context, false);
         loadContents(context);
@@ -46,7 +52,7 @@ public class BootstrapGenerationStepTest {
     @Test
     public void testAnnotatedBootstrapGeneration() {
         final CodeGenerationContext context =
-                CodeGenerationContext.empty();
+                CodeGenerationContext.empty().with(PROJECTIONS, ProjectionType.OPERATION_BASED.name());
 
         loadParameters(context, true);
         loadContents(context);
@@ -61,11 +67,36 @@ public class BootstrapGenerationStepTest {
         Assert.assertEquals(Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "Bootstrap.java").toString(), ((TextBasedContent) context.contents().get(5)).file.getAbsolutePath());
     }
 
+
+    @Test
+    public void testXoomInitializerBootstrapGeneration() {
+        final CodeGenerationContext context =
+                CodeGenerationContext.using(Mockito.mock(Filer.class), Mockito.mock(Element.class))
+                        .with(PROJECTIONS, ProjectionType.NONE.name())
+                        .with(XOOM_INITIALIZER_NAME, "AnnotatedBootstrap")
+                        .with(ADDRESS_FACTORY, AddressFactoryType.BASIC.name())
+                        .with(IDENTITY_GENERATOR, IdentityGeneratorType.RANDOM.name());
+
+        loadParameters(context, false);
+        loadContents(context);
+
+        new BootstrapGenerationStep().process(context);
+
+        Assert.assertEquals(6, context.contents().size());
+        Assert.assertEquals("XoomInitializer", context.contents().get(5).retrieveClassName());
+        Assert.assertTrue(context.contents().get(5).contains("Settings.enableBlockingMailbox();"));
+        Assert.assertTrue(context.contents().get(5).contains("world.stageNamed(\"xoom-app\")"));
+        Assert.assertTrue(context.contents().get(5).contains("new AnnotatedBootstrap();" ));
+        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
+        Assert.assertTrue(context.contents().get(5).contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
+        Assert.assertEquals("XoomInitializer.java", ((TextBasedContent) context.contents().get(5)).file.getName());
+    }
+
     private void loadParameters(final CodeGenerationContext context, final Boolean useAnnotation) {
         context.with(PACKAGE, "io.vlingo.xoomapp").with(APPLICATION_NAME, "xoom-app")
                 .with(TARGET_FOLDER, HOME_DIRECTORY).with(STORAGE_TYPE, "STATE_STORE")
-                .with(PROJECTIONS, ProjectionType.OPERATION_BASED.name()).with(CQRS, "true")
-                .with(BLOCKING_MESSAGING, "false").with(ANNOTATIONS, useAnnotation.toString());
+                .with(CQRS, "true").with(BLOCKING_MESSAGING, Boolean.TRUE.toString())
+                .with(ANNOTATIONS, useAnnotation.toString());
     }
 
     private void loadContents(final CodeGenerationContext context) {
