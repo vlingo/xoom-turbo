@@ -121,5 +121,4 @@ public enum StorageType {
         return typeRegistryPackage + "." + typeRegistryClassName;
     }
 
-
 }

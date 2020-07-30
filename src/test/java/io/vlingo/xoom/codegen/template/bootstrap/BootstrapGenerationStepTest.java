@@ -34,8 +34,7 @@ public class BootstrapGenerationStepTest {
 
         Assert.assertEquals(6, context.contents().size());
         Assert.assertEquals("Bootstrap", context.contents().get(5).retrieveClassName());
-        Assert.assertTrue(context.contents().get(5).contains("final ProjectionDispatcherProvider projectionDispatcherProvider"));
-        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher)"));
+        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, ProjectionDispatcherProvider.using(stage).storeDispatcher)"));
         Assert.assertTrue(context.contents().get(5).contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
         Assert.assertTrue(context.contents().get(5).contains("final AuthorResource authorResource = new AuthorResource(stage);"));
         Assert.assertTrue(context.contents().get(5).contains("final BookResource bookResource = new BookResource(stage);"));
@@ -56,8 +55,7 @@ public class BootstrapGenerationStepTest {
 
         Assert.assertEquals(6, context.contents().size());
         Assert.assertEquals("Bootstrap", context.contents().get(5).retrieveClassName());
-        Assert.assertTrue(context.contents().get(5).contains("final ProjectionDispatcherProvider projectionDispatcherProvider"));
-        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher)"));
+        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, ProjectionDispatcherProvider.using(stage).storeDispatcher)"));
         Assert.assertTrue(context.contents().get(5).contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
         Assert.assertTrue(context.contents().get(5).contains("@ResourceHandlers(packages = \"io.vlingo.xoomapp.resource\")"));
         Assert.assertEquals(Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "Bootstrap.java").toString(), ((TextBasedContent) context.contents().get(5)).file.getAbsolutePath());
@@ -73,8 +71,8 @@ public class BootstrapGenerationStepTest {
     private void loadContents(final CodeGenerationContext context) {
         context.addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT);
         context.addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT);
-        context.addContent(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT);
-        context.addContent(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT);
+        context.addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT);
+        context.addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT);
         context.addContent(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT);
     }
 

@@ -66,7 +66,7 @@ public class ProjectionTemplateData extends TemplateData {
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
                 .and(MODEL_CLASSIFICATION, QUERY).and(STORAGE_TYPE, STATE_STORE)
                 .and(ENTITY_DATA_NAME, entityDataName).and(PROJECTION_TYPE, projectionType)
-                .andResolve(STORAGE_PROVIDER_NAME, param -> STORAGE_PROVIDER.resolveClassname(param));
+                .andResolve(STORAGE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param));
     }
 
     private List<ImportParameter> resolveImports(final String stateName,

@@ -39,7 +39,7 @@ public class StorageTemplateDataFactoryTest {
 
         Assert.assertEquals(3, allTemplatesData.size());
         Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
-        Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORAGE_PROVIDER)).count());
+        Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
 
         //Assert for StateAdapter
 
@@ -59,7 +59,7 @@ public class StorageTemplateDataFactoryTest {
         //Assert for StoreProvider
 
         final TemplateData storeProviderTemplateData =
-                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORAGE_PROVIDER)).findFirst().get();
+                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).findFirst().get();
 
         final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
 
@@ -89,7 +89,7 @@ public class StorageTemplateDataFactoryTest {
 
         Assert.assertEquals(3, allTemplatesData.size());
         Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
-        Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORAGE_PROVIDER)).count());
+        Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
 
         //Assert for StateAdapter
 
@@ -109,7 +109,7 @@ public class StorageTemplateDataFactoryTest {
         //Assert for StoreProvider
 
         final TemplateData storeProviderTemplateData =
-                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORAGE_PROVIDER)).findFirst().get();
+                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).findFirst().get();
 
         final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
 
@@ -141,7 +141,7 @@ public class StorageTemplateDataFactoryTest {
 
         Assert.assertEquals(4, allTemplatesData.size());
         Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
-        Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORAGE_PROVIDER)).count());
+        Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
 
         //Assert for StateAdapter
 
@@ -162,7 +162,7 @@ public class StorageTemplateDataFactoryTest {
 
         final List<TemplateData> storeProviders =
                 allTemplatesData.stream()
-                        .filter(templateData -> templateData.standard().equals(STORAGE_PROVIDER))
+                        .filter(templateData -> templateData.standard().equals(STORE_PROVIDER))
                         .collect(Collectors.toList());
 
         IntStream.range(0, 1).forEach(modelClassificationIndex -> {

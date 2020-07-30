@@ -50,8 +50,8 @@ public class AnnotatedBootstrapTemplateDataTest {
                 CodeGenerationContext.with(codeGenerationParameters)
                         .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT)
                         .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT)
-                        .addContent(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT)
-                        .addContent(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT)
+                        .addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT)
+                        .addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT)
                         .addContent(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT);
 
         final TemplateParameters parameters =
@@ -67,20 +67,18 @@ public class AnnotatedBootstrapTemplateDataTest {
 
         Assert.assertEquals("io.vlingo.xoomapp.resource", parameters.find(TemplateParameter.REST_RESOURCE_PACKAGE));
 
-        Assert.assertEquals(3, parameters.<List>find(PROVIDERS).size());
-        Assert.assertEquals("QueryModelStateStoreProvider", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getInitialization());
-        Assert.assertEquals("stage, statefulTypeRegistry", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getArguments());
-        Assert.assertEquals("final ProjectionDispatcherProvider projectionDispatcherProvider = ProjectionDispatcherProvider", parameters.<List<ProviderParameter>>find(PROVIDERS).get(1).getInitialization());
-        Assert.assertEquals("stage", parameters.<List<ProviderParameter>>find(PROVIDERS).get(1).getArguments());
-        Assert.assertEquals("CommandModelStateStoreProvider", parameters.<List<ProviderParameter>>find(PROVIDERS).get(2).getInitialization());
-        Assert.assertEquals("stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher", parameters.<List<ProviderParameter>>find(PROVIDERS).get(2).getArguments());
+        Assert.assertEquals(2, parameters.<List>find(PROVIDERS).size());
+        Assert.assertEquals("QueryModelStateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getClassName());
+        Assert.assertEquals("stage, statefulTypeRegistry", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getArguments());
+        Assert.assertEquals("CommandModelStateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(1).getClassName());
+        Assert.assertEquals("stage, statefulTypeRegistry, ProjectionDispatcherProvider.using(stage).storeDispatcher", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(1).getArguments());
 
         Assert.assertEquals(1, parameters.<List>find(TYPE_REGISTRIES).size());
         Assert.assertEquals("StatefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getClassName());
         Assert.assertEquals("statefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getObjectName());
 
-        Assert.assertEquals(true, parameters.find(USE_PROJECTIONS));
         Assert.assertEquals("xoom-app", parameters.find(TemplateParameter.APPLICATION_NAME));
+        Assert.assertEquals(true, parameters.find(USE_PROJECTIONS));
     }
 
     @Test
@@ -99,7 +97,7 @@ public class AnnotatedBootstrapTemplateDataTest {
         final CodeGenerationContext context =
                 CodeGenerationContext.with(codeGenerationParameters)
                         .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT)
-                        .addContent(STORAGE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "StateStoreProvider.java"), SINGLE_MODEL_STORE_PROVIDER_CONTENT);
+                        .addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "StateStoreProvider.java"), SINGLE_MODEL_STORE_PROVIDER_CONTENT);
 
         final TemplateParameters parameters =
                 BootstrapTemplateData.from(context).parameters();
@@ -113,8 +111,8 @@ public class AnnotatedBootstrapTemplateDataTest {
         Assert.assertEquals("io.vlingo.xoomapp.resource", parameters.find(TemplateParameter.REST_RESOURCE_PACKAGE));
 
         Assert.assertEquals(1, parameters.<List>find(PROVIDERS).size());
-        Assert.assertEquals("StateStoreProvider", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getInitialization());
-        Assert.assertEquals("stage, statefulTypeRegistry", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getArguments());
+        Assert.assertEquals("StateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getClassName());
+        Assert.assertEquals("stage, statefulTypeRegistry", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getArguments());
 
         Assert.assertEquals(1, parameters.<List>find(TYPE_REGISTRIES).size());
         Assert.assertEquals("StatefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getClassName());

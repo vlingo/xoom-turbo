@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.codegen.template.storage;
 
+import java.util.stream.Stream;
+
 public enum ModelClassification {
 
     SINGLE("SingleModel"),
@@ -17,6 +19,13 @@ public enum ModelClassification {
 
     ModelClassification(String title) {
         this.title = title;
+    }
+
+    public static Stream<ModelClassification> applicableFor(final Boolean useCQRS) {
+        if(useCQRS) {
+            return Stream.of(QUERY, COMMAND);
+        }
+        return Stream.of(SINGLE);
     }
 
     public boolean isCommandModel() {

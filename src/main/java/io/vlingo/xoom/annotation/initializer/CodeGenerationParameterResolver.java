@@ -4,12 +4,12 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.annotation.initializer;
 
 import io.vlingo.xoom.XoomInitializationAware;
 import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.codegen.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.bootstrap.AddressFactoryType;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.QUERY_MODEL_DATABASE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.XOOM_INITIALIZER;
 import static io.vlingo.xoom.codegen.template.storage.DatabaseType.IN_MEMORY;
 
@@ -49,6 +48,24 @@ public class CodeGenerationParameterResolver {
         this.environment = environment;
     }
 
+    public Map<CodeGenerationParameter, String> resolve() {
+        return new HashMap<CodeGenerationParameter, String>() {{
+            put(PACKAGE, resolveBasePackage());
+            put(CQRS, resolveCQRS());
+            put(STORAGE_TYPE, resolveStorageType());
+            put(APPLICATION_NAME, resolveApplicationName());
+            put(ADDRESS_FACTORY, resolveAddressFactoryType());
+            put(IDENTITY_GENERATOR, resolveIdentityGeneratorType());
+            put(ANNOTATIONS, Boolean.FALSE.toString());
+            put(BLOCKING_MESSAGING, resolveBlockingMessaging());
+            put(XOOM_INITIALIZER_NAME, resolveInitializerClass());
+            put(PROJECTIONS, resolveProjections());
+            put(DATABASE, IN_MEMORY.name());
+            put(COMMAND_MODEL_DATABASE, IN_MEMORY.name());
+            put(QUERY_MODEL_DATABASE, IN_MEMORY.name());
+        }};
+    }
+
     private String resolveApplicationName() {
         return bootstrapClass.getAnnotation(Xoom.class).name();
     }
@@ -62,7 +79,7 @@ public class CodeGenerationParameterResolver {
     }
 
     private String resolveBasePackage() {
-        return XoomInitializerPackage.from(environment, bootstrapClass);
+        return basePackage;
     }
 
     private String resolveCQRS() {
@@ -118,25 +135,6 @@ public class CodeGenerationParameterResolver {
 //            return ProjectionType.NONE.name();
 //        }
 //
-        // TODO: Figure out how to merge events and to handle existing Entity Data
-        return ProjectionType.NONE.name();
-    }
-
-    public Map<CodeGenerationParameter, String> resolve() {
-        return new HashMap<CodeGenerationParameter, String>() {{
-            put(PROJECTIONS, resolveProjections());
-            put(PACKAGE, resolveBasePackage());
-            put(CQRS, resolveCQRS());
-            put(STORAGE_TYPE, resolveStorageType());
-            put(APPLICATION_NAME, resolveApplicationName());
-            put(ADDRESS_FACTORY, resolveAddressFactoryType());
-            put(IDENTITY_GENERATOR, resolveIdentityGeneratorType());
-            put(ANNOTATIONS, Boolean.FALSE.toString());
-            put(BLOCKING_MESSAGING, resolveBlockingMessaging());
-            put(XOOM_INITIALIZER_NAME, resolveInitializerClass());
-            put(DATABASE, IN_MEMORY.name());
-            put(COMMAND_MODEL_DATABASE, IN_MEMORY.name());
-            put(QUERY_MODEL_DATABASE, IN_MEMORY.name());
-        }};
+        return ProjectionType.NONE.name(); // TODO: Figure out how to merge events and to handle existing Entity Data
     }
 }

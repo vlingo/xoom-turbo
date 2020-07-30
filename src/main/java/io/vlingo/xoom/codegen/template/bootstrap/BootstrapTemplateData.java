@@ -20,7 +20,6 @@ import io.vlingo.xoom.codegen.template.storage.StorageType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.APPLICATION_NAME;
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.STORAGE_TYPE;
@@ -71,13 +70,13 @@ public abstract class BootstrapTemplateData extends TemplateData {
         final List<TypeRegistryParameter> typeRegistryParameters =
                 TypeRegistryParameter.from(storageType, useCQRS);
 
-        final List<ProviderParameter> providerParameters =
-                ProviderParameter.from(storageType, useCQRS, projectionType.isProjectionEnabled());
+        final List<StoreProviderParameter> storeProviderParameters =
+                StoreProviderParameter.from(storageType, useCQRS, projectionType.isProjectionEnabled());
 
         return this.parameters.and(IMPORTS, imports)
                 .and(PACKAGE_NAME, packageName)
                 .and(TemplateParameter.APPLICATION_NAME, context.parameterOf(APPLICATION_NAME))
-                .and(PROVIDERS, providerParameters)
+                .and(PROVIDERS, storeProviderParameters)
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(USE_ANNOTATIONS, context.parameterOf(ANNOTATIONS, Boolean::valueOf))
                 .and(TYPE_REGISTRIES, typeRegistryParameters)
@@ -94,7 +93,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
                                               final Boolean useCQRS) {
         final List<String> otherFullyQualifiedNames =
                 ContentQuery.findFullyQualifiedClassNames(contents,
-                        STORAGE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER);
+                        STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER);
 
         final List<String> typeRegistriesFullyQualifiedNames =
                 storageType.resolveTypeRegistryQualifiedNames(useCQRS);

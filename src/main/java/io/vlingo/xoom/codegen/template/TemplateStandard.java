@@ -53,7 +53,7 @@ public enum TemplateStandard {
         return Template.DOMAIN_EVENT.filename;
     }, (name, parameters) -> parameters.find(PLACEHOLDER_EVENT) ? name + "PlaceholderDefined" : name),
 
-    STORAGE_PROVIDER(parameters -> {
+    STORE_PROVIDER(parameters -> {
         return storeProviderTemplatesFrom(parameters.find(MODEL_CLASSIFICATION))
                 .get(parameters.find(STORAGE_TYPE));
     }, (name, parameters) -> {

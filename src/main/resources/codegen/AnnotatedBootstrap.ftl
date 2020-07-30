@@ -23,7 +23,7 @@ public class Bootstrap implements XoomInitializationAware {
        final ${registry.className} ${registry.objectName} = new ${registry.className}(stage.world());
    </#list>
    <#list providers as provider>
-       ${provider.initialization}.using(${provider.arguments});
+       ${provider.className}.using(${provider.arguments});
    </#list>
   }
 

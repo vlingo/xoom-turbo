@@ -30,7 +30,7 @@ public class Bootstrap {
     final ${registry.className} ${registry.objectName} = new ${registry.className}(world);
 </#list>
 <#list providers as provider>
-    ${provider.initialization}.using(${provider.arguments});
+    ${provider.className}.using(${provider.arguments});
 </#list>
 
 <#list restResources as restResource>

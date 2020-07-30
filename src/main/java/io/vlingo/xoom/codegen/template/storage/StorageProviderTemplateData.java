@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.content.ContentQuery.findFullyQualifiedClassNames;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STORAGE_PROVIDER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
 
 public class StorageProviderTemplateData extends TemplateData {
 
@@ -78,7 +78,7 @@ public class StorageProviderTemplateData extends TemplateData {
                 .and(PACKAGE_NAME, packageName).and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, adapterParameters).and(CONNECTION_URL, databaseType.connectionUrl)
                 .and(CONFIGURABLE, databaseType.configurable).and(PROJECTION_TYPE, projectionType)
-                .andResolve(STORAGE_PROVIDER_NAME, params -> STORAGE_PROVIDER.resolveClassname(params))
+                .andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
                 .enrich(params -> databaseType.addConfigurationParameters(params))
                 .and(REQUIRE_ADAPTERS, storageType.requireAdapters(modelClassification));
     }
@@ -90,7 +90,7 @@ public class StorageProviderTemplateData extends TemplateData {
 
     @Override
     public TemplateStandard standard() {
-        return STORAGE_PROVIDER;
+        return STORE_PROVIDER;
     }
 
 }
