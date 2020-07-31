@@ -116,7 +116,7 @@ public class StorageGenerationStepTest {
                 .with(COMMAND_MODEL_DATABASE, databaseType.name())
                 .with(QUERY_MODEL_DATABASE, databaseType.name())
                 .with(STORAGE_TYPE, storageType.name())
-                .with(PROJECTIONS, projectionType.name())
+                .with(PROJECTION_TYPE, projectionType.name())
                 .with(TARGET_FOLDER, HOME_DIRECTORY);
     }
 

@@ -12,12 +12,12 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PROJECTION_TO_DESCRIPTION;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
@@ -34,20 +34,35 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
         return new ProjectionDispatcherProviderTemplateData(basePackage, projectionType, aggregateProtocols);
     }
 
+    public static ProjectionDispatcherProviderTemplateData from(final String projectables,
+                                                                final List<Content> contents) {
+        return new ProjectionDispatcherProviderTemplateData(projectables, contents);
+    }
+
+    public ProjectionDispatcherProviderTemplateData(final String projectables,
+                                                    final List<Content> contents) {
+        final String packageName = ContentQuery.findPackage(PROJECTION, contents);
+
+        final List<String> projectablesPerProjection = Arrays.asList(projectables.split(";"));
+
+        final List<String> projectionNames = ContentQuery.findClassNames(PROJECTION, contents);
+
+        final List<ProjectToDescriptionParameter> projectToDescriptionParameters =
+                ProjectToDescriptionParameter.from(projectionNames, projectablesPerProjection);
+
+        this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
+                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionParameters);
+    }
+
     private ProjectionDispatcherProviderTemplateData(final String basePackage,
                                                      final ProjectionType projectionType,
                                                      final List<String> aggregateProtocols) {
         final String packageName = resolvePackage(basePackage);
-        this.templateParameters = loadParameters(packageName, projectionType, aggregateProtocols);
-    }
 
-    private TemplateParameters loadParameters(final String packageName,
-                                              final ProjectionType projectionType,
-                                              final List<String> aggregateProtocols) {
         final List<ProjectToDescriptionParameter> projectToDescriptionParameters =
                 ProjectToDescriptionParameter.from(projectionType, aggregateProtocols);
 
-        return TemplateParameters.with(PACKAGE_NAME, packageName)
+        this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
                 .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionParameters);
     }
 

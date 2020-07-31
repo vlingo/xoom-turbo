@@ -48,7 +48,7 @@ public class XoomInitializerTemplateDataTest {
                     put(APPLICATION_NAME, "xoom-app");
                     put(CQRS, Boolean.TRUE.toString());
                     put(STORAGE_TYPE, STATE_STORE.name());
-                    put(PROJECTIONS, ProjectionType.NONE.name());
+                    put(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType.NONE.name());
                     put(ANNOTATIONS, Boolean.FALSE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                     put(XOOM_INITIALIZER_NAME, "AnnotatedBootstrap");
@@ -106,7 +106,7 @@ public class XoomInitializerTemplateDataTest {
                     put(APPLICATION_NAME, "xoom-app");
                     put(CQRS, Boolean.FALSE.toString());
                     put(STORAGE_TYPE, StorageType.NONE.name());
-                    put(PROJECTIONS, ProjectionType.NONE.name());
+                    put(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType.NONE.name());
                     put(ANNOTATIONS, Boolean.FALSE.toString());
                     put(XOOM_INITIALIZER_NAME, "XoomInitializer");
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());

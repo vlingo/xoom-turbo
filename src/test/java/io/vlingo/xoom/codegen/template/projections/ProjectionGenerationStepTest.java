@@ -50,7 +50,7 @@ public class ProjectionGenerationStepTest {
     }
 
     private void performAssertion(final CodeGenerationContext context) {
-        final ProjectionType projectionType = context.parameterOf(PROJECTIONS, ProjectionType::valueOf);
+        final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
         final String expectedProjectionComment = projectionType.isEventBased() ? "replace with event" : "replace with operation text";
 
         Assert.assertEquals(9, context.contents().size());
@@ -78,7 +78,7 @@ public class ProjectionGenerationStepTest {
 
     private void loadParameters(final CodeGenerationContext context, final String projections) {
         context.with(PACKAGE, "io.vlingo").with(APPLICATION_NAME, "xoomapp")
-                .with(STORAGE_TYPE, "STATE_STORE").with(PROJECTIONS, projections)
+                .with(STORAGE_TYPE, "STATE_STORE").with(PROJECTION_TYPE, projections)
                 .with(TARGET_FOLDER, HOME_DIRECTORY);
     }
 

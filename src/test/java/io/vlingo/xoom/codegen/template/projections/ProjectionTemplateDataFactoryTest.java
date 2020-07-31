@@ -8,30 +8,71 @@
 package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.OperatingSystem;
-import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.file.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import javax.annotation.processing.Filer;
+import javax.lang.model.element.Element;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.PROJECTION_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class ProjectionTemplateDataFactoryTest {
 
     @Test
+    public void testCustomProjectionTemplateDataBuild() {
+        final Map<CodeGenerationParameter, String> parameters =
+                new HashMap<CodeGenerationParameter, String>() {{
+                    put(PACKAGE, "io.vlingo.xoomapp");
+                    put(PROJECTION_TYPE, ProjectionType.CUSTOM.name());
+                    put(PROJECTABLES, "\"AuthorRegistered\", \"AuthorRated\";\"BookSoldOut\", \"BookPurchased\"");
+                }};
+
+        final CodeGenerationContext context =
+                CodeGenerationContext.using(Mockito.mock(Filer.class), Mockito.mock(Element.class)).on(parameters)
+                        .addContent(PROJECTION, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorProjectionActor.java"),  AUTHOR_PROJECTION_ACTOR_CONTENT_TEXT)
+                        .addContent(PROJECTION, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "BookProjectionActor.java"),  BOOK_PROJECTION_ACTOR_CONTENT_TEXT);
+
+        loadContents(context);
+
+        final TemplateParameters providerTemplateDataParameters =
+                ProjectionTemplateDataFactory.build(context).get(0).parameters();
+
+        Assert.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
+        Assert.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"AuthorRegistered\", \"AuthorRated\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
+        Assert.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"BookSoldOut\", \"BookPurchased\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
+    }
+
+    @Test
     public void testEventBasedProjectionTemplateDataBuild() {
+        final Map<CodeGenerationParameter, String> parameters =
+                new HashMap<CodeGenerationParameter, String>() {{
+                    put(PACKAGE, "io.vlingo.xoomapp");
+                    put(PROJECTION_TYPE, ProjectionType.EVENT_BASED.name());
+                }};
+
+        final CodeGenerationContext context =
+                CodeGenerationContext.with(parameters);
+
+        loadContents(context);
+
         final List<TemplateData> allTemplatesData =
-                ProjectionTemplateDataFactory.build("io.vlingo.xoomapp",
-                        ProjectionType.EVENT_BASED, contents());
+                ProjectionTemplateDataFactory.build(context);
 
         //General Assert
 
@@ -100,9 +141,19 @@ public class ProjectionTemplateDataFactoryTest {
 
     @Test
     public void testOperationBasedProjectionTemplateDataBuild() {
+        final Map<CodeGenerationParameter, String> parameters =
+                new HashMap<CodeGenerationParameter, String>() {{
+                    put(PACKAGE, "io.vlingo.xoomapp");
+                    put(PROJECTION_TYPE, ProjectionType.OPERATION_BASED.name());
+                }};
+
+        final CodeGenerationContext context =
+                CodeGenerationContext.with(parameters);
+
+        loadContents(context);
+
         final List<TemplateData> allTemplatesData =
-                ProjectionTemplateDataFactory.build("io.vlingo.xoomapp",
-                        ProjectionType.OPERATION_BASED, contents());
+                ProjectionTemplateDataFactory.build(context);
 
         //General Assert
 
@@ -120,13 +171,11 @@ public class ProjectionTemplateDataFactoryTest {
         Assert.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"Operation name here\", \"Another Operation name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
     }
 
-    private List<Content> contents() {
-        return Arrays.asList(
-                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
-                Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
-                Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT)
-        );
+    private void loadContents(final CodeGenerationContext context) {
+        context.addContent(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT);
+        context.addContent(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT);
+        context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"),  AUTHOR_CONTENT_TEXT);
+        context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"),  BOOK_CONTENT_TEXT);
     }
 
     private static final String EXPECTED_INFRA_PACKAGE = "io.vlingo.xoomapp.infrastructure";
@@ -141,13 +190,21 @@ public class ProjectionTemplateDataFactoryTest {
             Paths.get(PROJECT_PATH, "src", "main", "java",
                     "io", "vlingo", "xoomapp", "model").toString();
 
-    private static final String INFRASTRUCTURE_PACKAGE_PATH =
-            Paths.get(PROJECT_PATH, "src", "main", "java",
-                    "io", "vlingo", "xoomapp", "infrastructure").toString();
-
     private static final String PERSISTENCE_PACKAGE_PATH =
             Paths.get(PROJECT_PATH, "src", "main", "java",
                     "io", "vlingo", "xoomapp", "infrastructure", "persistence").toString();
+
+    private static final String AUTHOR_PROJECTION_ACTOR_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
+                    "public class AuthorProjectionActor { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_PROJECTION_ACTOR_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
+                    "public class BookProjectionActor { \\n" +
+                    "... \\n" +
+                    "}";
 
     private static final String AUTHOR_STATE_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model; \\n" +

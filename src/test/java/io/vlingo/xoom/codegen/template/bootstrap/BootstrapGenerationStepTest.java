@@ -9,8 +9,6 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.xoom.OperatingSystem;
-import io.vlingo.xoom.actors.Settings;
-import io.vlingo.xoom.annotation.initializer.AnnotatedBootTest;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.template.TemplateFile;
@@ -31,7 +29,7 @@ public class BootstrapGenerationStepTest {
     @Test
     public void testDefaultBootstrapGeneration() {
         final CodeGenerationContext context =
-                CodeGenerationContext.empty().with(PROJECTIONS, ProjectionType.OPERATION_BASED.name());
+                CodeGenerationContext.empty().with(PROJECTION_TYPE, ProjectionType.OPERATION_BASED.name());
 
         loadParameters(context, false);
         loadContents(context);
@@ -52,7 +50,7 @@ public class BootstrapGenerationStepTest {
     @Test
     public void testAnnotatedBootstrapGeneration() {
         final CodeGenerationContext context =
-                CodeGenerationContext.empty().with(PROJECTIONS, ProjectionType.OPERATION_BASED.name());
+                CodeGenerationContext.empty().with(PROJECTION_TYPE, ProjectionType.OPERATION_BASED.name());
 
         loadParameters(context, true);
         loadContents(context);
@@ -72,7 +70,7 @@ public class BootstrapGenerationStepTest {
     public void testXoomInitializerBootstrapGeneration() {
         final CodeGenerationContext context =
                 CodeGenerationContext.using(Mockito.mock(Filer.class), Mockito.mock(Element.class))
-                        .with(PROJECTIONS, ProjectionType.NONE.name())
+                        .with(PROJECTION_TYPE, ProjectionType.NONE.name())
                         .with(XOOM_INITIALIZER_NAME, "AnnotatedBootstrap")
                         .with(ADDRESS_FACTORY, AddressFactoryType.BASIC.name())
                         .with(IDENTITY_GENERATOR, IdentityGeneratorType.RANDOM.name());

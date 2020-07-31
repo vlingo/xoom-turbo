@@ -8,33 +8,30 @@
 package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
-import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.AGGREGATES;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.PROJECTIONS;
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.PROJECTION_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION;
 
 public class ProjectionGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final String basePackage = context.parameterOf(CodeGenerationParameter.PACKAGE);
-        final ProjectionType projectionType = context.parameterOf(PROJECTIONS, ProjectionType::valueOf);
-        return ProjectionTemplateDataFactory.build(basePackage, projectionType, context.contents());
+        return ProjectionTemplateDataFactory.build(context);
     }
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        if(ContentQuery.exists(AGGREGATE_PROTOCOL, context.contents())) {
-            final ProjectionType projectionType =
-                    context.parameterOf(PROJECTIONS, ProjectionType::valueOf);
-            return projectionType.isProjectionEnabled();
+        if(context.isInternalGeneration()) {
+            return ContentQuery.exists(PROJECTION, context.contents());
+        } else if(ContentQuery.exists(AGGREGATE_PROTOCOL, context.contents())) {
+            return context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf)
+                    .isProjectionEnabled();
         }
         return false;
     }

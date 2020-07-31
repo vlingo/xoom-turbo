@@ -9,6 +9,7 @@ package io.vlingo.xoom.annotation.initializer;
 
 import io.vlingo.xoom.XoomInitializationAware;
 import io.vlingo.xoom.annotation.persistence.Persistence;
+import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
@@ -18,6 +19,8 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.XOOM_INITIALIZER;
@@ -59,7 +62,8 @@ public class CodeGenerationParameterResolver {
             put(ANNOTATIONS, Boolean.FALSE.toString());
             put(BLOCKING_MESSAGING, resolveBlockingMessaging());
             put(XOOM_INITIALIZER_NAME, resolveInitializerClass());
-            put(PROJECTIONS, resolveProjections());
+            put(PROJECTION_TYPE, resolveProjections());
+            put(PROJECTABLES, resolveProjectables());
             put(DATABASE, IN_MEMORY.name());
             put(COMMAND_MODEL_DATABASE, IN_MEMORY.name());
             put(QUERY_MODEL_DATABASE, IN_MEMORY.name());
@@ -128,13 +132,27 @@ public class CodeGenerationParameterResolver {
     }
 
     private String resolveProjections() {
-//        final Projections projections =
-//                annotatedClass.getAnnotation(Projections.class);
-//
-//        if(projections == null) {
-//            return ProjectionType.NONE.name();
-//        }
-//
-        return ProjectionType.NONE.name(); // TODO: Figure out how to merge events and to handle existing Entity Data
+        final Projections projections =
+                persistenceSetupClass.getAnnotation(Projections.class);
+
+        if(projections == null) {
+            return ProjectionType.NONE.name();
+        }
+
+        return ProjectionType.CUSTOM.name();
     }
+
+    private String resolveProjectables() {
+        final Projections projections =
+                persistenceSetupClass.getAnnotation(Projections.class);
+
+        if(projections == null) {
+            return "";
+        }
+
+        return "\"" + Stream.of(projections.value())
+                .map(projection -> String.join("\", \"", projection.becauseOf()))
+                .collect(Collectors.joining("\";\"")) + "\"";
+    }
+
 }

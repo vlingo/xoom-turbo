@@ -10,6 +10,7 @@ package io.vlingo.xoom.codegen.template.projections;
 public enum ProjectionType {
 
     NONE("None"),
+    CUSTOM("Custom"),
     EVENT_BASED("Event"),
     OPERATION_BASED("Operation");
 

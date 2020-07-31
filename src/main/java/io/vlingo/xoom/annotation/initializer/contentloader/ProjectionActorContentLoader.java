@@ -4,6 +4,7 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.annotation.persistence.Projections;
@@ -14,13 +15,15 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION;
 
-public class AggregateProtocolContentLoader extends TypeBasedContentLoader {
+public class ProjectionActorContentLoader extends TypeBasedContentLoader {
 
-    protected AggregateProtocolContentLoader(final Element annotatedClass,
-                                             final ProcessingEnvironment environment) {
+    protected ProjectionActorContentLoader(final Element annotatedClass,
+                                           final ProcessingEnvironment environment) {
         super(annotatedClass, environment);
     }
 
@@ -33,13 +36,14 @@ public class AggregateProtocolContentLoader extends TypeBasedContentLoader {
             return Collections.emptyList();
         }
 
-        return retrieveTypes(projections,
-                annotation -> projections.aggregateProtocols());
+        return Stream.of(projections.value())
+                .map(projection -> retrieveType(projection, aProjection -> projection.actor()))
+                .collect(Collectors.toList());
     }
 
     @Override
     protected TemplateStandard standard() {
-        return AGGREGATE_PROTOCOL;
+        return PROJECTION;
     }
 
 }

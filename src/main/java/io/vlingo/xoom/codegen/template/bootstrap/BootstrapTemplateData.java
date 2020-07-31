@@ -7,6 +7,7 @@
 package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.file.ImportParameter;
@@ -62,7 +63,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
         final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
         final String packageName = resolvePackage(context.parameterOf(PACKAGE));
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
-        final ProjectionType projectionType = context.parameterOf(PROJECTIONS, ProjectionType::valueOf);
+        final ProjectionType projectionType = context.parameterOf(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType::valueOf);
 
         final List<ImportParameter> imports =
                 loadImports(storageType, context.contents(), useCQRS);

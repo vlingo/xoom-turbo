@@ -60,7 +60,7 @@ public class CodeGenerationContextLoader {
         if(persistenceSetupClass == null) {
             return Collections.emptyList();
         }
-        return Arrays.asList(new AggregateProtocolContentLoader(persistenceSetupClass, environment),
+        return Arrays.asList(new ProjectionActorContentLoader(persistenceSetupClass, environment),
                 new DomainEventContentLoader(persistenceSetupClass, environment),
                 new StateContentLoader(persistenceSetupClass, environment),
                 new RestResourceContentLoader(bootstrapClass, environment));

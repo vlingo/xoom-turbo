@@ -42,7 +42,7 @@ public class DefaultBootstrapTemplateDataTest {
                     put(APPLICATION_NAME, "xoom-app");
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.TRUE.toString());
-                    put(PROJECTIONS, ProjectionType.EVENT_BASED.name());
+                    put(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType.EVENT_BASED.name());
                     put(ANNOTATIONS, Boolean.FALSE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                 }};
@@ -97,7 +97,7 @@ public class DefaultBootstrapTemplateDataTest {
                     put(APPLICATION_NAME, "xoom-app");
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.FALSE.toString());
-                    put(PROJECTIONS, ProjectionType.NONE.name());
+                    put(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType.NONE.name());
                     put(ANNOTATIONS, Boolean.FALSE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                 }};

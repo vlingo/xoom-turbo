@@ -19,11 +19,19 @@ public class ProjectToDescriptionParameter {
 
     private static final String FIRST_BECAUSE_OF_PLACEHOLDER = "\"%s name here\"";
     private static final String SECOND_BECAUSE_OF_PLACEHOLDER = "\"Another %s name here\"";
-    private static final String PROJECT_TO_DESCRIPITION_BUILD_PATTERN = "ProjectToDescription.with(%s.class, %s)%s";
+    private static final String PROJECT_TO_DESCRIPTION_BUILD_PATTERN = "ProjectToDescription.with(%s.class, %s)%s";
 
-    private final String projectionClassName;
     private final String joinedTypes;
     private final boolean lastParameter;
+    private final String projectionClassName;
+
+    public static List<ProjectToDescriptionParameter> from(final List<String> projectionNames,
+                                                           final List<String> projectablesPerProjection)  {
+        return IntStream.range(0, projectionNames.size()).mapToObj(index ->
+            new ProjectToDescriptionParameter(index, projectionNames.size(),
+                    projectionNames.get(index), projectablesPerProjection.get(index))
+        ).collect(Collectors.toList());
+    }
 
     public static List<ProjectToDescriptionParameter> from(final ProjectionType projectionType,
                                                            final List<String> aggregateProtocols) {
@@ -31,9 +39,9 @@ public class ProjectToDescriptionParameter {
             final String projectionName =
                     PROJECTION.resolveClassname(aggregateProtocols.get(index));
 
-            final List<String> becauseOf =
-                    Arrays.asList(String.format(FIRST_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName),
-                            String.format(SECOND_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName));
+            final String becauseOf =
+                    String.format(FIRST_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName) + ", " +
+                            String.format(SECOND_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName);
 
             return new ProjectToDescriptionParameter(index, aggregateProtocols.size(), projectionName, becauseOf);
         }).collect(Collectors.toList());
@@ -42,15 +50,15 @@ public class ProjectToDescriptionParameter {
     private ProjectToDescriptionParameter(final int index,
                                           final int numberOfProtocols,
                                           final String projectionClassName,
-                                          final List<String> sourceTypes) {
+                                          final String sourceTypes) {
+        this.joinedTypes = sourceTypes;
         this.projectionClassName = projectionClassName;
-        this.joinedTypes = sourceTypes.stream().collect(Collectors.joining(", "));
         this.lastParameter = index == numberOfProtocols - 1;
     }
 
     public String getInitializationCommand() {
         final String separator = lastParameter ? "" : ",";
-        return String.format(PROJECT_TO_DESCRIPITION_BUILD_PATTERN, projectionClassName, joinedTypes, separator);
+        return String.format(PROJECT_TO_DESCRIPTION_BUILD_PATTERN, projectionClassName, joinedTypes, separator);
     }
 
 }

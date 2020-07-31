@@ -22,7 +22,7 @@ public class StorageGenerationStep extends TemplateProcessingStep {
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
         final String basePackage = context.parameterOf(PACKAGE);
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::of);
-        final ProjectionType projectionType = context.parameterOf(PROJECTIONS, ProjectionType::valueOf);
+        final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
         return StorageTemplateDataFactory.build(basePackage, context.contents(), storageType,
                 context.databases(), projectionType);
     }

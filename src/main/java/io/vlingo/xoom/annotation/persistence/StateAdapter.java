@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.annotation.persistence;
 
-import io.vlingo.lattice.model.EntityActor;
 import io.vlingo.symbio.State;
 
 import java.lang.annotation.ElementType;

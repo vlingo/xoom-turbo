@@ -8,19 +8,19 @@
 package io.vlingo.xoom.annotation.persistence;
 
 import io.vlingo.symbio.State.TextState;
-import io.vlingo.xoom.annotation.persistence.model.Dummy;
 import io.vlingo.xoom.annotation.persistence.model.DummyState;
-import io.vlingo.xoom.annotation.persistence.model.OtherDummy;
 import io.vlingo.xoom.annotation.persistence.model.OtherDummyState;
 
 import static io.vlingo.xoom.annotation.persistence.Persistence.StorageType.STATE_STORE;
-import static io.vlingo.xoom.annotation.persistence.Projections.ProjectionType.EVENT_BASED;
 
 @Persistence(basePackage = "io.vlingo.xoom.annotation", storageType = STATE_STORE, cqrs = true)
-@Projections(type = EVENT_BASED, aggregateProtocols = Dummy.class)
-@StateAdapters(values = {
-        @StateAdapter(from = DummyState.class, to= TextState.class),
-        @StateAdapter(from = OtherDummyState.class, to= TextState.class)
+@Projections({
+        @Projection(actor = DummyProjectionActor.class, becauseOf = {"DummyCreated", "DummyCancelled"}),
+        @Projection(actor = OtherDummyProjectionActor.class, becauseOf = {"OtherDummyPromoted"})
+})
+@StateAdapters({
+        @StateAdapter(from = DummyState.class, to=TextState.class),
+        @StateAdapter(from = OtherDummyState.class, to=TextState.class)
 })
 public class PersistenceSetup {
 

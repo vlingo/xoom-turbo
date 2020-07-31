@@ -8,7 +8,6 @@
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.annotation.persistence.StateAdapters;
-import io.vlingo.xoom.annotation.initializer.contentloader.TypeBasedContentLoader;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -37,7 +36,7 @@ public class StateContentLoader extends TypeBasedContentLoader {
             return Collections.emptyList();
         }
 
-        return Stream.of(stateAdapters.values())
+        return Stream.of(stateAdapters.value())
                 .map(adapter -> retrieveType(adapter, anAdapter -> adapter.from()))
                 .collect(Collectors.toList());
     }
