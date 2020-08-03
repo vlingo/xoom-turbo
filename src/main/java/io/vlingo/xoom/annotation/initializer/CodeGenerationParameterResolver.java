@@ -132,12 +132,9 @@ public class CodeGenerationParameterResolver {
     }
 
     private String resolveProjections() {
-        if(persistenceSetupClass == null) {
-            return ProjectionType.NONE.name();
-        }
-
         final Projections projections =
-                persistenceSetupClass.getAnnotation(Projections.class);
+                persistenceSetupClass == null ? null :
+                        persistenceSetupClass.getAnnotation(Projections.class);
 
         if(projections == null) {
             return ProjectionType.NONE.name();
@@ -147,12 +144,9 @@ public class CodeGenerationParameterResolver {
     }
 
     private String resolveProjectables() {
-        if(persistenceSetupClass == null) {
-            return "";
-        }
-
         final Projections projections =
-                persistenceSetupClass.getAnnotation(Projections.class);
+                persistenceSetupClass == null ? null :
+                        persistenceSetupClass.getAnnotation(Projections.class);
 
         if(projections == null) {
             return "";
