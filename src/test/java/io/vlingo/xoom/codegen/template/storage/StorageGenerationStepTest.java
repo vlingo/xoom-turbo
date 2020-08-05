@@ -107,6 +107,33 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(10).contains("class QueryModelStateStoreProvider"));
     }
 
+    @Test
+    public void testAnnotatedStoreGeneration() {
+        final CodeGenerationContext context =
+                CodeGenerationContext.empty().with(ANNOTATIONS, "true");
+
+        loadProperties(context, STATE_STORE, IN_MEMORY, EVENT_BASED);
+        loadContents(context);
+
+        new StorageGenerationStep().process(context);
+
+        Assert.assertEquals(10, context.contents().size());
+        Assert.assertEquals("AuthorStateAdapter", context.contents().get(7).retrieveClassName());
+        Assert.assertEquals("BookStateAdapter", context.contents().get(8).retrieveClassName());
+        Assert.assertEquals("PersistenceSetup", context.contents().get(9).retrieveClassName());
+
+        Assert.assertTrue(context.contents().get(7).contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
+        Assert.assertTrue(context.contents().get(8).contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
+        Assert.assertTrue(context.contents().get(9).contains("class PersistenceSetup"));
+        Assert.assertTrue(context.contents().get(9).contains("@Persistence(basePackage = \"io.vlingo\", storageType = StorageType.STATE_STORE, cqrs = true)"));
+        Assert.assertTrue(context.contents().get(9).contains("@Projections({"));
+        Assert.assertTrue(context.contents().get(9).contains("@Projection(actor = AuthorProjectionActor.class, becauseOf = {\"\"}),"));
+        Assert.assertTrue(context.contents().get(9).contains("@Projection(actor = BookProjectionActor.class, becauseOf = {\"BookRented\", \"BookPurchased\"})"));
+        Assert.assertTrue(context.contents().get(9).contains("@StateAdapters({"));
+        Assert.assertTrue(context.contents().get(9).contains("@StateAdapter(from = AuthorState.class, to = TextState.class),"));
+        Assert.assertTrue(context.contents().get(9).contains("@StateAdapter(from = BookState.class, to = TextState.class)"));
+    }
+
     private void loadProperties(final CodeGenerationContext context,
                                 final StorageType storageType,
                                 final DatabaseType databaseType,

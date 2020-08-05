@@ -58,25 +58,9 @@ public class AnnotatedBootstrapTemplateDataTest {
                 BootstrapTemplateData.from(context).parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
-        Assert.assertEquals(5, parameters.<List>find(IMPORTS).size());
-        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.CommandModelStateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
-        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
-        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.ProjectionDispatcherProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
-        Assert.assertEquals("io.vlingo.lattice.model.stateful.StatefulTypeRegistry", parameters.<List<ImportParameter>>find(IMPORTS).get(3).getQualifiedClassName());
-        Assert.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(4).getQualifiedClassName());
-
+        Assert.assertEquals(1, parameters.<List>find(IMPORTS).size());
+        Assert.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
         Assert.assertEquals("io.vlingo.xoomapp.resource", parameters.find(TemplateParameter.REST_RESOURCE_PACKAGE));
-
-        Assert.assertEquals(2, parameters.<List>find(PROVIDERS).size());
-        Assert.assertEquals("QueryModelStateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getClassName());
-        Assert.assertEquals("stage, statefulTypeRegistry", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getArguments());
-        Assert.assertEquals("CommandModelStateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(1).getClassName());
-        Assert.assertEquals("stage, statefulTypeRegistry, ProjectionDispatcherProvider.using(stage).storeDispatcher", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(1).getArguments());
-
-        Assert.assertEquals(1, parameters.<List>find(TYPE_REGISTRIES).size());
-        Assert.assertEquals("StatefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getClassName());
-        Assert.assertEquals("statefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getObjectName());
-
         Assert.assertEquals("xoom-app", parameters.find(TemplateParameter.APPLICATION_NAME));
         Assert.assertEquals(true, parameters.find(USE_PROJECTIONS));
     }
@@ -103,23 +87,11 @@ public class AnnotatedBootstrapTemplateDataTest {
                 BootstrapTemplateData.from(context).parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
-        Assert.assertEquals(3, parameters.<List>find(IMPORTS).size());
-        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.StateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
-        Assert.assertEquals("io.vlingo.lattice.model.stateful.StatefulTypeRegistry", parameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
-        Assert.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
-
+        Assert.assertEquals(1, parameters.<List>find(IMPORTS).size());
+        Assert.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
         Assert.assertEquals("io.vlingo.xoomapp.resource", parameters.find(TemplateParameter.REST_RESOURCE_PACKAGE));
-
-        Assert.assertEquals(1, parameters.<List>find(PROVIDERS).size());
-        Assert.assertEquals("StateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getClassName());
-        Assert.assertEquals("stage, statefulTypeRegistry", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getArguments());
-
-        Assert.assertEquals(1, parameters.<List>find(TYPE_REGISTRIES).size());
-        Assert.assertEquals("StatefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getClassName());
-        Assert.assertEquals("statefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getObjectName());
-
-        Assert.assertEquals(false, parameters.find(USE_PROJECTIONS));
         Assert.assertEquals("xoom-app", parameters.find(TemplateParameter.APPLICATION_NAME));
+        Assert.assertEquals(false, parameters.find(USE_PROJECTIONS));
     }
 
     private static final String EXPECTED_PACKAGE = "io.vlingo.xoomapp.infrastructure";

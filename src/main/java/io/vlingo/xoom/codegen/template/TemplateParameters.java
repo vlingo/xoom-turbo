@@ -65,6 +65,13 @@ public class TemplateParameters {
         return (T) this.parameters.get(parameter.key);
     }
 
+    public <T> T find(final TemplateParameter parameter, final T defaultValue) {
+        if(!this.parameters.containsKey(parameter.key)) {
+            return defaultValue;
+        }
+        return find(parameter);
+    }
+
     public Map<String, Object> map() {
         return parameters;
     }

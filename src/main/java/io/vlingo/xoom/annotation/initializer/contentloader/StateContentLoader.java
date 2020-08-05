@@ -30,7 +30,8 @@ public class StateContentLoader extends TypeBasedContentLoader {
     @Override
     protected List<TypeElement> retrieveTypes() {
         final StateAdapters stateAdapters =
-                annotatedClass.getAnnotation(StateAdapters.class);
+                annotatedClass == null ? null :
+                        annotatedClass.getAnnotation(StateAdapters.class);
 
         if(stateAdapters == null) {
             return Collections.emptyList();

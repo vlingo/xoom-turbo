@@ -23,8 +23,10 @@ public class StorageGenerationStep extends TemplateProcessingStep {
         final String basePackage = context.parameterOf(PACKAGE);
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::of);
         final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
+        final Boolean useAnnotations = context.parameterOf(ANNOTATIONS, Boolean::valueOf);
+        final Boolean useCQRS  = context.parameterOf(CQRS, Boolean::valueOf);
         return StorageTemplateDataFactory.build(basePackage, context.contents(), storageType,
-                context.databases(), projectionType);
+                context.databases(), projectionType, useAnnotations, useCQRS);
     }
 
     @Override

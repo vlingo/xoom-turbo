@@ -19,12 +19,6 @@ public class Bootstrap implements XoomInitializationAware {
 
   @Override
   public void onInit(final Stage stage) {
-   <#list registries as registry>
-       final ${registry.className} ${registry.objectName} = new ${registry.className}(stage.world());
-   </#list>
-   <#list providers as provider>
-       ${provider.className}.using(${provider.arguments});
-   </#list>
   }
 
 }

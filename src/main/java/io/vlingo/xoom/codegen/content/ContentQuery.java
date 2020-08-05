@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -18,11 +19,11 @@ import static java.util.stream.Collectors.toList;
 public class ContentQuery {
 
      public static boolean exists(final TemplateStandard standard, final List<Content> contents) {
-        return filterBySubject(standard, contents).findAny().isPresent();
+        return filterByStandard(standard, contents).findAny().isPresent();
     }
 
     public static List<String> findClassNames(final TemplateStandard standard, final List<Content> contents) {
-        return filterBySubject(standard, contents)
+        return filterByStandard(standard, contents)
                 .map(Content::retrieveClassName)
                 .collect(toList());
     }
@@ -34,11 +35,11 @@ public class ContentQuery {
     }
 
     public static List<String> findFullyQualifiedClassNames(final TemplateStandard standard, final List<Content> contents) {
-        return filterBySubject(standard, contents).map(Content::retrieveFullyQualifiedName).collect(toList());
+        return filterByStandard(standard, contents).map(Content::retrieveFullyQualifiedName).collect(toList());
     }
 
     public static String findPackage(final TemplateStandard standard, final List<Content> contents) {
-        return filterBySubject(standard, contents).map(Content::retrievePackage).findAny().orElse("");
+        return filterByStandard(standard, contents).map(Content::retrievePackage).findAny().orElse("");
     }
 
     public static String findFullyQualifiedClassName(final TemplateStandard standard, final String className, final List<Content> contents) {
@@ -47,7 +48,14 @@ public class ContentQuery {
                 .findFirst().orElseThrow(IllegalArgumentException::new);
     }
 
-    private static Stream<Content> filterBySubject(final TemplateStandard standard, final List<Content> contents) {
+    public static List<String> findClassNames(final TemplateStandard standard, final String packageName, final List<Content> contents) {
+        return filterByStandard(standard, contents)
+                .filter(content -> content.retrievePackage().equals(packageName))
+                .map(content -> content.retrieveClassName())
+                .collect(Collectors.toList());
+    }
+
+    public static Stream<Content> filterByStandard(final TemplateStandard standard, final List<Content> contents) {
         return contents.stream().filter(content -> content.has(standard));
     }
 

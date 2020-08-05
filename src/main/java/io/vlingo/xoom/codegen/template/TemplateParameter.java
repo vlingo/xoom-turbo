@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.template;
 
 public enum TemplateParameter {
 
+    BASE_PACKAGE("basePackage"),
     PACKAGE_NAME("packageName"),
     APPLICATION_NAME("appName"),
     AGGREGATE_PROTOCOL_NAME("aggregateProtocolName"),
@@ -34,9 +35,11 @@ public enum TemplateParameter {
     STORAGE_TYPE("storageType"),
     REQUIRE_ADAPTERS("requireAdapters"),
     STORAGE_DELEGATE_NAME("storageDelegateName"),
+    PROJECTIONS("projections"),
     PROJECTION_NAME("projectionName"),
     PROJECTION_TYPE("projectionType"),
     PROJECTION_TO_DESCRIPTION("projectToDescriptions"),
+    USE_CQRS("useCQRS"),
     USE_PROJECTIONS("useProjections"),
     USE_ANNOTATIONS("useAnnotations"),
     MODEL_CLASSIFICATION("modelClassification"),

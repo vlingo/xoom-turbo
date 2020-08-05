@@ -4,7 +4,10 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.annotation.persistence.model;
+package io.vlingo.xoom.annotation.model;
 
-public interface OtherDummy {
+import io.vlingo.lattice.model.DomainEvent;
+
+public class DummyCancelled extends DomainEvent {
+
 }

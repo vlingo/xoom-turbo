@@ -8,9 +8,10 @@
 package io.vlingo.xoom.codegen.template.storage;
 
 import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,24 +27,51 @@ public class StorageTemplateDataFactory {
                                            final List<Content> contents,
                                            final StorageType storageType,
                                            final Map<ModelClassification, DatabaseType> databases,
-                                           final ProjectionType projectionType) {
-        final String persistencePackage =
-                resolvePackage(basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME);
+                                           final ProjectionType projectionType,
+                                           final Boolean useAnnotations,
+                                           final Boolean useCQRS) {
+        final String persistencePackage = resolvePackage(basePackage);
 
         final List<TemplateData> stateAdaptersTemplateData =
                 AdapterTemplateData.from(persistencePackage, storageType, contents);
 
         final List<TemplateData> storeProvidersTemplateData =
-                StorageProviderTemplateData.from(persistencePackage, storageType, projectionType,
-                        databases, stateAdaptersTemplateData, contents);
+                buildStoreProvidersTemplateData(basePackage, persistencePackage, useCQRS,
+                        useAnnotations, storageType, projectionType, databases,
+                        stateAdaptersTemplateData, contents);
 
         return Stream.of(stateAdaptersTemplateData, storeProvidersTemplateData)
                 .flatMap(templatesData -> templatesData.stream())
                 .collect(Collectors.toList());
     }
 
-    private static String resolvePackage(final String... additionalPackages) {
-        return String.format(PACKAGE_PATTERN, additionalPackages).toLowerCase();
+    private static List<TemplateData> buildStoreProvidersTemplateData(final String basePackage,
+                                                                      final String persistencePackage,
+                                                                      final Boolean useCQRS,
+                                                                      final Boolean useAnnotations,
+                                                                      final StorageType storageType,
+                                                                      final ProjectionType projectionType,
+                                                                      final Map<ModelClassification, DatabaseType> databases,
+                                                                      final List<TemplateData> stateAdaptersTemplateData,
+                                                                      final List<Content> contents) {
+        if(useAnnotations) {
+            final TemplateData annotatedTemplateData =
+                    AnnotatedStorageProviderTemplateData.from(basePackage, persistencePackage,
+                            useCQRS, storageType, projectionType, stateAdaptersTemplateData, contents);
+
+            return Arrays.asList(annotatedTemplateData);
+        }
+
+        return StorageProviderTemplateData.from(persistencePackage, storageType, projectionType,
+                databases, stateAdaptersTemplateData, contents);
+    }
+
+
+    private static String resolvePackage(final String basePackage) {
+        if(basePackage.endsWith(".infrastructure")) {
+            return basePackage + "." + PERSISTENCE_PACKAGE_NAME;
+        }
+        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME).toLowerCase();
     }
 
 }

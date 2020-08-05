@@ -54,9 +54,15 @@ public enum TemplateStandard {
     }, (name, parameters) -> parameters.find(PLACEHOLDER_EVENT) ? name + "PlaceholderDefined" : name),
 
     STORE_PROVIDER(parameters -> {
+        if(parameters.find(USE_ANNOTATIONS, false)) {
+            return Template.ANNOTATED_STORE_PROVIDER.filename;
+        }
         return storeProviderTemplatesFrom(parameters.find(MODEL_CLASSIFICATION))
                 .get(parameters.find(STORAGE_TYPE));
     }, (name, parameters) -> {
+        if(parameters.find(USE_ANNOTATIONS, false)) {
+            return "PersistenceSetup";
+        }
         final StorageType storageType = parameters.find(STORAGE_TYPE);
         final ModelClassification modelClassification = parameters.find(MODEL_CLASSIFICATION);
         if(modelClassification.isQueryModel()) {
@@ -108,7 +114,4 @@ public enum TemplateStandard {
         return this.nameResolver.apply(name, parameters) + FILE_EXTENSION;
     }
 
-    public boolean isProjectionDispatcherProvider() {
-        return equals(PROJECTION_DISPATCHER_PROVIDER);
-    }
 }

@@ -30,7 +30,8 @@ public class ProjectionActorContentLoader extends TypeBasedContentLoader {
     @Override
     protected List<TypeElement> retrieveTypes() {
         final Projections projections =
-                annotatedClass.getAnnotation(Projections.class);
+                annotatedClass == null ? null :
+                        annotatedClass.getAnnotation(Projections.class);
 
         if(projections == null) {
             return Collections.emptyList();

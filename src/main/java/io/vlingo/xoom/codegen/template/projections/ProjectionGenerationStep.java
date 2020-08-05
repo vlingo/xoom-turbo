@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.ANNOTATIONS;
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.PROJECTION_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION;
@@ -27,9 +28,9 @@ public class ProjectionGenerationStep extends TemplateProcessingStep {
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        if(context.isInternalGeneration()) {
+        if (context.isInternalGeneration()) {
             return ContentQuery.exists(PROJECTION, context.contents());
-        } else if(ContentQuery.exists(AGGREGATE_PROTOCOL, context.contents())) {
+        } else if (ContentQuery.exists(AGGREGATE_PROTOCOL, context.contents())) {
             return context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf)
                     .isProjectionEnabled();
         }

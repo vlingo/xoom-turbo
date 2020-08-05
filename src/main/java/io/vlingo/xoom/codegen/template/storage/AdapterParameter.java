@@ -7,12 +7,12 @@
 
 package io.vlingo.xoom.codegen.template.storage;
 
-
-import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.ADAPTER_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.SOURCE_NAME;
@@ -21,21 +21,27 @@ public class AdapterParameter {
 
     private final String sourceClass;
     private final String adapterClass;
+    private final boolean last;
 
-    private AdapterParameter(final String sourceClass,
+    private AdapterParameter(final int index,
+                             final int numberOfAdapters,
+                             final String sourceClass,
                              final String adapterClass) {
         this.sourceClass = sourceClass;
         this.adapterClass = adapterClass;
+        this.last = index == numberOfAdapters - 1;
     }
 
-    private AdapterParameter(final TemplateParameters parameters) {
-        this(parameters.find(SOURCE_NAME), parameters.find(ADAPTER_NAME));
+    private AdapterParameter(final int index, final int numberOfAdapters, final TemplateParameters parameters) {
+        this(index, numberOfAdapters, parameters.find(SOURCE_NAME), parameters.find(ADAPTER_NAME));
     }
 
     public static List<AdapterParameter> from(final List<TemplateData> adaptersTemplateData) {
-        return adaptersTemplateData.stream()
-                .map(adapterTemplateData -> new AdapterParameter(adapterTemplateData.parameters()))
-                .collect(Collectors.toList());
+        return IntStream.range(0, adaptersTemplateData.size()).mapToObj(index -> {
+            final TemplateData templateData = adaptersTemplateData.get(index);
+            return new AdapterParameter(index, adaptersTemplateData.size(),
+                    templateData.parameters());
+        }).collect(Collectors.toList());
     }
 
     public String getSourceClass() {
@@ -44,6 +50,10 @@ public class AdapterParameter {
 
     public String getAdapterClass() {
         return adapterClass;
+    }
+
+    public boolean isLast() {
+        return last;
     }
 
 }

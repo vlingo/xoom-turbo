@@ -10,7 +10,9 @@ package io.vlingo.xoom.codegen.template.storage;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.file.ImportParameter;
-import io.vlingo.xoom.codegen.template.*;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,7 +27,9 @@ import java.util.stream.IntStream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.codegen.template.storage.ModelClassification.*;
+import static io.vlingo.xoom.codegen.template.storage.StorageType.JOURNAL;
 
 public class StorageTemplateDataFactoryTest {
 
@@ -33,7 +37,7 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnSourcedSingleModel() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
-                        StorageType.JOURNAL, databaseTypes(), ProjectionType.EVENT_BASED);
+                        JOURNAL, databaseTypes(), EVENT_BASED, false, false);
 
         //General Assert
 
@@ -51,7 +55,7 @@ public class StorageTemplateDataFactoryTest {
 
         Assert.assertEquals(EXPECTED_PACKAGE, stateAdapterConfigurationParameters.find(PACKAGE_NAME));
         Assert.assertEquals("BookRented", stateAdapterConfigurationParameters.find(SOURCE_NAME));
-        Assert.assertEquals(StorageType.JOURNAL, stateAdapterConfigurationParameters.find(STORAGE_TYPE));
+        Assert.assertEquals(JOURNAL, stateAdapterConfigurationParameters.find(STORAGE_TYPE));
         Assert.assertEquals(1, stateAdapterConfigurationParameters.<List<ImportParameter>>find(IMPORTS).size());
         Assert.assertEquals("io.vlingo.xoomapp.model.book.BookRented", stateAdapterConfigurationParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
         Assert.assertEquals("BookRentedAdapter.java", entryAdapterTemplateData.filename());
@@ -83,7 +87,7 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnStatefulSingleModel() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
-                        StorageType.STATE_STORE, databaseTypes(), ProjectionType.EVENT_BASED);
+                        StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, false);
 
         //General Assert
 
@@ -135,7 +139,7 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnStatefulCQRSModel() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
-                        StorageType.STATE_STORE, databaseTypesForCQRS(), ProjectionType.NONE);
+                        StorageType.STATE_STORE, databaseTypesForCQRS(), ProjectionType.NONE, false, false);
 
         //General Assert
 

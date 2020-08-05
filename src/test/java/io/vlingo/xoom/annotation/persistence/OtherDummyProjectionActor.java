@@ -9,7 +9,7 @@ package io.vlingo.xoom.annotation.persistence;
 
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
 import io.vlingo.xoom.annotation.initializer.infrastructure.persistence.QueryModelStateStoreProvider;
-import io.vlingo.xoom.annotation.persistence.model.OtherDummyState;
+import io.vlingo.xoom.annotation.model.OtherDummyState;
 
 public class OtherDummyProjectionActor extends StateStoreProjectionActor<OtherDummyState> {
 

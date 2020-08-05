@@ -18,6 +18,7 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -62,11 +63,12 @@ public abstract class BootstrapTemplateData extends TemplateData {
     private TemplateParameters loadParameters(final CodeGenerationContext context) {
         final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
         final String packageName = resolvePackage(context.parameterOf(PACKAGE));
+        final Boolean useAnnotations = context.parameterOf(ANNOTATIONS, Boolean::valueOf);
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
         final ProjectionType projectionType = context.parameterOf(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType::valueOf);
 
         final List<ImportParameter> imports =
-                loadImports(storageType, context.contents(), useCQRS);
+                loadImports(storageType, context.contents(), useCQRS, useAnnotations);
 
         final List<TypeRegistryParameter> typeRegistryParameters =
                 TypeRegistryParameter.from(storageType, useCQRS);
@@ -91,7 +93,12 @@ public abstract class BootstrapTemplateData extends TemplateData {
 
     private List<ImportParameter> loadImports(final StorageType storageType,
                                               final List<Content> contents,
-                                              final Boolean useCQRS) {
+                                              final Boolean useCQRS,
+                                              final Boolean useAnnotations) {
+        if(useAnnotations){
+            return new ArrayList<>();
+        }
+
         final List<String> otherFullyQualifiedNames =
                 ContentQuery.findFullyQualifiedClassNames(contents,
                         STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER);

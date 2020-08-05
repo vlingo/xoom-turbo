@@ -19,6 +19,7 @@ public enum Template {
     PLAIN_STATE("ValueState"),
     DOMAIN_EVENT("DomainEvent"),
     JOURNAL_PROVIDER("JournalProvider"),
+    ANNOTATED_STORE_PROVIDER("PersistenceSetup"),
     STATE_STORE_PROVIDER("StateStoreProvider"),
     OBJECT_STORE_PROVIDER("ObjectStoreProvider"),
     QUERY_MODEL_OBJECT_STORE_PROVIDER("QueryModelObjectStoreProvider"),
