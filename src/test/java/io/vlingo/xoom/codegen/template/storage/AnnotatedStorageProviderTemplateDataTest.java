@@ -26,7 +26,7 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.ADAPTERS;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.EVENT_BASED;
-import static io.vlingo.xoom.codegen.template.storage.ModelClassification.*;
+import static io.vlingo.xoom.codegen.template.storage.Model.*;
 
 public class AnnotatedStorageProviderTemplateDataTest {
 
@@ -97,8 +97,8 @@ public class AnnotatedStorageProviderTemplateDataTest {
         );
     }
 
-    private static final Map<ModelClassification, DatabaseType> databaseTypes() {
-        return new HashMap<ModelClassification, DatabaseType>() {{
+    private static final Map<Model, DatabaseType> databaseTypes() {
+        return new HashMap<Model, DatabaseType>() {{
             put(COMMAND, DatabaseType.HSQLDB);
             put(QUERY, DatabaseType.IN_MEMORY);
         }};

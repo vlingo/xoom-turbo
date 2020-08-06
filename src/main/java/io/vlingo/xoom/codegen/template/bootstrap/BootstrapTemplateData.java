@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.APPLICATION_NAME;
+import static io.vlingo.xoom.codegen.CodeGenerationParameter.PROJECTION_TYPE;
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
@@ -65,7 +66,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
         final String packageName = resolvePackage(context.parameterOf(PACKAGE));
         final Boolean useAnnotations = context.parameterOf(ANNOTATIONS, Boolean::valueOf);
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
-        final ProjectionType projectionType = context.parameterOf(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType::valueOf);
+        final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
 
         final List<ImportParameter> imports =
                 loadImports(storageType, context.contents(), useCQRS, useAnnotations);

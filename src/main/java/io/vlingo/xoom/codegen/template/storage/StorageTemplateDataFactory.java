@@ -26,7 +26,7 @@ public class StorageTemplateDataFactory {
     public static List<TemplateData> build(final String basePackage,
                                            final List<Content> contents,
                                            final StorageType storageType,
-                                           final Map<ModelClassification, DatabaseType> databases,
+                                           final Map<Model, DatabaseType> databases,
                                            final ProjectionType projectionType,
                                            final Boolean useAnnotations,
                                            final Boolean useCQRS) {
@@ -51,7 +51,7 @@ public class StorageTemplateDataFactory {
                                                                       final Boolean useAnnotations,
                                                                       final StorageType storageType,
                                                                       final ProjectionType projectionType,
-                                                                      final Map<ModelClassification, DatabaseType> databases,
+                                                                      final Map<Model, DatabaseType> databases,
                                                                       final List<TemplateData> stateAdaptersTemplateData,
                                                                       final List<Content> contents) {
         if(useAnnotations) {

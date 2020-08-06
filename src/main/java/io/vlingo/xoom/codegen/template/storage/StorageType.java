@@ -66,8 +66,8 @@ public enum StorageType {
         return valueOf(storage.toUpperCase());
     }
 
-    public String resolveProviderNameFrom(final ModelClassification modelClassification) {
-        final String prefix = modelClassification.isSingle() ? title : modelClassification.title + title;
+    public String resolveProviderNameFrom(final Model model) {
+        final String prefix = model.isDomainModel() ? title : model.title + title;
         return prefix + STORE_PROVIDER_NAME_SUFFIX;
     }
 
@@ -84,8 +84,8 @@ public enum StorageType {
                 .collect(Collectors.toList());
     }
 
-    public String resolveTypeRegistryObjectName(final ModelClassification modelClassification) {
-        if(!modelClassification.isQueryModel()) {
+    public String resolveTypeRegistryObjectName(final Model model) {
+        if(!model.isQueryModel()) {
             return typeRegistryObjectName();
         }
         return STATE_STORE.typeRegistryObjectName();
@@ -101,8 +101,8 @@ public enum StorageType {
         return Stream.of(this, STATE_STORE);
     }
 
-    public Boolean requireAdapters(final ModelClassification modelClassification) {
-        return !modelClassification.isQueryModel() || isStateful();
+    public Boolean requireAdapters(final Model model) {
+        return !model.isQueryModel() || isStateful();
     }
 
     public boolean isEnabled() {

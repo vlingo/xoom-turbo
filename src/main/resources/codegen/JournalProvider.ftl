@@ -20,6 +20,8 @@ import io.vlingo.symbio.store.journal.Journal;
 import io.vlingo.symbio.store.DataFormat;
 import io.vlingo.symbio.store.StorageException;
 import io.vlingo.symbio.store.common.jdbc.Configuration;
+import io.vlingo.xoom.storage.DatabaseConfiguration;
+import io.vlingo.xoom.storage.Model;
 </#if>
 
 public class ${storeProviderName}  {
@@ -54,7 +56,7 @@ public class ${storeProviderName}  {
 </#list>
 
 <#if configurable>
-    final List<Object> parameters = Definition.parameters(dispatcher, configDatabase());
+    final List<Object> parameters = Definition.parameters(dispatcher, DatabaseConfiguration.load(Model.${model}));
 <#else>
     final List<Object> parameters = Definition.parameters(dispatcher);
 </#if>
@@ -74,21 +76,4 @@ public class ${storeProviderName}  {
     this.journal = journal;
   }
 
-<#if configurable>
-  private static Configuration configDatabase() {
-    try {
-        return ${configurationProviderName}.configuration(
-                DataFormat.Text,
-                "${connectionUrl}",
-                "databaseName",
-                "username",
-                "password",
-                "originatorId",
-                true
-        );
-    } catch (final Exception e) {
-      throw new StorageException(null, "Unable to configure database", e);
-    }
-  }
-</#if>
 }

@@ -28,6 +28,8 @@ import io.vlingo.symbio.store.StorageException;
 import io.vlingo.symbio.store.state.StateStore.StorageDelegate;
 import io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor.JDBCStateStoreInstantiator;
 import io.vlingo.symbio.store.common.jdbc.Configuration;
+import io.vlingo.xoom.storage.DatabaseConfiguration;
+import io.vlingo.xoom.storage.Model;
 </#if>
 
 public class ${storeProviderName} {
@@ -83,7 +85,6 @@ public class ${storeProviderName} {
     registry.register(new Info(storeWithControl._1, ${stateAdapter.sourceClass}.class, ${stateAdapter.sourceClass}.class.getSimpleName()));
 </#list>
 </#if>
-
     instance = new ${storeProviderName}(storeWithControl._1, storeWithControl._2);
 
     return instance;
@@ -99,24 +100,7 @@ public class ${storeProviderName} {
   }
 
   private static StorageDelegate setupStorageDelegate(final Stage stage) {
-    final Configuration configuration = configDatabase();
-    return new ${storageDelegateName}(configuration, stage.world().defaultLogger());
-  }
-
-  private static Configuration configDatabase() {
-    try {
-        return ${configurationProviderName}.configuration(
-                DataFormat.Text,
-                "${connectionUrl}",
-                "databaseName",
-                "username",
-                "password",
-                "originatorId",
-                true
-        );
-    } catch (final Exception e) {
-      throw new StorageException(null, "Unable to configure database", e);
-    }
+    return new ${storageDelegateName}(DatabaseConfiguration.load(Model.${model}), stage.world().defaultLogger());
   }
 </#if>
 

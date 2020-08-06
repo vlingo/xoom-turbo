@@ -9,23 +9,23 @@ package io.vlingo.xoom.codegen.template.storage;
 
 import java.util.stream.Stream;
 
-public enum ModelClassification {
+public enum Model {
 
-    SINGLE("SingleModel"),
+    DOMAIN("DomainModel"),
     COMMAND("CommandModel"),
     QUERY("QueryModel");
 
     public final String title;
 
-    ModelClassification(String title) {
+    Model(String title) {
         this.title = title;
     }
 
-    public static Stream<ModelClassification> applicableFor(final Boolean useCQRS) {
+    public static Stream<Model> applicableFor(final Boolean useCQRS) {
         if(useCQRS) {
             return Stream.of(QUERY, COMMAND);
         }
-        return Stream.of(SINGLE);
+        return Stream.of(DOMAIN);
     }
 
     public boolean isCommandModel() {
@@ -36,7 +36,7 @@ public enum ModelClassification {
         return equals(QUERY);
     }
 
-    public boolean isSingle() {
-        return equals(SINGLE);
+    public boolean isDomainModel() {
+        return equals(DOMAIN);
     }
 }

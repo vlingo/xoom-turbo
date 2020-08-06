@@ -58,9 +58,9 @@ public enum DatabaseType {
         }
 
         final StorageType storageType = parameters.find(STORAGE_TYPE);
-        final ModelClassification modelClassification = parameters.find(MODEL_CLASSIFICATION);
+        final Model model = parameters.find(MODEL_CLASSIFICATION);
 
-        if(modelClassification.isQueryModel() || storageType.isStateful()) {
+        if(model.isQueryModel() || storageType.isStateful()) {
 
             final String storageDelegateClassName =
                     CodeGenerationSetup.STORAGE_DELEGATE_CLASS_NAME.get(this);
@@ -73,8 +73,7 @@ public enum DatabaseType {
                     .addImport(storageDelegateQualifiedClassName);
         }
 
-        return parameters.and(CONFIGURATION_PROVIDER_NAME, this.configurationProviderName())
-                .addImport(configurationProviderQualifiedName);
+        return parameters;
     }
 
     public boolean isInMemory() {

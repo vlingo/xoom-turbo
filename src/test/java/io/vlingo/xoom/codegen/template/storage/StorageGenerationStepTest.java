@@ -49,9 +49,7 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(9).contains("io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor"));
         Assert.assertFalse(context.contents().get(9).contains("InMemoryJournalActor"));
         Assert.assertTrue(context.contents().get(10).contains("class QueryModelStateStoreProvider"));
-        Assert.assertTrue(context.contents().get(10).contains("HSQLDBConfigurationProvider"));
-        Assert.assertTrue(context.contents().get(10).contains("jdbc:hsqldb:mem:"));
-        Assert.assertTrue(context.contents().get(10).contains("import io.vlingo.symbio.store.common.jdbc.hsqldb.HSQLDBConfigurationProvider"));
+        Assert.assertTrue(context.contents().get(10).contains("DatabaseConfiguration.load(Model.QUERY)"));
         Assert.assertFalse(context.contents().get(10).contains("BookRented"));
         Assert.assertFalse(context.contents().get(10).contains("BookPurchased"));
         Assert.assertFalse(context.contents().get(10).contains("StatefulTypeRegistry.Info"));
@@ -80,9 +78,7 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(9).contains("import io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor.JDBCStateStoreInstantiator;"));
         Assert.assertFalse(context.contents().get(9).contains("InMemoryStateStoreActor"));
         Assert.assertTrue(context.contents().get(10).contains("class QueryModelStateStoreProvider"));
-        Assert.assertTrue(context.contents().get(10).contains("HSQLDBConfigurationProvider"));
-        Assert.assertTrue(context.contents().get(10).contains("jdbc:hsqldb:mem:"));
-        Assert.assertTrue(context.contents().get(10).contains("import io.vlingo.symbio.store.common.jdbc.hsqldb.HSQLDBConfigurationProvider"));
+        Assert.assertTrue(context.contents().get(10).contains("DatabaseConfiguration.load(Model.QUERY)"));
     }
 
     @Test

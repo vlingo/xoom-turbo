@@ -12,7 +12,7 @@ import io.vlingo.xoom.annotation.initializer.contentloader.TypeBasedContentLoade
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
-import io.vlingo.xoom.codegen.template.storage.ModelClassification;
+import io.vlingo.xoom.codegen.template.storage.Model;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
@@ -96,15 +96,15 @@ public class CodeGenerationContext {
                 !this.<String>parameterOf(codeGenerationParameter).trim().isEmpty();
     }
 
-    public Map<ModelClassification, DatabaseType> databases() {
+    public Map<Model, DatabaseType> databases() {
         if(parameterOf(CQRS, Boolean::valueOf)) {
-            return new HashMap<ModelClassification, DatabaseType>(){{
-                put(ModelClassification.COMMAND, parameterOf(COMMAND_MODEL_DATABASE, DatabaseType::valueOf));
-                put(ModelClassification.QUERY, parameterOf(QUERY_MODEL_DATABASE, DatabaseType::valueOf));
+            return new HashMap<Model, DatabaseType>(){{
+                put(Model.COMMAND, parameterOf(COMMAND_MODEL_DATABASE, DatabaseType::valueOf));
+                put(Model.QUERY, parameterOf(QUERY_MODEL_DATABASE, DatabaseType::valueOf));
             }};
         }
-        return new HashMap<ModelClassification, DatabaseType>(){{
-            put(ModelClassification.SINGLE, parameterOf(DATABASE, DatabaseType::valueOf));
+        return new HashMap<Model, DatabaseType>(){{
+            put(Model.DOMAIN, parameterOf(DATABASE, DatabaseType::valueOf));
         }};
     }
 

@@ -17,7 +17,7 @@ import java.util.List;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
-import static io.vlingo.xoom.codegen.template.storage.ModelClassification.QUERY;
+import static io.vlingo.xoom.codegen.template.storage.Model.QUERY;
 import static io.vlingo.xoom.codegen.template.storage.StorageType.STATE_STORE;
 
 public class ProjectionTemplateData extends TemplateData {

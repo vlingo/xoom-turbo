@@ -31,10 +31,10 @@ public class StorageProviderTemplateData extends TemplateData {
     public static List<TemplateData> from(final String persistencePackage,
                                           final StorageType storageType,
                                           final ProjectionType projectionType,
-                                          final Map<ModelClassification, DatabaseType> databases,
+                                          final Map<Model, DatabaseType> databases,
                                           final List<TemplateData> stateAdaptersTemplateData,
                                           final List<Content> contents) {
-        return Stream.of(ModelClassification.values())
+        return Stream.of(Model.values())
                 .filter(modelClassification -> databases.containsKey(modelClassification))
                 .map(modelClassification -> new StorageProviderTemplateData(persistencePackage,
                         storageType, databases.get(modelClassification), projectionType,
@@ -46,19 +46,19 @@ public class StorageProviderTemplateData extends TemplateData {
                                         final StorageType storageType,
                                         final DatabaseType databaseType,
                                         final ProjectionType projectionType,
-                                        final ModelClassification modelClassification,
+                                        final Model model,
                                         final List<TemplateData> stateAdaptersTemplateData,
                                         final List<Content> contents) {
         this.templateParameters =
                 loadParameters(persistencePackage, storageType, databaseType, projectionType,
-                        modelClassification, stateAdaptersTemplateData, contents);
+                        model, stateAdaptersTemplateData, contents);
     }
 
     private TemplateParameters loadParameters(final String packageName,
                                               final StorageType storageType,
                                               final DatabaseType databaseType,
                                               final ProjectionType projectionType,
-                                              final ModelClassification modelClassification,
+                                              final Model model,
                                               final List<TemplateData> stateAdaptersTemplateData,
                                               final List<Content> contents) {
         final String storageClassName =
@@ -68,19 +68,19 @@ public class StorageProviderTemplateData extends TemplateData {
                 AdapterParameter.from(stateAdaptersTemplateData);
 
         final List<String> sourceClassQualifiedNames =
-                storageType.requireAdapters(modelClassification) ?
+                storageType.requireAdapters(model) ?
                         findFullyQualifiedClassNames(storageType.adapterSourceClassStandard, contents) :
                         Collections.emptyList();
 
         return TemplateParameters.with(STORAGE_TYPE, storageType)
-                .and(MODEL_CLASSIFICATION, modelClassification).and(DATABASE_TYPE, databaseType)
+                .and(MODEL_CLASSIFICATION, model).and(DATABASE_TYPE, databaseType)
                 .and(IMPORTS, ImportParameter.of(sourceClassQualifiedNames)).and(STORE_NAME, storageClassName)
                 .and(PACKAGE_NAME, packageName).and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, adapterParameters).and(CONNECTION_URL, databaseType.connectionUrl)
                 .and(CONFIGURABLE, databaseType.configurable).and(PROJECTION_TYPE, projectionType)
                 .andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
                 .enrich(params -> databaseType.addConfigurationParameters(params))
-                .and(REQUIRE_ADAPTERS, storageType.requireAdapters(modelClassification));
+                .and(REQUIRE_ADAPTERS, storageType.requireAdapters(model));
     }
 
     @Override

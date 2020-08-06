@@ -10,13 +10,12 @@ package io.vlingo.xoom.codegen;
 import com.google.common.collect.Maps;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
-import io.vlingo.xoom.codegen.template.storage.ModelClassification;
+import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
 import static io.vlingo.xoom.codegen.template.Template.*;
 
 public class CodeGenerationSetup {
@@ -88,8 +87,8 @@ public class CodeGenerationSetup {
                     }}
             );
 
-    public static Map<StorageType, String> storeProviderTemplatesFrom(final ModelClassification modelClassification) {
-        if(modelClassification.isQueryModel()) {
+    public static Map<StorageType, String> storeProviderTemplatesFrom(final Model model) {
+        if(model.isQueryModel()) {
             return QUERY_MODEL_STORE_TEMPLATES;
         }
         return COMMAND_MODEL_STORE_TEMPLATES;

@@ -9,7 +9,7 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 
 
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.codegen.template.storage.ModelClassification;
+import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.Collections;
@@ -20,7 +20,6 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL_CLASSIFICA
 import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
-import static io.vlingo.xoom.codegen.template.storage.ModelClassification.SINGLE;
 
 
 public class StoreProviderParameter {
@@ -38,32 +37,32 @@ public class StoreProviderParameter {
             return Collections.emptyList();
         }
 
-        return ModelClassification.applicableFor(useCQRS)
+        return Model.applicableFor(useCQRS)
                 .map(model -> new StoreProviderParameter(storageType, model, useProjections))
                 .collect(Collectors.toList());
     }
 
     private StoreProviderParameter(final StorageType storageType,
-                                   final ModelClassification modelClassification,
+                                   final Model model,
                                    final Boolean useProjections) {
         final TemplateParameters parameters =
                 TemplateParameters.with(STORAGE_TYPE, storageType)
-                        .and(MODEL_CLASSIFICATION, modelClassification);
+                        .and(MODEL_CLASSIFICATION, model);
 
         this.className = STORE_PROVIDER.resolveClassname(parameters);
-        this.arguments = resolveArguments(modelClassification, storageType, useProjections);
+        this.arguments = resolveArguments(model, storageType, useProjections);
     }
 
-    private String resolveArguments(final ModelClassification modelClassification,
+    private String resolveArguments(final Model model,
                                     final StorageType storageType,
                                     final Boolean useProjections) {
         final String typeRegistryObjectName =
-                storageType.resolveTypeRegistryObjectName(modelClassification);
+                storageType.resolveTypeRegistryObjectName(model);
 
         final String dispatcherProviderClassName =
                 PROJECTION_DISPATCHER_PROVIDER.resolveClassname();
 
-        if(modelClassification.isQueryModel() || !useProjections) {
+        if(model.isQueryModel() || !useProjections) {
             return String.format(STORE_PROVIDER_ARGS_PATTERN, typeRegistryObjectName);
         }
 

@@ -28,7 +28,7 @@ import java.util.stream.IntStream;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.EVENT_BASED;
-import static io.vlingo.xoom.codegen.template.storage.ModelClassification.*;
+import static io.vlingo.xoom.codegen.template.storage.Model.*;
 import static io.vlingo.xoom.codegen.template.storage.StorageType.JOURNAL;
 
 public class StorageTemplateDataFactoryTest {
@@ -68,14 +68,12 @@ public class StorageTemplateDataFactoryTest {
         final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
-        Assert.assertEquals(SINGLE, storeProviderParameters.find(MODEL_CLASSIFICATION));
+        Assert.assertEquals(DOMAIN, storeProviderParameters.find(MODEL_CLASSIFICATION));
         Assert.assertEquals("JournalProvider", storeProviderParameters.find(STORAGE_PROVIDER_NAME));
         Assert.assertEquals("io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor", storeProviderParameters.find(STORE_NAME));
-        Assert.assertEquals(3, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
+        Assert.assertEquals(2, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
         Assert.assertEquals("io.vlingo.xoomapp.model.book.BookRented", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
         Assert.assertEquals("io.vlingo.xoomapp.model.book.BookPurchased", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
-        Assert.assertEquals("io.vlingo.symbio.store.common.jdbc.postgres.PostgresConfigurationProvider", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
-        Assert.assertEquals("PostgresConfigurationProvider", storeProviderParameters.find(CONFIGURATION_PROVIDER_NAME));
         Assert.assertEquals("BookRented", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
         Assert.assertEquals("BookRentedAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getAdapterClass());
         Assert.assertEquals("BookPurchased", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
@@ -118,16 +116,14 @@ public class StorageTemplateDataFactoryTest {
         final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
-        Assert.assertEquals(SINGLE, storeProviderParameters.find(MODEL_CLASSIFICATION));
+        Assert.assertEquals(DOMAIN, storeProviderParameters.find(MODEL_CLASSIFICATION));
         Assert.assertEquals("StateStoreProvider", storeProviderParameters.find(STORAGE_PROVIDER_NAME));
         Assert.assertEquals("io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor", storeProviderParameters.find(STORE_NAME));
-        Assert.assertEquals(4, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
+        Assert.assertEquals(3, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
         Assert.assertEquals("io.vlingo.xoomapp.model.author.AuthorState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
         Assert.assertEquals("io.vlingo.xoomapp.model.book.BookState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
         Assert.assertEquals("io.vlingo.symbio.store.state.jdbc.postgres.PostgresStorageDelegate", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
-        Assert.assertEquals("io.vlingo.symbio.store.common.jdbc.postgres.PostgresConfigurationProvider", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(3).getQualifiedClassName());
         Assert.assertEquals("PostgresStorageDelegate", storeProviderParameters.find(STORAGE_DELEGATE_NAME));
-        Assert.assertEquals("PostgresConfigurationProvider", storeProviderParameters.find(CONFIGURATION_PROVIDER_NAME));
         Assert.assertEquals("AuthorState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
         Assert.assertEquals("AuthorStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getAdapterClass());
         Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
@@ -171,13 +167,13 @@ public class StorageTemplateDataFactoryTest {
 
         IntStream.range(0, 1).forEach(modelClassificationIndex -> {
             final TemplateData storeProviderTemplateData = storeProviders.get(modelClassificationIndex);
-            final ModelClassification modelClassification = modelClassificationIndex == 0 ? COMMAND : QUERY;
+            final Model model = modelClassificationIndex == 0 ? COMMAND : QUERY;
             final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
             final String expectedStateStoreActor = modelClassificationIndex == 0 ? "io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor" : "io.vlingo.symbio.store.state.jdbc.InMemoryStateStoreActor";
-            final int expectedImports = modelClassificationIndex == 0 ? 4 : 2;
+            final int expectedImports = modelClassificationIndex == 0 ? 3 : 2;
             Assert.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
-            Assert.assertEquals(modelClassification, storeProviderParameters.find(MODEL_CLASSIFICATION));
-            Assert.assertEquals(modelClassification.title + "StateStoreProvider", storeProviderParameters.find(STORAGE_PROVIDER_NAME));
+            Assert.assertEquals(model, storeProviderParameters.find(MODEL_CLASSIFICATION));
+            Assert.assertEquals(model.title + "StateStoreProvider", storeProviderParameters.find(STORAGE_PROVIDER_NAME));
             Assert.assertEquals(expectedStateStoreActor, storeProviderParameters.find(STORE_NAME));
             Assert.assertEquals(expectedImports, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
             Assert.assertEquals("io.vlingo.xoomapp.model.author.AuthorState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
@@ -186,7 +182,7 @@ public class StorageTemplateDataFactoryTest {
             Assert.assertEquals("AuthorStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getAdapterClass());
             Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
             Assert.assertEquals("BookStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getAdapterClass());
-            Assert.assertEquals(modelClassification.title  + "StateStoreProvider.java", storeProviderTemplateData.filename());
+            Assert.assertEquals(model.title  + "StateStoreProvider.java", storeProviderTemplateData.filename());
         });
     }
 
@@ -202,16 +198,16 @@ public class StorageTemplateDataFactoryTest {
                 );
     }
 
-    private static final Map<ModelClassification, DatabaseType> databaseTypesForCQRS() {
-        return new HashMap<ModelClassification, DatabaseType>() {{
+    private static final Map<Model, DatabaseType> databaseTypesForCQRS() {
+        return new HashMap<Model, DatabaseType>() {{
            put(COMMAND, DatabaseType.HSQLDB);
            put(QUERY, DatabaseType.IN_MEMORY);
         }};
     }
 
-    private static final Map<ModelClassification, DatabaseType> databaseTypes() {
-        return new HashMap<ModelClassification, DatabaseType>() {{
-            put(SINGLE, DatabaseType.POSTGRES);
+    private static final Map<Model, DatabaseType> databaseTypes() {
+        return new HashMap<Model, DatabaseType>() {{
+            put(DOMAIN, DatabaseType.POSTGRES);
         }};
     }
 

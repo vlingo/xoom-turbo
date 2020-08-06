@@ -52,7 +52,9 @@ public class TextBasedContent extends Content {
 
     private void handleDefaultCreation() throws IOException {
         file.getParentFile().mkdirs();
-        file.createNewFile();
+        if(!file.exists()) {
+            file.createNewFile();
+        }
         Files.write(file.toPath(), text.getBytes());
     }
 

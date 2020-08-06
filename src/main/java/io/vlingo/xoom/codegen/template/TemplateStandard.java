@@ -2,7 +2,7 @@ package io.vlingo.xoom.codegen.template;
 
 
 import io.vlingo.xoom.codegen.CodeGenerationSetup;
-import io.vlingo.xoom.codegen.template.storage.ModelClassification;
+import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.function.BiFunction;
@@ -64,11 +64,11 @@ public enum TemplateStandard {
             return "PersistenceSetup";
         }
         final StorageType storageType = parameters.find(STORAGE_TYPE);
-        final ModelClassification modelClassification = parameters.find(MODEL_CLASSIFICATION);
-        if(modelClassification.isQueryModel()) {
-            return STATE_STORE.resolveProviderNameFrom(modelClassification);
+        final Model model = parameters.find(MODEL_CLASSIFICATION);
+        if(model.isQueryModel()) {
+            return STATE_STORE.resolveProviderNameFrom(model);
         }
-        return storageType.resolveProviderNameFrom(modelClassification);
+        return storageType.resolveProviderNameFrom(model);
     });
 
     private static final String FILE_EXTENSION = ".java";
