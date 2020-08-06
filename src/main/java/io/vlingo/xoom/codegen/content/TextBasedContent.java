@@ -51,7 +51,7 @@ public class TextBasedContent extends Content {
                 handleCreationFromSourceElement();
             }
         } catch (final IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
