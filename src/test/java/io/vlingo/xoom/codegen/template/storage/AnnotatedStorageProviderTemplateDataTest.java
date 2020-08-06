@@ -34,10 +34,10 @@ public class AnnotatedStorageProviderTemplateDataTest {
     public void testWithAdaptersAndProjections() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
-                        StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, true, true);
+                        StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, true, true);
 
         //General Assert
-        Assert.assertEquals(3, allTemplatesData.size());
+        Assert.assertEquals(4, allTemplatesData.size());
         Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
         Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
 

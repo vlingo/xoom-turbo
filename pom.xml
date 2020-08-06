@@ -172,6 +172,37 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <!-- current version -->
+          <groupId>fr.avianey.mojo</groupId>
+          <artifactId>hsqldb-maven-plugin</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <driver>org.hsqldb.jdbcDriver</driver>
+            <path>mem:test</path>
+            <address>localhost</address>
+            <name>xdb</name>
+            <username>sa</username>
+            <password>pwd</password>
+            <validationQuery>SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS</validationQuery>
+          </configuration>
+          <executions>
+            <execution>
+              <id>start-hsqldb</id>
+              <phase>pre-integration-test</phase>
+              <goals>
+                <goal>start</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>stop-hsqldb</id>
+              <phase>post-integration-test</phase>
+              <goals>
+                <goal>stop</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
     </plugins>
   </build>
 

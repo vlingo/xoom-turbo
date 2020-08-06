@@ -29,12 +29,12 @@ public class DatabaseParametersTest {
     @Test
     public void testQueryParametersLoad() {
         final DatabaseParameters parameters = new DatabaseParameters(Model.QUERY, false);
-        Assert.assertEquals("POSTGRES", parameters.database);
+        Assert.assertEquals("HSQLDB", parameters.database);
         Assert.assertEquals("DB_CONFIG_TEST", parameters.name);
-        Assert.assertEquals("jdbc:postgresql://localhost/", parameters.url);
-        Assert.assertEquals("org.postgresql.Driver", parameters.driver);
-        Assert.assertEquals("vlingo_test", parameters.username);
-        Assert.assertEquals("vlingo123", parameters.password);
+        Assert.assertEquals("jdbc:hsqldb:mem:", parameters.url);
+        Assert.assertEquals("org.hsqldb.jdbcDriver", parameters.driver);
+        Assert.assertEquals("sa", parameters.username);
+        Assert.assertEquals("pwd", parameters.password);
         Assert.assertEquals("MAIN", parameters.originator);
         Assert.assertFalse(parameters.autoCreate);
     }

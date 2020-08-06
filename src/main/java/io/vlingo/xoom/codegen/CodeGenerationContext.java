@@ -23,6 +23,7 @@ import java.util.function.Function;
 import static io.vlingo.xoom.codegen.CodeGenerationLocation.EXTERNAL;
 import static io.vlingo.xoom.codegen.CodeGenerationLocation.INTERNAL;
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.template.storage.DatabaseType.IN_MEMORY;
 
 public class CodeGenerationContext {
 
@@ -99,12 +100,12 @@ public class CodeGenerationContext {
     public Map<Model, DatabaseType> databases() {
         if(parameterOf(CQRS, Boolean::valueOf)) {
             return new HashMap<Model, DatabaseType>(){{
-                put(Model.COMMAND, parameterOf(COMMAND_MODEL_DATABASE, DatabaseType::valueOf));
-                put(Model.QUERY, parameterOf(QUERY_MODEL_DATABASE, DatabaseType::valueOf));
+                put(Model.COMMAND, parameterOf(COMMAND_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
+                put(Model.QUERY, parameterOf(QUERY_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
             }};
         }
         return new HashMap<Model, DatabaseType>(){{
-            put(Model.DOMAIN, parameterOf(DATABASE, DatabaseType::valueOf));
+            put(Model.DOMAIN, parameterOf(DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
         }};
     }
 

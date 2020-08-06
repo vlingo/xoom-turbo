@@ -33,7 +33,8 @@ public enum Template {
     PROJECTION_DISPATCHER_PROVIDER("ProjectionDispatcherProvider"),
     OPERATION_BASED_PROJECTION("OperationBasedProjection"),
     EVENT_BASED_PROJECTION("EventBasedProjection"),
-    ENTITY_DATA("ValueData");
+    ENTITY_DATA("ValueData"),
+    DATABASE_PROPERTIES("DatabaseProperties");
 
     public final String filename;
 

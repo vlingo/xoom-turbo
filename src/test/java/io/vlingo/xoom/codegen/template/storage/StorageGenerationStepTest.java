@@ -37,7 +37,7 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assert.assertEquals(11, context.contents().size());
+        Assert.assertEquals(12, context.contents().size());
         Assert.assertEquals("BookRentedAdapter", context.contents().get(7).retrieveClassName());
         Assert.assertEquals("BookPurchasedAdapter", context.contents().get(8).retrieveClassName());
         Assert.assertEquals("CommandModelJournalProvider", context.contents().get(9).retrieveClassName());
@@ -54,6 +54,10 @@ public class StorageGenerationStepTest {
         Assert.assertFalse(context.contents().get(10).contains("BookPurchased"));
         Assert.assertFalse(context.contents().get(10).contains("StatefulTypeRegistry.Info"));
         Assert.assertFalse(context.contents().get(10).contains("StateAdapterProvider"));
+        Assert.assertFalse(context.contents().get(11).contains("database.driver=org.hsqldb.jdbc.JDBCDriver"));
+        Assert.assertFalse(context.contents().get(11).contains("database.url=jdbc:hsqldb:mem:"));
+        Assert.assertFalse(context.contents().get(11).contains("query.database.driver=org.hsqldb.jdbc.JDBCDriver"));
+        Assert.assertFalse(context.contents().get(11).contains("query.database.url=jdbc:hsqldb:mem:"));
     }
 
     @Test
@@ -66,7 +70,7 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assert.assertEquals(11, context.contents().size());
+        Assert.assertEquals(12, context.contents().size());
         Assert.assertEquals("AuthorStateAdapter", context.contents().get(7).retrieveClassName());
         Assert.assertEquals("BookStateAdapter", context.contents().get(8).retrieveClassName());
         Assert.assertEquals("CommandModelStateStoreProvider", context.contents().get(9).retrieveClassName());
@@ -91,7 +95,7 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assert.assertEquals(11, context.contents().size());
+        Assert.assertEquals(12, context.contents().size());
         Assert.assertEquals("AuthorStateAdapter", context.contents().get(7).retrieveClassName());
         Assert.assertEquals("BookStateAdapter", context.contents().get(8).retrieveClassName());
         Assert.assertEquals("CommandModelStateStoreProvider", context.contents().get(9).retrieveClassName());
@@ -113,7 +117,7 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assert.assertEquals(10, context.contents().size());
+        Assert.assertEquals(11, context.contents().size());
         Assert.assertEquals("AuthorStateAdapter", context.contents().get(7).retrieveClassName());
         Assert.assertEquals("BookStateAdapter", context.contents().get(8).retrieveClassName());
         Assert.assertEquals("PersistenceSetup", context.contents().get(9).retrieveClassName());

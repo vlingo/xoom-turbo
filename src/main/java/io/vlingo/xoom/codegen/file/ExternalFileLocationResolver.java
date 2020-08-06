@@ -4,6 +4,7 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.codegen.file;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
@@ -15,10 +16,12 @@ import java.nio.file.Paths;
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.APPLICATION_NAME;
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.TARGET_FOLDER;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.RESOURCE_FILE;
 
 public class ExternalFileLocationResolver implements FileLocationResolver {
 
     private static final String[] SOURCE_FOLDER = {"src", "main", "java"};
+    private static final String[] RESOURCE_FOLDER = {"src", "main", "resources"};
 
     @Override
     public String resolve(final CodeGenerationContext context,
@@ -35,6 +38,9 @@ public class ExternalFileLocationResolver implements FileLocationResolver {
     }
 
     private String[] listSourceFolders(final TemplateData templateData) {
+        if(templateData.parameters().find(RESOURCE_FILE, false)) {
+            return RESOURCE_FOLDER;
+        }
         final String packageName = templateData.parameters().find(PACKAGE_NAME);
         return ArrayUtils.addAll(SOURCE_FOLDER, packageName.split("\\."));
     }

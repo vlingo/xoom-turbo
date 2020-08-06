@@ -46,6 +46,9 @@ public enum TemplateStandard {
             ANNOTATED_BOOTSTRAP.filename : DEFAULT_BOOTSTRAP.filename,
             (name, parameters) -> "Bootstrap"),
 
+    DATABASE_PROPERTIES(templateParameters -> Template.DATABASE_PROPERTIES.filename,
+            (name, parameters) -> "vlingo-xoom.properties"),
+
     DOMAIN_EVENT(parameters -> {
         if (parameters.find(PLACEHOLDER_EVENT)) {
             return Template.PLACEHOLDER_DOMAIN_EVENT.filename;
@@ -71,7 +74,7 @@ public enum TemplateStandard {
         return storageType.resolveProviderNameFrom(model);
     });
 
-    private static final String FILE_EXTENSION = ".java";
+    private static final String DEFAULT_FILE_EXTENSION = ".java";
 
     private final Function<TemplateParameters, String> templateFileRetriever;
     private final BiFunction<String, TemplateParameters, String> nameResolver;
@@ -111,7 +114,8 @@ public enum TemplateStandard {
     }
 
     public String resolveFilename(final String name, final TemplateParameters parameters) {
-        return this.nameResolver.apply(name, parameters) + FILE_EXTENSION;
+        final String fileName = this.nameResolver.apply(name, parameters);
+        return fileName.contains(".") ? fileName : fileName + DEFAULT_FILE_EXTENSION;
     }
 
 }

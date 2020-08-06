@@ -7,7 +7,8 @@
 
 package io.vlingo.xoom.storage;
 
-import io.vlingo.symbio.store.StorageException;
+import io.vlingo.symbio.store.common.jdbc.Configuration;
+import io.vlingo.symbio.store.common.jdbc.DatabaseType;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,9 +22,12 @@ public class DatabaseConfigurationTest {
         Assert.assertNull(DatabaseConfiguration.load(DOMAIN));
     }
 
-    @Test(expected = StorageException.class)
+    @Test
     public void testUnreachableDatabaseConfigurationLoad() {
-        DatabaseConfiguration.load(QUERY);
+        final Configuration configuration = DatabaseConfiguration.load(QUERY);
+        Assert.assertEquals(DatabaseType.HSQLDB, configuration.databaseType);
+        Assert.assertEquals("DB_CONFIG_TEST", configuration.actualDatabaseName);
+        Assert.assertTrue(configuration.createTables);
     }
 
 }

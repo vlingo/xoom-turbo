@@ -37,11 +37,11 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnSourcedSingleModel() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
-                        JOURNAL, databaseTypes(), EVENT_BASED, false, false);
+                        JOURNAL, databaseTypes(), EVENT_BASED, false, false, false);
 
         //General Assert
 
-        Assert.assertEquals(3, allTemplatesData.size());
+        Assert.assertEquals(4, allTemplatesData.size());
         Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
         Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
 
@@ -85,11 +85,11 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnStatefulSingleModel() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
-                        StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, false);
+                        StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, false, false);
 
         //General Assert
 
-        Assert.assertEquals(3, allTemplatesData.size());
+        Assert.assertEquals(4, allTemplatesData.size());
         Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
         Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
 
@@ -135,11 +135,11 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnStatefulCQRSModel() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
-                        StorageType.STATE_STORE, databaseTypesForCQRS(), ProjectionType.NONE, false, false);
+                        StorageType.STATE_STORE, databaseTypesForCQRS(), ProjectionType.NONE, false, false, false);
 
         //General Assert
 
-        Assert.assertEquals(4, allTemplatesData.size());
+        Assert.assertEquals(5, allTemplatesData.size());
         Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
         Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
 

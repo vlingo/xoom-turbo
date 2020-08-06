@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.content;
 
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.annotation.processing.Filer;
@@ -16,7 +17,11 @@ import javax.lang.model.element.Element;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
 
 public class TextBasedContent extends Content {
 
@@ -51,11 +56,13 @@ public class TextBasedContent extends Content {
     }
 
     private void handleDefaultCreation() throws IOException {
-        file.getParentFile().mkdirs();
-        if(!file.exists()) {
+        if(Files.isRegularFile(file.toPath())) {
+            Files.write(file.toPath(), text.getBytes(), APPEND);
+        } else {
+            file.getParentFile().mkdirs();
             file.createNewFile();
+            Files.write(file.toPath(), text.getBytes());
         }
-        Files.write(file.toPath(), text.getBytes());
     }
 
     private void handleCreationFromSourceElement() throws IOException {

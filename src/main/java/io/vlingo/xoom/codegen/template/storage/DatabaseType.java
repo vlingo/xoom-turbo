@@ -16,61 +16,60 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 
 public enum DatabaseType {
 
-    IN_MEMORY,
-    POSTGRES("postgres", "jdbc:postgresql://localhost", "io.vlingo.symbio.store.common.jdbc.postgres.PostgresConfigurationProvider"),
-    HSQLDB("hsqldb", "jdbc:hsqldb:mem:", "io.vlingo.symbio.store.common.jdbc.hsqldb.HSQLDBConfigurationProvider"),
-    MYSQL("mysql", "jdbc:mysql://localhost/", "io.vlingo.symbio.store.common.jdbc.mysql.MySQLConfigurationProvider"),
-    YUGA_BYTE("yugabyte", "jdbc:postgresql://localhost", "io.vlingo.symbio.store.common.jdbc.yugabyte.YugaByteConfigurationProvider");
+    IN_MEMORY("in_memory"),
+    POSTGRES("postgres", "org.postgresql.Driver", "jdbc:postgresql://localhost"),
+    HSQLDB("hsqldb", "org.hsqldb.jdbc.JDBCDriver", "jdbc:hsqldb:mem:"),
+    MYSQL("mysql", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost/"),
+    YUGA_BYTE("yugabyte", "org.postgresql.Driver", "jdbc:postgresql://localhost");
 
     public final String label;
     public final String connectionUrl;
-    public final String configurationProviderQualifiedName;
+    public final String driver;
     public final boolean configurable;
 
-    DatabaseType() {
-        this(null, null, null, false);
+    DatabaseType(final String label) {
+        this(label, "", "", false);
     }
 
     DatabaseType(final String label,
                  final String connectionUrl,
-                 final String configurationProviderQualifiedName) {
-        this(label, connectionUrl, configurationProviderQualifiedName, true);
+                 final String driver) {
+        this(label, connectionUrl, driver, true);
     }
 
     DatabaseType(final String label,
                  final String connectionUrl,
-                 final String configurationProviderQualifiedName,
+                 final String driver,
                  final boolean configurable) {
         this.label = label;
         this.connectionUrl = connectionUrl;
-        this.configurationProviderQualifiedName = configurationProviderQualifiedName;
+        this.driver = driver;
         this.configurable = configurable;
     }
 
-    public String configurationProviderName() {
-        final int classNameIndex = configurationProviderQualifiedName.lastIndexOf(".");
-        return configurationProviderQualifiedName.substring(classNameIndex + 1);
+    public static DatabaseType getOrDefault(final String name, final DatabaseType defaultDatabase) {
+        if(name == null) {
+            return defaultDatabase;
+        }
+        return valueOf(name);
     }
 
     public TemplateParameters addConfigurationParameters(final TemplateParameters parameters) {
-        if(!configurable) {
-            return parameters;
-        }
+        if(configurable) {
+            final Model model = parameters.find(MODEL_CLASSIFICATION);
+            final StorageType storageType = parameters.find(STORAGE_TYPE);
+            if(model.isQueryModel() || storageType.isStateful()) {
 
-        final StorageType storageType = parameters.find(STORAGE_TYPE);
-        final Model model = parameters.find(MODEL_CLASSIFICATION);
+                final String storageDelegateClassName =
+                        CodeGenerationSetup.STORAGE_DELEGATE_CLASS_NAME.get(this);
 
-        if(model.isQueryModel() || storageType.isStateful()) {
+                final String storageDelegateQualifiedClassName =
+                        String.format(STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN,
+                                label, storageDelegateClassName);
 
-            final String storageDelegateClassName =
-                    CodeGenerationSetup.STORAGE_DELEGATE_CLASS_NAME.get(this);
-
-            final String storageDelegateQualifiedClassName =
-                    String.format(STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN,
-                            label, storageDelegateClassName);
-
-            parameters.and(STORAGE_DELEGATE_NAME, storageDelegateClassName)
-                    .addImport(storageDelegateQualifiedClassName);
+                parameters.and(STORAGE_DELEGATE_NAME, storageDelegateClassName)
+                        .addImport(storageDelegateQualifiedClassName);
+            }
         }
 
         return parameters;

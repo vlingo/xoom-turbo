@@ -13,6 +13,8 @@ import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
+import io.vlingo.xoom.storage.DatabaseParameters;
+import io.vlingo.xoom.storage.Model;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
@@ -24,7 +26,6 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.XOOM_INITIALIZER;
-import static io.vlingo.xoom.codegen.template.storage.DatabaseType.IN_MEMORY;
 
 public class CodeGenerationParameterResolver {
 
@@ -64,9 +65,9 @@ public class CodeGenerationParameterResolver {
             put(XOOM_INITIALIZER_NAME, resolveInitializerClass());
             put(PROJECTION_TYPE, resolveProjections());
             put(PROJECTABLES, resolveProjectables());
-            put(DATABASE, IN_MEMORY.name());
-            put(COMMAND_MODEL_DATABASE, IN_MEMORY.name());
-            put(QUERY_MODEL_DATABASE, IN_MEMORY.name());
+            put(DATABASE, new DatabaseParameters(Model.DOMAIN).database);
+            put(COMMAND_MODEL_DATABASE, new DatabaseParameters(Model.COMMAND).database);
+            put(QUERY_MODEL_DATABASE, new DatabaseParameters(Model.QUERY).database);
         }};
     }
 

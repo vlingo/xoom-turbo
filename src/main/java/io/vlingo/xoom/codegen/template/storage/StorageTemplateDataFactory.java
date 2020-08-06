@@ -11,11 +11,10 @@ import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class StorageTemplateDataFactory {
 
@@ -28,22 +27,26 @@ public class StorageTemplateDataFactory {
                                            final StorageType storageType,
                                            final Map<Model, DatabaseType> databases,
                                            final ProjectionType projectionType,
+                                           final Boolean internalGeneration,
                                            final Boolean useAnnotations,
                                            final Boolean useCQRS) {
         final String persistencePackage = resolvePackage(basePackage);
 
-        final List<TemplateData> stateAdaptersTemplateData =
-                AdapterTemplateData.from(persistencePackage, storageType, contents);
+        final List<TemplateData> templatesData = new ArrayList<>();
 
-        final List<TemplateData> storeProvidersTemplateData =
-                buildStoreProvidersTemplateData(basePackage, persistencePackage, useCQRS,
-                        useAnnotations, storageType, projectionType, databases,
-                        stateAdaptersTemplateData, contents);
+        templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
 
-        return Stream.of(stateAdaptersTemplateData, storeProvidersTemplateData)
-                .flatMap(templatesData -> templatesData.stream())
-                .collect(Collectors.toList());
+        templatesData.addAll(buildStoreProvidersTemplateData(basePackage, persistencePackage,
+                useCQRS, useAnnotations, storageType, projectionType, databases, templatesData,
+                contents));
+
+        if(!internalGeneration) {
+            templatesData.add(new DatabasePropertiesTemplateData(databases));
+        }
+
+        return templatesData;
     }
+
 
     private static List<TemplateData> buildStoreProvidersTemplateData(final String basePackage,
                                                                       final String persistencePackage,
