@@ -7,9 +7,7 @@ import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.annotation.persistence.Projection;
 </#if>
 <#if requireAdapters>
-import io.vlingo.symbio.State.TextState;
 import io.vlingo.xoom.annotation.persistence.StateAdapters;
-import io.vlingo.xoom.annotation.persistence.StateAdapter;
 </#if>
 <#list imports as import>
 import ${import.qualifiedClassName};
@@ -28,12 +26,12 @@ import ${import.qualifiedClassName};
 })
 </#if>
 <#if requireAdapters>
-@StateAdapters({
+@StateAdapters(states = {
 <#list adapters as stateAdapter>
   <#if stateAdapter.last>
-  @StateAdapter(from = ${stateAdapter.sourceClass}.class, to = TextState.class)
+  ${stateAdapter.sourceClass}.class
   <#else>
-  @StateAdapter(from = ${stateAdapter.sourceClass}.class, to = TextState.class),
+  ${stateAdapter.sourceClass}.class,
   </#if>
 </#list>
 })

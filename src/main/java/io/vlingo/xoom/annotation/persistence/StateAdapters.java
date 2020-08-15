@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.annotation.persistence;
 
+import io.vlingo.symbio.store.object.StateObject;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -16,6 +18,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface StateAdapters {
 
-    StateAdapter[] value();
+    Class<? extends StateObject>[] states();
 
 }

@@ -129,9 +129,10 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(9).contains("@Projections({"));
         Assert.assertTrue(context.contents().get(9).contains("@Projection(actor = AuthorProjectionActor.class, becauseOf = {\"\"}),"));
         Assert.assertTrue(context.contents().get(9).contains("@Projection(actor = BookProjectionActor.class, becauseOf = {\"BookRented\", \"BookPurchased\"})"));
-        Assert.assertTrue(context.contents().get(9).contains("@StateAdapters({"));
-        Assert.assertTrue(context.contents().get(9).contains("@StateAdapter(from = AuthorState.class, to = TextState.class),"));
-        Assert.assertTrue(context.contents().get(9).contains("@StateAdapter(from = BookState.class, to = TextState.class)"));
+        Assert.assertTrue(context.contents().get(9).contains("@StateAdapters(states = {"));
+        Assert.assertTrue(context.contents().get(9).contains("AuthorState.class,"));
+        Assert.assertTrue(context.contents().get(9).contains("BookState.class"));
+        Assert.assertTrue(!context.contents().get(9).contains("BookState.class,"));
     }
 
     private void loadProperties(final CodeGenerationContext context,

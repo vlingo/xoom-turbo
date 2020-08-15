@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.annotation.persistence;
 
-import io.vlingo.symbio.State.TextState;
 import io.vlingo.xoom.annotation.model.DummyState;
 import io.vlingo.xoom.annotation.model.OtherDummyState;
 
@@ -18,10 +17,7 @@ import static io.vlingo.xoom.annotation.persistence.Persistence.StorageType.STAT
         @Projection(actor = DummyProjectionActor.class, becauseOf = {"DummyCreated", "DummyCancelled"}),
         @Projection(actor = OtherDummyProjectionActor.class, becauseOf = {"OtherDummyPromoted"})
 })
-@StateAdapters({
-        @StateAdapter(from = DummyState.class, to = TextState.class),
-        @StateAdapter(from = OtherDummyState.class, to = TextState.class)
-})
+@StateAdapters(states = {DummyState.class, OtherDummyState.class})
 public class PersistenceSetup {
 
 
