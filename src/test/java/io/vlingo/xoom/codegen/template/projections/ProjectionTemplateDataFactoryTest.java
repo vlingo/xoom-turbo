@@ -103,7 +103,7 @@ public class ProjectionTemplateDataFactoryTest {
             final String expectedName = rootName + "ProjectionActor";
             final String expectedStateName = rootName + "State";
             final String expectedEntityDataName = rootName + "Data";
-            final String expectedStateQualifiedName = "io.vlingo.xoomapp.model." + expectedStateName;
+            final String expectedStaticEventTypes = "io.vlingo.xoomapp.infrastructure.EventTypes";
             final String expectedEntityDataQualifiedName = EXPECTED_INFRA_PACKAGE + "." + expectedEntityDataName;
             final TemplateData projectionTemplateData = projectionsTemplatesData.get(templateIndex);
             final TemplateParameters projectionTemplateDataParameters = projectionTemplateData.parameters();
@@ -111,8 +111,8 @@ public class ProjectionTemplateDataFactoryTest {
             Assert.assertEquals(expectedName, projectionTemplateDataParameters.find(PROJECTION_NAME));
             Assert.assertEquals(expectedStateName, projectionTemplateDataParameters.find(STATE_NAME));
             Assert.assertEquals(expectedEntityDataName, projectionTemplateDataParameters.find(ENTITY_DATA_NAME));
-            Assert.assertEquals(expectedStateQualifiedName, projectionTemplateDataParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
-            Assert.assertEquals(expectedEntityDataQualifiedName, projectionTemplateDataParameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
+            Assert.assertEquals(expectedEntityDataQualifiedName, projectionTemplateDataParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+            Assert.assertEquals(expectedStaticEventTypes, projectionTemplateDataParameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
             Assert.assertEquals(expectedName + ".java", projectionTemplateData.filename());
         });
 

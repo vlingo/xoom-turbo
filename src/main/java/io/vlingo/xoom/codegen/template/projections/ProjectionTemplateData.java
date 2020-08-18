@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
@@ -61,7 +62,8 @@ public class ProjectionTemplateData extends TemplateData {
         final String modelPackage = ContentQuery.findPackage(STATE, stateName, contents);
 
         final List<ImportParameter> imports =
-                resolveImports(stateName, contents, projectionType, templatesData);
+                resolveImports(stateName, entityDataName, contents,
+                        projectionType, templatesData);
 
         return TemplateParameters.with(PACKAGE_NAME, packageName).and(IMPORTS, imports)
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
@@ -73,6 +75,7 @@ public class ProjectionTemplateData extends TemplateData {
     }
 
     private List<ImportParameter> resolveImports(final String stateName,
+                                                 final String entityDataName,
                                                  final List<Content> contents,
                                                  final ProjectionType projectionType,
                                                  final List<TemplateData> templatesData) {
@@ -81,29 +84,24 @@ public class ProjectionTemplateData extends TemplateData {
 
         final String entityDataQualifiedName =
                 templatesData.stream().filter(data -> data.hasStandard(ENTITY_DATA))
-                        .map(data -> data.parameters().find(ENTITY_DATA_QUALIFIED_NAME))
+                        .map(data -> data.parameters()).filter(parameters -> {
+                            return parameters.find(ENTITY_DATA_NAME).equals(entityDataName);
+                        }).map(parameters -> parameters.find(ENTITY_DATA_QUALIFIED_NAME))
                         .findFirst().get().toString();
 
         if(projectionType.isOperationBased()) {
             return ImportParameter.of(stateQualifiedName, entityDataQualifiedName);
         }
 
-        final String eventTypesQualifiedName =
-                templatesData.stream().filter(data -> data.hasStandard(EVENT_TYPES))
-                        .map(data -> data.parameters().find(EVENT_TYPES_QUALIFIED_NAME))
-                        .findFirst().get().toString();
-
-        return ImportParameter.of(stateQualifiedName, entityDataQualifiedName, eventTypesQualifiedName);
+        return templatesData.stream().filter(data -> data.hasStandard(EVENT_TYPES))
+                .map(data -> data.parameters().find(EVENT_TYPES_QUALIFIED_NAME).toString())
+                .map(qualifiedName -> ImportParameter.of(entityDataQualifiedName, qualifiedName))
+                .flatMap(imports -> imports.stream()).collect(Collectors.toList());
     }
 
     private String resolvePackage(final String basePackage) {
         return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME,
                 PERSISTENCE_PACKAGE_NAME).toLowerCase();
-    }
-
-    @Override
-    public String filename() {
-        return standard().resolveFilename(protocolName, parameters);
     }
 
     @Override
@@ -114,6 +112,11 @@ public class ProjectionTemplateData extends TemplateData {
     @Override
     public TemplateStandard standard() {
         return PROJECTION;
+    }
+
+    @Override
+    public String filename() {
+        return standard().resolveFilename(protocolName, parameters);
     }
 
 }

@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.template.storage;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.List;
 import java.util.function.IntFunction;
@@ -23,14 +24,14 @@ public class ProjectionParameter {
     private final String causes;
     private final Boolean last;
 
-    public static List<ProjectionParameter> from(final List<Content> contents) {
+    public static List<ProjectionParameter> from(final ProjectionType projectionType, final List<Content> contents) {
         final List<Content> protocols =
                 ContentQuery.filterByStandard(AGGREGATE_PROTOCOL, contents)
                 .collect(Collectors.toList());
 
         final IntFunction<ProjectionParameter> mapper =
                 index -> new ProjectionParameter(index, protocols.get(index),
-                        contents, protocols.size());
+                        contents, protocols.size(), projectionType);
 
         return IntStream.range(0, protocols.size()).mapToObj(mapper).collect(Collectors.toList());
     }
@@ -38,13 +39,20 @@ public class ProjectionParameter {
     private ProjectionParameter(final int index,
                                 final Content protocol,
                                 final List<Content> contents,
-                                final int numberOfProjections) {
-        this.causes = joinEvents(protocol, contents);
+                                final int numberOfProjections,
+                                final ProjectionType projectionType) {
+        this.causes = joinEvents(protocol, projectionType, contents);
         this.last = index == numberOfProjections - 1;
         this.actor = PROJECTION.resolveClassname(protocol.retrieveClassName());
     }
 
-    private String joinEvents(final Content protocol, final List<Content> contents) {
+    private String joinEvents(final Content protocol,
+                              final ProjectionType projectionType,
+                              final List<Content> contents) {
+        if(projectionType.isOperationBased()) {
+            return "";
+        }
+
         final List<String> eventNames =
                 ContentQuery.findClassNames(DOMAIN_EVENT,
                         protocol.retrievePackage(), contents);

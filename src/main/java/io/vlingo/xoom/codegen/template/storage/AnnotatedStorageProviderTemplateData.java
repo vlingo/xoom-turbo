@@ -17,8 +17,7 @@ import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import java.util.List;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class AnnotatedStorageProviderTemplateData extends TemplateData {
 
@@ -55,20 +54,24 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                                               final List<TemplateData> stateAdaptersTemplateData,
                                               final List<Content> contents)  {
         return TemplateParameters.with(BASE_PACKAGE, basePackage)
-                .and(IMPORTS, resolveImports(contents))
+                .and(IMPORTS, resolveImports(projectionType, contents))
                 .and(PACKAGE_NAME, persistencePackage)
                 .and(STORAGE_TYPE, storageType.name())
                 .and(REQUIRE_ADAPTERS, !stateAdaptersTemplateData.isEmpty())
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, AdapterParameter.from(stateAdaptersTemplateData))
-                .and(PROJECTIONS, ProjectionParameter.from(contents))
+                .and(PROJECTIONS, ProjectionParameter.from(projectionType, contents))
                 .and(USE_CQRS, useCQRS).and(USE_ANNOTATIONS, true)
                 .andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
 
     }
 
-    private List<ImportParameter> resolveImports(final List<Content> contents) {
-        return ImportParameter.of(ContentQuery.findFullyQualifiedClassNames(STATE, contents));
+    private List<ImportParameter> resolveImports(final ProjectionType projectionType, final List<Content> contents) {
+        final TemplateStandard[] relatedStandards =
+                projectionType.isEventBased() ? new TemplateStandard[]{STATE, DOMAIN_EVENT} :
+                        new TemplateStandard[]{STATE};
+
+        return ImportParameter.of(ContentQuery.findFullyQualifiedClassNames(contents, relatedStandards));
     }
 
     @Override
