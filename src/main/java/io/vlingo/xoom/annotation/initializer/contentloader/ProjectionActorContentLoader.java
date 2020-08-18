@@ -38,7 +38,7 @@ public class ProjectionActorContentLoader extends TypeBasedContentLoader {
         }
 
         return Stream.of(projections.value())
-                .map(projection -> retrieveType(projection, aProjection -> projection.actor()))
+                .map(projection -> typeRetriever.from(projection, aProjection -> projection.actor()))
                 .collect(Collectors.toList());
     }
 

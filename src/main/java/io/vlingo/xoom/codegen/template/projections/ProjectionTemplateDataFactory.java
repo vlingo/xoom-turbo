@@ -4,19 +4,17 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 
@@ -39,29 +37,31 @@ public class ProjectionTemplateDataFactory {
     }
 
     private List<TemplateData> handleExternalGeneration(final CodeGenerationContext context) {
-        final List<Content> contents = context.contents();
         final String basePackage = context.parameterOf(PACKAGE);
-        final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
+
+        final ProjectionType projectionType =
+                context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
 
         final List<String> aggregateProtocols =
-                ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents);
+                ContentQuery.findClassNames(AGGREGATE_PROTOCOL, context.contents());
 
         final List<TemplateData> templatesData = new ArrayList<>();
 
+        if(!projectionType.isOperationBased()) {
+            templatesData.add(EventTypesTemplateData.from(basePackage, context.contents()));
+        }
+
         if(!context.parameterOf(ANNOTATIONS, Boolean::valueOf)) {
             templatesData.add(ProjectionDispatcherProviderTemplateData.from(basePackage,
-                    projectionType, contents));
+                    projectionType, context.contents()));
         }
 
         aggregateProtocols.forEach(protocolName -> {
-            final TemplateData entityData =
-                    EntityDataTemplateData.from(basePackage, protocolName, contents);
+            templatesData.add(EntityDataTemplateData.from(basePackage,
+                    protocolName, context.contents()));
 
-            final TemplateData projectionData =
-                    ProjectionTemplateData.from(basePackage, protocolName,
-                            contents, projectionType, entityData);
-
-            Collections.addAll(templatesData, entityData, projectionData);
+            templatesData.add(ProjectionTemplateData.from(basePackage, protocolName,
+                            context.contents(), projectionType, templatesData));
         });
 
         return templatesData;

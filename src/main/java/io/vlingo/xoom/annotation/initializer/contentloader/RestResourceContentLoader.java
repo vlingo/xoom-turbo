@@ -8,7 +8,7 @@
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.http.resource.ResourceHandler;
-import io.vlingo.xoom.annotation.ClassRetriever;
+import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
@@ -16,6 +16,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypesException;
+import javax.lang.model.type.TypeMirror;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class RestResourceContentLoader extends TypeBasedContentLoader {
 
     @Override
     protected List<TypeElement> retrieveTypes() {
+
         final ResourceHandlers resourceHandlers =
                 annotatedClass.getAnnotation(ResourceHandlers.class);
 
@@ -37,17 +39,20 @@ public class RestResourceContentLoader extends TypeBasedContentLoader {
         }
 
         if(isPackageBased(resourceHandlers)) {
-            return ClassRetriever.with(environment.getElementUtils())
-                    .subclassesOf(ResourceHandler.class, resourceHandlers.packages())
+            return typeRetriever.subclassesOf(ResourceHandler.class, resourceHandlers.packages())
                     .map(this::toType).collect(Collectors.toList());
         }
 
-        return retrieveTypes(resourceHandlers, annotation -> resourceHandlers.value());
+        return typeRetriever.typesFrom(resourceHandlers, annotation -> resourceHandlers.value());
     }
 
     @Override
     protected TemplateStandard standard() {
         return TemplateStandard.REST_RESOURCE;
+    }
+
+    private TypeElement toType(final TypeMirror typeMirror) {
+        return (TypeElement) environment.getTypeUtils().asElement(typeMirror);
     }
 
     private boolean isPackageBased(final ResourceHandlers resourceHandlersAnnotation) {

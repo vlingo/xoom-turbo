@@ -127,8 +127,8 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(9).contains("class PersistenceSetup"));
         Assert.assertTrue(context.contents().get(9).contains("@Persistence(basePackage = \"io.vlingo\", storageType = StorageType.STATE_STORE, cqrs = true)"));
         Assert.assertTrue(context.contents().get(9).contains("@Projections({"));
-        Assert.assertTrue(context.contents().get(9).contains("@Projection(actor = AuthorProjectionActor.class, becauseOf = {\"\"}),"));
-        Assert.assertTrue(context.contents().get(9).contains("@Projection(actor = BookProjectionActor.class, becauseOf = {\"BookRented\", \"BookPurchased\"})"));
+        Assert.assertTrue(context.contents().get(9).contains("@Projection(actor = AuthorProjectionActor.class, becauseOf = {}),"));
+        Assert.assertTrue(context.contents().get(9).contains("@Projection(actor = BookProjectionActor.class, becauseOf = {BookRented.class, BookPurchased.class})"));
         Assert.assertTrue(context.contents().get(9).contains("@StateAdapters(states = {"));
         Assert.assertTrue(context.contents().get(9).contains("AuthorState.class,"));
         Assert.assertTrue(context.contents().get(9).contains("BookState.class"));

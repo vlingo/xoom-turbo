@@ -58,7 +58,7 @@ public class EntityDataTemplateData extends TemplateData {
         return TemplateParameters.with(PACKAGE_NAME, packageName)
                             .and(ENTITY_DATA_NAME, dataName)
                             .and(STATE_NAME, stateName)
-                            .and(ENTITY_DATA_QUALIFIED_CLASS_NAME, entityDataQualifiedClassName)
+                            .and(ENTITY_DATA_QUALIFIED_NAME, entityDataQualifiedClassName)
                             .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName);
     }
 

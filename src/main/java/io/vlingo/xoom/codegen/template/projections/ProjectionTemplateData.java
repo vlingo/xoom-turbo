@@ -33,19 +33,19 @@ public class ProjectionTemplateData extends TemplateData {
                                               final String protocolName,
                                               final List<Content> contents,
                                               final ProjectionType projectionType,
-                                              final TemplateData entityDataTemplateData) {
+                                              final List<TemplateData> templatesData) {
         return new ProjectionTemplateData(basePackage, protocolName,
-                contents, projectionType, entityDataTemplateData);
+                contents, projectionType, templatesData);
     }
 
     private ProjectionTemplateData (final String basePackage,
                                     final String protocolName,
                                     final List<Content> contents,
                                     final ProjectionType projectionType,
-                                    final TemplateData entityDataTemplateData) {
+                                    final List<TemplateData> templatesData) {
         this.parameters =
                 loadParameters(resolvePackage(basePackage), protocolName,
-                        contents, projectionType, entityDataTemplateData);
+                        contents, projectionType, templatesData);
 
         this.protocolName = protocolName;
     }
@@ -54,31 +54,46 @@ public class ProjectionTemplateData extends TemplateData {
                                               final String protocolName,
                                               final List<Content> contents,
                                               final ProjectionType projectionType,
-                                              final TemplateData entityDataTemplateData) {
+                                              final List<TemplateData> templatesData) {
         final String stateName = STATE.resolveClassname(protocolName);
         final String projectionName = PROJECTION.resolveClassname(protocolName);
         final String entityDataName = ENTITY_DATA.resolveClassname(protocolName);
+        final String modelPackage = ContentQuery.findPackage(STATE, stateName, contents);
 
         final List<ImportParameter> imports =
-                resolveImports(stateName, contents, entityDataTemplateData.parameters());
+                resolveImports(stateName, contents, projectionType, templatesData);
 
         return TemplateParameters.with(PACKAGE_NAME, packageName).and(IMPORTS, imports)
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
                 .and(MODEL_CLASSIFICATION, QUERY).and(STORAGE_TYPE, STATE_STORE)
+                .and(EVENT_TYPES_NAME, EVENT_TYPES.resolveClassname())
                 .and(ENTITY_DATA_NAME, entityDataName).and(PROJECTION_TYPE, projectionType)
+                .and(EVENTS_NAMES, ContentQuery.findClassNames(DOMAIN_EVENT, modelPackage, contents))
                 .andResolve(STORAGE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param));
     }
 
     private List<ImportParameter> resolveImports(final String stateName,
                                                  final List<Content> contents,
-                                                 final TemplateParameters entityDataTemplateParameters) {
+                                                 final ProjectionType projectionType,
+                                                 final List<TemplateData> templatesData) {
         final String stateQualifiedName =
                 ContentQuery.findFullyQualifiedClassName(STATE, stateName, contents);
 
         final String entityDataQualifiedName =
-                entityDataTemplateParameters.find(ENTITY_DATA_QUALIFIED_CLASS_NAME);
+                templatesData.stream().filter(data -> data.hasStandard(ENTITY_DATA))
+                        .map(data -> data.parameters().find(ENTITY_DATA_QUALIFIED_NAME))
+                        .findFirst().get().toString();
 
-        return ImportParameter.of(stateQualifiedName, entityDataQualifiedName);
+        if(projectionType.isOperationBased()) {
+            return ImportParameter.of(stateQualifiedName, entityDataQualifiedName);
+        }
+
+        final String eventTypesQualifiedName =
+                templatesData.stream().filter(data -> data.hasStandard(EVENT_TYPES))
+                        .map(data -> data.parameters().find(EVENT_TYPES_QUALIFIED_NAME))
+                        .findFirst().get().toString();
+
+        return ImportParameter.of(stateQualifiedName, entityDataQualifiedName, eventTypesQualifiedName);
     }
 
     private String resolvePackage(final String basePackage) {

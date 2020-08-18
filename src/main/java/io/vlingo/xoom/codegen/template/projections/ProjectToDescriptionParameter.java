@@ -8,12 +8,14 @@
 package io.vlingo.xoom.codegen.template.projections;
 
 
-import java.util.Arrays;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class ProjectToDescriptionParameter {
 
@@ -34,14 +36,18 @@ public class ProjectToDescriptionParameter {
     }
 
     public static List<ProjectToDescriptionParameter> from(final ProjectionType projectionType,
-                                                           final List<String> aggregateProtocols) {
+                                                           final List<Content> contents) {
+        final List<String> aggregateProtocols =
+                ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents);
+
         return IntStream.range(0, aggregateProtocols.size()).mapToObj(index -> {
+            final String aggregateProtocol = aggregateProtocols.get(index);
+
             final String projectionName =
-                    PROJECTION.resolveClassname(aggregateProtocols.get(index));
+                    PROJECTION.resolveClassname(aggregateProtocol);
 
             final String becauseOf =
-                    String.format(FIRST_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName) + ", " +
-                            String.format(SECOND_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName);
+                    buildCauseTypesExpression(aggregateProtocol, projectionType, contents);
 
             return new ProjectToDescriptionParameter(index, aggregateProtocols.size(), projectionName, becauseOf);
         }).collect(Collectors.toList());
@@ -54,6 +60,23 @@ public class ProjectToDescriptionParameter {
         this.joinedTypes = sourceTypes;
         this.projectionClassName = projectionClassName;
         this.lastParameter = index == numberOfProtocols - 1;
+    }
+
+    private static String buildCauseTypesExpression(final String aggregateProtocol,
+                                                    final ProjectionType projectionType,
+                                                    final List<Content> contents) {
+        final String protocolPackage =
+                ContentQuery.findPackage(AGGREGATE_PROTOCOL, aggregateProtocol, contents);
+
+        final List<String> eventNames =
+                ContentQuery.findClassNames(DOMAIN_EVENT, protocolPackage, contents);
+
+        if(projectionType.isOperationBased() || eventNames.isEmpty()) {
+            return String.format(FIRST_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName) + ", " +
+                    String.format(SECOND_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName);
+        }
+
+        return eventNames.stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(", "));
     }
 
     public String getInitializationCommand() {

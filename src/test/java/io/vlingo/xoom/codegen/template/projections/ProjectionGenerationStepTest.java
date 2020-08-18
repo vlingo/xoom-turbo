@@ -16,8 +16,8 @@ import org.junit.Test;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 
 public class ProjectionGenerationStepTest {
 
@@ -51,29 +51,36 @@ public class ProjectionGenerationStepTest {
 
     private void performAssertion(final CodeGenerationContext context) {
         final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
-        final String expectedProjectionComment = projectionType.isEventBased() ? "replace with event" : "replace with operation text";
+        final int contentSize = projectionType.isEventBased() ? 13 : 12;
 
-        Assert.assertEquals(9, context.contents().size());
-        Assert.assertEquals("ProjectionDispatcherProvider", context.contents().get(4).retrieveClassName());
-        Assert.assertEquals("AuthorData", context.contents().get(5).retrieveClassName());
-        Assert.assertEquals("AuthorProjectionActor", context.contents().get(6).retrieveClassName());
-        Assert.assertEquals("BookData", context.contents().get(7).retrieveClassName());
-        Assert.assertEquals("BookProjectionActor", context.contents().get(8).retrieveClassName());
+        Assert.assertEquals(contentSize, context.contents().size());
+        if(projectionType.isEventBased()) {
+            Assert.assertEquals("EventTypes", context.contents().get(contentSize - 6).retrieveClassName());
+        }
+        Assert.assertEquals("ProjectionDispatcherProvider", context.contents().get(contentSize - 5).retrieveClassName());
+        Assert.assertEquals("AuthorData", context.contents().get(contentSize - 4).retrieveClassName());
+        Assert.assertEquals("AuthorProjectionActor", context.contents().get(contentSize - 3).retrieveClassName());
+        Assert.assertEquals("BookData", context.contents().get(contentSize - 2).retrieveClassName());
+        Assert.assertEquals("BookProjectionActor", context.contents().get(contentSize - 1).retrieveClassName());
 
-        Assert.assertTrue(context.contents().get(4).contains("class ProjectionDispatcherProvider"));
-        Assert.assertTrue(context.contents().get(5).contains("class AuthorData"));
-        Assert.assertTrue(context.contents().get(6).contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
-        Assert.assertTrue(context.contents().get(6).contains(expectedProjectionComment));
-        Assert.assertTrue(context.contents().get(7).contains("class BookData"));
-        Assert.assertTrue(context.contents().get(8).contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
-        Assert.assertTrue(context.contents().get(8).contains(expectedProjectionComment));
+        Assert.assertTrue(context.contents().get(contentSize - 5).contains("class ProjectionDispatcherProvider"));
+        Assert.assertTrue(context.contents().get(contentSize - 4).contains("class AuthorData"));
+        Assert.assertTrue(context.contents().get(contentSize - 3).contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
+        Assert.assertTrue(context.contents().get(contentSize - 3).contains(projectionType.isEventBased() ? "case EventTypes.AuthorRated:" : "CreationCase1"));
+        Assert.assertTrue(context.contents().get(contentSize - 2).contains("class BookData"));
+        Assert.assertTrue(context.contents().get(contentSize - 1).contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
+        Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "case EventTypes.BookSoldOut:" : "CreationCase1"));
+        Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "case EventTypes.BookPurchased:" : "ChangeCase2"));
     }
 
     private void loadContents(final CodeGenerationContext context) {
         context.addContent(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT);
         context.addContent(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT);
         context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), AUTHOR_CONTENT_TEXT);
+        context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRated.java"), AUTHOR_RATED_CONTENT_TEXT);
         context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT);
+        context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookSoldOut.java"), BOOK_SOLD_OUT_CONTENT_TEXT);
+        context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), BOOK_PURCHASED_CONTENT_TEXT);
     }
 
     private void loadParameters(final CodeGenerationContext context, final String projections) {
@@ -83,26 +90,44 @@ public class ProjectionGenerationStepTest {
     }
 
     private static final String AUTHOR_STATE_CONTENT_TEXT =
-            "package io.vlingo.xoomapp.model; \\n" +
+            "package io.vlingo.xoomapp.model.author; \\n" +
                     "public class AuthorState { \\n" +
                     "... \\n" +
                     "}";
 
     private static final String BOOK_STATE_CONTENT_TEXT =
-            "package io.vlingo.xoomapp.model; \\n" +
+            "package io.vlingo.xoomapp.model.book; \\n" +
                     "public class BookState { \\n" +
                     "... \\n" +
                     "}";
 
     private static final String AUTHOR_CONTENT_TEXT =
-            "package io.vlingo.xoomapp.model; \\n" +
+            "package io.vlingo.xoomapp.model.author; \\n" +
                     "public interface Author { \\n" +
                     "... \\n" +
                     "}";
 
     private static final String BOOK_CONTENT_TEXT =
-            "package io.vlingo.xoomapp.model; \\n" +
+            "package io.vlingo.xoomapp.model.book; \\n" +
                     "public interface Book { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_SOLD_OUT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public class BookSoldOut extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_PURCHASED_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public class BookPurchased extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_RATED_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorRated extends DomainEvent { \\n" +
                     "... \\n" +
                     "}";
 

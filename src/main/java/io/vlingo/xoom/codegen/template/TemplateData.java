@@ -17,4 +17,7 @@ public abstract class TemplateData {
         return standard().resolveFilename(parameters());
     }
 
+    public boolean hasStandard(final TemplateStandard standard) {
+        return standard().equals(standard);
+    }
 }

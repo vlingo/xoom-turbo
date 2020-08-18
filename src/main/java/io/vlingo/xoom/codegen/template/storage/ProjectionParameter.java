@@ -49,7 +49,9 @@ public class ProjectionParameter {
                 ContentQuery.findClassNames(DOMAIN_EVENT,
                         protocol.retrievePackage(), contents);
 
-        return "\"" + eventNames.stream().collect(Collectors.joining("\", \"")) + "\"";
+        return eventNames.stream()
+                .map(name -> name + ".class")
+                .collect(Collectors.joining(", "));
     }
 
     public String getActor() {

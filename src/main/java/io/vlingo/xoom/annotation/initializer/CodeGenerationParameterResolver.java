@@ -8,7 +8,9 @@
 package io.vlingo.xoom.annotation.initializer;
 
 import io.vlingo.xoom.XoomInitializationAware;
+import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.annotation.persistence.Persistence;
+import io.vlingo.xoom.annotation.persistence.Projection;
 import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
@@ -153,9 +155,15 @@ public class CodeGenerationParameterResolver {
             return "";
         }
 
-        return "\"" + Stream.of(projections.value())
-                .map(projection -> String.join("\", \"", projection.becauseOf()))
-                .collect(Collectors.joining("\";\"")) + "\"";
+        return Stream.of(projections.value()).map(this::resolveCauseTypes)
+                .collect(Collectors.joining(";"));
+    }
+
+    private String resolveCauseTypes(final Projection projection) {
+        return TypeRetriever.with(environment).typesFrom(projection, annotation -> projection.becauseOf())
+                .stream().map(typeElement -> typeElement.getSimpleName().toString())
+                .map(name -> "\"" + name + "\"").collect(Collectors.joining(", "));
+
     }
 
 }

@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 
 public class ContentQuery {
 
-     public static boolean exists(final TemplateStandard standard, final List<Content> contents) {
+    public static boolean exists(final TemplateStandard standard, final List<Content> contents) {
         return filterByStandard(standard, contents).findAny().isPresent();
     }
 
@@ -40,6 +40,12 @@ public class ContentQuery {
 
     public static String findPackage(final TemplateStandard standard, final List<Content> contents) {
         return filterByStandard(standard, contents).map(Content::retrievePackage).findAny().orElse("");
+    }
+
+    public static String findPackage(final TemplateStandard standard, final String className, final List<Content> contents) {
+        return filterByStandard(standard, contents)
+                .filter(content -> content.retrieveClassName().equals(className))
+                .map(Content::retrievePackage).findAny().orElse("");
     }
 
     public static String findFullyQualifiedClassName(final TemplateStandard standard, final String className, final List<Content> contents) {

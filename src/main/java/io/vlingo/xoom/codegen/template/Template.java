@@ -34,6 +34,7 @@ public enum Template {
     OPERATION_BASED_PROJECTION("OperationBasedProjection"),
     EVENT_BASED_PROJECTION("EventBasedProjection"),
     ENTITY_DATA("ValueData"),
+    EVENT_TYPES("EventTypes"),
     DATABASE_PROPERTIES("DatabaseProperties");
 
     public final String filename;

@@ -19,6 +19,6 @@ import java.lang.annotation.Target;
 public @interface Projection {
 
     Class<? extends StateStoreProjectionActor> actor();
-    String[] becauseOf();
+    Class<?>[] becauseOf();
 
 }

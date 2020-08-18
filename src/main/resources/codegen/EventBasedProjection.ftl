@@ -47,15 +47,11 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
     }
 
     for (final DomainEvent event : events) {
-      switch (event.typeName()) {
-      case "Event1":          // TODO: replace with event FQCN
+      switch (${eventTypesName}.valueOf(event.typeName())) {
+      <#list eventsNames as name>
+      case ${eventTypesName}.${name}:
         return currentData;   // TODO: implement actual merge
-
-      case "Event2":          // TODO: replace with event FQCN
-        return currentData;   // TODO: implement actual merge
-
-      case "Event3":          // TODO: replace with event FQCN
-        return currentData;   // TODO: implement actual merge
+      </#list>
 
       default:
         logger().warn("Event of type " + event.typeName() + " was not matched.");

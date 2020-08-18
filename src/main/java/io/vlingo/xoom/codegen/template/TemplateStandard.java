@@ -24,6 +24,9 @@ public enum TemplateStandard {
     STATE(parameters -> CodeGenerationSetup.STATE_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
             (name, parameters) -> name + "State"),
 
+    EVENT_TYPES(parameters -> Template.EVENT_TYPES.filename,
+            (name, parameters) -> "EventTypes"),
+
     ENTITY_DATA(parameters -> Template.ENTITY_DATA.filename,
             (name, parameters) -> name + "Data"),
 

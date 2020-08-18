@@ -24,6 +24,10 @@ public enum ProjectionType {
         return equals(EVENT_BASED);
     }
 
+    public boolean isOperationBased() {
+        return equals(OPERATION_BASED);
+    }
+
     public boolean isProjectionEnabled() {
         return !equals(NONE);
     }

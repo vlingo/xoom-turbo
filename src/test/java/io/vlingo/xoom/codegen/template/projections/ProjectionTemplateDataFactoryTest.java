@@ -76,14 +76,15 @@ public class ProjectionTemplateDataFactoryTest {
 
         //General Assert
 
-        Assert.assertEquals(5, allTemplatesData.size());
-        Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION_DISPATCHER_PROVIDER)).count());
-        Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION)).count());
-        Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ENTITY_DATA)).count());
+        Assert.assertEquals(6, allTemplatesData.size());
+        Assert.assertEquals(1, allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION_DISPATCHER_PROVIDER)).count());
+        Assert.assertEquals(1, allTemplatesData.stream().filter(data -> data.hasStandard(EVENT_TYPES)).count());
+        Assert.assertEquals(2, allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION)).count());
+        Assert.assertEquals(2, allTemplatesData.stream().filter(data -> data.hasStandard(ENTITY_DATA)).count());
 
         //Assert for ProjectionDispatcherProvider
 
-        final TemplateData providerTemplateData = allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION_DISPATCHER_PROVIDER)).findFirst().get();
+        final TemplateData providerTemplateData = allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION_DISPATCHER_PROVIDER)).findFirst().get();
         final TemplateParameters providerTemplateDataParameters = providerTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
@@ -94,8 +95,7 @@ public class ProjectionTemplateDataFactoryTest {
 
         final List<TemplateData> projectionsTemplatesData =
                 allTemplatesData.stream()
-                        .filter(templateData ->
-                                templateData.standard().equals(PROJECTION))
+                        .filter(data -> data.hasStandard(PROJECTION))
                         .collect(Collectors.toList());
 
         IntStream.range(0, 1).forEach(templateIndex -> {
@@ -120,8 +120,8 @@ public class ProjectionTemplateDataFactoryTest {
 
         final List<TemplateData> entitiesTemplatesData =
                 allTemplatesData.stream()
-                        .filter(templateData ->
-                                templateData.standard().equals(ENTITY_DATA))
+                        .filter(data ->
+                                data.hasStandard(ENTITY_DATA))
                         .collect(Collectors.toList());
 
         IntStream.range(0, 1).forEach(templateIndex -> {
@@ -133,7 +133,7 @@ public class ProjectionTemplateDataFactoryTest {
             final TemplateParameters entityDataTemplateDataParameters = entityDataTemplateData.parameters();
             Assert.assertEquals(EXPECTED_INFRA_PACKAGE, entityDataTemplateDataParameters.find(PACKAGE_NAME));
             Assert.assertEquals(expectedName, entityDataTemplateDataParameters.find(ENTITY_DATA_NAME));
-            Assert.assertEquals(expectedEntityDataQualifiedName, entityDataTemplateDataParameters.find(ENTITY_DATA_QUALIFIED_CLASS_NAME));
+            Assert.assertEquals(expectedEntityDataQualifiedName, entityDataTemplateDataParameters.find(ENTITY_DATA_QUALIFIED_NAME));
             Assert.assertEquals(expectedStateQualifiedName, entityDataTemplateDataParameters.find(STATE_QUALIFIED_CLASS_NAME));
             Assert.assertEquals(expectedName + ".java", entityDataTemplateData.filename());
         });
@@ -158,13 +158,13 @@ public class ProjectionTemplateDataFactoryTest {
         //General Assert
 
         Assert.assertEquals(5, allTemplatesData.size());
-        Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION_DISPATCHER_PROVIDER)).count());
-        Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION)).count());
-        Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ENTITY_DATA)).count());
+        Assert.assertEquals(1, allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION_DISPATCHER_PROVIDER)).count());
+        Assert.assertEquals(2, allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION)).count());
+        Assert.assertEquals(2, allTemplatesData.stream().filter(data -> data.hasStandard(ENTITY_DATA)).count());
 
         //Assert for ProjectionDispatcherProvider
 
-        final TemplateData providerTemplateData = allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION_DISPATCHER_PROVIDER)).findFirst().get();
+        final TemplateData providerTemplateData = allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION_DISPATCHER_PROVIDER)).findFirst().get();
         final TemplateParameters providerTemplateDataParameters = providerTemplateData.parameters();
         Assert.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
         Assert.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Operation name here\", \"Another Operation name here\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());

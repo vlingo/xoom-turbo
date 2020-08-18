@@ -37,7 +37,7 @@ public class StateContentLoader extends TypeBasedContentLoader {
             return Collections.emptyList();
         }
 
-        return retrieveTypes(stateAdapters, annotation -> stateAdapters.states());
+        return typeRetriever.typesFrom(stateAdapters, annotation -> stateAdapters.states());
     }
 
     @Override

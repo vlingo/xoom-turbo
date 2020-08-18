@@ -73,10 +73,10 @@ public class AnnotatedStorageProviderTemplateDataTest {
         Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
         Assert.assertEquals(true, storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).isLast());
         Assert.assertEquals("AuthorProjectionActor", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getActor());
-        Assert.assertEquals("\"AuthorRated\"", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getCauses());
+        Assert.assertEquals("AuthorRated.class", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getCauses());
         Assert.assertEquals(false, storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).isLast());
         Assert.assertEquals("BookProjectionActor", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getActor());
-        Assert.assertEquals("\"BookRented\", \"BookPurchased\"", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getCauses());
+        Assert.assertEquals("BookRented.class, BookPurchased.class", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getCauses());
         Assert.assertEquals(true, storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).isLast());
         Assert.assertEquals("PersistenceSetup.java", storeProviderTemplateData.filename());
         Assert.assertEquals(true, storeProviderParameters.find(REQUIRE_ADAPTERS));

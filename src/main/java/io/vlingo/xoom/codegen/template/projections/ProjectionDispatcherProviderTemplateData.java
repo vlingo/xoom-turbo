@@ -30,8 +30,7 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
     public static ProjectionDispatcherProviderTemplateData from(final String basePackage,
                                                                 final ProjectionType projectionType,
                                                                 final List<Content> contents) {
-        final List<String> aggregateProtocols = ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents);
-        return new ProjectionDispatcherProviderTemplateData(basePackage, projectionType, aggregateProtocols);
+        return new ProjectionDispatcherProviderTemplateData(basePackage, projectionType, contents);
     }
 
     public static ProjectionDispatcherProviderTemplateData from(final String projectables,
@@ -39,7 +38,7 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
         return new ProjectionDispatcherProviderTemplateData(projectables, contents);
     }
 
-    public ProjectionDispatcherProviderTemplateData(final String projectables,
+    private ProjectionDispatcherProviderTemplateData(final String projectables,
                                                     final List<Content> contents) {
         final String packageName = ContentQuery.findPackage(PROJECTION, contents);
 
@@ -56,11 +55,11 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
     private ProjectionDispatcherProviderTemplateData(final String basePackage,
                                                      final ProjectionType projectionType,
-                                                     final List<String> aggregateProtocols) {
+                                                     final List<Content> contents) {
         final String packageName = resolvePackage(basePackage);
 
         final List<ProjectToDescriptionParameter> projectToDescriptionParameters =
-                ProjectToDescriptionParameter.from(projectionType, aggregateProtocols);
+                ProjectToDescriptionParameter.from(projectionType, contents);
 
         this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
                 .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionParameters);
