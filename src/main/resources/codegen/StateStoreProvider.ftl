@@ -68,7 +68,7 @@ public class ${storeProviderName} {
 
 <#if configurable>
     final ActorInstantiator jdbcInstantiator = setupJDBCInstantiator(stage, dispatcher);
-    final List<Object> parameters = Definition.parameters(Arrays.asList(jdbcInstantiator));
+    final List<Object> parameters = Definition.parameters(jdbcInstantiator);
 <#else>
     final List<Object> parameters = Definition.parameters(Arrays.asList(dispatcher));
 </#if>
