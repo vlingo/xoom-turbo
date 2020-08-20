@@ -96,7 +96,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
                                               final List<Content> contents,
                                               final Boolean useCQRS,
                                               final Boolean useAnnotations) {
-        if(useAnnotations){
+        if(useAnnotations) {
             return new ArrayList<>();
         }
 

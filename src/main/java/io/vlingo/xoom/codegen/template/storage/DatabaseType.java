@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.codegen.template.storage;
 
-
 import io.vlingo.xoom.codegen.CodeGenerationSetup;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 
@@ -23,8 +22,8 @@ public enum DatabaseType {
     YUGA_BYTE("yugabyte", "org.postgresql.Driver", "jdbc:postgresql://localhost");
 
     public final String label;
-    public final String connectionUrl;
     public final String driver;
+    public final String connectionUrl;
     public final boolean configurable;
 
     DatabaseType(final String label) {
@@ -32,18 +31,18 @@ public enum DatabaseType {
     }
 
     DatabaseType(final String label,
-                 final String connectionUrl,
-                 final String driver) {
-        this(label, connectionUrl, driver, true);
+                 final String driver,
+                 final String connectionUrl) {
+        this(label, driver, connectionUrl, true);
     }
 
     DatabaseType(final String label,
-                 final String connectionUrl,
                  final String driver,
+                 final String connectionUrl,
                  final boolean configurable) {
         this.label = label;
-        this.connectionUrl = connectionUrl;
         this.driver = driver;
+        this.connectionUrl = connectionUrl;
         this.configurable = configurable;
     }
 

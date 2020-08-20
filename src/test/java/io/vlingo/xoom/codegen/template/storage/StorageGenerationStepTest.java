@@ -54,10 +54,10 @@ public class StorageGenerationStepTest {
         Assert.assertFalse(context.contents().get(10).contains("BookPurchased"));
         Assert.assertFalse(context.contents().get(10).contains("StatefulTypeRegistry.Info"));
         Assert.assertFalse(context.contents().get(10).contains("StateAdapterProvider"));
-        Assert.assertFalse(context.contents().get(11).contains("database.driver=org.hsqldb.jdbc.JDBCDriver"));
-        Assert.assertFalse(context.contents().get(11).contains("database.url=jdbc:hsqldb:mem:"));
-        Assert.assertFalse(context.contents().get(11).contains("query.database.driver=org.hsqldb.jdbc.JDBCDriver"));
-        Assert.assertFalse(context.contents().get(11).contains("query.database.url=jdbc:hsqldb:mem:"));
+        Assert.assertTrue(context.contents().get(11).contains("database.driver=org.hsqldb.jdbc.JDBCDriver"));
+        Assert.assertTrue(context.contents().get(11).contains("database.url=jdbc:hsqldb:mem:"));
+        Assert.assertTrue(context.contents().get(11).contains("query.database.driver=org.hsqldb.jdbc.JDBCDriver"));
+        Assert.assertTrue(context.contents().get(11).contains("query.database.url=jdbc:hsqldb:mem:"));
     }
 
     @Test
