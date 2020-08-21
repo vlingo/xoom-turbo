@@ -67,8 +67,7 @@ public class ${storeProviderName} {
     new EntryAdapterProvider(stage.world()); // future use
 
 <#if configurable>
-    final ActorInstantiator jdbcInstantiator = setupJDBCInstantiator(stage, dispatcher);
-    final List<Object> parameters = Definition.parameters(jdbcInstantiator);
+    final ActorInstantiator parameters = setupJDBCInstantiator(stage, dispatcher);
 <#else>
     final List<Object> parameters = Definition.parameters(Arrays.asList(dispatcher));
 </#if>

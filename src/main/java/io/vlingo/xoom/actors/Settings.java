@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Settings {
 
@@ -39,17 +39,11 @@ public class Settings {
     }
 
     private static void patchMailboxProperties(final Map<Object, Object> mailboxProperties) {
-        final Map<Object, Object> otherProperties =
-                PROPERTIES.entrySet().stream().filter(entry -> !isMailboxProperty(entry.getKey()))
-                        .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+        Stream.of(BLOCKING_MAILBOX_PROPERTIES, DEFAULT_MAILBOX_PROPERTIES)
+                .flatMap(map -> map.entrySet().stream())
+                .forEach(entry -> PROPERTIES.remove(entry.getKey()));
 
-        PROPERTIES.clear();
         PROPERTIES.putAll(mailboxProperties);
-        PROPERTIES.putAll(otherProperties);
-    }
-
-    private static boolean isMailboxProperty(final Object key) {
-        return DEFAULT_MAILBOX_PROPERTIES.containsKey(key) || BLOCKING_MAILBOX_PROPERTIES.containsKey(key);
     }
 
     public static Properties properties() {

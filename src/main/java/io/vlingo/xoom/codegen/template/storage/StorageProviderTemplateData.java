@@ -35,10 +35,10 @@ public class StorageProviderTemplateData extends TemplateData {
                                           final List<TemplateData> stateAdaptersTemplateData,
                                           final List<Content> contents) {
         return Stream.of(Model.values())
-                .filter(modelClassification -> databases.containsKey(modelClassification))
-                .map(modelClassification -> new StorageProviderTemplateData(persistencePackage,
-                        storageType, databases.get(modelClassification), projectionType,
-                        modelClassification, stateAdaptersTemplateData, contents))
+                .filter(model -> databases.containsKey(model))
+                .map(model -> new StorageProviderTemplateData(persistencePackage,
+                        storageType, databases.get(model), projectionType,
+                        stateAdaptersTemplateData, contents, model))
                 .collect(Collectors.toList());
     }
 
@@ -46,21 +46,21 @@ public class StorageProviderTemplateData extends TemplateData {
                                         final StorageType storageType,
                                         final DatabaseType databaseType,
                                         final ProjectionType projectionType,
-                                        final Model model,
                                         final List<TemplateData> stateAdaptersTemplateData,
-                                        final List<Content> contents) {
+                                        final List<Content> contents,
+                                        final Model model) {
         this.templateParameters =
                 loadParameters(persistencePackage, storageType, databaseType, projectionType,
-                        model, stateAdaptersTemplateData, contents);
+                        stateAdaptersTemplateData, contents, model);
     }
 
     private TemplateParameters loadParameters(final String packageName,
                                               final StorageType storageType,
                                               final DatabaseType databaseType,
                                               final ProjectionType projectionType,
-                                              final Model model,
                                               final List<TemplateData> stateAdaptersTemplateData,
-                                              final List<Content> contents) {
+                                              final List<Content> contents,
+                                              final Model model) {
         final String storageClassName =
                 storageType.actorFor(databaseType);
 
