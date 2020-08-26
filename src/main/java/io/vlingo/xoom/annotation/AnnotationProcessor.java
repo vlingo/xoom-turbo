@@ -37,10 +37,10 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     @Override
     public boolean process(final Set<? extends TypeElement> set,
                            final RoundEnvironment roundEnvironment) {
-        final Map<Class, Set<Element>> annotatedElements =
-                filterAnnotatedElements(roundEnvironment);
+        final AnnotatedElements annotatedElements =
+                AnnotatedElements.from(roundEnvironment, supportedAnnotationClasses());
 
-        if(!annotatedElements.isEmpty()) {
+        if(annotatedElements.exists()) {
             try {
                 generate(annotatedElements);
             } catch (final ProcessingAnnotationException exception) {
@@ -61,7 +61,7 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     }
 
-    protected abstract void generate(final Map<Class, Set<Element>> annotatedElements);
+    protected abstract void generate(final AnnotatedElements annotatedElements);
 
     public abstract Stream<Class> supportedAnnotationClasses();
 

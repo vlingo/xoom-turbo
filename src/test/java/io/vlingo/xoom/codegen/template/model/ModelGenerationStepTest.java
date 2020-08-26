@@ -1,15 +1,14 @@
 package io.vlingo.xoom.codegen.template.model;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.model.ModelGenerationStep;
+import io.vlingo.xoom.codegen.parameter.Label;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class ModelGenerationStepTest {
 
@@ -46,8 +45,8 @@ public class ModelGenerationStepTest {
         Assert.assertTrue(context.contents().get(10).contains("class ProductSoldOut extends DomainEvent"));
     }
 
-    private Map<CodeGenerationParameter, String> loadParameters() {
-        final Map<CodeGenerationParameter, String> parameters = new HashMap<>();
+    private Map<Label, String> loadParameters() {
+        final Map<Label, String> parameters = new HashMap<>();
         parameters.put(PACKAGE, "com.company.context");
         parameters.put(APPLICATION_NAME, "logistics");
         parameters.put(STORAGE_TYPE, "STATE_STORE");

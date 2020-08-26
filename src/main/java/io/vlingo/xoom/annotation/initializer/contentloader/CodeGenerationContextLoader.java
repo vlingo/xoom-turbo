@@ -7,12 +7,14 @@
 
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
+import io.vlingo.xoom.annotation.AnnotatedElements;
 import io.vlingo.xoom.annotation.initializer.CodeGenerationParameterResolver;
+import io.vlingo.xoom.annotation.initializer.Xoom;
+import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,23 +30,21 @@ public class CodeGenerationContextLoader {
 
     public static CodeGenerationContext from(final Filer filer,
                                              final String basePackage,
-                                             final Element bootstrapClass,
-                                             final Element persistenceSetupClass,
+                                             final AnnotatedElements elements,
                                              final ProcessingEnvironment environment) {
-        return new CodeGenerationContextLoader(filer, basePackage, bootstrapClass,
-                persistenceSetupClass, environment).load();
+        return new CodeGenerationContextLoader(filer, basePackage,
+                elements, environment).load();
     }
 
     public CodeGenerationContextLoader(final Filer filer,
                                        final String basePackage,
-                                       final Element bootstrapClass,
-                                       final Element persistenceSetupClass,
+                                       final AnnotatedElements elements,
                                        final ProcessingEnvironment environment) {
         this.filer = filer;
         this.environment = environment;
         this.basePackage = basePackage;
-        this.bootstrapClass = (TypeElement) bootstrapClass;
-        this.persistenceSetupClass = (TypeElement) persistenceSetupClass;
+        this.bootstrapClass = elements.elementWith(Xoom.class);
+        this.persistenceSetupClass = elements.elementWith(Persistence.class);
     }
 
     public CodeGenerationContext load() {

@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
+import io.vlingo.xoom.annotation.AnnotatedElements;
 import io.vlingo.xoom.annotation.ProcessingAnnotationException;
 import io.vlingo.xoom.annotation.initializer.contentloader.CodeGenerationContextLoader;
 import io.vlingo.xoom.annotation.persistence.Persistence;
@@ -15,6 +16,7 @@ import io.vlingo.xoom.codegen.CodeGenerationException;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
 import io.vlingo.xoom.codegen.template.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.codegen.template.projections.ProjectionGenerationStep;
+import io.vlingo.xoom.codegen.template.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.codegen.template.storage.StorageGenerationStep;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -41,27 +43,18 @@ public class XoomInitializerGenerator {
     }
 
     public void generateFrom(final ProcessingEnvironment environment,
-                             final Map<Class, Set<Element>> annotatedElements) {
-
+                             final AnnotatedElements annotatedElements) {
         try {
-            final TypeElement bootstrapClass =
-                    (TypeElement) annotatedElements.get(Xoom.class)
-                            .stream().findFirst().get();
-
-            final Element persistenceSetupClass =
-                    annotatedElements.get(Persistence.class)
-                            .stream().findFirst().orElse(null);
-
             final String basePackage =
-                    XoomInitializerPackage.from(environment, bootstrapClass);
+                    XoomInitializerPackage.from(environment, annotatedElements);
 
             final CodeGenerationContext context =
                     CodeGenerationContextLoader.from(environment.getFiler(), basePackage,
-                            bootstrapClass, persistenceSetupClass, environment);
+                            annotatedElements, environment);
 
             Stream.of(new ProjectionGenerationStep(), new StorageGenerationStep(),
-                    new BootstrapGenerationStep(), new ContentCreationStep())
-                    .filter(step -> step.shouldProcess(context))
+                    new RestResourceGenerationStep(), new BootstrapGenerationStep(),
+                    new ContentCreationStep()).filter(step -> step.shouldProcess(context))
                     .forEach(step -> step.process(context));
 
         } catch (final CodeGenerationException exception) {

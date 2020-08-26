@@ -6,6 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation.initializer;
 
+import io.vlingo.xoom.annotation.AnnotatedElements;
+
 import javax.lang.model.element.Element;
 import java.util.Arrays;
 import java.util.Map;
@@ -26,7 +28,7 @@ public class XoomValidator {
         return instance;
     }
 
-    public void validate(final Map<Class, Set<Element>> annotatedElements) {
+    public void validate(final AnnotatedElements annotatedElements) {
         Arrays.asList(singularityValidation(), targetValidation(),
                 classVisibilityValidation(), new AddressFactoryValidation())
                 .forEach(validator -> validator.validate(Xoom.class, annotatedElements));

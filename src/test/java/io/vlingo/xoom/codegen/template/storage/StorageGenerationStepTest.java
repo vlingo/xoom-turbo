@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.NONE;

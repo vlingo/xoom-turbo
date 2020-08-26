@@ -13,8 +13,8 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.PACKAGE;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.REST_RESOURCES;
+import static io.vlingo.xoom.codegen.parameter.Label.PACKAGE;
+import static io.vlingo.xoom.codegen.parameter.Label.REST_RESOURCES;
 
 public class RestResourceGenerationStep extends TemplateProcessingStep {
 

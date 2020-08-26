@@ -15,7 +15,7 @@ public class ${resourceName} extends ResourceHandler {
 
     @Override
     public Resource<?> routes() {
-        return resource("${resourceName}" /*Add Request Handlers here as a second codeGenerationParameter*/);
+        return resource("${resourceName}" /*Add Request Handlers here as a second parameter*/);
     }
 
 }

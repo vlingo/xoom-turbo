@@ -12,7 +12,7 @@ import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.annotation.persistence.Projection;
 import io.vlingo.xoom.annotation.persistence.Projections;
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 import io.vlingo.xoom.storage.DatabaseParameters;
@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.XOOM_INITIALIZER;
 
 public class CodeGenerationParameterResolver {
@@ -54,8 +54,8 @@ public class CodeGenerationParameterResolver {
         this.environment = environment;
     }
 
-    public Map<CodeGenerationParameter, String> resolve() {
-        return new HashMap<CodeGenerationParameter, String>() {{
+    public Map<Label, String> resolve() {
+        return new HashMap<Label, String>() {{
             put(PACKAGE, resolveBasePackage());
             put(CQRS, resolveCQRS());
             put(STORAGE_TYPE, resolveStorageType());

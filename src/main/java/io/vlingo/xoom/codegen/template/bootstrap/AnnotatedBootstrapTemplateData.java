@@ -8,14 +8,9 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.CodeGenerationLocation;
-import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.template.storage.StorageType;
 
-import java.util.List;
-
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.ANNOTATIONS;
+import static io.vlingo.xoom.codegen.parameter.Label.ANNOTATIONS;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCE_PACKAGE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
 

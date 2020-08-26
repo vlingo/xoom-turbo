@@ -7,7 +7,6 @@
 package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.file.ImportParameter;
@@ -23,10 +22,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.APPLICATION_NAME;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.PROJECTION_TYPE;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
+import static io.vlingo.xoom.codegen.parameter.Label.PROJECTION_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 

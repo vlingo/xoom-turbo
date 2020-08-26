@@ -10,7 +10,7 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.ANNOTATIONS;
+import static io.vlingo.xoom.codegen.parameter.Label.ANNOTATIONS;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCES;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
 

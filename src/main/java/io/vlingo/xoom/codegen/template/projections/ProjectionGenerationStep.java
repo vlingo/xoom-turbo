@@ -14,8 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.ANNOTATIONS;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.PROJECTION_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.PROJECTION_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION;
 

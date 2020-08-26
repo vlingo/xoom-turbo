@@ -5,9 +5,9 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen;
+package io.vlingo.xoom.codegen.parameter;
 
-public enum CodeGenerationParameter {
+public enum Label {
 
     APPLICATION_NAME("appName"),
     PACKAGE("package"),
@@ -30,7 +30,7 @@ public enum CodeGenerationParameter {
 
     private final String key;
 
-    CodeGenerationParameter(final String key) {
+    Label(final String key) {
         this.key = key;
     }
 

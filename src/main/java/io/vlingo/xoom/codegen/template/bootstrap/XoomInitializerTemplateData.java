@@ -7,7 +7,6 @@
 package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.common.identity.IdentityGeneratorType;
-import io.vlingo.xoom.annotation.initializer.AddressFactory;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
@@ -18,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.XOOM_INITIALIZER;
 

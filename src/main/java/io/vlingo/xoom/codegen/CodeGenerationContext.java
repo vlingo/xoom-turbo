@@ -7,8 +7,10 @@
 
 package io.vlingo.xoom.codegen;
 
-import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.annotation.initializer.contentloader.TypeBasedContentLoader;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
@@ -22,15 +24,15 @@ import java.util.function.Function;
 
 import static io.vlingo.xoom.codegen.CodeGenerationLocation.EXTERNAL;
 import static io.vlingo.xoom.codegen.CodeGenerationLocation.INTERNAL;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.storage.DatabaseType.IN_MEMORY;
 
 public class CodeGenerationContext {
 
     private Filer filer;
     private Element source;
+    private final CodeGenerationParameters parameters;
     private final List<Content> contents = new ArrayList<>();
-    private final Map<CodeGenerationParameter, String> parameters = new HashMap<>();
 
     public static CodeGenerationContext empty() {
         return new CodeGenerationContext();
@@ -40,7 +42,7 @@ public class CodeGenerationContext {
         return new CodeGenerationContext(filer, source);
     }
 
-    public static CodeGenerationContext with(final Map<CodeGenerationParameter, String> parameters) {
+    public static CodeGenerationContext with(final Map<Label, String> parameters) {
         return new CodeGenerationContext().on(parameters);
     }
 
@@ -51,12 +53,13 @@ public class CodeGenerationContext {
     private CodeGenerationContext(final Filer filer, final Element source) {
         this.filer = filer;
         this.source = source;
-        parameters.put(GENERATION_LOCATION,
-                filer == null ? EXTERNAL.name() : INTERNAL.name());
+        this.parameters =
+                CodeGenerationParameters.from(GENERATION_LOCATION, filer == null ?
+                        EXTERNAL.name() : INTERNAL.name());
     }
 
-    public CodeGenerationContext on(final Map<CodeGenerationParameter, String> parameters) {
-        this.parameters.putAll(parameters);
+    public CodeGenerationContext on(final Map<Label, String> parameters) {
+        this.parameters.addAll(parameters);
         return this;
     }
 
@@ -65,36 +68,41 @@ public class CodeGenerationContext {
         return this;
     }
 
-    public CodeGenerationContext with(final CodeGenerationParameter parameter, final String value) {
-        this.parameters.put(parameter, value);
+    public CodeGenerationContext with(final Label label, final String value) {
+        with(CodeGenerationParameters.from(label, value));
         return this;
     }
 
-    public <T> T parameterOf(final CodeGenerationParameter codeGenerationParameter) {
-        return (T) parameterOf(codeGenerationParameter, value -> value);
+    public CodeGenerationContext with(final CodeGenerationParameters parameters) {
+        this.parameters.addAll(parameters);
+        return this;
     }
 
-    public <T> T parameterOf(final CodeGenerationParameter codeGenerationParameter, final Function<String, T> mapper) {
-        final String value = parameters.get(codeGenerationParameter);
+    public <T> T parameterOf(final Label label) {
+        return (T) parameterOf(label, value -> value);
+    }
+
+    public <T> T parameterOf(final Label label, final Function<String, T> mapper) {
+        final String value = parameters.retrieveValue(label);
         return (T) mapper.apply(value);
     }
 
     public CodeGenerationContext addContent(final TemplateStandard standard,
-                           final TemplateFile file,
-                           final String text) {
+                                            final TemplateFile file,
+                                            final String text) {
         this.contents.add(Content.with(standard, file, filer, source, text));
         return this;
     }
 
     public CodeGenerationContext addContent(final TemplateStandard standard,
-                           final TypeElement typeElement) {
+                                            final TypeElement typeElement) {
         this.contents.add(Content.with(standard, typeElement));
         return this;
     }
 
-    public boolean hasParameter(final CodeGenerationParameter codeGenerationParameter) {
-        return this.parameterOf(codeGenerationParameter) != null &&
-                !this.<String>parameterOf(codeGenerationParameter).trim().isEmpty();
+    public boolean hasParameter(final Label label) {
+        return this.parameterOf(label) != null &&
+                !this.<String>parameterOf(label).trim().isEmpty();
     }
 
     public Map<Model, DatabaseType> databases() {
@@ -116,7 +124,5 @@ public class CodeGenerationContext {
     public List<Content> contents() {
         return Collections.unmodifiableList(contents);
     }
-
-
 
 }

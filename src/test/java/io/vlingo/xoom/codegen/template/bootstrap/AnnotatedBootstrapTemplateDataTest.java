@@ -9,7 +9,7 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.file.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.APPLICATION_NAME;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.BLOCKING_MESSAGING;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
+import static io.vlingo.xoom.codegen.parameter.Label.BLOCKING_MESSAGING;
+import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.storage.StorageType.STATE_STORE;
@@ -35,14 +35,14 @@ public class AnnotatedBootstrapTemplateDataTest {
 
     @Test
     public void testBootstrapTemplateDataGenerationWithCQRSAndProjections() {
-        final Map<CodeGenerationParameter, String> codeGenerationParameters =
-                new HashMap<CodeGenerationParameter, String>() {{
+        final Map<Label, String> codeGenerationParameters =
+                new HashMap<Label, String>() {{
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(APPLICATION_NAME, "xoom-app");
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.TRUE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
-                    put(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType.EVENT_BASED.name());
+                    put(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED.name());
                     put(ANNOTATIONS, Boolean.TRUE.toString());
                 }};
 
@@ -67,13 +67,13 @@ public class AnnotatedBootstrapTemplateDataTest {
 
     @Test
     public void testBootstrapTemplateDataGenerationWithoutCQRSAndProjections() {
-        final Map<CodeGenerationParameter, String> codeGenerationParameters =
-                new HashMap<CodeGenerationParameter, String>() {{
+        final Map<Label, String> codeGenerationParameters =
+                new HashMap<Label, String>() {{
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(APPLICATION_NAME, "xoom-app");
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.FALSE.toString());
-                    put(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType.NONE.name());
+                    put(Label.PROJECTION_TYPE, ProjectionType.NONE.name());
                     put(ANNOTATIONS, Boolean.TRUE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                 }};

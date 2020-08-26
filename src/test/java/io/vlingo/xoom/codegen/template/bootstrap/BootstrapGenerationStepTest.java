@@ -21,7 +21,7 @@ import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class BootstrapGenerationStepTest {

@@ -11,7 +11,7 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationLocation;
 import io.vlingo.xoom.codegen.template.TemplateData;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.GENERATION_LOCATION;
+import static io.vlingo.xoom.codegen.parameter.Label.GENERATION_LOCATION;
 
 public interface FileLocationResolver {
 

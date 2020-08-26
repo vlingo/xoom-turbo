@@ -6,6 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation.persistence;
 
+import io.vlingo.xoom.annotation.AnnotatedElements;
+
 import javax.lang.model.element.Element;
 import java.util.Arrays;
 import java.util.Map;
@@ -26,7 +28,7 @@ public class PersistenceValidator {
         return instance;
     }
 
-    public void validate(final Map<Class, Set<Element>> annotatedElements) {
+    public void validate(final AnnotatedElements annotatedElements) {
         Arrays.asList(singularityValidation(), targetValidation(), classVisibilityValidation())
                 .forEach(validator -> validator.validate(Persistence.class, annotatedElements));
     }

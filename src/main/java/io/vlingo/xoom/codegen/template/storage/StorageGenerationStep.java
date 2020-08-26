@@ -14,7 +14,7 @@ import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class StorageGenerationStep extends TemplateProcessingStep {
 

@@ -8,23 +8,20 @@
 package io.vlingo.xoom.annotation.initializer;
 
 import com.google.auto.service.AutoService;
+import io.vlingo.xoom.annotation.AnnotatedElements;
 import io.vlingo.xoom.annotation.AnnotationProcessor;
 import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.annotation.persistence.PersistenceValidator;
 
 import javax.annotation.processing.Processor;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 
 @AutoService(Processor.class)
 public class XoomProcessor extends AnnotationProcessor {
 
     @Override
-    protected void generate(final Map<Class, Set<Element>> annotatedElements) {
-        if(annotatedElements.get(Xoom.class).isEmpty()) {
+    protected void generate(final AnnotatedElements annotatedElements) {
+        if(!annotatedElements.hasElementsWith(Xoom.class)) {
             return;
         }
         XoomValidator.instance().validate(annotatedElements);

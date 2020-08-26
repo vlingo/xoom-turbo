@@ -9,7 +9,7 @@ package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.file.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.PROJECTION_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.parameter.Label.PROJECTION_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
@@ -36,8 +36,8 @@ public class ProjectionTemplateDataFactoryTest {
 
     @Test
     public void testCustomProjectionTemplateDataBuild() {
-        final Map<CodeGenerationParameter, String> parameters =
-                new HashMap<CodeGenerationParameter, String>() {{
+        final Map<Label, String> parameters =
+                new HashMap<Label, String>() {{
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(PROJECTION_TYPE, ProjectionType.CUSTOM.name());
                     put(PROJECTABLES, "\"AuthorRegistered\", \"AuthorRated\";\"BookSoldOut\", \"BookPurchased\"");
@@ -60,8 +60,8 @@ public class ProjectionTemplateDataFactoryTest {
 
     @Test
     public void testEventBasedProjectionTemplateDataBuild() {
-        final Map<CodeGenerationParameter, String> parameters =
-                new HashMap<CodeGenerationParameter, String>() {{
+        final Map<Label, String> parameters =
+                new HashMap<Label, String>() {{
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(PROJECTION_TYPE, ProjectionType.EVENT_BASED.name());
                 }};
@@ -141,8 +141,8 @@ public class ProjectionTemplateDataFactoryTest {
 
     @Test
     public void testOperationBasedProjectionTemplateDataBuild() {
-        final Map<CodeGenerationParameter, String> parameters =
-                new HashMap<CodeGenerationParameter, String>() {{
+        final Map<Label, String> parameters =
+                new HashMap<Label, String>() {{
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(PROJECTION_TYPE, ProjectionType.OPERATION_BASED.name());
                 }};
