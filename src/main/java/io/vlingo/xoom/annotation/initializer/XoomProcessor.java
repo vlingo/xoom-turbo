@@ -8,12 +8,12 @@
 package io.vlingo.xoom.annotation.initializer;
 
 import com.google.auto.service.AutoService;
+import io.vlingo.xoom.actors.Settings;
 import io.vlingo.xoom.annotation.AnnotationProcessor;
 import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.annotation.persistence.PersistenceValidator;
 
 import javax.annotation.processing.Processor;
-import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +27,7 @@ public class XoomProcessor extends AnnotationProcessor {
         if(annotatedElements.get(Xoom.class).isEmpty()) {
             return;
         }
+        Settings.loadPropertiesExternally();
         XoomValidator.instance().validate(annotatedElements);
         PersistenceValidator.instance().validate(annotatedElements);
         XoomInitializerGenerator.instance().generateFrom(environment, annotatedElements);
