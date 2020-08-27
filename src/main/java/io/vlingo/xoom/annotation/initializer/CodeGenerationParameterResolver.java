@@ -12,7 +12,7 @@ import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.annotation.persistence.Projection;
 import io.vlingo.xoom.annotation.persistence.Projections;
-import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 import io.vlingo.xoom.storage.DatabaseParameters;
@@ -21,8 +21,6 @@ import io.vlingo.xoom.storage.Model;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,23 +52,21 @@ public class CodeGenerationParameterResolver {
         this.environment = environment;
     }
 
-    public Map<Label, String> resolve() {
-        return new HashMap<Label, String>() {{
-            put(PACKAGE, resolveBasePackage());
-            put(CQRS, resolveCQRS());
-            put(STORAGE_TYPE, resolveStorageType());
-            put(APPLICATION_NAME, resolveApplicationName());
-            put(ADDRESS_FACTORY, resolveAddressFactoryType());
-            put(IDENTITY_GENERATOR, resolveIdentityGeneratorType());
-            put(ANNOTATIONS, Boolean.FALSE.toString());
-            put(BLOCKING_MESSAGING, resolveBlockingMessaging());
-            put(XOOM_INITIALIZER_NAME, resolveInitializerClass());
-            put(PROJECTION_TYPE, resolveProjections());
-            put(PROJECTABLES, resolveProjectables());
-            put(DATABASE, new DatabaseParameters(Model.DOMAIN).database);
-            put(COMMAND_MODEL_DATABASE, new DatabaseParameters(Model.COMMAND).database);
-            put(QUERY_MODEL_DATABASE, new DatabaseParameters(Model.QUERY).database);
-        }};
+    public CodeGenerationParameters resolve() {
+        return CodeGenerationParameters.from(PACKAGE, resolveBasePackage())
+                .add(STORAGE_TYPE, resolveStorageType())
+                .add(APPLICATION_NAME, resolveApplicationName())
+                .add(ADDRESS_FACTORY, resolveAddressFactoryType())
+                .add(IDENTITY_GENERATOR, resolveIdentityGeneratorType())
+                .add(ANNOTATIONS, Boolean.FALSE.toString())
+                .add(BLOCKING_MESSAGING, resolveBlockingMessaging())
+                .add(XOOM_INITIALIZER_NAME, resolveInitializerClass())
+                .add(PROJECTION_TYPE, resolveProjections())
+                .add(PROJECTABLES, resolveProjectables())
+                .add(DATABASE, new DatabaseParameters(Model.DOMAIN).database)
+                .add(COMMAND_MODEL_DATABASE, new DatabaseParameters(Model.COMMAND).database)
+                .add(QUERY_MODEL_DATABASE, new DatabaseParameters(Model.QUERY).database)
+                .add(CQRS, resolveCQRS());
     }
 
     private String resolveApplicationName() {
@@ -163,7 +159,6 @@ public class CodeGenerationParameterResolver {
         return TypeRetriever.with(environment).typesFrom(projection, annotation -> projection.becauseOf())
                 .stream().map(typeElement -> typeElement.getSimpleName().toString())
                 .map(name -> "\"" + name + "\"").collect(Collectors.joining(", "));
-
     }
 
 }

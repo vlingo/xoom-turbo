@@ -58,22 +58,22 @@ public class CodeGenerationContext {
                         EXTERNAL.name() : INTERNAL.name());
     }
 
-    public CodeGenerationContext on(final Map<Label, String> parameters) {
-        this.parameters.addAll(parameters);
-        return this;
-    }
-
     public CodeGenerationContext with(final List<TypeBasedContentLoader> loaders) {
         loaders.forEach(loader -> loader.load(this));
         return this;
     }
 
     public CodeGenerationContext with(final Label label, final String value) {
-        with(CodeGenerationParameters.from(label, value));
+        on(CodeGenerationParameters.from(label, value));
         return this;
     }
 
-    public CodeGenerationContext with(final CodeGenerationParameters parameters) {
+    public CodeGenerationContext on(final Map<Label, String> parameters) {
+        this.parameters.addAll(parameters);
+        return this;
+    }
+
+    public CodeGenerationContext on(final CodeGenerationParameters parameters) {
         this.parameters.addAll(parameters);
         return this;
     }

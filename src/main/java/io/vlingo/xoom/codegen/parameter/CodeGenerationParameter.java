@@ -9,40 +9,31 @@ package io.vlingo.xoom.codegen.parameter;
 
 public class CodeGenerationParameter {
 
-    public final Category category;
     public final Label label;
-    public final Parent parent;
     public final String value;
+    private final CodeGenerationParameters relatedParameters;
 
-    public CodeGenerationParameter(final Category category,
-                                   final Label label,
-                                   final String value) {
-        this(category, Parent.none(), label, value);
-    }
-
-    public CodeGenerationParameter(final Category category,
-                                   final Label label,
-                                   final String parentName,
-                                   final String value) {
-        this(category, Parent.identifiedBy(parentName), label, value);
-    }
-
-    public CodeGenerationParameter(final Category category,
-                                   final Parent parent,
-                                   final Label label,
-                                   final String value) {
-        this.category = category;
+    public CodeGenerationParameter(final Label label, final String value) {
         this.label = label;
-        this.parent = parent;
         this.value = value;
+        this.relatedParameters = CodeGenerationParameters.empty();
     }
 
-    public boolean has(final Category category, final Label label) {
-        return this.category.equals(category) && this.label.equals(label);
+    public CodeGenerationParameter relate(final Label label, final String value) {
+        this.relatedParameters.add(label, value);
+        return this;
     }
 
-    public boolean has(final Category category, final Parent parent, final Label label) {
-        return this.parent.equals(parent) && has(category, label);
+    public CodeGenerationParameter relatedParameterWith(final Label label) {
+        return this.relatedParameters.retrieve(label);
+    }
+
+    public String relatedParameterValueWith(final Label label) {
+        return relatedParameterWith(label).value;
+    }
+
+    public boolean has(final Label label) {
+        return this.label.equals(label);
     }
 
 }

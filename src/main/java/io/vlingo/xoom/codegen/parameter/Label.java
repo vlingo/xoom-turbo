@@ -16,6 +16,7 @@ public enum Label {
     STORAGE_TYPE("storage.type"),
     CQRS("cqrs"),
     ANNOTATIONS("annotations"),
+    AUTO_DISPATCH("autoDispatch"),
     PROJECTION_TYPE("projections"),
     PROJECTABLES("projectables"),
     DATABASE("database"),
@@ -26,7 +27,26 @@ public enum Label {
     XOOM_INITIALIZER_NAME("xoom.initialization.classname"),
     COMMAND_MODEL_DATABASE("command.model.database"),
     QUERY_MODEL_DATABASE("query.model.database"),
-    GENERATION_LOCATION("generation.location");
+    GENERATION_LOCATION("generation.location"),
+
+    //Auto Dispatch Labels
+
+    ID("id"),
+    ID_TYPE("idType"),
+    BODY("body"),
+    BODY_TYPE("bodyType"),
+    //USE ALREADY EXISTING PACKAGE LABEL
+    AUTO_DISPATCH_NAME("autoDispatchName"),
+    MODEL_PROTOCOL("modelProtocol"),
+    MODEL_ACTOR("modelActor"),
+    MODEL_DATA("modelData"),
+    QUERIES_PROTOCOL("queriesProtocol"),
+    QUERIES_ACTOR("queriesActor"),
+    ROUTE_SIGNATURE("routeSignature"),
+    ROUTE_PATH("routePath"),
+    ROUTE_METHOD("routeMethod"),
+    ROUTE_HANDLE("routeHandler"),
+    CUSTOM_ROUTE("customRoute"); //boolean
 
     private final String key;
 
