@@ -16,10 +16,10 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 public enum DatabaseType {
 
     IN_MEMORY("in_memory"),
-    POSTGRES("postgres", "org.postgresql.Driver", "jdbc:postgresql://localhost"),
+    POSTGRES("postgres", "org.postgresql.Driver", "jdbc:postgresql://localhost/"),
     HSQLDB("hsqldb", "org.hsqldb.jdbc.JDBCDriver", "jdbc:hsqldb:mem:"),
     MYSQL("mysql", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost/"),
-    YUGA_BYTE("yugabyte", "org.postgresql.Driver", "jdbc:postgresql://localhost");
+    YUGA_BYTE("yugabyte", "org.postgresql.Driver", "jdbc:postgresql://localhost/");
 
     public final String label;
     public final String driver;

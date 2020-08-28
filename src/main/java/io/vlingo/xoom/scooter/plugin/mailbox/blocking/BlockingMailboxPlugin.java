@@ -17,6 +17,8 @@ import io.vlingo.actors.plugin.Plugin;
 import io.vlingo.actors.plugin.PluginConfiguration;
 import io.vlingo.actors.plugin.PluginProperties;
 
+import java.util.Properties;
+
 public class BlockingMailboxPlugin extends AbstractPlugin implements Plugin, MailboxProvider {
   private final BlockingMailboxPluginConfiguration configuration;
 
@@ -50,6 +52,11 @@ public class BlockingMailboxPlugin extends AbstractPlugin implements Plugin, Mai
   @Override
   public Plugin with(final PluginConfiguration overrideConfiguration) {
     return this;
+  }
+
+  @Override
+  public void __internal_Only_Init(String s, Configuration configuration, Properties properties) {
+
   }
 
   @Override

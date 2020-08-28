@@ -7,7 +7,9 @@
 
 package io.vlingo.xoom.actors;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -16,15 +18,35 @@ import java.util.stream.Stream;
 public class Settings {
 
     private static final Properties PROPERTIES =  new Properties();
-    private static final String PROPERTIES_FILE_PATH = "/vlingo-xoom.properties";
+    private static final String PROPERTIES_FILENAME = "vlingo-xoom.properties";
+    private static final String[] RELATIVE_PATH = new String[]{"src", "main", "resources", PROPERTIES_FILENAME};
 
     static {
         loadProperties();
     }
 
-    private static void loadProperties() {
+    public static void loadPropertiesExternally() {
         try {
-            PROPERTIES.load(Settings.class.getResourceAsStream(PROPERTIES_FILE_PATH));
+            final String rootFolder = System.getProperty("user.dir");
+            final Path path = Paths.get(rootFolder, RELATIVE_PATH);
+            loadProperties(new FileInputStream(path.toFile()));
+        } catch (FileNotFoundException e) {
+            throw new PropertiesLoadingException(e.getMessage(), e);
+        }
+    }
+
+    private static void loadProperties() {
+        loadProperties(Settings.class.getResourceAsStream("/" + PROPERTIES_FILENAME));
+    }
+
+    private static void loadProperties(final InputStream inputStream) {
+        try {
+            if(inputStream == null) {
+                System.out.println("Unable to read vlingo-xoom.properties");
+                return;
+            }
+            PROPERTIES.clear();
+            PROPERTIES.load(inputStream);
         } catch (final IOException e) {
             throw new PropertiesLoadingException(e.getMessage(), e);
         }

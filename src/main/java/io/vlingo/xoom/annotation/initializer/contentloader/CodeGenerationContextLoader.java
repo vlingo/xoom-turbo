@@ -8,6 +8,7 @@
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.annotation.AnnotatedElements;
+import io.vlingo.xoom.annotation.autodispatch.AutoDispatchGenerationParameter;
 import io.vlingo.xoom.annotation.initializer.CodeGenerationParameterResolver;
 import io.vlingo.xoom.annotation.initializer.Xoom;
 import io.vlingo.xoom.annotation.persistence.Persistence;
@@ -53,7 +54,9 @@ public class CodeGenerationContextLoader {
                         persistenceSetupClass, environment);
 
         return CodeGenerationContext.using(filer, bootstrapClass)
-                .with(resolveContentLoaders()).on(parameterResolver.resolve());
+                .with(resolveContentLoaders())
+                .on(parameterResolver.resolve())
+                .on(new AutoDispatchGenerationParameter().resolve());
     }
 
     private List<TypeBasedContentLoader> resolveContentLoaders() {
