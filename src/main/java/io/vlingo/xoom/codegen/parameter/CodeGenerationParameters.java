@@ -29,7 +29,12 @@ public class CodeGenerationParameters {
     }
 
     public CodeGenerationParameters add(final Label label, final String value) {
-        this.parameters.add(new CodeGenerationParameter(label, value));
+        return add(new CodeGenerationParameter(label, value));
+    }
+
+
+    public CodeGenerationParameters add(final CodeGenerationParameter parameter) {
+        this.parameters.add(parameter);
         return this;
     }
 
@@ -61,5 +66,6 @@ public class CodeGenerationParameters {
     protected List<CodeGenerationParameter> list() {
         return Collections.unmodifiableList(parameters);
     }
+
 
 }

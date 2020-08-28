@@ -24,6 +24,11 @@ public class CodeGenerationParameter {
         return this;
     }
 
+    public CodeGenerationParameter relate(final CodeGenerationParameter relatedParameter) {
+        this.relatedParameters.add(relatedParameter);
+        return this;
+    }
+
     public CodeGenerationParameter relatedParameterWith(final Label label) {
         return this.relatedParameters.retrieve(label);
     }
@@ -35,5 +40,4 @@ public class CodeGenerationParameter {
     public boolean has(final Label label) {
         return this.label.equals(label);
     }
-
 }
