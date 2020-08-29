@@ -7,12 +7,8 @@
 
 package io.vlingo.xoom.actors;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -21,26 +17,23 @@ import java.util.stream.Stream;
 public class Settings {
 
     private static final Properties PROPERTIES =  new Properties();
-    private static final String PROPERTIES_FILENAME = "vlingo-xoom.properties";
-    private static final String[] RELATIVE_PATH = new String[]{"src", "main", "resource", PROPERTIES_FILENAME};
+    private static final String PROPERTIES_FILENAME = "/vlingo-xoom.properties";
 
-    public static void loadProperties() {
-        loadProperties(Settings.class.getResourceAsStream(PROPERTIES_FILENAME));
+    static {
+        loadProperties();
     }
 
-    public static void loadPropertiesExternally() {
+    private static void loadProperties() {
         try {
-            final String rootFolder = System.getProperty("user.dir");
-            final Path path = Paths.get(rootFolder, RELATIVE_PATH);
-            loadProperties(new FileInputStream(path.toFile()));
-        } catch (FileNotFoundException e) {
-            throw new PropertiesLoadingException(e.getMessage(), e);
-        }
-    }
+            final InputStream stream =
+                    Settings.class.getResourceAsStream(PROPERTIES_FILENAME);
 
-    private static void loadProperties(final InputStream inputStream) {
-        try {
-            PROPERTIES.load(inputStream);
+            if(stream == null) {
+                System.out.println("Unable to read properties.");
+                return;
+            }
+
+            PROPERTIES.load(stream);
         } catch (final IOException e) {
             throw new PropertiesLoadingException(e.getMessage(), e);
         }
@@ -80,5 +73,6 @@ public class Settings {
         put("plugin.queueMailbox.numberOfDispatchers", 0);
         put("plugin.queueMailbox.dispatcherThrottlingCount", 1);
     }};
+
 
 }

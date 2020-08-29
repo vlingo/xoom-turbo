@@ -37,7 +37,7 @@ public class StorageTemplateDataFactory {
         templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
 
         templatesData.addAll(buildStoreProvidersTemplateData(basePackage, persistencePackage,
-                useCQRS, useAnnotations, storageType, projectionType, databases, templatesData,
+                useCQRS, useAnnotations, storageType, projectionType, templatesData,
                 contents));
 
         if(!internalGeneration) {
@@ -54,7 +54,6 @@ public class StorageTemplateDataFactory {
                                                                       final Boolean useAnnotations,
                                                                       final StorageType storageType,
                                                                       final ProjectionType projectionType,
-                                                                      final Map<Model, DatabaseType> databases,
                                                                       final List<TemplateData> stateAdaptersTemplateData,
                                                                       final List<Content> contents) {
         if(useAnnotations) {
@@ -66,7 +65,7 @@ public class StorageTemplateDataFactory {
         }
 
         return StorageProviderTemplateData.from(persistencePackage, storageType, projectionType,
-                databases, stateAdaptersTemplateData, contents);
+                stateAdaptersTemplateData, contents, Model.applicableFor(useCQRS));
     }
 
 

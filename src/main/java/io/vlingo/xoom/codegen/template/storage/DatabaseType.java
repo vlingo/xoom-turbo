@@ -53,28 +53,4 @@ public enum DatabaseType {
         return valueOf(name);
     }
 
-    public TemplateParameters addConfigurationParameters(final TemplateParameters parameters) {
-        if(configurable) {
-            final Model model = parameters.find(MODEL_CLASSIFICATION);
-            final StorageType storageType = parameters.find(STORAGE_TYPE);
-            if(model.isQueryModel() || storageType.isStateful()) {
-
-                final String storageDelegateClassName =
-                        CodeGenerationSetup.STORAGE_DELEGATE_CLASS_NAME.get(this);
-
-                final String storageDelegateQualifiedClassName =
-                        String.format(STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN,
-                                label, storageDelegateClassName);
-
-                parameters.and(STORAGE_DELEGATE_NAME, storageDelegateClassName)
-                        .addImport(storageDelegateQualifiedClassName);
-            }
-        }
-
-        return parameters;
-    }
-
-    public boolean isInMemory() {
-        return equals(IN_MEMORY);
-    }
 }

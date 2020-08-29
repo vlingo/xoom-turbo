@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class TemplateParameters {
@@ -38,11 +37,6 @@ public class TemplateParameters {
 
     public TemplateParameters andResolve(final TemplateParameter parameter, final Function<TemplateParameters, Object> resolver) {
         this.parameters.put(parameter.key, resolver.apply(this));
-        return this;
-    }
-
-    public TemplateParameters enrich(final Consumer<TemplateParameters> enricher)  {
-        enricher.accept(this);
         return this;
     }
 

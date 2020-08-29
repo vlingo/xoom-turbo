@@ -16,7 +16,6 @@ import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,39 +30,30 @@ public class StorageProviderTemplateData extends TemplateData {
     public static List<TemplateData> from(final String persistencePackage,
                                           final StorageType storageType,
                                           final ProjectionType projectionType,
-                                          final Map<Model, DatabaseType> databases,
                                           final List<TemplateData> stateAdaptersTemplateData,
-                                          final List<Content> contents) {
-        return Stream.of(Model.values())
-                .filter(model -> databases.containsKey(model))
-                .map(model -> new StorageProviderTemplateData(persistencePackage,
-                        storageType, databases.get(model), projectionType,
-                        stateAdaptersTemplateData, contents, model))
-                .collect(Collectors.toList());
+                                          final List<Content> contents,
+                                          final Stream<Model> models) {
+        return models.sorted().map(model -> new StorageProviderTemplateData(persistencePackage, storageType,
+                projectionType, stateAdaptersTemplateData, contents, model)).collect(Collectors.toList());
     }
 
     private StorageProviderTemplateData(final String persistencePackage,
                                         final StorageType storageType,
-                                        final DatabaseType databaseType,
                                         final ProjectionType projectionType,
                                         final List<TemplateData> stateAdaptersTemplateData,
                                         final List<Content> contents,
                                         final Model model) {
         this.templateParameters =
-                loadParameters(persistencePackage, storageType, databaseType, projectionType,
+                loadParameters(persistencePackage, storageType, projectionType,
                         stateAdaptersTemplateData, contents, model);
     }
 
     private TemplateParameters loadParameters(final String packageName,
                                               final StorageType storageType,
-                                              final DatabaseType databaseType,
                                               final ProjectionType projectionType,
                                               final List<TemplateData> stateAdaptersTemplateData,
                                               final List<Content> contents,
                                               final Model model) {
-        final String storageClassName =
-                storageType.actorFor(databaseType);
-
         final List<AdapterParameter> adapterParameters =
                 AdapterParameter.from(stateAdaptersTemplateData);
 
@@ -72,14 +62,10 @@ public class StorageProviderTemplateData extends TemplateData {
                         findFullyQualifiedClassNames(storageType.adapterSourceClassStandard, contents) :
                         Collections.emptyList();
 
-        return TemplateParameters.with(STORAGE_TYPE, storageType)
-                .and(MODEL_CLASSIFICATION, model).and(DATABASE_TYPE, databaseType)
-                .and(IMPORTS, ImportParameter.of(sourceClassQualifiedNames)).and(STORE_NAME, storageClassName)
+        return TemplateParameters.with(STORAGE_TYPE, storageType).and(PROJECTION_TYPE, projectionType)
+                .and(MODEL_CLASSIFICATION, model).and(IMPORTS, ImportParameter.of(sourceClassQualifiedNames))
                 .and(PACKAGE_NAME, packageName).and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
-                .and(ADAPTERS, adapterParameters).and(CONNECTION_URL, databaseType.connectionUrl)
-                .and(CONFIGURABLE, databaseType.configurable).and(PROJECTION_TYPE, projectionType)
-                .andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
-                .enrich(params -> databaseType.addConfigurationParameters(params))
+                .and(ADAPTERS, adapterParameters).andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
                 .and(REQUIRE_ADAPTERS, storageType.requireAdapters(model));
     }
 

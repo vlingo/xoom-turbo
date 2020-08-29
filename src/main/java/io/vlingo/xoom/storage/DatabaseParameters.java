@@ -11,8 +11,8 @@ import io.vlingo.xoom.actors.Settings;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DatabaseParameters {
 
@@ -34,37 +34,39 @@ public class DatabaseParameters {
     public final List<String> keys;
     public final boolean autoCreate;
 
-    public DatabaseParameters(final Model model) {
-        this(model, true);
+    public DatabaseParameters(final Model model, final Properties properties) {
+        this(model, properties, true);
     }
 
-    public DatabaseParameters(final Model model, final boolean autoCreate) {
+    public DatabaseParameters(final Model model,
+                              final Properties properties,
+                              final boolean autoCreate) {
         this.model = model;
         this.keys = prepareKeys();
-        this.database = valueFromIndex(0);
-        this.name = valueFromIndex(1);
-        this.driver = valueFromIndex(2);
-        this.url = valueFromIndex(3);
-        this.username = valueFromIndex(4);
-        this.password = valueFromIndex(5);
-        this.originator = valueFromIndex(6);
+        this.database = valueFromIndex(0, properties);
+        this.name = valueFromIndex(1, properties);
+        this.driver = valueFromIndex(2, properties);
+        this.url = valueFromIndex(3, properties);
+        this.username = valueFromIndex(4, properties);
+        this.password = valueFromIndex(5, properties);
+        this.originator = valueFromIndex(6, properties);
         this.autoCreate = autoCreate;
     }
 
-    private String valueFromIndex(final Integer index) {
+    private String valueFromIndex(final Integer index, Properties properties) {
         final String key = keys.get(index);
-        final String propertiesValue = retrieveFromProperties(key);
+        final String propertiesValue = retrieveFromProperties(key, properties);
         if(propertiesValue != null) {
             return propertiesValue;
         }
         return retrieveFromEnvironment(key);
     }
 
-    private String retrieveFromProperties(final String key) {
-        if(!Settings.properties().containsKey(key)) {
+    private String retrieveFromProperties(final String key, final Properties properties) {
+        if(!properties.containsKey(key)) {
             return null;
         }
-        final String value = Settings.properties().get(key).toString().trim();
+        final String value = properties.get(key).toString().trim();
         return value.isEmpty() ? null : value;
     }
 

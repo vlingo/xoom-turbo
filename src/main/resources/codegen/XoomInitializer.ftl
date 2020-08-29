@@ -27,7 +27,6 @@ public class XoomInitializer implements XoomInitializationAware {
   public final World world;
 
   public XoomInitializer(String[] args) {
-    Settings.loadProperties();
     <#if blockingMessaging>
     Settings.enableBlockingMailbox();
     <#else>

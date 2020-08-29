@@ -15,14 +15,10 @@ import io.vlingo.symbio.store.dispatch.Dispatcher;
 import io.vlingo.symbio.store.dispatch.DispatcherControl;
 import io.vlingo.symbio.store.dispatch.Dispatchable;
 import io.vlingo.symbio.store.journal.Journal;
-
-<#if configurable>
-import io.vlingo.symbio.store.DataFormat;
-import io.vlingo.symbio.store.StorageException;
-import io.vlingo.symbio.store.common.jdbc.Configuration;
-import io.vlingo.xoom.storage.DatabaseConfiguration;
+import io.vlingo.xoom.actors.Settings;
 import io.vlingo.xoom.storage.Model;
-</#if>
+import io.vlingo.xoom.storage.StoreActorBuilder;
+import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
 public class ${storeProviderName}  {
   private static ${storeProviderName} instance;
@@ -42,7 +38,6 @@ public class ${storeProviderName}  {
     return using(stage, registry, noop);
  }
 
-
   @SuppressWarnings({ "unchecked", "unused" })
   public static ${storeProviderName} using(final Stage stage, final SourcedTypeRegistry registry, final Dispatcher dispatcher) {
     if (instance != null) {
@@ -55,13 +50,8 @@ public class ${storeProviderName}  {
     entryAdapterProvider.registerAdapter(${entryAdapter.sourceClass}.class, new ${entryAdapter.adapterClass}());
 </#list>
 
-<#if configurable>
-    final List<Object> parameters = Definition.parameters(dispatcher, DatabaseConfiguration.load(Model.${model}));
-<#else>
-    final List<Object> parameters = Definition.parameters(dispatcher);
-</#if>
-
-    final Journal<String> journal = stage.world().actorFor(Journal.class, ${storeClassName}.class, dispatcher);
+    final Journal<String> journal =
+              StoreActorBuilder.from(stage, Model.${model}, dispatcher, StorageType.JOURNAL, Settings.properties(), true);
 
 <#list adapters as entryAdapter>
     registry.register(new Info(journal, ${entryAdapter.sourceClass}.class, ${entryAdapter.sourceClass}.class.getSimpleName()));
