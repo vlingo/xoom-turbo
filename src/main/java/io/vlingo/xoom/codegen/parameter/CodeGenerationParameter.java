@@ -13,7 +13,11 @@ public class CodeGenerationParameter {
     public final String value;
     private final CodeGenerationParameters relatedParameters;
 
-    public CodeGenerationParameter(final Label label, final String value) {
+    public static CodeGenerationParameter of(final Label label, final String value) {
+        return new CodeGenerationParameter(label, value);
+    }
+
+    private CodeGenerationParameter(final Label label, final String value) {
         this.label = label;
         this.value = value;
         this.relatedParameters = CodeGenerationParameters.empty();

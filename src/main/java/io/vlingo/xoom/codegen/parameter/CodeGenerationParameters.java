@@ -17,7 +17,7 @@ public class CodeGenerationParameters {
     private final List<CodeGenerationParameter> parameters = new ArrayList<>();
 
     public static CodeGenerationParameters from(final Label label, final String value) {
-        return new CodeGenerationParameters(Arrays.asList(new CodeGenerationParameter(label, value)));
+        return new CodeGenerationParameters(Arrays.asList(CodeGenerationParameter.of(label, value)));
     }
 
     public static CodeGenerationParameters empty() {
@@ -29,9 +29,8 @@ public class CodeGenerationParameters {
     }
 
     public CodeGenerationParameters add(final Label label, final String value) {
-        return add(new CodeGenerationParameter(label, value));
+        return add(CodeGenerationParameter.of(label, value));
     }
-
 
     public CodeGenerationParameters add(final CodeGenerationParameter parameter) {
         this.parameters.add(parameter);
@@ -40,7 +39,7 @@ public class CodeGenerationParameters {
 
     public void addAll(final Map<Label, String> parameterEntries) {
         final Function<Entry<Label, String>, CodeGenerationParameter> mapper =
-                entry -> new CodeGenerationParameter(entry.getKey(), entry.getValue());
+                entry -> CodeGenerationParameter.of(entry.getKey(), entry.getValue());
 
         addAll(parameterEntries.entrySet().stream().map(mapper).collect(Collectors.toList()));
     }
@@ -60,7 +59,7 @@ public class CodeGenerationParameters {
     public CodeGenerationParameter retrieve(final Label label) {
         return parameters.stream()
                 .filter(param -> param.has(label)).findFirst()
-                .orElse(new CodeGenerationParameter(label, ""));
+                .orElse(CodeGenerationParameter.of(label, ""));
     }
 
     protected List<CodeGenerationParameter> list() {
