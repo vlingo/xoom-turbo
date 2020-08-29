@@ -30,7 +30,7 @@ PARAMETERS HIERARCHY
 
 AutoDispatchName=GreetingResource  
     
-	@Model
+	  @Model
     ModelProtocol=io.vlingo.hello.model.Greeting
     ModelActor=io.vlingo.hello.model.GreetingEntity
     ModelData=io.vlingo.hello.infra.GreetingData
@@ -60,13 +60,13 @@ AutoDispatchName=GreetingResource
 
     ......	   
     
-	@Route
-    RouteSignature=queryGreetings()
-	   RoutePath=/greetings
-	   RouteMethod=GET
-	   RouteHandler=greetings()
-	   CustomRoute=FALSE
-	   //GET METHODS DO NOT NEED @RESPONSE
+    @Route
+      RouteSignature=queryGreetings()
+       RoutePath=/greetings
+       RouteMethod=GET
+       RouteHandler=greetings()
+       CustomRoute=FALSE
+       //GET METHODS DO NOT NEED @RESPONSE
 
 
 -------------------------------------------------------------------------------------------
