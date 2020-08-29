@@ -20,17 +20,10 @@ import io.vlingo.symbio.store.dispatch.Dispatcher;
 import io.vlingo.symbio.store.dispatch.DispatcherControl;
 import io.vlingo.symbio.store.dispatch.Dispatchable;
 import io.vlingo.symbio.store.state.StateStore;
-
-<#if configurable>
-import io.vlingo.actors.ActorInstantiator;
-import io.vlingo.symbio.store.DataFormat;
-import io.vlingo.symbio.store.StorageException;
-import io.vlingo.symbio.store.state.StateStore.StorageDelegate;
-import io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor.JDBCStateStoreInstantiator;
-import io.vlingo.symbio.store.common.jdbc.Configuration;
-import io.vlingo.xoom.storage.DatabaseConfiguration;
+import io.vlingo.xoom.actors.Settings;
 import io.vlingo.xoom.storage.Model;
-</#if>
+import io.vlingo.xoom.storage.StoreActorBuilder;
+import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
 public class ${storeProviderName} {
   private static ${storeProviderName} instance;
@@ -66,16 +59,8 @@ public class ${storeProviderName} {
 </#if>
     new EntryAdapterProvider(stage.world()); // future use
 
-<#if configurable>
-    final ActorInstantiator parameters = setupJDBCInstantiator(stage, dispatcher);
-<#else>
-    final List<Object> parameters = Definition.parameters(Arrays.asList(dispatcher));
-</#if>
-
     final Protocols storeProtocols =
-            stage.actorFor(
-                    new Class<?>[] { StateStore.class, DispatcherControl.class },
-                    Definition.has(${storeClassName}.class, parameters));
+            StoreActorBuilder.from(stage, Model.${model}, dispatcher, StorageType.STATE_STORE, Settings.properties(), true);
 
     final Protocols.Two<StateStore, DispatcherControl> storeWithControl = Protocols.two(storeProtocols);
 
@@ -88,20 +73,6 @@ public class ${storeProviderName} {
 
     return instance;
   }
-
-<#if configurable>
-  private static ActorInstantiator setupJDBCInstantiator(final Stage stage, final Dispatcher dispatcher) {
-    final StorageDelegate storageDelegate = setupStorageDelegate(stage);
-    final ActorInstantiator<?> instantiator = new JDBCStateStoreInstantiator();
-    instantiator.set("dispatcher", dispatcher);
-    instantiator.set("delegate", storageDelegate);
-    return instantiator;
-  }
-
-  private static StorageDelegate setupStorageDelegate(final Stage stage) {
-    return new ${storageDelegateName}(DatabaseConfiguration.load(Model.${model}), stage.world().defaultLogger());
-  }
-</#if>
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private ${storeProviderName}(final StateStore store, final DispatcherControl dispatcherControl) {

@@ -55,19 +55,7 @@ public class CodeGenerationSetup {
                     }}
             );
 
-    public static final String TEST_CLASSES_FOLDER_NAME = "test-classes";
-
     public static final String STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN = "io.vlingo.symbio.store.state.jdbc.%s.%s";
-
-    public static final Map<DatabaseType, String> STORAGE_DELEGATE_CLASS_NAME =
-            Maps.immutableEnumMap(
-                    new HashMap<DatabaseType, String>(){{
-                        put(DatabaseType.POSTGRES, "PostgresStorageDelegate");
-                        put(DatabaseType.MYSQL, "MySQLStorageDelegate");
-                        put(DatabaseType.HSQLDB, "HSQLDBStorageDelegate");
-                        put(DatabaseType.YUGA_BYTE, "YugaByteStorageDelegate");
-                    }}
-            );
 
     private static final Map<StorageType, String> COMMAND_MODEL_STORE_TEMPLATES =
             Maps.immutableEnumMap(

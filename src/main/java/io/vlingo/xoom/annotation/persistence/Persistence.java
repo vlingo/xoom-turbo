@@ -14,7 +14,19 @@ public @interface Persistence {
     boolean cqrs() default false;
 
     enum StorageType {
-        NONE, STATE_STORE, OBJECT_STORE, JOURNAL
+        NONE, STATE_STORE, OBJECT_STORE, JOURNAL;
+
+        public boolean isStateStore() {
+            return equals(STATE_STORE);
+        }
+
+        public boolean isJournal() {
+            return equals(JOURNAL);
+        }
+
+        public boolean isObjectStore() {
+            return equals(OBJECT_STORE);
+        }
     }
 
 }

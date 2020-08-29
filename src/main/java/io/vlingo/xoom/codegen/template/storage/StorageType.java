@@ -16,20 +16,14 @@ public enum StorageType {
 
     JOURNAL("JOURNAL", "Journal", "SourcedTypeRegistry",
             "io.vlingo.lattice.model.sourcing",
-            "io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor",
-            "io.vlingo.symbio.store.journal.inmemory.InMemoryJournalActor",
             DOMAIN_EVENT),
 
     OBJECT_STORE("OBJECT_STORE", "ObjectStore", "ObjectTypeRegistry",
             "io.vlingo.lattice.model.object",
-            "io.vlingo.symbio.store.object.jdbc.JDBCObjectStoreActor",
-            "io.vlingo.symbio.store.object.inmemory.InMemoryObjectStoreActor",
             STATE),
 
     STATE_STORE("STATE_STORE", "StateStore", "StatefulTypeRegistry",
             "io.vlingo.lattice.model.stateful",
-            "io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor",
-            "io.vlingo.symbio.store.state.inmemory.InMemoryStateStoreActor",
             STATE);
 
     private static final String STORE_PROVIDER_NAME_SUFFIX = "Provider";
@@ -38,27 +32,21 @@ public enum StorageType {
     public final String title;
     public final String typeRegistryClassName;
     private final String typeRegistryPackage;
-    private final String defaultStoreActorQualifiedName;
-    private final String inMemoryStoreActorQualifiedName;
     public final TemplateStandard adapterSourceClassStandard;
 
     StorageType() {
-        this(null, null, null, null, null, null, null);
+        this(null, null, null, null, null);
     }
 
     StorageType(final String key,
                 final String title,
                 final String typeRegistryClassName,
                 final String typeRegistryPackage,
-                final String defaultStoreActorQualifiedName,
-                final String inMemoryStoreActorQualifiedName,
                 final TemplateStandard adapterSourceClassStandard) {
         this.key = key;
         this.title = title;
         this.typeRegistryClassName = typeRegistryClassName;
         this.typeRegistryPackage = typeRegistryPackage;
-        this.defaultStoreActorQualifiedName = defaultStoreActorQualifiedName;
-        this.inMemoryStoreActorQualifiedName = inMemoryStoreActorQualifiedName;
         this.adapterSourceClassStandard = adapterSourceClassStandard;
     }
 
@@ -69,13 +57,6 @@ public enum StorageType {
     public String resolveProviderNameFrom(final Model model) {
         final String prefix = model.isDomainModel() ? title : model.title + title;
         return prefix + STORE_PROVIDER_NAME_SUFFIX;
-    }
-
-    public String actorFor(final DatabaseType databaseType) {
-        if(databaseType.isInMemory()) {
-            return inMemoryStoreActorQualifiedName;
-        }
-        return defaultStoreActorQualifiedName;
     }
 
     public List<String> resolveTypeRegistryQualifiedNames(final Boolean useCQRS) {

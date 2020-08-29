@@ -46,10 +46,9 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(7).contains("class BookRentedAdapter implements EntryAdapter<BookRented,TextEntry>"));
         Assert.assertTrue(context.contents().get(8).contains("class BookPurchasedAdapter implements EntryAdapter<BookPurchased,TextEntry>"));
         Assert.assertTrue(context.contents().get(9).contains("class CommandModelJournalProvider"));
-        Assert.assertTrue(context.contents().get(9).contains("io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor"));
-        Assert.assertFalse(context.contents().get(9).contains("InMemoryJournalActor"));
+        Assert.assertTrue(context.contents().get(9).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.JOURNAL, Settings.properties(), true"));
         Assert.assertTrue(context.contents().get(10).contains("class QueryModelStateStoreProvider"));
-        Assert.assertTrue(context.contents().get(10).contains("DatabaseConfiguration.load(Model.QUERY)"));
+        Assert.assertTrue(context.contents().get(10).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
         Assert.assertFalse(context.contents().get(10).contains("BookRented"));
         Assert.assertFalse(context.contents().get(10).contains("BookPurchased"));
         Assert.assertFalse(context.contents().get(10).contains("StatefulTypeRegistry.Info"));
@@ -79,10 +78,9 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(7).contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
         Assert.assertTrue(context.contents().get(8).contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
         Assert.assertTrue(context.contents().get(9).contains("class CommandModelStateStoreProvider"));
-        Assert.assertTrue(context.contents().get(9).contains("import io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor.JDBCStateStoreInstantiator;"));
-        Assert.assertFalse(context.contents().get(9).contains("InMemoryStateStoreActor"));
+        Assert.assertTrue(context.contents().get(9).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
         Assert.assertTrue(context.contents().get(10).contains("class QueryModelStateStoreProvider"));
-        Assert.assertTrue(context.contents().get(10).contains("DatabaseConfiguration.load(Model.QUERY)"));
+        Assert.assertTrue(context.contents().get(10).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
     }
 
     @Test

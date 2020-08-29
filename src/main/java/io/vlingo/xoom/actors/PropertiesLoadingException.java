@@ -9,6 +9,10 @@ package io.vlingo.xoom.actors;
 
 public class PropertiesLoadingException extends RuntimeException {
 
+    public PropertiesLoadingException(final String message) {
+        super(message);
+    }
+
     public PropertiesLoadingException(final String message, final Exception cause) {
         super(message, cause);
     }

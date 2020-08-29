@@ -15,8 +15,6 @@ import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
-import io.vlingo.xoom.storage.DatabaseParameters;
-import io.vlingo.xoom.storage.Model;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
@@ -63,9 +61,6 @@ public class CodeGenerationParameterResolver {
                 .add(XOOM_INITIALIZER_NAME, resolveInitializerClass())
                 .add(PROJECTION_TYPE, resolveProjections())
                 .add(PROJECTABLES, resolveProjectables())
-                .add(DATABASE, new DatabaseParameters(Model.DOMAIN).database)
-                .add(COMMAND_MODEL_DATABASE, new DatabaseParameters(Model.COMMAND).database)
-                .add(QUERY_MODEL_DATABASE, new DatabaseParameters(Model.QUERY).database)
                 .add(CQRS, resolveCQRS());
     }
 
@@ -159,6 +154,7 @@ public class CodeGenerationParameterResolver {
         return TypeRetriever.with(environment).typesFrom(projection, annotation -> projection.becauseOf())
                 .stream().map(typeElement -> typeElement.getSimpleName().toString())
                 .map(name -> "\"" + name + "\"").collect(Collectors.joining(", "));
+
     }
 
 }
