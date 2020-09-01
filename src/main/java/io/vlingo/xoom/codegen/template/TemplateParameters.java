@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template;
 
-import io.vlingo.xoom.codegen.file.ImportParameter;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
