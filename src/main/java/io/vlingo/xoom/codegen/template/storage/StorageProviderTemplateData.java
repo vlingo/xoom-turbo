@@ -63,7 +63,7 @@ public class StorageProviderTemplateData extends TemplateData {
                         Collections.emptyList();
 
         return TemplateParameters.with(STORAGE_TYPE, storageType).and(PROJECTION_TYPE, projectionType)
-                .and(MODEL_CLASSIFICATION, model).and(IMPORTS, ImportParameter.of(sourceClassQualifiedNames))
+                .and(MODEL, model).and(IMPORTS, ImportParameter.of(sourceClassQualifiedNames))
                 .and(PACKAGE_NAME, packageName).and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, adapterParameters).andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
                 .and(REQUIRE_ADAPTERS, storageType.requireAdapters(model));

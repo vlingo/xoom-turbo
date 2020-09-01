@@ -63,14 +63,14 @@ public enum TemplateStandard {
         if(parameters.find(USE_ANNOTATIONS, false)) {
             return Template.ANNOTATED_STORE_PROVIDER.filename;
         }
-        return storeProviderTemplatesFrom(parameters.find(MODEL_CLASSIFICATION))
+        return storeProviderTemplatesFrom(parameters.find(MODEL))
                 .get(parameters.find(STORAGE_TYPE));
     }, (name, parameters) -> {
         if(parameters.find(USE_ANNOTATIONS, false)) {
             return "PersistenceSetup";
         }
         final StorageType storageType = parameters.find(STORAGE_TYPE);
-        final Model model = parameters.find(MODEL_CLASSIFICATION);
+        final Model model = parameters.find(MODEL);
         if(model.isQueryModel()) {
             return STATE_STORE.resolveProviderNameFrom(model);
         }

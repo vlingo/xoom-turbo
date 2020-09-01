@@ -67,7 +67,7 @@ public class ProjectionTemplateData extends TemplateData {
 
         return TemplateParameters.with(PACKAGE_NAME, packageName).and(IMPORTS, imports)
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
-                .and(MODEL_CLASSIFICATION, QUERY).and(STORAGE_TYPE, STATE_STORE)
+                .and(MODEL, QUERY).and(STORAGE_TYPE, STATE_STORE)
                 .and(EVENT_TYPES_NAME, EVENT_TYPES.resolveClassname())
                 .and(ENTITY_DATA_NAME, entityDataName).and(PROJECTION_TYPE, projectionType)
                 .and(EVENTS_NAMES, ContentQuery.findClassNames(DOMAIN_EVENT, modelPackage, contents))

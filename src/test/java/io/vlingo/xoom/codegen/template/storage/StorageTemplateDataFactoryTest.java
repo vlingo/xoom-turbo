@@ -68,7 +68,7 @@ public class StorageTemplateDataFactoryTest {
         final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
-        Assert.assertEquals(DOMAIN, storeProviderParameters.find(MODEL_CLASSIFICATION));
+        Assert.assertEquals(DOMAIN, storeProviderParameters.find(MODEL));
         Assert.assertEquals("JournalProvider", storeProviderParameters.find(STORAGE_PROVIDER_NAME));
         Assert.assertEquals(2, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
         Assert.assertEquals("io.vlingo.xoomapp.model.book.BookRented", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
@@ -115,7 +115,7 @@ public class StorageTemplateDataFactoryTest {
         final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
-        Assert.assertEquals(DOMAIN, storeProviderParameters.find(MODEL_CLASSIFICATION));
+        Assert.assertEquals(DOMAIN, storeProviderParameters.find(MODEL));
         Assert.assertEquals("StateStoreProvider", storeProviderParameters.find(STORAGE_PROVIDER_NAME));
         Assert.assertEquals(2, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
         Assert.assertEquals("io.vlingo.xoomapp.model.author.AuthorState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
@@ -167,7 +167,7 @@ public class StorageTemplateDataFactoryTest {
             final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
             final int expectedImports = modelClassificationIndex == 0 ? 2 : 1;
             Assert.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
-            Assert.assertEquals(model, storeProviderParameters.find(MODEL_CLASSIFICATION));
+            Assert.assertEquals(model, storeProviderParameters.find(MODEL));
             Assert.assertEquals(model.title + "StateStoreProvider", storeProviderParameters.find(STORAGE_PROVIDER_NAME));
             Assert.assertEquals(expectedImports, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
             Assert.assertEquals("io.vlingo.xoomapp.model.author.AuthorState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
