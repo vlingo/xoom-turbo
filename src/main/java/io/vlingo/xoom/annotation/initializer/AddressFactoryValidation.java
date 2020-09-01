@@ -10,10 +10,12 @@ import io.vlingo.xoom.annotation.AnnotatedElements;
 import io.vlingo.xoom.annotation.ProcessingAnnotationException;
 import io.vlingo.xoom.annotation.Validation;
 
+import javax.annotation.processing.ProcessingEnvironment;
+
 public class AddressFactoryValidation implements Validation {
 
     @Override
-    public void validate(final Class annotation, final AnnotatedElements annotatedElements) {
+    public void validate(ProcessingEnvironment processingEnvironment, final Class annotation, final AnnotatedElements annotatedElements) {
         annotatedElements.elementsWith(Xoom.class).forEach(element -> {
             final Xoom xoom = element.getAnnotation(Xoom.class);
             final AddressFactory addressFactory = xoom.addressFactory();

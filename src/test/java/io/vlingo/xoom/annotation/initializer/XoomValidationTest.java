@@ -13,12 +13,11 @@ import io.vlingo.xoom.annotation.Validation;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -35,14 +34,14 @@ public class XoomValidationTest {
     public void testThatSingularityValidationPasses() {
         final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
         when(annotatedElements.count(Mockito.eq(Xoom.class))).thenReturn(1);
-        Validation.singularityValidation().validate(Xoom.class, annotatedElements);
+        Validation.singularityValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
     }
 
     @Test(expected = ProcessingAnnotationException.class)
     public void testThatSingularityValidationFails() {
         final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
         when(annotatedElements.count(Mockito.eq(Xoom.class))).thenReturn(2);
-        Validation.singularityValidation().validate(Xoom.class, annotatedElements);
+        Validation.singularityValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
     }
 
     @Test
@@ -52,7 +51,7 @@ public class XoomValidationTest {
         final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
         when(annotatedElements.elementsWith(Mockito.eq(Xoom.class))).thenReturn(elements);
         when(element.getKind()).thenReturn(ElementKind.CLASS);
-        Validation.targetValidation().validate(Xoom.class, annotatedElements);
+        Validation.targetValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
     }
 
     @Test(expected = ProcessingAnnotationException.class)
@@ -62,7 +61,7 @@ public class XoomValidationTest {
         final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
         when(annotatedElements.elementsWith(Mockito.eq(Xoom.class))).thenReturn(elements);
         when(element.getKind()).thenReturn(ElementKind.METHOD);
-        Validation.targetValidation().validate(Xoom.class, annotatedElements);
+        Validation.targetValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
     }
 
     @Test
@@ -72,7 +71,7 @@ public class XoomValidationTest {
         final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
         when(annotatedElements.elementsWith(Mockito.eq(Xoom.class))).thenReturn(elements);
         when(element.getModifiers()).thenReturn(Stream.of(Modifier.PUBLIC).collect(toSet()));
-        Validation.classVisibilityValidation().validate(Xoom.class, annotatedElements);
+        Validation.classVisibilityValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
     }
 
     @Test(expected = ProcessingAnnotationException.class)
@@ -82,7 +81,7 @@ public class XoomValidationTest {
         final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
         when(annotatedElements.elementsWith(Mockito.eq(Xoom.class))).thenReturn(elements);
         when(element.getModifiers()).thenReturn(Stream.of(Modifier.PRIVATE).collect(toSet()));
-        Validation.classVisibilityValidation().validate(Xoom.class, annotatedElements);
+        Validation.classVisibilityValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
     }
 
     @Test
@@ -93,7 +92,7 @@ public class XoomValidationTest {
         final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
         when(annotatedElements.elementsWith(Mockito.eq(Xoom.class))).thenReturn(elements);
         when(element.getAnnotation(eq(Xoom.class))).thenReturn(xoom);
-        new AddressFactoryValidation().validate(Xoom.class, annotatedElements);
+        new AddressFactoryValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
     }
 
     @Test(expected = ProcessingAnnotationException.class)
@@ -104,7 +103,7 @@ public class XoomValidationTest {
         final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
         when(annotatedElements.elementsWith(Mockito.eq(Xoom.class))).thenReturn(elements);
         when(element.getAnnotation(eq(Xoom.class))).thenReturn(xoom);
-        new AddressFactoryValidation().validate(Xoom.class, annotatedElements);
+        new AddressFactoryValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
     }
 
     private Xoom createXoomAnnotation(final String name,
