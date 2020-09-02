@@ -10,6 +10,10 @@ package io.vlingo.xoom.annotation.initializer;
 import com.google.auto.service.AutoService;
 import io.vlingo.xoom.annotation.AnnotatedElements;
 import io.vlingo.xoom.annotation.AnnotationProcessor;
+import io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidator;
+import io.vlingo.xoom.annotation.autodispatch.Model;
+import io.vlingo.xoom.annotation.autodispatch.Queries;
+import io.vlingo.xoom.annotation.autodispatch.Route;
 import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.annotation.persistence.PersistenceValidator;
 
@@ -26,12 +30,13 @@ public class XoomProcessor extends AnnotationProcessor {
         }
         XoomValidator.instance().validate(annotatedElements);
         PersistenceValidator.instance().validate(annotatedElements);
+        AutoDispatchValidator.instance().validate(annotatedElements);
         XoomInitializerGenerator.instance().generateFrom(environment, annotatedElements);
     }
 
     @Override
     public Stream<Class> supportedAnnotationClasses() {
-        return Stream.of(Xoom.class, Persistence.class);
+        return Stream.of(Xoom.class, Persistence.class, Route.class, Model.class, Queries.class);
     }
 
 }
