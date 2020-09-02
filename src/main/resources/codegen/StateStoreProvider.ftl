@@ -30,6 +30,9 @@ public class ${storeProviderName} {
 
   public final DispatcherControl dispatcherControl;
   public final StateStore store;
+  <#list queries as query>
+  public final ${query.protocolName} ${query.attributeName};
+  </#list>
 
   public static ${storeProviderName} instance() {
     return instance;
@@ -69,14 +72,17 @@ public class ${storeProviderName} {
     registry.register(new Info(storeWithControl._1, ${stateAdapter.sourceClass}.class, ${stateAdapter.sourceClass}.class.getSimpleName()));
 </#list>
 </#if>
-    instance = new ${storeProviderName}(storeWithControl._1, storeWithControl._2);
+    instance = new ${storeProviderName}(stage, storeWithControl._1, storeWithControl._2);
 
     return instance;
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private ${storeProviderName}(final StateStore store, final DispatcherControl dispatcherControl) {
+  private ${storeProviderName}(final Stage stage, final StateStore store, final DispatcherControl dispatcherControl) {
     this.store = store;
     this.dispatcherControl = dispatcherControl;
+    <#list queries as query>
+    this.${query.attributeName} = stage.actorFor(${query.protocolName}.class, ${query.actorName}.class, store);
+    </#list>
   }
 }

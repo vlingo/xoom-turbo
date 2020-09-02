@@ -83,18 +83,14 @@ public class ProjectionTemplateData extends TemplateData {
                 ContentQuery.findFullyQualifiedClassName(STATE, stateName, contents);
 
         final String entityDataQualifiedName =
-                templatesData.stream().filter(data -> data.hasStandard(ENTITY_DATA))
-                        .map(data -> data.parameters()).filter(parameters -> {
-                            return parameters.find(ENTITY_DATA_NAME).equals(entityDataName);
-                        }).map(parameters -> parameters.find(ENTITY_DATA_QUALIFIED_NAME))
-                        .findFirst().get().toString();
+                ContentQuery.findFullyQualifiedClassName(ENTITY_DATA, entityDataName, contents);
 
         if(projectionType.isOperationBased()) {
             return ImportParameter.of(stateQualifiedName, entityDataQualifiedName);
         }
 
         return templatesData.stream().filter(data -> data.hasStandard(EVENT_TYPES))
-                .map(data -> data.parameters().find(EVENT_TYPES_QUALIFIED_NAME).toString())
+                .map(data -> data.parameters().<String>find(EVENT_TYPES_QUALIFIED_NAME))
                 .map(qualifiedName -> ImportParameter.of(entityDataQualifiedName, qualifiedName))
                 .flatMap(imports -> imports.stream()).collect(Collectors.toList());
     }

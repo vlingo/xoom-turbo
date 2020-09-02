@@ -14,12 +14,10 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.content.ContentQuery.findFullyQualifiedClassNames;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
 
@@ -51,22 +49,33 @@ public class StorageProviderTemplateData extends TemplateData {
     private TemplateParameters loadParameters(final String packageName,
                                               final StorageType storageType,
                                               final ProjectionType projectionType,
-                                              final List<TemplateData> stateAdaptersTemplateData,
+                                              final List<TemplateData> templatesData,
                                               final List<Content> contents,
                                               final Model model) {
-        final List<AdapterParameter> adapterParameters =
-                AdapterParameter.from(stateAdaptersTemplateData);
-
-        final List<String> sourceClassQualifiedNames =
-                storageType.requireAdapters(model) ?
-                        findFullyQualifiedClassNames(storageType.adapterSourceClassStandard, contents) :
-                        Collections.emptyList();
+        final List<AdapterParameter> adapterParameters = AdapterParameter.from(templatesData);
+        final List<QueriesParameter> queriesParameters = QueriesParameter.from(model, contents, templatesData);
+        final List<ImportParameter> importParameters = resolveImports(model, storageType, contents, queriesParameters);
 
         return TemplateParameters.with(STORAGE_TYPE, storageType).and(PROJECTION_TYPE, projectionType)
-                .and(MODEL, model).and(IMPORTS, ImportParameter.of(sourceClassQualifiedNames))
-                .and(PACKAGE_NAME, packageName).and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
-                .and(ADAPTERS, adapterParameters).andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
-                .and(REQUIRE_ADAPTERS, storageType.requireAdapters(model));
+                .and(MODEL, model).and(IMPORTS, importParameters).and(PACKAGE_NAME, packageName)
+                .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
+                .and(ADAPTERS, adapterParameters).and(QUERIES, queriesParameters)
+                .and(REQUIRE_ADAPTERS, storageType.requireAdapters(model))
+                .andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
+    }
+
+    private List<ImportParameter> resolveImports(final Model model,
+                                                 final StorageType storageType,
+                                                 final List<Content> contents,
+                                                 final List<QueriesParameter> queriesParameters) {
+        final List<String> sourceClassQualifiedNames =
+                storageType.resolveAdaptersQualifiedName(model, contents);
+
+        final List<String> queriesQualifiedNames = queriesParameters.stream()
+                        .flatMap(param -> param.getQualifiedNames().stream())
+                        .collect(Collectors.toList());
+
+        return ImportParameter.of(sourceClassQualifiedNames, queriesQualifiedNames);
     }
 
     @Override

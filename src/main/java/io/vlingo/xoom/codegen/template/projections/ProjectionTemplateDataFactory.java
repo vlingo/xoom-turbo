@@ -27,13 +27,12 @@ public class ProjectionTemplateDataFactory {
             instance = new ProjectionTemplateDataFactory();
         }
         return context.isInternalGeneration() ?
-                instance.handleInternalGeneration(context) :
+                Arrays.asList(instance.handleInternalGeneration(context)) :
                 instance.handleExternalGeneration(context);
     }
 
-    private List<TemplateData> handleInternalGeneration(final CodeGenerationContext context) {
-        return Arrays.asList(ProjectionDispatcherProviderTemplateData.from(
-                context.parameterOf(PROJECTABLES), context.contents()));
+    private TemplateData handleInternalGeneration(final CodeGenerationContext context) {
+        return ProjectionDispatcherProviderTemplateData.from(context.parameterOf(PROJECTABLES), context.contents());
     }
 
     private List<TemplateData> handleExternalGeneration(final CodeGenerationContext context) {
@@ -57,9 +56,6 @@ public class ProjectionTemplateDataFactory {
         }
 
         aggregateProtocols.forEach(protocolName -> {
-            templatesData.add(EntityDataTemplateData.from(basePackage,
-                    protocolName, context.contents()));
-
             templatesData.add(ProjectionTemplateData.from(basePackage, protocolName,
                             context.contents(), projectionType, templatesData));
         });

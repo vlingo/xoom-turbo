@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
-import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
@@ -16,25 +15,17 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.List;
 
-public abstract class TypeBasedContentLoader {
-
-    protected final Element annotatedClass;
-    protected final TypeRetriever typeRetriever;
-    protected final ProcessingEnvironment environment;
+public abstract class TypeBasedContentLoader extends ContentLoader<List<TypeElement>> {
 
     protected TypeBasedContentLoader(final Element annotatedClass,
                                      final ProcessingEnvironment environment) {
-        this.environment = environment;
-        this.annotatedClass = annotatedClass;
-        this.typeRetriever = TypeRetriever.with(environment);
+        super(annotatedClass, environment);
     }
 
     public void load(final CodeGenerationContext context) {
-        this.retrieveTypes()
+        this.retrieveContentSource()
                 .forEach(typeElement -> context.addContent(standard(), typeElement));
     }
-
-    protected abstract List<TypeElement> retrieveTypes();
 
     protected abstract TemplateStandard standard();
 

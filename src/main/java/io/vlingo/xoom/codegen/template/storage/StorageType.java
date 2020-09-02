@@ -1,12 +1,16 @@
 package io.vlingo.xoom.codegen.template.storage;
 
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.content.ContentQuery.findFullyQualifiedClassNames;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
 
@@ -84,6 +88,13 @@ public enum StorageType {
 
     public Boolean requireAdapters(final Model model) {
         return !model.isQueryModel() || isStateful();
+    }
+
+    public List<String> resolveAdaptersQualifiedName(final Model model, final List<Content> contents) {
+        if(requireAdapters(model)) {
+            return ContentQuery.findFullyQualifiedClassNames(adapterSourceClassStandard, contents);
+        }
+        return Collections.emptyList();
     }
 
     public boolean isEnabled() {

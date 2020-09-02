@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen;
 
-import io.vlingo.xoom.annotation.initializer.contentloader.TypeBasedContentLoader;
+import io.vlingo.xoom.annotation.initializer.contentloader.ContentLoader;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -58,7 +58,7 @@ public class CodeGenerationContext {
                         EXTERNAL.name() : INTERNAL.name());
     }
 
-    public CodeGenerationContext with(final List<TypeBasedContentLoader> loaders) {
+    public CodeGenerationContext with(final List<ContentLoader> loaders) {
         loaders.forEach(loader -> loader.load(this));
         return this;
     }
@@ -95,8 +95,15 @@ public class CodeGenerationContext {
     }
 
     public CodeGenerationContext addContent(final TemplateStandard standard,
-                                            final TypeElement typeElement) {
-        this.contents.add(Content.with(standard, typeElement));
+                                            final TypeElement type) {
+        this.contents.add(Content.with(standard, type));
+        return this;
+    }
+
+    public CodeGenerationContext addContent(final TemplateStandard standard,
+                                            final TypeElement protocolType,
+                                            final TypeElement actorType) {
+        this.contents.add(Content.with(standard, protocolType, actorType));
         return this;
     }
 

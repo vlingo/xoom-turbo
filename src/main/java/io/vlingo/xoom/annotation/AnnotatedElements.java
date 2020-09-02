@@ -50,7 +50,7 @@ public class AnnotatedElements {
     }
 
     public <T extends Element> T elementWith(final Class annotation) {
-        return (T) elementsWith(annotation).stream().findFirst().get();
+        return (T) elementsWith(annotation).stream().findFirst().orElse(null);
     }
 
     public int count(final Class annotation) {

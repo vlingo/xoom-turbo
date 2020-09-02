@@ -1,6 +1,5 @@
 package io.vlingo.xoom.codegen.template;
 
-
 import io.vlingo.xoom.codegen.CodeGenerationSetup;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
@@ -23,6 +22,12 @@ public enum TemplateStandard {
 
     STATE(parameters -> CodeGenerationSetup.STATE_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
             (name, parameters) -> name + "State"),
+
+    QUERIES(parameters -> Template.QUERIES.filename,
+            (name, parameters) -> name + "Queries"),
+
+    QUERIES_ACTOR(parameters -> Template.QUERIES_ACTOR.filename,
+            (name, parameters) -> name + "QueriesActor"),
 
     EVENT_TYPES(parameters -> Template.EVENT_TYPES.filename,
             (name, parameters) -> "EventTypes"),

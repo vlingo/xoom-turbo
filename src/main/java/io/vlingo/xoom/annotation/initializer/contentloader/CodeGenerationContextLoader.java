@@ -59,12 +59,13 @@ public class CodeGenerationContextLoader {
                 .on(new AutoDispatchGenerationParameter().resolve());
     }
 
-    private List<TypeBasedContentLoader> resolveContentLoaders() {
+    private List<ContentLoader> resolveContentLoaders() {
         if(bootstrapClass == null) {
             return Collections.emptyList();
         }
         return Arrays.asList(new ProjectionActorContentLoader(persistenceSetupClass, environment),
                 new StateContentLoader(persistenceSetupClass, environment),
+                new QueriesContentLoader(persistenceSetupClass, environment),
                 new RestResourceContentLoader(bootstrapClass, environment));
     }
 

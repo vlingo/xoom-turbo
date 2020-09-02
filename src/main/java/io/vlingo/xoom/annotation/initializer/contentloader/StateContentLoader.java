@@ -28,7 +28,7 @@ public class StateContentLoader extends TypeBasedContentLoader {
     }
 
     @Override
-    protected List<TypeElement> retrieveTypes() {
+    protected List<TypeElement> retrieveContentSource() {
         final StateAdapters stateAdapters =
                 annotatedClass == null ? null :
                         annotatedClass.getAnnotation(StateAdapters.class);

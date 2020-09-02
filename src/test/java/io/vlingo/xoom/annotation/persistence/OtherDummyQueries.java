@@ -7,15 +7,10 @@
 
 package io.vlingo.xoom.annotation.persistence;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import io.vlingo.common.Completes;
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.CLASS)
-public @interface Projections {
+public interface OtherDummyQueries {
 
-    Projection[] value();
+    Completes<?> otherDummies();
 
 }

@@ -20,4 +20,5 @@ public abstract class TemplateData {
     public boolean hasStandard(final TemplateStandard standard) {
         return standard().equals(standard);
     }
+
 }

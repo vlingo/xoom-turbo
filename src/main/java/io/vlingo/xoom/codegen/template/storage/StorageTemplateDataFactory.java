@@ -36,13 +36,14 @@ public class StorageTemplateDataFactory {
 
         templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
 
+        if(!internalGeneration) {
+            templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, useCQRS, contents));
+            templatesData.add(new DatabasePropertiesTemplateData(databases));
+        }
+
         templatesData.addAll(buildStoreProvidersTemplateData(basePackage, persistencePackage,
                 useCQRS, useAnnotations, storageType, projectionType, templatesData,
                 contents));
-
-        if(!internalGeneration) {
-            templatesData.add(new DatabasePropertiesTemplateData(databases));
-        }
 
         return templatesData;
     }
@@ -54,18 +55,18 @@ public class StorageTemplateDataFactory {
                                                                       final Boolean useAnnotations,
                                                                       final StorageType storageType,
                                                                       final ProjectionType projectionType,
-                                                                      final List<TemplateData> stateAdaptersTemplateData,
+                                                                      final List<TemplateData> templatesData,
                                                                       final List<Content> contents) {
         if(useAnnotations) {
             final TemplateData annotatedTemplateData =
                     AnnotatedStorageProviderTemplateData.from(basePackage, persistencePackage,
-                            useCQRS, storageType, projectionType, stateAdaptersTemplateData, contents);
+                            useCQRS, storageType, projectionType, templatesData, contents);
 
             return Arrays.asList(annotatedTemplateData);
         }
 
         return StorageProviderTemplateData.from(persistencePackage, storageType, projectionType,
-                stateAdaptersTemplateData, contents, Model.applicableFor(useCQRS));
+                templatesData, contents, Model.applicableFor(useCQRS));
     }
 
 

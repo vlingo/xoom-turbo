@@ -25,6 +25,7 @@ import java.util.Map;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.ADAPTERS;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.codegen.template.storage.Model.*;
 
@@ -37,13 +38,15 @@ public class AnnotatedStorageProviderTemplateDataTest {
                         StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, true, true);
 
         //General Assert
-        Assert.assertEquals(4, allTemplatesData.size());
-        Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
-        Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
+        Assert.assertEquals(8, allTemplatesData.size());
+        Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(ADAPTER)).count());
+        Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(QUERIES)).count());
+        Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(QUERIES_ACTOR)).count());
+        Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(STORE_PROVIDER)).count());
 
         //Assert for StateAdapter
         final TemplateData stateAdapterTemplateData =
-                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).findFirst().get();
+                allTemplatesData.stream().filter(templateData -> templateData.hasStandard(ADAPTER)).findFirst().get();
 
         final TemplateParameters stateAdapterParameters =
                 stateAdapterTemplateData.parameters();
@@ -55,10 +58,34 @@ public class AnnotatedStorageProviderTemplateDataTest {
         Assert.assertEquals("io.vlingo.xoomapp.model.author.AuthorState", stateAdapterParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
         Assert.assertEquals("AuthorStateAdapter.java", stateAdapterTemplateData.filename());
 
-        //Assert for StoreProvider
+        //Assert for Queries
+        final TemplateData queriesTemplateData =
+                allTemplatesData.stream().filter(templateData -> templateData.hasStandard(QUERIES)).findFirst().get();
 
+        final TemplateParameters queriesParameters =
+                queriesTemplateData.parameters();
+
+        Assert.assertEquals(EXPECTED_PACKAGE, queriesParameters.find(PACKAGE_NAME));
+        Assert.assertEquals("AuthorQueries", queriesParameters.find(QUERIES_NAME));
+        Assert.assertEquals("AuthorData", queriesParameters.find(ENTITY_DATA_NAME));
+        Assert.assertEquals("authorOf", queriesParameters.find(QUERY_ID_METHOD_NAME));
+        Assert.assertEquals("authors", queriesParameters.find(QUERY_ALL_METHOD_NAME));
+        Assert.assertEquals(1, queriesParameters.<List<ImportParameter>>find(IMPORTS).size());
+        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.AuthorData", queriesParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+
+        //Assert for QueriesActor
+        final TemplateData queriesActorTemplateData =
+                allTemplatesData.stream().filter(templateData -> templateData.hasStandard(QUERIES_ACTOR)).findFirst().get();
+
+        final TemplateParameters queriesActorParameters =
+                queriesActorTemplateData.parameters();
+
+        Assert.assertEquals(EXPECTED_PACKAGE, queriesActorParameters.find(PACKAGE_NAME));
+        Assert.assertEquals("AuthorQueriesActor", queriesActorParameters.find(QUERIES_ACTOR_NAME));
+
+        //Assert for StoreProvider
         final TemplateData storeProviderTemplateData =
-                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).findFirst().get();
+                allTemplatesData.stream().filter(templateData -> templateData.hasStandard(STORE_PROVIDER)).findFirst().get();
 
         final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
 
@@ -96,8 +123,10 @@ public class AnnotatedStorageProviderTemplateDataTest {
                 Content.with(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookRented.java"), null, null, BOOK_RENTED_TEXT),
                 Content.with(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), null, null, BOOK_PURCHASED_TEXT),
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
-                Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT)
-        );
+                Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT),
+                Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
+                Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT)
+            );
     }
 
     private static final Map<Model, DatabaseType> databaseTypes() {
@@ -118,9 +147,9 @@ public class AnnotatedStorageProviderTemplateDataTest {
             Paths.get(PROJECT_PATH, "src", "main", "java",
                     "io", "vlingo", "xoomapp", "model").toString();
 
-    private static final String PERSISTENCE_PACKAGE_PATH =
+    private static final String INFRASTRUCTURE_PACKAGE_PATH =
             Paths.get(PROJECT_PATH, "src", "main", "java",
-                    "io", "vlingo", "xoomapp", "infrastructure", "persistence").toString();
+                    "io", "vlingo", "xoomapp", "infrastructure").toString();
 
     private static final String AUTHOR_STATE_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model.author; \\n" +
@@ -158,9 +187,15 @@ public class AnnotatedStorageProviderTemplateDataTest {
                     "... \\n" +
                     "}";
 
-    private static final String PROJECTION_DISPATCHER_PROVIDER_CONTENT_TEXT =
-            "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
-                    "public class ProjectionDispatcherProvider { \\n" +
+    private static final String AUTHOR_DATA_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.infrastructure; \\n" +
+                    "public class AuthorData { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_DATA_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.infrastructure; \\n" +
+                    "public class BookData { \\n" +
                     "... \\n" +
                     "}";
 }
