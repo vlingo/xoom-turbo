@@ -28,7 +28,7 @@ public interface Validation {
         return (processingEnvironment, annotation, annotatedElements) -> {
             annotatedElements.elementsWith(annotation).forEach(rootElement -> {
                 if (rootElement.getKind() != ElementKind.CLASS) {
-                    throw new ProcessingAnnotationException("The " + annotation.getName() + " annotation is only allowed at class level");
+                    throw new ProcessingAnnotationException("The " + annotation.getName() + " ");
                 }
             });
         };
@@ -39,6 +39,16 @@ public interface Validation {
             annotatedElements.elementsWith(annotation).forEach(element -> {
                 if (!element.getModifiers().contains(Modifier.PUBLIC)) {
                     throw new ProcessingAnnotationException("The class " + element.getSimpleName() + " is not public.");
+                }
+            });
+        };
+    }
+
+    static Validation isInterface() {
+        return (processingEnvironment, annotation, annotatedElements) -> {
+            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
+                if (!rootElement.getKind().isInterface()) {
+                    throw new ProcessingAnnotationException("The " + annotation.getName() + " annotation is only allowed at interface level");
                 }
             });
         };

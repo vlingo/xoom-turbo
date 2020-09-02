@@ -19,8 +19,7 @@ public class ActorsValidation implements Validation {
     public void validate(final ProcessingEnvironment processingEnvironment, final Class annotation, final AnnotatedElements annotatedElements) {
         annotatedElements.elementsWith(Queries.class).forEach(element -> {
             final Queries queries = element.getAnnotation(Queries.class);
-            System.out.println("Test Vitor");
-            final boolean anInterface = TypeRetriever.with(processingEnvironment).from(queries, ((retriever) -> queries.actor())).getKind().isInterface();
+            final boolean anInterface = TypeRetriever.with(processingEnvironment).from(queries, ((retriever) -> queries.protocol())).getKind().isInterface();
             if(!anInterface){
                 throw new ProcessingAnnotationException(String.format("Protocol value must be an interface"));
             }
