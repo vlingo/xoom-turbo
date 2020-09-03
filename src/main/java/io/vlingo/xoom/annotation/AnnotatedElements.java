@@ -44,8 +44,9 @@ public class AnnotatedElements {
     }
 
     public <T extends Element> Set<T> elementsWith(final Class ...annotations) {
-        return Stream.of(annotations).map(annotation -> elements.get(annotation))
-                .flatMap(set -> (Stream<T>) set.stream()).collect(Collectors.toSet());
+        return Stream.of(annotations).filter(annotation -> elements.containsKey(annotation))
+                .map(annotation -> elements.get(annotation)).flatMap(set -> (Stream<T>) set.stream())
+                .collect(Collectors.toSet());
     }
 
     public <T extends Element> T elementWith(final Class annotation) {
