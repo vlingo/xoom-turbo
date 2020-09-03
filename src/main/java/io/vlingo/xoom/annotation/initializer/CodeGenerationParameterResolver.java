@@ -19,6 +19,8 @@ import io.vlingo.xoom.codegen.template.storage.StorageType;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,25 +30,29 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.XOOM_INITIALIZER;
 public class CodeGenerationParameterResolver {
 
     private final String basePackage;
+    private final ProcessingEnvironment environment;
     private final TypeElement bootstrapClass;
     private final TypeElement persistenceSetupClass;
-    private final ProcessingEnvironment environment;
+    private final Set<TypeElement> autoDispatchResourceClasses = new HashSet<>();
 
     public static CodeGenerationParameterResolver from(final String basePackage,
                                                        final TypeElement bootstrapClass,
                                                        final TypeElement persistenceSetupClass,
+                                                       final Set<TypeElement> autoDispatchResourceClasses,
                                                        final ProcessingEnvironment environment) {
         return new CodeGenerationParameterResolver(basePackage, bootstrapClass,
-                persistenceSetupClass, environment);
+                persistenceSetupClass, autoDispatchResourceClasses, environment);
     }
 
     private CodeGenerationParameterResolver(final String basePackage,
                                             final TypeElement bootstrapClass,
                                             final TypeElement persistenceSetupClass,
+                                            final Set<TypeElement> autoDispatchResourceClasses,
                                             final ProcessingEnvironment environment) {
         this.basePackage = basePackage;
         this.bootstrapClass = bootstrapClass;
         this.persistenceSetupClass = persistenceSetupClass;
+        this.autoDispatchResourceClasses.addAll(autoDispatchResourceClasses);
         this.environment = environment;
     }
 
@@ -61,6 +67,7 @@ public class CodeGenerationParameterResolver {
                 .add(XOOM_INITIALIZER_NAME, resolveInitializerClass())
                 .add(PROJECTION_TYPE, resolveProjections())
                 .add(PROJECTABLES, resolveProjectables())
+                .add(REST_RESOURCES, resolveRestResources())
                 .add(CQRS, resolveCQRS());
     }
 
@@ -148,6 +155,11 @@ public class CodeGenerationParameterResolver {
 
         return Stream.of(projections.value()).map(this::resolveCauseTypes)
                 .collect(Collectors.joining(";"));
+    }
+
+    private String resolveRestResources() {
+        return autoDispatchResourceClasses.stream().map(type -> type.getSimpleName().toString())
+                .map(resourceName -> resourceName + "Handler").collect(Collectors.joining(";"));
     }
 
     private String resolveCauseTypes(final Projection projection) {

@@ -6,8 +6,6 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation;
 
-import io.vlingo.xoom.annotation.initializer.Xoom;
-
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import java.util.AbstractMap;
@@ -45,8 +43,9 @@ public class AnnotatedElements {
         return elements.containsKey(annotation) && !elementsWith(annotation).isEmpty();
     }
 
-    public <T extends Element> Set<T> elementsWith(final Class annotation) {
-        return (Set<T>) elements.get(annotation);
+    public <T extends Element> Set<T> elementsWith(final Class ...annotations) {
+        return Stream.of(annotations).map(annotation -> elements.get(annotation))
+                .flatMap(set -> (Stream<T>) set.stream()).collect(Collectors.toSet());
     }
 
     public <T extends Element> T elementWith(final Class annotation) {
