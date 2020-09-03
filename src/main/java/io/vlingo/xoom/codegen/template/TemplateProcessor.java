@@ -23,11 +23,18 @@ public class TemplateProcessor {
         return instance;
     }
 
-    public String process(final TemplateData templateData) {
-        return process(templateData.standard(), templateData.parameters());
+    public String process(final TemplateData mainTemplateData) {
+        mainTemplateData.dependencies().forEach(templateData -> {
+            final String outcome =
+                    process(templateData.standard(), templateData.parameters());
+
+            mainTemplateData.handleDependencyOutcome(templateData.standard(), outcome);
+        });
+
+        return process(mainTemplateData.standard(), mainTemplateData.parameters());
     }
 
-    public String process(final TemplateStandard standard, final TemplateParameters parameters) {
+    private String process(final TemplateStandard standard, final TemplateParameters parameters) {
         try {
             final String templateFilename =
                     standard.retrieveTemplateFilename(parameters);
