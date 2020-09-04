@@ -55,8 +55,6 @@ public class CodeGenerationSetup {
                     }}
             );
 
-    public static final String STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN = "io.vlingo.symbio.store.state.jdbc.%s.%s";
-
     private static final Map<StorageType, String> COMMAND_MODEL_STORE_TEMPLATES =
             Maps.immutableEnumMap(
                     new HashMap<StorageType, String>(){{

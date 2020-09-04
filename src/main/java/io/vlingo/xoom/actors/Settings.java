@@ -17,7 +17,30 @@ import java.util.stream.Stream;
 public class Settings {
 
     private static final Properties PROPERTIES =  new Properties();
+
     private static final String PROPERTIES_FILENAME = "/vlingo-xoom.properties";
+
+    private static final Map<Object, Object> COMPLETES_PLUGIN_PROPERTIES = new HashMap<Object, Object>() {{
+        put("plugin.name.pooledCompletes", "true");
+        put("plugin.pooledCompletes.classname", "io.vlingo.actors.plugin.completes.PooledCompletesPlugin");
+        put("plugin.pooledCompletes.pool", "10");
+        put("plugin.pooledCompletes.mailbox", "queueMailbox");
+    }};
+
+    private static final Map<Object, Object> BLOCKING_MAILBOX_PROPERTIES = new HashMap<Object, Object>() {{
+        put("plugin.name.blockingMailbox", "true");
+        put("plugin.blockingMailbox.classname", "io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin");
+        put("plugin.blockingMailbox.defaultMailbox", "true");
+    }};
+
+    private static final Map<Object, Object> DEFAULT_MAILBOX_PROPERTIES = new HashMap<Object, Object>() {{
+        put("plugin.name.queueMailbox", "true");
+        put("plugin.queueMailbox.classname", "io.vlingo.actors.plugin.mailbox.concurrentqueue.ConcurrentQueueMailboxPlugin");
+        put("plugin.queueMailbox.defaultMailbox", "true");
+        put("plugin.queueMailbox.numberOfDispatchersFactor", 1.5);
+        put("plugin.queueMailbox.numberOfDispatchers", 0);
+        put("plugin.queueMailbox.dispatcherThrottlingCount", 1);
+    }};
 
     static {
         loadProperties();
@@ -29,11 +52,12 @@ public class Settings {
                     Settings.class.getResourceAsStream(PROPERTIES_FILENAME);
 
             if(stream == null) {
-                System.out.println("Unable to read properties.");
-                return;
+                System.out.println("Unable to read properties. VLINGO/XOOM will set the default mailbox");
+                PROPERTIES.putAll(COMPLETES_PLUGIN_PROPERTIES);
+                disableBlockingMailbox();
+            } else {
+                PROPERTIES.load(stream);
             }
-
-            PROPERTIES.load(stream);
         } catch (final IOException e) {
             throw new PropertiesLoadingException(e.getMessage(), e);
         }
@@ -58,21 +82,5 @@ public class Settings {
     public static Properties properties() {
         return PROPERTIES;
     }
-
-    private static final Map<Object, Object> BLOCKING_MAILBOX_PROPERTIES = new HashMap<Object, Object>() {{
-        put("plugin.name.blockingMailbox", "true");
-        put("plugin.blockingMailbox.classname", "io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin");
-        put("plugin.blockingMailbox.defaultMailbox", "true");
-    }};
-
-    private static final Map<Object, Object> DEFAULT_MAILBOX_PROPERTIES = new HashMap<Object, Object>() {{
-        put("plugin.name.queueMailbox", "true");
-        put("plugin.queueMailbox.classname", "io.vlingo.actors.plugin.mailbox.concurrentqueue.ConcurrentQueueMailboxPlugin");
-        put("plugin.queueMailbox.defaultMailbox", "true");
-        put("plugin.queueMailbox.numberOfDispatchersFactor", 1.5);
-        put("plugin.queueMailbox.numberOfDispatchers", 0);
-        put("plugin.queueMailbox.dispatcherThrottlingCount", 1);
-    }};
-
 
 }

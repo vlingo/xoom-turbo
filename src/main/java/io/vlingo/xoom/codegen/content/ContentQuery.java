@@ -35,7 +35,7 @@ public class ContentQuery {
     }
 
     public static List<String> findFullyQualifiedClassNames(final TemplateStandard standard, final List<Content> contents) {
-        return filterByStandard(standard, contents).map(Content::retrieveFullyQualifiedName).collect(toList());
+        return filterByStandard(standard, contents).map(Content::retrieveQualifiedName).collect(toList());
     }
 
     public static String findPackage(final TemplateStandard standard, final List<Content> contents) {

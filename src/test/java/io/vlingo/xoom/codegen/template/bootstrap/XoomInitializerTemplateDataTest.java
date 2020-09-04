@@ -12,7 +12,7 @@ import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.file.ImportParameter;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;

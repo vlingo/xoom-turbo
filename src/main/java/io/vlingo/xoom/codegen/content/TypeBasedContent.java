@@ -13,32 +13,33 @@ import javax.lang.model.element.TypeElement;
 
 public class TypeBasedContent extends Content {
 
-    public final TypeElement typeElement;
+    public final TypeElement contentType;
 
-    protected TypeBasedContent(final TemplateStandard standard, final TypeElement typeElement) {
+    protected TypeBasedContent(final TemplateStandard standard,
+                               final TypeElement contentType) {
         super(standard);
-        this.typeElement = typeElement;
+        this.contentType = contentType;
     }
 
     @Override
     public void create() {
-        throw new UnsupportedOperationException("Class Based Content is read-only");
+        throw new UnsupportedOperationException("Type Based Content is read-only");
     }
 
     @Override
     public String retrieveClassName() {
-        return typeElement.getSimpleName().toString();
+        return contentType.getSimpleName().toString();
     }
 
     @Override
     public String retrievePackage() {
-        final String qualifiedName = retrieveFullyQualifiedName();
+        final String qualifiedName = retrieveQualifiedName();
         return qualifiedName.substring(0, qualifiedName.lastIndexOf("."));
     }
 
     @Override
-    public String retrieveFullyQualifiedName() {
-        return typeElement.getQualifiedName().toString();
+    public String retrieveQualifiedName() {
+        return contentType.getQualifiedName().toString();
     }
 
     @Override

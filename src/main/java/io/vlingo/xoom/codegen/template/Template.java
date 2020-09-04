@@ -35,7 +35,9 @@ public enum Template {
     EVENT_BASED_PROJECTION("EventBasedProjection"),
     ENTITY_DATA("ValueData"),
     EVENT_TYPES("EventTypes"),
-    DATABASE_PROPERTIES("DatabaseProperties");
+    DATABASE_PROPERTIES("DatabaseProperties"),
+    QUERIES("Queries"),
+    QUERIES_ACTOR("QueriesActor");
 
     public final String filename;
 

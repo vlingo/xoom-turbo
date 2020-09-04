@@ -22,7 +22,7 @@ public class ModelTemplateDataFactoryTest {
                 ModelTemplateDataFactory.build(basePackage, aggregatesData, JOURNAL);
 
         Assert.assertEquals(12, templatesData.size());
-        Assert.assertEquals(6, templatesData.stream().filter(templateData -> templateData.standard().equals(DOMAIN_EVENT)).count());
+        Assert.assertEquals(6, templatesData.stream().filter(templateData -> templateData.hasStandard(DOMAIN_EVENT)).count());
 
         Assert.assertEquals("Author", templatesData.get(0).parameters().find(AGGREGATE_PROTOCOL_NAME));
         Assert.assertEquals(JOURNAL, templatesData.get(1).parameters().find(STORAGE_TYPE));

@@ -8,7 +8,7 @@ package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.file.ImportParameter;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -67,7 +67,7 @@ public class ProjectionTemplateData extends TemplateData {
 
         return TemplateParameters.with(PACKAGE_NAME, packageName).and(IMPORTS, imports)
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
-                .and(MODEL_CLASSIFICATION, QUERY).and(STORAGE_TYPE, STATE_STORE)
+                .and(MODEL, QUERY).and(STORAGE_TYPE, STATE_STORE)
                 .and(EVENT_TYPES_NAME, EVENT_TYPES.resolveClassname())
                 .and(ENTITY_DATA_NAME, entityDataName).and(PROJECTION_TYPE, projectionType)
                 .and(EVENTS_NAMES, ContentQuery.findClassNames(DOMAIN_EVENT, modelPackage, contents))
@@ -83,18 +83,14 @@ public class ProjectionTemplateData extends TemplateData {
                 ContentQuery.findFullyQualifiedClassName(STATE, stateName, contents);
 
         final String entityDataQualifiedName =
-                templatesData.stream().filter(data -> data.hasStandard(ENTITY_DATA))
-                        .map(data -> data.parameters()).filter(parameters -> {
-                            return parameters.find(ENTITY_DATA_NAME).equals(entityDataName);
-                        }).map(parameters -> parameters.find(ENTITY_DATA_QUALIFIED_NAME))
-                        .findFirst().get().toString();
+                ContentQuery.findFullyQualifiedClassName(ENTITY_DATA, entityDataName, contents);
 
         if(projectionType.isOperationBased()) {
             return ImportParameter.of(stateQualifiedName, entityDataQualifiedName);
         }
 
         return templatesData.stream().filter(data -> data.hasStandard(EVENT_TYPES))
-                .map(data -> data.parameters().find(EVENT_TYPES_QUALIFIED_NAME).toString())
+                .map(data -> data.parameters().<String>find(EVENT_TYPES_QUALIFIED_NAME))
                 .map(qualifiedName -> ImportParameter.of(entityDataQualifiedName, qualifiedName))
                 .flatMap(imports -> imports.stream()).collect(Collectors.toList());
     }

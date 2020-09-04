@@ -21,7 +21,6 @@ public enum TemplateParameter {
     ENTITY_DATA_QUALIFIED_NAME("dataQualifiedName"),
     IMPORTS("imports"),
     CUSTOM_INITIALIZATION("customInitialization"),
-    DATABASE_TYPE("databaseType"),
     ADAPTERS("adapters"),
     STORAGE_PROVIDER_NAME("storeProviderName"),
     STATE_NAME("stateName"),
@@ -37,11 +36,16 @@ public enum TemplateParameter {
     PROJECTIONS("projections"),
     PROJECTION_NAME("projectionName"),
     PROJECTION_TYPE("projectionType"),
+    QUERIES("queries"),
+    QUERIES_NAME("queriesName"),
+    QUERIES_ACTOR_NAME("queriesActorName"),
+    QUERY_ID_METHOD_NAME("queryByIdMethodName"),
+    QUERY_ALL_METHOD_NAME("queryAllMethodName"),
     PROJECTION_TO_DESCRIPTION("projectToDescriptions"),
     USE_CQRS("useCQRS"),
     USE_PROJECTIONS("useProjections"),
     USE_ANNOTATIONS("useAnnotations"),
-    MODEL_CLASSIFICATION("model"),
+    MODEL("model"),
     REST_RESOURCE_NAME("resourceName"),
     REST_RESOURCE_PACKAGE("restResourcePackage"),
     DEFAULT_DATABASE_PARAMETER("databaseParameter"),
@@ -51,8 +55,7 @@ public enum TemplateParameter {
     XOOM_INITIALIZER_CLASS("xoomInitializerClass"),
     STAGE_INSTANTIATION_VARIABLES("stageInstantiationVariables"),
     PROJECTION_DISPATCHER_PROVIDER_NAME("projectionDispatcherProviderName"),
-    PROVIDERS("providers"),
-    CONNECTION_URL("connectionUrl");
+    PROVIDERS("providers");
 
     public final String key;
 

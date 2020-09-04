@@ -30,7 +30,7 @@ public class TypeRetriever {
     }
 
     public Stream<TypeMirror> subclassesOf(final Class superclass,
-                                         final String[] packages) {
+                                           final String[] packages) {
         return Stream.of(packages).map(packageName -> elements.getPackageElement(packageName))
                 .flatMap(packageElement -> packageElement.getEnclosedElements().stream())
                 .filter(element -> isSubclass(element, superclass))

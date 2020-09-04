@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.projections;
+package io.vlingo.xoom.codegen.template.entitydata;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
@@ -14,10 +14,11 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class EntityDataTemplateData extends TemplateData {
 
@@ -27,18 +28,20 @@ public class EntityDataTemplateData extends TemplateData {
     private final String protocolName;
     private final TemplateParameters parameters;
 
-    public static EntityDataTemplateData from(final String basePackage,
-                                              final String protocolName,
-                                              final List<Content> contents) {
-        return new EntityDataTemplateData(basePackage, protocolName, contents);
+    public static List<TemplateData> from(final String basePackage,
+                                          final List<Content> contents) {
+        final Function<String, TemplateData> mapper =
+                protocolName -> new EntityDataTemplateData(basePackage, protocolName, contents);
+
+        return ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents).stream()
+                .map(mapper).collect(Collectors.toList());
     }
 
     private EntityDataTemplateData(final String basePackage,
                                    final String protocolName,
                                    final List<Content> contents) {
         this.protocolName = protocolName;
-        final String packageName = resolvePackage(basePackage);
-        this.parameters = loadParameters(packageName, protocolName, contents);
+        this.parameters = loadParameters(resolvePackage(basePackage), protocolName, contents);
     }
 
     private TemplateParameters loadParameters(final String packageName,

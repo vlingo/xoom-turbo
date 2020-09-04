@@ -9,6 +9,8 @@ package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.annotation.AnnotatedElements;
 import io.vlingo.xoom.annotation.autodispatch.AutoDispatchGenerationParameter;
+import io.vlingo.xoom.annotation.autodispatch.Model;
+import io.vlingo.xoom.annotation.autodispatch.Queries;
 import io.vlingo.xoom.annotation.initializer.CodeGenerationParameterResolver;
 import io.vlingo.xoom.annotation.initializer.Xoom;
 import io.vlingo.xoom.annotation.persistence.Persistence;
@@ -17,17 +19,16 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class CodeGenerationContextLoader {
 
     private final Filer filer;
     private final String basePackage;
+    private final ProcessingEnvironment environment;
     private final TypeElement bootstrapClass;
     private final TypeElement persistenceSetupClass;
-    private final ProcessingEnvironment environment;
+    private final Set<TypeElement> autoDispatchResourceClasses = new HashSet<>();
 
     public static CodeGenerationContext from(final Filer filer,
                                              final String basePackage,
@@ -46,12 +47,14 @@ public class CodeGenerationContextLoader {
         this.basePackage = basePackage;
         this.bootstrapClass = elements.elementWith(Xoom.class);
         this.persistenceSetupClass = elements.elementWith(Persistence.class);
+        this.autoDispatchResourceClasses.addAll(elements.elementsWith(Model.class, Queries.class));
     }
 
     public CodeGenerationContext load() {
         final CodeGenerationParameterResolver parameterResolver =
                 CodeGenerationParameterResolver.from(basePackage, bootstrapClass,
-                        persistenceSetupClass, environment);
+                        persistenceSetupClass, autoDispatchResourceClasses,
+                        environment);
 
         return CodeGenerationContext.using(filer, bootstrapClass)
                 .with(resolveContentLoaders())
@@ -59,12 +62,13 @@ public class CodeGenerationContextLoader {
                 .on(new AutoDispatchGenerationParameter().resolve());
     }
 
-    private List<TypeBasedContentLoader> resolveContentLoaders() {
+    private List<ContentLoader> resolveContentLoaders() {
         if(bootstrapClass == null) {
             return Collections.emptyList();
         }
         return Arrays.asList(new ProjectionActorContentLoader(persistenceSetupClass, environment),
                 new StateContentLoader(persistenceSetupClass, environment),
+                new QueriesContentLoader(persistenceSetupClass, environment),
                 new RestResourceContentLoader(bootstrapClass, environment));
     }
 

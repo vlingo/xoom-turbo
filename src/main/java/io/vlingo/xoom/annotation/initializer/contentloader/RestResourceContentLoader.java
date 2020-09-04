@@ -29,7 +29,7 @@ public class RestResourceContentLoader extends TypeBasedContentLoader {
     }
 
     @Override
-    protected List<TypeElement> retrieveTypes() {
+    protected List<TypeElement> retrieveContentSource() {
 
         final ResourceHandlers resourceHandlers =
                 annotatedClass.getAnnotation(ResourceHandlers.class);
