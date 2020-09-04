@@ -5,21 +5,24 @@ import io.vlingo.xoom.annotation.ProcessingAnnotationException;
 import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.annotation.Validation;
 
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
+import java.util.List;
 
 public interface AutoDispatchValidations extends Validation {
 
     static Validation isProtocolModelAnInterface() {
         return (processingEnvironment, annotation, annotatedElements) -> {
-            annotatedElements.elementsWith(Model.class).forEach(element -> {
-                final Model queries = element.getAnnotation(Model.class);
+            annotatedElements.elementsWith(annotation).forEach(element -> {
+                final Model model = element.getAnnotation(Model.class);
                 final TypeRetriever retriever = TypeRetriever.with(processingEnvironment);
-                if (!retriever.isAnInterface(queries, Void -> queries.protocol())) {
+                if (!retriever.isAnInterface(model, Void -> model.protocol())) {
                     throw new ProcessingAnnotationException(
                             String.format("Protocol value to Model annotation must be an interface, class informed: %s",
-                                    retriever.getClassName(queries,
-                                            Void -> queries.protocol())));
+                                    retriever.getClassName(model,
+                                            Void -> model.protocol())));
                 }
             });
         };
@@ -120,5 +123,41 @@ public interface AutoDispatchValidations extends Validation {
                 }
             });
         };
+    }
+
+    static Validation handlerWithoutValidMethodValidator() {
+        return (processingEnvironment, annotation, annotatedElements) -> {
+            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
+                final Model model = rootElement.getAnnotation(Model.class);
+                if (model != null) {
+                    rootElement.getEnclosedElements().forEach(enclosed -> {
+                        final Route routeAnnotation = enclosed.getAnnotation(Route.class);
+                        if(ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null){
+                            final String handler = routeAnnotation.handler();
+                            final String methodName = handler.substring(0, handler.indexOf("("));
+                            final String[] params = handler.substring(handler.indexOf("(") + 1, handler.indexOf(")")).split(",");
+                            final List<ExecutableElement> methods =
+                                    TypeRetriever.with(processingEnvironment)
+                                            .getMethods(model, Void -> model.protocol());
+                            methods.stream()
+                                    .filter(m -> methodName.equals(m.getSimpleName().toString()))
+                                    .forEach(m -> {
+                                if(params.length < m.getParameters().size()){
+                                    throw new ProcessingAnnotationException(
+                                            String.format("Class [%s], with Model annotation, have Route annotation with an invalid protocol handler: %s",
+                                                    getQualifiedClassName(processingEnvironment, rootElement),
+                                                    m.toString())
+                                    );
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        };
+    }
+
+    static String getQualifiedClassName(ProcessingEnvironment processingEnvironment, Element rootElement) {
+        return String.format("%s.%s.java", processingEnvironment.getElementUtils().getPackageOf(rootElement).getQualifiedName().toString(), rootElement.getSimpleName().toString());
     }
 }
