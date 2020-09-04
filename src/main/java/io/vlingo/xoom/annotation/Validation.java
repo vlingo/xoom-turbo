@@ -6,11 +6,6 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation;
 
-import io.vlingo.http.Method;
-import io.vlingo.xoom.annotation.autodispatch.Model;
-import io.vlingo.xoom.annotation.autodispatch.Queries;
-import io.vlingo.xoom.annotation.autodispatch.Route;
-
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;

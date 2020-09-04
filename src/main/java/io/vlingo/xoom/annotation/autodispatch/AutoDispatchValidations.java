@@ -89,4 +89,18 @@ public interface AutoDispatchValidations extends Validation {
             });
         };
     }
+
+    static Validation routeHasQueryOrModel() {
+        return (processingEnvironment, annotation, annotatedElements) -> {
+            annotatedElements.elementsWith(annotation).forEach(methodElement -> {
+                final ExecutableElement executableElement = (ExecutableElement) methodElement;
+                System.out.println(executableElement.getEnclosingElement().getSimpleName());
+                final Queries queriesAnnotation = executableElement.getEnclosingElement().getAnnotation(Queries.class);
+                final Model modelAnnotation = executableElement.getEnclosingElement().getAnnotation(Model.class);
+                if(queriesAnnotation == null && modelAnnotation == null ){
+                    throw new ProcessingAnnotationException("To use Route annotation you need to use Queries or Model annotation on the Class level.");
+                }
+            });
+        };
+    }
 }

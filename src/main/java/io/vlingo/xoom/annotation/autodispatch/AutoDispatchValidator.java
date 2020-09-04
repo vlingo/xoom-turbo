@@ -30,6 +30,10 @@ public class AutoDispatchValidator {
                 .forEach(validator ->
                         validator.validate(processingEnvironment, Model.class, annotatedElements));
 
+        Arrays.asList(routeHasQueryOrModel())
+                .forEach(validator ->
+                        validator.validate(processingEnvironment, Route.class, annotatedElements));
+
     }
 
 }
