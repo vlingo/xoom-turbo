@@ -13,15 +13,20 @@ import io.vlingo.xoom.annotation.Validation;
 
 import javax.annotation.processing.ProcessingEnvironment;
 
-public class ActorsValidation implements Validation {
+public class QueriesValidation implements Validation {
 
     @Override
-    public void validate(final ProcessingEnvironment processingEnvironment, final Class annotation, final AnnotatedElements annotatedElements) {
+    public void validate(final ProcessingEnvironment processingEnvironment,
+                         final Class annotation,
+                         final AnnotatedElements annotatedElements) {
         annotatedElements.elementsWith(Queries.class).forEach(element -> {
             final Queries queries = element.getAnnotation(Queries.class);
-            final boolean anInterface = TypeRetriever.with(processingEnvironment).from(queries, ((retriever) -> queries.protocol())).getKind().isInterface();
-            if(!anInterface){
-                throw new ProcessingAnnotationException(String.format("Protocol value must be an interface"));
+            final TypeRetriever retriever = TypeRetriever.with(processingEnvironment);
+            if(!retriever.isAnInterface(queries, Void -> queries.protocol())){
+                throw new ProcessingAnnotationException(
+                        String.format("Protocol value to Queries annotation must be an interface, class informed: %s",
+                                retriever.getClassName(queries,
+                                        Void -> queries.protocol())));
             }
         });
     }
