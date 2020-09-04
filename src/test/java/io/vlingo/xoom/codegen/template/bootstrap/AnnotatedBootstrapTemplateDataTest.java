@@ -10,7 +10,6 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
@@ -20,8 +19,8 @@ import org.junit.Test;
 
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
 import static io.vlingo.xoom.codegen.parameter.Label.BLOCKING_MESSAGING;
@@ -58,8 +57,8 @@ public class AnnotatedBootstrapTemplateDataTest {
                 BootstrapTemplateData.from(context).parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
-        Assert.assertEquals(1, parameters.<List>find(IMPORTS).size());
-        Assert.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+        Assert.assertEquals(1, parameters.<Set>find(IMPORTS).size());
+        Assert.assertTrue(parameters.hasImport("io.vlingo.xoom.annotation.initializer.ResourceHandlers"));
         Assert.assertEquals("io.vlingo.xoomapp.resource", parameters.find(TemplateParameter.REST_RESOURCE_PACKAGE));
         Assert.assertEquals("xoom-app", parameters.find(TemplateParameter.APPLICATION_NAME));
         Assert.assertEquals(true, parameters.find(USE_PROJECTIONS));
@@ -87,8 +86,8 @@ public class AnnotatedBootstrapTemplateDataTest {
                 BootstrapTemplateData.from(context).parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
-        Assert.assertEquals(1, parameters.<List>find(IMPORTS).size());
-        Assert.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+        Assert.assertEquals(1, parameters.<Set>find(IMPORTS).size());
+        Assert.assertTrue(parameters.hasImport("io.vlingo.xoom.annotation.initializer.ResourceHandlers"));
         Assert.assertEquals("io.vlingo.xoomapp.resource", parameters.find(TemplateParameter.REST_RESOURCE_PACKAGE));
         Assert.assertEquals("xoom-app", parameters.find(TemplateParameter.APPLICATION_NAME));
         Assert.assertEquals(false, parameters.find(USE_PROJECTIONS));

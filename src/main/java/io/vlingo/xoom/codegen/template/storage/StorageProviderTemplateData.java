@@ -15,6 +15,7 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,7 +55,7 @@ public class StorageProviderTemplateData extends TemplateData {
                                               final Model model) {
         final List<AdapterParameter> adapterParameters = AdapterParameter.from(templatesData);
         final List<QueriesParameter> queriesParameters = QueriesParameter.from(model, contents, templatesData);
-        final List<ImportParameter> importParameters = resolveImports(model, storageType, contents, queriesParameters);
+        final Set<ImportParameter> importParameters = resolveImports(model, storageType, contents, queriesParameters);
 
         return TemplateParameters.with(STORAGE_TYPE, storageType).and(PROJECTION_TYPE, projectionType)
                 .and(MODEL, model).and(IMPORTS, importParameters).and(PACKAGE_NAME, packageName)
@@ -64,10 +65,10 @@ public class StorageProviderTemplateData extends TemplateData {
                 .andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
     }
 
-    private List<ImportParameter> resolveImports(final Model model,
-                                                 final StorageType storageType,
-                                                 final List<Content> contents,
-                                                 final List<QueriesParameter> queriesParameters) {
+    private Set<ImportParameter> resolveImports(final Model model,
+                                                final StorageType storageType,
+                                                final List<Content> contents,
+                                                final List<QueriesParameter> queriesParameters) {
         final List<String> sourceClassQualifiedNames =
                 storageType.resolveAdaptersQualifiedName(model, contents);
 

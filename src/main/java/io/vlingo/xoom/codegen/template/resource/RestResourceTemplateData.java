@@ -7,14 +7,11 @@
 
 package io.vlingo.xoom.codegen.template.resource;
 
+import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.TemplateData;
 
-import java.io.File;
-
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
 
 public class RestResourceTemplateData extends TemplateData {
@@ -36,7 +33,8 @@ public class RestResourceTemplateData extends TemplateData {
     private TemplateParameters loadParameters() {
         return TemplateParameters
                 .with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
-                .and(PACKAGE_NAME, packageName);
+                .and(PACKAGE_NAME, packageName)
+                .and(USE_AUTO_DISPATCH, false);
     }
 
     private String resolvePackage(final String basePackage) {

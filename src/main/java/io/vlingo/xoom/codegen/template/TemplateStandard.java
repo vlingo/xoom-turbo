@@ -38,6 +38,12 @@ public enum TemplateStandard {
     REST_RESOURCE(parameters -> Template.REST_RESOURCE.filename,
             (name, parameters) -> name + "Resource"),
 
+    ROUTE_METHOD(parameters -> Template.REST_RESOURCE.filename,
+            (name, parameters) -> name),
+
+    AUTO_DISPATCH_RESOURCE(parameters -> Template.REST_RESOURCE.filename,
+            (name, parameters) -> name),
+
     ADAPTER(parameters -> ADAPTER_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
             (name, parameters) -> name + "Adapter"),
 

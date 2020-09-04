@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CodeGenerationParameters {
 
@@ -66,5 +67,7 @@ public class CodeGenerationParameters {
         return Collections.unmodifiableList(parameters);
     }
 
-
+    public Stream<CodeGenerationParameter> retrieveAll(final Label label) {
+        return parameters.stream().filter(param -> param.has(label));
+    }
 }

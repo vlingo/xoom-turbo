@@ -9,8 +9,10 @@ package io.vlingo.xoom.codegen;
 
 import io.vlingo.xoom.annotation.initializer.contentloader.ContentLoader;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
@@ -21,6 +23,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.CodeGenerationLocation.EXTERNAL;
 import static io.vlingo.xoom.codegen.CodeGenerationLocation.INTERNAL;
@@ -132,4 +135,7 @@ public class CodeGenerationContext {
         return Collections.unmodifiableList(contents);
     }
 
+    public Stream<CodeGenerationParameter> parametersOf(final Label label) {
+        return parameters.retrieveAll(label);
+    }
 }

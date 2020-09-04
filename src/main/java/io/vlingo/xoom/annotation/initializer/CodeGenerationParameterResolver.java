@@ -67,7 +67,7 @@ public class CodeGenerationParameterResolver {
                 .add(XOOM_INITIALIZER_NAME, resolveInitializerClass())
                 .add(PROJECTION_TYPE, resolveProjections())
                 .add(PROJECTABLES, resolveProjectables())
-                .add(REST_RESOURCES, resolveRestResources())
+                .add(AUTO_DISPATCH_RESOURCES, resolveAutoDispatchRestResources())
                 .add(CQRS, resolveCQRS());
     }
 
@@ -157,7 +157,7 @@ public class CodeGenerationParameterResolver {
                 .collect(Collectors.joining(";"));
     }
 
-    private String resolveRestResources() {
+    private String resolveAutoDispatchRestResources() {
         return autoDispatchResourceClasses.stream().map(type -> type.getSimpleName().toString())
                 .map(resourceName -> resourceName + "Handler").collect(Collectors.joining(";"));
     }

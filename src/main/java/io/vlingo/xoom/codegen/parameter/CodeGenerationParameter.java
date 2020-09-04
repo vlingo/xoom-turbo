@@ -33,12 +33,12 @@ public class CodeGenerationParameter {
         return this;
     }
 
-    public CodeGenerationParameter relatedParameterWith(final Label label) {
+    public CodeGenerationParameter relatedParameterOf(final Label label) {
         return this.relatedParameters.retrieve(label);
     }
 
-    public String relatedParameterValueWith(final Label label) {
-        return relatedParameterWith(label).value;
+    public String relatedParameterValueOf(final Label label) {
+        return relatedParameterOf(label).value;
     }
 
     public boolean has(final Label label) {

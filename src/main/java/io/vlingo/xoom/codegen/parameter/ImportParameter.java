@@ -9,6 +9,8 @@ package io.vlingo.xoom.codegen.parameter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,20 +22,36 @@ public class ImportParameter {
         this.qualifiedClassName = qualifiedClassName;
     }
 
-    public static List<ImportParameter> of(final String ...qualifiedClassNames) {
+    public static Set<ImportParameter> of(final String ...qualifiedClassNames) {
         return of(Stream.of(qualifiedClassNames));
     }
 
-    public static List<ImportParameter> of(final List<String> ...qualifiedNames) {
+    public static Set<ImportParameter> of(final List<String> ...qualifiedNames) {
         return of(Stream.of(qualifiedNames).flatMap(Collection::stream));
     }
 
-    public static List<ImportParameter> of(final Stream<String> stateQualifiedNames) {
-        return stateQualifiedNames.map(ImportParameter::new).collect(Collectors.toList());
+    public static Set<ImportParameter> of(final Stream<String> stateQualifiedNames) {
+        return stateQualifiedNames.map(ImportParameter::new).collect(Collectors.toSet());
     }
 
     public String getQualifiedClassName() {
         return qualifiedClassName;
     }
 
+    public boolean matchClass(final String qualifiedClassName) {
+        return this.qualifiedClassName.equals(qualifiedClassName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ImportParameter that = (ImportParameter) o;
+        return qualifiedClassName.equals(that.getQualifiedClassName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(qualifiedClassName);
+    }
 }

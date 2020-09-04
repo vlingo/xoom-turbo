@@ -15,6 +15,7 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.List;
+import java.util.Set;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
@@ -67,7 +68,7 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                 .andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
     }
 
-    private List<ImportParameter> resolveImports(final ProjectionType projectionType, final List<Content> contents) {
+    private Set<ImportParameter> resolveImports(final ProjectionType projectionType, final List<Content> contents) {
         final TemplateStandard[] relatedStandards =
                 projectionType.isEventBased() ? new TemplateStandard[]{STATE, DOMAIN_EVENT} :
                         new TemplateStandard[]{STATE};

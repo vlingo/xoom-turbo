@@ -8,6 +8,8 @@ package io.vlingo.xoom.codegen.template.storage;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 
@@ -59,6 +61,14 @@ public class QueriesParameter {
                 .map(data -> new QueriesParameter(data.parameters())).collect(Collectors.toList());
     }
 
+    public static QueriesParameter from(final CodeGenerationParameter autoDispatchParameter) {
+        if(!autoDispatchParameter.has(Label.QUERIES_PROTOCOL)) {
+            return null;
+        }
+        return new QueriesParameter(autoDispatchParameter.relatedParameterValueOf(Label.QUERIES_PROTOCOL),
+                autoDispatchParameter.relatedParameterValueOf(Label.QUERIES_ACTOR));
+    }
+
     private QueriesParameter(final TemplateParameters parameters) {
         this(parameters.find(PACKAGE_NAME), parameters.find(QUERIES_NAME),
                 parameters.find(PACKAGE_NAME), parameters.find(QUERIES_ACTOR_NAME));
@@ -83,7 +93,6 @@ public class QueriesParameter {
                 Arrays.asList(String.format(QUALIFIED_NAME_PATTERN, protocolPackageName, protocolName),
                         String.format(QUALIFIED_NAME_PATTERN, actorPackageName, actorName)));
     }
-
 
     public String getProtocolName() {
         return protocolName;

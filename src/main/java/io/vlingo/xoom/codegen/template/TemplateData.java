@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen.template;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +21,11 @@ public abstract class TemplateData {
     public abstract TemplateStandard standard();
 
     protected void dependOn(final TemplateData templateData) {
-        this.dependencies.add(templateData);
+        this.dependOn(Arrays.asList(templateData));
+    }
+
+    protected void dependOn(final List<TemplateData> templatesData) {
+        this.dependencies.addAll(templatesData);
     }
 
     public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {

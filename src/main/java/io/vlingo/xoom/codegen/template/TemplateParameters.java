@@ -9,11 +9,10 @@ package io.vlingo.xoom.codegen.template;
 
 import io.vlingo.xoom.codegen.parameter.ImportParameter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
+
+import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
 
 public class TemplateParameters {
 
@@ -45,7 +44,7 @@ public class TemplateParameters {
             this.and(TemplateParameter.IMPORTS, new ArrayList<ImportParameter>());
         }
         if(qualifiedClassName != null && !qualifiedClassName.trim().isEmpty()) {
-            this.<List>find(TemplateParameter.IMPORTS).add(new ImportParameter(qualifiedClassName.trim()));
+            this.<Set>find(TemplateParameter.IMPORTS).add(new ImportParameter(qualifiedClassName.trim()));
         }
         return this;
     }
@@ -53,6 +52,11 @@ public class TemplateParameters {
     public TemplateParameters addImports(final List<String> qualifiedClassNames) {
         qualifiedClassNames.forEach(this::addImport);
         return this;
+    }
+
+    public boolean hasImport(final String qualifiedName) {
+        return ((Set<ImportParameter>) find(IMPORTS)).stream()
+                .anyMatch(imp -> imp.matchClass(qualifiedName));
     }
 
     public <T> T find(final TemplateParameter parameter) {

@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
@@ -61,7 +62,7 @@ public class ProjectionTemplateData extends TemplateData {
         final String entityDataName = ENTITY_DATA.resolveClassname(protocolName);
         final String modelPackage = ContentQuery.findPackage(STATE, stateName, contents);
 
-        final List<ImportParameter> imports =
+        final Set<ImportParameter> imports =
                 resolveImports(stateName, entityDataName, contents,
                         projectionType, templatesData);
 
@@ -74,11 +75,11 @@ public class ProjectionTemplateData extends TemplateData {
                 .andResolve(STORAGE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param));
     }
 
-    private List<ImportParameter> resolveImports(final String stateName,
-                                                 final String entityDataName,
-                                                 final List<Content> contents,
-                                                 final ProjectionType projectionType,
-                                                 final List<TemplateData> templatesData) {
+    private Set<ImportParameter> resolveImports(final String stateName,
+                                                final String entityDataName,
+                                                final List<Content> contents,
+                                                final ProjectionType projectionType,
+                                                final List<TemplateData> templatesData) {
         final String stateQualifiedName =
                 ContentQuery.findFullyQualifiedClassName(STATE, stateName, contents);
 
@@ -92,7 +93,7 @@ public class ProjectionTemplateData extends TemplateData {
         return templatesData.stream().filter(data -> data.hasStandard(EVENT_TYPES))
                 .map(data -> data.parameters().<String>find(EVENT_TYPES_QUALIFIED_NAME))
                 .map(qualifiedName -> ImportParameter.of(entityDataQualifiedName, qualifiedName))
-                .flatMap(imports -> imports.stream()).collect(Collectors.toList());
+                .flatMap(imports -> imports.stream()).collect(Collectors.toSet());
     }
 
     private String resolvePackage(final String basePackage) {
