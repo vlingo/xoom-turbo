@@ -6,6 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation;
 
+import io.vlingo.xoom.annotation.autodispatch.Queries;
+
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -13,6 +15,7 @@ import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
+import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -75,6 +78,19 @@ public class TypeRetriever {
 
     public static TypeRetriever with(final ProcessingEnvironment environment) {
         return new TypeRetriever(environment);
+    }
+
+    public boolean isAnInterface(final Annotation queries, final Function<Object, Class<?>> retriever) {
+        return getTypeElement(queries, retriever).getKind().isInterface();
+    }
+
+    public String getClassName(final Annotation queries, final Function<Object, Class<?>> retriever) {
+        return getTypeElement(queries, retriever).getQualifiedName().toString();
+    }
+
+    public TypeElement getTypeElement(final Annotation annotation,
+                                       final Function<Object, Class<?>> retriever) {
+        return from(annotation, retriever);
     }
 
 }

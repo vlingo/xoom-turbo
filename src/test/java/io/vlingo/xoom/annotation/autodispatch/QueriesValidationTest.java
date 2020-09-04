@@ -24,14 +24,15 @@ public class QueriesValidationTest {
     public void testThatSingularityValidationPasses() {
         final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
         when(annotatedElements.count(Mockito.eq(Queries.class))).thenReturn(1);
-        Validation.singularityValidation().validate(Mockito.mock(ProcessingEnvironment.class), Queries.class, annotatedElements);
+        Validation.singularityValidation().validate(Mockito.mock(ProcessingEnvironment.class),
+                Queries.class, annotatedElements);
     }
 
     private Queries createQueriesAnnotation() {
         return new Queries() {
             @Override
             public Class<?> protocol() {
-                return null;
+                return ActorProtocol.class;
             }
 
             @Override
@@ -46,4 +47,6 @@ public class QueriesValidationTest {
         };
     }
 
+    interface ActorProtocol {
+    }
 }

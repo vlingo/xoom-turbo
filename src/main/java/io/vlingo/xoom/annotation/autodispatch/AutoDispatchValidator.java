@@ -6,6 +6,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import java.util.Arrays;
 
 import static io.vlingo.xoom.annotation.Validation.*;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.*;
 
 public class AutoDispatchValidator {
 
@@ -21,12 +22,11 @@ public class AutoDispatchValidator {
     }
 
     public void validate(final ProcessingEnvironment processingEnvironment, final AnnotatedElements annotatedElements) {
-        Arrays.asList(isInterface(), classVisibilityValidation(), new ActorsValidation(), queryWithoutModelValidator())
+        Arrays.asList(isInterface(), classVisibilityValidation(), isQueryInterface(), queryWithoutModelValidator())
                 .forEach(validator ->
                         validator.validate(processingEnvironment, Queries.class, annotatedElements));
 
-
-        Arrays.asList(isInterface(), classVisibilityValidation(), new ActorsValidation(), modelWithoutQueryValidator())
+        Arrays.asList(isInterface(), classVisibilityValidation(), isModelInterface(), modelWithoutQueryValidator())
                 .forEach(validator ->
                         validator.validate(processingEnvironment, Model.class, annotatedElements));
 

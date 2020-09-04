@@ -59,35 +59,4 @@ public interface Validation {
         };
     }
 
-    static Validation queryWithoutModelValidator() {
-        return (processingEnvironment, annotation, annotatedElements) -> {
-            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
-                if (rootElement.getAnnotation(Model.class) == null) {
-                    rootElement.getEnclosedElements().forEach(enclosed -> {
-                        final Route routeAnnotation = enclosed.getAnnotation(Route.class);
-                        if (ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && (routeAnnotation.method() == Method.POST || routeAnnotation.method() == Method.PUT
-                                || routeAnnotation.method() == Method.PATCH || routeAnnotation.method() == Method.DELETE)) {
-                            throw new ProcessingAnnotationException("Class with " +  routeAnnotation.method().name + " method for Route need to have Model annotation.");
-                        }
-                    });
-                }
-            });
-        };
-    }
-
-    static Validation modelWithoutQueryValidator() {
-        return (processingEnvironment, annotation, annotatedElements) -> {
-            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
-                if (rootElement.getAnnotation(Queries.class) == null) {
-                    rootElement.getEnclosedElements().forEach(enclosed -> {
-                        final Route routeAnnotation = enclosed.getAnnotation(Route.class);
-                        if (ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && routeAnnotation.method() == Method.GET) {
-                            throw new ProcessingAnnotationException("Class with " +  routeAnnotation.method().name + " method for Route need to have Queries annotation.");
-                        }
-                    });
-                }
-            });
-        };
-    }
-
 }

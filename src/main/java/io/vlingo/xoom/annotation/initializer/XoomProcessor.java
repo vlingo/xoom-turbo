@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 public class XoomProcessor extends AnnotationProcessor {
 
     @Override
-    protected void generate(AnnotatedElements annotatedElements) {
+    protected void generate(final AnnotatedElements annotatedElements) {
         if(annotatedElements.elementsWith(Xoom.class).isEmpty()) {
             return;
         }
