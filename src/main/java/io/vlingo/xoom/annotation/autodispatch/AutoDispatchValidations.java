@@ -10,7 +10,7 @@ import javax.lang.model.element.ExecutableElement;
 
 public interface AutoDispatchValidations extends Validation {
 
-    static Validation isModelInterface() {
+    static Validation isProtocolModelAnInterface() {
         return (processingEnvironment, annotation, annotatedElements) -> {
             annotatedElements.elementsWith(Model.class).forEach(element -> {
                 final Model queries = element.getAnnotation(Model.class);
@@ -28,17 +28,17 @@ public interface AutoDispatchValidations extends Validation {
     static Validation bodyForRouteValidator() {
         return (processingEnvironment, annotation, annotatedElements) -> {
             annotatedElements.elementsWith(annotation).forEach(rootElement -> {
-                    rootElement.getEnclosedElements().forEach(enclosed -> {
-                        final Route routeAnnotation = enclosed.getAnnotation(Route.class);
-                        if (ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && routeAnnotation.method() == Method.GET) {
-                            final ExecutableElement executableElement = (ExecutableElement) enclosed;
-                            executableElement.getParameters().forEach(methodParameters -> {
-                                if(ElementKind.PARAMETER.equals(methodParameters.getKind()) && methodParameters.getAnnotation(Body.class) != null){
-                                    throw new ProcessingAnnotationException("Body annotation is not allowed with " +  routeAnnotation.method().name + " as method parameter for Route annotation.");
-                                }
-                            });
-                        }
-                    });
+                rootElement.getEnclosedElements().forEach(enclosed -> {
+                    final Route routeAnnotation = enclosed.getAnnotation(Route.class);
+                    if (ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && routeAnnotation.method() == Method.GET) {
+                        final ExecutableElement executableElement = (ExecutableElement) enclosed;
+                        executableElement.getParameters().forEach(methodParameters -> {
+                            if (ElementKind.PARAMETER.equals(methodParameters.getKind()) && methodParameters.getAnnotation(Body.class) != null) {
+                                throw new ProcessingAnnotationException("Body annotation is not allowed with " + routeAnnotation.method().name + " as method parameter for Route annotation.");
+                            }
+                        });
+                    }
+                });
             });
         };
     }
@@ -50,7 +50,7 @@ public interface AutoDispatchValidations extends Validation {
                     rootElement.getEnclosedElements().forEach(enclosed -> {
                         final Route routeAnnotation = enclosed.getAnnotation(Route.class);
                         if (ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && routeAnnotation.method() == Method.GET) {
-                            throw new ProcessingAnnotationException("Class with " +  routeAnnotation.method().name + " method for Route need to have Queries annotation.");
+                            throw new ProcessingAnnotationException("Class with " + routeAnnotation.method().name + " method for Route need to have Queries annotation.");
                         }
                     });
                 }
@@ -58,9 +58,9 @@ public interface AutoDispatchValidations extends Validation {
         };
     }
 
-    static Validation isQueryInterface() {
+    static Validation isQueriesProtocolAnInterface() {
         return (processingEnvironment, annotation, annotatedElements) -> {
-            annotatedElements.elementsWith(Queries.class).forEach(element -> {
+            annotatedElements.elementsWith(annotation).forEach(element -> {
                 final Queries queries = element.getAnnotation(Queries.class);
                 final TypeRetriever retriever = TypeRetriever.with(processingEnvironment);
                 if (!retriever.isAnInterface(queries, Void -> queries.protocol())) {
@@ -82,7 +82,7 @@ public interface AutoDispatchValidations extends Validation {
                         final Route routeAnnotation = enclosed.getAnnotation(Route.class);
                         if (ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && (routeAnnotation.method() == Method.POST || routeAnnotation.method() == Method.PUT
                                 || routeAnnotation.method() == Method.PATCH || routeAnnotation.method() == Method.DELETE)) {
-                            throw new ProcessingAnnotationException("Class with " +  routeAnnotation.method().name + " method for Route need to have Model annotation.");
+                            throw new ProcessingAnnotationException("Class with " + routeAnnotation.method().name + " method for Route need to have Model annotation.");
                         }
                     });
                 }
@@ -97,8 +97,26 @@ public interface AutoDispatchValidations extends Validation {
                 System.out.println(executableElement.getEnclosingElement().getSimpleName());
                 final Queries queriesAnnotation = executableElement.getEnclosingElement().getAnnotation(Queries.class);
                 final Model modelAnnotation = executableElement.getEnclosingElement().getAnnotation(Model.class);
-                if(queriesAnnotation == null && modelAnnotation == null ){
+                if (queriesAnnotation == null && modelAnnotation == null) {
                     throw new ProcessingAnnotationException("To use Route annotation you need to use Queries or Model annotation on the Class level.");
+
+                }
+            });
+        };
+    }
+
+    static Validation routeWithoutResponseValidator() {
+        return (processingEnvironment, annotation, annotatedElements) -> {
+            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
+                if (rootElement.getAnnotation(Model.class) != null) {
+                    rootElement.getEnclosedElements().forEach(enclosed -> {
+                        final Route routeAnnotation = enclosed.getAnnotation(Route.class);
+                        boolean hasMethods = ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && (routeAnnotation.method() == Method.POST || routeAnnotation.method() == Method.PUT
+                                || routeAnnotation.method() == Method.PATCH || routeAnnotation.method() == Method.DELETE);
+                        if (hasMethods && enclosed.getAnnotation(Response.class) == null) {
+                            throw new ProcessingAnnotationException("Class with " +  routeAnnotation.method().name + " method for Route need to have Response annotation.");
+                        }
+                    });
                 }
             });
         };
