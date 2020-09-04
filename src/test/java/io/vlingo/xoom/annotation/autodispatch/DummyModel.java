@@ -9,6 +9,6 @@ public interface DummyModel {
 
     @Route(method = Method.PUT, path = "", handler = "")
     @Response(data = "test")
-     void dummyRoute();
+    void dummyRouteForModel(@Body String body);
 
 }

@@ -1,13 +1,12 @@
 package io.vlingo.xoom.annotation.autodispatch;
 
 import io.vlingo.http.Method;
-import io.vlingo.xoom.annotation.AnnotatedElements;
 import io.vlingo.xoom.annotation.ProcessingAnnotationException;
 import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.annotation.Validation;
 
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 
 public interface AutoDispatchValidations extends Validation {
 
@@ -22,6 +21,24 @@ public interface AutoDispatchValidations extends Validation {
                                     retriever.getClassName(queries,
                                             Void -> queries.protocol())));
                 }
+            });
+        };
+    }
+
+    static Validation bodyForRouteValidator() {
+        return (processingEnvironment, annotation, annotatedElements) -> {
+            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
+                    rootElement.getEnclosedElements().forEach(enclosed -> {
+                        final Route routeAnnotation = enclosed.getAnnotation(Route.class);
+                        if (ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && routeAnnotation.method() == Method.GET) {
+                            final ExecutableElement executableElement = (ExecutableElement) enclosed;
+                            executableElement.getParameters().forEach(methodParameters -> {
+                                if(ElementKind.PARAMETER.equals(methodParameters.getKind()) && methodParameters.getAnnotation(Body.class) != null){
+                                    throw new ProcessingAnnotationException("Body annotation is not allowed with " +  routeAnnotation.method().name + " as method parameter for Route annotation.");
+                                }
+                            });
+                        }
+                    });
             });
         };
     }

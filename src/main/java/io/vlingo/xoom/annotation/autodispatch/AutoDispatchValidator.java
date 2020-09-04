@@ -22,7 +22,7 @@ public class AutoDispatchValidator {
     }
 
     public void validate(final ProcessingEnvironment processingEnvironment, final AnnotatedElements annotatedElements) {
-        Arrays.asList(isInterface(), classVisibilityValidation(), isQueriesProtocolAnInterface(), queryWithoutModelValidator())
+        Arrays.asList(isInterface(), classVisibilityValidation(), isQueriesProtocolAnInterface(), queryWithoutModelValidator(), bodyForRouteValidator())
                 .forEach(validator ->
                         validator.validate(processingEnvironment, Queries.class, annotatedElements));
 
