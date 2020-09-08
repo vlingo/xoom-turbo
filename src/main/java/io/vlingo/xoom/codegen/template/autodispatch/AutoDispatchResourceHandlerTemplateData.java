@@ -21,20 +21,23 @@ import static io.vlingo.xoom.codegen.parameter.Label.AUTO_DISPATCH;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
 
-public class AutoDispatchResourceTemplateData extends TemplateData {
+public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
+
+    private static final String CLASS_SUFFIX = "Handler";
 
     private final TemplateParameters parameters;
 
     public static List<TemplateData> from(final CodeGenerationContext context) {
-        return context.parametersOf(AUTO_DISPATCH).map(AutoDispatchResourceTemplateData::new).collect(toList());
+        return context.parametersOf(AUTO_DISPATCH).map(AutoDispatchResourceHandlerTemplateData::new).collect(toList());
     }
 
-    public AutoDispatchResourceTemplateData(final CodeGenerationParameter autoDispatchParameter) {
+    public AutoDispatchResourceHandlerTemplateData(final CodeGenerationParameter autoDispatchParameter) {
         this.parameters =
-                TemplateParameters.with(PACKAGE_NAME, resolveAutoDispatchPackage(autoDispatchParameter.value))
+                TemplateParameters.with(AUTO_DISPATCH_MAPPING_NAME, autoDispatchParameter.value)
+                        .and(PACKAGE_NAME, resolveAutoDispatchPackage(autoDispatchParameter.value))
                         .and(REST_RESOURCE_NAME, resolveAutoDispatchClassName(autoDispatchParameter.value))
-                        .and(QUERIES, QueriesParameter.from(autoDispatchParameter))
-                        .and(URI_ROOT, "/TODO/").and(ROUTES, RouteParameter.from(autoDispatchParameter))
+                        .and(QUERIES, QueriesParameter.from(autoDispatchParameter)).and(URI_ROOT, "/TODO/")
+                        .and(ROUTE_DECLARATIONS, RouteDeclarationParameter.from(autoDispatchParameter))
                         .and(MODEL_PROTOCOL, autoDispatchParameter.relatedParameterValueOf(Label.MODEL_PROTOCOL))
                         .and(MODEL_ACTOR, autoDispatchParameter.relatedParameterValueOf(Label.MODEL_ACTOR));
 
@@ -42,12 +45,12 @@ public class AutoDispatchResourceTemplateData extends TemplateData {
     }
 
     @Override
-    public void handleDependencyOutcome(final TemplateStandard standard, String outcome) {
-
+    public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {
+        this.parameters.<List<String>>find(ROUTE_METHODS).add(outcome);
     }
 
     private String resolveAutoDispatchClassName(final String qualifiedName) {
-        return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1);
+        return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1) + CLASS_SUFFIX;
     }
 
     private String resolveAutoDispatchPackage(final String qualifiedName) {
@@ -61,7 +64,7 @@ public class AutoDispatchResourceTemplateData extends TemplateData {
 
     @Override
     public TemplateStandard standard() {
-        return TemplateStandard.AUTO_DISPATCH_RESOURCE;
+        return TemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
     }
 
 }

@@ -11,10 +11,11 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class ContentQuery {
 
@@ -22,20 +23,20 @@ public class ContentQuery {
         return filterByStandard(standard, contents).findAny().isPresent();
     }
 
-    public static List<String> findClassNames(final TemplateStandard standard, final List<Content> contents) {
+    public static Set<String> findClassNames(final TemplateStandard standard, final List<Content> contents) {
         return filterByStandard(standard, contents)
                 .map(Content::retrieveClassName)
-                .collect(toList());
+                .collect(Collectors.toSet());
     }
 
-    public static List<String> findFullyQualifiedClassNames(final List<Content> contents, final TemplateStandard ...standards) {
+    public static Set<String> findFullyQualifiedClassNames(final List<Content> contents, final TemplateStandard ...standards) {
         return Arrays.asList(standards).stream()
                 .flatMap(standard -> findFullyQualifiedClassNames(standard, contents).stream())
-                .collect(toList());
+                .collect(Collectors.toSet());
     }
 
-    public static List<String> findFullyQualifiedClassNames(final TemplateStandard standard, final List<Content> contents) {
-        return filterByStandard(standard, contents).map(Content::retrieveQualifiedName).collect(toList());
+    public static Set<String> findFullyQualifiedClassNames(final TemplateStandard standard, final List<Content> contents) {
+        return filterByStandard(standard, contents).map(Content::retrieveQualifiedName).collect(toSet());
     }
 
     public static String findPackage(final TemplateStandard standard, final List<Content> contents) {

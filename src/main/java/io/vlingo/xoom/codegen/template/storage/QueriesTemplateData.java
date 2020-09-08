@@ -20,7 +20,7 @@ public class QueriesTemplateData extends TemplateData {
     private final TemplateParameters parameters;
 
     protected QueriesTemplateData(final String aggregateProtocol,
-                               final TemplateParameters parameters) {
+                                  final TemplateParameters parameters) {
         this.aggregateProtocol = aggregateProtocol;
         this.parameters =
                 parameters.and(QUERIES_NAME,

@@ -22,13 +22,11 @@ public enum Template {
     ANNOTATED_STORE_PROVIDER("PersistenceSetup"),
     STATE_STORE_PROVIDER("StateStoreProvider"),
     OBJECT_STORE_PROVIDER("ObjectStoreProvider"),
-    QUERY_MODEL_OBJECT_STORE_PROVIDER("QueryModelObjectStoreProvider"),
-    STORE_PROVIDER_CONFIGURATION("StoreProviderConfiguration"),
-    STORAGE_CONFIGURATION("StorageConfiguration"),
     PLACEHOLDER_DOMAIN_EVENT("PlaceholderDefinedEvent"),
     ENTRY_ADAPTER("EntryAdapter"),
     STATE_ADAPTER("StateAdapter"),
     REST_RESOURCE("RestResource"),
+    AUTO_DISPATCH_MAPPING("AutoDispatchMapping"),
     XOOM_INITIALIZER("XoomInitializer"),
     PROJECTION_DISPATCHER_PROVIDER("ProjectionDispatcherProvider"),
     OPERATION_BASED_PROJECTION("OperationBasedProjection"),
@@ -37,6 +35,9 @@ public enum Template {
     EVENT_TYPES("EventTypes"),
     DATABASE_PROPERTIES("DatabaseProperties"),
     QUERIES("Queries"),
+    CREATION_METHOD("CreationMethod"),
+    RETRIEVE_METHOD("RetrieveMethod"),
+    UPDATE_METHOD("UpdateMethod"),
     QUERIES_ACTOR("QueriesActor");
 
     public final String filename;

@@ -9,9 +9,9 @@ package io.vlingo.xoom.codegen.template.model;
 
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.template.storage.StorageType;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.List;
 

@@ -98,11 +98,11 @@ public class StorageTemplateDataFactoryTest {
                 stateAdapterTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, stateAdapterConfigurationParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("AuthorState", stateAdapterConfigurationParameters.find(SOURCE_NAME));
+        Assert.assertEquals("BookState", stateAdapterConfigurationParameters.find(SOURCE_NAME));
         Assert.assertEquals(StorageType.STATE_STORE, stateAdapterConfigurationParameters.find(STORAGE_TYPE));
         Assert.assertEquals(1, stateAdapterConfigurationParameters.<Set<ImportParameter>>find(IMPORTS).size());
-        Assert.assertTrue(stateAdapterConfigurationParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorState"));
-        Assert.assertEquals("AuthorStateAdapter.java", stateAdapterTemplateData.filename());
+        Assert.assertTrue(stateAdapterConfigurationParameters.hasImport("io.vlingo.xoomapp.model.book.BookState"));
+        Assert.assertEquals("BookStateAdapter.java", stateAdapterTemplateData.filename());
 
         //Assert for StoreProvider
 
@@ -117,10 +117,10 @@ public class StorageTemplateDataFactoryTest {
         Assert.assertEquals(2, storeProviderParameters.<Set<ImportParameter>>find(IMPORTS).size());
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorState"));
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookState"));
-        Assert.assertEquals("AuthorState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
-        Assert.assertEquals("AuthorStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getAdapterClass());
-        Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
-        Assert.assertEquals("BookStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getAdapterClass());
+        Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
+        Assert.assertEquals("BookStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getAdapterClass());
+        Assert.assertEquals("AuthorState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
+        Assert.assertEquals("AuthorStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getAdapterClass());
         Assert.assertEquals("StateStoreProvider.java", storeProviderTemplateData.filename());
     }
 
@@ -145,11 +145,11 @@ public class StorageTemplateDataFactoryTest {
                 stateAdapterTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, stateAdapterConfigurationParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("AuthorState", stateAdapterConfigurationParameters.find(SOURCE_NAME));
+        Assert.assertEquals("BookState", stateAdapterConfigurationParameters.find(SOURCE_NAME));
         Assert.assertEquals(StorageType.STATE_STORE, stateAdapterConfigurationParameters.find(STORAGE_TYPE));
         Assert.assertEquals(1, stateAdapterConfigurationParameters.<Set<ImportParameter>>find(IMPORTS).size());
-        Assert.assertTrue(stateAdapterConfigurationParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorState"));
-        Assert.assertEquals("AuthorStateAdapter.java", stateAdapterTemplateData.filename());
+        Assert.assertTrue(stateAdapterConfigurationParameters.hasImport("io.vlingo.xoomapp.model.book.BookState"));
+        Assert.assertEquals("BookStateAdapter.java", stateAdapterTemplateData.filename());
 
         //Assert for StoreProvider
 
@@ -169,10 +169,10 @@ public class StorageTemplateDataFactoryTest {
             Assert.assertEquals(expectedImports, storeProviderParameters.<Set<ImportParameter>>find(IMPORTS).size());
             Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorState"));
             Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookState"));
-            Assert.assertEquals("AuthorState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
-            Assert.assertEquals("AuthorStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getAdapterClass());
-            Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
-            Assert.assertEquals("BookStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getAdapterClass());
+            Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
+            Assert.assertEquals("BookStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getAdapterClass());
+            Assert.assertEquals("AuthorState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
+            Assert.assertEquals("AuthorStateAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getAdapterClass());
             Assert.assertEquals(model.title  + "StateStoreProvider.java", storeProviderTemplateData.filename());
         });
     }

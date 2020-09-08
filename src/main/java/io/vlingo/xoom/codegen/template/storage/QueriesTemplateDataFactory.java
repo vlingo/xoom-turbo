@@ -50,7 +50,7 @@ public class QueriesTemplateDataFactory {
                                                        final String aggregateProtocol,
                                                        final List<Content> contents) {
         final String queryByIdMethodName =
-                buildQueryByMethodName(aggregateProtocol);
+                buildQueryByIdMethodName(aggregateProtocol);
 
         final String queryAllMethodName =
                 buildQueryAllMethodName(aggregateProtocol);
@@ -68,7 +68,7 @@ public class QueriesTemplateDataFactory {
                 .and(IMPORTS, ImportParameter.of(entityDataQualifiedName));
     }
 
-    private static String buildQueryByMethodName(final String aggregateProtocol) {
+    private static String buildQueryByIdMethodName(final String aggregateProtocol) {
         return Introspector.decapitalize(aggregateProtocol) + "Of";
     }
 

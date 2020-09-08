@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.codegen.template.model;
 
-import io.vlingo.xoom.codegen.template.storage.StorageType;
 import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,6 @@ public class ModelTemplateDataFactory {
     public static List<TemplateData> build(final String basePackage,
                                            final String aggregatesData,
                                            final StorageType storageType) {
-
         return Stream.of(aggregatesData.split(AGGREGATE_SEPARATOR)).flatMap(aggregateData -> {
             final List<String> eventsNames = new ArrayList<>();
             final String[] splittedAggregatesData = aggregateData.split(EVENTS_SEPARATOR);
@@ -45,7 +44,7 @@ public class ModelTemplateDataFactory {
                                                       final StorageType storageType,
                                                       final List<String> eventsNames) {
         final List<TemplateData> templatesData = new ArrayList<>();
-        templatesData.add(new AggregateProtocolTemplateData(packageName,aggregateProtocolName));
+        templatesData.add(new AggregateProtocolTemplateData(packageName, aggregateProtocolName));
         templatesData.add(new AggregateTemplateData(packageName, aggregateProtocolName, storageType));
         templatesData.add(new StateTemplateData(packageName, aggregateProtocolName, storageType));
         templatesData.addAll(DomainEventTemplateData.from(aggregateProtocolName, packageName, eventsNames));

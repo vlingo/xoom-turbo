@@ -11,7 +11,9 @@ package io.vlingo.xoom.codegen.template.projections;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -27,21 +29,25 @@ public class ProjectToDescriptionParameter {
     private final boolean lastParameter;
     private final String projectionClassName;
 
-    public static List<ProjectToDescriptionParameter> from(final List<String> projectionNames,
+    public static List<ProjectToDescriptionParameter> from(final Set<String> projectionNames,
                                                            final List<String> projectablesPerProjection)  {
+        final Iterator<String> iterator = projectionNames.iterator();
+
         return IntStream.range(0, projectionNames.size()).mapToObj(index ->
             new ProjectToDescriptionParameter(index, projectionNames.size(),
-                    projectionNames.get(index), projectablesPerProjection.get(index))
+                    iterator.next(), projectablesPerProjection.get(index))
         ).collect(Collectors.toList());
     }
 
     public static List<ProjectToDescriptionParameter> from(final ProjectionType projectionType,
                                                            final List<Content> contents) {
-        final List<String> aggregateProtocols =
+        final Set<String> aggregateProtocols =
                 ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents);
 
+        final Iterator<String> iterator = aggregateProtocols.iterator();
+
         return IntStream.range(0, aggregateProtocols.size()).mapToObj(index -> {
-            final String aggregateProtocol = aggregateProtocols.get(index);
+            final String aggregateProtocol = iterator.next();
 
             final String projectionName =
                     PROJECTION.resolveClassname(aggregateProtocol);

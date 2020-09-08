@@ -49,11 +49,11 @@ public class AnnotatedStorageProviderTemplateDataTest {
                 stateAdapterTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, stateAdapterParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("AuthorState", stateAdapterParameters.find(SOURCE_NAME));
+        Assert.assertEquals("BookState", stateAdapterParameters.find(SOURCE_NAME));
         Assert.assertEquals(StorageType.STATE_STORE, stateAdapterParameters.find(STORAGE_TYPE));
         Assert.assertEquals(1, stateAdapterParameters.<Set<ImportParameter>>find(IMPORTS).size());
-        Assert.assertTrue(stateAdapterParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorState"));
-        Assert.assertEquals("AuthorStateAdapter.java", stateAdapterTemplateData.filename());
+        Assert.assertTrue(stateAdapterParameters.hasImport("io.vlingo.xoomapp.model.book.BookState"));
+        Assert.assertEquals("BookStateAdapter.java", stateAdapterTemplateData.filename());
 
         //Assert for Queries
         final TemplateData queriesTemplateData =
@@ -63,12 +63,12 @@ public class AnnotatedStorageProviderTemplateDataTest {
                 queriesTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, queriesParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("AuthorQueries", queriesParameters.find(QUERIES_NAME));
-        Assert.assertEquals("AuthorData", queriesParameters.find(ENTITY_DATA_NAME));
-        Assert.assertEquals("authorOf", queriesParameters.find(QUERY_ID_METHOD_NAME));
-        Assert.assertEquals("authors", queriesParameters.find(QUERY_ALL_METHOD_NAME));
+        Assert.assertEquals("BookQueries", queriesParameters.find(QUERIES_NAME));
+        Assert.assertEquals("BookData", queriesParameters.find(ENTITY_DATA_NAME));
+        Assert.assertEquals("bookOf", queriesParameters.find(QUERY_ID_METHOD_NAME));
+        Assert.assertEquals("books", queriesParameters.find(QUERY_ALL_METHOD_NAME));
         Assert.assertEquals(1, queriesParameters.<Set<ImportParameter>>find(IMPORTS).size());
-        Assert.assertTrue(queriesParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+        Assert.assertTrue(queriesParameters.hasImport("io.vlingo.xoomapp.infrastructure.BookData"));
 
         //Assert for QueriesActor
         final TemplateData queriesActorTemplateData =
@@ -78,7 +78,7 @@ public class AnnotatedStorageProviderTemplateDataTest {
                 queriesActorTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, queriesActorParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("AuthorQueriesActor", queriesActorParameters.find(QUERIES_ACTOR_NAME));
+        Assert.assertEquals("BookQueriesActor", queriesActorParameters.find(QUERIES_ACTOR_NAME));
 
         //Assert for StoreProvider
         final TemplateData storeProviderTemplateData =
@@ -95,9 +95,9 @@ public class AnnotatedStorageProviderTemplateDataTest {
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorRated"));
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookRented"));
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookPurchased"));
-        Assert.assertEquals("AuthorState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
+        Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
         Assert.assertEquals(false, storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).isLast());
-        Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
+        Assert.assertEquals("AuthorState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
         Assert.assertEquals(true, storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).isLast());
         Assert.assertEquals("AuthorProjectionActor", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getActor());
         Assert.assertEquals("AuthorRated.class", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getCauses());

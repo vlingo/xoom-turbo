@@ -18,8 +18,7 @@ public abstract class TemplateProcessingStep implements CodeGenerationStep {
     public void process(final CodeGenerationContext context) {
         buildTemplatesData(context).forEach(templateData -> {
             final String code = TemplateProcessor.instance().process(templateData);
-            final TemplateFile templateFile = new TemplateFile(context, templateData);
-            context.addContent(templateData.standard(), templateFile, code);
+            context.registerTemplateProcessing(templateData, code);
         });
     }
 

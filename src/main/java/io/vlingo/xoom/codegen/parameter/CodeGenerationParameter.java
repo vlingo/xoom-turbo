@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.codegen.parameter;
 
+import java.util.stream.Stream;
+
 public class CodeGenerationParameter {
 
     public final Label label;
@@ -35,6 +37,10 @@ public class CodeGenerationParameter {
 
     public CodeGenerationParameter relatedParameterOf(final Label label) {
         return this.relatedParameters.retrieve(label);
+    }
+
+    public Stream<CodeGenerationParameter> retrieveAll(final Label label) {
+        return relatedParameters.retrieveAll(label);
     }
 
     public String relatedParameterValueOf(final Label label) {

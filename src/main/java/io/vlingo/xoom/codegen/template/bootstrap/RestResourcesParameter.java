@@ -11,7 +11,9 @@ import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
@@ -24,11 +26,13 @@ public class RestResourcesParameter {
     private final boolean last;
 
     public static List<RestResourcesParameter> from(final List<Content> contents) {
-        final List<String> classNames =
+        final Set<String> classNames =
                 ContentQuery.findClassNames(REST_RESOURCE, contents);
 
+        final Iterator<String> iterator = classNames.iterator();
+
         return IntStream.range(0, classNames.size()).mapToObj(index ->
-                new RestResourcesParameter(classNames.get(index), index,
+                new RestResourcesParameter(iterator.next(), index,
                         classNames.size())).collect(toList());
     }
 

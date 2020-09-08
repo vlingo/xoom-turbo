@@ -14,10 +14,12 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PROJECTION_TO_DESCRIPTION;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
 
 public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
@@ -44,7 +46,7 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
         final List<String> projectablesPerProjection = Arrays.asList(projectables.split(";"));
 
-        final List<String> projectionNames = ContentQuery.findClassNames(PROJECTION, contents);
+        final Set<String> projectionNames = ContentQuery.findClassNames(PROJECTION, contents);
 
         final List<ProjectToDescriptionParameter> projectToDescriptionParameters =
                 ProjectToDescriptionParameter.from(projectionNames, projectablesPerProjection);

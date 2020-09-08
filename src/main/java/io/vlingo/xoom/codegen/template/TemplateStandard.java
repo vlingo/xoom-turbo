@@ -1,5 +1,6 @@
 package io.vlingo.xoom.codegen.template;
 
+import io.vlingo.http.Method;
 import io.vlingo.xoom.codegen.CodeGenerationSetup;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
@@ -38,11 +39,26 @@ public enum TemplateStandard {
     REST_RESOURCE(parameters -> Template.REST_RESOURCE.filename,
             (name, parameters) -> name + "Resource"),
 
-    ROUTE_METHOD(parameters -> Template.REST_RESOURCE.filename,
+    ROUTE_METHOD(parameters -> {
+            final String httpMethod =
+                    parameters.find(TemplateParameter.ROUTE_METHOD);
+
+            if(Method.from(httpMethod).isGET()) {
+                return Template.RETRIEVE_METHOD.filename;
+            }
+
+            if(parameters.has(ID_NAME)) {
+                return Template.UPDATE_METHOD.filename;
+            }
+
+            return Template.CREATION_METHOD.filename;
+        }, (name, parameters) -> name),
+
+    AUTO_DISPATCH_RESOURCE_HANDLER(parameters -> Template.REST_RESOURCE.filename,
             (name, parameters) -> name),
 
-    AUTO_DISPATCH_RESOURCE(parameters -> Template.REST_RESOURCE.filename,
-            (name, parameters) -> name),
+    AUTO_DISPATCH_MAPPING(parameters -> Template.AUTO_DISPATCH_MAPPING.filename,
+            (name, parameters) -> name + "Resource"),
 
     ADAPTER(parameters -> ADAPTER_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
             (name, parameters) -> name + "Adapter"),

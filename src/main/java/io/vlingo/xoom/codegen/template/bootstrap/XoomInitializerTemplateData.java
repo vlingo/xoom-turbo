@@ -13,9 +13,11 @@ import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
@@ -46,10 +48,11 @@ public class XoomInitializerTemplateData extends BootstrapTemplateData {
     private void loadImports(final AddressFactoryType addressFactoryType,
                              final List<Content> contents) {
 
-        final List<String> addressFactoryImports =
-                addressFactoryType.isBasic() ? Collections.emptyList() :
-                        Arrays.asList(addressFactoryType.qualifiedName,
-                                IdentityGeneratorType.class.getCanonicalName());
+        final Set<String> addressFactoryImports =
+                addressFactoryType.isBasic() ? Collections.emptySet() :
+                        Stream.of(addressFactoryType.qualifiedName,
+                                IdentityGeneratorType.class.getCanonicalName())
+                                .collect(Collectors.toSet());
 
         parameters().addImports(addressFactoryImports)
                 .addImports(ContentQuery.findFullyQualifiedClassNames(REST_RESOURCE, contents));

@@ -17,7 +17,6 @@ import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 
 public class ProjectionGenerationStepTest {
 
@@ -62,16 +61,17 @@ public class ProjectionGenerationStepTest {
             Assert.assertEquals("EventTypes", context.contents().get(contentSize - 4).retrieveClassName());
         }
         Assert.assertEquals("ProjectionDispatcherProvider", context.contents().get(contentSize - 3).retrieveClassName());
-        Assert.assertEquals("AuthorProjectionActor", context.contents().get(contentSize - 2).retrieveClassName());
-        Assert.assertEquals("BookProjectionActor", context.contents().get(contentSize - 1).retrieveClassName());
+        Assert.assertEquals("BookProjectionActor", context.contents().get(contentSize - 2).retrieveClassName());
+        Assert.assertEquals("AuthorProjectionActor", context.contents().get(contentSize - 1).retrieveClassName());
 
         Assert.assertTrue(context.contents().get(contentSize - 3).contains("class ProjectionDispatcherProvider"));
-        Assert.assertTrue(context.contents().get(contentSize - 2).contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
-        Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "case AuthorRated:" : "CreationCase1"));
-        Assert.assertTrue(context.contents().get(contentSize - 1).contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
-        Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "case BookSoldOut:" : "CreationCase1"));
-        Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "BookData.from(currentData.id, \"Handle BookSoldOut here\")" : "merged = currentData;"));
-        Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "case BookPurchased:" : "ChangeCase2"));
+
+        Assert.assertTrue(context.contents().get(contentSize - 2).contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
+        Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "case BookSoldOut:" : "CreationCase1"));
+        Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "BookData.from(currentData.id, \"Handle BookSoldOut here\")" : "merged = currentData;"));
+        Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "case BookPurchased:" : "ChangeCase2"));
+        Assert.assertTrue(context.contents().get(contentSize - 1).contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
+        Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "case AuthorRated:" : "CreationCase1"));
     }
 
     private void loadContents(final CodeGenerationContext context) {

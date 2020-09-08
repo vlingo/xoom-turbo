@@ -46,8 +46,10 @@ public enum Label {
     ROUTE_SIGNATURE("routeSignature"),
     ROUTE_PATH("routePath"),
     ROUTE_METHOD("routeMethod"),
-    ROUTE_HANDLE("routeHandler"),
-    CUSTOM_ROUTE("customRoute"); //boolean
+    ROUTE_HANDLER("routeHandler"),
+    RESPONSE_DATA("responseData"),
+    CUSTOM_ROUTE("customRoute"), //boolean
+    USE_AUTO_DISPATCH("useAutoDispatch");
 
     private final String key;
 

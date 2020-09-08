@@ -17,7 +17,11 @@ import static io.vlingo.http.ResponseHeader.*;
 import static io.vlingo.http.resource.ResourceBuilder.*;
 </#if>
 
+<#if useAutoDispatch>
+public class ${resourceName} extends ResourceHandler implements ${autoDispatchMappingName} {
+<#else>
 public class ${resourceName} extends ResourceHandler {
+</#if>
 
   private final Stage stage;
   <#if queries?has_content>
@@ -33,25 +37,26 @@ public class ${resourceName} extends ResourceHandler {
 
   <#if useAutoDispatch>
   <#list routeMethods as routeMethod>
-  ${routeMethod.sourceCode}
+  ${routeMethod}
   </#list>
   </#if>
 
+  //Route Parameter
   @Override
   public Resource<?> routes() {
-  <#if useAutoDispatch && routes?size == 0>
+  <#if !useAutoDispatch || (routeDeclarations?has_content && routeDeclarations?size == 0)>
      return resource("${resourceName}" /*Add Request Handlers here as a second parameter*/);
-  <else>
+  <#else>
      return resource("${resourceName}",
-     <#list routes as route>
-        ${routeBuilderMethod}("${routePath}")
-         <#list route.parameters as parameter>
-            .param(${parameter.type}.class)
+     <#list routeDeclarations as declaration>
+        ${declaration.builderMethod}("${declaration.path}")
+         <#list declaration.parameterTypes as parameterType>
+            .param(${parameterType}.class)
          </#list>
-         <#if route.bodyType?has_content>
-            .body(${route.bodyType}.class)
+         <#if declaration.bodyType?has_content>
+            .body(${declaration.bodyType}.class)
          </#if>
-            .handle(this::${route.methodName})
+            .handle(this::${declaration.handlerName})
      </#list>
      );
   </#if>

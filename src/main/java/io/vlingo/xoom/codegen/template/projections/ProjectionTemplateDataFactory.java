@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
@@ -41,7 +42,7 @@ public class ProjectionTemplateDataFactory {
         final ProjectionType projectionType =
                 context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
 
-        final List<String> aggregateProtocols =
+        final Set<String> aggregateProtocols =
                 ContentQuery.findClassNames(AGGREGATE_PROTOCOL, context.contents());
 
         final List<TemplateData> templatesData = new ArrayList<>();

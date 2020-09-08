@@ -8,7 +8,6 @@
 package io.vlingo.xoom.codegen.parameter;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,7 +25,7 @@ public class ImportParameter {
         return of(Stream.of(qualifiedClassNames));
     }
 
-    public static Set<ImportParameter> of(final List<String> ...qualifiedNames) {
+    public static Set<ImportParameter> of(final Set<String> ...qualifiedNames) {
         return of(Stream.of(qualifiedNames).flatMap(Collection::stream));
     }
 

@@ -23,6 +23,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.CodeGenerationLocation.EXTERNAL;
@@ -36,6 +37,7 @@ public class CodeGenerationContext {
     private Element source;
     private final CodeGenerationParameters parameters;
     private final List<Content> contents = new ArrayList<>();
+    private final List<TemplateData> templatesData = new ArrayList<>();
 
     public static CodeGenerationContext empty() {
         return new CodeGenerationContext();
@@ -90,6 +92,17 @@ public class CodeGenerationContext {
         return (T) mapper.apply(value);
     }
 
+    public List<TemplateData> templateParametersOf(final TemplateStandard standard) {
+        return templatesData.stream().filter(templateData -> templateData.hasStandard(standard))
+                .collect(Collectors.toList());
+    }
+
+    public void registerTemplateProcessing(final TemplateData templateData, final String text) {
+        this.addContent(templateData.standard(), new TemplateFile(this, templateData), text);
+        this.templatesData.add(templateData);
+    }
+
+    //TODO: Make it private
     public CodeGenerationContext addContent(final TemplateStandard standard,
                                             final TemplateFile file,
                                             final String text) {
@@ -110,11 +123,6 @@ public class CodeGenerationContext {
         return this;
     }
 
-    public boolean hasParameter(final Label label) {
-        return this.parameterOf(label) != null &&
-                !this.<String>parameterOf(label).trim().isEmpty();
-    }
-
     public Map<Model, DatabaseType> databases() {
         if(parameterOf(CQRS, Boolean::valueOf)) {
             return new HashMap<Model, DatabaseType>(){{
@@ -131,11 +139,16 @@ public class CodeGenerationContext {
         return parameterOf(GENERATION_LOCATION, CodeGenerationLocation::valueOf).isInternal();
     }
 
-    public List<Content> contents() {
-        return Collections.unmodifiableList(contents);
-    }
-
     public Stream<CodeGenerationParameter> parametersOf(final Label label) {
         return parameters.retrieveAll(label);
+    }
+
+    public boolean hasParameter(final Label label) {
+        return this.parameterOf(label) != null &&
+                !this.<String>parameterOf(label).trim().isEmpty();
+    }
+
+    public List<Content> contents() {
+        return Collections.unmodifiableList(contents);
     }
 }

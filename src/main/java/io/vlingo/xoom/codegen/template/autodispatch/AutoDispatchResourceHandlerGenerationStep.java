@@ -14,11 +14,11 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
-public class AutoDispatchResourceGenerationStep extends TemplateProcessingStep {
+public class AutoDispatchResourceHandlerGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        return AutoDispatchResourceTemplateData.from(context);
+        return AutoDispatchResourceHandlerTemplateData.from(context);
     }
 
     @Override

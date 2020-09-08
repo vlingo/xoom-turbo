@@ -9,7 +9,6 @@ package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
@@ -87,8 +86,8 @@ public class ProjectionTemplateDataFactoryTest {
         final TemplateParameters providerTemplateDataParameters = providerTemplateData.parameters();
 
         Assert.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Event name here\", \"Another Event name here\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
-        Assert.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"Event name here\", \"Another Event name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
+        Assert.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"Event name here\", \"Another Event name here\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
+        Assert.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Event name here\", \"Another Event name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
 
         //Assert for Projections
 
@@ -98,7 +97,7 @@ public class ProjectionTemplateDataFactoryTest {
                         .collect(Collectors.toList());
 
         IntStream.range(0, 1).forEach(templateIndex -> {
-            final String rootName = templateIndex == 0 ? "Author" : "Book";
+            final String rootName = templateIndex == 0 ? "Book" : "Author";
             final String expectedName = rootName + "ProjectionActor";
             final String expectedStateName = rootName + "State";
             final String expectedStaticEventTypes = "io.vlingo.xoomapp.infrastructure.EventTypes";
@@ -139,8 +138,8 @@ public class ProjectionTemplateDataFactoryTest {
         final TemplateData providerTemplateData = allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION_DISPATCHER_PROVIDER)).findFirst().get();
         final TemplateParameters providerTemplateDataParameters = providerTemplateData.parameters();
         Assert.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Operation name here\", \"Another Operation name here\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
-        Assert.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"Operation name here\", \"Another Operation name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
+        Assert.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"Operation name here\", \"Another Operation name here\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
+        Assert.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Operation name here\", \"Another Operation name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
     }
 
     private void loadContents(final CodeGenerationContext context) {

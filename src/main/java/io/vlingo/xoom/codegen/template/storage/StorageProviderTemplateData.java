@@ -69,12 +69,12 @@ public class StorageProviderTemplateData extends TemplateData {
                                                 final StorageType storageType,
                                                 final List<Content> contents,
                                                 final List<QueriesParameter> queriesParameters) {
-        final List<String> sourceClassQualifiedNames =
+        final Set<String> sourceClassQualifiedNames =
                 storageType.resolveAdaptersQualifiedName(model, contents);
 
-        final List<String> queriesQualifiedNames = queriesParameters.stream()
+        final Set<String> queriesQualifiedNames = queriesParameters.stream()
                         .flatMap(param -> param.getQualifiedNames().stream())
-                        .collect(Collectors.toList());
+                        .collect(Collectors.toSet());
 
         return ImportParameter.of(sourceClassQualifiedNames, queriesQualifiedNames);
     }

@@ -7,10 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.content.ContentQuery.findFullyQualifiedClassNames;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
 
@@ -63,10 +63,10 @@ public enum StorageType {
         return prefix + STORE_PROVIDER_NAME_SUFFIX;
     }
 
-    public List<String> resolveTypeRegistryQualifiedNames(final Boolean useCQRS) {
+    public Set<String> resolveTypeRegistryQualifiedNames(final Boolean useCQRS) {
         return findRelatedStorageTypes(useCQRS)
                 .map(storageType -> storageType.typeRegistryQualifiedClassName())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     public String resolveTypeRegistryObjectName(final Model model) {
@@ -90,11 +90,11 @@ public enum StorageType {
         return !model.isQueryModel() || isStateful();
     }
 
-    public List<String> resolveAdaptersQualifiedName(final Model model, final List<Content> contents) {
+    public Set<String> resolveAdaptersQualifiedName(final Model model, final List<Content> contents) {
         if(requireAdapters(model)) {
             return ContentQuery.findFullyQualifiedClassNames(adapterSourceClassStandard, contents);
         }
-        return Collections.emptyList();
+        return Collections.emptySet();
     }
 
     public boolean isEnabled() {
