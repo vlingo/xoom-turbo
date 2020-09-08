@@ -10,6 +10,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 public interface AutoDispatchValidations extends Validation {
 
@@ -146,8 +147,8 @@ public interface AutoDispatchValidations extends Validation {
                         final Route routeAnnotation = enclosed.getAnnotation(Route.class);
                         if(ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null){
                             final String handler = routeAnnotation.handler();
-                            final String methodName = handler.substring(0, handler.indexOf("("));
-                            final String[] params = handler.substring(handler.indexOf("(") + 1, handler.indexOf(")")).split(",");
+                            final String methodName = getMethodName(processingEnvironment, rootElement, handler);
+                            final String[] params = getParams(processingEnvironment, rootElement, handler);
                             final List<ExecutableElement> methods =
                                     TypeRetriever.with(processingEnvironment)
                                             .getMethods(model, Void -> model.protocol());
@@ -168,6 +169,31 @@ public interface AutoDispatchValidations extends Validation {
             });
         };
     }
+
+    static String[] getParams(final ProcessingEnvironment processingEnvironment, final Element rootElement, final String handler) {
+        try {
+            return handler.substring(handler.indexOf("(") + 1, handler.indexOf(")")).split(",");
+        }catch(StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException | PatternSyntaxException ex){
+            throw new ProcessingAnnotationException(
+                    String.format("Class [%s], with Model annotation, have Route annotation with an invalid protocol handler: %s",
+                            getQualifiedClassName(processingEnvironment, rootElement),
+                            handler)
+            );
+        }
+    }
+
+    static String getMethodName(final ProcessingEnvironment processingEnvironment, final Element rootElement, final String handler) {
+        try {
+            return handler.substring(0, handler.indexOf("("));
+        }catch(StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException | PatternSyntaxException ex){
+            throw new ProcessingAnnotationException(
+                    String.format("Class [%s], with Model annotation, have Route annotation with an invalid protocol handler: %s",
+                            getQualifiedClassName(processingEnvironment, rootElement),
+                            handler)
+            );
+        }
+    }
+
 
     static String getQualifiedClassName(final ProcessingEnvironment processingEnvironment, final Element rootElement) {
         return String.format("%s.%s.java", processingEnvironment.getElementUtils().getPackageOf(rootElement).getQualifiedName().toString(), rootElement.getSimpleName().toString());
