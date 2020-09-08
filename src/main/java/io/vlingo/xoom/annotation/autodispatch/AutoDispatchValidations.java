@@ -20,9 +20,8 @@ public interface AutoDispatchValidations extends Validation {
                 final TypeRetriever retriever = TypeRetriever.with(processingEnvironment);
                 if (!retriever.isAnInterface(model, Void -> model.protocol())) {
                     throw new ProcessingAnnotationException(
-                            String.format("Protocol value to Model annotation must be an interface, class informed: %s",
-                                    retriever.getClassName(model,
-                                            Void -> model.protocol())));
+                            String.format("Class [%s]. Protocol value to Model annotation must be an interface",
+                                    retriever.getClassName(model, Void -> model.protocol())));
                 }
             });
         };
@@ -37,7 +36,10 @@ public interface AutoDispatchValidations extends Validation {
                         final ExecutableElement executableElement = (ExecutableElement) enclosed;
                         executableElement.getParameters().forEach(methodParameters -> {
                             if (ElementKind.PARAMETER.equals(methodParameters.getKind()) && methodParameters.getAnnotation(Body.class) != null) {
-                                throw new ProcessingAnnotationException("Body annotation is not allowed with " + routeAnnotation.method().name + " as method parameter for Route annotation.");
+                                throw new ProcessingAnnotationException(
+                                        String.format("Class [%s]. Body annotation is not allowed with %s as method parameter for Route annotation.",
+                                                getQualifiedClassName(processingEnvironment, rootElement),
+                                                routeAnnotation.method().name));
                             }
                         });
                     }
@@ -53,7 +55,10 @@ public interface AutoDispatchValidations extends Validation {
                     rootElement.getEnclosedElements().forEach(enclosed -> {
                         final Route routeAnnotation = enclosed.getAnnotation(Route.class);
                         if (ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && routeAnnotation.method() == Method.GET) {
-                            throw new ProcessingAnnotationException("Class with " + routeAnnotation.method().name + " method for Route need to have Queries annotation.");
+                            throw new ProcessingAnnotationException(
+                                    String.format("Class [%s]. Class with %s method for Route need to have Queries annotation.",
+                                            getQualifiedClassName(processingEnvironment, rootElement),
+                                            routeAnnotation.method().name));
                         }
                     });
                 }
@@ -68,7 +73,8 @@ public interface AutoDispatchValidations extends Validation {
                 final TypeRetriever retriever = TypeRetriever.with(processingEnvironment);
                 if (!retriever.isAnInterface(queries, Void -> queries.protocol())) {
                     throw new ProcessingAnnotationException(
-                            String.format("Protocol value to Queries annotation must be an interface, class informed: %s",
+                            String.format("Class [%s]. Protocol value to Queries annotation must be an interface.",
+                                    getQualifiedClassName(processingEnvironment, element),
                                     retriever.getClassName(queries,
                                             Void -> queries.protocol())));
                 }
@@ -85,7 +91,10 @@ public interface AutoDispatchValidations extends Validation {
                         final Route routeAnnotation = enclosed.getAnnotation(Route.class);
                         if (ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && (routeAnnotation.method() == Method.POST || routeAnnotation.method() == Method.PUT
                                 || routeAnnotation.method() == Method.PATCH || routeAnnotation.method() == Method.DELETE)) {
-                            throw new ProcessingAnnotationException("Class with " + routeAnnotation.method().name + " method for Route need to have Model annotation.");
+                            throw new ProcessingAnnotationException(
+                                    String.format("Class [%s]. Class with %s method for Route need to have Model annotation.",
+                                            getQualifiedClassName(processingEnvironment, rootElement),
+                                            routeAnnotation.method().name));
                         }
                     });
                 }
@@ -97,12 +106,12 @@ public interface AutoDispatchValidations extends Validation {
         return (processingEnvironment, annotation, annotatedElements) -> {
             annotatedElements.elementsWith(annotation).forEach(methodElement -> {
                 final ExecutableElement executableElement = (ExecutableElement) methodElement;
-                System.out.println(executableElement.getEnclosingElement().getSimpleName());
                 final Queries queriesAnnotation = executableElement.getEnclosingElement().getAnnotation(Queries.class);
                 final Model modelAnnotation = executableElement.getEnclosingElement().getAnnotation(Model.class);
                 if (queriesAnnotation == null && modelAnnotation == null) {
-                    throw new ProcessingAnnotationException("To use Route annotation you need to use Queries or Model annotation on the Class level.");
-
+                    throw new ProcessingAnnotationException(
+                            String.format("Class [%s]. To use Route annotation you need to use Queries or Model annotation on the Class level.",
+                                    getQualifiedClassName(processingEnvironment, methodElement.getEnclosingElement())));
                 }
             });
         };
@@ -117,7 +126,10 @@ public interface AutoDispatchValidations extends Validation {
                         boolean hasMethods = ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && (routeAnnotation.method() == Method.POST || routeAnnotation.method() == Method.PUT
                                 || routeAnnotation.method() == Method.PATCH || routeAnnotation.method() == Method.DELETE);
                         if (hasMethods && enclosed.getAnnotation(Response.class) == null) {
-                            throw new ProcessingAnnotationException("Class with " +  routeAnnotation.method().name + " method for Route need to have Response annotation.");
+                            throw new ProcessingAnnotationException(
+                                    String.format("Class [%s]. Class with %s method for Route need to have Response annotation.",
+                                            getQualifiedClassName(processingEnvironment, rootElement),
+                                            routeAnnotation.method().name));
                         }
                     });
                 }
@@ -157,7 +169,7 @@ public interface AutoDispatchValidations extends Validation {
         };
     }
 
-    static String getQualifiedClassName(ProcessingEnvironment processingEnvironment, Element rootElement) {
+    static String getQualifiedClassName(final ProcessingEnvironment processingEnvironment, final Element rootElement) {
         return String.format("%s.%s.java", processingEnvironment.getElementUtils().getPackageOf(rootElement).getQualifiedName().toString(), rootElement.getSimpleName().toString());
     }
 }
