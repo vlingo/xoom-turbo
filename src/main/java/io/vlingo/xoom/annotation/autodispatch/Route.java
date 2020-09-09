@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
 public @interface Route {
 
     Method method();
-    String path();
+    String path() default "";
     String handler();
 
 }
