@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 public class Settings {
 
-    private static final Properties PROPERTIES =  new Properties();
+    private static final Properties PROPERTIES = new Properties();
 
     private static final String PROPERTIES_FILENAME = "/vlingo-xoom.properties";
 
@@ -25,6 +25,13 @@ public class Settings {
         put("plugin.pooledCompletes.classname", "io.vlingo.actors.plugin.completes.PooledCompletesPlugin");
         put("plugin.pooledCompletes.pool", "10");
         put("plugin.pooledCompletes.mailbox", "queueMailbox");
+    }};
+
+    private static final Map<Object, Object> LOGGING_PROPERTIES = new HashMap<Object, Object>() {{
+        put("plugin.name.slf4jLogger", "true");
+        put("plugin.slf4jLogger.classname", "io.vlingo.actors.plugin.logging.slf4j.Slf4jLoggerPlugin");
+        put("plugin.slf4jLogger.name", "vlingo/xoom");
+        put("plugin.slf4jLogger.defaultLogger", "true");
     }};
 
     private static final Map<Object, Object> BLOCKING_MAILBOX_PROPERTIES = new HashMap<Object, Object>() {{
@@ -52,8 +59,9 @@ public class Settings {
                     Settings.class.getResourceAsStream(PROPERTIES_FILENAME);
 
             if(stream == null) {
-                System.out.println("Unable to read properties. VLINGO/XOOM will set the default mailbox");
+                System.out.println("Unable to read properties. VLINGO/XOOM will set the default mailbox and logger");
                 PROPERTIES.putAll(COMPLETES_PLUGIN_PROPERTIES);
+                PROPERTIES.putAll(LOGGING_PROPERTIES);
                 disableBlockingMailbox();
             } else {
                 PROPERTIES.load(stream);
