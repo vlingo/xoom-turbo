@@ -47,8 +47,8 @@ public class XoomInitializerGenerator {
                     CodeGenerationContextLoader.from(environment.getFiler(), basePackage,
                             annotatedElements, environment);
 
-            Stream.of(new ProjectionGenerationStep(), new AutoDispatchResourceHandlerGenerationStep(),
-                    new StorageGenerationStep(), new BootstrapGenerationStep(), new ContentCreationStep())
+            Stream.of(new ProjectionGenerationStep(), new StorageGenerationStep(), new BootstrapGenerationStep(),
+                    new AutoDispatchResourceHandlerGenerationStep(), new ContentCreationStep())
                     .filter(step -> step.shouldProcess(context)).forEach(step -> step.process(context));
         } catch (final CodeGenerationException exception) {
             throw new ProcessingAnnotationException(exception);

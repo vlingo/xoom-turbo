@@ -17,7 +17,7 @@ import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.parameter.Label.AUTO_DISPATCH;
+import static io.vlingo.xoom.codegen.parameter.Label.AUTO_DISPATCH_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
 
@@ -28,15 +28,15 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
     private final TemplateParameters parameters;
 
     public static List<TemplateData> from(final CodeGenerationContext context) {
-        return context.parametersOf(AUTO_DISPATCH).map(AutoDispatchResourceHandlerTemplateData::new).collect(toList());
+        return context.parametersOf(AUTO_DISPATCH_NAME).map(AutoDispatchResourceHandlerTemplateData::new).collect(toList());
     }
 
     public AutoDispatchResourceHandlerTemplateData(final CodeGenerationParameter autoDispatchParameter) {
         this.parameters =
-                TemplateParameters.with(AUTO_DISPATCH_MAPPING_NAME, autoDispatchParameter.value)
-                        .and(PACKAGE_NAME, resolveAutoDispatchPackage(autoDispatchParameter.value))
+                TemplateParameters.with(PACKAGE_NAME, resolveAutoDispatchPackage(autoDispatchParameter.value))
                         .and(REST_RESOURCE_NAME, resolveAutoDispatchClassName(autoDispatchParameter.value))
-                        .and(QUERIES, QueriesParameter.from(autoDispatchParameter)).and(URI_ROOT, "/TODO/")
+                        .and(QUERIES, QueriesParameter.from(autoDispatchParameter))
+                        .and(URI_ROOT, autoDispatchParameter.relatedParameterValueOf(Label.URI_ROOT))
                         .and(ROUTE_DECLARATIONS, RouteDeclarationParameter.from(autoDispatchParameter))
                         .and(MODEL_PROTOCOL, autoDispatchParameter.relatedParameterValueOf(Label.MODEL_PROTOCOL))
                         .and(MODEL_ACTOR, autoDispatchParameter.relatedParameterValueOf(Label.MODEL_ACTOR));

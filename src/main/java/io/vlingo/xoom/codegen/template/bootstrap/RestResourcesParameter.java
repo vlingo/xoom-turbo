@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
 import static java.util.stream.Collectors.toList;
 
@@ -27,7 +28,8 @@ public class RestResourcesParameter {
 
     public static List<RestResourcesParameter> from(final List<Content> contents) {
         final Set<String> classNames =
-                ContentQuery.findClassNames(REST_RESOURCE, contents);
+                ContentQuery.findClassNames(contents, REST_RESOURCE,
+                        AUTO_DISPATCH_RESOURCE_HANDLER);
 
         final Iterator<String> iterator = classNames.iterator();
 

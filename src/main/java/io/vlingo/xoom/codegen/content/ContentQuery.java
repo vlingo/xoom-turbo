@@ -29,6 +29,18 @@ public class ContentQuery {
                 .collect(Collectors.toSet());
     }
 
+    public static Set<String> findClassNames(final List<Content> contents, final TemplateStandard ...standards) {
+        return Stream.of(standards).flatMap(standard -> findClassNames(standard, contents)
+                .stream()).collect(Collectors.toSet());
+    }
+
+    public static List<String> findClassNames(final TemplateStandard standard, final String packageName, final List<Content> contents) {
+        return filterByStandard(standard, contents)
+                .filter(content -> content.retrievePackage().equals(packageName))
+                .map(content -> content.retrieveClassName())
+                .collect(Collectors.toList());
+    }
+
     public static Set<String> findFullyQualifiedClassNames(final List<Content> contents, final TemplateStandard ...standards) {
         return Arrays.asList(standards).stream()
                 .flatMap(standard -> findFullyQualifiedClassNames(standard, contents).stream())
@@ -47,19 +59,6 @@ public class ContentQuery {
         return filterByStandard(standard, contents)
                 .filter(content -> content.retrieveClassName().equals(className))
                 .map(Content::retrievePackage).findAny().orElse("");
-    }
-
-    public static String findFullyQualifiedClassName(final TemplateStandard standard, final String className, final List<Content> contents) {
-        return findFullyQualifiedClassNames(standard, contents).stream()
-                .filter(qualifiedClassName -> qualifiedClassName.endsWith("." + className))
-                .findFirst().orElseThrow(IllegalArgumentException::new);
-    }
-
-    public static List<String> findClassNames(final TemplateStandard standard, final String packageName, final List<Content> contents) {
-        return filterByStandard(standard, contents)
-                .filter(content -> content.retrievePackage().equals(packageName))
-                .map(content -> content.retrieveClassName())
-                .collect(Collectors.toList());
     }
 
     public static Stream<Content> filterByStandard(final TemplateStandard standard, final List<Content> contents) {

@@ -15,6 +15,10 @@ public class CodeGenerationParameter {
     public final String value;
     private final CodeGenerationParameters relatedParameters;
 
+    public static CodeGenerationParameter of(final Label label, final Object value) {
+        return of(label, value.toString());
+    }
+
     public static CodeGenerationParameter of(final Label label, final String value) {
         return new CodeGenerationParameter(label, value);
     }
@@ -23,6 +27,10 @@ public class CodeGenerationParameter {
         this.label = label;
         this.value = value;
         this.relatedParameters = CodeGenerationParameters.empty();
+    }
+
+    public CodeGenerationParameter relate(final Label label, final Object value) {;
+        return relate(label, value.toString());
     }
 
     public CodeGenerationParameter relate(final Label label, final String value) {

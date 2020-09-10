@@ -63,7 +63,7 @@ public class CodeGenerationContext {
                         EXTERNAL.name() : INTERNAL.name());
     }
 
-    public CodeGenerationContext with(final List<ContentLoader> loaders) {
+    public CodeGenerationContext contents(final List<ContentLoader> loaders) {
         loaders.forEach(loader -> loader.load(this));
         return this;
     }

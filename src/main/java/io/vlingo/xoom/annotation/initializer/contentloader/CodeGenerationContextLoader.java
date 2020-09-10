@@ -8,12 +8,12 @@
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.annotation.AnnotatedElements;
-import io.vlingo.xoom.annotation.autodispatch.AutoDispatchGenerationParameter;
-import io.vlingo.xoom.annotation.autodispatch.Model;
-import io.vlingo.xoom.annotation.autodispatch.Queries;
-import io.vlingo.xoom.annotation.initializer.CodeGenerationParameterResolver;
+import io.vlingo.xoom.annotation.autodispatch.AutoDispatch;
+import io.vlingo.xoom.annotation.autodispatch.AutoDispatchParameterResolver;
 import io.vlingo.xoom.annotation.initializer.Xoom;
+import io.vlingo.xoom.annotation.initializer.XoomInitializerParameterResolver;
 import io.vlingo.xoom.annotation.persistence.Persistence;
+import io.vlingo.xoom.annotation.persistence.PersistenceParameterResolver;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 
 import javax.annotation.processing.Filer;
@@ -47,19 +47,15 @@ public class CodeGenerationContextLoader {
         this.basePackage = basePackage;
         this.bootstrapClass = elements.elementWith(Xoom.class);
         this.persistenceSetupClass = elements.elementWith(Persistence.class);
-        this.autoDispatchResourceClasses.addAll(elements.elementsWith(Model.class, Queries.class));
+        this.autoDispatchResourceClasses.addAll(elements.elementsWith(AutoDispatch.class));
     }
 
     public CodeGenerationContext load() {
-        final CodeGenerationParameterResolver parameterResolver =
-                CodeGenerationParameterResolver.from(basePackage, bootstrapClass,
-                        persistenceSetupClass, autoDispatchResourceClasses,
-                        environment);
-
         return CodeGenerationContext.using(filer, bootstrapClass)
-                .with(resolveContentLoaders())
-                .on(parameterResolver.resolve())
-                .on(new AutoDispatchGenerationParameter().resolve());
+                .on(XoomInitializerParameterResolver.from(basePackage, bootstrapClass, environment).resolve())
+                .on(AutoDispatchParameterResolver.from(autoDispatchResourceClasses, environment).resolve())
+                .on(PersistenceParameterResolver.from(persistenceSetupClass, environment).resolve())
+                .contents(resolveContentLoaders());
     }
 
     private List<ContentLoader> resolveContentLoaders() {

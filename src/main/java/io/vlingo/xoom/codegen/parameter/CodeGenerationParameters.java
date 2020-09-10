@@ -17,6 +17,10 @@ public class CodeGenerationParameters {
 
     private final List<CodeGenerationParameter> parameters = new ArrayList<>();
 
+    public static CodeGenerationParameters from(final Label label, final Object value) {
+        return from(label, value.toString());
+    }
+
     public static CodeGenerationParameters from(final Label label, final String value) {
         return new CodeGenerationParameters(Arrays.asList(CodeGenerationParameter.of(label, value)));
     }
@@ -35,6 +39,14 @@ public class CodeGenerationParameters {
 
     public CodeGenerationParameters add(final CodeGenerationParameter parameter) {
         this.parameters.add(parameter);
+        return this;
+    }
+
+    public CodeGenerationParameters child(final CodeGenerationParameter parameter) {
+        if(this.parameters.isEmpty()) {
+            throw new UnsupportedOperationException("Unable to add a parameter child without a parent");
+        }
+        this.parameters.get(this.parameters.size() - 1).relate(parameter);
         return this;
     }
 
