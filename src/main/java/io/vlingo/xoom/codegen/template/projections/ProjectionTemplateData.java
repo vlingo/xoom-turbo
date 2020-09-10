@@ -72,7 +72,7 @@ public class ProjectionTemplateData extends TemplateData {
                 .and(EVENT_TYPES_NAME, EVENT_TYPES.resolveClassname())
                 .and(ENTITY_DATA_NAME, entityDataName).and(PROJECTION_TYPE, projectionType)
                 .and(EVENTS_NAMES, ContentQuery.findClassNames(DOMAIN_EVENT, modelPackage, contents))
-                .andResolve(STORAGE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param));
+                .andResolve(STORE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param));
     }
 
     private Set<ImportParameter> resolveImports(final String stateName,

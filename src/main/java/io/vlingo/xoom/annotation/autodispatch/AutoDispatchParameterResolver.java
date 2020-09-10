@@ -12,20 +12,20 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static javax.lang.model.element.Modifier.DEFAULT;
 
 public class AutoDispatchParameterResolver {
+
+    private static final String ROUTE_SIGNATURE_PATTERN = "%s(%s)";
 
     private final TypeRetriever typeRetriever;
     private final ProcessingEnvironment environment;
@@ -111,7 +111,7 @@ public class AutoDispatchParameterResolver {
 
     private void resolveRoutesAnnotation(final TypeElement autoDispatchClass,
                                          final CodeGenerationParameter autoDispatchParameter) {
-
+        final String uriRoot = autoDispatchParameter.relatedParameterValueOf(URI_ROOT);
         final Predicate<Element> filter = element -> element instanceof ExecutableElement;
         final Function<Element, ExecutableElement> mapper = element -> (ExecutableElement) element;
 
@@ -121,18 +121,32 @@ public class AutoDispatchParameterResolver {
 
             if(routeAnnotation != null) {
                 final CodeGenerationParameter routeParameter =
-                        CodeGenerationParameter.of(ROUTE_SIGNATURE, method.getSimpleName());
+                    CodeGenerationParameter.of(ROUTE_SIGNATURE, buildRouteSignature(method));
 
                 routeParameter.relate(ROUTE_HANDLER, routeAnnotation.handler())
-                        .relate(ROUTE_PATH, routeAnnotation.path())
                         .relate(ROUTE_METHOD, routeAnnotation.method())
-                        .relate(CUSTOM_ROUTE, method.getModifiers().contains(DEFAULT));
+                        .relate(CUSTOM_ROUTE, method.getModifiers().contains(DEFAULT))
+                        .relate(ROUTE_PATH, RoutePath.resolve(uriRoot, routeAnnotation.path()));
 
                 resolveVariablesAnnotation(method, routeParameter);
                 resolveResponseAnnotation(method, routeParameter);
                 autoDispatchParameter.relate(routeParameter);
             }
         });
+    }
+
+    private String buildRouteSignature(final ExecutableElement method) {
+        final String signatureParameters =
+                method.getParameters().stream().map(param -> {
+                    final Name paramType =
+                            environment.getTypeUtils()
+                                    .asElement(param.asType())
+                                    .getSimpleName();
+
+                    return paramType + " " + param.getSimpleName();
+                }).collect(Collectors.joining(", "));
+
+        return String.format(ROUTE_SIGNATURE_PATTERN, method.getSimpleName(), signatureParameters);
     }
 
     private void resolveVariablesAnnotation(final ExecutableElement method,

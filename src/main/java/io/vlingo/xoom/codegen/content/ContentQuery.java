@@ -47,6 +47,12 @@ public class ContentQuery {
                 .collect(Collectors.toSet());
     }
 
+    public static String findFullyQualifiedClassName(final TemplateStandard standard, final String className, final List<Content> contents) {
+        return findFullyQualifiedClassNames(standard, contents).stream()
+                .filter(qualifiedClassName -> qualifiedClassName.endsWith("." + className))
+                .findFirst().orElseThrow(IllegalArgumentException::new);
+    }
+
     public static Set<String> findFullyQualifiedClassNames(final TemplateStandard standard, final List<Content> contents) {
         return filterByStandard(standard, contents).map(Content::retrieveQualifiedName).collect(toSet());
     }

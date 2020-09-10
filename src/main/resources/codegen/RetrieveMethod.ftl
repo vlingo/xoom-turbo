@@ -1,5 +1,5 @@
-public Completes<Response> ${methodSignature} {
+public Completes<Response> ${routeSignature} {
   return ${queriesAttribute}.${routeHandler}
           .andThenTo(data -> Completes.withSuccess(Response.of(Ok, serialized(data))))
-          .recoveryFrom(e -> Completes.withSuccess(Response.of(Failure, e.getMessage())));
+          .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
 }

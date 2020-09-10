@@ -1,6 +1,6 @@
-public Completes<Response> ${methodSignature} {
+public Completes<Response> ${routeSignature} {
   return ${modelProtocol}
     .${routeHandler}
     .andThenTo(state -> Completes.withSuccess(Response.of(Created, headers(of(Location, location(state.id))), serialized(${adapterInvocation}(state)))))
-    .recoveryFrom(e -> Completes.withSuccess(Response.of(Failure, e.getMessage())));
+    .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
 }

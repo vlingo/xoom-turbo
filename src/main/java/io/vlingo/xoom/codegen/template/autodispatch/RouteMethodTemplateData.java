@@ -49,19 +49,19 @@ public class RouteMethodTemplateData extends TemplateData {
                                     final CodeGenerationParameter routeSignatureParameter,
                                     final TemplateParameters parentParameters) {
         this.parameters =
-                TemplateParameters.with(ROUTE_SIGNATURE, routeSignatureParameter.value)
+                TemplateParameters.with(MODEL_PROTOCOL, autoDispatchParameter.relatedParameterValueOf(Label.MODEL_PROTOCOL))
+                        .and(QUERIES_ATTRIBUTE, resolveQueriesAttribute(autoDispatchParameter))
+                        .and(ADAPTER_INVOCATION, autoDispatchParameter.relatedParameterValueOf(Label.RESPONSE_DATA))
                         .and(ROUTE_METHOD, routeSignatureParameter.relatedParameterValueOf(Label.ROUTE_METHOD))
-                        .and(ROUTE_HANDLER, routeSignatureParameter.relatedParameterOf(Label.ROUTE_HANDLER))
+                        .and(ROUTE_HANDLER, routeSignatureParameter.relatedParameterValueOf(Label.ROUTE_HANDLER))
                         .and(ID_NAME, routeSignatureParameter.relatedParameterValueOf(Label.ID))
-                        .and(ADAPTER_INVOCATION, routeSignatureParameter.relatedParameterValueOf(Label.RESPONSE_DATA))
-                        .and(MODEL_PROTOCOL, routeSignatureParameter.relatedParameterValueOf(Label.MODEL_PROTOCOL))
-                        .and(QUERIES_ATTRIBUTE, resolveQueriesAttribute(autoDispatchParameter));
+                        .and(ROUTE_SIGNATURE, routeSignatureParameter.value);
 
         parentParameters.addImports(resolveImports(autoDispatchParameter, routeSignatureParameter));
     }
 
     private String resolveQueriesAttribute(final CodeGenerationParameter autoDispatchParameter) {
-        if(!autoDispatchParameter.has(QUERIES_PROTOCOL)) {
+        if(!autoDispatchParameter.hasAny(QUERIES_PROTOCOL)) {
             return "";
         }
 

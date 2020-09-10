@@ -62,7 +62,7 @@ public class StorageProviderTemplateData extends TemplateData {
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, adapterParameters).and(QUERIES, queriesParameters)
                 .and(REQUIRE_ADAPTERS, storageType.requireAdapters(model))
-                .andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
+                .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
     }
 
     private Set<ImportParameter> resolveImports(final Model model,

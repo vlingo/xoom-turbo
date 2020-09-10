@@ -9,8 +9,8 @@ package io.vlingo.xoom.codegen.template;
 
 import io.vlingo.xoom.codegen.parameter.ImportParameter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -22,6 +22,7 @@ public class TemplateParameters {
     private final Map<String, Object> parameters = new HashMap<>();
 
     private TemplateParameters() {
+
     }
 
     public static TemplateParameters empty() {
@@ -44,7 +45,7 @@ public class TemplateParameters {
 
     public TemplateParameters addImport(final String qualifiedClassName) {
         if(this.find(TemplateParameter.IMPORTS) == null) {
-            this.and(TemplateParameter.IMPORTS, new ArrayList<ImportParameter>());
+            this.and(TemplateParameter.IMPORTS, new HashSet<ImportParameter>());
         }
         if(qualifiedClassName != null && !qualifiedClassName.trim().isEmpty()) {
             this.<Set>find(TemplateParameter.IMPORTS).add(new ImportParameter(qualifiedClassName.trim()));
@@ -76,7 +77,6 @@ public class TemplateParameters {
     public Map<String, Object> map() {
         return parameters;
     }
-
 
     public boolean has(final TemplateParameter parameter) {
         return parameters.containsKey(parameter.key) &&

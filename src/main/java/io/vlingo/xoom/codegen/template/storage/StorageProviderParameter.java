@@ -23,7 +23,7 @@ public class StorageProviderParameter {
     private final boolean useProjections;
 
     private StorageProviderParameter(final TemplateParameters parameters) {
-        this.name = parameters.find(STORAGE_PROVIDER_NAME);
+        this.name = parameters.find(STORE_PROVIDER_NAME);
         final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
         final Model model = parameters.find(MODEL);
         this.useProjections = projectionType.isProjectionEnabled() && model.isCommandModel();

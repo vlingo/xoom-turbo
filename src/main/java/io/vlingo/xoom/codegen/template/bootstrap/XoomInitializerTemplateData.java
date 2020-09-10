@@ -20,8 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.XOOM_INITIALIZER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class XoomInitializerTemplateData extends BootstrapTemplateData {
 
@@ -55,7 +54,7 @@ public class XoomInitializerTemplateData extends BootstrapTemplateData {
                                 .collect(Collectors.toSet());
 
         parameters().addImports(addressFactoryImports)
-                .addImports(ContentQuery.findFullyQualifiedClassNames(REST_RESOURCE, contents));
+                .addImports(ContentQuery.findFullyQualifiedClassNames(contents, REST_RESOURCE, AUTO_DISPATCH_RESOURCE_HANDLER));
     }
 
     @Override

@@ -29,7 +29,7 @@ public class CodeGenerationParameter {
         this.relatedParameters = CodeGenerationParameters.empty();
     }
 
-    public CodeGenerationParameter relate(final Label label, final Object value) {;
+    public CodeGenerationParameter relate(final Label label, final Object value) {
         return relate(label, value.toString());
     }
 
@@ -57,5 +57,9 @@ public class CodeGenerationParameter {
 
     public boolean has(final Label label) {
         return this.label.equals(label);
+    }
+
+    public boolean hasAny(final Label label) {
+        return has(label) || relatedParameters.list().stream().anyMatch(parameter -> parameter.has(label));
     }
 }

@@ -22,7 +22,11 @@ public class CodeGenerationParameters {
     }
 
     public static CodeGenerationParameters from(final Label label, final String value) {
-        return new CodeGenerationParameters(Arrays.asList(CodeGenerationParameter.of(label, value)));
+        return from(CodeGenerationParameter.of(label, value));
+    }
+
+    public static CodeGenerationParameters from(final CodeGenerationParameter ...codeGenerationParameters) {
+        return new CodeGenerationParameters(Arrays.asList(codeGenerationParameters));
     }
 
     public static CodeGenerationParameters empty() {

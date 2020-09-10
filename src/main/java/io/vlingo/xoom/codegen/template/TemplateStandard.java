@@ -55,7 +55,7 @@ public enum TemplateStandard {
         }, (name, parameters) -> name),
 
     AUTO_DISPATCH_RESOURCE_HANDLER(parameters -> Template.REST_RESOURCE.filename,
-            (name, parameters) -> name),
+            (name, parameters) -> name + "Handler"),
 
     AUTO_DISPATCH_MAPPING(parameters -> Template.AUTO_DISPATCH_MAPPING.filename,
             (name, parameters) -> name + "Resource"),

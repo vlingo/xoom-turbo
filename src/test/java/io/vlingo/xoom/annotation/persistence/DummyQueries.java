@@ -10,6 +10,6 @@ import io.vlingo.common.Completes;
 
 public interface DummyQueries {
 
-    Completes<?> allDummies();
+    Completes<DummyData> allDummies();
 
 }

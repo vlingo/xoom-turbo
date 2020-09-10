@@ -62,7 +62,7 @@ public class QueriesParameter {
     }
 
     public static QueriesParameter from(final CodeGenerationParameter autoDispatchParameter) {
-        if(!autoDispatchParameter.has(Label.QUERIES_PROTOCOL)) {
+        if(!autoDispatchParameter.hasAny(Label.QUERIES_PROTOCOL)) {
             return null;
         }
         return new QueriesParameter(autoDispatchParameter.relatedParameterValueOf(Label.QUERIES_PROTOCOL),

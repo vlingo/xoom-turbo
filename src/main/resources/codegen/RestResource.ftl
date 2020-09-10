@@ -11,6 +11,7 @@ import ${import.qualifiedClassName};
 </#list>
 
 import io.vlingo.http.Response;
+import io.vlingo.common.Completes;
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.http.Response.Status.*;
 import static io.vlingo.http.ResponseHeader.*;
@@ -25,13 +26,13 @@ public class ${resourceName} extends ResourceHandler {
 
   private final Stage stage;
   <#if queries?has_content>
-  public final ${queries.protocolName} ${queries.attributeName};
+  private final ${queries.protocolName} ${queries.attributeName};
   </#if>
 
   public ${resourceName}(final Stage stage) {
       this.stage = stage;
       <#if queries?has_content>
-      this.${queries.attributeName} = QueryModelStoreProvider.instance().${queries.attributeName};
+      this.${queries.attributeName} = ${storeProviderName}.instance().${queries.attributeName};
       </#if>
   }
 
@@ -41,7 +42,6 @@ public class ${resourceName} extends ResourceHandler {
   </#list>
   </#if>
 
-  //Route Parameter
   @Override
   public Resource<?> routes() {
   <#if !useAutoDispatch || (routeDeclarations?has_content && routeDeclarations?size == 0)>
@@ -56,7 +56,11 @@ public class ${resourceName} extends ResourceHandler {
          <#if declaration.bodyType?has_content>
             .body(${declaration.bodyType}.class)
          </#if>
+         <#if declaration.last>
             .handle(this::${declaration.handlerName})
+         <#else>
+            .handle(this::${declaration.handlerName}),
+         </#if>
      </#list>
      );
   </#if>
@@ -64,7 +68,7 @@ public class ${resourceName} extends ResourceHandler {
 
   <#if useAutoDispatch>
   private String location(final String id) {
-      return ${uriRoot} + id;
+      return "${uriRoot}" + id;
   }
 
   private Completes<${modelProtocol}> resolve(final String id) {

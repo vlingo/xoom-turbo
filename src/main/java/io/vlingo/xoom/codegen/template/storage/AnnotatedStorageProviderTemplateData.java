@@ -65,7 +65,7 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                 .and(QUERIES, QueriesParameter.from(useCQRS, contents, templatesData))
                 .and(USE_CQRS, useCQRS).and(USE_ANNOTATIONS, true)
                 .andResolve(REQUIRE_ADAPTERS, params -> !params.<List>find(ADAPTERS).isEmpty())
-                .andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
+                .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
     }
 
     private Set<ImportParameter> resolveImports(final ProjectionType projectionType, final List<Content> contents) {

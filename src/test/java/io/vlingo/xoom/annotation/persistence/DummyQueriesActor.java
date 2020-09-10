@@ -17,7 +17,7 @@ public class DummyQueriesActor extends StateStoreQueryActor implements DummyQuer
     }
 
     @Override
-    public Completes<?> allDummies() {
+    public Completes<DummyData> allDummies() {
         return Completes.noTimeout();
     }
 

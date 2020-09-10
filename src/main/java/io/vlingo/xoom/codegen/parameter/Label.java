@@ -21,7 +21,6 @@ public enum Label {
     PROJECTABLES("projectables"),
     DATABASE("database"),
     REST_RESOURCES("resources"),
-    AUTO_DISPATCH_RESOURCES("autoDispatchResources"),
     ADDRESS_FACTORY("address.factory"),
     IDENTITY_GENERATOR("identity.generator"),
     BLOCKING_MESSAGING("blocking.messaging"),

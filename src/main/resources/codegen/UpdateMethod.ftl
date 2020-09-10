@@ -1,7 +1,7 @@
-public Completes<Response> ${methodSignature} {
+public Completes<Response> ${routeSignature} {
   return resolve(${idName})
           .andThenTo(entity -> entity.${routeHandler})
           .andThenTo(state -> Completes.withSuccess(Response.of(Ok, serialized(${adapterInvocation}(state)))))
           .otherwise(noGreeting -> Response.of(NotFound, location(${idName})))
-          .recoveryFrom(e -> Completes.withSuccess(Response.of(Failure, e.getMessage())));
+          .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
 }

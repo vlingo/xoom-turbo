@@ -14,6 +14,9 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
+import static io.vlingo.xoom.codegen.parameter.Label.AUTO_DISPATCH;
+import static io.vlingo.xoom.codegen.parameter.Label.USE_AUTO_DISPATCH;
+
 public class AutoDispatchResourceHandlerGenerationStep extends TemplateProcessingStep {
 
     @Override
@@ -23,7 +26,7 @@ public class AutoDispatchResourceHandlerGenerationStep extends TemplateProcessin
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        return context.hasParameter(Label.AUTO_DISPATCH);
+        return context.hasParameter(USE_AUTO_DISPATCH) && context.parameterOf(USE_AUTO_DISPATCH, Boolean::valueOf);
     }
 
 }

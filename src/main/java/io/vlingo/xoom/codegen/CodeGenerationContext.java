@@ -51,6 +51,10 @@ public class CodeGenerationContext {
         return new CodeGenerationContext().on(parameters);
     }
 
+    public static CodeGenerationContext with(final CodeGenerationParameters parameters) {
+        return new CodeGenerationContext().on(parameters);
+    }
+
     private CodeGenerationContext() {
         this(null, null);
     }
