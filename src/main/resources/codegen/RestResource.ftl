@@ -67,8 +67,12 @@ public class ${resourceName} extends ResourceHandler {
   }
 
   <#if useAutoDispatch>
+  private String location() {
+    return location(null);
+  }
+
   private String location(final String id) {
-      return "${uriRoot}" + id;
+    return id== null ? "${uriRoot}" : "${uriRoot}" + id;
   }
 
   private Completes<${modelProtocol}> resolve(final String id) {

@@ -49,6 +49,11 @@ public class Settings {
         put("plugin.queueMailbox.dispatcherThrottlingCount", 1);
     }};
 
+    private static final Map<Object, Object> DATABASE_PROPERTIES = new HashMap<Object, Object>() {{
+        put("database", "IN_MEMORY");
+        put("query.database", "IN_MEMORY");
+    }};
+
     static {
         loadProperties();
     }
@@ -62,6 +67,7 @@ public class Settings {
                 System.out.println("Unable to read properties. VLINGO/XOOM will set the default mailbox and logger");
                 PROPERTIES.putAll(COMPLETES_PLUGIN_PROPERTIES);
                 PROPERTIES.putAll(LOGGING_PROPERTIES);
+                PROPERTIES.putAll(DATABASE_PROPERTIES);
                 disableBlockingMailbox();
             } else {
                 PROPERTIES.load(stream);

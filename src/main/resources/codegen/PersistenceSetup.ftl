@@ -7,7 +7,7 @@ import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.annotation.persistence.Projection;
 </#if>
 <#if requireAdapters>
-import io.vlingo.xoom.annotation.persistence.StateAdapters;
+import io.vlingo.xoom.annotation.persistence.Adapters;
 </#if>
 <#if queries?size gt 0>
 import io.vlingo.xoom.annotation.persistence.EnableQueries;

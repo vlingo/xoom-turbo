@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
-import io.vlingo.xoom.annotation.persistence.StateAdapters;
+import io.vlingo.xoom.annotation.persistence.Adapters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -15,8 +15,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
 
@@ -29,15 +27,15 @@ public class StateContentLoader extends TypeBasedContentLoader {
 
     @Override
     protected List<TypeElement> retrieveContentSource() {
-        final StateAdapters stateAdapters =
+        final Adapters adapters =
                 annotatedClass == null ? null :
-                        annotatedClass.getAnnotation(StateAdapters.class);
+                        annotatedClass.getAnnotation(Adapters.class);
 
-        if(stateAdapters == null) {
+        if(adapters == null) {
             return Collections.emptyList();
         }
 
-        return typeRetriever.typesFrom(stateAdapters, annotation -> stateAdapters.states());
+        return typeRetriever.typesFrom(adapters, annotation -> adapters.value());
     }
 
     @Override
