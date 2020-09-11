@@ -11,9 +11,8 @@ import io.vlingo.symbio.Source;
 public final class ${entityName} extends StatefulEntity<${stateName}> implements ${aggregateProtocolName} {
   private ${stateName} state;
 
-  public ${entityName}() {
-    super(); // uses GridAddress id as unique identity
-
+  public ${entityName}(final String id) {
+    super(id);
     this.state = ${stateName}.identifiedBy(id);
   }
 

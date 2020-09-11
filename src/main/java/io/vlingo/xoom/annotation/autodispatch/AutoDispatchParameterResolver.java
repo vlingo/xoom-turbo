@@ -190,7 +190,7 @@ public class AutoDispatchParameterResolver {
         final ResponseAdapter responseAdapterAnnotation = method.getAnnotation(ResponseAdapter.class);
 
         if(responseAdapterAnnotation != null) {
-            routeParameter.relate(RESPONSE_DATA, responseAdapterAnnotation.data());
+            routeParameter.relate(RESPONSE_DATA, responseAdapterAnnotation.value());
         }
     }
 

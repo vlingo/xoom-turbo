@@ -7,6 +7,7 @@
 package io.vlingo.xoom.annotation.initializer.resources;
 
 import io.vlingo.common.Completes;
+import io.vlingo.http.Response;
 import io.vlingo.xoom.annotation.autodispatch.*;
 import io.vlingo.xoom.annotation.model.Dummy;
 import io.vlingo.xoom.annotation.model.DummyEntity;
@@ -22,14 +23,14 @@ import static io.vlingo.http.Method.*;
 public interface DummyResource {
 
     @Route(method = POST, handler = "defineWith(stage, data.name)")
-    @ResponseAdapter(data = "DummyData.from")
-    Completes<io.vlingo.http.Response> defineDummy(@Body DummyData data);
+    @ResponseAdapter("DummyData.from")
+    Completes<Response> defineDummy(@Body DummyData data);
 
     @Route(method = PATCH, path = "/{dummyId}/name", handler = "withName(data.name)")
-    @ResponseAdapter(data = "DummyData.from")
-    Completes<io.vlingo.http.Response> changeDummyName(@Id String dummyId, @Body DummyData data);
+    @ResponseAdapter("DummyData.from")
+    Completes<Response> changeDummyName(@Id String dummyId, @Body DummyData data);
 
     @Route(method = GET, handler="allDummies()")
-    Completes<io.vlingo.http.Response> queryDummies();
+    Completes<Response> queryDummies();
 
 }

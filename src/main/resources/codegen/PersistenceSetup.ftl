@@ -30,7 +30,7 @@ import ${import.qualifiedClassName};
 })
 </#if>
 <#if requireAdapters>
-@StateAdapters(states = {
+@Adapters({
 <#list adapters as stateAdapter>
   <#if stateAdapter.last>
   ${stateAdapter.sourceClass}.class

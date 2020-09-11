@@ -21,11 +21,11 @@ import static io.vlingo.http.Method.GET;
 public interface ${autoDispatchMappingName} {
 
     @Route(method = POST, handler = "definePlaceholder(stage, data.placeholderValue)")
-    @Response(data = "${dataName}.from")
+    @ResponseAdapter("${dataName}.from")
     Completes<Response> definePlaceholder(@Body ${dataName} data);
 
     <#if useCQRS>
-    @Route(method = GET, handler="${queryAllMethodName}")
+    @Route(method = GET, handler="${queryAllMethodName}()")
     Completes<Response> queryAll();
     </#if>
 

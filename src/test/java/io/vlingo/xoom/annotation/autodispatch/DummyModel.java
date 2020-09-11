@@ -7,7 +7,7 @@ import io.vlingo.lattice.model.EntityActor;
 public interface DummyModel {
 
     @Route(method = Method.PUT, path = "", handler = "someMethod(obj1, data.message, obj2)")
-    @ResponseAdapter(data = "test")
+    @ResponseAdapter("test")
     void dummyRouteForModel(@Body String body);
 
 }

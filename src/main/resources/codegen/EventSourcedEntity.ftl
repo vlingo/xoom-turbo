@@ -9,9 +9,9 @@ import io.vlingo.lattice.model.sourcing.EventSourced;
 public final class ${entityName} extends EventSourced implements ${aggregateProtocolName} {
   private ${stateName} state;
 
-  public ${entityName}() {
-    super(); // uses GridAddress id as unique identity
-    this.state = ${stateName}.identifiedBy(streamName);
+  public ${entityName}(final String id) {
+    super(id);
+    this.state = ${stateName}.identifiedBy(id);
   }
 
   public Completes<${stateName}> definePlaceholder(final String value) {
