@@ -187,10 +187,10 @@ public class AutoDispatchParameterResolver {
 
     private void resolveResponseAnnotation(final ExecutableElement method,
                                            final CodeGenerationParameter routeParameter) {
-        final Response responseAnnotation = method.getAnnotation(Response.class);
+        final ResponseAdapter responseAdapterAnnotation = method.getAnnotation(ResponseAdapter.class);
 
-        if(responseAnnotation != null) {
-            routeParameter.relate(RESPONSE_DATA, responseAnnotation.data());
+        if(responseAdapterAnnotation != null) {
+            routeParameter.relate(RESPONSE_DATA, responseAdapterAnnotation.data());
         }
     }
 

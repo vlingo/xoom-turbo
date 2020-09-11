@@ -9,13 +9,15 @@ package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.beans.Introspector;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -24,6 +26,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static java.util.stream.Collectors.toList;
 
 public class AutoDispatchMappingTemplateData extends TemplateData {
 
@@ -43,8 +46,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
                 aggregateName -> new AutoDispatchMappingTemplateData(basePackage,
                         aggregateName, useCQRS, contents, queriesTemplateData);
 
-        return Arrays.asList(restResourcesData.split(REST_RESOURCES_SEPARATOR))
-                .stream().map(mapper).collect(Collectors.toList());
+        return Stream.of(restResourcesData.split(REST_RESOURCES_SEPARATOR)).map(mapper).collect(toList());
     }
 
     private AutoDispatchMappingTemplateData(final String basePackage,
@@ -55,39 +57,30 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
         this.aggregateName = aggregateProtocolName;
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage))
-                        .and(IMPORTS, resolveImports(aggregateProtocolName, contents))
+                        .addImports(resolveImports(aggregateProtocolName, contents))
                         .and(AUTO_DISPATCH_MAPPING_NAME, AUTO_DISPATCH_MAPPING.resolveClassname(aggregateProtocolName))
                         .and(AGGREGATE_PROTOCOL_NAME, aggregateProtocolName)
                         .and(ENTITY_NAME, AGGREGATE.resolveClassname(aggregateProtocolName))
                         .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateProtocolName))
+                        .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateProtocolName))
+                        .and(QUERIES_ACTOR_NAME, QUERIES_ACTOR.resolveClassname(aggregateProtocolName))
                         .and(QUERY_ALL_METHOD_NAME, findQueryMethodName(aggregateProtocolName, queriesTemplateData))
-                        .and(URI_ROOT, resolveUriRoot(aggregateProtocolName))
+                        .and(URI_ROOT, formatUriRoot(aggregateProtocolName))
                         .and(USE_CQRS, useCQRS);
     }
 
-    private String resolvePackage(final String basePackage) {
-        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME).toLowerCase();
-    }
-
-    private String resolveUriRoot(final String aggregateProtocolName) {
-        final String formatted = Introspector.decapitalize(aggregateProtocolName);
-        return formatted.endsWith("s") ? formatted : formatted + "s";
-    }
-
-    private Set<ImportParameter> resolveImports(final String aggregateName,
-                                                final List<Content> contents) {
+    private Set<String> resolveImports(final String aggregateName,
+                                       final List<Content> contents) {
         final Map<TemplateStandard, String> classes =
                 mapClassesWithTemplateStandards(aggregateName);
 
-        return classes.entrySet().stream().flatMap(entry -> {
+        return classes.entrySet().stream().map(entry -> {
             try {
-                final String qualifiedName =
-                        ContentQuery.findFullyQualifiedClassName(entry.getKey(),
-                                entry.getValue(), contents);
-
-                return ImportParameter.of(qualifiedName).stream();
+                final String className = entry.getValue();
+                final TemplateStandard standard = entry.getKey();
+                return ContentQuery.findFullyQualifiedClassName(standard, className, contents);
             } catch (final IllegalArgumentException exception) {
-                return Stream.empty();
+                return null;
             }
         }).collect(Collectors.toSet());
     }
@@ -101,21 +94,28 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
         final String expectedQueriesName =
                 QUERIES.resolveClassname(aggregateName);
 
-        final Function<TemplateData, TemplateParameters> parametersMapper =
-                templateData -> templateData.parameters();
-
         final Predicate<TemplateParameters> filter =
                 parameters -> parameters.hasValue(QUERIES_NAME, expectedQueriesName);
 
         final Function<TemplateParameters, String> queryMethodNameMapper =
                 parameters -> parameters.find(QUERY_ALL_METHOD_NAME);
 
-        return queriesTemplateData.stream().map(parametersMapper).filter(filter)
+        return queriesTemplateData.stream().map(TemplateData::parameters).filter(filter)
                 .map(queryMethodNameMapper).findFirst().get();
+    }
+
+    private String resolvePackage(final String basePackage) {
+        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME).toLowerCase();
+    }
+
+    private String formatUriRoot(final String aggregateProtocolName) {
+        final String formatted = Introspector.decapitalize(aggregateProtocolName);
+        return formatted.endsWith("s") ? formatted : formatted + "s";
     }
 
     private Map<TemplateStandard, String> mapClassesWithTemplateStandards(final String aggregateName) {
         return new HashMap<TemplateStandard, String>(){{
+            put(AGGREGATE, AGGREGATE.resolveClassname(aggregateName));
             put(AGGREGATE_PROTOCOL, aggregateName);
             put(QUERIES, QUERIES.resolveClassname(aggregateName));
             put(QUERIES_ACTOR, QUERIES_ACTOR.resolveClassname(aggregateName));

@@ -22,11 +22,11 @@ import static io.vlingo.http.Method.*;
 public interface DummyResource {
 
     @Route(method = POST, handler = "defineWith(stage, data.name)")
-    @Response(data = "DummyData.from")
+    @ResponseAdapter(data = "DummyData.from")
     Completes<io.vlingo.http.Response> defineDummy(@Body DummyData data);
 
     @Route(method = PATCH, path = "/{dummyId}/name", handler = "withName(data.name)")
-    @Response(data = "DummyData.from")
+    @ResponseAdapter(data = "DummyData.from")
     Completes<io.vlingo.http.Response> changeDummyName(@Id String dummyId, @Body DummyData data);
 
     @Route(method = GET, handler="allDummies()")

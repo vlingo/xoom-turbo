@@ -126,7 +126,7 @@ public interface AutoDispatchValidations extends Validation {
                         final Route routeAnnotation = enclosed.getAnnotation(Route.class);
                         boolean hasMethods = ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && (routeAnnotation.method() == Method.POST || routeAnnotation.method() == Method.PUT
                                 || routeAnnotation.method() == Method.PATCH || routeAnnotation.method() == Method.DELETE);
-                        if (hasMethods && enclosed.getAnnotation(Response.class) == null) {
+                        if (hasMethods && enclosed.getAnnotation(ResponseAdapter.class) == null) {
                             throw new ProcessingAnnotationException(
                                     String.format("Class [%s]. Class with %s method for Route need to have Response annotation.",
                                             getQualifiedClassName(processingEnvironment, rootElement),

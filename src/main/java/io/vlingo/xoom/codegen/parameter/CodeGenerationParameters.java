@@ -37,6 +37,10 @@ public class CodeGenerationParameters {
         this.parameters.addAll(parameters);
     }
 
+    public CodeGenerationParameters add(final Label label, final Object value) {
+        return add(label, value.toString());
+    }
+
     public CodeGenerationParameters add(final Label label, final String value) {
         return add(CodeGenerationParameter.of(label, value));
     }
