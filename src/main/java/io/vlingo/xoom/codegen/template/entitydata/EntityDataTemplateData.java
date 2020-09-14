@@ -23,7 +23,7 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 public class EntityDataTemplateData extends TemplateData {
 
     private final static String PACKAGE_PATTERN = "%s.%s";
-    private final static String PARENT_PACKAGE_NAME = "infrastructure";
+    private final static String INFRA_PACKAGE_NAME = "infrastructure";
 
     private final String protocolName;
     private final TemplateParameters parameters;
@@ -59,15 +59,14 @@ public class EntityDataTemplateData extends TemplateData {
         final String entityDataQualifiedClassName = packageName.concat(".").concat(dataName);
 
         return TemplateParameters.with(PACKAGE_NAME, packageName)
-                            .and(ENTITY_DATA_NAME, dataName)
-                            .and(STATE_NAME, stateName)
-                            .and(ENTITY_DATA_QUALIFIED_NAME, entityDataQualifiedClassName)
-                            .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName);
+                .and(STATE_NAME, stateName).and(ENTITY_DATA_NAME, dataName)
+                .and(ENTITY_DATA_QUALIFIED_NAME, entityDataQualifiedClassName)
+                .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName);
     }
 
     private String resolvePackage(final String basePackage) {
         return String.format(PACKAGE_PATTERN, basePackage,
-                PARENT_PACKAGE_NAME).toLowerCase();
+                INFRA_PACKAGE_NAME).toLowerCase();
     }
 
     @Override
