@@ -19,7 +19,10 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.*;
 import javax.lang.model.util.Elements;
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static io.vlingo.xoom.annotation.Validation.classVisibilityValidation;
 import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.*;
@@ -152,7 +155,7 @@ public class AutoDispatchValidatorTest {
         when(rootElement.getEnclosedElements()).thenReturn(enclosedElements);
         when(rootElement.getAnnotation(Model.class)).thenReturn(mock(Model.class));
         when(enclosedElement.getAnnotation(Route.class)).thenReturn(createRouteAnnotation(Method.PUT));
-        when(enclosedElement.getAnnotation(Response.class)).thenReturn(mock(Response.class));
+        when(enclosedElement.getAnnotation(ResponseAdapter.class)).thenReturn(mock(ResponseAdapter.class));
         when(enclosedElement.getKind()).thenReturn(ElementKind.METHOD);
         routeWithoutResponseValidator().validate(mock(ProcessingEnvironment.class), Model.class, annotatedElements);
     }
