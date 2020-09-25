@@ -20,6 +20,6 @@ public @interface Route {
 
     Method method();
     String path() default "";
-    String handler();
+    int handler();
 
 }

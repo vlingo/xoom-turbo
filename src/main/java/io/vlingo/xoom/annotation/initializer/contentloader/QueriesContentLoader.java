@@ -8,6 +8,7 @@
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.annotation.persistence.EnableQueries;
+import io.vlingo.xoom.annotation.persistence.QueriesEntry;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -47,10 +48,10 @@ public class QueriesContentLoader extends ContentLoader<Map<TypeElement, TypeEle
 
         return Stream.of(queries.value()).map(queriesEntry -> {
                     final TypeElement protocolType =
-                            typeRetriever.from(queriesEntry, anEntry -> queriesEntry.protocol());
+                            typeRetriever.from(queriesEntry, QueriesEntry::protocol);
 
                     final TypeElement actorType =
-                            typeRetriever.from(queriesEntry, anEntry -> queriesEntry.actor());
+                            typeRetriever.from(queriesEntry, QueriesEntry::actor);
 
                     return new SimpleEntry<>(protocolType, actorType);
                 }).collect(Collectors.toMap(Entry::getKey, Entry::getValue));

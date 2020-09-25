@@ -15,7 +15,6 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.*;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ import static javax.lang.model.element.Modifier.DEFAULT;
 
 public class AutoDispatchParameterResolver {
 
-    private static final String ROUTE_SIGNATURE_PATTERN = "%s(%s)";
+    private static final String SIGNATURE_PATTERN = "%s(%s)";
 
     private final TypeRetriever typeRetriever;
     private final ProcessingEnvironment environment;
@@ -48,11 +47,8 @@ public class AutoDispatchParameterResolver {
                 CodeGenerationParameters.from(USE_AUTO_DISPATCH,
                         !autoDispatchResourceClasses.isEmpty());
 
-        final Consumer<CodeGenerationParameter> consumer =
-                parameter -> parameters.add(parameter);
-
         this.autoDispatchResourceClasses.stream()
-                .map(this::resolveAutoDispatchAnnotation).forEach(consumer);
+                .map(this::resolveAutoDispatchAnnotation).forEach(parameters::add);
 
         return parameters;
     }
@@ -61,13 +57,17 @@ public class AutoDispatchParameterResolver {
         final AutoDispatch autoDispatchAnnotation =
                 autoDispatchClass.getAnnotation(AutoDispatch.class);
 
+        final TypeElement handlersConfigClass =
+                typeRetriever.from(autoDispatchAnnotation, AutoDispatch::handlers);
+
         final CodeGenerationParameter autoDispatchParameter =
                 CodeGenerationParameter.of(AUTO_DISPATCH_NAME, autoDispatchClass.getQualifiedName())
+                        .relate(HANDLERS_CONFIG_NAME, handlersConfigClass.getQualifiedName())
                         .relate(URI_ROOT, autoDispatchAnnotation.path());
 
         resolveModelAnnotation(autoDispatchClass, autoDispatchParameter);
         resolveQueriesAnnotation(autoDispatchClass, autoDispatchParameter);
-        resolveRoutesAnnotation(autoDispatchClass, autoDispatchParameter);
+        resolveRoutesAnnotation(autoDispatchClass, handlersConfigClass, autoDispatchParameter);
         return autoDispatchParameter;
     }
 
@@ -78,13 +78,13 @@ public class AutoDispatchParameterResolver {
 
         if(modelAnnotation != null) {
             final TypeElement protocol =
-                    typeRetriever.from(modelAnnotation, annotation -> modelAnnotation.protocol());
+                    typeRetriever.from(modelAnnotation, Model::protocol);
 
             final TypeElement actor =
-                    typeRetriever.from(modelAnnotation, annotation -> modelAnnotation.actor());
+                    typeRetriever.from(modelAnnotation, Model::actor);
 
             final TypeElement data =
-                    typeRetriever.from(modelAnnotation, annotation -> modelAnnotation.data());
+                    typeRetriever.from(modelAnnotation, Model::data);
 
             autoDispatchParameter.relate(MODEL_PROTOCOL, protocol.getQualifiedName())
                     .relate(MODEL_ACTOR, actor.getQualifiedName())
@@ -99,10 +99,10 @@ public class AutoDispatchParameterResolver {
 
         if(queriesAnnotation != null) {
             final TypeElement protocol =
-                    typeRetriever.from(queriesAnnotation, annotation -> queriesAnnotation.protocol());
+                    typeRetriever.from(queriesAnnotation, Queries::protocol);
 
             final TypeElement actor =
-                    typeRetriever.from(queriesAnnotation, annotation -> queriesAnnotation.actor());
+                    typeRetriever.from(queriesAnnotation, Queries::actor);
 
             autoDispatchParameter.relate(QUERIES_PROTOCOL, protocol.getQualifiedName())
                     .relate(QUERIES_ACTOR, actor.getQualifiedName());
@@ -110,10 +110,12 @@ public class AutoDispatchParameterResolver {
     }
 
     private void resolveRoutesAnnotation(final TypeElement autoDispatchClass,
+                                         final TypeElement handlersConfigClass,
                                          final CodeGenerationParameter autoDispatchParameter) {
         final String uriRoot = autoDispatchParameter.relatedParameterValueOf(URI_ROOT);
         final Predicate<Element> filter = element -> element instanceof ExecutableElement;
         final Function<Element, ExecutableElement> mapper = element -> (ExecutableElement) element;
+        final HandlerResolver handlerResolver = HandlerResolver.with(handlersConfigClass, environment);
 
         autoDispatchClass.getEnclosedElements().stream().filter(filter).map(mapper).forEach(method -> {
             final Route routeAnnotation =
@@ -121,21 +123,24 @@ public class AutoDispatchParameterResolver {
 
             if(routeAnnotation != null) {
                 final CodeGenerationParameter routeParameter =
-                    CodeGenerationParameter.of(ROUTE_SIGNATURE, buildRouteSignature(method));
+                    CodeGenerationParameter.of(ROUTE_SIGNATURE, buildMethodSignature(method));
 
-                routeParameter.relate(ROUTE_HANDLER, routeAnnotation.handler())
+                final HandlerInvocation handlerInvocation = handlerResolver.find(routeAnnotation.handler());
+
+                routeParameter.relate(ROUTE_HANDLER_INVOCATION, handlerInvocation.invocation)
+                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, handlerInvocation.hasCustomParamNames())
                         .relate(ROUTE_METHOD, routeAnnotation.method())
                         .relate(CUSTOM_ROUTE, method.getModifiers().contains(DEFAULT))
                         .relate(ROUTE_PATH, RoutePath.resolve(uriRoot, routeAnnotation.path()));
 
                 resolveVariablesAnnotation(method, routeParameter);
-                resolveResponseAnnotation(method, routeParameter);
+                resolveResponseAnnotation(method, routeParameter, handlerResolver);
                 autoDispatchParameter.relate(routeParameter);
             }
         });
     }
 
-    private String buildRouteSignature(final ExecutableElement method) {
+    private String buildMethodSignature(final ExecutableElement method) {
         final String signatureParameters =
                 method.getParameters().stream().map(param -> {
                     final Name paramType =
@@ -146,7 +151,7 @@ public class AutoDispatchParameterResolver {
                     return paramType + " " + param.getSimpleName();
                 }).collect(Collectors.joining(", "));
 
-        return String.format(ROUTE_SIGNATURE_PATTERN, method.getSimpleName(), signatureParameters);
+        return String.format(SIGNATURE_PATTERN, method.getSimpleName(), signatureParameters);
     }
 
     private void resolveVariablesAnnotation(final ExecutableElement method,
@@ -186,11 +191,19 @@ public class AutoDispatchParameterResolver {
     }
 
     private void resolveResponseAnnotation(final ExecutableElement method,
-                                           final CodeGenerationParameter routeParameter) {
+                                           final CodeGenerationParameter routeParameter,
+                                           final HandlerResolver handlerResolver) {
         final ResponseAdapter responseAdapterAnnotation = method.getAnnotation(ResponseAdapter.class);
 
         if(responseAdapterAnnotation != null) {
-            routeParameter.relate(RESPONSE_DATA, responseAdapterAnnotation.value());
+            final HandlerInvocation handlerInvocation =
+                    handlerResolver.find(responseAdapterAnnotation.handler());
+
+            routeParameter.relate(USE_ADAPTER, true)
+                    .relate(ADAPTER_HANDLER_INVOCATION, handlerInvocation.invocation)
+                    .relate(USE_CUSTOM_ADAPTER_HANDLER_PARAM, handlerInvocation.hasCustomParamNames());
+        } else {
+            routeParameter.relate(USE_ADAPTER, false);
         }
     }
 

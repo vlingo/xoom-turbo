@@ -16,7 +16,6 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
-import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
 public interface AutoDispatchValidations extends Validation {
@@ -148,31 +147,31 @@ public interface AutoDispatchValidations extends Validation {
     static Validation handlerWithoutValidMethodValidator() {
         return (processingEnvironment, annotation, annotatedElements) -> {
             annotatedElements.elementsWith(annotation).forEach(rootElement -> {
-                final Model model = rootElement.getAnnotation(Model.class);
-                if (model != null) {
-                    rootElement.getEnclosedElements().forEach(enclosed -> {
-                        final Route routeAnnotation = enclosed.getAnnotation(Route.class);
-                        if(ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null){
-                            final String handler = routeAnnotation.handler();
-                            final String methodName = getMethodName(processingEnvironment, rootElement, handler);
-                            final String[] params = getParams(processingEnvironment, rootElement, handler);
-                            final List<ExecutableElement> methods =
-                                    TypeRetriever.with(processingEnvironment)
-                                            .getMethods(model, Void -> model.protocol());
-                            methods.stream()
-                                    .filter(m -> methodName.equals(m.getSimpleName().toString()))
-                                    .forEach(m -> {
-                                if(params.length < m.getParameters().size()){
-                                    throw new ProcessingAnnotationException(
-                                            String.format("Class [%s], with Model annotation, have Route annotation with an invalid protocol handler: %s",
-                                                    getQualifiedClassName(processingEnvironment, rootElement),
-                                                    m.toString())
-                                    );
-                                }
-                            });
-                        }
-                    });
-                }
+//                final Model model = rootElement.getAnnotation(Model.class);
+//                if (model != null) {
+//                    rootElement.getEnclosedElements().forEach(enclosed -> {
+//                        final Route routeAnnotation = enclosed.getAnnotation(Route.class);
+//                        if(ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null){
+//                            final String handler = routeAnnotation.handler();
+//                            final String methodName = getMethodName(processingEnvironment, rootElement, handler);
+//                            final String[] params = getParams(processingEnvironment, rootElement, handler);
+//                            final List<ExecutableElement> methods =
+//                                    TypeRetriever.with(processingEnvironment)
+//                                            .getMethods(model, Void -> model.protocol());
+//                            methods.stream()
+//                                    .filter(m -> methodName.equals(m.getSimpleName().toString()))
+//                                    .forEach(m -> {
+//                                if(params.length < m.getParameters().size()){
+//                                    throw new ProcessingAnnotationException(
+//                                            String.format("Class [%s], with Model annotation, have Route annotation with an invalid protocol handler: %s",
+//                                                    getQualifiedClassName(processingEnvironment, rootElement),
+//                                                    m.toString())
+//                                    );
+//                                }
+//                            });
+//                        }
+//                    });
+//                }
             });
         };
     }

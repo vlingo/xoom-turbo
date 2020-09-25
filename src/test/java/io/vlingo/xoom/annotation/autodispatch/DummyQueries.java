@@ -12,7 +12,7 @@ import io.vlingo.http.Method;
 @Queries(actor = Actor.class, protocol = ActorProtocol.class)
 public interface DummyQueries {
 
-    @Route(method = Method.GET, path = "", handler = "")
+    @Route(method = Method.GET, path = "", handler = 0)
     void dummyRouteForQueries(String parameter);
 
 }

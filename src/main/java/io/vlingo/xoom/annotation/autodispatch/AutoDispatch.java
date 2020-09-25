@@ -10,5 +10,5 @@ package io.vlingo.xoom.annotation.autodispatch;
 public @interface AutoDispatch {
 
    String path();
-
+   Class<?> handlers();
 }

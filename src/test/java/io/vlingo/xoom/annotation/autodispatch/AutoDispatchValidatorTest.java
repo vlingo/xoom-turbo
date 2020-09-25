@@ -244,8 +244,8 @@ public class AutoDispatchValidatorTest {
             }
 
             @Override
-            public String handler() {
-                return "testMethod(String any)";
+            public int handler() {
+                return 0;
             }
         };
     }

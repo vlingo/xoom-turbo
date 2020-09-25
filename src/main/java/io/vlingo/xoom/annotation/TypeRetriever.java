@@ -48,7 +48,7 @@ public class TypeRetriever {
                 .equals(resourceHandler);
     }
 
-    public TypeElement from(final Object annotation, final Function<Object, Class<?>> retriever) {
+    public <T> TypeElement from(final T annotation, final Function<T, Class<?>> retriever) {
         try {
             final Class<?> clazz =
                     retriever.apply(annotation);
@@ -61,7 +61,7 @@ public class TypeRetriever {
         }
     }
 
-    public List<TypeElement> typesFrom(final Object annotation, final Function<Object, Class<?>[]> retriever) {
+    public <T>  List<TypeElement> typesFrom(final T annotation, final Function<T, Class<?>[]> retriever) {
         try {
             final Class<?>[] classes =
                     retriever.apply(annotation);

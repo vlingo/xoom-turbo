@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.storage;
 
+import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -13,7 +14,6 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 
-import java.beans.Introspector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,10 +76,8 @@ public class QueriesParameter {
 
     private QueriesParameter(final String protocolQualifiedName,
                              final String actorQualifiedName) {
-        this(protocolQualifiedName.substring(0, protocolQualifiedName.lastIndexOf(".")),
-                protocolQualifiedName.substring(protocolQualifiedName.lastIndexOf(".") + 1),
-                actorQualifiedName.substring(0, actorQualifiedName.lastIndexOf(".")),
-                actorQualifiedName.substring(actorQualifiedName.lastIndexOf(".") + 1));
+        this(ClassFormatter.packageOf(protocolQualifiedName), ClassFormatter.simpleNameOf(protocolQualifiedName),
+                ClassFormatter.packageOf(actorQualifiedName), ClassFormatter.simpleNameOf(actorQualifiedName));
     }
 
     private QueriesParameter(final String protocolPackageName,
@@ -88,7 +86,7 @@ public class QueriesParameter {
                              final String actorName) {
         this.actorName = actorName;
         this.protocolName = protocolName;
-        this.attributeName = Introspector.decapitalize(protocolName);
+        this.attributeName = ClassFormatter.simpleNameToAttribute(protocolName);
         this.qualifiedNames.addAll(
                 Arrays.asList(String.format(QUALIFIED_NAME_PATTERN, protocolPackageName, protocolName),
                         String.format(QUALIFIED_NAME_PATTERN, actorPackageName, actorName)));

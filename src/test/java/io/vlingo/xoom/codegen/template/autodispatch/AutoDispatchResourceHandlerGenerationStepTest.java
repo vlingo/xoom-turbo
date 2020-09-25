@@ -40,6 +40,15 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
                         content.retrieveClassName().equals("AuthorResourceHandler")).findFirst().get();
 
         Assert.assertTrue(authorResourceHandlerContent.contains("import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;"));
+        Assert.assertTrue(authorResourceHandlerContent.contains(".andThenTo(author -> AuthorHandlers.changeAuthorNameHandler.handler.handle(author,authorData))"));
+        Assert.assertTrue(authorResourceHandlerContent.contains("return AuthorHandlers.queryByIdHandler.handler.handle(authorId, authorQueries)"));
+
+        final Content bookResourceHandlerContent =
+                context.contents().stream().filter(content ->
+                        content.retrieveClassName().equals("BookResourceHandler")).findFirst().get();
+
+        Assert.assertTrue(bookResourceHandlerContent.contains("import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;"));
+        Assert.assertTrue(bookResourceHandlerContent.contains("return BookHandlers.queryAllHandler.handler.handle(bookQueries)"));
     }
 
     private CodeGenerationParameters loadParameters() {
@@ -48,7 +57,8 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
 
         final CodeGenerationParameter firstAuthorRouteParameter =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeAuthorName(final String authorId, final AuthorData authorData)")
-                        .relate(ROUTE_HANDLER, "changeName(authorData.name)")
+                        .relate(ROUTE_HANDLER_INVOCATION, "changeAuthorNameHandler.handler.handle(author,authorData)")
+                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
                         .relate(ROUTE_PATH, "/authors/{authorId}/name")
                         .relate(ROUTE_METHOD, "PATCH")
                         .relate(CUSTOM_ROUTE, "false")
@@ -56,11 +66,13 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
                         .relate(ID_TYPE, "java.lang.String")
                         .relate(BODY, "authorData")
                         .relate(BODY_TYPE, "io.vlingo.xoomapp.infrastructure.AuthorData")
-                        .relate(RESPONSE_DATA, "AuthorData.from");
+                        .relate(ADAPTER_HANDLER_INVOCATION, "adaptStateHandler.handler.handle")
+                        .relate(USE_CUSTOM_ADAPTER_HANDLER_PARAM, "false");
 
         final CodeGenerationParameter secondAuthorRouteParameter =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryById(final String authorId)")
-                        .relate(ROUTE_HANDLER, "authorOf(authorId)")
+                        .relate(ROUTE_HANDLER_INVOCATION, "queryByIdHandler.handler.handle(authorId, authorQueries)")
+                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
                         .relate(ROUTE_PATH, "/authors/{authorId}")
                         .relate(ROUTE_METHOD, "GET")
                         .relate(CUSTOM_ROUTE, "false")
@@ -69,6 +81,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
 
         final CodeGenerationParameter authorResourceParameter =
                 CodeGenerationParameter.of(AUTO_DISPATCH_NAME, "io.vlingo.xoomapp.resources.AuthorResource")
+                        .relate(HANDLERS_CONFIG_NAME, "io.vlingo.xoomapp.resources.AuthorHandlers")
                         .relate(URI_ROOT, "/authors")
                         .relate(MODEL_PROTOCOL, "io.vlingo.xoomapp.model.Author")
                         .relate(MODEL_ACTOR, "io.vlingo.xoomapp.model.AuthorEntity")
@@ -79,7 +92,8 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
 
         final CodeGenerationParameter bookRouteParameter =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryBooks()")
-                        .relate(ROUTE_HANDLER, "retrieveAll()")
+                        .relate(ROUTE_HANDLER_INVOCATION, "queryAllHandler.handler.handle")
+                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "false")
                         .relate(ROUTE_PATH, "/books")
                         .relate(ROUTE_METHOD, "GET")
                         .relate(CUSTOM_ROUTE, "false");
@@ -87,6 +101,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
         final CodeGenerationParameter bookResourceParameter =
                 CodeGenerationParameter.of(AUTO_DISPATCH_NAME, "io.vlingo.xoomapp.resources.BookResource")
                         .relate(URI_ROOT, "/books").relate(bookRouteParameter)
+                        .relate(HANDLERS_CONFIG_NAME, "io.vlingo.xoomapp.resources.BookHandlers")
                         .relate(QUERIES_PROTOCOL, "io.vlingo.xoomapp.infrastructure.persistence.BookQueries")
                         .relate(QUERIES_ACTOR, "io.vlingo.xoomapp.infrastructure.persistence.BookQueriesActor");
 

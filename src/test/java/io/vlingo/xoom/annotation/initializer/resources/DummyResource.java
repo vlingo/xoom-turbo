@@ -16,21 +16,22 @@ import io.vlingo.xoom.annotation.persistence.DummyQueries;
 import io.vlingo.xoom.annotation.persistence.DummyQueriesActor;
 
 import static io.vlingo.http.Method.*;
+import static io.vlingo.xoom.annotation.initializer.resources.DummyHandlers.*;
 
-@AutoDispatch(path = "/dummies")
+@AutoDispatch(path = "/dummies", handlers = DummyHandlers.class)
 @Queries(protocol = DummyQueries.class, actor = DummyQueriesActor.class)
 @Model(protocol = Dummy.class, actor = DummyEntity.class, data = DummyData.class)
 public interface DummyResource {
 
-    @Route(method = POST, handler = "defineWith(stage, data.name)")
-    @ResponseAdapter("DummyData.from")
-    Completes<Response> defineDummy(@Body DummyData data);
+    @Route(method = POST, handler = DEFINE_WITH)
+    @ResponseAdapter(handler = ADAPT_STATE)
+    Completes<Response> defineDummy(@Body DummyData dummyData);
 
-    @Route(method = PATCH, path = "/{dummyId}/name", handler = "withName(data.name)")
-    @ResponseAdapter("DummyData.from")
-    Completes<Response> changeDummyName(@Id String dummyId, @Body DummyData data);
+    @Route(method = PATCH, path = "/{dummyId}/name", handler = CHANGE_NAME)
+    @ResponseAdapter(handler = ADAPT_STATE)
+    Completes<Response> changeDummyName(@Id String dummyId, @Body DummyData dummyData);
 
-    @Route(method = GET, handler="allDummies()")
+    @Route(method = GET, handler= QUERY_ALL)
     Completes<Response> queryDummies();
 
 }

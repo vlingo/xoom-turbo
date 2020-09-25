@@ -53,7 +53,9 @@ public class StorageGenerationStepTest {
         Assert.assertFalse(context.contents().get(16).contains("public final BookQueries bookQueries;"));
         Assert.assertTrue(context.contents().get(16).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.JOURNAL, Settings.properties(), true"));
         Assert.assertTrue(context.contents().get(17).contains("class QueryModelStateStoreProvider"));
+        Assert.assertTrue(context.contents().get(17).contains("public final AuthorQueries authorQueries;"));
         Assert.assertTrue(context.contents().get(17).contains("public final BookQueries bookQueries;"));
+        Assert.assertTrue(context.contents().get(17).contains("this.authorQueries = stage.actorFor(AuthorQueries.class, AuthorQueriesActor.class, store)"));
         Assert.assertTrue(context.contents().get(17).contains("this.bookQueries = stage.actorFor(BookQueries.class, BookQueriesActor.class, store)"));
         Assert.assertTrue(context.contents().get(17).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
         Assert.assertFalse(context.contents().get(17).contains("BookRented"));

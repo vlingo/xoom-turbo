@@ -8,7 +8,6 @@
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.http.resource.ResourceHandler;
-import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
@@ -43,7 +42,7 @@ public class RestResourceContentLoader extends TypeBasedContentLoader {
                     .map(this::toType).collect(Collectors.toList());
         }
 
-        return typeRetriever.typesFrom(resourceHandlers, annotation -> resourceHandlers.value());
+        return typeRetriever.typesFrom(resourceHandlers, ResourceHandlers::value);
     }
 
     @Override

@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,9 +29,12 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
 
     @Test
     public void testThatTemplateParametersAreMapped() {
+        final TemplateFile templateFile =
+                new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java");
+
         final CodeGenerationContext context =
                 CodeGenerationContext.with(loadParameters())
-                        .addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT);
+                        .addContent(STORE_PROVIDER, templateFile, QUERY_MODEL_STORE_PROVIDER_CONTENT);
 
         final List<TemplateData> templatesData =
                 AutoDispatchResourceHandlerTemplateData.from(context);
@@ -74,18 +78,19 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
 
         Assert.assertEquals(2, resourceHandlerData.dependencies().size());
 
-        final TemplateData queryRouteMethodTemplateData =
+        final TemplateParameters queryRouteMethodParameters =
                 resourceHandlerData.dependencies().stream()
                         .filter(data -> data.parameters().find(TemplateParameter.ROUTE_SIGNATURE)
                                         .equals("queryById(final String authorId)"))
+                        .map(TemplateData::parameters)
                         .findFirst().get();
 
-        Assert.assertEquals("authorId", queryRouteMethodTemplateData.parameters().find(TemplateParameter.ID_NAME));
-        Assert.assertEquals("GET", queryRouteMethodTemplateData.parameters().find(TemplateParameter.ROUTE_METHOD));
-        Assert.assertEquals("authorOf(authorId)", queryRouteMethodTemplateData.parameters().find(TemplateParameter.ROUTE_HANDLER));
-        Assert.assertEquals("io.vlingo.xoomapp.model.Author", queryRouteMethodTemplateData.parameters().find(TemplateParameter.MODEL_PROTOCOL));
-        Assert.assertEquals("authorQueries", queryRouteMethodTemplateData.parameters().find(TemplateParameter.QUERIES_ATTRIBUTE));
-        Assert.assertEquals("", queryRouteMethodTemplateData.parameters().find(TemplateParameter.ADAPTER_INVOCATION));
+        Assert.assertEquals("authorId", queryRouteMethodParameters.find(TemplateParameter.ID_NAME));
+        Assert.assertEquals("GET", queryRouteMethodParameters.find(TemplateParameter.ROUTE_METHOD));
+        Assert.assertEquals("AuthorHandlers.queryByIdHandler.handler.handle(authorId, authorQueries)", queryRouteMethodParameters.find(TemplateParameter.ROUTE_HANDLER_INVOCATION));
+        Assert.assertEquals("io.vlingo.xoomapp.model.Author", queryRouteMethodParameters.find(TemplateParameter.MODEL_PROTOCOL));
+        Assert.assertEquals("authorQueries", queryRouteMethodParameters.find(TemplateParameter.QUERIES_ATTRIBUTE));
+        Assert.assertEquals("", queryRouteMethodParameters.find(TemplateParameter.ADAPTER_HANDLER_INVOCATION));
     }
 
     private void assertBookResource(final List<TemplateData> templatesData) {
@@ -113,7 +118,8 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
     private CodeGenerationParameters loadParameters() {
         final CodeGenerationParameter firstAuthorRouteParameter =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeAuthorName(final String authorId, final AuthorData authorData)")
-                        .relate(ROUTE_HANDLER, "changeName(authorData.name)")
+                        .relate(ROUTE_HANDLER_INVOCATION, "changeAuthorNameHandler.handler.handle(author,authorData)")
+                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
                         .relate(ROUTE_PATH, "/authors/{authorId}/name")
                         .relate(ROUTE_METHOD, "PATCH")
                         .relate(CUSTOM_ROUTE, "false")
@@ -121,11 +127,13 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
                         .relate(ID_TYPE, "java.lang.String")
                         .relate(BODY, "authorData")
                         .relate(BODY_TYPE, "io.vlingo.xoomapp.infrastructure.AuthorData")
-                        .relate(RESPONSE_DATA, "AuthorData.from");
+                        .relate(ADAPTER_HANDLER_INVOCATION, "adaptStateHandler.handler.handle")
+                        .relate(USE_CUSTOM_ADAPTER_HANDLER_PARAM, "false");
 
         final CodeGenerationParameter secondAuthorRouteParameter =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryById(final String authorId)")
-                        .relate(ROUTE_HANDLER, "authorOf(authorId)")
+                        .relate(ROUTE_HANDLER_INVOCATION, "queryByIdHandler.handler.handle(authorId, authorQueries)")
+                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
                         .relate(ROUTE_PATH, "/authors/{authorId}")
                         .relate(ROUTE_METHOD, "GET")
                         .relate(CUSTOM_ROUTE, "false")
@@ -134,6 +142,7 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
 
         final CodeGenerationParameter authorResourceParameter =
                 CodeGenerationParameter.of(AUTO_DISPATCH_NAME, "io.vlingo.xoomapp.resources.AuthorResource")
+                        .relate(HANDLERS_CONFIG_NAME, "io.vlingo.xoomapp.resources.AuthorHandlers")
                         .relate(URI_ROOT, "/authors")
                         .relate(MODEL_PROTOCOL, "io.vlingo.xoomapp.model.Author")
                         .relate(MODEL_ACTOR, "io.vlingo.xoomapp.model.AuthorEntity")
@@ -144,7 +153,8 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
 
         final CodeGenerationParameter bookRouteParameter =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryBooks()")
-                        .relate(ROUTE_HANDLER, "retrieveAll()")
+                        .relate(ROUTE_HANDLER_INVOCATION, "queryAllHandler.handler.handle")
+                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "false")
                         .relate(ROUTE_PATH, "/books")
                         .relate(ROUTE_METHOD, "GET")
                         .relate(CUSTOM_ROUTE, "false");
@@ -152,6 +162,7 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
         final CodeGenerationParameter bookResourceParameter =
                 CodeGenerationParameter.of(AUTO_DISPATCH_NAME, "io.vlingo.xoomapp.resources.BookResource")
                         .relate(URI_ROOT, "/books").relate(bookRouteParameter)
+                        .relate(HANDLERS_CONFIG_NAME, "io.vlingo.xoomapp.resources.BookHandlers")
                         .relate(QUERIES_PROTOCOL, "io.vlingo.xoomapp.infrastructure.persistence.BookQueries")
                         .relate(QUERIES_ACTOR, "io.vlingo.xoomapp.infrastructure.persistence.BookQueriesActor");
 

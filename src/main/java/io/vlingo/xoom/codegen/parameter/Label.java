@@ -9,6 +9,10 @@ package io.vlingo.xoom.codegen.parameter;
 
 public enum Label {
 
+    ID("id"),
+    ID_TYPE("idType"),
+    BODY("body"),
+    BODY_TYPE("bodyType"),
     APPLICATION_NAME("appName"),
     PACKAGE("package"),
     TARGET_FOLDER("target.folder"),
@@ -28,14 +32,8 @@ public enum Label {
     COMMAND_MODEL_DATABASE("command.model.database"),
     QUERY_MODEL_DATABASE("query.model.database"),
     GENERATION_LOCATION("generation.location"),
-
-    //Auto Dispatch Labels
-
-    ID("id"),
-    ID_TYPE("idType"),
-    BODY("body"),
-    BODY_TYPE("bodyType"),
     AUTO_DISPATCH_NAME("autoDispatchName"),
+    HANDLERS_CONFIG_NAME("handlersConfigName"),
     MODEL_PROTOCOL("modelProtocol"),
     MODEL_ACTOR("modelActor"),
     MODEL_DATA("modelData"),
@@ -45,9 +43,12 @@ public enum Label {
     ROUTE_SIGNATURE("routeSignature"),
     ROUTE_PATH("routePath"),
     ROUTE_METHOD("routeMethod"),
-    ROUTE_HANDLER("routeHandler"),
-    RESPONSE_DATA("responseData"),
-    CUSTOM_ROUTE("customRoute"), //boolean
+    ROUTE_HANDLER_INVOCATION("routeHandlerInvocation"),
+    USE_CUSTOM_ROUTE_HANDLER_PARAM("useCustomRouteHandlerParam"),
+    ADAPTER_HANDLER_INVOCATION("adapterHandlerIndex"),
+    USE_CUSTOM_ADAPTER_HANDLER_PARAM("useCustomAdapterHandlerParam"),
+    USE_ADAPTER("useAdapter"),
+    CUSTOM_ROUTE("customRoute"),
     USE_AUTO_DISPATCH("useAutoDispatch");
 
     private final String key;

@@ -9,7 +9,6 @@ package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.template.bootstrap.RestResourcesParameter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,20 +30,17 @@ public class RouteDeclarationParameter {
     private final List<String> parameterTypes = new ArrayList<>();
 
     public static List<RouteDeclarationParameter> from(final CodeGenerationParameter autoDispatchParameter) {
-
         final List<CodeGenerationParameter> routeSignatures =
                 autoDispatchParameter.retrieveAll(Label.ROUTE_SIGNATURE).collect(toList());
 
         return IntStream.range(0, routeSignatures.size()).mapToObj(index ->
                 new RouteDeclarationParameter(index, routeSignatures.size(), routeSignatures.get(index)))
                 .collect(Collectors.toList());
-
     }
 
-    private RouteDeclarationParameter(
-            final int routeIndex,
-            final int numberOfRoutes,
-            final CodeGenerationParameter routeSignatureParameter) {
+    private RouteDeclarationParameter(final int routeIndex,
+                                      final int numberOfRoutes,
+                                      final CodeGenerationParameter routeSignatureParameter) {
         this.handlerName = resolveHandlerName(routeSignatureParameter);
         this.path = routeSignatureParameter.relatedParameterValueOf(ROUTE_PATH);
         this.bodyType = routeSignatureParameter.relatedParameterValueOf(BODY_TYPE);

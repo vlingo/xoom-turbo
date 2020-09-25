@@ -33,8 +33,7 @@ public class TypeBasedContent extends Content {
 
     @Override
     public String retrievePackage() {
-        final String qualifiedName = retrieveQualifiedName();
-        return qualifiedName.substring(0, qualifiedName.lastIndexOf("."));
+        return ClassFormatter.packageOf(retrieveQualifiedName());
     }
 
     @Override

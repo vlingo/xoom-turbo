@@ -28,7 +28,6 @@ import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 public class ${storeProviderName} {
   private static ${storeProviderName} instance;
 
-  public final DispatcherControl dispatcherControl;
   public final StateStore store;
   <#list queries as query>
   public final ${query.protocolName} ${query.attributeName};
@@ -62,25 +61,22 @@ public class ${storeProviderName} {
 </#if>
     new EntryAdapterProvider(stage.world()); // future use
 
-    final Protocols storeProtocols =
+    final StateStore store =
             StoreActorBuilder.from(stage, Model.${model}, dispatcher, StorageType.STATE_STORE, Settings.properties(), true);
-
-    final Protocols.Two<StateStore, DispatcherControl> storeWithControl = Protocols.two(storeProtocols);
 
 <#if requireAdapters>
 <#list adapters as stateAdapter>
-    registry.register(new Info(storeWithControl._1, ${stateAdapter.sourceClass}.class, ${stateAdapter.sourceClass}.class.getSimpleName()));
+    registry.register(new Info(store, ${stateAdapter.sourceClass}.class, ${stateAdapter.sourceClass}.class.getSimpleName()));
 </#list>
 </#if>
-    instance = new ${storeProviderName}(stage, storeWithControl._1, storeWithControl._2);
+    instance = new ${storeProviderName}(stage, store);
 
     return instance;
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private ${storeProviderName}(final Stage stage, final StateStore store, final DispatcherControl dispatcherControl) {
+  private ${storeProviderName}(final Stage stage, final StateStore store) {
     this.store = store;
-    this.dispatcherControl = dispatcherControl;
     <#list queries as query>
     this.${query.attributeName} = stage.actorFor(${query.protocolName}.class, ${query.actorName}.class, store);
     </#list>
