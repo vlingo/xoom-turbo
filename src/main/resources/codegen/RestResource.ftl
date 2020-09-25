@@ -13,7 +13,6 @@ import ${import.qualifiedClassName};
 import io.vlingo.http.Response;
 import io.vlingo.common.Completes;
 import io.vlingo.xoom.annotation.autodispatch.Handler;
-import io.vlingo.xoom.annotation.autodispatch.Handlers;
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.http.Response.Status.*;
 import static io.vlingo.http.ResponseHeader.*;
