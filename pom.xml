@@ -104,7 +104,7 @@
       <groupId>com.sun</groupId>
       <artifactId>tools</artifactId>
       <version>1.0</version>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
   <build>
