@@ -15,9 +15,8 @@ import org.junit.Test;
 
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 
 public class ProjectionGenerationStepTest {
 
@@ -26,6 +25,10 @@ public class ProjectionGenerationStepTest {
     private static final String MODEL_PACKAGE_PATH =
             Paths.get(PROJECT_PATH, "src", "main", "java",
                     "io", "vlingo", "xoomapp", "model").toString();
+
+    private static final String INFRASTRUCTURE_PACKAGE_PATH =
+            Paths.get(PROJECT_PATH, "src", "main", "java",
+                    "io", "vlingo", "xoomapp", "infrastructure").toString();
 
     @Test
     public void testEventBasedProjectionGeneration() {
@@ -55,23 +58,20 @@ public class ProjectionGenerationStepTest {
 
         Assert.assertEquals(contentSize, context.contents().size());
         if(projectionType.isEventBased()) {
-            Assert.assertEquals("EventTypes", context.contents().get(contentSize - 6).retrieveClassName());
+            Assert.assertEquals("EventTypes", context.contents().get(contentSize - 4).retrieveClassName());
         }
-        Assert.assertEquals("ProjectionDispatcherProvider", context.contents().get(contentSize - 5).retrieveClassName());
-        Assert.assertEquals("AuthorData", context.contents().get(contentSize - 4).retrieveClassName());
-        Assert.assertEquals("AuthorProjectionActor", context.contents().get(contentSize - 3).retrieveClassName());
-        Assert.assertEquals("BookData", context.contents().get(contentSize - 2).retrieveClassName());
-        Assert.assertEquals("BookProjectionActor", context.contents().get(contentSize - 1).retrieveClassName());
+        Assert.assertEquals("ProjectionDispatcherProvider", context.contents().get(contentSize - 3).retrieveClassName());
+        Assert.assertEquals("BookProjectionActor", context.contents().get(contentSize - 2).retrieveClassName());
+        Assert.assertEquals("AuthorProjectionActor", context.contents().get(contentSize - 1).retrieveClassName());
 
-        Assert.assertTrue(context.contents().get(contentSize - 5).contains("class ProjectionDispatcherProvider"));
-        Assert.assertTrue(context.contents().get(contentSize - 4).contains("class AuthorData"));
-        Assert.assertTrue(context.contents().get(contentSize - 3).contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
-        Assert.assertTrue(context.contents().get(contentSize - 3).contains(projectionType.isEventBased() ? "case AuthorRated:" : "CreationCase1"));
-        Assert.assertTrue(context.contents().get(contentSize - 2).contains("class BookData"));
-        Assert.assertTrue(context.contents().get(contentSize - 1).contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
-        Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "case BookSoldOut:" : "CreationCase1"));
-        Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "BookData.from(currentData.id, \"Handle BookSoldOut here\")" : "merged = currentData;"));
-        Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "case BookPurchased:" : "ChangeCase2"));
+        Assert.assertTrue(context.contents().get(contentSize - 3).contains("class ProjectionDispatcherProvider"));
+
+        Assert.assertTrue(context.contents().get(contentSize - 2).contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
+        Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "case BookSoldOut:" : "CreationCase1"));
+        Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "BookData.from(currentData.id, \"Handle BookSoldOut here\")" : "merged = currentData;"));
+        Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "case BookPurchased:" : "ChangeCase2"));
+        Assert.assertTrue(context.contents().get(contentSize - 1).contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
+        Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "case AuthorRated:" : "CreationCase1"));
     }
 
     private void loadContents(final CodeGenerationContext context) {
@@ -82,6 +82,8 @@ public class ProjectionGenerationStepTest {
         context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT);
         context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookSoldOut.java"), BOOK_SOLD_OUT_CONTENT_TEXT);
         context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), BOOK_PURCHASED_CONTENT_TEXT);
+        context.addContent(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), AUTHOR_DATA_CONTENT_TEXT);
+        context.addContent(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), BOOK_DATA_CONTENT_TEXT);
     }
 
     private void loadParameters(final CodeGenerationContext context, final String projections) {
@@ -132,4 +134,15 @@ public class ProjectionGenerationStepTest {
                     "... \\n" +
                     "}";
 
+    private static final String  AUTHOR_DATA_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.infrastructure; \\n" +
+                    "public class AuthorData { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_DATA_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.infrastructure; \\n" +
+                    "public class BookData { \\n" +
+                    "... \\n" +
+                    "}";
 }

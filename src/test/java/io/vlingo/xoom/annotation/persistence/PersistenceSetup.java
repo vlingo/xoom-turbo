@@ -16,8 +16,14 @@ import static io.vlingo.xoom.annotation.persistence.Persistence.StorageType.STAT
         @Projection(actor = DummyProjectionActor.class, becauseOf = {DummyCreated.class, DummyCancelled.class}),
         @Projection(actor = OtherDummyProjectionActor.class, becauseOf = {OtherDummyPromoted.class})
 })
-@StateAdapters(states = {DummyState.class, OtherDummyState.class})
+@EnableQueries({
+        @QueriesEntry(protocol = DummyQueries.class, actor = DummyQueriesActor.class),
+        @QueriesEntry(protocol = OtherDummyQueries.class, actor = OtherDummyQueriesActor.class),
+})
+@Adapters({DummyState.class, OtherDummyState.class})
 public class PersistenceSetup {
 
 
 }
+
+

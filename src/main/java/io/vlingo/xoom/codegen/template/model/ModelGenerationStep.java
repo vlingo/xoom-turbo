@@ -9,13 +9,13 @@ package io.vlingo.xoom.codegen.template.model;
 
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.template.storage.StorageType;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class ModelGenerationStep extends TemplateProcessingStep {
 

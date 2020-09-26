@@ -10,11 +10,14 @@ package io.vlingo.xoom.codegen.template.storage;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.ADAPTER;
 
 public class StorageGenerationStep extends TemplateProcessingStep {
 
@@ -25,9 +28,19 @@ public class StorageGenerationStep extends TemplateProcessingStep {
         final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
         final Boolean useAnnotations = context.parameterOf(ANNOTATIONS, Boolean::valueOf);
         final Boolean useCQRS  = context.parameterOf(CQRS, Boolean::valueOf);
-        return StorageTemplateDataFactory.build(basePackage, context.contents(), storageType,
-                context.databases(), projectionType, context.isInternalGeneration(),
-                useAnnotations, useCQRS);
+        final List<TemplateData> templatesData =
+                StorageTemplateDataFactory.build(basePackage, context.contents(), storageType,
+                        context.databases(), projectionType, context.isInternalGeneration(),
+                        useAnnotations, useCQRS);
+
+        return filterConditionally(useAnnotations, templatesData);
+    }
+
+    private List<TemplateData> filterConditionally(final Boolean useAnnotations, final List<TemplateData> templatesData) {
+        if(!useAnnotations) {
+            return templatesData;
+        }
+        return templatesData.stream().filter(data -> !data.hasStandard(ADAPTER)).collect(Collectors.toList());
     }
 
     @Override

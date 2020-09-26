@@ -6,14 +6,13 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.content;
 
-import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
@@ -42,7 +41,7 @@ public class ContentQueryTest {
 
     @Test
     public void testClassNameQuery() {
-        final List<String> classNames =
+        final Set<String> classNames =
                 ContentQuery.findClassNames(STATE, contents());
 
         Assert.assertEquals(2, classNames.size());
@@ -52,7 +51,7 @@ public class ContentQueryTest {
 
     @Test
     public void testQualifiedClassNameQuery() {
-        final List<String> classNames =
+        final Set<String> classNames =
                 ContentQuery.findFullyQualifiedClassNames(STATE, contents());
 
         Assert.assertEquals(2, classNames.size());

@@ -7,7 +7,11 @@ import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.annotation.persistence.Projection;
 </#if>
 <#if requireAdapters>
-import io.vlingo.xoom.annotation.persistence.StateAdapters;
+import io.vlingo.xoom.annotation.persistence.Adapters;
+</#if>
+<#if queries?size gt 0>
+import io.vlingo.xoom.annotation.persistence.EnableQueries;
+import io.vlingo.xoom.annotation.persistence.QueriesEntry;
 </#if>
 <#list imports as import>
 import ${import.qualifiedClassName};
@@ -26,13 +30,20 @@ import ${import.qualifiedClassName};
 })
 </#if>
 <#if requireAdapters>
-@StateAdapters(states = {
+@Adapters({
 <#list adapters as stateAdapter>
   <#if stateAdapter.last>
   ${stateAdapter.sourceClass}.class
   <#else>
   ${stateAdapter.sourceClass}.class,
   </#if>
+</#list>
+})
+</#if>
+<#if queries?size gt 0>
+@EnableQueries({
+<#list queries as query>
+  @QueriesEntry(protocol = ${query.protocolName}.class, actor = ${query.actorName}.class),
 </#list>
 })
 </#if>

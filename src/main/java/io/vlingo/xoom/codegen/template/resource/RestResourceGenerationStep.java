@@ -13,8 +13,7 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.PACKAGE;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.REST_RESOURCES;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class RestResourceGenerationStep extends TemplateProcessingStep {
 
@@ -27,7 +26,7 @@ public class RestResourceGenerationStep extends TemplateProcessingStep {
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        return context.hasParameter(REST_RESOURCES);
+        return !context.hasParameter(USE_AUTO_DISPATCH) && context.hasParameter(REST_RESOURCES);
     }
 
 }

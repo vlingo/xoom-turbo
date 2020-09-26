@@ -8,14 +8,16 @@ package io.vlingo.xoom.codegen.template.storage;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.file.ImportParameter;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.List;
+import java.util.Set;
 
+import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
@@ -28,10 +30,10 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                                     final Boolean useCQRS,
                                     final StorageType storageType,
                                     final ProjectionType projectionType,
-                                    final List<TemplateData> stateAdaptersTemplateData,
+                                    final List<TemplateData> templatesData,
                                     final List<Content> contents) {
         return new AnnotatedStorageProviderTemplateData(basePackage, persistencePackage, useCQRS,
-                storageType, projectionType, stateAdaptersTemplateData, contents);
+                storageType, projectionType, templatesData, contents);
     }
 
     private AnnotatedStorageProviderTemplateData(final String basePackage,
@@ -39,11 +41,11 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                                                  final Boolean useCQRS,
                                                  final StorageType storageType,
                                                  final ProjectionType projectionType,
-                                                 final List<TemplateData> stateAdaptersTemplateData,
+                                                 final List<TemplateData> templatesData,
                                                  final List<Content> contents){
         this.templateParameters =
                 loadParameters(basePackage, persistencePackage,useCQRS, storageType,
-                        projectionType, stateAdaptersTemplateData, contents);
+                        projectionType, templatesData, contents);
     }
 
     private TemplateParameters loadParameters(final String basePackage,
@@ -51,22 +53,22 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                                               final Boolean useCQRS,
                                               final StorageType storageType,
                                               final ProjectionType projectionType,
-                                              final List<TemplateData> stateAdaptersTemplateData,
+                                              final List<TemplateData> templatesData,
                                               final List<Content> contents)  {
         return TemplateParameters.with(BASE_PACKAGE, basePackage)
                 .and(IMPORTS, resolveImports(projectionType, contents))
                 .and(PACKAGE_NAME, persistencePackage)
                 .and(STORAGE_TYPE, storageType.name())
-                .and(REQUIRE_ADAPTERS, !stateAdaptersTemplateData.isEmpty())
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
-                .and(ADAPTERS, AdapterParameter.from(stateAdaptersTemplateData))
+                .and(ADAPTERS, AdapterParameter.from(templatesData))
                 .and(PROJECTIONS, ProjectionParameter.from(projectionType, contents))
+                .and(QUERIES, QueriesParameter.from(useCQRS, contents, templatesData))
                 .and(USE_CQRS, useCQRS).and(USE_ANNOTATIONS, true)
-                .andResolve(STORAGE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
-
+                .andResolve(REQUIRE_ADAPTERS, params -> !params.<List>find(ADAPTERS).isEmpty())
+                .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
     }
 
-    private List<ImportParameter> resolveImports(final ProjectionType projectionType, final List<Content> contents) {
+    private Set<ImportParameter> resolveImports(final ProjectionType projectionType, final List<Content> contents) {
         final TemplateStandard[] relatedStandards =
                 projectionType.isEventBased() ? new TemplateStandard[]{STATE, DOMAIN_EVENT} :
                         new TemplateStandard[]{STATE};

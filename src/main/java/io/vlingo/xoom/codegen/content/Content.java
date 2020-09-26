@@ -24,8 +24,14 @@ public abstract class Content {
     }
 
     public static Content with(final TemplateStandard standard,
-                               final TypeElement typeElement) {
-        return new TypeBasedContent(standard, typeElement);
+                               final TypeElement type) {
+        return new TypeBasedContent(standard, type);
+    }
+
+    public static Content with(final TemplateStandard standard,
+                               final TypeElement protocolType,
+                               final TypeElement actorType) {
+        return new ProtocolBasedContent(standard, protocolType, actorType);
     }
 
     public abstract void create();
@@ -34,11 +40,19 @@ public abstract class Content {
 
     public abstract String retrievePackage();
 
-    public abstract String retrieveFullyQualifiedName();
+    public abstract String retrieveQualifiedName();
 
     public abstract boolean canWrite();
 
     public abstract boolean contains(final String term);
+
+    public String retrieveProtocolQualifiedName() {
+        throw new UnsupportedOperationException("Content does not have a protocol by default");
+    }
+
+    public boolean isProtocolBased() {
+        return false;
+    }
 
     public boolean has(final TemplateStandard standard) {
         return this.standard.equals(standard);

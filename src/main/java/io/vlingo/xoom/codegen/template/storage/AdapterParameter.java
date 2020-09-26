@@ -11,11 +11,13 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.ADAPTER_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.SOURCE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.ADAPTER;
 
 public class AdapterParameter {
 
@@ -36,10 +38,16 @@ public class AdapterParameter {
         this(index, numberOfAdapters, parameters.find(SOURCE_NAME), parameters.find(ADAPTER_NAME));
     }
 
-    public static List<AdapterParameter> from(final List<TemplateData> adaptersTemplateData) {
-        return IntStream.range(0, adaptersTemplateData.size()).mapToObj(index -> {
-            final TemplateData templateData = adaptersTemplateData.get(index);
-            return new AdapterParameter(index, adaptersTemplateData.size(),
+    public static List<AdapterParameter> from(final List<TemplateData> templatesData) {
+        final Predicate<TemplateData> filter =
+                templateData -> templateData.hasStandard(ADAPTER);
+
+        final List<TemplateData> adapterTemplates =
+                templatesData.stream().filter(filter).collect(Collectors.toList());
+
+        return IntStream.range(0, adapterTemplates.size()).mapToObj(index -> {
+            final TemplateData templateData = adapterTemplates.get(index);
+            return new AdapterParameter(index, adapterTemplates.size(),
                     templateData.parameters());
         }).collect(Collectors.toList());
     }

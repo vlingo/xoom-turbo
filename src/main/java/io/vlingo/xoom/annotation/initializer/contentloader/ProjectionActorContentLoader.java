@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
+import io.vlingo.xoom.annotation.persistence.Projection;
 import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
@@ -28,7 +29,7 @@ public class ProjectionActorContentLoader extends TypeBasedContentLoader {
     }
 
     @Override
-    protected List<TypeElement> retrieveTypes() {
+    protected List<TypeElement> retrieveContentSource() {
         final Projections projections =
                 annotatedClass == null ? null :
                         annotatedClass.getAnnotation(Projections.class);
@@ -38,7 +39,7 @@ public class ProjectionActorContentLoader extends TypeBasedContentLoader {
         }
 
         return Stream.of(projections.value())
-                .map(projection -> typeRetriever.from(projection, aProjection -> projection.actor()))
+                .map(projection -> typeRetriever.from(projection, Projection::actor))
                 .collect(Collectors.toList());
     }
 

@@ -7,19 +7,22 @@
 
 package io.vlingo.xoom.codegen.template;
 
-import io.vlingo.xoom.codegen.file.ImportParameter;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
+
+import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
 
 public class TemplateParameters {
 
     private final Map<String, Object> parameters = new HashMap<>();
 
     private TemplateParameters() {
+
     }
 
     public static TemplateParameters empty() {
@@ -42,17 +45,22 @@ public class TemplateParameters {
 
     public TemplateParameters addImport(final String qualifiedClassName) {
         if(this.find(TemplateParameter.IMPORTS) == null) {
-            this.and(TemplateParameter.IMPORTS, new ArrayList<ImportParameter>());
+            this.and(TemplateParameter.IMPORTS, new HashSet<ImportParameter>());
         }
         if(qualifiedClassName != null && !qualifiedClassName.trim().isEmpty()) {
-            this.<List>find(TemplateParameter.IMPORTS).add(new ImportParameter(qualifiedClassName.trim()));
+            this.<Set>find(TemplateParameter.IMPORTS).add(new ImportParameter(qualifiedClassName.trim()));
         }
         return this;
     }
 
-    public TemplateParameters addImports(final List<String> qualifiedClassNames) {
+    public TemplateParameters addImports(final Set<String> qualifiedClassNames) {
         qualifiedClassNames.forEach(this::addImport);
         return this;
+    }
+
+    public boolean hasImport(final String qualifiedName) {
+        return ((Set<ImportParameter>) find(IMPORTS)).stream()
+                .anyMatch(imp -> imp.matchClass(qualifiedName));
     }
 
     public <T> T find(final TemplateParameter parameter) {
@@ -70,5 +78,14 @@ public class TemplateParameters {
         return parameters;
     }
 
+    public boolean has(final TemplateParameter parameter) {
+        return parameters.containsKey(parameter.key) &&
+                parameters.get(parameter.key) != null &&
+                !parameters.get(parameter.key).toString().trim().isEmpty();
+    }
+
+    public boolean hasValue(final TemplateParameter parameter, final String value) {
+        return has(parameter) && this.parameters.get(parameter.key).equals(value);
+    }
 
 }

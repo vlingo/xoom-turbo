@@ -9,8 +9,7 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.file.ImportParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
@@ -20,13 +19,13 @@ import org.junit.Test;
 
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.APPLICATION_NAME;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.BLOCKING_MESSAGING;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
+import static io.vlingo.xoom.codegen.parameter.Label.BLOCKING_MESSAGING;
+import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.storage.StorageType.STATE_STORE;
@@ -35,14 +34,14 @@ public class AnnotatedBootstrapTemplateDataTest {
 
     @Test
     public void testBootstrapTemplateDataGenerationWithCQRSAndProjections() {
-        final Map<CodeGenerationParameter, String> codeGenerationParameters =
-                new HashMap<CodeGenerationParameter, String>() {{
+        final Map<Label, String> codeGenerationParameters =
+                new HashMap<Label, String>() {{
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(APPLICATION_NAME, "xoom-app");
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.TRUE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
-                    put(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType.EVENT_BASED.name());
+                    put(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED.name());
                     put(ANNOTATIONS, Boolean.TRUE.toString());
                 }};
 
@@ -58,8 +57,8 @@ public class AnnotatedBootstrapTemplateDataTest {
                 BootstrapTemplateData.from(context).parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
-        Assert.assertEquals(1, parameters.<List>find(IMPORTS).size());
-        Assert.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+        Assert.assertEquals(1, parameters.<Set>find(IMPORTS).size());
+        Assert.assertTrue(parameters.hasImport("io.vlingo.xoom.annotation.initializer.ResourceHandlers"));
         Assert.assertEquals("io.vlingo.xoomapp.resource", parameters.find(TemplateParameter.REST_RESOURCE_PACKAGE));
         Assert.assertEquals("xoom-app", parameters.find(TemplateParameter.APPLICATION_NAME));
         Assert.assertEquals(true, parameters.find(USE_PROJECTIONS));
@@ -67,13 +66,13 @@ public class AnnotatedBootstrapTemplateDataTest {
 
     @Test
     public void testBootstrapTemplateDataGenerationWithoutCQRSAndProjections() {
-        final Map<CodeGenerationParameter, String> codeGenerationParameters =
-                new HashMap<CodeGenerationParameter, String>() {{
+        final Map<Label, String> codeGenerationParameters =
+                new HashMap<Label, String>() {{
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(APPLICATION_NAME, "xoom-app");
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.FALSE.toString());
-                    put(CodeGenerationParameter.PROJECTION_TYPE, ProjectionType.NONE.name());
+                    put(Label.PROJECTION_TYPE, ProjectionType.NONE.name());
                     put(ANNOTATIONS, Boolean.TRUE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                 }};
@@ -87,8 +86,8 @@ public class AnnotatedBootstrapTemplateDataTest {
                 BootstrapTemplateData.from(context).parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
-        Assert.assertEquals(1, parameters.<List>find(IMPORTS).size());
-        Assert.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+        Assert.assertEquals(1, parameters.<Set>find(IMPORTS).size());
+        Assert.assertTrue(parameters.hasImport("io.vlingo.xoom.annotation.initializer.ResourceHandlers"));
         Assert.assertEquals("io.vlingo.xoomapp.resource", parameters.find(TemplateParameter.REST_RESOURCE_PACKAGE));
         Assert.assertEquals("xoom-app", parameters.find(TemplateParameter.APPLICATION_NAME));
         Assert.assertEquals(false, parameters.find(USE_PROJECTIONS));

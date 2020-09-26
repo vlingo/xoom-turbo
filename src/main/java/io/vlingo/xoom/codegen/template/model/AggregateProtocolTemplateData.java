@@ -11,9 +11,10 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
-import static io.vlingo.xoom.codegen.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import java.beans.Introspector;
+
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class AggregateProtocolTemplateData extends TemplateData {
 
@@ -24,7 +25,10 @@ public class AggregateProtocolTemplateData extends TemplateData {
                                          final String protocolName) {
         this.protocolName = protocolName;
         this.parameters = TemplateParameters.with(PACKAGE_NAME, packageName)
-                        .and(AGGREGATE_PROTOCOL_NAME, protocolName);
+                .and(AGGREGATE_PROTOCOL_NAME, protocolName)
+                .and(STATE_NAME, STATE.resolveClassname(protocolName))
+                .and(ENTITY_NAME, AGGREGATE.resolveClassname(protocolName))
+                .and(AGGREGATE_PROTOCOL_VARIABLE, Introspector.decapitalize(protocolName));
     }
 
     @Override

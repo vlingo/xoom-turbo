@@ -8,11 +8,13 @@ package io.vlingo.xoom.annotation;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
+import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -30,7 +32,7 @@ public class TypeRetriever {
     }
 
     public Stream<TypeMirror> subclassesOf(final Class superclass,
-                                         final String[] packages) {
+                                           final String[] packages) {
         return Stream.of(packages).map(packageName -> elements.getPackageElement(packageName))
                 .flatMap(packageElement -> packageElement.getEnclosedElements().stream())
                 .filter(element -> isSubclass(element, superclass))
@@ -46,7 +48,7 @@ public class TypeRetriever {
                 .equals(resourceHandler);
     }
 
-    public TypeElement from(final Object annotation, final Function<Object, Class<?>> retriever) {
+    public <T> TypeElement from(final T annotation, final Function<T, Class<?>> retriever) {
         try {
             final Class<?> clazz =
                     retriever.apply(annotation);
@@ -59,7 +61,7 @@ public class TypeRetriever {
         }
     }
 
-    public List<TypeElement> typesFrom(final Object annotation, final Function<Object, Class<?>[]> retriever) {
+    public <T>  List<TypeElement> typesFrom(final T annotation, final Function<T, Class<?>[]> retriever) {
         try {
             final Class<?>[] classes =
                     retriever.apply(annotation);
@@ -75,6 +77,23 @@ public class TypeRetriever {
 
     public static TypeRetriever with(final ProcessingEnvironment environment) {
         return new TypeRetriever(environment);
+    }
+
+    public boolean isAnInterface(final Annotation queries, final Function<Object, Class<?>> retriever) {
+        return getTypeElement(queries, retriever).getKind().isInterface();
+    }
+
+    public String getClassName(final Annotation queries, final Function<Object, Class<?>> retriever) {
+        return getTypeElement(queries, retriever).getQualifiedName().toString();
+    }
+
+    public List<ExecutableElement> getMethods(final Annotation queries, final Function<Object, Class<?>> retriever) {
+        return (List<ExecutableElement>)getTypeElement(queries, retriever).getEnclosedElements();
+    }
+
+    public TypeElement getTypeElement(final Annotation annotation,
+                                       final Function<Object, Class<?>> retriever) {
+        return from(annotation, retriever);
     }
 
 }

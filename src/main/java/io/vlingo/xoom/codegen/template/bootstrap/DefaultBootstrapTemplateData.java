@@ -10,16 +10,23 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.ANNOTATIONS;
+import java.util.Set;
+
+import static io.vlingo.xoom.codegen.parameter.Label.ANNOTATIONS;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCES;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
 
 public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
     @Override
     protected void enrichParameters(final CodeGenerationContext context) {
+        final Set<String> qualifiedNames =
+                ContentQuery.findFullyQualifiedClassNames(context.contents(),
+                        REST_RESOURCE, AUTO_DISPATCH_RESOURCE_HANDLER);
+
         parameters().and(REST_RESOURCES, RestResourcesParameter.from(context.contents()))
-                .addImports(ContentQuery.findFullyQualifiedClassNames(REST_RESOURCE, context.contents()));
+                .addImports(qualifiedNames);
     }
 
     @Override

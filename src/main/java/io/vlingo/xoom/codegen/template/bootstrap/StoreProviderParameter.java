@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL_CLASSIFICATION;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
@@ -47,7 +47,7 @@ public class StoreProviderParameter {
                                    final Boolean useProjections) {
         final TemplateParameters parameters =
                 TemplateParameters.with(STORAGE_TYPE, storageType)
-                        .and(MODEL_CLASSIFICATION, model);
+                        .and(MODEL, model);
 
         this.className = STORE_PROVIDER.resolveClassname(parameters);
         this.arguments = resolveArguments(model, storageType, useProjections);

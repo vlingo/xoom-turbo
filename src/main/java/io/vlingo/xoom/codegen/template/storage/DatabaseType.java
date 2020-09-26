@@ -7,12 +7,6 @@
 
 package io.vlingo.xoom.codegen.template.storage;
 
-import io.vlingo.xoom.codegen.CodeGenerationSetup;
-import io.vlingo.xoom.codegen.template.TemplateParameters;
-
-import static io.vlingo.xoom.codegen.CodeGenerationSetup.STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-
 public enum DatabaseType {
 
     IN_MEMORY("in_memory"),

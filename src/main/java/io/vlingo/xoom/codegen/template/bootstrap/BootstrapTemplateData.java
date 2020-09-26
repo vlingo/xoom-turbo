@@ -7,10 +7,9 @@
 package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.file.ImportParameter;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
@@ -18,15 +17,16 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.APPLICATION_NAME;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.PROJECTION_TYPE;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
+import static io.vlingo.xoom.codegen.parameter.Label.PROJECTION_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
@@ -68,7 +68,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
         final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
 
-        final List<ImportParameter> imports =
+        final Set<ImportParameter> imports =
                 loadImports(storageType, context.contents(), useCQRS, useAnnotations);
 
         final List<TypeRegistryParameter> typeRegistryParameters =
@@ -92,19 +92,19 @@ public abstract class BootstrapTemplateData extends TemplateData {
 
     protected abstract boolean support(final CodeGenerationContext context);
 
-    private List<ImportParameter> loadImports(final StorageType storageType,
-                                              final List<Content> contents,
-                                              final Boolean useCQRS,
-                                              final Boolean useAnnotations) {
+    private Set<ImportParameter> loadImports(final StorageType storageType,
+                                             final List<Content> contents,
+                                             final Boolean useCQRS,
+                                             final Boolean useAnnotations) {
         if(useAnnotations) {
-            return new ArrayList<>();
+            return new HashSet<>();
         }
 
-        final List<String> otherFullyQualifiedNames =
+        final Set<String> otherFullyQualifiedNames =
                 ContentQuery.findFullyQualifiedClassNames(contents,
                         STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER);
 
-        final List<String> typeRegistriesFullyQualifiedNames =
+        final Set<String> typeRegistriesFullyQualifiedNames =
                 storageType.resolveTypeRegistryQualifiedNames(useCQRS);
 
         return ImportParameter.of(otherFullyQualifiedNames, typeRegistriesFullyQualifiedNames);

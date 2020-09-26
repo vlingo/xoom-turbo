@@ -1,6 +1,6 @@
 package io.vlingo.xoom.codegen.template;
 
-
+import io.vlingo.http.Method;
 import io.vlingo.xoom.codegen.CodeGenerationSetup;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
@@ -24,6 +24,12 @@ public enum TemplateStandard {
     STATE(parameters -> CodeGenerationSetup.STATE_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
             (name, parameters) -> name + "State"),
 
+    QUERIES(parameters -> Template.QUERIES.filename,
+            (name, parameters) -> name + "Queries"),
+
+    QUERIES_ACTOR(parameters -> Template.QUERIES_ACTOR.filename,
+            (name, parameters) -> name + "QueriesActor"),
+
     EVENT_TYPES(parameters -> Template.EVENT_TYPES.filename,
             (name, parameters) -> "EventTypes"),
 
@@ -32,6 +38,30 @@ public enum TemplateStandard {
 
     REST_RESOURCE(parameters -> Template.REST_RESOURCE.filename,
             (name, parameters) -> name + "Resource"),
+
+    ROUTE_METHOD(parameters -> {
+            final String httpMethod =
+                    parameters.find(TemplateParameter.ROUTE_METHOD);
+
+            if(Method.from(httpMethod).isGET()) {
+                return Template.RETRIEVE_METHOD.filename;
+            }
+
+            if(parameters.has(ID_NAME)) {
+                return Template.UPDATE_METHOD.filename;
+            }
+
+            return Template.CREATION_METHOD.filename;
+        }, (name, parameters) -> name),
+
+    AUTO_DISPATCH_RESOURCE_HANDLER(parameters -> Template.REST_RESOURCE.filename,
+            (name, parameters) -> name + "Handler"),
+
+    AUTO_DISPATCH_MAPPING(parameters -> Template.AUTO_DISPATCH_MAPPING.filename,
+            (name, parameters) -> name + "Resource"),
+
+    AUTO_DISPATCH_HANDLERS_MAPPING(parameters -> Template.AUTO_DISPATCH_HANDLERS_MAPPING.filename,
+            (name, parameters) -> name + "ResourceHandlers"),
 
     ADAPTER(parameters -> ADAPTER_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
             (name, parameters) -> name + "Adapter"),
@@ -63,14 +93,14 @@ public enum TemplateStandard {
         if(parameters.find(USE_ANNOTATIONS, false)) {
             return Template.ANNOTATED_STORE_PROVIDER.filename;
         }
-        return storeProviderTemplatesFrom(parameters.find(MODEL_CLASSIFICATION))
+        return storeProviderTemplatesFrom(parameters.find(MODEL))
                 .get(parameters.find(STORAGE_TYPE));
     }, (name, parameters) -> {
         if(parameters.find(USE_ANNOTATIONS, false)) {
             return "PersistenceSetup";
         }
         final StorageType storageType = parameters.find(STORAGE_TYPE);
-        final Model model = parameters.find(MODEL_CLASSIFICATION);
+        final Model model = parameters.find(MODEL);
         if(model.isQueryModel()) {
             return STATE_STORE.resolveProviderNameFrom(model);
         }
