@@ -104,8 +104,7 @@
       <groupId>com.sun</groupId>
       <artifactId>tools</artifactId>
       <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/repo/tools.jar</systemPath>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
@@ -224,6 +223,12 @@
   </build>
 
   <repositories>
+    <repository>
+      <id>project.local</id>
+      <name>project</name>
+      <url>file:${project.basedir}/repo</url>
+    </repository>
+
     <repository>
       <id>jcenter.bintray.com</id>
       <url>https://jcenter.bintray.com</url>
