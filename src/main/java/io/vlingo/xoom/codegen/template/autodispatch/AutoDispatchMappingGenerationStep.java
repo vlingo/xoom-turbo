@@ -24,7 +24,7 @@ public class AutoDispatchMappingGenerationStep extends TemplateProcessingStep {
         final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
         final String restResourcesData = context.parameterOf(REST_RESOURCES);
         final List<TemplateData> queriesTemplateData = context.templateParametersOf(QUERIES_ACTOR);
-        return AutoDispatchMappingTemplateData.build(basePackage, restResourcesData, useCQRS,
+        return AutoDispatchMappingTemplateDataFactory.build(basePackage, restResourcesData, useCQRS,
                 queriesTemplateData, context.contents());
     }
 

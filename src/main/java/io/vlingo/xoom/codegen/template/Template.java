@@ -27,6 +27,7 @@ public enum Template {
     STATE_ADAPTER("StateAdapter"),
     REST_RESOURCE("RestResource"),
     AUTO_DISPATCH_MAPPING("AutoDispatchMapping"),
+    AUTO_DISPATCH_HANDLERS_MAPPING("AutoDispatchHandlersMapping"),
     XOOM_INITIALIZER("XoomInitializer"),
     PROJECTION_DISPATCHER_PROVIDER("ProjectionDispatcherProvider"),
     OPERATION_BASED_PROJECTION("OperationBasedProjection"),

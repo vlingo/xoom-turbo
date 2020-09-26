@@ -21,10 +21,11 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import static io.vlingo.xoom.codegen.template.TemplateParameter.AUTO_DISPATCH_HANDLERS_MAPPING_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.AUTO_DISPATCH_MAPPING_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
-public class AutoDispatchMappingTemplateDataTest {
+public class AutoDispatchMappingTemplateDataFactoryTest {
 
     @Test
     public void testThatTemplateParametersAreMapped() {
@@ -36,13 +37,14 @@ public class AutoDispatchMappingTemplateDataTest {
                 QueriesTemplateDataFactory.from(persistencePackage, true, contents());
 
         final List<TemplateData> mappingTemplatesData =
-                AutoDispatchMappingTemplateData.build(basePackage, restResourcesData,
+                AutoDispatchMappingTemplateDataFactory.build(basePackage, restResourcesData,
                         true, queriesTemplateData, contents());
 
-        Assert.assertEquals(2, mappingTemplatesData.size());
+        Assert.assertEquals(4, mappingTemplatesData.size());
 
         final TemplateParameters autoDispatchMappingParameters =
-                mappingTemplatesData.stream().map(TemplateData::parameters)
+                mappingTemplatesData.stream()
+                        .filter(data -> data.hasStandard(AUTO_DISPATCH_MAPPING)).map(TemplateData::parameters)
                         .filter(params-> params.find(AUTO_DISPATCH_MAPPING_NAME).equals("AuthorResource"))
                         .findFirst().get();
 
@@ -58,9 +60,26 @@ public class AutoDispatchMappingTemplateDataTest {
         Assert.assertEquals("AuthorData", autoDispatchMappingParameters.find(TemplateParameter.ENTITY_DATA_NAME));
         Assert.assertEquals("AuthorQueries", autoDispatchMappingParameters.find(TemplateParameter.QUERIES_NAME));
         Assert.assertEquals("AuthorQueriesActor", autoDispatchMappingParameters.find(TemplateParameter.QUERIES_ACTOR_NAME));
-        Assert.assertEquals("authors", autoDispatchMappingParameters.find(TemplateParameter.QUERY_ALL_METHOD_NAME));
         Assert.assertEquals("authors", autoDispatchMappingParameters.find(TemplateParameter.URI_ROOT));
         Assert.assertEquals(true, autoDispatchMappingParameters.find(TemplateParameter.USE_CQRS));
+
+        final TemplateParameters autoDispatchHandlersMappingParameters =
+                mappingTemplatesData.stream()
+                        .filter(data -> data.hasStandard(AUTO_DISPATCH_HANDLERS_MAPPING)).map(TemplateData::parameters)
+                        .filter(params-> params.find(AUTO_DISPATCH_HANDLERS_MAPPING_NAME).equals("AuthorResourceHandlers"))
+                        .findFirst().get();
+
+        Assert.assertTrue(autoDispatchHandlersMappingParameters.hasImport("io.vlingo.xoomapp.model.author.Author"));
+        Assert.assertTrue(autoDispatchHandlersMappingParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorState"));
+        Assert.assertTrue(autoDispatchHandlersMappingParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+        Assert.assertTrue(autoDispatchHandlersMappingParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries"));
+        Assert.assertEquals("io.vlingo.xoomapp.resource", autoDispatchHandlersMappingParameters.find(TemplateParameter.PACKAGE_NAME));
+        Assert.assertEquals("AuthorResourceHandlers", autoDispatchHandlersMappingParameters.find(AUTO_DISPATCH_HANDLERS_MAPPING_NAME));
+        Assert.assertEquals("Author", autoDispatchHandlersMappingParameters.find(TemplateParameter.AGGREGATE_PROTOCOL_NAME));
+        Assert.assertEquals("AuthorData", autoDispatchHandlersMappingParameters.find(TemplateParameter.ENTITY_DATA_NAME));
+        Assert.assertEquals("AuthorQueries", autoDispatchHandlersMappingParameters.find(TemplateParameter.QUERIES_NAME));
+        Assert.assertEquals("authors", autoDispatchHandlersMappingParameters.find(TemplateParameter.QUERY_ALL_METHOD_NAME));
+        Assert.assertEquals(true, autoDispatchHandlersMappingParameters.find(TemplateParameter.USE_CQRS));
     }
 
     private List<Content> contents() {
@@ -69,6 +88,8 @@ public class AutoDispatchMappingTemplateDataTest {
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT),
                 Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_AGGREGATE_CONTENT_TEXT),
                 Content.with(AGGREGATE,  new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookEntity.java"), null, null, BOOK_AGGREGATE_CONTENT_TEXT),
+                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
                 Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
                 Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
@@ -115,6 +136,18 @@ public class AutoDispatchMappingTemplateDataTest {
     private static final String BOOK_AGGREGATE_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model.book; \\n" +
                     "public class BookEntity { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_STATE_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorState { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_STATE_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public class BookState { \\n" +
                     "... \\n" +
                     "}";
 

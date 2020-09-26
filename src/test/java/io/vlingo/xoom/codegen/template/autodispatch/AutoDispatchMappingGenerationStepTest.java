@@ -46,13 +46,24 @@ public class AutoDispatchMappingGenerationStepTest {
 
         new AutoDispatchMappingGenerationStep().process(context);
 
-        Assert.assertEquals(16, context.contents().size());
+        Assert.assertEquals(20, context.contents().size());
 
         final Content authorMappingContent =
                 context.contents().stream().filter(content -> content.retrieveClassName().equals("AuthorResource"))
-                .findFirst().get();
+                        .findFirst().get();
 
         Assert.assertTrue(authorMappingContent.contains("@Queries(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)"));
+
+        final Content authorHandlersMappingContent =
+                context.contents().stream().filter(content -> content.retrieveClassName().equals("AuthorResourceHandlers"))
+                        .findFirst().get();
+
+        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Three<Completes<AuthorState>, Stage, AuthorData>> defineWithHandler ="));
+        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(DEFINE_PLACEHOLDER, (stage, data) -> Author.definePlaceholder(stage, data.placeholderValue));"));
+        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<AuthorData, AuthorState>> adaptStateHandler ="));
+        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(ADAPT_STATE, AuthorData::from);"));
+        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<Completes<Collection<AuthorData>>, AuthorQueries>> queryAllHandler ="));
+        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(QUERY_ALL, AuthorQueries::authors);"));
     }
 
     private Content[] contents() {
@@ -61,6 +72,8 @@ public class AutoDispatchMappingGenerationStepTest {
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT),
                 Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_AGGREGATE_CONTENT_TEXT),
                 Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookEntity.java"), null, null, BOOK_AGGREGATE_CONTENT_TEXT),
+                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
                 Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
                 Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
@@ -95,6 +108,18 @@ public class AutoDispatchMappingGenerationStepTest {
     private static final String BOOK_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model.book; \\n" +
                     "public interface Book { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_STATE_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorState { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_STATE_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public class BookState { \\n" +
                     "... \\n" +
                     "}";
 

@@ -63,7 +63,7 @@ public class AutoDispatchParameterResolver {
         final CodeGenerationParameter autoDispatchParameter =
                 CodeGenerationParameter.of(AUTO_DISPATCH_NAME, autoDispatchClass.getQualifiedName())
                         .relate(HANDLERS_CONFIG_NAME, handlersConfigClass.getQualifiedName())
-                        .relate(URI_ROOT, autoDispatchAnnotation.path());
+                        .relate(URI_ROOT, resolveRootURI(autoDispatchAnnotation));
 
         resolveModelAnnotation(autoDispatchClass, autoDispatchParameter);
         resolveQueriesAnnotation(autoDispatchClass, autoDispatchParameter);
@@ -207,4 +207,8 @@ public class AutoDispatchParameterResolver {
         }
     }
 
+    private String resolveRootURI(final AutoDispatch autoDispatch) {
+        final String rootURI = autoDispatch.path();
+        return rootURI.endsWith("/") ? rootURI : rootURI + "/";
+    }
 }

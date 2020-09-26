@@ -13,19 +13,19 @@ import static io.vlingo.http.Method.POST;
 import static io.vlingo.http.Method.GET;
 </#if>
 
-@AutoDispatch(path="/${uriRoot}")
+@AutoDispatch(path="/${uriRoot}", handlers=${autoDispatchHandlersMappingName}.class)
 <#if useCQRS>
 @Queries(protocol = ${queriesName}.class, actor = ${queriesActorName}.class)
 </#if>
 @Model(protocol = ${aggregateProtocolName}.class, actor = ${entityName}.class, data = ${dataName}.class)
 public interface ${autoDispatchMappingName} {
 
-    @Route(method = POST, handler = "definePlaceholder(stage, data.placeholderValue)")
-    @ResponseAdapter("${dataName}.from")
+    @Route(method = POST, handler = ${autoDispatchHandlersMappingName}.DEFINE_PLACEHOLDER)
+    @ResponseAdapter(handler = ${autoDispatchHandlersMappingName}.ADAPT_STATE)
     Completes<Response> definePlaceholder(@Body ${dataName} data);
 
     <#if useCQRS>
-    @Route(method = GET, handler="${queryAllMethodName}()")
+    @Route(method = GET, handler = ${autoDispatchHandlersMappingName}.QUERY_ALL)
     Completes<Response> queryAll();
     </#if>
 
