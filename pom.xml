@@ -45,7 +45,7 @@
           <artifactId>tools</artifactId>
           <scope>system</scope>
           <version>1.0</version>
-          <systemPath>${env.JAVA_HOME}/lib/tools.jar</systemPath>
+          <systemPath>/usr/lib/jvm/java-8-openjdk-amd64/lib/tools.jar</systemPath>
         </dependency>
       </dependencies>
     </profile>
