@@ -26,13 +26,13 @@ public class ${resourceName} extends ResourceHandler {
 </#if>
 
   private final Stage stage;
-  <#if queries?has_content>
+  <#if queries?has_content && !queries.empty>
   private final ${queries.protocolName} ${queries.attributeName};
   </#if>
 
   public ${resourceName}(final Stage stage) {
       this.stage = stage;
-      <#if queries?has_content>
+      <#if queries?has_content && !queries.empty>
       this.${queries.attributeName} = ${storeProviderName}.instance().${queries.attributeName};
       </#if>
   }
@@ -76,9 +76,11 @@ public class ${resourceName} extends ResourceHandler {
     return id== null ? "${uriRoot}" : "${uriRoot}" + id;
   }
 
+  <#if modelProtocol?has_content>
   private Completes<${modelProtocol}> resolve(final String id) {
     return stage.actorOf(${modelProtocol}.class, stage.addressFactory().from(id), ${modelActor}.class);
   }
+  </#if>
   </#if>
 
 }
