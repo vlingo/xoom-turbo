@@ -8,10 +8,9 @@ before_install:
   - cp .travis/settings.xml $HOME/.m2/settings.xml
   - mvn deploy:help versions:help help:help
   - cd /usr/lib/jvm/java-8-openjdk-amd64
-  - find . -name "tools*"
 
 script:
-  - mvn install -PTravisCI
+  - find . -name "tools*"
 
 before_cache:
   - rm -rf $HOME/.m2/repository/io/vlingo
