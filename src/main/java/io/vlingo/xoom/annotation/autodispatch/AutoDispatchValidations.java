@@ -41,7 +41,7 @@ public interface AutoDispatchValidations extends Validation {
                     final Route routeAnnotation = enclosed.getAnnotation(Route.class);
                     if (ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null && routeAnnotation.method() == Method.GET) {
                         final ExecutableElement executableElement = (ExecutableElement) enclosed;
-                        executableElement.getParameters().forEach(methodParameters -> {
+                        executableElement.getRgetParameters().forEach(methodParameters -> {
                             if (ElementKind.PARAMETER.equals(methodParameters.getKind()) && methodParameters.getAnnotation(Body.class) != null) {
                                 throw new ProcessingAnnotationException(
                                         String.format("Class [%s]. Body annotation is not allowed with %s as method parameter for Route annotation.",
