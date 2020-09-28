@@ -8,11 +8,13 @@ package io.vlingo.xoom.annotation.autodispatch;
 
 import io.vlingo.actors.Actor;
 import io.vlingo.http.Method;
+import io.vlingo.xoom.annotation.initializer.resources.DummyHandlers;
 
 @Queries(actor = Actor.class, protocol = ActorProtocol.class)
+@AutoDispatch(path = "/dummies", handlers = DummyHandlers.class)
 public interface DummyQueries {
 
-    @Route(method = Method.GET, path = "", handler = 0)
+    @Route(method = Method.GET, path = "any-path", handler = 0)
     void dummyRouteForQueries(String parameter);
 
 }

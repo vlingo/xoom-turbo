@@ -7,13 +7,21 @@
 package io.vlingo.xoom.annotation.persistence;
 
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
-import io.vlingo.xoom.annotation.initializer.infrastructure.persistence.QueryModelStateStoreProvider;
+import io.vlingo.symbio.*;
+import io.vlingo.symbio.store.state.StateStore;
 import io.vlingo.xoom.annotation.model.DummyState;
 
 public class DummyProjectionActor extends StateStoreProjectionActor<DummyState> {
-
-    public DummyProjectionActor() {
-        super(QueryModelStateStoreProvider.instance().store);
+    public DummyProjectionActor(StateStore stateStore) {
+        super(stateStore);
     }
+
+    public DummyProjectionActor(StateStore stateStore, StateAdapter<Object, State<?>> stateAdapter, EntryAdapter<Source<?>, Entry<?>> entryAdapter) {
+        super(stateStore, stateAdapter, entryAdapter);
+    }
+
+//    public DummyProjectionActor() {
+//        super(QueryModelStateStoreProvider.instance().store);
+//    }
 
 }

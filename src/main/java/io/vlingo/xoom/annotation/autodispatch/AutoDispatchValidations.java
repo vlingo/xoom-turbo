@@ -16,6 +16,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
+import java.lang.annotation.Annotation;
 import java.util.regex.PatternSyntaxException;
 
 public interface AutoDispatchValidations extends Validation {
@@ -172,6 +173,19 @@ public interface AutoDispatchValidations extends Validation {
 //                        }
 //                    });
 //                }
+            });
+        };
+    }
+
+    static Validation hasAutoDispatchAnnotation() {
+        return (processingEnvironment, annotation, annotatedElements) -> {
+            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
+                if (rootElement.getAnnotation(AutoDispatch.class) == null) {
+                    throw new ProcessingAnnotationException(
+                                    String.format("Class [%s]. Class annotated with %s needs AutoDispatch annotation.",
+                                            getQualifiedClassName(processingEnvironment, rootElement),
+                                            annotation.getClass().getName()));
+                }
             });
         };
     }
