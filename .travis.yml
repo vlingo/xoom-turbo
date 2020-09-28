@@ -1,12 +1,12 @@
 language: java
+dist: trusty
 jdk:
   - openjdk8
-dist: trusty
 before_install:
-  - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
   - rm -rf $HOME/.m2/repository/io/vlingo
   - cp .travis/settings.xml $HOME/.m2/settings.xml
   - mvn deploy:help versions:help help:help
+  - cd /usr/lib/jvm/java-8-openjdk-amd64/lib && ls
 
 script:
   - mvn install -PTravisCI
