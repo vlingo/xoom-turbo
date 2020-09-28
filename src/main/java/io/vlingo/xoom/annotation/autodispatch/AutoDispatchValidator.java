@@ -45,6 +45,10 @@ public class AutoDispatchValidator {
                 .forEach(validator ->
                         validator.validate(processingEnvironment, Route.class, annotatedElements));
 
+        Arrays.asList(handlerTypeValidation())
+                .forEach(validator ->
+                        validator.validate(processingEnvironment, AutoDispatch.class, annotatedElements));
+
     }
 
 }

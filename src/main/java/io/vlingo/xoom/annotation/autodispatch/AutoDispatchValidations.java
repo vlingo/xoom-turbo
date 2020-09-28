@@ -13,11 +13,12 @@ import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.annotation.Validation;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.*;
+import java.applet.AudioClip;
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Stream;
 
 public interface AutoDispatchValidations extends Validation {
 
@@ -182,10 +183,39 @@ public interface AutoDispatchValidations extends Validation {
             annotatedElements.elementsWith(annotation).forEach(rootElement -> {
                 if (rootElement.getAnnotation(AutoDispatch.class) == null) {
                     throw new ProcessingAnnotationException(
-                                    String.format("Class [%s]. Class annotated with %s needs AutoDispatch annotation.",
-                                            getQualifiedClassName(processingEnvironment, rootElement),
-                                            annotation.getClass().getName()));
+                            String.format("Class [%s]. Class annotated with %s needs AutoDispatch annotation.",
+                                    getQualifiedClassName(processingEnvironment, rootElement),
+                                    annotation.getClass().getName()));
                 }
+            });
+        };
+    }
+
+    static Validation handlerTypeValidation() {
+        return (processingEnvironment, annotation, annotatedElements) -> {
+            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
+                final AutoDispatch autoDispatch = rootElement.getAnnotation(AutoDispatch.class);
+                final TypeRetriever retriever = TypeRetriever.with(processingEnvironment);
+                final TypeElement typeElement = retriever.getTypeElement(autoDispatch, Void -> autoDispatch.handlers());
+                typeElement.getEnclosedElements().forEach(element -> {
+                    if (element.getKind().equals(ElementKind.METHOD)) {
+                        throw new ProcessingAnnotationException(
+                                String.format("Class [%s]. Methods are not allowed on handler %s",
+                                        getQualifiedClassName(processingEnvironment, rootElement),
+                                        typeElement.getSimpleName()));
+                    }
+                    if (element.getKind().equals(ElementKind.FIELD)) {
+                        VariableElement variable = (VariableElement) element;
+                        if (variable.getModifiers().size() != 3 || (!variable.getModifiers().contains(Modifier.PUBLIC) ||
+                                !variable.getModifiers().contains(Modifier.STATIC) && !variable.getModifiers().contains(Modifier.FINAL))) {
+                            throw new ProcessingAnnotationException(
+                                    String.format("Class [%s]. Fields of handler %s must have public final static modifiers.",
+                                            getQualifiedClassName(processingEnvironment, rootElement),
+                                            typeElement.getSimpleName()));
+
+                        }
+                    }
+                });
             });
         };
     }
@@ -193,7 +223,7 @@ public interface AutoDispatchValidations extends Validation {
     static String[] getParams(final ProcessingEnvironment processingEnvironment, final Element rootElement, final String handler) {
         try {
             return handler.substring(handler.indexOf("(") + 1, handler.indexOf(")")).split(",");
-        }catch(StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException | PatternSyntaxException ex){
+        } catch (StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException | PatternSyntaxException ex) {
             throw new ProcessingAnnotationException(
                     String.format("Class [%s], with Model annotation, have Route annotation with an invalid protocol handler: %s",
                             getQualifiedClassName(processingEnvironment, rootElement),
@@ -205,7 +235,7 @@ public interface AutoDispatchValidations extends Validation {
     static String getMethodName(final ProcessingEnvironment processingEnvironment, final Element rootElement, final String handler) {
         try {
             return handler.substring(0, handler.indexOf("("));
-        }catch(StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException | PatternSyntaxException ex){
+        } catch (StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException | PatternSyntaxException ex) {
             throw new ProcessingAnnotationException(
                     String.format("Class [%s], with Model annotation, have Route annotation with an invalid protocol handler: %s",
                             getQualifiedClassName(processingEnvironment, rootElement),

@@ -10,12 +10,12 @@ import io.vlingo.http.Method;
 import io.vlingo.xoom.annotation.initializer.resources.DummyHandlers;
 import io.vlingo.xoom.annotation.persistence.DummyQueriesActor;
 
-@Queries(protocol = io.vlingo.xoom.annotation.persistence.DummyQueries.class, actor = DummyQueriesActor.class)
-@AutoDispatch(path = "/dummies", handlers = DummyHandlers.class)
+//@Queries(protocol = io.vlingo.xoom.annotation.persistence.DummyQueries.class, actor = DummyQueriesActor.class)
+//@AutoDispatch(path = "/dummies", handlers = DummyHandlers.class)
 public interface DummyQueries {
 
-    @Route(method = Method.GET, path = "any-path", handler = 0)
-    @ResponseAdapter(handler = 0)
+//    @Route(method = Method.GET, path = "any-path", handler = 0)
+//    @ResponseAdapter(handler = 0)
     void dummyRouteForQueries(String parameter);
 
 }

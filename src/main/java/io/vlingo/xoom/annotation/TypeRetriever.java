@@ -10,6 +10,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
@@ -89,6 +90,10 @@ public class TypeRetriever {
 
     public List<ExecutableElement> getMethods(final Annotation queries, final Function<Object, Class<?>> retriever) {
         return (List<ExecutableElement>)getTypeElement(queries, retriever).getEnclosedElements();
+    }
+
+    public List<Element> getElements(final Annotation queries, final Function<Object, Class<?>> retriever) {
+        return (List<Element>)getTypeElement(queries, retriever).getEnclosedElements();
     }
 
     public TypeElement getTypeElement(final Annotation annotation,
