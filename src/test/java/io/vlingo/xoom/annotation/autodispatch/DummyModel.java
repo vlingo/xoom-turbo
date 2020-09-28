@@ -7,16 +7,28 @@
 
 package io.vlingo.xoom.annotation.autodispatch;
 
+import io.vlingo.common.Completes;
 import io.vlingo.http.Method;
+import io.vlingo.http.Response;
 import io.vlingo.lattice.model.EntityActor;
 import io.vlingo.xoom.annotation.initializer.resources.DummyHandlers;
+import io.vlingo.xoom.annotation.model.Dummy;
+import io.vlingo.xoom.annotation.model.DummyEntity;
+import io.vlingo.xoom.annotation.persistence.DummyData;
+import io.vlingo.xoom.annotation.persistence.DummyQueries;
+import io.vlingo.xoom.annotation.persistence.DummyQueriesActor;
 
-@Model(data = ModelData.class, actor = EntityActor.class, protocol = ActorProtocol.class)
+import static io.vlingo.http.Method.PATCH;
+import static io.vlingo.http.Method.PUT;
+import static io.vlingo.xoom.annotation.initializer.resources.DummyHandlers.ADAPT_STATE;
+import static io.vlingo.xoom.annotation.initializer.resources.DummyHandlers.CHANGE_NAME;
+
+@Model(protocol = Dummy.class, actor = DummyEntity.class, data = DummyData.class)
 @AutoDispatch(path = "/dummies", handlers = DummyHandlers.class)
 public interface DummyModel {
 
-    @Route(method = Method.PUT, path = "/any-path", handler = 0)
-    @ResponseAdapter(handler = 0)
-    void dummyRouteForModel(@Body String body);
+    @Route(method = PUT, path = "/{dummyId}/name", handler = CHANGE_NAME)
+    @ResponseAdapter(handler = ADAPT_STATE)
+    Completes<Response> changeDummyName(@Id String dummyId, @Body DummyData dummyData);
 
 }

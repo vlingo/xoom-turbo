@@ -6,15 +6,16 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation.autodispatch;
 
-import io.vlingo.actors.Actor;
 import io.vlingo.http.Method;
 import io.vlingo.xoom.annotation.initializer.resources.DummyHandlers;
+import io.vlingo.xoom.annotation.persistence.DummyQueriesActor;
 
-@Queries(actor = Actor.class, protocol = ActorProtocol.class)
+@Queries(protocol = io.vlingo.xoom.annotation.persistence.DummyQueries.class, actor = DummyQueriesActor.class)
 @AutoDispatch(path = "/dummies", handlers = DummyHandlers.class)
 public interface DummyQueries {
 
     @Route(method = Method.GET, path = "any-path", handler = 0)
+    @ResponseAdapter(handler = 0)
     void dummyRouteForQueries(String parameter);
 
 }

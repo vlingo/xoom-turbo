@@ -46,6 +46,7 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
     private AutoDispatchResourceHandlerTemplateData(final CodeGenerationContext context,
                                                     final CodeGenerationParameter autoDispatchParameter) {
         this.restResourceName = ClassFormatter.simpleNameOf(autoDispatchParameter.value);
+        System.out.println(restResourceName);
 
         final TemplateParameters queryStoreProviderParameters =
                 TemplateParameters.with(STORAGE_TYPE, StorageType.STATE_STORE).and(MODEL, Model.QUERY);
