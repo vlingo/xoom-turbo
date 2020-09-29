@@ -25,15 +25,15 @@ public class ${resourceName} extends ResourceHandler implements ${autoDispatchMa
 public class ${resourceName} extends ResourceHandler {
 </#if>
 
-  private final Stage stage;
+  private final Stage $stage;
   <#if queries?has_content && !queries.empty>
-  private final ${queries.protocolName} ${queries.attributeName};
+  private final ${queries.protocolName} $queries;
   </#if>
 
-  public ${resourceName}(final Stage stage) {
-      this.stage = stage;
+  public ${resourceName}(final Stage $stage) {
+      this.$stage = $stage;
       <#if queries?has_content && !queries.empty>
-      this.${queries.attributeName} = ${storeProviderName}.instance().${queries.attributeName};
+      this.$queries = ${storeProviderName}.instance().${queries.attributeName};
       </#if>
   }
 
@@ -78,7 +78,7 @@ public class ${resourceName} extends ResourceHandler {
 
   <#if modelProtocol?has_content>
   private Completes<${modelProtocol}> resolve(final String id) {
-    return stage.actorOf(${modelProtocol}.class, stage.addressFactory().from(id), ${modelActor}.class);
+    return $stage.actorOf(${modelProtocol}.class, $stage.addressFactory().from(id), ${modelActor}.class);
   }
   </#if>
   </#if>
