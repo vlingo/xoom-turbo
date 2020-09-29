@@ -81,8 +81,10 @@ public class TypeReader {
             final FileObject fileObject =
                     filer.getResource(SOURCE_PATH, packageName, className);
 
-            return IOUtils.toString(fileObject.openInputStream(), UTF_8.name())
-                    .replaceAll("\r\n", " ");
+            final String sourceCode =
+                    IOUtils.toString(fileObject.openInputStream(), UTF_8.name());
+
+            return sourceCode.replaceAll("\r\n", " ");
         } catch (final IOException e) {
             throw new ProcessingAnnotationException(e);
         }
