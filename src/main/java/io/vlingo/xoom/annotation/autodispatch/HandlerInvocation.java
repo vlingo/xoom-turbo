@@ -7,12 +7,9 @@
 
 package io.vlingo.xoom.annotation.autodispatch;
 
-import com.sun.source.util.Trees;
+import io.vlingo.xoom.annotation.TypeReader;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class HandlerInvocation {
 
@@ -21,20 +18,18 @@ public class HandlerInvocation {
 
     public final int index;
     public final String invocation;
-    private final Trees sourceCode;
-    private final List<? extends Element> configMembers;
+    private final TypeReader handlersConfigReader;
 
-    public HandlerInvocation(final Trees sourceCode,
-                             final Element handlerEntry,
-                             final List<? extends Element> configMembers) {
-        this.sourceCode = sourceCode;
-        this.configMembers = configMembers;
+    public HandlerInvocation(final TypeReader handlersConfigReader,
+                             final VariableElement handlerEntry) {
+        this.handlersConfigReader = handlersConfigReader;
         this.index = findIndex(handlerEntry);
         this.invocation = resolveInvocation(handlerEntry);
     }
 
-    private int findIndex(final Element handlerEntry) {
-        final String handlerEntryValue = retrieveHandlerEntryValue(handlerEntry);
+    private int findIndex(final VariableElement handlerEntry) {
+        final String handlerEntryValue =
+                handlersConfigReader.findMemberValue(handlerEntry);
 
         final String handlerEntryIndex =
                 handlerEntryValue.substring(handlerEntryValue.indexOf("(") + 1,
@@ -42,22 +37,13 @@ public class HandlerInvocation {
         try {
             return Integer.parseInt(handlerEntryIndex);
         } catch (final NumberFormatException exception) {
-            return findMemberValue(handlerEntryIndex);
+            return Integer.parseInt(handlersConfigReader.findMemberValue(handlerEntryIndex));
         }
     }
 
-    private int findMemberValue(final String memberName) {
-        final Predicate<Element> memberFilter =
-                element -> element.getSimpleName().toString().equals(memberName);
-
-        return configMembers.stream().filter(memberFilter)
-                .map(member -> ((VariableElement) member).getConstantValue())
-                .mapToInt(value -> Integer.parseInt(value.toString())).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Member " + memberName + " not found"));
-    }
-
-    private String resolveInvocation(final Element handlerEntry) {
-        final String handlerEntryValue = retrieveHandlerEntryValue(handlerEntry);
+    private String resolveInvocation(final VariableElement handlerEntry) {
+        final String handlerEntryValue =
+                handlersConfigReader.findMemberValue(handlerEntry);
 
         if(handlerEntryValue.contains("->")) {
             final String handlerInvocationArguments = extractHandlerArguments(handlerEntryValue);
@@ -71,10 +57,6 @@ public class HandlerInvocation {
     private String extractHandlerArguments(final String handlerEntryValue) {
         return handlerEntryValue.substring(handlerEntryValue.indexOf(",") + 1, handlerEntryValue.indexOf("->"))
                 .replaceAll("\\(", "").replaceAll("\\)", "").trim();
-    }
-
-    private String retrieveHandlerEntryValue(final Element handlerEntry) {
-        return sourceCode.getTree(handlerEntry).toString().split("=")[1].trim();
     }
 
     public boolean hasCustomParamNames() {

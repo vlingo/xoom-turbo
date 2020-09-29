@@ -7,11 +7,12 @@
 
 package io.vlingo.xoom.annotation.autodispatch;
 
-import com.sun.source.util.Trees;
+import io.vlingo.xoom.annotation.TypeReader;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -21,8 +22,7 @@ public class HandlerResolver {
 
     private static final String HANDLER_ENTRY_CLASSNAME = HandlerEntry.class.getCanonicalName();
 
-    private final Trees sourceCode;
-    private final List<? extends Element> configMembers;
+    private final TypeReader handlersConfigReader;
     private final List<HandlerInvocation> handlerInvocations = new ArrayList<>();
 
     public static HandlerResolver with(final TypeElement handlersConfig,
@@ -32,8 +32,7 @@ public class HandlerResolver {
 
     private HandlerResolver(final TypeElement handlersConfig,
                             final ProcessingEnvironment environment) {
-        this.sourceCode = Trees.instance(environment);
-        this.configMembers = handlersConfig.getEnclosedElements();
+        this.handlersConfigReader = TypeReader.from(environment, handlersConfig);
         this.handlerInvocations.addAll(resolveInvocations());
     }
 
@@ -46,8 +45,8 @@ public class HandlerResolver {
         final Predicate<Element> onlyHandlerEntries =
                 element -> element.asType().toString().startsWith(HANDLER_ENTRY_CLASSNAME);
 
-        return configMembers.stream().filter(onlyHandlerEntries).map(handlerEntry ->
-                new HandlerInvocation(sourceCode, handlerEntry, configMembers))
+        return handlersConfigReader.findMembers().stream().filter(onlyHandlerEntries)
+                .map(handlerEntry -> new HandlerInvocation(handlersConfigReader, handlerEntry))
                 .collect(Collectors.toList());
     }
 
