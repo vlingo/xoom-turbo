@@ -14,6 +14,8 @@ import io.vlingo.xoom.annotation.Validation;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.*;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
 import java.util.regex.PatternSyntaxException;
 
 public interface AutoDispatchValidations extends Validation {
@@ -187,12 +189,21 @@ public interface AutoDispatchValidations extends Validation {
         };
     }
 
+
+//    Use $ prefix which differs ResourceHandler members to endpoint params
+
     static Validation handlerTypeValidation() {
         return (processingEnvironment, annotation, annotatedElements) -> {
             annotatedElements.elementsWith(annotation).forEach(rootElement -> {
                 final AutoDispatch autoDispatch = rootElement.getAnnotation(AutoDispatch.class);
                 final TypeRetriever retriever = TypeRetriever.with(processingEnvironment);
                 final TypeElement typeElement = retriever.getTypeElement(autoDispatch, Void -> autoDispatch.handlers());
+                if(!typeElement.getModifiers().contains(Modifier.PUBLIC)){
+                    throw new ProcessingAnnotationException(
+                            String.format("Class [%s]. Handler Class %s needs to be public.",
+                                    getQualifiedClassName(processingEnvironment, rootElement),
+                                    typeElement.getSimpleName()));
+                }
                 typeElement.getEnclosedElements().forEach(element -> {
                     if (element.getKind().equals(ElementKind.METHOD)) {
                         throw new ProcessingAnnotationException(
@@ -201,7 +212,7 @@ public interface AutoDispatchValidations extends Validation {
                                         typeElement.getSimpleName()));
                     }
                     if (element.getKind().equals(ElementKind.FIELD)) {
-                        VariableElement variable = (VariableElement) element;
+                        final VariableElement variable = (VariableElement) element;
                         if (variable.getModifiers().size() != 3 || (!variable.getModifiers().contains(Modifier.PUBLIC) ||
                                 !variable.getModifiers().contains(Modifier.STATIC) && !variable.getModifiers().contains(Modifier.FINAL))) {
                             throw new ProcessingAnnotationException(
@@ -210,6 +221,24 @@ public interface AutoDispatchValidations extends Validation {
                                             typeElement.getSimpleName()));
 
                         }
+                        if (variable.asType().getKind().equals(TypeKind.DECLARED)) {
+                            final DeclaredType type = (DeclaredType) variable.asType();
+                            if (!HandlerEntry.class.getName().equals(type.asElement().toString())) {
+                                throw new ProcessingAnnotationException(
+                                        String.format("Class [%s]. Fields of handler %s must have type int, Integer or HandlerEntry.",
+                                                getQualifiedClassName(processingEnvironment, rootElement),
+                                                typeElement.getSimpleName()));
+
+                            }
+                            return;
+                        }
+                        if (variable.asType().getKind().equals(TypeKind.INT)) {
+                            return;
+                        }
+                        throw new ProcessingAnnotationException(
+                                String.format("Class [%s]. Fields of handler %s must have type int, Integer or HandlerEntry.",
+                                        getQualifiedClassName(processingEnvironment, rootElement),
+                                        typeElement.getSimpleName()));
                     }
                 });
             });
