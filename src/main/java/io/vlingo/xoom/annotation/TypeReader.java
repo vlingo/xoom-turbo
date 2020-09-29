@@ -44,7 +44,7 @@ public class TypeReader {
     public String findMemberValue(final VariableElement member) {
         final String memberName = member.getSimpleName().toString();
         if(!hasMember(memberName)) {
-            throw new IllegalArgumentException("Member " + member + " not found in " + type.getQualifiedName());
+            throw invalidMemberArgumentException(memberName);
         }
         return extractMemberValue(memberName);
     }
