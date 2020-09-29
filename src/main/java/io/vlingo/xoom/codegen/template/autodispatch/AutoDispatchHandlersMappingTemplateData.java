@@ -39,6 +39,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                                                       final List<TemplateData> queriesTemplateData,
                                                       final List<Content> contents) {
         this.aggregateName = aggregateProtocolName;
+        System.out.println(aggregateName);
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage))
                         .and(AGGREGATE_PROTOCOL_NAME, aggregateProtocolName)
