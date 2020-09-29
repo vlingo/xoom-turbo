@@ -10,7 +10,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
@@ -80,20 +80,25 @@ public class TypeRetriever {
         return new TypeRetriever(environment);
     }
 
-    public boolean isAnInterface(final Annotation queries, final Function<Object, Class<?>> retriever) {
-        return getTypeElement(queries, retriever).getKind().isInterface();
+    public boolean isAnInterface(final Annotation annotation, final Function<Object, Class<?>> retriever) {
+        return getTypeElement(annotation, retriever).getKind().isInterface();
     }
 
-    public String getClassName(final Annotation queries, final Function<Object, Class<?>> retriever) {
-        return getTypeElement(queries, retriever).getQualifiedName().toString();
+    public String getClassName(final Annotation annotation, final Function<Object, Class<?>> retriever) {
+        return getTypeElement(annotation, retriever).getQualifiedName().toString();
     }
 
-    public List<ExecutableElement> getMethods(final Annotation queries, final Function<Object, Class<?>> retriever) {
-        return (List<ExecutableElement>)getTypeElement(queries, retriever).getEnclosedElements();
+    public List<ExecutableElement> getMethods(final Annotation annotation, final Function<Object, Class<?>> retriever) {
+        return (List<ExecutableElement>)getTypeElement(annotation, retriever).getEnclosedElements();
     }
 
-    public List<Element> getElements(final Annotation queries, final Function<Object, Class<?>> retriever) {
-        return (List<Element>)getTypeElement(queries, retriever).getEnclosedElements();
+    public TypeElement getGenericType(final Annotation annotation, final Function<Object, Class<?>> retriever) {
+        final DeclaredType declaredType = (DeclaredType)getTypeElement(annotation, retriever).getSuperclass();
+        return (TypeElement)((DeclaredType)declaredType.getTypeArguments().get(0)).asElement();
+    }
+
+    public List<Element> getElements(final Annotation annotation, final Function<Object, Class<?>> retriever) {
+        return (List<Element>)getTypeElement(annotation, retriever).getEnclosedElements();
     }
 
     public TypeElement getTypeElement(final Annotation annotation,

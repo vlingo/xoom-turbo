@@ -14,11 +14,7 @@ import io.vlingo.xoom.annotation.Validation;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.*;
-import java.applet.AudioClip;
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
 import java.util.regex.PatternSyntaxException;
-import java.util.stream.Stream;
 
 public interface AutoDispatchValidations extends Validation {
 
@@ -247,5 +243,26 @@ public interface AutoDispatchValidations extends Validation {
 
     static String getQualifiedClassName(final ProcessingEnvironment processingEnvironment, final Element rootElement) {
         return String.format("%s.%s.java", processingEnvironment.getElementUtils().getPackageOf(rootElement).getQualifiedName().toString(), rootElement.getSimpleName().toString());
+    }
+
+    static Validation entityActorValidation() {
+        return (processingEnvironment, annotation, annotatedElements) -> {
+            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
+                final Model model = rootElement.getAnnotation(Model.class);
+                final TypeElement genericType =
+                        TypeRetriever.with(processingEnvironment)
+                                            .getGenericType(model, Void -> model.actor());
+
+                final boolean hasId = genericType.getEnclosedElements().stream().anyMatch(e ->
+                    e.getKind().equals(ElementKind.FIELD) && e.getSimpleName().toString().equals("id") && e.getModifiers().contains(Modifier.PUBLIC)
+                );
+                if(!hasId) {
+                    throw new ProcessingAnnotationException(
+                            String.format("Class [%s], with Model annotation, has an actor state object without an public id: %s",
+                                    getQualifiedClassName(processingEnvironment, rootElement), genericType.getSimpleName())
+                    );
+                }
+            });
+        };
     }
 }

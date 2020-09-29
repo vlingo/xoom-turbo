@@ -37,7 +37,7 @@ public class AutoDispatchValidator {
 
         Arrays.asList(isInterface(), classVisibilityValidation(), isProtocolModelAnInterface(),
                 modelWithoutQueryValidator(), routeWithoutResponseValidator(), handlerWithoutValidMethodValidator(),
-                hasAutoDispatchAnnotation())
+                hasAutoDispatchAnnotation(), entityActorValidation())
                 .forEach(validator ->
                         validator.validate(processingEnvironment, Model.class, annotatedElements));
 
