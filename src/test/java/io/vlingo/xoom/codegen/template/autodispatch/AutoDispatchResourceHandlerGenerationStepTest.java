@@ -48,7 +48,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
                         content.retrieveClassName().equals("BookResourceHandler")).findFirst().get();
 
         Assert.assertTrue(bookResourceHandlerContent.contains("import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;"));
-        Assert.assertTrue(bookResourceHandlerContent.contains("return BookHandlers.queryAllHandler.handler.handle(bookQueries)"));
+        Assert.assertTrue(bookResourceHandlerContent.contains("return BookHandlers.queryAllHandler.handler.handle($queries)"));
     }
 
     private CodeGenerationParameters loadParameters() {
