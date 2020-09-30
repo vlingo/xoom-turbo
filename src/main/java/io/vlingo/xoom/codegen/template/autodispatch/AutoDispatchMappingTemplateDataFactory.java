@@ -29,7 +29,7 @@ public class AutoDispatchMappingTemplateDataFactory {
                 Stream.of(new AutoDispatchMappingTemplateData(basePackage,
                                 aggregateName, useCQRS, contents),
                         new AutoDispatchHandlersMappingTemplateData(basePackage, aggregateName,
-                                useCQRS, queriesData, contents));
+                                queriesData, contents, useCQRS));
 
         return Stream.of(restResourcesData.split(REST_RESOURCES_SEPARATOR)).flatMap(mapper).collect(toList());
     }

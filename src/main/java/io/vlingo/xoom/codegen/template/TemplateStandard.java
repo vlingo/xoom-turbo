@@ -47,7 +47,7 @@ public enum TemplateStandard {
                 return Template.RETRIEVE_METHOD.filename;
             }
 
-            if(parameters.has(ID_NAME)) {
+            if(parameters.find(REQUIRE_ENTITY_LOADING)) {
                 return Template.UPDATE_METHOD.filename;
             }
 

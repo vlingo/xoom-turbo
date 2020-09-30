@@ -13,7 +13,6 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
 
 import java.util.List;
 import java.util.Set;
@@ -55,15 +54,10 @@ public class RouteMethodTemplateData extends TemplateData {
 
         this.parameters =
                 TemplateParameters.with(ROUTE_SIGNATURE, routeSignatureParameter.value)
-                        .and(ID_NAME, routeSignatureParameter.relatedParameterValueOf(Label.ID))
-                        .and(ID_TYPE, routeSignatureParameter.relatedParameterValueOf(Label.ID_TYPE))
-                        .and(QUERIES, parentParameters.<QueriesParameter>find(QUERIES).getProtocolName())
-                        .and(QUERIES_ATTRIBUTE, resolveAttributeName(autoDispatchParameter, Label.QUERIES_PROTOCOL))
-                        .and(MODEL_PROTOCOL, autoDispatchParameter.relatedParameterValueOf(Label.MODEL_PROTOCOL))
                         .and(MODEL_ATTRIBUTE, resolveAttributeName(autoDispatchParameter, Label.MODEL_PROTOCOL))
                         .and(ROUTE_METHOD, routeSignatureParameter.relatedParameterValueOf(Label.ROUTE_METHOD))
-                        .and(STATE_NAME, parentParameters.find(STATE_NAME))
-                        .and(ENTITY_DATA_NAME, parentParameters.find(ENTITY_DATA_NAME))
+                        .and(ID_NAME, routeSignatureParameter.relatedParameterValueOf(Label.ID))
+                        .and(REQUIRE_ENTITY_LOADING, routeSignatureParameter.hasAny(Label.ID))
                         .and(ROUTE_HANDLER_INVOCATION, routeHandlerInvocation)
                         .and(ADAPTER_HANDLER_INVOCATION, adapterHandlerInvocation);
 
@@ -80,14 +74,14 @@ public class RouteMethodTemplateData extends TemplateData {
                 .collect(Collectors.toSet());
     }
 
-    private String resolveAttributeName(final CodeGenerationParameter autoDispatchParameter, final Label protocolLabel) {
+    private String resolveAttributeName(final CodeGenerationParameter autoDispatchParameter,
+                                        final Label protocolLabel) {
         if(!autoDispatchParameter.hasAny(protocolLabel)) {
             return "";
         }
         final String qualifiedName = autoDispatchParameter.relatedParameterValueOf(protocolLabel);
         return ClassFormatter.qualifiedNameToAttribute(qualifiedName);
     }
-
 
     @Override
     public TemplateParameters parameters() {

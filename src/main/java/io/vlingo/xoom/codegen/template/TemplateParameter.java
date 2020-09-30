@@ -47,6 +47,7 @@ public enum TemplateParameter {
     ROUTE_METHOD("routeMethod"),
     ROUTE_METHODS("routeMethods"),
     ROUTE_HANDLER_INVOCATION("routeHandlerInvocation"),
+    REQUIRE_ENTITY_LOADING("requireEntityLoading"),
     ADAPTER_HANDLER_INVOCATION("adapterHandlerInvocation"),
     HANDLERS_CONFIG_NAME("handlersConfigName"),
     QUERIES("queries"),

@@ -35,11 +35,10 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
     protected AutoDispatchHandlersMappingTemplateData(final String basePackage,
                                                       final String aggregateProtocolName,
-                                                      final Boolean useCQRS,
                                                       final List<TemplateData> queriesTemplateData,
-                                                      final List<Content> contents) {
+                                                      final List<Content> contents,
+                                                      final Boolean useCQRS) {
         this.aggregateName = aggregateProtocolName;
-        System.out.println(aggregateName);
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage))
                         .and(AGGREGATE_PROTOCOL_NAME, aggregateProtocolName)
@@ -49,22 +48,6 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                         .and(QUERY_ALL_METHOD_NAME, findQueryMethodName(aggregateProtocolName, queriesTemplateData))
                         .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, standard().resolveClassname(aggregateProtocolName))
                         .addImports(resolveImports(aggregateProtocolName, contents));
-    }
-
-    private Set<String> resolveImports(final String aggregateName,
-                                       final List<Content> contents) {
-        final Map<TemplateStandard, String> classes =
-                mapClassesWithTemplateStandards(aggregateName);
-
-        return classes.entrySet().stream().map(entry -> {
-            try {
-                final String className = entry.getValue();
-                final TemplateStandard standard = entry.getKey();
-                return ContentQuery.findFullyQualifiedClassName(standard, className, contents);
-            } catch (final IllegalArgumentException exception) {
-                return null;
-            }
-        }).collect(Collectors.toSet());
     }
 
     private String findQueryMethodName(final String aggregateName,
@@ -84,6 +67,22 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
         return queriesTemplateData.stream().map(TemplateData::parameters).filter(filter)
                 .map(queryMethodNameMapper).findFirst().get();
+    }
+
+    private Set<String> resolveImports(final String aggregateName,
+                                       final List<Content> contents) {
+        final Map<TemplateStandard, String> classes =
+                mapClassesWithTemplateStandards(aggregateName);
+
+        return classes.entrySet().stream().map(entry -> {
+            try {
+                final String className = entry.getValue();
+                final TemplateStandard standard = entry.getKey();
+                return ContentQuery.findFullyQualifiedClassName(standard, className, contents);
+            } catch (final IllegalArgumentException exception) {
+                return null;
+            }
+        }).collect(Collectors.toSet());
     }
 
     private Map<TemplateStandard, String> mapClassesWithTemplateStandards(final String aggregateName) {

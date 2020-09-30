@@ -88,8 +88,6 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
         Assert.assertEquals("authorId", queryRouteMethodParameters.find(TemplateParameter.ID_NAME));
         Assert.assertEquals("GET", queryRouteMethodParameters.find(TemplateParameter.ROUTE_METHOD));
         Assert.assertEquals("AuthorHandlers.queryByIdHandler.handler.handle(authorId, authorQueries)", queryRouteMethodParameters.find(TemplateParameter.ROUTE_HANDLER_INVOCATION));
-        Assert.assertEquals("io.vlingo.xoomapp.model.Author", queryRouteMethodParameters.find(TemplateParameter.MODEL_PROTOCOL));
-        Assert.assertEquals("authorQueries", queryRouteMethodParameters.find(TemplateParameter.QUERIES_ATTRIBUTE));
         Assert.assertEquals("", queryRouteMethodParameters.find(TemplateParameter.ADAPTER_HANDLER_INVOCATION));
     }
 
