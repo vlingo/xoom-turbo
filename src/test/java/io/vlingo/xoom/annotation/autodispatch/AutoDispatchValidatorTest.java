@@ -161,39 +161,6 @@ public class AutoDispatchValidatorTest {
     }
 
     @Test
-    public void testHandlerWithoutValidMethodValidator() {
-        final AnnotatedElements annotatedElements = mock(AnnotatedElements.class);
-        final Element rootElement = mock(Element.class);
-        final Element enclosedElement = mock(Element.class);
-        final ExecutableElement method = mock(ExecutableElement.class);
-        final Set<Element> elements = new HashSet<>();
-        final List enclosedElements = new ArrayList<>();
-        final List typeEnclosedElements = new ArrayList<>();
-        final List variableElements = new ArrayList<>();
-        final TypeElement typeElement = mock(TypeElement.class);
-        final Elements elementUtil = mock(Elements.class);
-        final ProcessingEnvironment processingEnvironment = mock(ProcessingEnvironment.class);
-        final Name methodName = mock(Name.class);
-        final VariableElement methodParameter = mock(VariableElement.class);
-        typeEnclosedElements.add(method);
-        variableElements.add(methodParameter);
-        elements.add(rootElement);
-        enclosedElements.add(enclosedElement);
-        when(annotatedElements.elementsWith(Model.class)).thenReturn(elements);
-        when(rootElement.getEnclosedElements()).thenReturn(enclosedElements);
-        when(rootElement.getAnnotation(Model.class)).thenReturn(createModelAnnotation());
-        when(enclosedElement.getAnnotation(Route.class)).thenReturn(createRouteAnnotation(Method.PUT));
-        when(processingEnvironment.getElementUtils()).thenReturn(elementUtil);
-        when(enclosedElement.getKind()).thenReturn(ElementKind.METHOD);
-        when(elementUtil.getTypeElement(Mockito.anyString())).thenReturn(typeElement);
-        when(typeElement.getEnclosedElements()).thenReturn(typeEnclosedElements);
-        when(methodName.toString()).thenReturn("testMethod");
-        when(method.getSimpleName()).thenReturn(methodName);
-        when(method.getParameters()).thenReturn(variableElements);
-        handlerWithoutValidMethodValidator().validate(processingEnvironment, Model.class, annotatedElements);
-    }
-
-    @Test
     public void testRouteHasQueryOrModel() {
         final AnnotatedElements annotatedElements = mock(AnnotatedElements.class);
         final ExecutableElement rootElement = mock(ExecutableElement.class);

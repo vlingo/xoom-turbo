@@ -7,8 +7,10 @@
 
 package io.vlingo.xoom.annotation.autodispatch;
 
+import io.vlingo.actors.Stage;
 import io.vlingo.http.Method;
 import io.vlingo.xoom.annotation.ProcessingAnnotationException;
+import io.vlingo.xoom.annotation.TypeReader;
 import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.annotation.Validation;
 
@@ -144,38 +146,6 @@ public interface AutoDispatchValidations extends Validation {
         };
     }
 
-    static Validation handlerWithoutValidMethodValidator() {
-        return (processingEnvironment, annotation, annotatedElements) -> {
-            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
-//                final Model model = rootElement.getAnnotation(Model.class);
-//                if (model != null) {
-//                    rootElement.getEnclosedElements().forEach(enclosed -> {
-//                        final Route routeAnnotation = enclosed.getAnnotation(Route.class);
-//                        if(ElementKind.METHOD.equals(enclosed.getKind()) && routeAnnotation != null){
-//                            final String handler = routeAnnotation.handler();
-//                            final String methodName = getMethodName(processingEnvironment, rootElement, handler);
-//                            final String[] params = getParams(processingEnvironment, rootElement, handler);
-//                            final List<ExecutableElement> methods =
-//                                    TypeRetriever.with(processingEnvironment)
-//                                            .getMethods(model, Void -> model.protocol());
-//                            methods.stream()
-//                                    .filter(m -> methodName.equals(m.getSimpleName().toString()))
-//                                    .forEach(m -> {
-//                                if(params.length < m.getParameters().size()){
-//                                    throw new ProcessingAnnotationException(
-//                                            String.format("Class [%s], with Model annotation, have Route annotation with an invalid protocol handler: %s",
-//                                                    getQualifiedClassName(processingEnvironment, rootElement),
-//                                                    m.toString())
-//                                    );
-//                                }
-//                            });
-//                        }
-//                    });
-//                }
-            });
-        };
-    }
-
     static Validation hasAutoDispatchAnnotation() {
         return (processingEnvironment, annotation, annotatedElements) -> {
             annotatedElements.elementsWith(annotation).forEach(rootElement -> {
@@ -189,8 +159,19 @@ public interface AutoDispatchValidations extends Validation {
         };
     }
 
+    static Validation hasQueriesOrModel() {
+        return (processingEnvironment, annotation, annotatedElements) -> {
+            annotatedElements.elementsWith(annotation).forEach(rootElement -> {
+                if (rootElement.getAnnotation(Queries.class) == null && rootElement.getAnnotation(Model.class) == null) {
+                    System.out.println(rootElement);
+                    throw new ProcessingAnnotationException(
+                            String.format("Class %s annotated with AutoDispatch needs Queries and/or Model annotation.",
+                                    getQualifiedClassName(processingEnvironment, rootElement)));
+                }
+            });
+        };
+    }
 
-//    Use $ prefix which differs ResourceHandler members to endpoint params
 
     static Validation handlerTypeValidation() {
         return (processingEnvironment, annotation, annotatedElements) -> {
@@ -198,29 +179,12 @@ public interface AutoDispatchValidations extends Validation {
                 final AutoDispatch autoDispatch = rootElement.getAnnotation(AutoDispatch.class);
                 final TypeRetriever retriever = TypeRetriever.with(processingEnvironment);
                 final TypeElement typeElement = retriever.getTypeElement(autoDispatch, Void -> autoDispatch.handlers());
-                if(!typeElement.getModifiers().contains(Modifier.PUBLIC)){
-                    throw new ProcessingAnnotationException(
-                            String.format("Class [%s]. Handler Class %s needs to be public.",
-                                    getQualifiedClassName(processingEnvironment, rootElement),
-                                    typeElement.getSimpleName()));
-                }
+                handlerClassPublicValidation(processingEnvironment, rootElement, typeElement);
                 typeElement.getEnclosedElements().forEach(element -> {
-                    if (element.getKind().equals(ElementKind.METHOD)) {
-                        throw new ProcessingAnnotationException(
-                                String.format("Class [%s]. Methods are not allowed on handler %s",
-                                        getQualifiedClassName(processingEnvironment, rootElement),
-                                        typeElement.getSimpleName()));
-                    }
+                    hasMethodValidation(processingEnvironment, rootElement, typeElement, element);
                     if (element.getKind().equals(ElementKind.FIELD)) {
                         final VariableElement variable = (VariableElement) element;
-                        if (variable.getModifiers().size() != 3 || (!variable.getModifiers().contains(Modifier.PUBLIC) ||
-                                !variable.getModifiers().contains(Modifier.STATIC) && !variable.getModifiers().contains(Modifier.FINAL))) {
-                            throw new ProcessingAnnotationException(
-                                    String.format("Class [%s]. Fields of handler %s must have public final static modifiers.",
-                                            getQualifiedClassName(processingEnvironment, rootElement),
-                                            typeElement.getSimpleName()));
-
-                        }
+                        handlerVariableModifiersValidation(processingEnvironment, rootElement, typeElement, variable);
                         if (variable.asType().getKind().equals(TypeKind.DECLARED)) {
                             final DeclaredType type = (DeclaredType) variable.asType();
                             if (!HandlerEntry.class.getName().equals(type.asElement().toString())) {
@@ -230,6 +194,7 @@ public interface AutoDispatchValidations extends Validation {
                                                 typeElement.getSimpleName()));
 
                             }
+                            validateReservedWords(processingEnvironment, rootElement, retriever, typeElement, variable, type);
                             return;
                         }
                         if (variable.asType().getKind().equals(TypeKind.INT)) {
@@ -243,6 +208,59 @@ public interface AutoDispatchValidations extends Validation {
                 });
             });
         };
+    }
+
+    static void validateReservedWords(ProcessingEnvironment processingEnvironment, Element rootElement, TypeRetriever retriever, TypeElement typeElement, VariableElement variable, DeclaredType type) {
+        type.getTypeArguments().forEach(arguments -> {
+            final DeclaredType argumentType = (DeclaredType) arguments;
+            final TypeReader typeReader = TypeReader.from(processingEnvironment, typeElement);
+            final String memberValue = typeReader.findMemberValue(variable);
+            if ((argumentType.toString().contains(Stage.class.getName()) && !memberValue.contains("$stage")) ||
+                    (!argumentType.toString().contains(Stage.class.getName()) && memberValue.contains("$stage"))) {
+                throw new ProcessingAnnotationException(
+                        String.format("Class [%s]. Stage on handler %s is only allowed with $stage variable.",
+                                getQualifiedClassName(processingEnvironment, rootElement),
+                                typeElement.getSimpleName()));
+            }
+            final Queries queries = rootElement.getAnnotation(Queries.class);
+            final TypeElement queriesElement = (queries != null) ? retriever.getTypeElement(queries, Void -> queries.protocol()) : null;
+            if (memberValue.contains("$queries") &&
+                    (queriesElement == null || argumentType.toString().contains(queriesElement.toString()))) {
+                throw new ProcessingAnnotationException(
+                        String.format("Class [%s]. Handler %s should only have $queries when variable has his Queries Protocol as an agument.",
+                                getQualifiedClassName(processingEnvironment, rootElement),
+                                typeElement.getSimpleName()));
+            }
+        });
+    }
+
+    static void handlerVariableModifiersValidation(ProcessingEnvironment processingEnvironment, Element rootElement, TypeElement typeElement, VariableElement variable) {
+        if (variable.getModifiers().size() != 3 || (!variable.getModifiers().contains(Modifier.PUBLIC) ||
+                !variable.getModifiers().contains(Modifier.STATIC) && !variable.getModifiers().contains(Modifier.FINAL))) {
+            throw new ProcessingAnnotationException(
+                    String.format("Class [%s]. Fields of handler %s must have public final static modifiers.",
+                            getQualifiedClassName(processingEnvironment, rootElement),
+                            typeElement.getSimpleName()));
+
+        }
+    }
+
+    static void hasMethodValidation(ProcessingEnvironment processingEnvironment, Element rootElement, TypeElement typeElement, Element element) {
+        if (element.getKind().equals(ElementKind.METHOD)) {
+            throw new ProcessingAnnotationException(
+                    String.format("Class [%s]. Methods are not allowed on handler %s",
+                            getQualifiedClassName(processingEnvironment, rootElement),
+                            typeElement.getSimpleName()));
+        }
+    }
+
+    static void handlerClassPublicValidation(ProcessingEnvironment processingEnvironment, Element rootElement, TypeElement typeElement) {
+        if (!typeElement.getModifiers().contains(Modifier.PUBLIC)) {
+            throw new ProcessingAnnotationException(
+                    String.format("Class [%s]. Handler Class %s needs to be public.",
+                            getQualifiedClassName(processingEnvironment, rootElement),
+                            typeElement.getSimpleName()));
+        }
     }
 
     static String[] getParams(final ProcessingEnvironment processingEnvironment, final Element rootElement, final String handler) {
@@ -280,12 +298,12 @@ public interface AutoDispatchValidations extends Validation {
                 final Model model = rootElement.getAnnotation(Model.class);
                 final TypeElement genericType =
                         TypeRetriever.with(processingEnvironment)
-                                            .getGenericType(model, Void -> model.actor());
+                                .getGenericType(model, Void -> model.actor());
 
                 final boolean hasId = genericType.getEnclosedElements().stream().anyMatch(e ->
-                    e.getKind().equals(ElementKind.FIELD) && e.getSimpleName().toString().equals("id") && e.getModifiers().contains(Modifier.PUBLIC)
+                        e.getKind().equals(ElementKind.FIELD) && e.getSimpleName().toString().equals("id") && e.getModifiers().contains(Modifier.PUBLIC)
                 );
-                if(!hasId) {
+                if (!hasId) {
                     throw new ProcessingAnnotationException(
                             String.format("Class [%s], with Model annotation, has an actor state object without an public id: %s",
                                     getQualifiedClassName(processingEnvironment, rootElement), genericType.getSimpleName())

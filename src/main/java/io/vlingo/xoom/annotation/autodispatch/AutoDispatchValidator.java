@@ -36,7 +36,7 @@ public class AutoDispatchValidator {
                         validator.validate(processingEnvironment, Queries.class, annotatedElements));
 
         Arrays.asList(isInterface(), classVisibilityValidation(), isProtocolModelAnInterface(),
-                modelWithoutQueryValidator(), routeWithoutResponseValidator(), handlerWithoutValidMethodValidator(),
+                modelWithoutQueryValidator(), routeWithoutResponseValidator(),
                 hasAutoDispatchAnnotation(), entityActorValidation())
                 .forEach(validator ->
                         validator.validate(processingEnvironment, Model.class, annotatedElements));
@@ -45,7 +45,7 @@ public class AutoDispatchValidator {
                 .forEach(validator ->
                         validator.validate(processingEnvironment, Route.class, annotatedElements));
 
-        Arrays.asList(handlerTypeValidation())
+        Arrays.asList(handlerTypeValidation(), hasQueriesOrModel())
                 .forEach(validator ->
                         validator.validate(processingEnvironment, AutoDispatch.class, annotatedElements));
 
