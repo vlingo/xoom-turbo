@@ -90,4 +90,9 @@ public class CodeGenerationParameters {
     public Stream<CodeGenerationParameter> retrieveAll(final Label label) {
         return parameters.stream().filter(param -> param.has(label));
     }
+
+    public boolean isEmpty() {
+        return parameters.isEmpty();
+    }
+
 }

@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 
 public class ProjectionGenerationStepTest {
 

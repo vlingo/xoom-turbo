@@ -43,7 +43,7 @@ public class DefaultBootstrapTemplateDataTest {
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.TRUE.toString());
                     put(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED.name());
-                    put(ANNOTATIONS, Boolean.FALSE.toString());
+                    put(Label.USE_ANNOTATIONS, Boolean.FALSE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                 }};
 
@@ -98,7 +98,7 @@ public class DefaultBootstrapTemplateDataTest {
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.FALSE.toString());
                     put(Label.PROJECTION_TYPE, ProjectionType.NONE.name());
-                    put(ANNOTATIONS, Boolean.FALSE.toString());
+                    put(Label.USE_ANNOTATIONS, Boolean.FALSE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                 }};
 

@@ -21,6 +21,7 @@ import java.util.Arrays;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 

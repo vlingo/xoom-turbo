@@ -12,7 +12,7 @@ import io.vlingo.xoom.codegen.content.ContentQuery;
 
 import java.util.Set;
 
-import static io.vlingo.xoom.codegen.parameter.Label.ANNOTATIONS;
+import static io.vlingo.xoom.codegen.parameter.Label.USE_ANNOTATIONS;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCES;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
@@ -32,7 +32,7 @@ public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
     @Override
     protected boolean support(final CodeGenerationContext context) {
         return !context.isInternalGeneration() &&
-                !context.parameterOf(ANNOTATIONS, Boolean::valueOf);
+                !context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
     }
 
 }

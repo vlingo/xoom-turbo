@@ -26,6 +26,7 @@ import java.util.function.Predicate;
 import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
 import static io.vlingo.xoom.codegen.parameter.Label.PROJECTION_TYPE;
 import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.USE_ANNOTATIONS;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
@@ -64,7 +65,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
     private TemplateParameters loadParameters(final CodeGenerationContext context) {
         final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
         final String packageName = resolvePackage(context.parameterOf(PACKAGE));
-        final Boolean useAnnotations = context.parameterOf(ANNOTATIONS, Boolean::valueOf);
+        final Boolean useAnnotations = context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
         final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
 
@@ -79,11 +80,11 @@ public abstract class BootstrapTemplateData extends TemplateData {
 
         return this.parameters.and(IMPORTS, imports)
                 .and(PACKAGE_NAME, packageName)
-                .and(TemplateParameter.APPLICATION_NAME, context.parameterOf(APPLICATION_NAME))
                 .and(PROVIDERS, storeProviderParameters)
-                .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
-                .and(USE_ANNOTATIONS, context.parameterOf(ANNOTATIONS, Boolean::valueOf))
                 .and(TYPE_REGISTRIES, typeRegistryParameters)
+                .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
+                .and(TemplateParameter.APPLICATION_NAME, context.parameterOf(APPLICATION_NAME))
+                .and(TemplateParameter.USE_ANNOTATIONS, context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf))
                 .andResolve(PROJECTION_DISPATCHER_PROVIDER_NAME,
                         param -> PROJECTION_DISPATCHER_PROVIDER.resolveClassname(param));
     }

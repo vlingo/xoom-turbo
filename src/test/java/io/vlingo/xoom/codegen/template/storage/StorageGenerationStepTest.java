@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.NONE;
 import static io.vlingo.xoom.codegen.template.storage.DatabaseType.HSQLDB;
@@ -113,7 +114,7 @@ public class StorageGenerationStepTest {
     @Test
     public void testAnnotatedStoreGeneration() {
         final CodeGenerationContext context =
-                CodeGenerationContext.empty().with(ANNOTATIONS, "true");
+                CodeGenerationContext.empty().with(USE_ANNOTATIONS, "true");
 
         loadProperties(context, STATE_STORE, IN_MEMORY, EVENT_BASED);
         loadContents(context);

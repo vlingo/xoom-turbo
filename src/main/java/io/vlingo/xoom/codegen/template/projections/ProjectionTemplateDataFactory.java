@@ -51,7 +51,7 @@ public class ProjectionTemplateDataFactory {
             templatesData.add(EventTypesTemplateData.from(basePackage, context.contents()));
         }
 
-        if(!context.parameterOf(ANNOTATIONS, Boolean::valueOf)) {
+        if(!context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf)) {
             templatesData.add(ProjectionDispatcherProviderTemplateData.from(basePackage,
                     projectionType, context.contents()));
         }

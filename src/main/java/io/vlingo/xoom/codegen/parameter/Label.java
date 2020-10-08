@@ -11,15 +11,23 @@ public enum Label {
 
     ID("id"),
     ID_TYPE("idType"),
+    API("api"),
     BODY("body"),
     BODY_TYPE("bodyType"),
     APPLICATION_NAME("appName"),
     PACKAGE("package"),
     TARGET_FOLDER("target.folder"),
     AGGREGATES("aggregates"),
+    AGGREGATE("aggregate"),
+    STATE_FIELD("stateField"),
+    FIELD_TYPE("fieldType"),
+    DOMAIN_EVENT("domainEvent"),
+    AGGREGATE_METHOD("aggregateMethod"),
+    METHOD_PARAMETER("methodParameter"),
+    FACTORY_METHOD("factoryMethod"),
+    REQUIRE_ENTITY_LOAD("requireEntityLoad"),
     STORAGE_TYPE("storage.type"),
     CQRS("cqrs"),
-    ANNOTATIONS("annotations"),
     AUTO_DISPATCH("autoDispatch"),
     PROJECTION_TYPE("projections"),
     PROJECTABLES("projectables"),
@@ -49,6 +57,7 @@ public enum Label {
     USE_CUSTOM_ADAPTER_HANDLER_PARAM("useCustomAdapterHandlerParam"),
     USE_ADAPTER("useAdapter"),
     CUSTOM_ROUTE("customRoute"),
+    USE_ANNOTATIONS("annotations"),
     USE_AUTO_DISPATCH("useAutoDispatch");
 
     private final String key;

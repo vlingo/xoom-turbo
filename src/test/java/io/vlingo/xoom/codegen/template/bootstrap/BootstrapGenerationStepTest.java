@@ -92,7 +92,7 @@ public class BootstrapGenerationStepTest {
         context.with(PACKAGE, "io.vlingo.xoomapp").with(APPLICATION_NAME, "xoom-app")
                 .with(TARGET_FOLDER, HOME_DIRECTORY).with(STORAGE_TYPE, "STATE_STORE")
                 .with(CQRS, "true").with(BLOCKING_MESSAGING, Boolean.TRUE.toString())
-                .with(ANNOTATIONS, useAnnotation.toString());
+                .with(USE_ANNOTATIONS, useAnnotation.toString());
     }
 
     private void loadContents(final CodeGenerationContext context) {
