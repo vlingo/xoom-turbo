@@ -8,6 +8,9 @@ package io.vlingo.xoom;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.http.resource.Configuration;
+import io.vlingo.http.resource.StaticFilesConfiguration;
+import io.vlingo.http.resource.feed.FeedConfiguration;
+import io.vlingo.http.resource.sse.SseConfiguration;
 
 public interface XoomInitializationAware {
 
@@ -20,6 +23,30 @@ public interface XoomInitializationAware {
         return Configuration.define().withPort(port);
     }
 
+    /**
+     * Answer an unconfigured {@code FeedConfiguration}.
+     * @return FeedConfiguration
+     */
+    default FeedConfiguration feedConfiguration() {
+      return FeedConfiguration.define();
+    }
+
+    /**
+     * Answer an unconfigured {@code SseConfiguration}.
+     * @return SseConfiguration
+     */
+    default SseConfiguration sseConfiguration() {
+      return SseConfiguration.define();
+    }
+
+    /**
+     * Answer an unconfigured {@code StaticFilesConfiguration}.
+     * @return StaticFilesConfiguration
+     */
+    default StaticFilesConfiguration staticFilesConfiguration() {
+      return StaticFilesConfiguration.define();
+    }
+
     default int resolvePort(final Stage stage, final String[] args) {
         try {
             return Integer.parseInt(args[0]);
@@ -28,5 +55,4 @@ public interface XoomInitializationAware {
             return DEFAULT_PORT;
         }
     }
-
 }
