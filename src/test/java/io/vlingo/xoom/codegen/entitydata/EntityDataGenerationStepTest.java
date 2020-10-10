@@ -17,7 +17,7 @@ import org.junit.Test;
 
 import static io.vlingo.xoom.codegen.parameter.Label.PACKAGE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
 public class EntityDataGenerationStepTest {
 
@@ -46,8 +46,8 @@ public class EntityDataGenerationStepTest {
 
     private Content[] contents() {
         return new Content[]{
-                Content.with(STATE, new TemplateFile("/Projects/", "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-                Content.with(STATE, new TemplateFile("/Projects/", "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
+                Content.with(AGGREGATE_STATE, new TemplateFile("/Projects/", "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+                Content.with(AGGREGATE_STATE, new TemplateFile("/Projects/", "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile("/Projects/", "Author.java"), null, null, AUTHOR_PROTOCOL_CONTENT_TEXT),
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile("/Projects/", "Book.java"), null, null, BOOK_PROTOCOL_CONTENT_TEXT)
         };

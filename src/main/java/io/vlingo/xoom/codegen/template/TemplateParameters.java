@@ -21,9 +21,7 @@ public class TemplateParameters {
 
     private final Map<String, Object> parameters = new HashMap<>();
 
-    private TemplateParameters() {
-
-    }
+    private TemplateParameters() {}
 
     public static TemplateParameters empty() {
         return new TemplateParameters();
@@ -41,6 +39,10 @@ public class TemplateParameters {
     public TemplateParameters andResolve(final TemplateParameter parameter, final Function<TemplateParameters, Object> resolver) {
         this.parameters.put(parameter.key, resolver.apply(this));
         return this;
+    }
+
+    public TemplateParameters addImport(final Class<?> clazz) {
+        return addImport(clazz.getCanonicalName());
     }
 
     public TemplateParameters addImport(final String qualifiedClassName) {

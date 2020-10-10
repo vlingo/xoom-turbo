@@ -161,4 +161,8 @@ public class CodeGenerationContext {
     public List<Content> contents() {
         return Collections.unmodifiableList(contents);
     }
+
+    public CodeGenerationParameters parameters() {
+        return parameters;
+    }
 }

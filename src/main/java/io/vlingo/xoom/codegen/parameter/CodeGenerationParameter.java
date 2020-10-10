@@ -14,6 +14,7 @@ public class CodeGenerationParameter {
 
     public final Label label;
     public final String value;
+    private CodeGenerationParameter parent;
     private final CodeGenerationParameters relatedParameters;
 
     public static CodeGenerationParameter of(final Label label, final Object value) {
@@ -35,11 +36,11 @@ public class CodeGenerationParameter {
     }
 
     public CodeGenerationParameter relate(final Label label, final String value) {
-        this.relatedParameters.add(label, value);
-        return this;
+        return this.relate(CodeGenerationParameter.of(label, value));
     }
 
     public CodeGenerationParameter relate(final CodeGenerationParameter relatedParameter) {
+        relatedParameter.ownedBy(this);
         this.relatedParameters.add(relatedParameter);
         return this;
     }
@@ -52,6 +53,14 @@ public class CodeGenerationParameter {
         return relatedParameters.retrieveAll(label);
     }
 
+    public CodeGenerationParameter parent() {
+        return parent;
+    }
+
+    private void ownedBy(final CodeGenerationParameter parent) {
+        this.parent = parent;
+    }
+
     public String relatedParameterValueOf(final Label label) {
         return relatedParameterValueOf(label, value -> value);
     }
@@ -60,11 +69,12 @@ public class CodeGenerationParameter {
         return mapper.apply(relatedParameterOf(label).value);
     }
 
-    public boolean has(final Label label) {
+    public boolean isLabeled(final Label label) {
         return this.label.equals(label);
     }
 
     public boolean hasAny(final Label label) {
-        return has(label) || relatedParameters.list().stream().anyMatch(parameter -> parameter.has(label));
+        return isLabeled(label) || relatedParameters.list().stream().anyMatch(parameter -> parameter.isLabeled(label));
     }
+
 }

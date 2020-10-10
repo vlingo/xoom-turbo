@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
 public enum StorageType {
 
@@ -24,11 +24,11 @@ public enum StorageType {
 
     OBJECT_STORE("OBJECT_STORE", "ObjectStore", "ObjectTypeRegistry",
             "io.vlingo.lattice.model.object",
-            STATE),
+            AGGREGATE_STATE),
 
     STATE_STORE("STATE_STORE", "StateStore", "StatefulTypeRegistry",
             "io.vlingo.lattice.model.stateful",
-            STATE);
+            AGGREGATE_STATE);
 
     private static final String STORE_PROVIDER_NAME_SUFFIX = "Provider";
 
@@ -103,6 +103,10 @@ public enum StorageType {
 
     public Boolean isStateful() {
         return equals(STATE_STORE);
+    }
+
+    public boolean isSourced() {
+        return equals(JOURNAL);
     }
 
     public String typeRegistryObjectName() {

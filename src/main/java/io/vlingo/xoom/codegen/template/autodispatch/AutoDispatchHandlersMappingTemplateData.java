@@ -42,7 +42,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage))
                         .and(AGGREGATE_PROTOCOL_NAME, aggregateProtocolName)
-                        .and(STATE_NAME, STATE.resolveClassname(aggregateProtocolName))
+                        .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregateProtocolName))
                         .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateProtocolName))
                         .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateProtocolName)).and(USE_CQRS, useCQRS)
                         .and(QUERY_ALL_METHOD_NAME, findQueryMethodName(aggregateProtocolName, queriesTemplateData))
@@ -88,7 +88,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
     private Map<TemplateStandard, String> mapClassesWithTemplateStandards(final String aggregateName) {
         return new HashMap<TemplateStandard, String>(){{
             put(AGGREGATE_PROTOCOL, aggregateName);
-            put(STATE, STATE.resolveClassname(aggregateName));
+            put(AGGREGATE_STATE, AGGREGATE_STATE.resolveClassname(aggregateName));
             put(QUERIES, QUERIES.resolveClassname(aggregateName));
             put(ENTITY_DATA, ENTITY_DATA.resolveClassname(aggregateName));
         }};

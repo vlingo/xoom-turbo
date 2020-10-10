@@ -16,7 +16,7 @@ import javax.lang.model.element.TypeElement;
 import java.util.Collections;
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
 public class StateContentLoader extends TypeBasedContentLoader {
 
@@ -40,7 +40,7 @@ public class StateContentLoader extends TypeBasedContentLoader {
 
     @Override
     protected TemplateStandard standard() {
-        return STATE;
+        return AGGREGATE_STATE;
     }
 
 }

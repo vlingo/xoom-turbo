@@ -7,11 +7,15 @@
 
 package io.vlingo.xoom.codegen.template.model;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.autodispatch.RouteMethodTemplateData;
 
 import java.beans.Introspector;
+import java.util.ArrayList;
+import java.util.List;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
@@ -22,13 +26,18 @@ public class AggregateProtocolTemplateData extends TemplateData {
     private final TemplateParameters parameters;
 
     public AggregateProtocolTemplateData(final String packageName,
-                                         final String protocolName) {
-        this.protocolName = protocolName;
+                                         final CodeGenerationParameter aggregate) {
+        this.protocolName = aggregate.value;
         this.parameters = TemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(AGGREGATE_PROTOCOL_NAME, protocolName)
-                .and(STATE_NAME, STATE.resolveClassname(protocolName))
-                .and(ENTITY_NAME, AGGREGATE.resolveClassname(protocolName))
-                .and(AGGREGATE_PROTOCOL_VARIABLE, Introspector.decapitalize(protocolName));
+                .and(AGGREGATE_PROTOCOL_NAME, aggregate)
+                .and(METHODS, new ArrayList<String>());
+
+        this.dependOn(AggregateProtocolMethodTemplateData.from(parameters, aggregate));
+    }
+
+    @Override
+    public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {
+        this.parameters.<List<String>>find(METHODS).add(outcome);
     }
 
     @Override

@@ -24,7 +24,7 @@ public class ModelGenerationStep extends TemplateProcessingStep {
         final String packageName = context.parameterOf(PACKAGE);
         final String aggregatesData = context.parameterOf(AGGREGATES);
         final StorageType storageType = StorageType.of(context.parameterOf(STORAGE_TYPE));
-        return ModelTemplateDataFactory.build(packageName, aggregatesData, storageType);
+        return ModelTemplateDataFactory.from(context.parameters());
     }
 
     @Override

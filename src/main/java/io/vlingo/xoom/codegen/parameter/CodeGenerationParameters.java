@@ -79,7 +79,7 @@ public class CodeGenerationParameters {
 
     public CodeGenerationParameter retrieve(final Label label) {
         return parameters.stream()
-                .filter(param -> param.has(label)).findFirst()
+                .filter(param -> param.isLabeled(label)).findFirst()
                 .orElse(CodeGenerationParameter.of(label, ""));
     }
 
@@ -88,7 +88,7 @@ public class CodeGenerationParameters {
     }
 
     public Stream<CodeGenerationParameter> retrieveAll(final Label label) {
-        return parameters.stream().filter(param -> param.has(label));
+        return parameters.stream().filter(param -> param.isLabeled(label));
     }
 
     public boolean isEmpty() {

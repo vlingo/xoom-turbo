@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
 public class ContentQueryTest {
 
@@ -42,7 +42,7 @@ public class ContentQueryTest {
     @Test
     public void testClassNameQuery() {
         final Set<String> classNames =
-                ContentQuery.findClassNames(STATE, contents());
+                ContentQuery.findClassNames(AGGREGATE_STATE, contents());
 
         Assert.assertEquals(2, classNames.size());
         Assert.assertTrue(classNames.contains("AuthorState"));
@@ -52,7 +52,7 @@ public class ContentQueryTest {
     @Test
     public void testQualifiedClassNameQuery() {
         final Set<String> classNames =
-                ContentQuery.findFullyQualifiedClassNames(STATE, contents());
+                ContentQuery.findFullyQualifiedClassNames(AGGREGATE_STATE, contents());
 
         Assert.assertEquals(2, classNames.size());
         Assert.assertTrue(classNames.contains("io.vlingo.xoomapp.model.AuthorState"));
@@ -61,8 +61,8 @@ public class ContentQueryTest {
 
     private List<Content> contents() {
         return Arrays.asList(
-            Content.with(STATE, new TemplateFile("/Projects/", "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-            Content.with(STATE, new TemplateFile("/Projects/", "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
+            Content.with(AGGREGATE_STATE, new TemplateFile("/Projects/", "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+            Content.with(AGGREGATE_STATE, new TemplateFile("/Projects/", "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
             Content.with(AGGREGATE, new TemplateFile("/Projects/", "Author.java"), null, null, AGGREGATE_CONTENT_TEXT)
         );
     }

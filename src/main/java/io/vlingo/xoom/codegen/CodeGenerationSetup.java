@@ -9,7 +9,6 @@ package io.vlingo.xoom.codegen;
 
 import com.google.common.collect.Maps;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
-import io.vlingo.xoom.codegen.template.storage.DatabaseType;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
@@ -29,12 +28,12 @@ public class CodeGenerationSetup {
                     }}
             );
 
-    public static final Map<StorageType, String> STATE_TEMPLATES =
+    public static final Map<StorageType, String> AGGREGATE_METHOD_TEMPLATES =
             Maps.immutableEnumMap(
                     new HashMap<StorageType, String>(){{
-                        put(StorageType.OBJECT_STORE, STATE_OBJECT.filename);
-                        put(StorageType.STATE_STORE, STATE_OBJECT.filename);
-                        put(StorageType.JOURNAL, PLAIN_STATE.filename);
+                        put(StorageType.OBJECT_STORE, "");
+                        put(StorageType.STATE_STORE, STATEFUL_ENTITY_METHOD.filename);
+                        put(StorageType.JOURNAL, EVENT_SOURCE_ENTITY_METHOD.filename);
                     }}
             );
 

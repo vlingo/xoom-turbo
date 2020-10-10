@@ -13,6 +13,7 @@ import javax.tools.FileObject;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static javax.tools.StandardLocation.SOURCE_OUTPUT;
 import static javax.tools.StandardLocation.SOURCE_PATH;
 
 public class ClassFile {

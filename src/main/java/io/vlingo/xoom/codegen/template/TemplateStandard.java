@@ -2,6 +2,7 @@ package io.vlingo.xoom.codegen.template;
 
 import io.vlingo.http.Method;
 import io.vlingo.xoom.codegen.CodeGenerationSetup;
+import io.vlingo.xoom.codegen.template.model.MethodScope;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
@@ -9,8 +10,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static io.vlingo.xoom.codegen.CodeGenerationSetup.*;
-import static io.vlingo.xoom.codegen.template.Template.ANNOTATED_BOOTSTRAP;
-import static io.vlingo.xoom.codegen.template.Template.DEFAULT_BOOTSTRAP;
+import static io.vlingo.xoom.codegen.template.Template.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.storage.StorageType.STATE_STORE;
 
@@ -18,11 +18,20 @@ public enum TemplateStandard {
 
     AGGREGATE_PROTOCOL(parameters -> Template.AGGREGATE_PROTOCOL.filename),
 
+    AGGREGATE_PROTOCOL_METHOD(parameters ->
+            parameters.<MethodScope>find(METHOD_SCOPE).isStatic() ?
+                    AGGREGATE_PROTOCOL_STATIC_METHOD.filename :
+                    AGGREGATE_PROTOCOL_INSTANCE_METHOD.filename),
+
     AGGREGATE(parameters -> AGGREGATE_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
             (name, parameters) -> name + "Entity"),
 
-    STATE(parameters -> CodeGenerationSetup.STATE_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
+    AGGREGATE_METHOD(parameters -> AGGREGATE_METHOD_TEMPLATES.get(parameters.find(STORAGE_TYPE))),
+
+    AGGREGATE_STATE(parameters -> Template.AGGREGATE_STATE.filename,
             (name, parameters) -> name + "State"),
+
+    AGGREGATE_STATE_METHOD(parameters -> Template.AGGREGATE_STATE_METHOD.filename),
 
     QUERIES(parameters -> Template.QUERIES.filename,
             (name, parameters) -> name + "Queries"),
@@ -44,14 +53,14 @@ public enum TemplateStandard {
                     parameters.find(TemplateParameter.ROUTE_METHOD);
 
             if(Method.from(httpMethod).isGET()) {
-                return Template.RETRIEVE_METHOD.filename;
+                return Template.REST_RESOURCE_RETRIEVE_METHOD.filename;
             }
 
             if(parameters.find(REQUIRE_ENTITY_LOADING)) {
-                return Template.UPDATE_METHOD.filename;
+                return Template.REST_RESOURCE_UPDATE_METHOD.filename;
             }
 
-            return Template.CREATION_METHOD.filename;
+            return Template.REST_RESOURCE_CREATION_METHOD.filename;
         }, (name, parameters) -> name),
 
     AUTO_DISPATCH_RESOURCE_HANDLER(parameters -> Template.REST_RESOURCE.filename,
@@ -82,12 +91,7 @@ public enum TemplateStandard {
     DATABASE_PROPERTIES(templateParameters -> Template.DATABASE_PROPERTIES.filename,
             (name, parameters) -> "vlingo-xoom.properties"),
 
-    DOMAIN_EVENT(parameters -> {
-        if (parameters.find(PLACEHOLDER_EVENT)) {
-            return Template.PLACEHOLDER_DOMAIN_EVENT.filename;
-        }
-        return Template.DOMAIN_EVENT.filename;
-    }, (name, parameters) -> parameters.find(PLACEHOLDER_EVENT) ? name + "PlaceholderDefined" : name),
+    DOMAIN_EVENT(parameters -> Template.DOMAIN_EVENT.filename),
 
     STORE_PROVIDER(parameters -> {
         if(parameters.find(USE_ANNOTATIONS, false)) {

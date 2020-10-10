@@ -48,10 +48,10 @@ public class EntityDataTemplateData extends TemplateData {
                                               final String protocolName,
                                               final List<Content> contents) {
         final String stateName =
-                STATE.resolveClassname(protocolName);
+                AGGREGATE_STATE.resolveClassname(protocolName);
 
         final String stateQualifiedClassName =
-                ContentQuery.findFullyQualifiedClassName(STATE, stateName, contents);
+                ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents);
 
         final String dataName =
                 ENTITY_DATA.resolveClassname(protocolName);
