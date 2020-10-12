@@ -11,25 +11,21 @@ package io.vlingo.xoom.codegen.template.model;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
-import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
 
 public class ModelGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final String packageName = context.parameterOf(PACKAGE);
-        final String aggregatesData = context.parameterOf(AGGREGATES);
-        final StorageType storageType = StorageType.of(context.parameterOf(STORAGE_TYPE));
         return ModelTemplateDataFactory.from(context.parameters());
     }
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        return context.hasParameter(AGGREGATES);
+        return context.hasParameter(AGGREGATE);
     }
 
 }

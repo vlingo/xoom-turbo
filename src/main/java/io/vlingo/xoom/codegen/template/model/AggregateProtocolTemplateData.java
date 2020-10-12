@@ -11,14 +11,12 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.autodispatch.RouteMethodTemplateData;
 
-import java.beans.Introspector;
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 
 public class AggregateProtocolTemplateData extends TemplateData {
 
@@ -29,7 +27,7 @@ public class AggregateProtocolTemplateData extends TemplateData {
                                          final CodeGenerationParameter aggregate) {
         this.protocolName = aggregate.value;
         this.parameters = TemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(AGGREGATE_PROTOCOL_NAME, aggregate)
+                .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
                 .and(METHODS, new ArrayList<String>());
 
         this.dependOn(AggregateProtocolMethodTemplateData.from(parameters, aggregate));

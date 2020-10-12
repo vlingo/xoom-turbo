@@ -57,14 +57,15 @@ public class AggregateProtocolMethodTemplateData extends TemplateData {
                         .and(ENTITY_NAME, AGGREGATE.resolveClassname(method.parent().value))
                         .and(AGGREGATE_PROTOCOL_VARIABLE, Introspector.decapitalize(method.parent().value))
                         .and(METHOD_INVOCATION_PARAMETERS, METHOD_INVOCATION.format(method))
-                        .and(METHOD_PARAMETERS, SIGNATURE_DECLARATION.format(method, methodScope));
+                        .and(METHOD_PARAMETERS, SIGNATURE_DECLARATION.format(method, methodScope))
+                        .and(AGGREGATE_PROTOCOL_NAME, method.parent().value);
 
         parentParameters.addImports(resolveImports(methodScope));
     }
 
     private Set<String> resolveImports(final MethodScope methodScope) {
         return Stream.of(methodScope.requiredClasses)
-                .map(clazz -> clazz.getClass().getCanonicalName())
+                .map(clazz -> clazz.getCanonicalName())
                 .collect(Collectors.toSet());
     }
 

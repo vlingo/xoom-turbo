@@ -64,7 +64,7 @@ public enum TemplateParameter {
     MODEL("model"),
     URI_ROOT("uriRoot"),
     MEMBERS("members"),
-    MEMBERS_ASSIGNMENT("membersAssigment"),
+    MEMBERS_ASSIGNMENT("membersAssignment"),
     METHODS("methods"),
     METHOD_NAME("methodName"),
     METHOD_SCOPE("methodScope"),

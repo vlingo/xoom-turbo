@@ -16,7 +16,6 @@ public enum Label {
     BODY_TYPE("bodyType"),
     APPLICATION_NAME("appName"),
     PACKAGE("package"),
-    TARGET_FOLDER("target.folder"),
     AGGREGATES("aggregates"),
     AGGREGATE("aggregate"),
     STATE_FIELD("stateField"),
@@ -33,6 +32,8 @@ public enum Label {
     PROJECTABLES("projectables"),
     DATABASE("database"),
     REST_RESOURCES("resources"),
+    MAIN_CLASS("main.class"),
+    DEPLOYMENT("deployment"),
     ADDRESS_FACTORY("address.factory"),
     IDENTITY_GENERATOR("identity.generator"),
     BLOCKING_MESSAGING("blocking.messaging"),
@@ -58,7 +59,15 @@ public enum Label {
     USE_ADAPTER("useAdapter"),
     CUSTOM_ROUTE("customRoute"),
     USE_ANNOTATIONS("annotations"),
-    USE_AUTO_DISPATCH("useAutoDispatch");
+    USE_AUTO_DISPATCH("useAutoDispatch"),
+    GROUP_ID("groupId"),
+    ARTIFACT_ID("artifactId"),
+    VERSION("version"),
+    XOOM_SERVER_VERSION("xoomServerVersion"),
+    DOCKER_IMAGE("dockerImage"),
+    KUBERNETES_IMAGE("kubernetesImages"),
+    KUBERNETES_POD_NAME("kubernetesPod"),
+    TARGET_FOLDER("targetFolder");
 
     private final String key;
 

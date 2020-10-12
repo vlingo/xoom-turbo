@@ -57,6 +57,27 @@ public class CodeGenerationParameter {
         return parent;
     }
 
+    public CodeGenerationParameter parent(final Label label) {
+        if(!hasParent()) {
+            throw new UnsupportedOperationException("Orphan parameter");
+        }
+
+        CodeGenerationParameter matchedParent = parent;
+
+        while(matchedParent != null) {
+            if(matchedParent.isLabeled(label)) {
+                return matchedParent;
+            }
+            matchedParent = matchedParent.parent();
+        }
+
+        throw new UnsupportedOperationException("Orphan parameter");
+    }
+
+    public boolean hasParent() {
+        return parent != null;
+    }
+
     private void ownedBy(final CodeGenerationParameter parent) {
         this.parent = parent;
     }

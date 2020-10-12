@@ -42,7 +42,7 @@ public class AggregateStateMethodTemplateData extends TemplateData {
     }
 
     private String resolveConstructorParameters(final CodeGenerationParameter method) {
-        return SELF_ALTERNATE_REFERENCE.format(method, method.retrieveAll(METHOD_PARAMETER));
+        return SELF_ALTERNATE_REFERENCE.format(method.parent(), method.retrieveAll(METHOD_PARAMETER));
     }
 
     @Override

@@ -22,21 +22,21 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
 import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.*;
 
-public class StateTemplateData extends TemplateData {
+public class AggregateStateTemplateData extends TemplateData {
 
     private final String protocolName;
     private final TemplateParameters parameters;
 
-    public StateTemplateData(final String packageName,
-                             final CodeGenerationParameter aggregate,
-                             final StorageType storageType) {
+    public AggregateStateTemplateData(final String packageName,
+                                      final CodeGenerationParameter aggregate,
+                                      final StorageType storageType) {
         this.protocolName = aggregate.value;
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, packageName)
                         .and(EVENT_SOURCED, storageType.isSourced())
                         .and(MEMBERS, MEMBER_DECLARATION.format(aggregate))
                         .and(MEMBERS_ASSIGNMENT, ASSIGNMENT.format(aggregate))
-                        .and(ID_TYPE, StateFieldTypeRetriever.retrieve(aggregate, "id"))
+                        .and(ID_TYPE, StateFieldType.retrieve(aggregate, "id"))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
                         .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
                         .and(METHOD_INVOCATION_PARAMETERS, resolveIdBasedConstructorParameters(aggregate))

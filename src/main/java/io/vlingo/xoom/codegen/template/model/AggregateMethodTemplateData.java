@@ -9,19 +9,17 @@ package io.vlingo.xoom.codegen.template.model;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE_METHOD;
-import static io.vlingo.xoom.codegen.parameter.Label.DOMAIN_EVENT;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.METHOD_INVOCATION;
 import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.MethodScope.INSTANCE;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodTemplateData extends TemplateData {
@@ -42,7 +40,8 @@ public class AggregateMethodTemplateData extends TemplateData {
                         .and(DOMAIN_EVENT_NAME, method.relatedParameterValueOf(DOMAIN_EVENT))
                         .and(METHOD_INVOCATION_PARAMETERS, METHOD_INVOCATION.format(method))
                         .and(METHOD_PARAMETERS, SIGNATURE_DECLARATION.format(method))
-                        .and(SOURCED_EVENTS, SourcedEventParameter.from(method.parent()));
+                        .and(SOURCED_EVENTS, SourcedEventParameter.from(method.parent()))
+                        .and(STATE_NAME, TemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(AGGREGATE).value));
     }
 
     @Override

@@ -9,7 +9,6 @@ package io.vlingo.xoom.codegen.template.model;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
@@ -40,7 +39,7 @@ public class ModelTemplateDataFactory {
         final List<TemplateData> templatesData = new ArrayList<>();
         templatesData.add(new AggregateProtocolTemplateData(packageName, aggregateParameter));
         templatesData.add(new AggregateTemplateData(packageName, aggregateParameter, storageType));
-        templatesData.add(new StateTemplateData(packageName, aggregateParameter, storageType));
+        templatesData.add(new AggregateStateTemplateData(packageName, aggregateParameter, storageType));
         templatesData.addAll(DomainEventTemplateData.from(packageName, aggregateParameter));
         return templatesData.stream();
     }

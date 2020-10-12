@@ -18,16 +18,14 @@ public class ModelTemplateDataFactoryTest {
 
     @Test
     public void testAggregateTemplateDataBuild() {
-        final String basePackage = "io.vlingo.xoomapp";
-
         final CodeGenerationParameters parameters =
-                CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, basePackage),
+                CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, JOURNAL),
                         authorAggregate());
 
         final List<TemplateData> templatesData = ModelTemplateDataFactory.from(parameters);
 
-        Assert.assertEquals(6, templatesData.size());
+        Assert.assertEquals(5, templatesData.size());
         Assert.assertEquals(2, templatesData.stream().filter(templateData -> templateData.hasStandard(DOMAIN_EVENT)).count());
 
         Assert.assertEquals("Author", templatesData.get(0).parameters().find(AGGREGATE_PROTOCOL_NAME));
@@ -88,6 +86,7 @@ public class ModelTemplateDataFactoryTest {
         final CodeGenerationParameter factoryMethod =
                 CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
                         .relate(Label.METHOD_PARAMETER, "name")
+                        .relate(Label.FACTORY_METHOD, "true")
                         .relate(authorRegisteredEvent);
 
         final CodeGenerationParameter rankMethod =

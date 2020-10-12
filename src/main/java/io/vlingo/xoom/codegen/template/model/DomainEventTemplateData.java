@@ -15,12 +15,13 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.*;
+import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.MEMBER_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.STATE_BASED_ASSIGNMENT;
 
 public class DomainEventTemplateData extends TemplateData {
 
@@ -30,19 +31,19 @@ public class DomainEventTemplateData extends TemplateData {
     public static List<TemplateData> from(final String packageName,
                                           final CodeGenerationParameter aggregate) {
         return aggregate.retrieveAll(Label.DOMAIN_EVENT).map(event ->
-                new DomainEventTemplateData(packageName, event.value, aggregate, event.retrieveAll(STATE_FIELD)))
+                new DomainEventTemplateData(packageName, event, aggregate))
                 .collect(Collectors.toList());
     }
 
     private DomainEventTemplateData(final String packageName,
-                                    final String eventName,
-                                    final CodeGenerationParameter aggregate,
-                                    final Stream<CodeGenerationParameter> eventFields) {
-        this.name = eventName;
+                                    final CodeGenerationParameter event,
+                                    final CodeGenerationParameter aggregate) {
+        this.name = event.value;
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, packageName).and(DOMAIN_EVENT_NAME, name)
-                        .and(MEMBERS, MEMBER_DECLARATION.format(aggregate, eventFields))
-                        .and(MEMBERS_ASSIGNMENT, STATE_BASED_ASSIGNMENT.format(aggregate, eventFields));
+                        .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
+                        .and(MEMBERS, MEMBER_DECLARATION.format(aggregate, event.retrieveAll(STATE_FIELD)))
+                        .and(MEMBERS_ASSIGNMENT, STATE_BASED_ASSIGNMENT.format(aggregate, event.retrieveAll(STATE_FIELD)));
     }
 
     @Override

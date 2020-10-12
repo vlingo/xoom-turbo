@@ -13,9 +13,10 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
 
 public interface AggregateArgumentsFormat {
 
@@ -45,15 +46,15 @@ public interface AggregateArgumentsFormat {
                     .flatMap(Collection::stream).collect(Collectors.joining(", "));
         }
 
-        private Set<String> formatMethodParameters(final CodeGenerationParameter parameter) {
+        private List<String> formatMethodParameters(final CodeGenerationParameter parameter) {
             return parameter.retrieveAll(resolveFieldsLabel(parameter)).map(param -> {
-                final String paramType = StateFieldTypeRetriever.retrieve(param.parent(), param.value);
-                return String.format(SIGNATURE_PATTERN, param.value, paramType);
-            }).collect(Collectors.toSet());
+                final String paramType = StateFieldType.retrieve(param.parent(AGGREGATE), param.value);
+                return String.format(SIGNATURE_PATTERN, paramType, param.value);
+            }).collect(Collectors.toList());
         }
 
         private Label resolveFieldsLabel(final CodeGenerationParameter parameter) {
-            return parameter.isLabeled(Label.AGGREGATE) ? Label.STATE_FIELD : Label.METHOD_PARAMETER;
+            return parameter.isLabeled(AGGREGATE) ? Label.STATE_FIELD : Label.METHOD_PARAMETER;
         }
     }
 

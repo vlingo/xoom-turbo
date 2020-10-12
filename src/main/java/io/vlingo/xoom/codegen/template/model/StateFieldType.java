@@ -9,12 +9,16 @@ package io.vlingo.xoom.codegen.template.model;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static io.vlingo.xoom.codegen.parameter.Label.FIELD_TYPE;
 import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
 
-public class StateFieldTypeRetriever {
+public class StateFieldType {
 
     private static String UNKNOWN_FIELD_MESSAGE = "%s is not a field in %s state";
+    private static final List<String> NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "integer", "long", "double", "float");
 
     public static String retrieve(final CodeGenerationParameter aggregate, final String fieldName) {
         return aggregate.retrieveAll(STATE_FIELD)
@@ -23,4 +27,7 @@ public class StateFieldTypeRetriever {
                 .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, aggregate.value)));
     }
 
+    public static boolean isNumeric(final CodeGenerationParameter aggregate, final String fieldName) {
+        return NUMERIC_TYPES.contains(retrieve(aggregate, fieldName).toLowerCase());
+    }
 }
