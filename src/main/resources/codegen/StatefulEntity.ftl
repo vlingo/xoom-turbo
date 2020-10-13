@@ -17,7 +17,6 @@ public final class ${entityName} extends StatefulEntity<${stateName}> implements
   <#list methods as method>
   ${method}
   </#list>
-
   @Override
   protected void state(final ${stateName} state) {
     this.state = state;
@@ -27,5 +26,4 @@ public final class ${entityName} extends StatefulEntity<${stateName}> implements
   protected Class<${stateName}> stateType() {
     return ${stateName}.class;
   }
-
 }

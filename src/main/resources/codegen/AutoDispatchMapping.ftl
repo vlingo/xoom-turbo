@@ -8,10 +8,7 @@ import io.vlingo.http.Response;
 import ${import.qualifiedClassName};
 </#list>
 
-import static io.vlingo.http.Method.POST;
-<#if useCQRS>
-import static io.vlingo.http.Method.GET;
-</#if>
+import static io.vlingo.http.Method.*;
 
 @AutoDispatch(path="/${uriRoot}", handlers=${autoDispatchHandlersMappingName}.class)
 <#if useCQRS>
@@ -20,13 +17,7 @@ import static io.vlingo.http.Method.GET;
 @Model(protocol = ${aggregateProtocolName}.class, actor = ${entityName}.class, data = ${dataName}.class)
 public interface ${autoDispatchMappingName} {
 
-    @Route(method = POST, handler = ${autoDispatchHandlersMappingName}.DEFINE_PLACEHOLDER)
-    @ResponseAdapter(handler = ${autoDispatchHandlersMappingName}.ADAPT_STATE)
-    Completes<Response> definePlaceholder(@Body ${dataName} data);
-
-    <#if useCQRS>
-    @Route(method = GET, handler = ${autoDispatchHandlersMappingName}.QUERY_ALL)
-    Completes<Response> queryAll();
-    </#if>
-
+  <#list routeDeclarations as declaration>
+  ${declaration}
+  </#list>
 }

@@ -1,3 +1,3 @@
 public ${stateName} ${methodName}(${methodParameters}) {
-  return new ${stateName}(${constructorParameters});
-}
+    return new ${stateName}(${constructorParameters});
+  }

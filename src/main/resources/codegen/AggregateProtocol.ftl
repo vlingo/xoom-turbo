@@ -9,5 +9,4 @@ public interface ${aggregateProtocolName} {
   <#list methods as method>
   ${method}
   </#list>
-
 }

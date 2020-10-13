@@ -17,13 +17,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
+import static io.vlingo.xoom.codegen.parameter.Label.METHOD_PARAMETER;
 
 public interface AggregateArgumentsFormat {
 
     AggregateArgumentsFormat METHOD_INVOCATION = new MethodInvocation();
     AggregateArgumentsFormat SIGNATURE_DECLARATION = new SignatureDeclaration();
+    AggregateArgumentsFormat DATA_BASED_METHOD_INVOCATION = new MethodInvocation("data");
 
-    String format(final CodeGenerationParameter parameter);
+    default String format(final CodeGenerationParameter parameter) {
+        return format(parameter, MethodScope.INSTANCE);
+    }
 
     String format(final CodeGenerationParameter parameter, final MethodScope scope);
 
@@ -31,11 +35,6 @@ public interface AggregateArgumentsFormat {
 
         private static final String SIGNATURE_PATTERN = "final %s %s";
         private static final String STAGE_ARGUMENT = String.format(SIGNATURE_PATTERN, "Stage", "stage");
-
-        @Override
-        public String format(final CodeGenerationParameter parameter) {
-            return format(parameter, MethodScope.INSTANCE);
-        }
 
         @Override
         public String format(final CodeGenerationParameter parameter, final MethodScope scope) {
@@ -60,14 +59,30 @@ public interface AggregateArgumentsFormat {
 
     class MethodInvocation implements AggregateArgumentsFormat {
 
-        @Override
-        public String format(final CodeGenerationParameter method) {
-            return method.retrieveAll(Label.METHOD_PARAMETER).map(param -> param.value).collect(Collectors.joining(", "));
+        private final String carrier;
+        private static final String FIELD_ACCESS_PATTERN = "%s.%s";
+
+        protected MethodInvocation() {
+            this("");
+        }
+
+        protected MethodInvocation(final String carrier) {
+            this.carrier = carrier;
         }
 
         @Override
         public String format(final CodeGenerationParameter method, final MethodScope scope) {
-            throw new UnsupportedOperationException("This format does not support MethodScope");
+            final List<String> args = scope.isStatic() ?
+                    Arrays.asList("stage") : Arrays.asList();
+
+            return Stream.of(args, formatMethodParameters(method))
+                    .flatMap(Collection::stream).collect(Collectors.joining(", "));
+        }
+
+        private List<String> formatMethodParameters(final CodeGenerationParameter method) {
+            return method.retrieveAll(METHOD_PARAMETER).map(param ->
+                carrier.isEmpty() ? param.value : String.format(FIELD_ACCESS_PATTERN, carrier, param.value))
+                    .collect(Collectors.toList());
         }
 
     }

@@ -25,5 +25,4 @@ public final class ${stateName} extends StateObject {
   <#list methods as method>
   ${method}
   </#list>
-
 }

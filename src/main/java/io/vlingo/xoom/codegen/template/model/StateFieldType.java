@@ -27,7 +27,14 @@ public class StateFieldType {
                 .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, aggregate.value)));
     }
 
-    public static boolean isNumeric(final CodeGenerationParameter aggregate, final String fieldName) {
-        return NUMERIC_TYPES.contains(retrieve(aggregate, fieldName).toLowerCase());
+    public static String resolveDefaultValue(final CodeGenerationParameter aggregate, final String fieldName) {
+        final String type = retrieve(aggregate, fieldName);
+        if(type.equalsIgnoreCase(Boolean.class.getSimpleName())) {
+            return "false";
+        }
+        if(NUMERIC_TYPES.contains(retrieve(aggregate, fieldName).toLowerCase())) {
+            return "0";
+        }
+        return "null";
     }
 }

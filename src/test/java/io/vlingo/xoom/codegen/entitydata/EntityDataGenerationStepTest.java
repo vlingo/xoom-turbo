@@ -9,7 +9,9 @@ package io.vlingo.xoom.codegen.entitydata;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.entitydata.EntityDataGenerationStep;
 import org.junit.Assert;
@@ -24,7 +26,8 @@ public class EntityDataGenerationStepTest {
     @Test
     public void testThatEntitiesDataAreGenerated() {
         final CodeGenerationParameters parameters =
-                CodeGenerationParameters.from(PACKAGE, "io.vlingo.xoomapp");
+                CodeGenerationParameters.from(PACKAGE, "io.vlingo.xoomapp")
+                .add(authorAggregate()).add(bookAggregate());
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters)
@@ -42,6 +45,44 @@ public class EntityDataGenerationStepTest {
         Assert.assertTrue(bookDataContent.contains("public class BookData"));
         Assert.assertTrue(bookDataContent.contains("final BookState state"));
         Assert.assertTrue(bookDataContent.contains("import io.vlingo.xoomapp.model.book.BookState;"));
+    }
+
+    private CodeGenerationParameter authorAggregate() {
+        final CodeGenerationParameter idField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                        .relate(Label.FIELD_TYPE, "long");
+
+        final CodeGenerationParameter nameField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter rankField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                        .relate(Label.FIELD_TYPE, "int");
+
+        final CodeGenerationParameter statusField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "status")
+                        .relate(Label.FIELD_TYPE, "boolean");
+
+        return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+                .relate(idField).relate(nameField).relate(rankField).relate(statusField);
+    }
+
+    private CodeGenerationParameter bookAggregate() {
+        final CodeGenerationParameter idField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                        .relate(Label.FIELD_TYPE, "long");
+
+        final CodeGenerationParameter nameField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "title")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter rankField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "publisher")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        return CodeGenerationParameter.of(Label.AGGREGATE, "Book")
+                .relate(idField).relate(nameField).relate(rankField);
     }
 
     private Content[] contents() {

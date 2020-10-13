@@ -8,6 +8,8 @@
 package io.vlingo.xoom.codegen.entitydata;
 
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
@@ -17,17 +19,20 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.STATE_QUALIFIED_CLASS_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
 public class EntityDataTemplateDataTest {
 
     @Test
     public void testThatTemplateParametersAreMapped() {
         final List<TemplateData> templatesData =
-                EntityDataTemplateData.from("io.vlingo.xoomapp", contents());
+                EntityDataTemplateData.from("io.vlingo.xoomapp",
+                        Stream.of(authorAggregate(), bookAggregate()),
+                        contents());
 
         Assert.assertEquals(2, templatesData.size());
 
@@ -38,8 +43,55 @@ public class EntityDataTemplateDataTest {
         Assert.assertEquals("AuthorData", authorEntityDataParameters.find(ENTITY_DATA_NAME));
         Assert.assertEquals("AuthorState", authorEntityDataParameters.find(STATE_NAME));
         Assert.assertEquals("io.vlingo.xoomapp.infrastructure", authorEntityDataParameters.find(PACKAGE_NAME));
+        Assert.assertEquals("public final long id;", authorEntityDataParameters.<List<String>>find(MEMBERS).get(0));
+        Assert.assertEquals("public final String name;", authorEntityDataParameters.<List<String>>find(MEMBERS).get(1));
+        Assert.assertEquals("public final int rank;", authorEntityDataParameters.<List<String>>find(MEMBERS).get(2));
+        Assert.assertEquals("public final boolean status;", authorEntityDataParameters.<List<String>>find(MEMBERS).get(3));
+        Assert.assertEquals("this.id = state.id;", authorEntityDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(0));
+        Assert.assertEquals("this.name = state.name;", authorEntityDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(1));
+        Assert.assertEquals("this.rank = state.rank;", authorEntityDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(2));
+        Assert.assertEquals("this.status = state.status;", authorEntityDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(3));
+        Assert.assertEquals("final long id, final String name, final int rank, final boolean status", authorEntityDataParameters.find(CONSTRUCTOR_PARAMETERS));
         Assert.assertEquals("io.vlingo.xoomapp.infrastructure.AuthorData", authorEntityDataParameters.find(ENTITY_DATA_QUALIFIED_NAME));
         Assert.assertEquals("io.vlingo.xoomapp.model.author.AuthorState", authorEntityDataParameters.find(STATE_QUALIFIED_CLASS_NAME));
+    }
+
+    private CodeGenerationParameter authorAggregate() {
+        final CodeGenerationParameter idField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                        .relate(Label.FIELD_TYPE, "long");
+
+        final CodeGenerationParameter nameField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter rankField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                        .relate(Label.FIELD_TYPE, "int");
+
+        final CodeGenerationParameter statusField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "status")
+                        .relate(Label.FIELD_TYPE, "boolean");
+
+        return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+                .relate(idField).relate(nameField).relate(rankField).relate(statusField);
+    }
+
+    private CodeGenerationParameter bookAggregate() {
+        final CodeGenerationParameter idField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                        .relate(Label.FIELD_TYPE, "long");
+
+        final CodeGenerationParameter nameField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "title")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter rankField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "publisher")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        return CodeGenerationParameter.of(Label.AGGREGATE, "Book")
+                .relate(idField).relate(nameField).relate(rankField);
     }
 
     private List<Content> contents() {

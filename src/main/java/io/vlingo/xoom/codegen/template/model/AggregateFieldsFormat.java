@@ -23,8 +23,8 @@ public interface AggregateFieldsFormat<T> {
     AggregateFieldsFormat<List<String>> ASSIGNMENT = new Constructor();
     AggregateFieldsFormat<List<String>> MEMBER_DECLARATION = new Member();
     AggregateFieldsFormat<List<String>> STATE_BASED_ASSIGNMENT = new Constructor("state");
-    AggregateFieldsFormat<String> SELF_ALTERNATE_REFERENCE = AlternateReference.handlingSelfFields();
-    AggregateFieldsFormat<String> NULLABLE_ALTERNATE_REFERENCE = AlternateReference.handlingNullableFields();
+    AggregateFieldsFormat<String> SELF_ALTERNATE_REFERENCE = AlternateReference.handlingSelfReferencedFields();
+    AggregateFieldsFormat<String> DEFAULT_VALUE = AlternateReference.handlingDefaultFieldsValue();
 
     default T format(final CodeGenerationParameter aggregate) {
         return format(aggregate, aggregate.retrieveAll(STATE_FIELD));
@@ -85,12 +85,12 @@ public interface AggregateFieldsFormat<T> {
             this.absenceHandler = absenceHandler;
         }
 
-        public static AlternateReference handlingSelfFields() {
+        public static AlternateReference handlingSelfReferencedFields() {
             return new AlternateReference(field -> "this." + field.value);
         }
 
-        public static AlternateReference handlingNullableFields() {
-            return new AlternateReference(field -> StateFieldType.isNumeric(field.parent(AGGREGATE), field.value) ? "0" : "null");
+        public static AlternateReference handlingDefaultFieldsValue() {
+            return new AlternateReference(field -> StateFieldType.resolveDefaultValue(field.parent(AGGREGATE), field.value));
         }
 
         @Override

@@ -47,7 +47,7 @@ public class AggregateStateTemplateData extends TemplateData {
 
     private String resolveIdBasedConstructorParameters(final CodeGenerationParameter aggregate) {
         final CodeGenerationParameter idField = CodeGenerationParameter.of(STATE_FIELD, "id");
-        return NULLABLE_ALTERNATE_REFERENCE.format(aggregate, Stream.of(idField));
+        return DEFAULT_VALUE.format(aggregate, Stream.of(idField));
     }
 
     @Override

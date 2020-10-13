@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.template.entitydata;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -16,9 +17,14 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
+import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.MEMBER_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.STATE_BASED_ASSIGNMENT;
 
 public class EntityDataTemplateData extends TemplateData {
 
@@ -29,38 +35,37 @@ public class EntityDataTemplateData extends TemplateData {
     private final TemplateParameters parameters;
 
     public static List<TemplateData> from(final String basePackage,
+                                          final Stream<CodeGenerationParameter> aggregates,
                                           final List<Content> contents) {
-        final Function<String, TemplateData> mapper =
-                protocolName -> new EntityDataTemplateData(basePackage, protocolName, contents);
+        final Function<CodeGenerationParameter, TemplateData> mapper =
+                aggregate -> new EntityDataTemplateData(basePackage, aggregate, contents);
 
-        return ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents).stream()
-                .map(mapper).collect(Collectors.toList());
+        return aggregates.map(mapper).collect(Collectors.toList());
     }
 
     private EntityDataTemplateData(final String basePackage,
-                                   final String protocolName,
+                                   final CodeGenerationParameter aggregate,
                                    final List<Content> contents) {
-        this.protocolName = protocolName;
-        this.parameters = loadParameters(resolvePackage(basePackage), protocolName, contents);
+        this.protocolName = aggregate.value;
+        this.parameters = loadParameters(resolvePackage(basePackage), aggregate, contents);
     }
 
     private TemplateParameters loadParameters(final String packageName,
-                                              final String protocolName,
+                                              final CodeGenerationParameter aggregate,
                                               final List<Content> contents) {
-        final String stateName =
-                AGGREGATE_STATE.resolveClassname(protocolName);
+        final String stateName = AGGREGATE_STATE.resolveClassname(aggregate.value);
 
         final String stateQualifiedClassName =
                 ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents);
 
-        final String dataName =
-                ENTITY_DATA.resolveClassname(protocolName);
-
-        final String entityDataQualifiedClassName = packageName.concat(".").concat(dataName);
+        final String dataName = ENTITY_DATA.resolveClassname(protocolName);
 
         return TemplateParameters.with(PACKAGE_NAME, packageName)
                 .and(STATE_NAME, stateName).and(ENTITY_DATA_NAME, dataName)
-                .and(ENTITY_DATA_QUALIFIED_NAME, entityDataQualifiedClassName)
+                .and(MEMBERS, MEMBER_DECLARATION.format(aggregate))
+                .and(MEMBERS_ASSIGNMENT, STATE_BASED_ASSIGNMENT.format(aggregate))
+                .and(ENTITY_DATA_QUALIFIED_NAME, packageName.concat(".").concat(dataName))
+                .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
                 .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName);
     }
 

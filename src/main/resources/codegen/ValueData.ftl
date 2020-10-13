@@ -2,45 +2,30 @@ package ${packageName};
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import ${stateQualifiedClassName};
 
 public class ${dataName} {
-  public final String id;
-  public final String placeholderValue;
-
-  public static ${dataName} empty() {
-    return new ${dataName}("", "");
-  }
+  <#list members as member>
+  ${member}
+  </#list>
 
   public static ${dataName} from(final ${stateName} state) {
-    return new ${dataName}(state.id, state.placeholderValue);
+    return new ${dataName}(state);
   }
 
   public static List<${dataName}> from(final List<${stateName}> states) {
-    final List<${dataName}> data = new ArrayList<>(states.size());
-
-    for (final ${stateName} state : states) {
-      data.add(${dataName}.from(state));
-    }
-
-    return data;
+    return states.stream().map(${dataName}::from).collect(Collectors.toList());
   }
 
-  public static ${dataName} from(final String id, final String placeholderValue) {
-    return new ${dataName}(id, placeholderValue);
+  public static ${dataName} empty() {
+    return new ${dataName}(${stateName}.identifiedBy(0));
   }
 
-  public static ${dataName} just(final String placeholderValue) {
-    return new ${dataName}("", placeholderValue);
+  private ${dataName} (final ${stateName} state) {
+    <#list membersAssignment as assignment>
+    ${assignment}
+    </#list>
   }
 
-  @Override
-  public String toString() {
-    return "${dataName} [id=" + id + " placeholderValue=" + placeholderValue + "]";
-  }
-
-  private ${dataName}(final String id, final String placeholderValue) {
-    this.id = id;
-    this.placeholderValue = placeholderValue;
-  }
 }

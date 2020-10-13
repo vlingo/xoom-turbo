@@ -9,46 +9,72 @@ package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.beans.Introspector;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static io.vlingo.http.Method.GET;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_SIGNATURE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.URI_ROOT;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 
 public class AutoDispatchMappingTemplateData extends TemplateData {
 
     private final static String PACKAGE_PATTERN = "%s.%s";
     private final static String PARENT_PACKAGE_NAME = "resource";
 
+    private final static CodeGenerationParameter DEFAULT_QUERY_ROUTE_PARAMETER =
+            CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryAll")
+                    .relate(ROUTE_METHOD, GET).relate(READ_ONLY, "true");
+
     private final String aggregateName;
     private final TemplateParameters parameters;
 
     protected AutoDispatchMappingTemplateData(final String basePackage,
-                                              final String aggregateProtocolName,
+                                              final CodeGenerationParameter aggregate,
                                               final Boolean useCQRS,
                                               final List<Content> contents) {
-        this.aggregateName = aggregateProtocolName;
+
+        this.aggregateName = aggregate.value;
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage))
-                        .addImports(resolveImports(aggregateProtocolName, contents))
-                        .and(AUTO_DISPATCH_MAPPING_NAME, AUTO_DISPATCH_MAPPING.resolveClassname(aggregateProtocolName))
-                        .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, AUTO_DISPATCH_HANDLERS_MAPPING.resolveClassname(aggregateProtocolName))
-                        .and(AGGREGATE_PROTOCOL_NAME, aggregateProtocolName)
-                        .and(ENTITY_NAME, AGGREGATE.resolveClassname(aggregateProtocolName))
-                        .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateProtocolName))
-                        .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateProtocolName))
-                        .and(QUERIES_ACTOR_NAME, QUERIES_ACTOR.resolveClassname(aggregateProtocolName))
-                        .and(URI_ROOT, formatUriRoot(aggregateProtocolName))
+                        .and(AGGREGATE_PROTOCOL_NAME, aggregateName)
+                        .and(ENTITY_NAME, AGGREGATE.resolveClassname(aggregateName))
+                        .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateName))
+                        .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateName))
+                        .and(QUERIES_ACTOR_NAME, QUERIES_ACTOR.resolveClassname(aggregateName))
+                        .and(AUTO_DISPATCH_MAPPING_NAME, AUTO_DISPATCH_MAPPING.resolveClassname(aggregateName))
+                        .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, AUTO_DISPATCH_HANDLERS_MAPPING.resolveClassname(aggregateName))
+                        .and(URI_ROOT, aggregate.relatedParameterValueOf(Label.URI_ROOT))
+                        .addImports(resolveImports(aggregateName, contents))
+                        .and(ROUTE_DECLARATIONS, new ArrayList<String>())
                         .and(USE_CQRS, useCQRS);
+
+        this.loadDependencies(aggregate, useCQRS);
+    }
+
+    private void loadDependencies(final CodeGenerationParameter aggregate, final boolean useCQRS) {
+        if(useCQRS) {
+            aggregate.relate(DEFAULT_QUERY_ROUTE_PARAMETER);
+        }
+        this.dependOn(AutoDispatchRouteTemplateData.from(aggregate.retrieveAll(ROUTE_SIGNATURE)));
+    }
+
+    @Override
+    public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {
+        this.parameters.<List<String>>find(ROUTE_DECLARATIONS).add(outcome);
     }
 
     private Set<String> resolveImports(final String aggregateName,
