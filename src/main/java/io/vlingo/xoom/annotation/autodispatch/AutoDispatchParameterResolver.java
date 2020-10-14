@@ -12,7 +12,11 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.*;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -142,14 +146,9 @@ public class AutoDispatchParameterResolver {
 
     private String buildMethodSignature(final ExecutableElement method) {
         final String signatureParameters =
-                method.getParameters().stream().map(param -> {
-                    final Name paramType =
-                            environment.getTypeUtils()
-                                    .asElement(param.asType())
-                                    .getSimpleName();
-
-                    return paramType + " " + param.getSimpleName();
-                }).collect(Collectors.joining(", "));
+                method.getParameters().stream().map(param ->
+                        param.asType() + " " + param.getSimpleName())
+                        .collect(Collectors.joining(", "));
 
         return String.format(SIGNATURE_PATTERN, method.getSimpleName(), signatureParameters);
     }
@@ -167,13 +166,20 @@ public class AutoDispatchParameterResolver {
         final Id idAnnotation = methodVariable.getAnnotation(Id.class);
 
         if(idAnnotation != null) {
-            final TypeElement idtype =
-                    (TypeElement) environment.getTypeUtils()
-                            .asElement(methodVariable.asType());
-
             routeParameter.relate(ID, methodVariable.getSimpleName())
-                    .relate(ID_TYPE, idtype.getQualifiedName());
+                    .relate(ID_TYPE, retriedIdTypeQualifiedName(methodVariable.asType()));
         }
+    }
+
+    private String retriedIdTypeQualifiedName(final TypeMirror idType) {
+        if(idType.getKind().isPrimitive()) {
+            return "";
+        }
+
+        final TypeElement idTypeElement =
+                (TypeElement) environment.getTypeUtils().asElement(idType);
+
+        return idTypeElement.getQualifiedName().toString();
     }
 
     private void resolveBodyAnnotation(final VariableElement methodVariable,

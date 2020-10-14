@@ -10,7 +10,9 @@ package io.vlingo.xoom.codegen.template.autodispatch;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.storage.QueriesTemplateDataFactory;
 import org.junit.Assert;
@@ -20,7 +22,9 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
@@ -32,8 +36,8 @@ public class AutoDispatchMappingGenerationStepTest {
         final String persistencePackage = basePackage + ".infrastructure.persistence";
 
         final CodeGenerationParameters parameters =
-                CodeGenerationParameters.from(PACKAGE, basePackage)
-                        .add(REST_RESOURCES, "Author;Book").add(CQRS, true);
+                CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, basePackage),
+                        CodeGenerationParameter.of(CQRS, true), authorAggregate());
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters).contents(contents());
@@ -46,7 +50,7 @@ public class AutoDispatchMappingGenerationStepTest {
 
         new AutoDispatchMappingGenerationStep().process(context);
 
-        Assert.assertEquals(20, context.contents().size());
+        Assert.assertEquals(18, context.contents().size());
 
         final Content authorMappingContent =
                 context.contents().stream().filter(content -> content.retrieveClassName().equals("AuthorResource"))
@@ -58,11 +62,13 @@ public class AutoDispatchMappingGenerationStepTest {
                 context.contents().stream().filter(content -> content.retrieveClassName().equals("AuthorResourceHandlers"))
                         .findFirst().get();
 
-        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Three<Completes<AuthorState>, Stage, AuthorData>> defineWithHandler ="));
-        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(DEFINE_PLACEHOLDER, (stage, data) -> Author.definePlaceholder(stage, data.placeholderValue));"));
-        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<AuthorData, AuthorState>> adaptStateHandler ="));
+        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Three<Completes<AuthorState>, Stage, AuthorData>> WITH_NAME_HANDLER ="));
+        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(WITH_NAME, ($stage, data) -> Author.withName($stage, data.name));"));
+        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> CHANGE_RANK_HANDLER ="));
+        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(CHANGE_RANK, (author, data) -> author.changeRank(data.rank));"));
+        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<AuthorData, AuthorState>> ADAPT_STATE_HANDLER ="));
         Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(ADAPT_STATE, AuthorData::from);"));
-        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<Completes<Collection<AuthorData>>, AuthorQueries>> queryAllHandler ="));
+        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<Completes<Collection<AuthorData>>, AuthorQueries>> QUERY_ALL_HANDLER ="));
         Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(QUERY_ALL, AuthorQueries::authors);"));
     }
 
@@ -72,8 +78,8 @@ public class AutoDispatchMappingGenerationStepTest {
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT),
                 Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_AGGREGATE_CONTENT_TEXT),
                 Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookEntity.java"), null, null, BOOK_AGGREGATE_CONTENT_TEXT),
-                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
+                Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+                Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
                 Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
                 Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
@@ -81,6 +87,57 @@ public class AutoDispatchMappingGenerationStepTest {
                 Content.with(QUERIES_ACTOR, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueriesActor.java"), null, null, AUTHOR_QUERIES_ACTOR_CONTENT_TEXT),
                 Content.with(QUERIES_ACTOR, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "BookQueriesActor.java"), null, null, BOOK_QUERIES_ACTOR_CONTENT_TEXT)
         };
+    }
+
+    private CodeGenerationParameter authorAggregate() {
+        final CodeGenerationParameter idField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                        .relate(Label.FIELD_TYPE, "long");
+
+        final CodeGenerationParameter nameField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter rankField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                        .relate(Label.FIELD_TYPE, "int");
+
+        final CodeGenerationParameter authorRegisteredEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+                        .relate(idField).relate(nameField);
+
+        final CodeGenerationParameter authorRankedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
+                        .relate(idField).relate(rankField);
+
+        final CodeGenerationParameter factoryMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
+                        .relate(Label.METHOD_PARAMETER, "name")
+                        .relate(FACTORY_METHOD, "true")
+                        .relate(authorRegisteredEvent);
+
+        final CodeGenerationParameter rankMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
+                        .relate(Label.METHOD_PARAMETER, "rank")
+                        .relate(authorRankedEvent);
+
+        final CodeGenerationParameter withNameRoute =
+                CodeGenerationParameter.of(ROUTE_SIGNATURE, "withName")
+                        .relate(ROUTE_METHOD, "POST")
+                        .relate(ROUTE_PATH, "/authors/")
+                        .relate(REQUIRE_ENTITY_LOADING, "false");
+
+        final CodeGenerationParameter changeRankRoute =
+                CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeRank")
+                        .relate(ROUTE_METHOD, "PATCH")
+                        .relate(ROUTE_PATH, "/authors/{id}/rank")
+                        .relate(REQUIRE_ENTITY_LOADING, "true");
+
+        return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+                .relate(URI_ROOT, "authors").relate(idField)
+                .relate(nameField).relate(rankField).relate(factoryMethod)
+                .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
+                .relate(authorRegisteredEvent).relate(authorRankedEvent);
     }
 
     private static final String PROJECT_PATH =

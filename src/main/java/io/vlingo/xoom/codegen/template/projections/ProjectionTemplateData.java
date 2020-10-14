@@ -57,10 +57,10 @@ public class ProjectionTemplateData extends TemplateData {
                                               final List<Content> contents,
                                               final ProjectionType projectionType,
                                               final List<TemplateData> templatesData) {
-        final String stateName = STATE.resolveClassname(protocolName);
+        final String stateName = AGGREGATE_STATE.resolveClassname(protocolName);
         final String projectionName = PROJECTION.resolveClassname(protocolName);
         final String entityDataName = ENTITY_DATA.resolveClassname(protocolName);
-        final String modelPackage = ContentQuery.findPackage(STATE, stateName, contents);
+        final String modelPackage = ContentQuery.findPackage(AGGREGATE_STATE, stateName, contents);
 
         final Set<ImportParameter> imports =
                 resolveImports(stateName, entityDataName, contents,
@@ -81,7 +81,7 @@ public class ProjectionTemplateData extends TemplateData {
                                                 final ProjectionType projectionType,
                                                 final List<TemplateData> templatesData) {
         final String stateQualifiedName =
-                ContentQuery.findFullyQualifiedClassName(STATE, stateName, contents);
+                ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents);
 
         final String entityDataQualifiedName =
                 ContentQuery.findFullyQualifiedClassName(ENTITY_DATA, entityDataName, contents);

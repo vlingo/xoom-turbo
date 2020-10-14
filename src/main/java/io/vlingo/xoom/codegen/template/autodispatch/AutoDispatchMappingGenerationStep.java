@@ -13,24 +13,22 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.parameter.Label.REST_RESOURCES;
+import static io.vlingo.xoom.codegen.parameter.Label.USE_AUTO_DISPATCH;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 
 public class AutoDispatchMappingGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final String basePackage = context.parameterOf(PACKAGE);
-        final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
-        final String restResourcesData = context.parameterOf(REST_RESOURCES);
         final List<TemplateData> queriesTemplateData = context.templateParametersOf(QUERIES_ACTOR);
-        return AutoDispatchMappingTemplateDataFactory.build(basePackage, restResourcesData, useCQRS,
+        return AutoDispatchMappingTemplateDataFactory.build(context.parameters(),
                 queriesTemplateData, context.contents());
     }
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        return context.hasParameter(USE_AUTO_DISPATCH) && context.hasParameter(REST_RESOURCES) &&
+        return context.hasParameter(USE_AUTO_DISPATCH) &&
                 context.parameterOf(USE_AUTO_DISPATCH, Boolean::valueOf);
     }
 

@@ -42,7 +42,7 @@ public class XoomInitializerParameterResolver {
                 .add(APPLICATION_NAME, resolveApplicationName())
                 .add(ADDRESS_FACTORY, resolveAddressFactoryType())
                 .add(IDENTITY_GENERATOR, resolveIdentityGeneratorType())
-                .add(ANNOTATIONS, Boolean.FALSE.toString())
+                .add(USE_ANNOTATIONS, Boolean.FALSE.toString())
                 .add(BLOCKING_MESSAGING, resolveBlockingMessaging())
                 .add(XOOM_INITIALIZER_NAME, resolveInitializerClass());
     }

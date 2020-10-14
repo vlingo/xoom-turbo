@@ -10,7 +10,6 @@ package io.vlingo.xoom.codegen.template.storage;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
-import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class StorageGenerationStep extends TemplateProcessingStep {
         final String basePackage = context.parameterOf(PACKAGE);
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::of);
         final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
-        final Boolean useAnnotations = context.parameterOf(ANNOTATIONS, Boolean::valueOf);
+        final Boolean useAnnotations = context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
         final Boolean useCQRS  = context.parameterOf(CQRS, Boolean::valueOf);
         final List<TemplateData> templatesData =
                 StorageTemplateDataFactory.build(basePackage, context.contents(), storageType,

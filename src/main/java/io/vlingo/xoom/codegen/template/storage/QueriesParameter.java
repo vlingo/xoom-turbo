@@ -63,10 +63,14 @@ public class QueriesParameter {
 
     public static QueriesParameter from(final CodeGenerationParameter autoDispatchParameter) {
         if(!autoDispatchParameter.hasAny(Label.QUERIES_PROTOCOL)) {
-            return null;
+            return QueriesParameter.empty();
         }
         return new QueriesParameter(autoDispatchParameter.relatedParameterValueOf(Label.QUERIES_PROTOCOL),
                 autoDispatchParameter.relatedParameterValueOf(Label.QUERIES_ACTOR));
+    }
+
+    private static QueriesParameter empty() {
+        return new QueriesParameter("", "", "", "");
     }
 
     private QueriesParameter(final TemplateParameters parameters) {
@@ -87,9 +91,12 @@ public class QueriesParameter {
         this.actorName = actorName;
         this.protocolName = protocolName;
         this.attributeName = ClassFormatter.simpleNameToAttribute(protocolName);
-        this.qualifiedNames.addAll(
-                Arrays.asList(String.format(QUALIFIED_NAME_PATTERN, protocolPackageName, protocolName),
-                        String.format(QUALIFIED_NAME_PATTERN, actorPackageName, actorName)));
+
+        if(!isEmpty()) {
+            this.qualifiedNames.addAll(
+                    Arrays.asList(String.format(QUALIFIED_NAME_PATTERN, protocolPackageName, protocolName),
+                            String.format(QUALIFIED_NAME_PATTERN, actorPackageName, actorName)));
+        }
     }
 
     public String getProtocolName() {
@@ -106,6 +113,10 @@ public class QueriesParameter {
 
     public List<String> getQualifiedNames() {
         return qualifiedNames;
+    }
+
+    public boolean isEmpty() {
+        return protocolName.isEmpty() && actorName.isEmpty() && attributeName.isEmpty();
     }
 
 }

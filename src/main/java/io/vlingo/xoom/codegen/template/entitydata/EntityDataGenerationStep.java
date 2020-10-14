@@ -18,7 +18,8 @@ public class EntityDataGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        return EntityDataTemplateData.from(context.parameterOf(Label.PACKAGE), context.contents());
+        return EntityDataTemplateData.from(context.parameterOf(Label.PACKAGE),
+                context.parametersOf(Label.AGGREGATE), context.contents());
     }
 
 }

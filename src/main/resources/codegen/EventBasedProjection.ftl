@@ -50,7 +50,7 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
       switch (${eventTypesName}.valueOf(event.typeName())) {
       <#list eventsNames as name>
         case ${name}:
-          return ${dataName}.from(currentData.id, "Handle ${name} here");   // TODO: implement actual merge
+          return ${dataName}.empty();   // TODO: implement actual merge
       </#list>
       default:
         logger().warn("Event of type " + event.typeName() + " was not matched.");

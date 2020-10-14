@@ -25,7 +25,7 @@ public class DummyHandlers {
     public static final int ADAPT_STATE = 3;
 
     public static final HandlerEntry<Three<Completes<DummyState>, Stage, DummyData>> defineWithHandler =
-           HandlerEntry.of(DEFINE_WITH, (stage, dummyData) -> Dummy.defineWith(stage, dummyData.name));
+           HandlerEntry.of(DEFINE_WITH, ($stage, dummyData) -> Dummy.defineWith($stage, dummyData.name));
 
     public static final HandlerEntry<Three<Completes<DummyState>, Dummy, DummyData>> changeNameHandler =
             HandlerEntry.of(CHANGE_NAME, (dummy, dummyData) -> dummy.withName(dummyData.name));
@@ -35,5 +35,6 @@ public class DummyHandlers {
 
     public static final HandlerEntry<Two<DummyData, DummyState>> adaptStateHandler =
             HandlerEntry.of(ADAPT_STATE, DummyData::from);
+
 
 }

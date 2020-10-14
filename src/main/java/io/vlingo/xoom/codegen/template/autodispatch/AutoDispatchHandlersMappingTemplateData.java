@@ -9,18 +9,19 @@ package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_SIGNATURE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
@@ -29,41 +30,49 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
     private final static String PACKAGE_PATTERN = "%s.%s";
     private final static String PARENT_PACKAGE_NAME = "resource";
+    private final static String HANDLER_INDEX_PATTERN = "public static final int %s = %d;";
+    private final static CodeGenerationParameter STATE_ADAPTER_HANDLER =
+            CodeGenerationParameter.of(ROUTE_SIGNATURE, "adaptState");
 
     private final String aggregateName;
     private final TemplateParameters parameters;
 
     protected AutoDispatchHandlersMappingTemplateData(final String basePackage,
-                                                      final String aggregateProtocolName,
-                                                      final Boolean useCQRS,
+                                                      final CodeGenerationParameter aggregate,
                                                       final List<TemplateData> queriesTemplateData,
-                                                      final List<Content> contents) {
-        this.aggregateName = aggregateProtocolName;
+                                                      final List<Content> contents,
+                                                      final Boolean useCQRS) {
+        this.aggregateName = aggregate.value;
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage))
-                        .and(AGGREGATE_PROTOCOL_NAME, aggregateProtocolName)
-                        .and(STATE_NAME, STATE.resolveClassname(aggregateProtocolName))
-                        .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateProtocolName))
-                        .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateProtocolName)).and(USE_CQRS, useCQRS)
-                        .and(QUERY_ALL_METHOD_NAME, findQueryMethodName(aggregateProtocolName, queriesTemplateData))
-                        .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, standard().resolveClassname(aggregateProtocolName))
-                        .addImports(resolveImports(aggregateProtocolName, contents));
+                        .and(AGGREGATE_PROTOCOL_NAME, aggregateName)
+                        .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregateName))
+                        .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateName))
+                        .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateName)).and(USE_CQRS, useCQRS)
+                        .and(QUERY_ALL_METHOD_NAME, findQueryMethodName(aggregateName, queriesTemplateData))
+                        .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, standard().resolveClassname(aggregateName))
+                        .and(HANDLER_INDEXES, resolveHandlerIndexes(aggregate, useCQRS))
+                        .and(HANDLER_ENTRIES, new ArrayList<String>())
+                        .addImports(resolveImports(aggregateName, contents));
+
+        this.dependOn(AutoDispatchHandlerEntryTemplateData.from(aggregate));
     }
 
-    private Set<String> resolveImports(final String aggregateName,
-                                       final List<Content> contents) {
-        final Map<TemplateStandard, String> classes =
-                mapClassesWithTemplateStandards(aggregateName);
+    @Override
+    public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {
+        this.parameters.<List<String>>find(HANDLER_ENTRIES).add(outcome);
+    }
 
-        return classes.entrySet().stream().map(entry -> {
-            try {
-                final String className = entry.getValue();
-                final TemplateStandard standard = entry.getKey();
-                return ContentQuery.findFullyQualifiedClassName(standard, className, contents);
-            } catch (final IllegalArgumentException exception) {
-                return null;
-            }
-        }).collect(Collectors.toSet());
+    private List<String> resolveHandlerIndexes(final CodeGenerationParameter aggregate, final Boolean useCQRS) {
+        final List<CodeGenerationParameter> handlers =
+                Stream.of(aggregate.retrieveAll(ROUTE_SIGNATURE), Stream.of(STATE_ADAPTER_HANDLER))
+                        .flatMap(stream -> stream).collect(Collectors.toList());
+
+        return IntStream.range(0, handlers.size()).mapToObj(index -> {
+            final String signature = handlers.get(index).value;
+            final String mappingValue = AutoDispatchMappingValueFormatter.format(signature);
+            return String.format(HANDLER_INDEX_PATTERN, mappingValue, index);
+        }).collect(Collectors.toList());
     }
 
     private String findQueryMethodName(final String aggregateName,
@@ -85,10 +94,26 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                 .map(queryMethodNameMapper).findFirst().get();
     }
 
+    private Set<String> resolveImports(final String aggregateName,
+                                       final List<Content> contents) {
+        final Map<TemplateStandard, String> classes =
+                mapClassesWithTemplateStandards(aggregateName);
+
+        return classes.entrySet().stream().map(entry -> {
+            try {
+                final String className = entry.getValue();
+                final TemplateStandard standard = entry.getKey();
+                return ContentQuery.findFullyQualifiedClassName(standard, className, contents);
+            } catch (final IllegalArgumentException exception) {
+                return null;
+            }
+        }).collect(Collectors.toSet());
+    }
+
     private Map<TemplateStandard, String> mapClassesWithTemplateStandards(final String aggregateName) {
         return new HashMap<TemplateStandard, String>(){{
             put(AGGREGATE_PROTOCOL, aggregateName);
-            put(STATE, STATE.resolveClassname(aggregateName));
+            put(AGGREGATE_STATE, AGGREGATE_STATE.resolveClassname(aggregateName));
             put(QUERIES, QUERIES.resolveClassname(aggregateName));
             put(ENTITY_DATA, ENTITY_DATA.resolveClassname(aggregateName));
         }};

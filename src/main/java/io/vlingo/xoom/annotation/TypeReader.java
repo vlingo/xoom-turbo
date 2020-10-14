@@ -13,14 +13,13 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.tools.FileObject;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static javax.tools.StandardLocation.SOURCE_PATH;
 
 public class TypeReader {
 
@@ -55,13 +54,6 @@ public class TypeReader {
                 .findFirst().orElseThrow(() -> invalidMemberArgumentException(memberName));
     }
 
-    private String extractMemberValue(final String memberName) {
-        final int elementIndex = codeElementIndex(memberName, DEFAULT_MATCH_PATTERN, VARIABLE_MATCH_PATTERN);
-        final int valueIndex = elementIndex + memberName.length() + 1;
-        final String codeSlice = sourceCode.substring(valueIndex).replaceAll("=", "").trim();
-        return codeSlice.substring(0, codeSlice.indexOf(";")).trim();
-    }
-
     public List<VariableElement> findMembers() {
         return type.getEnclosedElements().stream()
                 .filter(element -> element instanceof VariableElement)
@@ -69,22 +61,20 @@ public class TypeReader {
                 .collect(Collectors.toList());
     }
 
+    private String extractMemberValue(final String memberName) {
+        final int elementIndex = codeElementIndex(memberName, DEFAULT_MATCH_PATTERN, VARIABLE_MATCH_PATTERN);
+        final int valueIndex = elementIndex + memberName.length() + 1;
+        final String codeSlice = sourceCode.substring(valueIndex).replaceAll("=", "").trim();
+        return codeSlice.substring(0, codeSlice.indexOf(";")).trim();
+    }
+
     private String readSourceCode(final Filer filer,
                                   final TypeElement typeElement) {
         try {
-            final String className =
-                    typeElement.getSimpleName() + ".java";
+            final InputStream stream =
+                    ClassFile.from(filer, typeElement).openInputStream();
 
-            final String packageName =
-                    typeElement.getEnclosingElement().toString();
-
-            final FileObject fileObject =
-                    filer.getResource(SOURCE_PATH, packageName, className);
-
-            final String sourceCode =
-                    IOUtils.toString(fileObject.openInputStream(), UTF_8.name());
-
-            return sourceCode.replaceAll("\r\n", " ");
+            return IOUtils.toString(stream, UTF_8.name()).replaceAll("\r\n", " ");
         } catch (final IOException e) {
             throw new ProcessingAnnotationException(e);
         }

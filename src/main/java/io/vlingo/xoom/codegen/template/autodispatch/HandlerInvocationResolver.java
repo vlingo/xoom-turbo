@@ -15,8 +15,9 @@ public class HandlerInvocationResolver {
 
     private static final String DEFAULT_ADAPTER_PARAMETER = "state";
     private static final String HANDLER_INVOCATION_PATTERN = "%s.%s";
-    private static final String DEFAULT_FACTORY_METHOD_PARAMETER = "stage";
+    private static final String DEFAULT_FACTORY_METHOD_PARAMETER = "$stage";
     private static final String HANDLER_INVOCATION_WITH_DEFAULT_PARAMS_PATTERN = "%s.%s(%s)";
+    public static final String QUERIES_PARAMETER = "$queries";
 
     public static String resolve(final Label invocationLabel,
                                  final CodeGenerationParameter autoDispatchParameter,
@@ -55,10 +56,7 @@ public class HandlerInvocationResolver {
             return DEFAULT_ADAPTER_PARAMETER;
         }
         if(routeSignatureParameter.relatedParameterValueOf(Label.ROUTE_METHOD, Method::from).isGET()) {
-            final String queriesProtocol =
-                    autoDispatchParameter.relatedParameterValueOf(Label.QUERIES_PROTOCOL);
-
-            return ClassFormatter.qualifiedNameToAttribute(queriesProtocol);
+            return QUERIES_PARAMETER;
         }
         return DEFAULT_FACTORY_METHOD_PARAMETER;
     }

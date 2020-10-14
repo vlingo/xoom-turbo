@@ -59,7 +59,7 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, ClassFormatter.packageOf(autoDispatchParameter.value))
                         .and(QUERIES, QueriesParameter.from(autoDispatchParameter))
-                        .and(STATE_NAME, STATE.resolveClassname(aggregateProtocolClassName))
+                        .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregateProtocolClassName))
                         .and(REST_RESOURCE_NAME, standard().resolveClassname(restResourceName))
                         .and(URI_ROOT, autoDispatchParameter.relatedParameterValueOf(Label.URI_ROOT))
                         .and(ROUTE_DECLARATIONS, RouteDeclarationParameter.from(autoDispatchParameter))

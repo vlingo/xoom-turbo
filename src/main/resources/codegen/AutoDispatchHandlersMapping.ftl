@@ -9,28 +9,25 @@ import io.vlingo.xoom.annotation.autodispatch.HandlerEntry;
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
-
 <#if useCQRS>
 import java.util.Collection;
 </#if>
 
 public class ${autoDispatchHandlersMappingName} {
 
-  public static final int DEFINE_PLACEHOLDER = 0;
-  public static final int ADAPT_STATE = 1;
-  <#if useCQRS>
-  public static final int QUERY_ALL = 2;
-  </#if>
+  <#list handlerIndexes as index>
+  ${index}
+  </#list>
 
-  public static final HandlerEntry<Three<Completes<${stateName}>, Stage, ${dataName}>> defineWithHandler =
-         HandlerEntry.of(DEFINE_PLACEHOLDER, (stage, data) -> ${aggregateProtocolName}.definePlaceholder(stage, data.placeholderValue));
-
-  public static final HandlerEntry<Two<${dataName}, ${stateName}>> adaptStateHandler =
+  <#list handlerEntries as entry>
+  ${entry}
+  </#list>
+  public static final HandlerEntry<Two<${dataName}, ${stateName}>> ADAPT_STATE_HANDLER =
           HandlerEntry.of(ADAPT_STATE, ${dataName}::from);
 
   <#if useCQRS>
-  public static final HandlerEntry<Two<Completes<Collection<${dataName}>>, ${queriesName}>> queryAllHandler =
-         HandlerEntry.of(QUERY_ALL, ${queriesName}::${queryAllMethodName});
+  public static final HandlerEntry<Two<Completes<Collection<${dataName}>>, ${queriesName}>> QUERY_ALL_HANDLER =
+          HandlerEntry.of(QUERY_ALL, ${queriesName}::${queryAllMethodName});
   </#if>
 
 }

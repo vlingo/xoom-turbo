@@ -9,6 +9,9 @@ package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
@@ -21,8 +24,12 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.AUTO_DISPATCH_HANDLERS_MAPPING_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.AUTO_DISPATCH_MAPPING_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class AutoDispatchMappingTemplateDataFactoryTest {
@@ -30,22 +37,24 @@ public class AutoDispatchMappingTemplateDataFactoryTest {
     @Test
     public void testThatTemplateParametersAreMapped() {
         final String basePackage = "io.vlingo.xoomapp";
-        final String restResourcesData = "Author;Book";
         final String persistencePackage = basePackage + ".infrastructure.persistence";
+
+        final CodeGenerationParameters parameters =
+                CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, basePackage),
+                        CodeGenerationParameter.of(CQRS, true), authorAggregate());
 
         final List<TemplateData> queriesTemplateData =
                 QueriesTemplateDataFactory.from(persistencePackage, true, contents());
 
         final List<TemplateData> mappingTemplatesData =
-                AutoDispatchMappingTemplateDataFactory.build(basePackage, restResourcesData,
-                        true, queriesTemplateData, contents());
+                AutoDispatchMappingTemplateDataFactory.build(parameters, queriesTemplateData, contents());
 
-        Assert.assertEquals(4, mappingTemplatesData.size());
+        Assert.assertEquals(2, mappingTemplatesData.size());
 
         final TemplateParameters autoDispatchMappingParameters =
                 mappingTemplatesData.stream()
                         .filter(data -> data.hasStandard(AUTO_DISPATCH_MAPPING)).map(TemplateData::parameters)
-                        .filter(params-> params.find(AUTO_DISPATCH_MAPPING_NAME).equals("AuthorResource"))
+                        .filter(params -> params.find(AUTO_DISPATCH_MAPPING_NAME).equals("AuthorResource"))
                         .findFirst().get();
 
         Assert.assertTrue(autoDispatchMappingParameters.hasImport("io.vlingo.xoomapp.model.author.Author"));
@@ -82,14 +91,65 @@ public class AutoDispatchMappingTemplateDataFactoryTest {
         Assert.assertEquals(true, autoDispatchHandlersMappingParameters.find(TemplateParameter.USE_CQRS));
     }
 
+    private CodeGenerationParameter authorAggregate() {
+        final CodeGenerationParameter idField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                        .relate(Label.FIELD_TYPE, "long");
+
+        final CodeGenerationParameter nameField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter rankField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                        .relate(Label.FIELD_TYPE, "int");
+
+        final CodeGenerationParameter authorRegisteredEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+                        .relate(idField).relate(nameField);
+
+        final CodeGenerationParameter authorRankedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
+                        .relate(idField).relate(rankField);
+
+        final CodeGenerationParameter factoryMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
+                        .relate(Label.METHOD_PARAMETER, "name")
+                        .relate(FACTORY_METHOD, "true")
+                        .relate(authorRegisteredEvent);
+
+        final CodeGenerationParameter rankMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
+                        .relate(Label.METHOD_PARAMETER, "rank")
+                        .relate(authorRankedEvent);
+
+        final CodeGenerationParameter withNameRoute =
+                CodeGenerationParameter.of(ROUTE_SIGNATURE, "withName")
+                        .relate(ROUTE_METHOD, "POST")
+                        .relate(ROUTE_PATH, "/authors/")
+                        .relate(REQUIRE_ENTITY_LOADING, "false");
+
+        final CodeGenerationParameter changeRankRoute =
+                CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeRank")
+                        .relate(ROUTE_METHOD, "PATCH")
+                        .relate(ROUTE_PATH, "/authors/{id}/rank")
+                        .relate(REQUIRE_ENTITY_LOADING, "true");
+
+        return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+                .relate(URI_ROOT, "authors").relate(idField)
+                .relate(nameField).relate(rankField).relate(factoryMethod)
+                .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
+                .relate(authorRegisteredEvent).relate(authorRankedEvent);
+    }
+
     private List<Content> contents() {
         return Arrays.asList(
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT),
                 Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_AGGREGATE_CONTENT_TEXT),
                 Content.with(AGGREGATE,  new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookEntity.java"), null, null, BOOK_AGGREGATE_CONTENT_TEXT),
-                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-                Content.with(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
+                Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+                Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
                 Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
                 Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),

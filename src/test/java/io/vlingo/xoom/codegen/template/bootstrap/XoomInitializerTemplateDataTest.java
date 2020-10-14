@@ -50,7 +50,7 @@ public class XoomInitializerTemplateDataTest {
                     put(CQRS, Boolean.TRUE.toString());
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(Label.PROJECTION_TYPE, ProjectionType.NONE.name());
-                    put(ANNOTATIONS, Boolean.FALSE.toString());
+                    put(Label.USE_ANNOTATIONS, Boolean.FALSE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                     put(XOOM_INITIALIZER_NAME, "AnnotatedBootstrap");
                     put(ADDRESS_FACTORY, AddressFactoryType.GRID.name());
@@ -108,7 +108,7 @@ public class XoomInitializerTemplateDataTest {
                     put(CQRS, Boolean.FALSE.toString());
                     put(STORAGE_TYPE, StorageType.NONE.name());
                     put(Label.PROJECTION_TYPE, ProjectionType.NONE.name());
-                    put(ANNOTATIONS, Boolean.FALSE.toString());
+                    put(Label.USE_ANNOTATIONS, Boolean.FALSE.toString());
                     put(XOOM_INITIALIZER_NAME, "XoomInitializer");
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                     put(ADDRESS_FACTORY, AddressFactoryType.BASIC.name());

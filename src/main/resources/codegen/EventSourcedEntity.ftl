@@ -1,32 +1,30 @@
 package ${packageName};
 
-import java.util.Collections;
-import java.util.List;
+<#list imports as import>
+import ${import.qualifiedClassName};
+</#list>
 
-import io.vlingo.common.Completes;
 import io.vlingo.lattice.model.sourcing.EventSourced;
 
 public final class ${entityName} extends EventSourced implements ${aggregateProtocolName} {
   private ${stateName} state;
 
-  public ${entityName}(final String id) {
+  public ${entityName}(final {String} id) {
     super(id);
     this.state = ${stateName}.identifiedBy(id);
   }
 
-  public Completes<${stateName}> definePlaceholder(final String value) {
-    return apply(new ${domainEventName}(state.id, value), () -> state);
-  }
-
-  //=====================================
-  // EventSourced
-  //=====================================
-
+  <#if sourcedEvents?has_content && !sourcedEvents.empty>
   static {
+    <#list sourcedEvents as sourcedEvent>
     EventSourced.registerConsumer(${entityName}.class, ${domainEventName}.class, ${entityName}::apply${domainEventName});
+    </#list>
   }
+  </#if>
 
-  private void apply${domainEventName}(final ${domainEventName} e) {
-    state = state.withPlaceholderValue(e.placeholderValue);
+  <#list sourcedEvents as sourcedEvent>
+  private void apply${domainEventName}(final ${domainEventName} event) {
+    //TODO: Handle ${domainEventName} here
   }
+  </#list>
 }

@@ -25,15 +25,15 @@ public class ${resourceName} extends ResourceHandler implements ${autoDispatchMa
 public class ${resourceName} extends ResourceHandler {
 </#if>
 
-  private final Stage stage;
-  <#if queries?has_content>
-  private final ${queries.protocolName} ${queries.attributeName};
+  private final Stage $stage;
+  <#if queries?has_content && !queries.empty>
+  private final ${queries.protocolName} $queries;
   </#if>
 
-  public ${resourceName}(final Stage stage) {
-      this.stage = stage;
-      <#if queries?has_content>
-      this.${queries.attributeName} = ${storeProviderName}.instance().${queries.attributeName};
+  public ${resourceName}(final Stage $stage) {
+      this.$stage = $stage;
+      <#if queries?has_content && !queries.empty>
+      this.$queries = ${storeProviderName}.instance().${queries.attributeName};
       </#if>
   }
 
@@ -72,13 +72,15 @@ public class ${resourceName} extends ResourceHandler {
     return location(null);
   }
 
-  private String location(final String id) {
+  private String location(final Object id) {
     return id== null ? "${uriRoot}" : "${uriRoot}" + id;
   }
 
-  private Completes<${modelProtocol}> resolve(final String id) {
-    return stage.actorOf(${modelProtocol}.class, stage.addressFactory().from(id), ${modelActor}.class);
+  <#if modelProtocol?has_content>
+  private Completes<${modelProtocol}> resolve(final Object id) {
+    return $stage.actorOf(${modelProtocol}.class, $stage.addressFactory().from(id.toString()), ${modelActor}.class);
   }
+  </#if>
   </#if>
 
 }

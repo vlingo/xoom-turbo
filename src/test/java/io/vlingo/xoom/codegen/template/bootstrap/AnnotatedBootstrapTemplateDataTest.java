@@ -42,7 +42,7 @@ public class AnnotatedBootstrapTemplateDataTest {
                     put(CQRS, Boolean.TRUE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                     put(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED.name());
-                    put(ANNOTATIONS, Boolean.TRUE.toString());
+                    put(Label.USE_ANNOTATIONS, Boolean.TRUE.toString());
                 }};
 
         final CodeGenerationContext context =
@@ -73,7 +73,7 @@ public class AnnotatedBootstrapTemplateDataTest {
                     put(STORAGE_TYPE, STATE_STORE.name());
                     put(CQRS, Boolean.FALSE.toString());
                     put(Label.PROJECTION_TYPE, ProjectionType.NONE.name());
-                    put(ANNOTATIONS, Boolean.TRUE.toString());
+                    put(Label.USE_ANNOTATIONS, Boolean.TRUE.toString());
                     put(BLOCKING_MESSAGING, Boolean.FALSE.toString());
                 }};
 

@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.NONE;
 import static io.vlingo.xoom.codegen.template.storage.DatabaseType.HSQLDB;
@@ -113,7 +114,7 @@ public class StorageGenerationStepTest {
     @Test
     public void testAnnotatedStoreGeneration() {
         final CodeGenerationContext context =
-                CodeGenerationContext.empty().with(ANNOTATIONS, "true");
+                CodeGenerationContext.empty().with(USE_ANNOTATIONS, "true");
 
         loadProperties(context, STATE_STORE, IN_MEMORY, EVENT_BASED);
         loadContents(context);
@@ -153,8 +154,8 @@ public class StorageGenerationStepTest {
     }
 
     private void loadContents(final CodeGenerationContext context) {
-        context.addContent(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT);
-        context.addContent(STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT);
+        context.addContent(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT);
+        context.addContent(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT);
         context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), AUTHOR_CONTENT_TEXT);
         context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT);
         context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookRented.java"), BOOK_RENTED_TEXT);
