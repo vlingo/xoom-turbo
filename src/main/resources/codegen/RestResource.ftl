@@ -72,13 +72,13 @@ public class ${resourceName} extends ResourceHandler {
     return location(null);
   }
 
-  private String location(final String id) {
+  private String location(final Object id) {
     return id== null ? "${uriRoot}" : "${uriRoot}" + id;
   }
 
   <#if modelProtocol?has_content>
-  private Completes<${modelProtocol}> resolve(final String id) {
-    return $stage.actorOf(${modelProtocol}.class, $stage.addressFactory().from(id), ${modelActor}.class);
+  private Completes<${modelProtocol}> resolve(final Object id) {
+    return $stage.actorOf(${modelProtocol}.class, $stage.addressFactory().from(id.toString()), ${modelActor}.class);
   }
   </#if>
   </#if>

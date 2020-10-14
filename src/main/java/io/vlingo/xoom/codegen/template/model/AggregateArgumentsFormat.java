@@ -21,9 +21,9 @@ import static io.vlingo.xoom.codegen.parameter.Label.METHOD_PARAMETER;
 
 public interface AggregateArgumentsFormat {
 
-    AggregateArgumentsFormat METHOD_INVOCATION = new MethodInvocation();
+    AggregateArgumentsFormat METHOD_INVOCATION = new MethodInvocation("stage");
     AggregateArgumentsFormat SIGNATURE_DECLARATION = new SignatureDeclaration();
-    AggregateArgumentsFormat DATA_BASED_METHOD_INVOCATION = new MethodInvocation("data");
+    AggregateArgumentsFormat DATA_BASED_METHOD_INVOCATION = new MethodInvocation("$stage", "data");
 
     default String format(final CodeGenerationParameter parameter) {
         return format(parameter, MethodScope.INSTANCE);
@@ -60,28 +60,34 @@ public interface AggregateArgumentsFormat {
     class MethodInvocation implements AggregateArgumentsFormat {
 
         private final String carrier;
+        private final String stageVariableName;
         private static final String FIELD_ACCESS_PATTERN = "%s.%s";
 
-        protected MethodInvocation() {
-            this("");
+        public MethodInvocation() {
+            this("", "");
         }
 
-        protected MethodInvocation(final String carrier) {
+        public MethodInvocation(final String stageVariableName) {
+            this(stageVariableName, "");
+        }
+
+        public MethodInvocation(final String stageVariableName, final String carrier) {
             this.carrier = carrier;
+            this.stageVariableName = stageVariableName;
         }
 
         @Override
         public String format(final CodeGenerationParameter method, final MethodScope scope) {
             final List<String> args = scope.isStatic() ?
-                    Arrays.asList("stage") : Arrays.asList();
+                    Arrays.asList(stageVariableName) : Arrays.asList();
 
             return Stream.of(args, formatMethodParameters(method))
                     .flatMap(Collection::stream).collect(Collectors.joining(", "));
         }
 
         private List<String> formatMethodParameters(final CodeGenerationParameter method) {
-            return method.retrieveAll(METHOD_PARAMETER).map(param ->
-                carrier.isEmpty() ? param.value : String.format(FIELD_ACCESS_PATTERN, carrier, param.value))
+            return method.retrieveAll(METHOD_PARAMETER).map(param -> carrier.isEmpty() ?
+                    param.value : String.format(FIELD_ACCESS_PATTERN, carrier, param.value))
                     .collect(Collectors.toList());
         }
 

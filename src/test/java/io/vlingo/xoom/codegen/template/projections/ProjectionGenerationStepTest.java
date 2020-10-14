@@ -69,7 +69,7 @@ public class ProjectionGenerationStepTest {
 
         Assert.assertTrue(context.contents().get(contentSize - 2).contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
         Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "case BookSoldOut:" : "CreationCase1"));
-        Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "BookData.from(currentData.id, \"Handle BookSoldOut here\")" : "merged = currentData;"));
+        Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "BookData.empty()" : "merged = currentData;"));
         Assert.assertTrue(context.contents().get(contentSize - 2).contains(projectionType.isEventBased() ? "case BookPurchased:" : "ChangeCase2"));
         Assert.assertTrue(context.contents().get(contentSize - 1).contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
         Assert.assertTrue(context.contents().get(contentSize - 1).contains(projectionType.isEventBased() ? "case AuthorRated:" : "CreationCase1"));

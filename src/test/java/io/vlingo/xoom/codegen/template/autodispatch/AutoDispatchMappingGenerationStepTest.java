@@ -63,7 +63,7 @@ public class AutoDispatchMappingGenerationStepTest {
                         .findFirst().get();
 
         Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Three<Completes<AuthorState>, Stage, AuthorData>> WITH_NAME_HANDLER ="));
-        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(WITH_NAME, (stage, data) -> Author.withName(stage, data.name));"));
+        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(WITH_NAME, ($stage, data) -> Author.withName($stage, data.name));"));
         Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> CHANGE_RANK_HANDLER ="));
         Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(CHANGE_RANK, (author, data) -> author.changeRank(data.rank));"));
         Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<AuthorData, AuthorState>> ADAPT_STATE_HANDLER ="));
