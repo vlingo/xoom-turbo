@@ -2,11 +2,10 @@ package ${packageName};
 
 import io.vlingo.actors.Stage;
 import io.vlingo.actors.World;
-import io.vlingo.http.resource.Configuration;
-import io.vlingo.http.resource.Resources;
-import io.vlingo.http.resource.Server;
+import io.vlingo.http.resource.*;
 import io.vlingo.xoom.XoomInitializationAware;
 import io.vlingo.xoom.actors.Settings;
+import java.util.Arrays;
 
 <#list imports as import>
 import ${import.qualifiedClassName};
@@ -15,6 +14,10 @@ import ${import.qualifiedClassName};
 import java.lang.Exception;
 import java.lang.Integer;
 import java.lang.String;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class XoomInitializer implements XoomInitializationAware {
 
@@ -56,17 +59,25 @@ public class XoomInitializer implements XoomInitializationAware {
     final ${restResource.className} ${restResource.objectName} = new ${restResource.className}(stage);
     </#list>
 
-    Resources resources = Resources.are(
-    <#list restResources as restResource>
-        <#if restResource.last>
-        ${restResource.objectName}.routes()
-        <#else>
-        ${restResource.objectName}.routes(),
-        </#if>
-    </#list>
+    final Collection<Resource<?>> sseResources = Loader.resourcesFrom(initializer.sseConfiguration()).values();
+    final Collection<Resource<?>> feedResources = Loader.resourcesFrom(initializer.feedConfiguration()).values();
+    final Collection<Resource<?>> staticResources = Loader.resourcesFrom(initializer.staticFilesConfiguration()).values();
+    final Collection<Resource<?>> restResources = Arrays.asList(
+          <#list restResources as restResource>
+              <#if restResource.last>
+              ${restResource.objectName}.routes()
+              <#else>
+              ${restResource.objectName}.routes(),
+              </#if>
+          </#list>
     );
 
-    server = Server.startWith(stage, resources, serverConfiguration.port(), serverConfiguration.sizing(), serverConfiguration.timing());
+    final Resource[] resources =
+            Stream.of(sseResources, feedResources, staticResources, restResources)
+                    .flatMap(Collection::stream).collect(Collectors.toList())
+                    .toArray(new Resource<?>[]{});
+
+    server = Server.startWith(stage, Resources.are(resources), serverConfiguration.port(), serverConfiguration.sizing(), serverConfiguration.timing());
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
          if (instance != null) {
