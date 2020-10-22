@@ -7,10 +7,13 @@
 
 package io.vlingo.xoom.storage;
 
-import io.vlingo.actors.Definition;
 import io.vlingo.actors.Stage;
+import io.vlingo.symbio.Entry;
 import io.vlingo.symbio.store.common.jdbc.Configuration;
+import io.vlingo.symbio.store.dispatch.Dispatchable;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
+import io.vlingo.symbio.store.journal.Journal;
+import io.vlingo.symbio.store.journal.inmemory.InMemoryJournalActor;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
 public class InMemoryJournalActorBuilder implements StoreActorBuilder {
@@ -19,7 +22,11 @@ public class InMemoryJournalActorBuilder implements StoreActorBuilder {
     public Object build(final Stage stage,
                         final Dispatcher dispatcher,
                         final Configuration configuration) {
-        return Definition.parameters(dispatcher);
+        return Journal.using(stage, InMemoryJournalActor.class, dispatcher);
+    }
+
+    private Dispatcher<Dispatchable<Entry<?>,?>> typed(Dispatcher dispatcher) {
+        return dispatcher;
     }
 
     @Override

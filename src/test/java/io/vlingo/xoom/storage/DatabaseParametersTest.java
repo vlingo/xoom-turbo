@@ -30,12 +30,12 @@ public class DatabaseParametersTest {
     @Test
     public void testQueryParametersLoad() {
         final DatabaseParameters parameters = new DatabaseParameters(Model.QUERY, Settings.properties(), true);
-        Assert.assertEquals("HSQLDB", parameters.database);
-        Assert.assertEquals("DB_CONFIG_TEST", parameters.name);
-        Assert.assertEquals("jdbc:hsqldb:mem:", parameters.url);
-        Assert.assertEquals("org.hsqldb.jdbcDriver", parameters.driver);
-        Assert.assertEquals("sa", parameters.username);
-        Assert.assertEquals("pwd", parameters.password);
+        Assert.assertEquals("POSTGRES", parameters.database);
+        Assert.assertEquals("STORAGE_TEST", parameters.name);
+        Assert.assertEquals("jdbc:mysql://localhost:2215/", parameters.url);
+        Assert.assertEquals("com.mysql.cj.jdbc.Driver", parameters.driver);
+        Assert.assertEquals("vlingo_test", parameters.username);
+        Assert.assertEquals("vlingo123", parameters.password);
         Assert.assertEquals("MAIN", parameters.originator);
         Assert.assertTrue(parameters.autoCreate);
     }

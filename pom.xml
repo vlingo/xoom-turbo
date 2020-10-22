@@ -100,20 +100,14 @@
       <version>3.3.3</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.wix</groupId>
+      <artifactId>wix-embedded-mysql</artifactId>
+      <version>4.2.0</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.21.0</version>
-        <configuration>
-          <systemPropertyVariables>
-            <propertyName>firefox</propertyName>
-          </systemPropertyVariables>
-          <argLine>-Xmx1024m</argLine>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
@@ -121,6 +115,22 @@
         <executions>
           <execution>
             <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <source>8</source>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
             <goals>
               <goal>jar</goal>
             </goals>
@@ -139,80 +149,60 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.0</version>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
         <configuration>
           <source>8</source>
+          <target>8</target>
         </configuration>
         <executions>
           <execution>
-            <id>attach-javadocs</id>
+            <id>test-compile</id>
             <goals>
-              <goal>jar</goal>
+              <goal>testCompile</goal>
             </goals>
+            <configuration>
+              <compilerArgs>
+                <arg>-parameters</arg>
+              </compilerArgs>
+              <annotationProcessorPaths>
+                <path>
+                  <groupId>io.vlingo</groupId>
+                  <artifactId>vlingo-xoom</artifactId>
+                  <version>${project.version}</version>
+                </path>
+              </annotationProcessorPaths>
+            </configuration>
           </execution>
         </executions>
       </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.7.0</version>
-          <configuration>
-            <source>8</source>
-            <target>8</target>
-          </configuration>
-          <executions>
-            <execution>
-              <id>test-compile</id>
-              <goals>
-                <goal>testCompile</goal>
-              </goals>
-              <configuration>
-                <compilerArgs>
-                  <arg>-parameters</arg>
-                </compilerArgs>
-                <annotationProcessorPaths>
-                  <path>
-                    <groupId>io.vlingo</groupId>
-                    <artifactId>vlingo-xoom</artifactId>
-                    <version>${project.version}</version>
-                  </path>
-                </annotationProcessorPaths>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <!-- current version -->
-          <groupId>fr.avianey.mojo</groupId>
-          <artifactId>hsqldb-maven-plugin</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <driver>org.hsqldb.jdbcDriver</driver>
-            <path>mem:test</path>
-            <address>localhost</address>
-            <name>xdb</name>
-            <username>sa</username>
-            <password>pwd</password>
-            <validationQuery>SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS</validationQuery>
-          </configuration>
-          <executions>
-            <execution>
-              <id>start-hsqldb</id>
-              <phase>pre-integration-test</phase>
-              <goals>
-                <goal>start</goal>
-              </goals>
-            </execution>
-            <execution>
-              <id>stop-hsqldb</id>
-              <phase>post-integration-test</phase>
-              <goals>
-                <goal>stop</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>db-start</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <mainClass>io.vlingo.xoom.storage.EmbeddedDatabaseInitializer</mainClass>
+            </configuration>
+          </execution>
+          <execution>
+            <id>db-close</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <mainClass>io.vlingo.xoom.storage.EmbeddedDatabaseStopper</mainClass>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
