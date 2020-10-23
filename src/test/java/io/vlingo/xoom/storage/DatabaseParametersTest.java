@@ -30,7 +30,7 @@ public class DatabaseParametersTest {
     @Test
     public void testQueryParametersLoad() {
         final DatabaseParameters parameters = new DatabaseParameters(Model.QUERY, Settings.properties(), true);
-        Assert.assertEquals("POSTGRES", parameters.database);
+        Assert.assertEquals("MYSQL", parameters.database);
         Assert.assertEquals("STORAGE_TEST", parameters.name);
         Assert.assertEquals("jdbc:mysql://localhost:2215/", parameters.url);
         Assert.assertEquals("com.mysql.cj.jdbc.Driver", parameters.driver);

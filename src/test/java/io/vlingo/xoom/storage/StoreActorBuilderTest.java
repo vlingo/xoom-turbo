@@ -64,7 +64,7 @@ public class StoreActorBuilderTest {
     private Properties defaultDatabaseProperties(final Model model) {
         final String prefix = Model.QUERY.equals(model) ? "query." : "";
         final Properties properties = new Properties();
-        properties.put(prefix + "database", "POSTGRES");
+        properties.put(prefix + "database", "MYSQL");
         properties.put(prefix + "database.name", "STORAGE_TEST");
         properties.put(prefix + "database.url", "jdbc:mysql://localhost:2215/");
         properties.put(prefix + "database.driver", "com.mysql.cj.jdbc.Driver");
