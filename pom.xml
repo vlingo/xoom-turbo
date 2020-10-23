@@ -189,6 +189,7 @@
             </goals>
             <configuration>
               <mainClass>io.vlingo.xoom.storage.EmbeddedDatabaseInitializer</mainClass>
+              <cleanupDaemonThreads>false</cleanupDaemonThreads>
             </configuration>
           </execution>
           <execution>
@@ -199,6 +200,7 @@
             </goals>
             <configuration>
               <mainClass>io.vlingo.xoom.storage.EmbeddedDatabaseStopper</mainClass>
+              <cleanupDaemonThreads>false</cleanupDaemonThreads>
             </configuration>
           </execution>
         </executions>
