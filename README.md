@@ -35,6 +35,10 @@ repositories {
 }
 ```
 
+## Development
+
+:warning: On maven test, Windows will sometimes open a firewall dialog, you should just close it (will reappear due to mysqld-instance getting copied each time).
+
 License (See LICENSE file for full license)
 -------------------------------------------
 Copyright © 2012-2020 VLINGO LABS. All rights reserved.
