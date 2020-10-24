@@ -56,7 +56,7 @@ public enum TemplateStandard {
                 return Template.REST_RESOURCE_RETRIEVE_METHOD.filename;
             }
 
-            if((boolean) parameters.find(REQUIRE_ENTITY_LOADING)) {
+            if(parameters.find(REQUIRE_ENTITY_LOADING, false)) {
                 return Template.REST_RESOURCE_UPDATE_METHOD.filename;
             }
 
@@ -88,7 +88,7 @@ public enum TemplateStandard {
     XOOM_INITIALIZER(templateParameters -> Template.XOOM_INITIALIZER.filename,
             (name, parameters) -> "XoomInitializer"),
 
-    BOOTSTRAP(parameters -> (boolean) parameters.find(USE_ANNOTATIONS) ?
+    BOOTSTRAP(parameters -> parameters.find(USE_ANNOTATIONS, false) ?
             ANNOTATED_BOOTSTRAP.filename : DEFAULT_BOOTSTRAP.filename,
             (name, parameters) -> "Bootstrap"),
 
