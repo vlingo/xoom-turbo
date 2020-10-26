@@ -17,16 +17,10 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static io.vlingo.http.Method.GET;
-import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.parameter.Label.READ_ONLY;
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
 import static java.util.stream.Collectors.toList;
 
 public class AutoDispatchMappingTemplateDataFactory {
-
-    private final static CodeGenerationParameter DEFAULT_QUERY_ROUTE_PARAMETER =
-            CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryAll")
-                    .relate(ROUTE_METHOD, GET).relate(READ_ONLY, "true");
 
     public static List<TemplateData> build(final CodeGenerationParameters parameters,
                                            final List<TemplateData> queriesData,
