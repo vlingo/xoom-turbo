@@ -10,6 +10,7 @@ package io.vlingo.xoom.codegen.template.resource;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.parameter.Label;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 
+@Ignore
 public class RestResourceGenerationStepTest {
 
     @Test

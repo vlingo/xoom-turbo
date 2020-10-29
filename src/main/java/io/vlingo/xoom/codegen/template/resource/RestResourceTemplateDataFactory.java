@@ -7,24 +7,29 @@
 
 package io.vlingo.xoom.codegen.template.resource;
 
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.TemplateData;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.codegen.parameter.Label.*;
+
 public class RestResourceTemplateDataFactory {
 
-    private static final String REST_RESOURCES_SEPARATOR = ";";
+    public static List<TemplateData> build(final CodeGenerationParameters parameters,
+                                           final List<Content> contents) {
+        final String basePackage = parameters.retrieveValue(PACKAGE);
+        final Boolean useCQRS = parameters.retrieveValue(CQRS, Boolean::valueOf);
+        final Function<CodeGenerationParameter, TemplateData> mapper =
+                aggregateParameter -> new RestResourceTemplateData(basePackage, aggregateParameter, contents, useCQRS);
 
-    public static List<TemplateData> build(final String basePackage,
-                                           final String restResourcesData) {
-        final Function<String, RestResourceTemplateData> mapper =
-                aggregateName -> new RestResourceTemplateData(aggregateName, basePackage);
-
-        return Arrays.asList(restResourcesData.split(REST_RESOURCES_SEPARATOR))
-                .stream().map(mapper).collect(Collectors.toList());
+        return parameters.retrieveAll(AGGREGATE)
+                .filter(aggregateParameter -> aggregateParameter.hasAny(ROUTE_SIGNATURE))
+                .map(mapper).collect(Collectors.toList());
     }
 
 }

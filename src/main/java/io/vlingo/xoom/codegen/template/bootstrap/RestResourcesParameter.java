@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.codegen.template.bootstrap;
 
+import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Iterator;
 import java.util.List;
@@ -42,12 +42,8 @@ public class RestResourcesParameter {
                                   final int resourceIndex,
                                   final int numberOfResources) {
         this.className = restResourceName;
-        this.objectName = formatObjectName(restResourceName);
+        this.objectName = ClassFormatter.simpleNameToAttribute(restResourceName);
         this.last = resourceIndex == numberOfResources - 1;
-    }
-
-    private String formatObjectName(final String restResourceName) {
-        return StringUtils.uncapitalize(restResourceName);
     }
 
     public String getClassName() {

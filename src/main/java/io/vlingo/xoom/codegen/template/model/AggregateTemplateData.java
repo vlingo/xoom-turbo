@@ -36,7 +36,7 @@ public class AggregateTemplateData extends TemplateData {
                 .and(AGGREGATE_PROTOCOL_NAME, protocolName)
                 .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
                 .and(ENTITY_NAME, AGGREGATE.resolveClassname(protocolName))
-                .and(ID_TYPE, StateFieldType.retrieve(aggregate, "id"))
+                .and(ID_TYPE, StateFieldDetail.typeOf(aggregate, "id"))
                 .and(METHODS, new ArrayList<String>())
                 .and(STORAGE_TYPE, storageType);
 

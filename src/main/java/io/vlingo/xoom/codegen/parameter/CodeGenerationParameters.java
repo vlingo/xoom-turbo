@@ -77,6 +77,10 @@ public class CodeGenerationParameters {
         return retrieve(label).value;
     }
 
+    public <T> T retrieveValue(final Label label, final Function<String, T> mapper) {
+        return mapper.apply(retrieveValue(label));
+    }
+
     public CodeGenerationParameter retrieve(final Label label) {
         return parameters.stream()
                 .filter(param -> param.isLabeled(label)).findFirst()

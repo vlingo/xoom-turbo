@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.autodispatch;
+package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -29,9 +29,9 @@ public class RouteDeclarationParameter {
     private final String builderMethod;
     private final List<String> parameterTypes = new ArrayList<>();
 
-    public static List<RouteDeclarationParameter> from(final CodeGenerationParameter autoDispatchParameter) {
+    public static List<RouteDeclarationParameter> from(final CodeGenerationParameter mainParameter) {
         final List<CodeGenerationParameter> routeSignatures =
-                autoDispatchParameter.retrieveAll(Label.ROUTE_SIGNATURE).collect(toList());
+                mainParameter.retrieveAll(Label.ROUTE_SIGNATURE).collect(toList());
 
         return IntStream.range(0, routeSignatures.size()).mapToObj(index ->
                 new RouteDeclarationParameter(index, routeSignatures.size(), routeSignatures.get(index)))
@@ -43,7 +43,7 @@ public class RouteDeclarationParameter {
                                       final CodeGenerationParameter routeSignatureParameter) {
         this.handlerName = resolveHandlerName(routeSignatureParameter);
         this.path = routeSignatureParameter.relatedParameterValueOf(ROUTE_PATH);
-        this.bodyType = routeSignatureParameter.relatedParameterValueOf(BODY_TYPE);
+        this.bodyType = RouteDetail.resolveBodyType(routeSignatureParameter);
         this.builderMethod = routeSignatureParameter.relatedParameterValueOf(ROUTE_METHOD);
         this.parameterTypes.addAll(resolveParameterTypes(routeSignatureParameter));
         this.last = routeIndex == numberOfRoutes - 1;

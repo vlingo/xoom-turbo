@@ -5,18 +5,18 @@ import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.ResourceHandler;
 import static io.vlingo.http.resource.ResourceBuilder.resource;
 
-<#if useAutoDispatch>
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
 
 import io.vlingo.http.Response;
 import io.vlingo.common.Completes;
-import io.vlingo.xoom.annotation.autodispatch.Handler;
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.http.Response.Status.*;
 import static io.vlingo.http.ResponseHeader.*;
 import static io.vlingo.http.resource.ResourceBuilder.*;
+<#if useAutoDispatch>
+import io.vlingo.xoom.annotation.autodispatch.Handler;
 </#if>
 
 <#if useAutoDispatch>
@@ -26,26 +26,24 @@ public class ${resourceName} extends ResourceHandler {
 </#if>
 
   private final Stage $stage;
-  <#if queries?has_content && !queries.empty>
+  <#if !queries.empty>
   private final ${queries.protocolName} $queries;
   </#if>
 
   public ${resourceName}(final Stage $stage) {
       this.$stage = $stage;
-      <#if queries?has_content && !queries.empty>
+      <#if !queries.empty>
       this.$queries = ${storeProviderName}.instance().${queries.attributeName};
       </#if>
   }
 
-  <#if useAutoDispatch>
   <#list routeMethods as routeMethod>
   ${routeMethod}
   </#list>
-  </#if>
 
   @Override
   public Resource<?> routes() {
-  <#if !useAutoDispatch || (routeDeclarations?has_content && routeDeclarations?size == 0)>
+  <#if routeDeclarations?has_content && routeDeclarations?size == 0>
      return resource("${resourceName}" /*Add Request Handlers here as a second parameter*/);
   <#else>
      return resource("${resourceName}",
@@ -67,7 +65,6 @@ public class ${resourceName} extends ResourceHandler {
   </#if>
   }
 
-  <#if useAutoDispatch>
   private String location() {
     return location(null);
   }
@@ -80,7 +77,6 @@ public class ${resourceName} extends ResourceHandler {
   private Completes<${modelProtocol}> resolve(final Object id) {
     return $stage.actorOf(${modelProtocol}.class, $stage.addressFactory().from(id.toString()), ${modelActor}.class);
   }
-  </#if>
   </#if>
 
 }

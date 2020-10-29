@@ -26,7 +26,7 @@ public class AutoDispatchMappingTemplateDataFactory {
                                            final List<TemplateData> queriesData,
                                            final List<Content> contents) {
         final String basePackage = parameters.retrieveValue(Label.PACKAGE);
-        final boolean useCQRS = Boolean.valueOf(parameters.retrieveValue(Label.CQRS));
+        final boolean useCQRS = parameters.retrieveValue(Label.CQRS, Boolean::valueOf);
 
         final Function<CodeGenerationParameter, Stream<TemplateData>> mapper = aggregate ->
                 Stream.of(new AutoDispatchMappingTemplateData(basePackage,

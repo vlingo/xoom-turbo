@@ -15,6 +15,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.resource.RouteDeclarationParameter;
 import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
 import org.junit.Assert;
 import org.junit.Test;

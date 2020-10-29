@@ -19,14 +19,15 @@ public class RestResourceGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final String basePackage = context.parameterOf(PACKAGE);
-        final String restResourcesData = context.parameterOf(REST_RESOURCES);
-        return RestResourceTemplateDataFactory.build(basePackage, restResourcesData);
+        return RestResourceTemplateDataFactory.build(context.parameters(), context.contents());
     }
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        return !context.hasParameter(USE_AUTO_DISPATCH) && context.hasParameter(REST_RESOURCES);
+        if(context.hasParameter(USE_AUTO_DISPATCH) && context.parameterOf(USE_AUTO_DISPATCH, Boolean::valueOf)) {
+            return false;
+        }
+        return true;
     }
 
 }

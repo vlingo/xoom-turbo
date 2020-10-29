@@ -39,9 +39,11 @@ public class CodeGenerationParameter {
         return this.relate(CodeGenerationParameter.of(label, value));
     }
 
-    public CodeGenerationParameter relate(final CodeGenerationParameter relatedParameter) {
-        relatedParameter.ownedBy(this);
-        this.relatedParameters.add(relatedParameter);
+    public CodeGenerationParameter relate(final CodeGenerationParameter ...relatedParameters) {
+        Stream.of(relatedParameters).forEach(relatedParameter -> {
+            relatedParameter.ownedBy(this);
+            this.relatedParameters.add(relatedParameter);
+        });
         return this;
     }
 
