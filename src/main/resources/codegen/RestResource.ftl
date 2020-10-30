@@ -1,6 +1,7 @@
 package ${packageName};
 
 import io.vlingo.actors.Stage;
+import io.vlingo.actors.Logger;
 import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.ResourceHandler;
 import static io.vlingo.http.resource.ResourceBuilder.resource;
@@ -26,12 +27,14 @@ public class ${resourceName} extends ResourceHandler {
 </#if>
 
   private final Stage $stage;
+  private final Logger $logger;
   <#if queries?has_content && !queries.empty>
   private final ${queries.protocolName} $queries;
   </#if>
 
   public ${resourceName}(final Stage $stage) {
       this.$stage = $stage;
+      this.$logger = $stage.world().defaultLogger();
       <#if queries?has_content && !queries.empty>
       this.$queries = ${storeProviderName}.instance().${queries.attributeName};
       </#if>

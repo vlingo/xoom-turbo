@@ -1,4 +1,4 @@
-#vlingo-xoom
+# vlingo-xoom
 
 [![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-xoom.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-xoom) [![Build Status](https://travis-ci.org/vlingo/vlingo-xoom.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-xoom) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-xoom/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-xoom/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/xoom)
 
@@ -34,6 +34,10 @@ repositories {
     jcenter()
 }
 ```
+
+## Development
+
+:warning: On maven test, Windows will sometimes open a firewall dialog, you should just close it (will reappear due to mysqld-instance getting copied each time).
 
 License (See LICENSE file for full license)
 -------------------------------------------
