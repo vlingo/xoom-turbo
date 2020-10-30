@@ -9,6 +9,8 @@ package io.vlingo.xoom.codegen.template.storage;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
@@ -18,6 +20,7 @@ import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.NONE;
@@ -38,31 +41,33 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assert.assertEquals(18, context.contents().size());
-        Assert.assertEquals("BookRentedAdapter", context.contents().get(9).retrieveClassName());
-        Assert.assertEquals("BookPurchasedAdapter", context.contents().get(10).retrieveClassName());
-        Assert.assertEquals("CommandModelJournalProvider", context.contents().get(16).retrieveClassName());
-        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(17).retrieveClassName());
+        Assert.assertEquals(20, context.contents().size());
+        Assert.assertEquals("BookRentedAdapter", context.contents().get(11).retrieveClassName());
+        Assert.assertEquals("BookPurchasedAdapter", context.contents().get(12).retrieveClassName());
+        Assert.assertEquals("CommandModelJournalProvider", context.contents().get(18).retrieveClassName());
+        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(19).retrieveClassName());
 
-        Assert.assertTrue(context.contents().get(9).contains("class BookRentedAdapter implements EntryAdapter<BookRented,TextEntry>"));
-        Assert.assertTrue(context.contents().get(10).contains("class BookPurchasedAdapter implements EntryAdapter<BookPurchased,TextEntry>"));
-        Assert.assertTrue(context.contents().get(15).contains("database.driver=org.hsqldb.jdbc.JDBCDriver"));
-        Assert.assertTrue(context.contents().get(15).contains("database.url=jdbc:hsqldb:mem:"));
-        Assert.assertTrue(context.contents().get(15).contains("query.database.driver=org.hsqldb.jdbc.JDBCDriver"));
-        Assert.assertTrue(context.contents().get(15).contains("query.database.url=jdbc:hsqldb:mem:"));
-        Assert.assertTrue(context.contents().get(16).contains("class CommandModelJournalProvider"));
-        Assert.assertFalse(context.contents().get(16).contains("public final BookQueries bookQueries;"));
-        Assert.assertTrue(context.contents().get(16).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.JOURNAL, Settings.properties(), true"));
-        Assert.assertTrue(context.contents().get(17).contains("class QueryModelStateStoreProvider"));
-        Assert.assertTrue(context.contents().get(17).contains("public final AuthorQueries authorQueries;"));
-        Assert.assertTrue(context.contents().get(17).contains("public final BookQueries bookQueries;"));
-        Assert.assertTrue(context.contents().get(17).contains("this.authorQueries = stage.actorFor(AuthorQueries.class, AuthorQueriesActor.class, store)"));
-        Assert.assertTrue(context.contents().get(17).contains("this.bookQueries = stage.actorFor(BookQueries.class, BookQueriesActor.class, store)"));
-        Assert.assertTrue(context.contents().get(17).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
-        Assert.assertFalse(context.contents().get(17).contains("BookRented"));
-        Assert.assertFalse(context.contents().get(17).contains("BookPurchased"));
-        Assert.assertFalse(context.contents().get(17).contains("StatefulTypeRegistry.Info"));
-        Assert.assertFalse(context.contents().get(17).contains("StateAdapterProvider"));
+        Assert.assertTrue(context.contents().get(11).contains("class BookRentedAdapter implements EntryAdapter<BookRented,TextEntry>"));
+        Assert.assertTrue(context.contents().get(12).contains("class BookPurchasedAdapter implements EntryAdapter<BookPurchased,TextEntry>"));
+        Assert.assertTrue(context.contents().get(17).contains("database.driver=org.hsqldb.jdbc.JDBCDriver"));
+        Assert.assertTrue(context.contents().get(17).contains("database.url=jdbc:hsqldb:mem:"));
+        Assert.assertTrue(context.contents().get(17).contains("query.database.driver=org.hsqldb.jdbc.JDBCDriver"));
+        Assert.assertTrue(context.contents().get(17).contains("query.database.url=jdbc:hsqldb:mem:"));
+        Assert.assertTrue(context.contents().get(18).contains("class CommandModelJournalProvider"));
+        Assert.assertFalse(context.contents().get(18).contains("public final BookQueries bookQueries;"));
+        Assert.assertTrue(context.contents().get(18).contains("registry.register(new Info(journal, AuthorEntity.class, AuthorEntity.class.getSimpleName()));"));
+        Assert.assertTrue(context.contents().get(18).contains("registry.register(new Info(journal, BookEntity.class, BookEntity.class.getSimpleName()));"));
+        Assert.assertTrue(context.contents().get(18).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.JOURNAL, Settings.properties(), true"));
+        Assert.assertTrue(context.contents().get(19).contains("class QueryModelStateStoreProvider"));
+        Assert.assertTrue(context.contents().get(19).contains("public final AuthorQueries authorQueries;"));
+        Assert.assertTrue(context.contents().get(19).contains("public final BookQueries bookQueries;"));
+        Assert.assertTrue(context.contents().get(19).contains("this.authorQueries = stage.actorFor(AuthorQueries.class, AuthorQueriesActor.class, store)"));
+        Assert.assertTrue(context.contents().get(19).contains("this.bookQueries = stage.actorFor(BookQueries.class, BookQueriesActor.class, store)"));
+        Assert.assertTrue(context.contents().get(19).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
+        Assert.assertFalse(context.contents().get(19).contains("BookRented"));
+        Assert.assertFalse(context.contents().get(19).contains("BookPurchased"));
+        Assert.assertFalse(context.contents().get(19).contains("StatefulTypeRegistry.Info"));
+        Assert.assertFalse(context.contents().get(19).contains("StateAdapterProvider"));
     }
 
     @Test
@@ -75,18 +80,18 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assert.assertEquals(18, context.contents().size());
-        Assert.assertEquals("BookStateAdapter", context.contents().get(9).retrieveClassName());
-        Assert.assertEquals("AuthorStateAdapter", context.contents().get(10).retrieveClassName());
-        Assert.assertEquals("CommandModelStateStoreProvider", context.contents().get(16).retrieveClassName());
-        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(17).retrieveClassName());
+        Assert.assertEquals(20, context.contents().size());
+        Assert.assertEquals("BookStateAdapter", context.contents().get(11).retrieveClassName());
+        Assert.assertEquals("AuthorStateAdapter", context.contents().get(12).retrieveClassName());
+        Assert.assertEquals("CommandModelStateStoreProvider", context.contents().get(18).retrieveClassName());
+        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(19).retrieveClassName());
 
-        Assert.assertTrue(context.contents().get(9).contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
-        Assert.assertTrue(context.contents().get(10).contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
-        Assert.assertTrue(context.contents().get(16).contains("class CommandModelStateStoreProvider"));
-        Assert.assertTrue(context.contents().get(16).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
-        Assert.assertTrue(context.contents().get(17).contains("class QueryModelStateStoreProvider"));
-        Assert.assertTrue(context.contents().get(17).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
+        Assert.assertTrue(context.contents().get(11).contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
+        Assert.assertTrue(context.contents().get(12).contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
+        Assert.assertTrue(context.contents().get(18).contains("class CommandModelStateStoreProvider"));
+        Assert.assertTrue(context.contents().get(18).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
+        Assert.assertTrue(context.contents().get(19).contains("class QueryModelStateStoreProvider"));
+        Assert.assertTrue(context.contents().get(19).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
     }
 
     @Test
@@ -99,16 +104,16 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assert.assertEquals(18, context.contents().size());
-        Assert.assertEquals("BookStateAdapter", context.contents().get(9).retrieveClassName());
-        Assert.assertEquals("AuthorStateAdapter", context.contents().get(10).retrieveClassName());
-        Assert.assertEquals("CommandModelStateStoreProvider", context.contents().get(16).retrieveClassName());
-        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(17).retrieveClassName());
+        Assert.assertEquals(20, context.contents().size());
+        Assert.assertEquals("BookStateAdapter", context.contents().get(11).retrieveClassName());
+        Assert.assertEquals("AuthorStateAdapter", context.contents().get(12).retrieveClassName());
+        Assert.assertEquals("CommandModelStateStoreProvider", context.contents().get(18).retrieveClassName());
+        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(19).retrieveClassName());
 
-        Assert.assertTrue(context.contents().get(9).contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
-        Assert.assertTrue(context.contents().get(10).contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
-        Assert.assertTrue(context.contents().get(16).contains("class CommandModelStateStoreProvider"));
-        Assert.assertTrue(context.contents().get(17).contains("class QueryModelStateStoreProvider"));
+        Assert.assertTrue(context.contents().get(11).contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
+        Assert.assertTrue(context.contents().get(12).contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
+        Assert.assertTrue(context.contents().get(18).contains("class CommandModelStateStoreProvider"));
+        Assert.assertTrue(context.contents().get(19).contains("class QueryModelStateStoreProvider"));
     }
 
     @Test
@@ -121,23 +126,22 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assert.assertEquals(15, context.contents().size());
-        Assert.assertEquals("PersistenceSetup", context.contents().get(14).retrieveClassName());
-
-        Assert.assertTrue(context.contents().get(14).contains("class PersistenceSetup"));
-        Assert.assertTrue(context.contents().get(14).contains("@Persistence(basePackage = \"io.vlingo\", storageType = StorageType.STATE_STORE, cqrs = true)"));
-        Assert.assertTrue(context.contents().get(14).contains("@Projections({"));
-        Assert.assertTrue(context.contents().get(14).contains("@Projection(actor = AuthorProjectionActor.class, becauseOf = {}),"));
-        Assert.assertTrue(context.contents().get(14).contains("@Projection(actor = BookProjectionActor.class, becauseOf = {BookRented.class, BookPurchased.class})"));
-        Assert.assertTrue(context.contents().get(14).contains("@Adapters({"));
-        Assert.assertTrue(context.contents().get(14).contains("BookState.class,"));
-        Assert.assertTrue(context.contents().get(14).contains("AuthorState.class"));
-        Assert.assertTrue(!context.contents().get(14).contains("AuthorState.class,"));
-        Assert.assertTrue(context.contents().get(14).contains("import io.vlingo.xoom.annotation.persistence.EnableQueries;"));
-        Assert.assertTrue(context.contents().get(14).contains("import io.vlingo.xoom.annotation.persistence.QueriesEntry;"));
-        Assert.assertTrue(context.contents().get(14).contains("@EnableQueries({"));
-        Assert.assertTrue(context.contents().get(14).contains("@QueriesEntry(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)"));
-        Assert.assertTrue(context.contents().get(14).contains("@QueriesEntry(protocol = BookQueries.class, actor = BookQueriesActor.class)"));
+        Assert.assertEquals(17, context.contents().size());
+        Assert.assertEquals("PersistenceSetup", context.contents().get(16).retrieveClassName());
+        Assert.assertTrue(context.contents().get(16).contains("class PersistenceSetup"));
+        Assert.assertTrue(context.contents().get(16).contains("@Persistence(basePackage = \"io.vlingo\", storageType = StorageType.STATE_STORE, cqrs = true)"));
+        Assert.assertTrue(context.contents().get(16).contains("@Projections({"));
+        Assert.assertTrue(context.contents().get(16).contains("@Projection(actor = AuthorProjectionActor.class, becauseOf = {}),"));
+        Assert.assertTrue(context.contents().get(16).contains("@Projection(actor = BookProjectionActor.class, becauseOf = {BookRented.class, BookPurchased.class})"));
+        Assert.assertTrue(context.contents().get(16).contains("@Adapters({"));
+        Assert.assertTrue(context.contents().get(16).contains("BookState.class,"));
+        Assert.assertTrue(context.contents().get(16).contains("AuthorState.class"));
+        Assert.assertTrue(!context.contents().get(16).contains("AuthorState.class,"));
+        Assert.assertTrue(context.contents().get(16).contains("import io.vlingo.xoom.annotation.persistence.EnableQueries;"));
+        Assert.assertTrue(context.contents().get(16).contains("import io.vlingo.xoom.annotation.persistence.QueriesEntry;"));
+        Assert.assertTrue(context.contents().get(16).contains("@EnableQueries({"));
+        Assert.assertTrue(context.contents().get(16).contains("@QueriesEntry(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)"));
+        Assert.assertTrue(context.contents().get(16).contains("@QueriesEntry(protocol = BookQueries.class, actor = BookQueriesActor.class)"));
     }
 
     private void loadProperties(final CodeGenerationContext context,
@@ -158,6 +162,8 @@ public class StorageGenerationStepTest {
         context.addContent(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT);
         context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), AUTHOR_CONTENT_TEXT);
         context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT);
+        context.addContent(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), AUTHOR_ENTITY_CONTENT_TEXT);
+        context.addContent(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookEntity.java"), BOOK_ENTITY_CONTENT_TEXT);
         context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookRented.java"), BOOK_RENTED_TEXT);
         context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), BOOK_PURCHASED_TEXT);
         context.addContent(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT_TEXT);
@@ -212,6 +218,18 @@ public class StorageGenerationStepTest {
     private static final String BOOK_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model.book; \\n" +
                     "public interface Book { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_ENTITY_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public interface AuthorEntity { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_ENTITY_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public interface BookEntity { \\n" +
                     "... \\n" +
                     "}";
 

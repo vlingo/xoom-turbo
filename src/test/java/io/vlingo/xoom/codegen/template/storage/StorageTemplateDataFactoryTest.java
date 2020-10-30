@@ -67,13 +67,18 @@ public class StorageTemplateDataFactoryTest {
         Assert.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
         Assert.assertEquals(DOMAIN, storeProviderParameters.find(MODEL));
         Assert.assertEquals("JournalProvider", storeProviderParameters.find(STORE_PROVIDER_NAME));
-        Assert.assertEquals(2, storeProviderParameters.<Set<ImportParameter>>find(IMPORTS).size());
+        Assert.assertEquals(4, storeProviderParameters.<Set<ImportParameter>>find(IMPORTS).size());
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookRented"));
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookPurchased"));
+        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorEntity"));
+        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookEntity"));
         Assert.assertEquals("BookRented", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
         Assert.assertEquals("BookRentedAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getAdapterClass());
         Assert.assertEquals("BookPurchased", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
         Assert.assertEquals("BookPurchasedAdapter", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getAdapterClass());
+        Assert.assertEquals(2, storeProviderParameters.<Set<String>>find(AGGREGATES).size());
+        Assert.assertTrue(storeProviderParameters.<Set<String>>find(AGGREGATES).contains("AuthorEntity"));
+        Assert.assertTrue(storeProviderParameters.<Set<String>>find(AGGREGATES).contains("BookEntity"));
         Assert.assertEquals("JournalProvider.java", storeProviderTemplateData.filename());
     }
 
@@ -185,6 +190,8 @@ public class StorageTemplateDataFactoryTest {
                     Content.with(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), null, null, BOOK_PURCHASED_TEXT),
                     Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
                     Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT),
+                    Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_ENTITY_CONTENT_TEXT),
+                    Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookEntity.java"), null, null, BOOK_ENTITY_CONTENT_TEXT),
                     Content.with(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), null, null, PROJECTION_DISPATCHER_PROVIDER_CONTENT_TEXT),
                     Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
                     Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT)
@@ -244,6 +251,18 @@ public class StorageTemplateDataFactoryTest {
     private static final String BOOK_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model.book; \\n" +
                     "public interface Book { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_ENTITY_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public interface AuthorEntity { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_ENTITY_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public interface BookEntity { \\n" +
                     "... \\n" +
                     "}";
 

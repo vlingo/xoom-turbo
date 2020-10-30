@@ -14,6 +14,7 @@ public enum TemplateParameter {
     APPLICATION_NAME("appName"),
     AUTO_DISPATCH_MAPPING_NAME("autoDispatchMappingName"),
     AUTO_DISPATCH_HANDLERS_MAPPING_NAME("autoDispatchHandlersMappingName"),
+    AGGREGATES("aggregates"),
     AGGREGATE_PROTOCOL_NAME("aggregateProtocolName"),
     AGGREGATE_PROTOCOL_VARIABLE("aggregateProtocolVariable"),
     BLOCKING_MESSAGING("blockingMessaging"),

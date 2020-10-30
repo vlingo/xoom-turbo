@@ -8,18 +8,21 @@
 package io.vlingo.xoom.codegen.template.storage;
 
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
 
 public class StorageProviderTemplateData extends TemplateData {
@@ -59,9 +62,10 @@ public class StorageProviderTemplateData extends TemplateData {
 
         return TemplateParameters.with(STORAGE_TYPE, storageType).and(PROJECTION_TYPE, projectionType)
                 .and(MODEL, model).and(IMPORTS, importParameters).and(PACKAGE_NAME, packageName)
+                .and(REQUIRE_ADAPTERS, storageType.requireAdapters(model))
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, adapterParameters).and(QUERIES, queriesParameters)
-                .and(REQUIRE_ADAPTERS, storageType.requireAdapters(model))
+                .and(AGGREGATES, ContentQuery.findClassNames(AGGREGATE, contents))
                 .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
     }
 
@@ -76,7 +80,10 @@ public class StorageProviderTemplateData extends TemplateData {
                         .flatMap(param -> param.getQualifiedNames().stream())
                         .collect(Collectors.toSet());
 
-        return ImportParameter.of(sourceClassQualifiedNames, queriesQualifiedNames);
+        final Set<String> aggregateActorQualifiedNames = storageType.isSourced() ?
+                ContentQuery.findFullyQualifiedClassNames(AGGREGATE, contents) : new HashSet<>();
+
+        return ImportParameter.of(sourceClassQualifiedNames, queriesQualifiedNames, aggregateActorQualifiedNames);
     }
 
     @Override

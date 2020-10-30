@@ -53,8 +53,8 @@ public class ${storeProviderName}  {
     final Journal<String> journal =
               StoreActorBuilder.from(stage, Model.${model}, dispatcher, StorageType.JOURNAL, Settings.properties(), true);
 
-<#list adapters as entryAdapter>
-    registry.register(new Info(journal, ${entryAdapter.sourceClass}.class, ${entryAdapter.sourceClass}.class.getSimpleName()));
+<#list aggregates as aggregate>
+    registry.register(new Info(journal, ${aggregate}.class, ${aggregate}.class.getSimpleName()));
 </#list>
 
     instance = new ${storeProviderName}(journal);
