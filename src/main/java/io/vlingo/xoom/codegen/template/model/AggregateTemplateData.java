@@ -17,8 +17,10 @@ import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.DOMAIN_EVENT;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
@@ -37,6 +39,7 @@ public class AggregateTemplateData extends TemplateData {
                 .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
                 .and(ENTITY_NAME, AGGREGATE.resolveClassname(protocolName))
                 .and(ID_TYPE, StateFieldType.retrieve(aggregate, "id"))
+                .and(SOURCED_EVENTS, resolveEventNames(aggregate))
                 .and(METHODS, new ArrayList<String>())
                 .and(STORAGE_TYPE, storageType);
 
@@ -45,6 +48,11 @@ public class AggregateTemplateData extends TemplateData {
         }
 
         this.dependOn(AggregateMethodTemplateData.from(aggregate, storageType));
+    }
+
+    private List<String> resolveEventNames(final CodeGenerationParameter aggregate) {
+        return aggregate.retrieveAll(DOMAIN_EVENT).map(event -> TemplateStandard.DOMAIN_EVENT.resolveClassname(event.value))
+                .collect(Collectors.toList());
     }
 
     @Override

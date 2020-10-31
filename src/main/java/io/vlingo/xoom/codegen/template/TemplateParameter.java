@@ -36,6 +36,7 @@ public enum TemplateParameter {
     FACTORY_METHOD("factoryMethod"),
     SOURCE_NAME("sourceName"),
     ADAPTER_NAME("adapterName"),
+    DEFAULT_ID("defaultId"),
     STATE_QUALIFIED_CLASS_NAME("stateQualifiedClassName"),
     STORAGE_TYPE("storageType"),
     EVENT_SOURCED("eventSourced"),

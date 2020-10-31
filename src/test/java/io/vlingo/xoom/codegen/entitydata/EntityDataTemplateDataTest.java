@@ -40,6 +40,7 @@ public class EntityDataTemplateDataTest {
                 templatesData.stream().filter(data -> data.filename().equals("AuthorData.java"))
                         .map(TemplateData::parameters).findFirst().get();
 
+        Assert.assertEquals("0", authorEntityDataParameters.find(DEFAULT_ID));
         Assert.assertEquals("AuthorData", authorEntityDataParameters.find(ENTITY_DATA_NAME));
         Assert.assertEquals("AuthorState", authorEntityDataParameters.find(STATE_NAME));
         Assert.assertEquals("io.vlingo.xoomapp.infrastructure", authorEntityDataParameters.find(PACKAGE_NAME));

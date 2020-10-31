@@ -45,6 +45,7 @@ public class EntityDataGenerationStepTest {
         Assert.assertTrue(bookDataContent.contains("public class BookData"));
         Assert.assertTrue(bookDataContent.contains("final BookState state"));
         Assert.assertTrue(bookDataContent.contains("import io.vlingo.xoomapp.model.book.BookState;"));
+        Assert.assertTrue(bookDataContent.contains("return new BookData(BookState.identifiedBy(0));"));
     }
 
     private CodeGenerationParameter authorAggregate() {

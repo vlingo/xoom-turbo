@@ -1,6 +1,7 @@
 package io.vlingo.xoom.codegen.template.model;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -9,12 +10,13 @@ import org.junit.Test;
 
 import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.PACKAGE;
+import static io.vlingo.xoom.codegen.template.storage.StorageType.JOURNAL;
 import static io.vlingo.xoom.codegen.template.storage.StorageType.STATE_STORE;
 
 public class ModelGenerationStepTest {
 
     @Test
-    public void testModelGeneration() {
+    public void testStatefulModelGeneration() {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, STATE_STORE),
@@ -36,23 +38,45 @@ public class ModelGenerationStepTest {
         Assert.assertEquals("AuthorRegistered", context.contents().get(3).retrieveClassName());
         Assert.assertEquals("AuthorRanked", context.contents().get(4).retrieveClassName());
 
-//        Assert.assertEquals("Product", context.contents().get(6).retrieveClassName());
-//        Assert.assertEquals("ProductEntity", context.contents().get(7).retrieveClassName());
-//        Assert.assertEquals("ProductState", context.contents().get(8).retrieveClassName());
-//        Assert.assertEquals("ProductPlaceholderDefined", context.contents().get(9).retrieveClassName());
-//        Assert.assertEquals("ProductSoldOut", context.contents().get(10).retrieveClassName());
-
         Assert.assertTrue(context.contents().get(0).contains("interface Author "));
         Assert.assertTrue(context.contents().get(1).contains("class AuthorEntity extends StatefulEntity"));
-        Assert.assertTrue(context.contents().get(2).contains("class AuthorState extends StateObject"));
+        Assert.assertTrue(context.contents().get(1).contains("public Completes<AuthorState> withName(final String name)"));
+        Assert.assertTrue(context.contents().get(1).contains("return apply(state.withName(name), new AuthorRegistered(state), () -> state)"));
+        Assert.assertTrue(context.contents().get(2).contains("class AuthorState"));
         Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered extends DomainEvent"));
         Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends DomainEvent"));
+    }
 
-//        Assert.assertTrue(context.contents().get(6).contains("interface Product "));
-//        Assert.assertTrue(context.contents().get(7).contains("class ProductEntity extends StatefulEntity"));
-//        Assert.assertTrue(context.contents().get(8).contains("class ProductState extends StateObject"));
-//        Assert.assertTrue(context.contents().get(9).contains("class ProductPlaceholderDefined extends DomainEvent"));
-//        Assert.assertTrue(context.contents().get(10).contains("class ProductSoldOut extends DomainEvent"));
+    @Test
+    public void testSourcedModelGeneration() {
+        final CodeGenerationParameters parameters =
+                CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
+                        CodeGenerationParameter.of(Label.STORAGE_TYPE, JOURNAL),
+                        authorAggregate());
+
+        final CodeGenerationContext context =
+                CodeGenerationContext.with(parameters);
+
+        final ModelGenerationStep modelGenerationStep = new ModelGenerationStep();
+
+        Assert.assertTrue(modelGenerationStep.shouldProcess(context));
+
+        modelGenerationStep.process(context);
+
+        Assert.assertEquals(5, context.contents().size());
+        Assert.assertEquals("Author", context.contents().get(0).retrieveClassName());
+        Assert.assertEquals("AuthorEntity", context.contents().get(1).retrieveClassName());
+        Assert.assertEquals("AuthorState", context.contents().get(2).retrieveClassName());
+        Assert.assertEquals("AuthorRegistered", context.contents().get(3).retrieveClassName());
+        Assert.assertEquals("AuthorRanked", context.contents().get(4).retrieveClassName());
+
+        Assert.assertTrue(context.contents().get(0).contains("interface Author "));
+        Assert.assertTrue(context.contents().get(1).contains("class AuthorEntity extends EventSourced"));
+        Assert.assertTrue(context.contents().get(1).contains("public Completes<AuthorState> withName(final String name) {"));
+        Assert.assertTrue(context.contents().get(1).contains("return apply(new AuthorRegistered(state), () -> state);"));
+        Assert.assertTrue(context.contents().get(2).contains("class AuthorState"));
+        Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered extends DomainEvent"));
+        Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends DomainEvent"));
     }
 
     private CodeGenerationParameter authorAggregate() {

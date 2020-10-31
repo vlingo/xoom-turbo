@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.model.StateFieldType;
 
 import java.util.List;
 import java.util.function.Function;
@@ -66,7 +67,8 @@ public class EntityDataTemplateData extends TemplateData {
                 .and(MEMBERS_ASSIGNMENT, STATE_BASED_ASSIGNMENT.format(aggregate))
                 .and(ENTITY_DATA_QUALIFIED_NAME, packageName.concat(".").concat(dataName))
                 .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
-                .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName);
+                .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName)
+                .and(DEFAULT_ID, StateFieldType.resolveDefaultValue(aggregate, "id"));
     }
 
     private String resolvePackage(final String basePackage) {
