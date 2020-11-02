@@ -71,7 +71,7 @@ public class RestResourceTemplateData extends TemplateData {
 
     private void loadDependencies(final CodeGenerationParameter aggregate, final boolean useCQRS) {
         if(useCQRS) {
-            aggregate.relate(RouteDetail.defaultQueryRouteParameter());
+            aggregate.relate(RouteDetail.defaultQueryRouteParameter(aggregate));
         }
         this.dependOn(RouteMethodTemplateData.from(aggregate, parameters));
     }
@@ -89,6 +89,7 @@ public class RestResourceTemplateData extends TemplateData {
         }
         if(useCQRS) {
             imports.addAll(queriesParameter.getQualifiedNames());
+            imports.add(findFullyQualifiedClassName(STORE_PROVIDER, resolveQueryStoreProviderName(), contents));
         }
         return imports;
     }

@@ -80,10 +80,10 @@ public class RouteMethodTemplateData extends TemplateData {
                 invocationResolver.resolveAdapterHandlerInvocation(mainParameter, routeSignatureParameter);
 
         this.parameters =
-                TemplateParameters.with(ROUTE_SIGNATURE, routeSignatureParameter.value)
-                        .and(MODEL_ATTRIBUTE, resolveAttributeName(mainParameter, Label.MODEL_PROTOCOL))
+                TemplateParameters.with(ROUTE_SIGNATURE, RouteDetail.resolveMethodSignature(routeSignatureParameter))
+                        .and(MODEL_ATTRIBUTE, resolveModelAttributeName(mainParameter, Label.MODEL_PROTOCOL))
                         .and(ROUTE_METHOD, routeSignatureParameter.relatedParameterValueOf(Label.ROUTE_METHOD))
-                        .and(REQUIRE_ENTITY_LOADING, routeSignatureParameter.hasAny(Label.ID))
+                        .and(REQUIRE_ENTITY_LOADING, resolveEntityLoading(routeSignatureParameter))
                         .and(ADAPTER_HANDLER_INVOCATION, adapterHandlerInvocation)
                         .and(ROUTE_HANDLER_INVOCATION, routeHandlerInvocation)
                         .and(ID_NAME, resolveIdName(routeSignatureParameter));
@@ -103,6 +103,12 @@ public class RouteMethodTemplateData extends TemplateData {
                 .collect(Collectors.toSet());
     }
 
+    private Boolean resolveEntityLoading(final CodeGenerationParameter routeSignatureParameter) {
+        return routeSignatureParameter.hasAny(Label.ID) ||
+                (routeSignatureParameter.hasAny(Label.REQUIRE_ENTITY_LOADING) &&
+                        routeSignatureParameter.relatedParameterValueOf(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf));
+    }
+
     private String resolveIdName(final CodeGenerationParameter routeSignatureParameter) {
         if(!routeSignatureParameter.hasAny(Label.ID)) {
             return DEFAULT_ID_NAME;
@@ -115,10 +121,10 @@ public class RouteMethodTemplateData extends TemplateData {
         return idType.contains(".") ? "" : idType;
     }
 
-    private String resolveAttributeName(final CodeGenerationParameter mainParameter,
-                                        final Label protocolLabel) {
-        if(!mainParameter.hasAny(protocolLabel)) {
-            return "";
+    private String resolveModelAttributeName(final CodeGenerationParameter mainParameter,
+                                             final Label protocolLabel) {
+        if (mainParameter.isLabeled(Label.AGGREGATE)) {
+            return ClassFormatter.simpleNameToAttribute(mainParameter.value);
         }
         final String qualifiedName = mainParameter.relatedParameterValueOf(protocolLabel);
         return ClassFormatter.qualifiedNameToAttribute(qualifiedName);

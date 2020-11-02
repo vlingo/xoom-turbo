@@ -10,11 +10,17 @@ package io.vlingo.xoom.codegen.template.model;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 
+import java.util.Optional;
+
 public class AggregateDetail {
 
     public static CodeGenerationParameter methodWithName(final CodeGenerationParameter aggregate, final String methodName) {
+        return findMethod(aggregate, methodName).orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " not found" ));
+    }
+
+    private static Optional<CodeGenerationParameter> findMethod(final CodeGenerationParameter aggregate, final String methodName) {
         return aggregate.retrieveAll(Label.AGGREGATE_METHOD)
-                .filter(method -> methodName.equals(method.value))
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " not found" ));
+                .filter(method -> methodName.equals(method.value) || method.value.startsWith(methodName + "("))
+                .findFirst();
     }
 }

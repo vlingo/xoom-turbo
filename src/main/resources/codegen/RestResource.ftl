@@ -40,7 +40,6 @@ public class ${resourceName} extends ResourceHandler {
   <#list routeMethods as routeMethod>
   ${routeMethod}
   </#list>
-
   @Override
   public Resource<?> routes() {
   <#if routeDeclarations?has_content && routeDeclarations?size == 0>
@@ -48,7 +47,11 @@ public class ${resourceName} extends ResourceHandler {
   <#else>
      return resource("${resourceName}",
      <#list routeDeclarations as declaration>
+        <#if declaration.path?has_content>
         ${declaration.builderMethod}("${declaration.path}")
+        <#else>
+        ${declaration.builderMethod}("${uriRoot}")
+        </#if>
          <#list declaration.parameterTypes as parameterType>
             .param(${parameterType}.class)
          </#list>
@@ -66,16 +69,16 @@ public class ${resourceName} extends ResourceHandler {
   }
 
   private String location() {
-    return location(null);
+    return location("");
   }
 
-  private String location(final Object id) {
-    return id== null ? "${uriRoot}" : "${uriRoot}" + id;
+  private String location(final String id) {
+    return "${uriRoot}" + id;
   }
 
   <#if modelProtocol?has_content>
-  private Completes<${modelProtocol}> resolve(final Object id) {
-    return $stage.actorOf(${modelProtocol}.class, $stage.addressFactory().from(id.toString()), ${modelActor}.class);
+  private Completes<${modelProtocol}> resolve(final String id) {
+    return $stage.actorOf(${modelProtocol}.class, $stage.addressFactory().from(id), ${modelActor}.class);
   }
   </#if>
 

@@ -82,7 +82,6 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertEquals("AuthorData", nameUpdateRouteDeclaration.getBodyType());
         Assert.assertEquals("post", nameUpdateRouteDeclaration.getBuilderMethod());
         Assert.assertEquals("/authors/", nameUpdateRouteDeclaration.getPath());
-        Assert.assertEquals("AuthorData", nameUpdateRouteDeclaration.getParameterTypes().get(0));
     }
 
     private CodeGenerationParameter authorAggregate() {
