@@ -15,6 +15,8 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.resource.RouteDeclarationParameter;
+import io.vlingo.xoom.codegen.template.resource.RouteMethodTemplateData;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
@@ -24,9 +26,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.parameter.Label.AUTO_DISPATCH_NAME;
-import static io.vlingo.xoom.codegen.parameter.Label.QUERIES_PROTOCOL;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.HANDLERS_CONFIG_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL_ACTOR;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL_PROTOCOL;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.URI_ROOT;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_AUTO_DISPATCH;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static java.util.stream.Collectors.toList;
@@ -69,6 +76,7 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                         .and(STORE_PROVIDER_NAME, queryStoreProviderName).and(ROUTE_METHODS, new ArrayList<String>())
                         .and(AUTO_DISPATCH_MAPPING_NAME, restResourceName).and(USE_AUTO_DISPATCH, true)
                         .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateProtocolClassName))
+                        .and(USE_CQRS, context.parameterOf(CQRS, Boolean::valueOf))
                         .addImports(resolveImports(context, autoDispatchParameter, queryStoreProviderName));
 
         this.dependOn(RouteMethodTemplateData.from(autoDispatchParameter, parameters));

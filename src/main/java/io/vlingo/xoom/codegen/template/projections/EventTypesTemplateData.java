@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.projections;
 
+import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateData;
@@ -34,7 +35,7 @@ public class EventTypesTemplateData extends TemplateData {
                                   final List<Content> contents) {
         final String packageName = resolvePackage(basePackage);
         final String className = EVENT_TYPES.resolveClassname();
-        final String qualifiedName = packageName + "." + className;
+        final String qualifiedName = ClassFormatter.qualifiedNameOf(packageName, className);
 
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, packageName)

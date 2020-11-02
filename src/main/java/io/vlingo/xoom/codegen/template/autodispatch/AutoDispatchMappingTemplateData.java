@@ -14,30 +14,20 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.resource.RouteDetail;
 
-import java.beans.Introspector;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static io.vlingo.http.Method.GET;
-import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_SIGNATURE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.URI_ROOT;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 
 public class AutoDispatchMappingTemplateData extends TemplateData {
 
     private final static String PACKAGE_PATTERN = "%s.%s";
     private final static String PARENT_PACKAGE_NAME = "resource";
-
-    private final static CodeGenerationParameter DEFAULT_QUERY_ROUTE_PARAMETER =
-            CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryAll")
-                    .relate(ROUTE_METHOD, GET).relate(READ_ONLY, "true");
 
     private final String aggregateName;
     private final TemplateParameters parameters;
@@ -67,7 +57,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
 
     private void loadDependencies(final CodeGenerationParameter aggregate, final boolean useCQRS) {
         if(useCQRS) {
-            aggregate.relate(DEFAULT_QUERY_ROUTE_PARAMETER);
+            aggregate.relate(RouteDetail.defaultQueryRouteParameter(aggregate));
         }
         this.dependOn(AutoDispatchRouteTemplateData.from(aggregate.retrieveAll(ROUTE_SIGNATURE)));
     }
@@ -105,11 +95,6 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
 
     private String resolvePackage(final String basePackage) {
         return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME).toLowerCase();
-    }
-
-    private String formatUriRoot(final String aggregateProtocolName) {
-        final String formatted = Introspector.decapitalize(aggregateProtocolName);
-        return formatted.endsWith("s") ? formatted : formatted + "s";
     }
 
     @Override

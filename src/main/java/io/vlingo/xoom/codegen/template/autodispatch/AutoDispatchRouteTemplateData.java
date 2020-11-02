@@ -12,7 +12,7 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.model.StateFieldType;
+import io.vlingo.xoom.codegen.template.model.StateFieldDetail;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +34,7 @@ public class AutoDispatchRouteTemplateData extends TemplateData {
         final CodeGenerationParameter aggregate = route.parent(Label.AGGREGATE);
         this.parameters =
                 TemplateParameters.with(RETRIEVAL_ROUTE, isRetrievalRoute(route))
-                        .and(ID_TYPE, StateFieldType.retrieve(aggregate, "id"))
+                        .and(ID_TYPE, StateFieldDetail.typeOf(aggregate, "id"))
                         .and(ROUTE_METHOD, route.relatedParameterValueOf(Label.ROUTE_METHOD))
                         .and(ROUTE_PATH, route.relatedParameterValueOf(Label.ROUTE_PATH))
                         .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregate.value))
@@ -45,7 +45,7 @@ public class AutoDispatchRouteTemplateData extends TemplateData {
     }
 
     private boolean isRetrievalRoute(final CodeGenerationParameter route) {
-        final Method method = route.relatedParameterValueOf(Label.ROUTE_METHOD, Method::valueOf);
+        final Method method = route.relatedParameterValueOf(Label.ROUTE_METHOD, Method::from);
         return method.isGET() || method.isOPTIONS();
     }
 

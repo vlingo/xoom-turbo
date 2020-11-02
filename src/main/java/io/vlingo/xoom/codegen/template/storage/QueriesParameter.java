@@ -14,13 +14,11 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 
 public class QueriesParameter {
@@ -30,7 +28,7 @@ public class QueriesParameter {
     private final String protocolName;
     private final String actorName;
     private final String attributeName;
-    private final List<String> qualifiedNames = new ArrayList<>();
+    private final Set<String> qualifiedNames = new HashSet<>();
 
     public static List<QueriesParameter> from(final Boolean useCQRS,
                                               final List<Content> contents,
@@ -67,6 +65,14 @@ public class QueriesParameter {
         }
         return new QueriesParameter(autoDispatchParameter.relatedParameterValueOf(Label.QUERIES_PROTOCOL),
                 autoDispatchParameter.relatedParameterValueOf(Label.QUERIES_ACTOR));
+    }
+
+    public static QueriesParameter from(final CodeGenerationParameter aggregateParameter,
+                                        final List<Content> contents) {
+        final String queriesProtocol = QUERIES.resolveClassname(aggregateParameter.value);
+        final String queriesActor = QUERIES_ACTOR.resolveClassname(aggregateParameter.value);
+        return new QueriesParameter(ContentQuery.findFullyQualifiedClassName(QUERIES, queriesProtocol, contents),
+                ContentQuery.findFullyQualifiedClassName(QUERIES_ACTOR, queriesActor, contents));
     }
 
     private static QueriesParameter empty() {
@@ -111,7 +117,7 @@ public class QueriesParameter {
         return attributeName;
     }
 
-    public List<String> getQualifiedNames() {
+    public Set<String> getQualifiedNames() {
         return qualifiedNames;
     }
 

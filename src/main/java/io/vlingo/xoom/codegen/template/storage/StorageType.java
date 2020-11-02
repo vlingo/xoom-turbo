@@ -1,9 +1,9 @@
 package io.vlingo.xoom.codegen.template.storage;
 
+import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 
 public enum StorageType {
 
@@ -110,11 +110,11 @@ public enum StorageType {
     }
 
     public String typeRegistryObjectName() {
-        return StringUtils.uncapitalize(typeRegistryClassName);
+        return ClassFormatter.simpleNameToAttribute(typeRegistryClassName);
     }
 
     private String typeRegistryQualifiedClassName() {
-        return typeRegistryPackage + "." + typeRegistryClassName;
+        return ClassFormatter.qualifiedNameOf(typeRegistryPackage, typeRegistryClassName);
     }
 
 }

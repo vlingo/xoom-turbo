@@ -47,7 +47,7 @@ public interface AggregateArgumentsFormat {
 
         private List<String> formatMethodParameters(final CodeGenerationParameter parameter) {
             return parameter.retrieveAll(resolveFieldsLabel(parameter)).map(param -> {
-                final String paramType = StateFieldType.retrieve(param.parent(AGGREGATE), param.value);
+                final String paramType = StateFieldDetail.typeOf(param.parent(AGGREGATE), param.value);
                 return String.format(SIGNATURE_PATTERN, paramType, param.value);
             }).collect(Collectors.toList());
         }
@@ -62,10 +62,6 @@ public interface AggregateArgumentsFormat {
         private final String carrier;
         private final String stageVariableName;
         private static final String FIELD_ACCESS_PATTERN = "%s.%s";
-
-        public MethodInvocation() {
-            this("", "");
-        }
 
         public MethodInvocation(final String stageVariableName) {
             this(stageVariableName, "");

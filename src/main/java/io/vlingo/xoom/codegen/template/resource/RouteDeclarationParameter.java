@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.autodispatch;
+package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_PATH;
 import static java.util.stream.Collectors.toList;
 
 public class RouteDeclarationParameter {
@@ -27,11 +28,12 @@ public class RouteDeclarationParameter {
     private final String bodyType;
     private final String handlerName;
     private final String builderMethod;
+    private final String signature;
     private final List<String> parameterTypes = new ArrayList<>();
 
-    public static List<RouteDeclarationParameter> from(final CodeGenerationParameter autoDispatchParameter) {
+    public static List<RouteDeclarationParameter> from(final CodeGenerationParameter mainParameter) {
         final List<CodeGenerationParameter> routeSignatures =
-                autoDispatchParameter.retrieveAll(Label.ROUTE_SIGNATURE).collect(toList());
+                mainParameter.retrieveAll(Label.ROUTE_SIGNATURE).collect(toList());
 
         return IntStream.range(0, routeSignatures.size()).mapToObj(index ->
                 new RouteDeclarationParameter(index, routeSignatures.size(), routeSignatures.get(index)))
@@ -41,32 +43,31 @@ public class RouteDeclarationParameter {
     private RouteDeclarationParameter(final int routeIndex,
                                       final int numberOfRoutes,
                                       final CodeGenerationParameter routeSignatureParameter) {
-        this.handlerName = resolveHandlerName(routeSignatureParameter);
-        this.path = routeSignatureParameter.relatedParameterValueOf(ROUTE_PATH);
-        this.bodyType = routeSignatureParameter.relatedParameterValueOf(BODY_TYPE);
+        this.signature = RouteDetail.resolveMethodSignature(routeSignatureParameter);
+        this.handlerName = resolveHandlerName();
+        this.path = resolvePath(routeSignatureParameter);
+        this.bodyType = RouteDetail.resolveBodyType(routeSignatureParameter);
         this.builderMethod = routeSignatureParameter.relatedParameterValueOf(ROUTE_METHOD);
         this.parameterTypes.addAll(resolveParameterTypes(routeSignatureParameter));
         this.last = routeIndex == numberOfRoutes - 1;
     }
 
-    private String resolveHandlerName(final CodeGenerationParameter routeSignatureParameter) {
-        final String handlerName =
-                routeSignatureParameter.value;
+    private String resolvePath(final CodeGenerationParameter routeSignatureParameter) {
+        final String path = routeSignatureParameter.relatedParameterValueOf(ROUTE_PATH);
+        return path.startsWith("/") ? path : "/" + path;
+    }
 
-        return handlerName.substring(0, handlerName.indexOf("(")).trim();
+    private String resolveHandlerName() {
+        return signature.substring(0, signature.indexOf("(")).trim();
     }
 
     private List<String> resolveParameterTypes(final CodeGenerationParameter routeSignatureParameter) {
-        final String bodyParameterName =
-                routeSignatureParameter.relatedParameterValueOf(BODY);
-
-        final String signature =
-                routeSignatureParameter.value;
+        final String bodyParameterName = RouteDetail.resolveBodyName(routeSignatureParameter);
 
         final String parameters =
                 signature.substring(signature.indexOf("(") + 1, signature.lastIndexOf(")"));
 
-        if(parameters.trim().isEmpty()) {
+        if (parameters.trim().isEmpty()) {
             return Collections.emptyList();
         }
 

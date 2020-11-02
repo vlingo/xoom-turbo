@@ -8,13 +8,11 @@
 package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.parameter.Label.AUTO_DISPATCH;
 import static io.vlingo.xoom.codegen.parameter.Label.USE_AUTO_DISPATCH;
 
 public class AutoDispatchResourceHandlerGenerationStep extends TemplateProcessingStep {

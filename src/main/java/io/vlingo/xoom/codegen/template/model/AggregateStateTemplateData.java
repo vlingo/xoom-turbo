@@ -36,7 +36,7 @@ public class AggregateStateTemplateData extends TemplateData {
                         .and(EVENT_SOURCED, storageType.isSourced())
                         .and(MEMBERS, MEMBER_DECLARATION.format(aggregate))
                         .and(MEMBERS_ASSIGNMENT, ASSIGNMENT.format(aggregate))
-                        .and(ID_TYPE, StateFieldType.retrieve(aggregate, "id"))
+                        .and(ID_TYPE, StateFieldDetail.typeOf(aggregate, "id"))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
                         .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
                         .and(METHOD_INVOCATION_PARAMETERS, resolveIdBasedConstructorParameters(aggregate))

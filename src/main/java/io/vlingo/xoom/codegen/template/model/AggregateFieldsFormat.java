@@ -41,7 +41,7 @@ public interface AggregateFieldsFormat<T> {
                                    final Stream<CodeGenerationParameter> fields) {
             return fields.map(field -> {
                 final String fieldType =
-                        StateFieldType.retrieve(aggregate, field.value);
+                        StateFieldDetail.typeOf(aggregate, field.value);
                 return String.format(PATTERN, fieldType, field.value);
             }).collect(Collectors.toList());
         }
@@ -90,7 +90,7 @@ public interface AggregateFieldsFormat<T> {
         }
 
         public static AlternateReference handlingDefaultFieldsValue() {
-            return new AlternateReference(field -> StateFieldType.resolveDefaultValue(field.parent(AGGREGATE), field.value));
+            return new AlternateReference(field -> StateFieldDetail.resolveDefaultValue(field.parent(AGGREGATE), field.value));
         }
 
         @Override
