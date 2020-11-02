@@ -10,6 +10,7 @@ package io.vlingo.xoom.codegen.template.resource;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -46,6 +47,7 @@ public class RestResourceGenerationStepTest {
 
         Assert.assertEquals(8, context.contents().size());
         Assert.assertEquals("AuthorResource", context.contents().get(7).retrieveClassName());
+        System.out.println(((TextBasedContent) context.contents().get(7)).text);
         Assert.assertTrue(context.contents().get(7).contains("class AuthorResource"));
         Assert.assertTrue(context.contents().get(7).contains("package io.vlingo.xoomapp.resource;"));
     }

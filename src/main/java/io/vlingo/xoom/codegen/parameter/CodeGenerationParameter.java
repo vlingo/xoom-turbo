@@ -97,7 +97,7 @@ public class CodeGenerationParameter {
     }
 
     public boolean hasAny(final Label label) {
-        return isLabeled(label) || relatedParameters.list().stream().anyMatch(parameter -> parameter.isLabeled(label));
+        return isLabeled(label) || relatedParameters.list().stream().anyMatch(parameter -> parameter.isLabeled(label) && parameter.value != null && !parameter.value.isEmpty());
     }
 
 }

@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
-import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_PATH;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static java.util.stream.Collectors.toList;
 
 public class RouteDeclarationParameter {
@@ -53,8 +52,17 @@ public class RouteDeclarationParameter {
     }
 
     private String resolvePath(final CodeGenerationParameter routeSignatureParameter) {
-        final String path = routeSignatureParameter.relatedParameterValueOf(ROUTE_PATH);
-        return path.startsWith("/") ? path : "/" + path;
+        final StringBuilder path = new StringBuilder();
+        final String uriRoot = "/" + routeSignatureParameter.parent().relatedParameterValueOf(URI_ROOT);
+
+        path.append(routeSignatureParameter.hasAny(ROUTE_PATH) ?
+                "/" + routeSignatureParameter.relatedParameterValueOf(ROUTE_PATH) : uriRoot);
+
+        if (path.indexOf(uriRoot) == -1) {
+            path.insert(0, uriRoot);
+        }
+
+        return path.toString().replaceAll("//", "/");
     }
 
     private String resolveHandlerName() {
