@@ -10,18 +10,19 @@ import io.vlingo.http.Method;
 import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.resource.HandlerInvocationResolver;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.template.resource.HandlerInvocationResolver.QUERIES_PARAMETER;
 
-public class HandlerInvocationResolver {
+public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationResolver {
 
     private static final String DEFAULT_ADAPTER_PARAMETER = "state";
     private static final String HANDLER_INVOCATION_PATTERN = "%s.%s";
     private static final String DEFAULT_FACTORY_METHOD_PARAMETER = "$stage";
     private static final String HANDLER_INVOCATION_WITH_DEFAULT_PARAMS_PATTERN = "%s.%s(%s)";
-    private static final String QUERIES_PARAMETER = "$queries";
 
-    public static String resolveRouteHandlerInvocation(final CodeGenerationParameter parentParameter,
+    public String resolveRouteHandlerInvocation(final CodeGenerationParameter parentParameter,
                                                        final CodeGenerationParameter routeSignatureParameter) {
         final Method httpMethod =
                 routeSignatureParameter.relatedParameterValueOf(ROUTE_METHOD, Method::from);
@@ -31,13 +32,12 @@ public class HandlerInvocationResolver {
         return resolve(ROUTE_HANDLER_INVOCATION, USE_CUSTOM_ROUTE_HANDLER_PARAM, defaultParameter, parentParameter, routeSignatureParameter);
     }
 
-    public static String resolveAdapterHandlerInvocation(final CodeGenerationParameter parentParameter,
+    public String resolveAdapterHandlerInvocation(final CodeGenerationParameter parentParameter,
                                                          final CodeGenerationParameter routeSignatureParameter) {
-        return resolve(ADAPTER_HANDLER_INVOCATION, USE_CUSTOM_ADAPTER_HANDLER_PARAM, DEFAULT_ADAPTER_PARAMETER,
-                parentParameter, routeSignatureParameter);
+        return resolve(ADAPTER_HANDLER_INVOCATION, USE_CUSTOM_ADAPTER_HANDLER_PARAM, DEFAULT_ADAPTER_PARAMETER, parentParameter, routeSignatureParameter);
     }
 
-    private static String resolve(final Label invocationLabel,
+    private String resolve(final Label invocationLabel,
                                   final Label customParamsLabel,
                                   final String defaultParameter,
                                   final CodeGenerationParameter parentParameter,

@@ -45,7 +45,7 @@ public class AutoDispatchRouteTemplateData extends TemplateData {
     }
 
     private boolean isRetrievalRoute(final CodeGenerationParameter route) {
-        final Method method = route.relatedParameterValueOf(Label.ROUTE_METHOD, Method::valueOf);
+        final Method method = route.relatedParameterValueOf(Label.ROUTE_METHOD, Method::from);
         return method.isGET() || method.isOPTIONS();
     }
 

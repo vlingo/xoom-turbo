@@ -15,7 +15,6 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.autodispatch.HandlerInvocationResolver;
 
 import java.util.List;
 import java.util.Set;
@@ -72,11 +71,13 @@ public class RouteMethodTemplateData extends TemplateData {
     private RouteMethodTemplateData(final CodeGenerationParameter mainParameter,
                                     final CodeGenerationParameter routeSignatureParameter,
                                     final TemplateParameters parentParameters) {
+        final HandlerInvocationResolver invocationResolver = HandlerInvocationResolver.with(mainParameter);
+
         final String routeHandlerInvocation =
-                HandlerInvocationResolver.resolveRouteHandlerInvocation(mainParameter, routeSignatureParameter);
+                invocationResolver.resolveRouteHandlerInvocation(mainParameter, routeSignatureParameter);
 
         final String adapterHandlerInvocation =
-                HandlerInvocationResolver.resolveAdapterHandlerInvocation(mainParameter, routeSignatureParameter);
+                invocationResolver.resolveAdapterHandlerInvocation(mainParameter, routeSignatureParameter);
 
         this.parameters =
                 TemplateParameters.with(ROUTE_SIGNATURE, routeSignatureParameter.value)

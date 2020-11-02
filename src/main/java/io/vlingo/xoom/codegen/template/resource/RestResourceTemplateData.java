@@ -65,14 +65,15 @@ public class RestResourceTemplateData extends TemplateData {
                 .and(MODEL_ACTOR, AGGREGATE.resolveClassname(aggregateName))
                 .and(STORE_PROVIDER_NAME, resolveQueryStoreProviderName())
                 .andResolve(MODEL_PROTOCOL, modelProtocolResolver)
-                .and(ROUTE_METHODS, new ArrayList<String>());
+                .and(ROUTE_METHODS, new ArrayList<String>())
+                .and(USE_AUTO_DISPATCH, false);
     }
 
     private void loadDependencies(final CodeGenerationParameter aggregate, final boolean useCQRS) {
         if(useCQRS) {
             aggregate.relate(RouteDetail.defaultQueryRouteParameter());
         }
-        this.dependOn(AutoDispatchRouteTemplateData.from(aggregate.retrieveAll(ROUTE_SIGNATURE)));
+        this.dependOn(RouteMethodTemplateData.from(aggregate, parameters));
     }
 
     private Set<String> resolveImports(final CodeGenerationParameter aggregateParameter,
@@ -84,6 +85,7 @@ public class RestResourceTemplateData extends TemplateData {
             final String aggregateEntityName = AGGREGATE.resolveClassname(aggregateName);
             imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
             imports.add(findFullyQualifiedClassName(AGGREGATE, aggregateEntityName, contents));
+            imports.add(findFullyQualifiedClassName(ENTITY_DATA, ENTITY_DATA.resolveClassname(aggregateName), contents));
         }
         if(useCQRS) {
             imports.addAll(queriesParameter.getQualifiedNames());

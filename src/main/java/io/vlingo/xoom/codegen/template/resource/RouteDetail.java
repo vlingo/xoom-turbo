@@ -22,7 +22,7 @@ public class RouteDetail {
     private static final List<Method> BODY_SUPPORTED_HTTP_METHODS = Arrays.asList(POST, PUT, PATCH);
 
     public static String resolveBodyType(final CodeGenerationParameter route) {
-        final Method httpMethod = route.relatedParameterValueOf(ROUTE_METHOD, Method::valueOf);
+        final Method httpMethod = route.relatedParameterValueOf(ROUTE_METHOD, Method::from);
 
         if(!BODY_SUPPORTED_HTTP_METHODS.contains(httpMethod)) {
             return "";

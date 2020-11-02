@@ -7,10 +7,25 @@
 
 package io.vlingo.xoom.codegen.template.resource;
 
-public class HandlerInvocationResolver {
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.autodispatch.AutoDispatchHandlerInvocationResolver;
 
-    public static String resolve() {
-        return "";
+public interface HandlerInvocationResolver {
+
+    String QUERIES_PARAMETER = "$queries";
+
+    static HandlerInvocationResolver with(final CodeGenerationParameter parentParameter) {
+        if(parentParameter.isLabeled(Label.AUTO_DISPATCH_NAME)) {
+            return new AutoDispatchHandlerInvocationResolver();
+        }
+        return new DefaultHandlerInvocationResolver();
     }
+
+    String resolveRouteHandlerInvocation(final CodeGenerationParameter parentParameter,
+                                         final CodeGenerationParameter routeSignatureParameter);
+
+    String resolveAdapterHandlerInvocation(final CodeGenerationParameter parentParameter,
+                                           final CodeGenerationParameter routeSignatureParameter);
 
 }

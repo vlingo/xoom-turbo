@@ -9,8 +9,10 @@ package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +20,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
 import static java.util.stream.Collectors.toList;
 
 public class RouteDeclarationParameter {
@@ -50,31 +53,41 @@ public class RouteDeclarationParameter {
     }
 
     private String resolveHandlerName(final CodeGenerationParameter routeSignatureParameter) {
-        final String handlerName =
-                routeSignatureParameter.value;
-
-        return handlerName.substring(0, handlerName.indexOf("(")).trim();
+        try {
+            final String handlerName = routeSignatureParameter.value;
+            return handlerName.substring(0, handlerName.indexOf("(")).trim();
+        } catch (final StringIndexOutOfBoundsException exception) {
+            return routeSignatureParameter.value;
+        }
     }
 
     private List<String> resolveParameterTypes(final CodeGenerationParameter routeSignatureParameter) {
-        final String bodyParameterName =
-                routeSignatureParameter.relatedParameterValueOf(BODY);
+        try {
+            final String bodyParameterName =
+                    routeSignatureParameter.relatedParameterValueOf(BODY);
 
-        final String signature =
-                routeSignatureParameter.value;
+            final String signature =
+                    routeSignatureParameter.value;
 
-        final String parameters =
-                signature.substring(signature.indexOf("(") + 1, signature.lastIndexOf(")"));
+            final String parameters =
+                    signature.substring(signature.indexOf("(") + 1, signature.lastIndexOf(")"));
 
-        if(parameters.trim().isEmpty()) {
-            return Collections.emptyList();
+            if (parameters.trim().isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            return Stream.of(parameters.split(","))
+                    .map(parameter -> parameter.replaceAll("final", "").trim())
+                    .filter(parameter -> !parameter.endsWith(" " + bodyParameterName))
+                    .map(parameter -> parameter.substring(0, parameter.indexOf(" ")))
+                    .collect(Collectors.toList());
+        } catch (final StringIndexOutOfBoundsException exception) {
+            final CodeGenerationParameter parentParameter = routeSignatureParameter.parent();
+            if(!parentParameter.isLabeled(AGGREGATE)) {
+                return Collections.emptyList();
+            }
+            return Arrays.asList(ENTITY_DATA.resolveClassname(parentParameter.value));
         }
-
-        return Stream.of(parameters.split(","))
-                .map(parameter -> parameter.replaceAll("final", "").trim())
-                .filter(parameter -> !parameter.endsWith(" " + bodyParameterName))
-                .map(parameter -> parameter.substring(0, parameter.indexOf(" ")))
-                .collect(Collectors.toList());
     }
 
     public String getPath() {

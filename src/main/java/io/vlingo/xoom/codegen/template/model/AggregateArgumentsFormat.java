@@ -63,10 +63,6 @@ public interface AggregateArgumentsFormat {
         private final String stageVariableName;
         private static final String FIELD_ACCESS_PATTERN = "%s.%s";
 
-        public MethodInvocation() {
-            this("", "");
-        }
-
         public MethodInvocation(final String stageVariableName) {
             this(stageVariableName, "");
         }

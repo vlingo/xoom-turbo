@@ -8,193 +8,154 @@
 package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.xoom.OperatingSystem;
-import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.codegen.template.autodispatch.AutoDispatchResourceHandlerTemplateData;
 import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
-@Ignore
 public class RestResourceTemplateDataFactoryTest {
 
     @Test
     public void testRestResourceTemplateDataBuild() {
-        final String basePackage = "io.vlingo.xoomapp";
-        final String restResourcesData = "Author;Book";
+        final CodeGenerationParameter packageParameter =
+                CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp");
 
-        final List<TemplateData> templateData =
-                RestResourceTemplateDataFactory.build(null, null);
+        final CodeGenerationParameter useCQRSParameter =
+                CodeGenerationParameter.of(CQRS, "true");
 
-        Assert.assertEquals(2, templateData.size());
-
-        Assert.assertEquals("AuthorResource", templateData.get(0).parameters().find(REST_RESOURCE_NAME));
-        Assert.assertEquals("io.vlingo.xoomapp.resource", templateData.get(0).parameters().find(PACKAGE_NAME));
-        Assert.assertEquals("AuthorResource.java", templateData.get(0).filename());
-
-        Assert.assertEquals("BookResource", templateData.get(1).parameters().find(REST_RESOURCE_NAME));
-        Assert.assertEquals("io.vlingo.xoomapp.resource", templateData.get(1).parameters().find(PACKAGE_NAME));
-        Assert.assertEquals("BookResource.java", templateData.get(1).filename());
-    }
-
-    @Test
-    public void testThatTemplateParametersAreMapped() {
-        final TemplateFile templateFile =
-                new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java");
-
-        final CodeGenerationContext context =
-                CodeGenerationContext.with(loadParameters())
-                        .addContent(STORE_PROVIDER, templateFile, QUERY_MODEL_STORE_PROVIDER_CONTENT);
+        final CodeGenerationParameters parameters =
+                CodeGenerationParameters.from(packageParameter,
+                        useCQRSParameter, authorAggregate());
 
         final List<TemplateData> templatesData =
-                AutoDispatchResourceHandlerTemplateData.from(context);
+                RestResourceTemplateDataFactory.build(parameters, contents());
 
-        Assert.assertEquals(2, templatesData.size());
+        Assert.assertEquals(1, templatesData.size());
 
-        assertAuthorResource(templatesData);
-        assertBookResource(templatesData);
-    }
+        final TemplateParameters templateParameters = templatesData.get(0).parameters();
 
-    private void assertAuthorResource(final List<TemplateData> templatesData) {
-        final TemplateData resourceHandlerData =
-                templatesData.stream().filter(data -> data.filename().endsWith("AuthorResourceHandler.java")).findFirst().get();
-
-        Assert.assertEquals("/authors", resourceHandlerData.parameters().find(TemplateParameter.URI_ROOT));
-        Assert.assertEquals("io.vlingo.xoomapp.resources", resourceHandlerData.parameters().find(TemplateParameter.PACKAGE_NAME));
-        Assert.assertEquals("AuthorResourceHandler", resourceHandlerData.parameters().find(TemplateParameter.REST_RESOURCE_NAME));
+        Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.Author"));
+        Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorEntity"));
+        Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+        Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries"));
+        Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueriesActor"));
+        Assert.assertEquals("io.vlingo.xoomapp.resource", templateParameters.find(TemplateParameter.PACKAGE_NAME));
+        Assert.assertEquals("AuthorResource", templateParameters.find(TemplateParameter.REST_RESOURCE_NAME));
+        Assert.assertEquals("Author", templateParameters.find(TemplateParameter.MODEL_PROTOCOL));
+        Assert.assertEquals("AuthorEntity", templateParameters.find(TemplateParameter.MODEL_ACTOR));
+        Assert.assertEquals("QueryModelStateStoreProvider", templateParameters.find(TemplateParameter.STORE_PROVIDER_NAME));
+        Assert.assertEquals("authors", templateParameters.find(TemplateParameter.URI_ROOT));
+        Assert.assertEquals(true, templateParameters.find(TemplateParameter.USE_CQRS));
 
         final QueriesParameter queriesParameter =
-                resourceHandlerData.parameters().find(TemplateParameter.QUERIES);
+                templateParameters.find(TemplateParameter.QUERIES);
 
         Assert.assertEquals("AuthorQueries", queriesParameter.getProtocolName());
         Assert.assertEquals("AuthorQueriesActor", queriesParameter.getActorName());
         Assert.assertEquals("authorQueries", queriesParameter.getAttributeName());
 
         final List<RouteDeclarationParameter> routeDeclarationParameters =
-                resourceHandlerData.parameters().find(TemplateParameter.ROUTE_DECLARATIONS);
-
-        Assert.assertEquals(2, routeDeclarationParameters.size());
+                templateParameters.find(TemplateParameter.ROUTE_DECLARATIONS);
 
         final RouteDeclarationParameter nameUpdateRouteDeclaration =
                 routeDeclarationParameters.stream().filter(parameter ->
-                        parameter.getHandlerName().equals("changeAuthorName"))
+                        parameter.getHandlerName().equals("withName"))
                         .findFirst().get();
 
-        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.AuthorData", nameUpdateRouteDeclaration.getBodyType());
-        Assert.assertEquals("patch", nameUpdateRouteDeclaration.getBuilderMethod());
-        Assert.assertEquals("/authors/{authorId}/name", nameUpdateRouteDeclaration.getPath());
-        Assert.assertEquals(1, nameUpdateRouteDeclaration.getParameterTypes().size());
-        Assert.assertEquals("String", nameUpdateRouteDeclaration.getParameterTypes().get(0));
-
-        Assert.assertEquals(2, resourceHandlerData.dependencies().size());
-
-        final TemplateParameters queryRouteMethodParameters =
-                resourceHandlerData.dependencies().stream()
-                        .filter(data -> data.parameters().find(TemplateParameter.ROUTE_SIGNATURE)
-                                .equals("queryById(final String authorId)"))
-                        .map(TemplateData::parameters)
-                        .findFirst().get();
-
-        Assert.assertEquals("authorId", queryRouteMethodParameters.find(TemplateParameter.ID_NAME));
-        Assert.assertEquals("GET", queryRouteMethodParameters.find(TemplateParameter.ROUTE_METHOD));
-        Assert.assertEquals("AuthorHandlers.queryByIdHandler.handler.handle(authorId, authorQueries)", queryRouteMethodParameters.find(TemplateParameter.ROUTE_HANDLER_INVOCATION));
-        Assert.assertEquals("", queryRouteMethodParameters.find(TemplateParameter.ADAPTER_HANDLER_INVOCATION));
+        Assert.assertEquals("AuthorData", nameUpdateRouteDeclaration.getBodyType());
+        Assert.assertEquals("post", nameUpdateRouteDeclaration.getBuilderMethod());
+        Assert.assertEquals("/authors/", nameUpdateRouteDeclaration.getPath());
+        Assert.assertEquals("AuthorData", nameUpdateRouteDeclaration.getParameterTypes().get(0));
     }
 
-    private void assertBookResource(final List<TemplateData> templatesData) {
-        final TemplateData resourceHandlerData =
-                templatesData.stream().filter(data -> data.filename().endsWith("BookResourceHandler.java")).findFirst().get();
+    private CodeGenerationParameter authorAggregate() {
+        final CodeGenerationParameter idField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                        .relate(Label.FIELD_TYPE, "long");
 
-        Assert.assertEquals("/books", resourceHandlerData.parameters().find(TemplateParameter.URI_ROOT));
-        Assert.assertEquals("io.vlingo.xoomapp.resources", resourceHandlerData.parameters().find(TemplateParameter.PACKAGE_NAME));
-        Assert.assertEquals("BookResourceHandler", resourceHandlerData.parameters().find(TemplateParameter.REST_RESOURCE_NAME));
+        final CodeGenerationParameter nameField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+                        .relate(Label.FIELD_TYPE, "String");
 
-        final QueriesParameter queriesParameter =
-                resourceHandlerData.parameters().find(TemplateParameter.QUERIES);
+        final CodeGenerationParameter rankField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                        .relate(Label.FIELD_TYPE, "int");
 
-        Assert.assertEquals("BookQueries", queriesParameter.getProtocolName());
-        Assert.assertEquals("BookQueriesActor", queriesParameter.getActorName());
-        Assert.assertEquals("bookQueries", queriesParameter.getAttributeName());
+        final CodeGenerationParameter authorRegisteredEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+                        .relate(idField).relate(nameField);
 
-        final List<RouteDeclarationParameter> routeDeclarationParameters =
-                resourceHandlerData.parameters().find(TemplateParameter.ROUTE_DECLARATIONS);
+        final CodeGenerationParameter authorRankedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
+                        .relate(idField).relate(rankField);
 
-        Assert.assertEquals(1, routeDeclarationParameters.size());
-        Assert.assertEquals(1, resourceHandlerData.dependencies().size());
-    }
+        final CodeGenerationParameter factoryMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
+                        .relate(Label.METHOD_PARAMETER, "name")
+                        .relate(FACTORY_METHOD, "true")
+                        .relate(authorRegisteredEvent);
 
-    private CodeGenerationParameters loadParameters() {
-        final CodeGenerationParameter firstAuthorRouteParameter =
-                CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeAuthorName(final String authorId, final AuthorData authorData)")
-                        .relate(ROUTE_HANDLER_INVOCATION, "changeAuthorNameHandler.handler.handle(author,authorData)")
-                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
-                        .relate(ROUTE_PATH, "/authors/{authorId}/name")
+        final CodeGenerationParameter rankMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
+                        .relate(Label.METHOD_PARAMETER, "rank")
+                        .relate(authorRankedEvent);
+
+        final CodeGenerationParameter withNameRoute =
+                CodeGenerationParameter.of(ROUTE_SIGNATURE, "withName")
+                        .relate(ROUTE_METHOD, "POST")
+                        .relate(ROUTE_PATH, "/authors/")
+                        .relate(REQUIRE_ENTITY_LOADING, "false");
+
+        final CodeGenerationParameter changeRankRoute =
+                CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeRank")
                         .relate(ROUTE_METHOD, "PATCH")
-                        .relate(CUSTOM_ROUTE, "false")
-                        .relate(ID, "authorId")
-                        .relate(ID_TYPE, "java.lang.String")
-                        .relate(BODY, "authorData")
-                        .relate(BODY_TYPE, "io.vlingo.xoomapp.infrastructure.AuthorData")
-                        .relate(ADAPTER_HANDLER_INVOCATION, "adaptStateHandler.handler.handle")
-                        .relate(USE_CUSTOM_ADAPTER_HANDLER_PARAM, "false");
+                        .relate(ROUTE_PATH, "/authors/{id}/rank")
+                        .relate(REQUIRE_ENTITY_LOADING, "true");
 
-        final CodeGenerationParameter secondAuthorRouteParameter =
-                CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryById(final String authorId)")
-                        .relate(ROUTE_HANDLER_INVOCATION, "queryByIdHandler.handler.handle(authorId, authorQueries)")
-                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
-                        .relate(ROUTE_PATH, "/authors/{authorId}")
-                        .relate(ROUTE_METHOD, "GET")
-                        .relate(CUSTOM_ROUTE, "false")
-                        .relate(ID, "authorId")
-                        .relate(ID_TYPE, "java.lang.String");
+        return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+                .relate(URI_ROOT, "authors").relate(idField)
+                .relate(nameField).relate(rankField).relate(factoryMethod)
+                .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
+                .relate(authorRegisteredEvent).relate(authorRankedEvent);
+    }
 
-        final CodeGenerationParameter authorResourceParameter =
-                CodeGenerationParameter.of(AUTO_DISPATCH_NAME, "io.vlingo.xoomapp.resources.AuthorResource")
-                        .relate(HANDLERS_CONFIG_NAME, "io.vlingo.xoomapp.resources.AuthorHandlers")
-                        .relate(URI_ROOT, "/authors")
-                        .relate(MODEL_PROTOCOL, "io.vlingo.xoomapp.model.Author")
-                        .relate(MODEL_ACTOR, "io.vlingo.xoomapp.model.AuthorEntity")
-                        .relate(MODEL_DATA, "io.vlingo.xoomapp.infrastructure.AuthorData")
-                        .relate(QUERIES_PROTOCOL, "io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries")
-                        .relate(QUERIES_ACTOR, "io.vlingo.xoomapp.infrastructure.persistence.AuthorQueriesActor")
-                        .relate(firstAuthorRouteParameter).relate(secondAuthorRouteParameter);
-
-        final CodeGenerationParameter bookRouteParameter =
-                CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryBooks()")
-                        .relate(ROUTE_HANDLER_INVOCATION, "queryAllHandler.handler.handle")
-                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "false")
-                        .relate(ROUTE_PATH, "/books")
-                        .relate(ROUTE_METHOD, "GET")
-                        .relate(CUSTOM_ROUTE, "false");
-
-        final CodeGenerationParameter bookResourceParameter =
-                CodeGenerationParameter.of(AUTO_DISPATCH_NAME, "io.vlingo.xoomapp.resources.BookResource")
-                        .relate(URI_ROOT, "/books").relate(bookRouteParameter)
-                        .relate(HANDLERS_CONFIG_NAME, "io.vlingo.xoomapp.resources.BookHandlers")
-                        .relate(QUERIES_PROTOCOL, "io.vlingo.xoomapp.infrastructure.persistence.BookQueries")
-                        .relate(QUERIES_ACTOR, "io.vlingo.xoomapp.infrastructure.persistence.BookQueriesActor");
-
-        return CodeGenerationParameters.from(authorResourceParameter, bookResourceParameter);
+    private List<Content> contents() {
+        return Arrays.asList(
+                Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
+                Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_AGGREGATE_CONTENT_TEXT),
+                Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+                Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
+                Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
+                Content.with(QUERIES_ACTOR, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueriesActor.java"), null, null, AUTHOR_QUERIES_ACTOR_CONTENT_TEXT),
+                Content.with(STORE_PROVIDER, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "QueryModelStateStoreProvider.java"), null, null, QUERY_MODEL_STORE_PROVIDER_CONTENT)
+        );
     }
 
     private static final String PROJECT_PATH =
             OperatingSystem.detect().isWindows() ?
                     Paths.get("D:\\projects", "xoom-app").toString() :
                     Paths.get("/home", "xoom-app").toString();
+
+    private static final String MODEL_PACKAGE_PATH =
+            Paths.get(PROJECT_PATH, "src", "main", "java",
+                    "io", "vlingo", "xoomapp", "model").toString();
 
     private static final String INFRASTRUCTURE_PACKAGE_PATH =
             Paths.get(PROJECT_PATH, "src", "main", "java",
@@ -203,10 +164,45 @@ public class RestResourceTemplateDataFactoryTest {
     private static final String PERSISTENCE_PACKAGE_PATH =
             Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "persistence").toString();
 
+    private static final String AUTHOR_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public interface Author { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_STATE_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorState { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_AGGREGATE_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorEntity { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_DATA_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.infrastructure; \\n" +
+                    "public class AuthorData { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_QUERIES_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
+                    "public interface AuthorQueries { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_QUERIES_ACTOR_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
+                    "public class AuthorQueriesActor { \\n" +
+                    "... \\n" +
+                    "}";
+
     private static final String QUERY_MODEL_STORE_PROVIDER_CONTENT =
             "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
                     "public class QueryModelStateStoreProvider { \\n" +
                     "... \\n" +
                     "}";
-
 }
