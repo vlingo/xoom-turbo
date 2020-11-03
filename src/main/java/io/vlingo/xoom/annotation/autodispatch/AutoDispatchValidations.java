@@ -282,14 +282,16 @@ public interface AutoDispatchValidations extends Validation {
                         TypeRetriever.with(processingEnvironment)
                                             .getGenericType(model, Void -> model.actor());
 
-                final boolean hasId = genericType.getEnclosedElements().stream().anyMatch(e ->
-                    e.getKind().equals(ElementKind.FIELD) && e.getSimpleName().toString().equals("id") && e.getModifiers().contains(Modifier.PUBLIC)
-                );
-                if(!hasId) {
-                    throw new ProcessingAnnotationException(
-                            String.format("Class [%s], with Model annotation, has an actor state object without an public id: %s",
-                                    getQualifiedClassName(processingEnvironment, rootElement), genericType.getSimpleName())
+                if(genericType != null) {
+                    final boolean hasId = genericType.getEnclosedElements().stream().anyMatch(e ->
+                            e.getKind().equals(ElementKind.FIELD) && e.getSimpleName().toString().equals("id") && e.getModifiers().contains(Modifier.PUBLIC)
                     );
+                    if (!hasId) {
+                        throw new ProcessingAnnotationException(
+                                String.format("Class [%s], with Model annotation, has an actor state object without an public id: %s",
+                                        getQualifiedClassName(processingEnvironment, rootElement), genericType.getSimpleName())
+                        );
+                    }
                 }
             });
         };

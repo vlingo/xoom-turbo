@@ -25,6 +25,7 @@ import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_SIGNATURE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.autodispatch.AutoDispatchMappingValueFormatter.format;
 
 public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
@@ -50,6 +51,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                         .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateName))
                         .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateName)).and(USE_CQRS, useCQRS)
                         .and(QUERY_ALL_METHOD_NAME, findQueryMethodName(aggregateName, queriesTemplateData))
+                        .andResolve(QUERY_ALL_INDEX_NAME, params -> format(params.find(QUERY_ALL_METHOD_NAME)))
                         .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, standard().resolveClassname(aggregateName))
                         .and(HANDLER_INDEXES, resolveHandlerIndexes(aggregate, useCQRS))
                         .and(HANDLER_ENTRIES, new ArrayList<String>())
@@ -70,7 +72,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
         return IntStream.range(0, handlers.size()).mapToObj(index -> {
             final String signature = handlers.get(index).value;
-            final String mappingValue = AutoDispatchMappingValueFormatter.format(signature);
+            final String mappingValue = format(signature);
             return String.format(HANDLER_INDEX_PATTERN, mappingValue, index);
         }).collect(Collectors.toList());
     }
@@ -78,7 +80,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
     private String findQueryMethodName(final String aggregateName,
                                        final List<TemplateData> queriesTemplateData) {
         if(queriesTemplateData.isEmpty()) {
-            return null;
+            return "";
         }
 
         final String expectedQueriesName =

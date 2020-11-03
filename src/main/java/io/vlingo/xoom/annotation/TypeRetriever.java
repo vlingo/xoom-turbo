@@ -94,6 +94,9 @@ public class TypeRetriever {
 
     public TypeElement getGenericType(final Annotation annotation, final Function<Object, Class<?>> retriever) {
         final DeclaredType declaredType = (DeclaredType)getTypeElement(annotation, retriever).getSuperclass();
+        if(declaredType.getTypeArguments().isEmpty()) {
+            return null;
+        }
         return (TypeElement)((DeclaredType)declaredType.getTypeArguments().get(0)).asElement();
     }
 

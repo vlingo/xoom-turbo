@@ -64,6 +64,7 @@ public enum TemplateParameter {
     QUERIES_ATTRIBUTE("queriesAttribute"),
     QUERY_ID_METHOD_NAME("queryByIdMethodName"),
     QUERY_ALL_METHOD_NAME("queryAllMethodName"),
+    QUERY_ALL_INDEX_NAME("queryAllIndexName"),
     PROJECTION_TO_DESCRIPTION("projectToDescriptions"),
     USE_CQRS("useCQRS"),
     USE_PROJECTIONS("useProjections"),

@@ -27,7 +27,7 @@ public class ${autoDispatchHandlersMappingName} {
 
   <#if useCQRS>
   public static final HandlerEntry<Two<Completes<Collection<${dataName}>>, ${queriesName}>> QUERY_ALL_HANDLER =
-          HandlerEntry.of(QUERY_ALL, ${queriesName}::${queryAllMethodName});
+          HandlerEntry.of(${queryAllIndexName}, ${queriesName}::${queryAllMethodName});
   </#if>
 
 }

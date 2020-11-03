@@ -62,6 +62,9 @@ public class AutoDispatchMappingGenerationStepTest {
                 context.contents().stream().filter(content -> content.retrieveClassName().equals("AuthorResourceHandlers"))
                         .findFirst().get();
 
+        Assert.assertTrue(authorHandlersMappingContent.contains("public static final int WITH_NAME = 0;"));
+        Assert.assertTrue(authorHandlersMappingContent.contains("public static final int CHANGE_RANK = 1;"));
+        Assert.assertTrue(authorHandlersMappingContent.contains("public static final int AUTHORS = 2;"));
         Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Three<Completes<AuthorState>, Stage, AuthorData>> WITH_NAME_HANDLER ="));
         Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(WITH_NAME, ($stage, data) -> Author.withName($stage, data.name));"));
         Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> CHANGE_RANK_HANDLER ="));
@@ -69,7 +72,7 @@ public class AutoDispatchMappingGenerationStepTest {
         Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<AuthorData, AuthorState>> ADAPT_STATE_HANDLER ="));
         Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(ADAPT_STATE, AuthorData::from);"));
         Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<Completes<Collection<AuthorData>>, AuthorQueries>> QUERY_ALL_HANDLER ="));
-        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(QUERY_ALL, AuthorQueries::authors);"));
+        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(AUTHORS, AuthorQueries::authors);"));
     }
 
     private Content[] contents() {
