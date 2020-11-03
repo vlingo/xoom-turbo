@@ -62,7 +62,11 @@ public class RouteDeclarationParameter {
             path.insert(0, uriRoot);
         }
 
-        return path.toString().replaceAll("//", "/");
+        String resolvedPath = path.toString();
+        while(resolvedPath.contains("//")) {
+            resolvedPath = resolvedPath.replaceAll("//", "/");
+        }
+        return resolvedPath;
     }
 
     private String resolveHandlerName() {
