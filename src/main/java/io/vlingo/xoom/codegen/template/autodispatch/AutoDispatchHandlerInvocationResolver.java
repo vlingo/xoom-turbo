@@ -22,7 +22,7 @@ public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationR
     private static final String HANDLER_INVOCATION_WITH_DEFAULT_PARAMS_PATTERN = "%s.%s(%s)";
 
     public String resolveRouteHandlerInvocation(final CodeGenerationParameter parentParameter,
-                                                       final CodeGenerationParameter routeSignatureParameter) {
+                                                final CodeGenerationParameter routeSignatureParameter) {
         final Method httpMethod =
                 routeSignatureParameter.relatedParameterValueOf(ROUTE_METHOD, Method::from);
 
@@ -32,15 +32,15 @@ public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationR
     }
 
     public String resolveAdapterHandlerInvocation(final CodeGenerationParameter parentParameter,
-                                                         final CodeGenerationParameter routeSignatureParameter) {
+                                                     final CodeGenerationParameter routeSignatureParameter) {
         return resolve(ADAPTER_HANDLER_INVOCATION, USE_CUSTOM_ADAPTER_HANDLER_PARAM, DEFAULT_ADAPTER_PARAMETER, parentParameter, routeSignatureParameter);
     }
 
     private String resolve(final Label invocationLabel,
-                                  final Label customParamsLabel,
-                                  final String defaultParameter,
-                                  final CodeGenerationParameter parentParameter,
-                                  final CodeGenerationParameter routeSignatureParameter) {
+                           final Label customParamsLabel,
+                           final String defaultParameter,
+                           final CodeGenerationParameter parentParameter,
+                           final CodeGenerationParameter routeSignatureParameter) {
         if(!routeSignatureParameter.hasAny(customParamsLabel)){
             return "";
         }
