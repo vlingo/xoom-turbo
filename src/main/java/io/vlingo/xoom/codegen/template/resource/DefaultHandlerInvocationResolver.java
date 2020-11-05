@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.http.Method;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat;
 import io.vlingo.xoom.codegen.template.model.AggregateDetail;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
 
@@ -16,7 +17,6 @@ import static io.vlingo.xoom.codegen.content.ClassFormatter.simpleNameToAttribut
 import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
-import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.DATA_BASED_METHOD_INVOCATION;
 
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 
@@ -39,11 +39,13 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
         return String.format(ADAPTER_PATTERN, ENTITY_DATA.resolveClassname(aggregateParameter.value));
     }
 
-    private String resolveCommandMethodInvocation(final CodeGenerationParameter aggregateParameter, final CodeGenerationParameter routeParameter) {
+    private String resolveCommandMethodInvocation(final CodeGenerationParameter aggregateParameter,
+                                                  final CodeGenerationParameter routeParameter) {
+        final AggregateArgumentsFormat argumentsFormat = new AggregateArgumentsFormat.MethodInvocation("stage()", "data");
         final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregateParameter, routeParameter.value);
         final Boolean factoryMethod = method.relatedParameterValueOf(FACTORY_METHOD, Boolean::valueOf);
         final MethodScope scope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
-        final String methodInvocationParameters = DATA_BASED_METHOD_INVOCATION.format(method, scope);
+        final String methodInvocationParameters = argumentsFormat.format(method, scope);
         final String invoker = factoryMethod ? aggregateParameter.value : simpleNameToAttribute(aggregateParameter.value);
         return String.format(COMMAND_PATTERN, invoker, method.value, methodInvocationParameters);
     }

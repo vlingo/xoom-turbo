@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
+import io.vlingo.http.resource.DynamicResourceHandler;
 import io.vlingo.http.resource.ResourceHandler;
 import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -38,7 +39,7 @@ public class RestResourceContentLoader extends TypeBasedContentLoader {
         }
 
         if(isPackageBased(resourceHandlers)) {
-            return typeRetriever.subclassesOf(ResourceHandler.class, resourceHandlers.packages())
+            return typeRetriever.subclassesOf(DynamicResourceHandler.class, resourceHandlers.packages())
                     .map(this::toType).collect(Collectors.toList());
         }
 

@@ -41,12 +41,12 @@ public class TypeRetriever {
     }
 
     private boolean isSubclass(final Element typeElement, final Class superclass) {
-        final TypeMirror resourceHandler =
+        final TypeMirror type =
                 elements.getTypeElement(superclass.getCanonicalName())
                         .asType();
 
         return ((TypeElement) typeElement).getSuperclass()
-                .equals(resourceHandler);
+                .equals(type);
     }
 
     public <T> TypeElement from(final T annotation, final Function<T, Class<?>> retriever) {

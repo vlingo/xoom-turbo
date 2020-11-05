@@ -23,7 +23,6 @@ public interface AggregateArgumentsFormat {
 
     AggregateArgumentsFormat METHOD_INVOCATION = new MethodInvocation("stage");
     AggregateArgumentsFormat SIGNATURE_DECLARATION = new SignatureDeclaration();
-    AggregateArgumentsFormat DATA_BASED_METHOD_INVOCATION = new MethodInvocation("$stage", "data");
 
     default String format(final CodeGenerationParameter parameter) {
         return format(parameter, MethodScope.INSTANCE);

@@ -1,9 +1,8 @@
 package ${packageName};
 
-import io.vlingo.actors.Logger;
 import io.vlingo.actors.Stage;
 import io.vlingo.http.resource.Resource;
-import io.vlingo.http.resource.ResourceHandler;
+import io.vlingo.http.resource.DynamicResourceHandler;
 import static io.vlingo.http.resource.ResourceBuilder.resource;
 
 <#list imports as import>
@@ -17,24 +16,29 @@ import static io.vlingo.http.Response.Status.*;
 import static io.vlingo.http.ResponseHeader.*;
 import static io.vlingo.http.resource.ResourceBuilder.*;
 <#if useAutoDispatch>
+import io.vlingo.actors.Logger;
 import io.vlingo.xoom.annotation.autodispatch.Handler;
 </#if>
 
 <#if useAutoDispatch>
-public class ${resourceName} extends ResourceHandler implements ${autoDispatchMappingName} {
+public class ${resourceName} extends DynamicResourceHandler implements ${autoDispatchMappingName} {
 <#else>
-public class ${resourceName} extends ResourceHandler {
+public class ${resourceName} extends DynamicResourceHandler {
 </#if>
-
+  <#if useAutoDispatch>
   private final Stage $stage;
   private final Logger $logger;
+  </#if>
   <#if queries?has_content && !queries.empty>
   private final ${queries.protocolName} $queries;
   </#if>
 
-  public ${resourceName}(final Stage $stage) {
-      this.$stage = $stage;
-      this.$logger = $stage.world().defaultLogger();
+  public ${resourceName}(final Stage stage) {
+      super(stage);
+      <#if useAutoDispatch>
+      this.$stage = super.stage();
+      this.$logger = super.logger();
+      </#if>
       <#if queries?has_content && !queries.empty>
       this.$queries = ${storeProviderName}.instance().${queries.attributeName};
       </#if>

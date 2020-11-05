@@ -19,6 +19,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.file.Paths;
+import java.util.List;
 
 import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
@@ -45,10 +46,12 @@ public class RestResourceGenerationStepTest {
 
         new RestResourceGenerationStep().process(context);
 
-        Assert.assertEquals(8, context.contents().size());
-        Assert.assertEquals("AuthorResource", context.contents().get(7).retrieveClassName());
-        Assert.assertTrue(context.contents().get(7).contains("class AuthorResource"));
-        Assert.assertTrue(context.contents().get(7).contains("package io.vlingo.xoomapp.resource;"));
+        final List<Content> contents = context.contents();
+        Assert.assertEquals(8, contents.size());
+        Assert.assertEquals("AuthorResource", contents.get(7).retrieveClassName());
+        Assert.assertTrue(contents.get(7).contains("class AuthorResource"));
+        Assert.assertTrue(contents.get(7).contains("Author.withName(stage(), data.name)"));
+        Assert.assertTrue(contents.get(7).contains("package io.vlingo.xoomapp.resource;"));
     }
 
     private CodeGenerationParameter authorAggregate() {

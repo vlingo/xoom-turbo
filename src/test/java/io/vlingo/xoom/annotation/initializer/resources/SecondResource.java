@@ -9,6 +9,7 @@ package io.vlingo.xoom.annotation.initializer.resources;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
+import io.vlingo.http.resource.DynamicResourceHandler;
 import io.vlingo.http.resource.ObjectResponse;
 import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.ResourceHandler;
@@ -17,9 +18,10 @@ import static io.vlingo.http.Response.Status.Ok;
 import static io.vlingo.http.resource.ResourceBuilder.get;
 import static io.vlingo.http.resource.ResourceBuilder.resource;
 
-public class SecondResource extends ResourceHandler {
+public class SecondResource extends DynamicResourceHandler {
 
     public SecondResource(final Stage stage) {
+        super(stage);
     }
 
     public Completes<ObjectResponse<String>> retrieveResource() {

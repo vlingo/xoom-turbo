@@ -12,6 +12,8 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat;
+import io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.MethodInvocation;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
 
 import java.util.List;
@@ -22,7 +24,6 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.FACTORY_METHOD;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
-import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.DATA_BASED_METHOD_INVOCATION;
 
 public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
@@ -49,7 +50,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
                         .and(AGGREGATE_PROTOCOL_VARIABLE, ClassFormatter.simpleNameToAttribute(aggregate.value))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
                         .and(INDEX_NAME, AutoDispatchMappingValueFormatter.format(route.value))
-                        .and(METHOD_INVOCATION_PARAMETERS, DATA_BASED_METHOD_INVOCATION.format(method, methodScope));
+                        .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method));
     }
 
     private CodeGenerationParameter findMethod(final CodeGenerationParameter aggregate,
@@ -57,6 +58,12 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
         return aggregate.retrieveAll(AGGREGATE_METHOD)
                 .filter(method -> method.value.equals(route.value))
                 .findFirst().get();
+    }
+
+    private String resolveMethodInvocationParameters(final CodeGenerationParameter method) {
+        final boolean factoryMethod = method.relatedParameterValueOf(Label.FACTORY_METHOD, Boolean::valueOf);
+        final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
+        return new AggregateArgumentsFormat.MethodInvocation("$stage", "data").format(method, methodScope);
     }
 
     @Override
