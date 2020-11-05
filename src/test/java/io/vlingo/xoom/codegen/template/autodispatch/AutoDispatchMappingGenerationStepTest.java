@@ -10,6 +10,7 @@ package io.vlingo.xoom.codegen.template.autodispatch;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -21,8 +22,8 @@ import org.junit.Test;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
@@ -57,6 +58,13 @@ public class AutoDispatchMappingGenerationStepTest {
                         .findFirst().get();
 
         Assert.assertTrue(authorMappingContent.contains("@Queries(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)"));
+        Assert.assertTrue(authorMappingContent.contains("@Route(method = POST, handler = AuthorResourceHandlers.WITH_NAME)"));
+        Assert.assertTrue(authorMappingContent.contains("@ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)"));
+        Assert.assertTrue(authorMappingContent.contains("Completes<Response> withName(@Body final AuthorData data);"));
+        Assert.assertTrue(authorMappingContent.contains("@Route(method = PATCH, path = \"/{id}/rank\", handler = AuthorResourceHandlers.CHANGE_RANK)"));
+        Assert.assertTrue(authorMappingContent.contains("Completes<Response> changeRank(@Id final long id, @Body final AuthorData data);"));
+        Assert.assertTrue(authorMappingContent.contains("@Route(method = GET, handler = AuthorResourceHandlers.AUTHORS)"));
+        Assert.assertTrue(authorMappingContent.contains("Completes<Response> authors();"));
 
         final Content authorHandlersMappingContent =
                 context.contents().stream().filter(content -> content.retrieveClassName().equals("AuthorResourceHandlers"))
@@ -127,13 +135,12 @@ public class AutoDispatchMappingGenerationStepTest {
         final CodeGenerationParameter withNameRoute =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "withName")
                         .relate(ROUTE_METHOD, "POST")
-                        .relate(ROUTE_PATH, "/authors/")
                         .relate(REQUIRE_ENTITY_LOADING, "false");
 
         final CodeGenerationParameter changeRankRoute =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeRank")
                         .relate(ROUTE_METHOD, "PATCH")
-                        .relate(ROUTE_PATH, "/authors/{id}/rank")
+                        .relate(ROUTE_PATH, "/{id}/rank")
                         .relate(REQUIRE_ENTITY_LOADING, "true");
 
         return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
