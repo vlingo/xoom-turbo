@@ -96,7 +96,6 @@ public class RouteDetail {
 
     public static CodeGenerationParameter defaultQueryRouteParameter(final CodeGenerationParameter aggregate) {
         return CodeGenerationParameter.of(ROUTE_SIGNATURE, buildQueryAllMethodName(aggregate.value))
-                .relate(ROUTE_PATH, aggregate.relatedParameterValueOf(URI_ROOT))
                 .relate(ROUTE_METHOD, GET).relate(READ_ONLY, "true");
     }
 
