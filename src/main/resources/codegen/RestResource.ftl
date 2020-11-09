@@ -85,7 +85,7 @@ public class ${resourceName} extends DynamicResourceHandler {
 
   <#if modelProtocol?has_content>
   private Completes<${modelProtocol}> resolve(final String id) {
-    return $stage.actorOf(${modelProtocol}.class, $stage.addressFactory().from(id), ${modelActor}.class);
+    return stage().actorOf(${modelProtocol}.class, stage().addressFactory().from(id), ${modelActor}.class);
   }
   </#if>
 
