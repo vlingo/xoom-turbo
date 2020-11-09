@@ -10,7 +10,6 @@ package io.vlingo.xoom.codegen.template.resource;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -52,6 +51,7 @@ public class RestResourceGenerationStepTest {
         Assert.assertTrue(contents.get(7).contains("class AuthorResource"));
         Assert.assertTrue(contents.get(7).contains("Author.withName(stage(), data.name)"));
         Assert.assertTrue(contents.get(7).contains("package io.vlingo.xoomapp.resource;"));
+        Assert.assertTrue(contents.get(7).contains("return stage().actorOf(Author.class, stage().addressFactory().from(id), AuthorEntity.class);"));
     }
 
     private CodeGenerationParameter authorAggregate() {
