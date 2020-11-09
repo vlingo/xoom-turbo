@@ -12,6 +12,7 @@ import io.vlingo.actors.Protocols;
 import io.vlingo.actors.Stage;
 import io.vlingo.lattice.model.stateful.StatefulTypeRegistry;
 <#if requireAdapters>
+import io.vlingo.symbio.store.state.StateTypeStateStoreMap;
 import io.vlingo.lattice.model.stateful.StatefulTypeRegistry.Info;
 import io.vlingo.symbio.StateAdapterProvider;
 </#if>
@@ -24,6 +25,7 @@ import io.vlingo.xoom.actors.Settings;
 import io.vlingo.xoom.storage.Model;
 import io.vlingo.xoom.storage.StoreActorBuilder;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
+
 
 public class ${storeProviderName} {
   private static ${storeProviderName} instance;
@@ -69,6 +71,10 @@ public class ${storeProviderName} {
     registry.register(new Info(store, ${stateAdapter.sourceClass}.class, ${stateAdapter.sourceClass}.class.getSimpleName()));
 </#list>
 </#if>
+<#list persistentTypes as persistentType>
+    StateTypeStateStoreMap.stateTypeToStoreName(${persistentType}.class, ${persistentType}.class.getSimpleName());
+</#list>
+
     instance = new ${storeProviderName}(stage, store);
 
     return instance;

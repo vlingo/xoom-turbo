@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.storage;
 
+import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.ImportParameter;
@@ -24,6 +25,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static java.util.stream.Collectors.toSet;
 
 public class StorageProviderTemplateData extends TemplateData {
 
@@ -58,6 +60,7 @@ public class StorageProviderTemplateData extends TemplateData {
                                               final Model model) {
         final List<AdapterParameter> adapterParameters = AdapterParameter.from(templatesData);
         final List<QueriesParameter> queriesParameters = QueriesParameter.from(model, contents, templatesData);
+        final Stream<String> persistentTypes = storageType.findPersistentQualifiedTypes(model, contents).stream();
         final Set<ImportParameter> importParameters = resolveImports(model, storageType, contents, queriesParameters);
 
         return TemplateParameters.with(STORAGE_TYPE, storageType).and(PROJECTION_TYPE, projectionType)
@@ -66,6 +69,7 @@ public class StorageProviderTemplateData extends TemplateData {
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, adapterParameters).and(QUERIES, queriesParameters)
                 .and(AGGREGATES, ContentQuery.findClassNames(AGGREGATE, contents))
+                .and(PERSISTENT_TYPES, persistentTypes.map(ClassFormatter::simpleNameOf).collect(toSet()))
                 .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
     }
 
@@ -76,14 +80,18 @@ public class StorageProviderTemplateData extends TemplateData {
         final Set<String> sourceClassQualifiedNames =
                 storageType.resolveAdaptersQualifiedName(model, contents);
 
+        final Set<String> persistentTypes =
+                storageType.findPersistentQualifiedTypes(model, contents);
+
         final Set<String> queriesQualifiedNames = queriesParameters.stream()
                         .flatMap(param -> param.getQualifiedNames().stream())
-                        .collect(Collectors.toSet());
+                        .collect(toSet());
 
         final Set<String> aggregateActorQualifiedNames = storageType.isSourced() ?
                 ContentQuery.findFullyQualifiedClassNames(AGGREGATE, contents) : new HashSet<>();
 
-        return ImportParameter.of(sourceClassQualifiedNames, queriesQualifiedNames, aggregateActorQualifiedNames);
+        return ImportParameter.of(sourceClassQualifiedNames, queriesQualifiedNames,
+                aggregateActorQualifiedNames, persistentTypes);
     }
 
     @Override

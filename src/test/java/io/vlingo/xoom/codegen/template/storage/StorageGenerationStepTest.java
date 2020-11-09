@@ -9,8 +9,6 @@ package io.vlingo.xoom.codegen.template.storage;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
@@ -19,9 +17,9 @@ import org.junit.Test;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.codegen.template.projections.ProjectionType.NONE;
 import static io.vlingo.xoom.codegen.template.storage.DatabaseType.HSQLDB;
@@ -59,11 +57,15 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(18).contains("registry.register(new Info(journal, BookEntity.class, BookEntity.class.getSimpleName()));"));
         Assert.assertTrue(context.contents().get(18).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.JOURNAL, Settings.properties(), true"));
         Assert.assertTrue(context.contents().get(19).contains("class QueryModelStateStoreProvider"));
+        Assert.assertTrue(context.contents().get(19).contains("import io.vlingo.xoomapp.infrastructure.AuthorData;"));
+        Assert.assertTrue(context.contents().get(19).contains("import io.vlingo.xoomapp.infrastructure.BookData;"));
         Assert.assertTrue(context.contents().get(19).contains("public final AuthorQueries authorQueries;"));
         Assert.assertTrue(context.contents().get(19).contains("public final BookQueries bookQueries;"));
         Assert.assertTrue(context.contents().get(19).contains("this.authorQueries = stage.actorFor(AuthorQueries.class, AuthorQueriesActor.class, store)"));
         Assert.assertTrue(context.contents().get(19).contains("this.bookQueries = stage.actorFor(BookQueries.class, BookQueriesActor.class, store)"));
         Assert.assertTrue(context.contents().get(19).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
+        Assert.assertTrue(context.contents().get(19).contains("StateTypeStateStoreMap.stateTypeToStoreName(AuthorData.class, AuthorData.class.getSimpleName())"));
+        Assert.assertTrue(context.contents().get(19).contains("StateTypeStateStoreMap.stateTypeToStoreName(BookData.class, BookData.class.getSimpleName())"));
         Assert.assertFalse(context.contents().get(19).contains("BookRented"));
         Assert.assertFalse(context.contents().get(19).contains("BookPurchased"));
         Assert.assertFalse(context.contents().get(19).contains("StatefulTypeRegistry.Info"));
@@ -89,9 +91,17 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(11).contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
         Assert.assertTrue(context.contents().get(12).contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
         Assert.assertTrue(context.contents().get(18).contains("class CommandModelStateStoreProvider"));
+        Assert.assertTrue(context.contents().get(18).contains("import io.vlingo.xoomapp.model.author.AuthorState;"));
+        Assert.assertTrue(context.contents().get(18).contains("import io.vlingo.xoomapp.model.book.BookState;"));
+        Assert.assertTrue(context.contents().get(18).contains("StateTypeStateStoreMap.stateTypeToStoreName(AuthorState.class, AuthorState.class.getSimpleName())"));
+        Assert.assertTrue(context.contents().get(18).contains("StateTypeStateStoreMap.stateTypeToStoreName(BookState.class, BookState.class.getSimpleName())"));
         Assert.assertTrue(context.contents().get(18).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
         Assert.assertTrue(context.contents().get(19).contains("class QueryModelStateStoreProvider"));
+        Assert.assertTrue(context.contents().get(19).contains("import io.vlingo.xoomapp.infrastructure.AuthorData;"));
+        Assert.assertTrue(context.contents().get(19).contains("import io.vlingo.xoomapp.infrastructure.BookData;"));
         Assert.assertTrue(context.contents().get(19).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
+        Assert.assertTrue(context.contents().get(19).contains("StateTypeStateStoreMap.stateTypeToStoreName(AuthorData.class, AuthorData.class.getSimpleName())"));
+        Assert.assertTrue(context.contents().get(19).contains("StateTypeStateStoreMap.stateTypeToStoreName(BookData.class, BookData.class.getSimpleName())"));
     }
 
     @Test

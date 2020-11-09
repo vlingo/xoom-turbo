@@ -66,6 +66,7 @@ public enum TemplateParameter {
     QUERY_ALL_METHOD_NAME("queryAllMethodName"),
     QUERY_ALL_INDEX_NAME("queryAllIndexName"),
     PROJECTION_TO_DESCRIPTION("projectToDescriptions"),
+    PERSISTENT_TYPES("persistentTypes"),
     USE_CQRS("useCQRS"),
     USE_PROJECTIONS("useProjections"),
     USE_ANNOTATIONS("useAnnotations"),
