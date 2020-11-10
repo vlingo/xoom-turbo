@@ -37,7 +37,7 @@ public enum Template {
     PROJECTION_DISPATCHER_PROVIDER("ProjectionDispatcherProvider"),
     OPERATION_BASED_PROJECTION("OperationBasedProjection"),
     EVENT_BASED_PROJECTION("EventBasedProjection"),
-    ENTITY_DATA("ValueData"),
+    DATA_OBJECT("DataObject"),
     EVENT_TYPES("EventTypes"),
     DATABASE_PROPERTIES("DatabaseProperties"),
     QUERIES("Queries"),

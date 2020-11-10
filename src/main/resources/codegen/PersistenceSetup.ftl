@@ -13,6 +13,9 @@ import io.vlingo.xoom.annotation.persistence.Adapters;
 import io.vlingo.xoom.annotation.persistence.EnableQueries;
 import io.vlingo.xoom.annotation.persistence.QueriesEntry;
 </#if>
+<#if dataObjects?has_content>
+import io.vlingo.xoom.annotation.persistence.DataObjects;
+</#if>
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
@@ -46,6 +49,9 @@ import ${import.qualifiedClassName};
   @QueriesEntry(protocol = ${query.protocolName}.class, actor = ${query.actorName}.class),
 </#list>
 })
+</#if>
+<#if dataObjects?has_content>
+@DataObjects({${dataObjects}})
 </#if>
 public class ${storeProviderName} {
 

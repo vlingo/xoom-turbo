@@ -64,6 +64,7 @@ public class CodeGenerationContextLoader {
         }
         return Arrays.asList(new ProjectionActorContentLoader(persistenceSetupClass, environment),
                 new StateContentLoader(persistenceSetupClass, environment),
+                new DataObjectContentLoader(persistenceSetupClass, environment),
                 new QueriesContentLoader(persistenceSetupClass, environment),
                 new RestResourceContentLoader(bootstrapClass, environment));
     }

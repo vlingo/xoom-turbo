@@ -48,7 +48,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                 TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage))
                         .and(AGGREGATE_PROTOCOL_NAME, aggregateName)
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregateName))
-                        .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateName))
+                        .and(DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregateName))
                         .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateName)).and(USE_CQRS, useCQRS)
                         .and(QUERY_ALL_METHOD_NAME, findQueryMethodName(aggregateName, queriesTemplateData))
                         .andResolve(QUERY_ALL_INDEX_NAME, params -> format(params.find(QUERY_ALL_METHOD_NAME)))
@@ -117,7 +117,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
             put(AGGREGATE_PROTOCOL, aggregateName);
             put(AGGREGATE_STATE, AGGREGATE_STATE.resolveClassname(aggregateName));
             put(QUERIES, QUERIES.resolveClassname(aggregateName));
-            put(ENTITY_DATA, ENTITY_DATA.resolveClassname(aggregateName));
+            put(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName));
         }};
     }
 

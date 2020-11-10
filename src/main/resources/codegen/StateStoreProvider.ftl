@@ -10,9 +10,11 @@ import ${import.qualifiedClassName};
 import io.vlingo.actors.Definition;
 import io.vlingo.actors.Protocols;
 import io.vlingo.actors.Stage;
+<#if persistentTypes?has_content>
+import io.vlingo.symbio.store.state.StateTypeStateStoreMap;
+</#if>
 import io.vlingo.lattice.model.stateful.StatefulTypeRegistry;
 <#if requireAdapters>
-import io.vlingo.symbio.store.state.StateTypeStateStoreMap;
 import io.vlingo.lattice.model.stateful.StatefulTypeRegistry.Info;
 import io.vlingo.symbio.StateAdapterProvider;
 </#if>
@@ -63,6 +65,10 @@ public class ${storeProviderName} {
 </#if>
     new EntryAdapterProvider(stage.world()); // future use
 
+<#list persistentTypes as persistentType>
+    StateTypeStateStoreMap.stateTypeToStoreName(${persistentType}.class, ${persistentType}.class.getSimpleName());
+</#list>
+
     final StateStore store =
             StoreActorBuilder.from(stage, Model.${model}, dispatcher, StorageType.STATE_STORE, Settings.properties(), true);
 
@@ -71,9 +77,6 @@ public class ${storeProviderName} {
     registry.register(new Info(store, ${stateAdapter.sourceClass}.class, ${stateAdapter.sourceClass}.class.getSimpleName()));
 </#list>
 </#if>
-<#list persistentTypes as persistentType>
-    StateTypeStateStoreMap.stateTypeToStoreName(${persistentType}.class, ${persistentType}.class.getSimpleName());
-</#list>
 
     instance = new ${storeProviderName}(stage, store);
 

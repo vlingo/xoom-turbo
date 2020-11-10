@@ -49,7 +49,7 @@ public class AnnotatedStorageProviderTemplateDataTest {
 
         Assert.assertEquals(EXPECTED_PACKAGE, queriesParameters.find(PACKAGE_NAME));
         Assert.assertEquals("BookQueries", queriesParameters.find(QUERIES_NAME));
-        Assert.assertEquals("BookData", queriesParameters.find(ENTITY_DATA_NAME));
+        Assert.assertEquals("BookData", queriesParameters.find(DATA_OBJECT_NAME));
         Assert.assertEquals("bookOf", queriesParameters.find(QUERY_ID_METHOD_NAME));
         Assert.assertEquals("books", queriesParameters.find(QUERY_ALL_METHOD_NAME));
         Assert.assertEquals(1, queriesParameters.<Set<ImportParameter>>find(IMPORTS).size());
@@ -80,6 +80,7 @@ public class AnnotatedStorageProviderTemplateDataTest {
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorRated"));
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookRented"));
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookPurchased"));
+
         Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
         Assert.assertEquals(false, storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).isLast());
         Assert.assertEquals("AuthorState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
@@ -91,6 +92,7 @@ public class AnnotatedStorageProviderTemplateDataTest {
         Assert.assertEquals("BookRented.class, BookPurchased.class", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getCauses());
         Assert.assertEquals(true, storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).isLast());
         Assert.assertEquals("PersistenceSetup.java", storeProviderTemplateData.filename());
+        Assert.assertEquals("AuthorData.class, BookData.class", storeProviderParameters.find(DATA_OBJECTS));
         Assert.assertEquals(true, storeProviderParameters.find(REQUIRE_ADAPTERS));
         Assert.assertEquals(true, storeProviderParameters.find(USE_PROJECTIONS));
         Assert.assertEquals(true, storeProviderParameters.find(USE_ANNOTATIONS));
@@ -106,8 +108,8 @@ public class AnnotatedStorageProviderTemplateDataTest {
                 Content.with(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), null, null, BOOK_PURCHASED_TEXT),
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT),
-                Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
-                Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT)
+                Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
+                Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT)
             );
     }
 

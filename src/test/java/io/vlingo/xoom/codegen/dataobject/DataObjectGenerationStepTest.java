@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.entitydata;
+package io.vlingo.xoom.codegen.dataobject;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
@@ -13,7 +13,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateFile;
-import io.vlingo.xoom.codegen.template.entitydata.EntityDataGenerationStep;
+import io.vlingo.xoom.codegen.template.dataobject.DataObjectGenerationStep;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,10 +21,10 @@ import static io.vlingo.xoom.codegen.parameter.Label.PACKAGE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
-public class EntityDataGenerationStepTest {
+public class DataObjectGenerationStepTest {
 
     @Test
-    public void testThatEntitiesDataAreGenerated() {
+    public void testThatDataObjectsAreGenerated() {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(PACKAGE, "io.vlingo.xoomapp")
                 .add(authorAggregate()).add(bookAggregate());
@@ -33,7 +33,7 @@ public class EntityDataGenerationStepTest {
                 CodeGenerationContext.with(parameters)
                         .contents(contents());
 
-        new EntityDataGenerationStep().process(context);
+        new DataObjectGenerationStep().process(context);
 
         Assert.assertEquals(6, context.contents().size());
 

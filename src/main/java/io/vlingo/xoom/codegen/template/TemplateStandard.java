@@ -42,7 +42,7 @@ public enum TemplateStandard {
     EVENT_TYPES(parameters -> Template.EVENT_TYPES.filename,
             (name, parameters) -> "EventTypes"),
 
-    ENTITY_DATA(parameters -> Template.ENTITY_DATA.filename,
+    DATA_OBJECT(parameters -> Template.DATA_OBJECT.filename,
             (name, parameters) -> name + "Data"),
 
     REST_RESOURCE(parameters -> Template.REST_RESOURCE.filename,

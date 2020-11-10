@@ -80,7 +80,7 @@ public class RestResourceTemplateData extends TemplateData {
             final String aggregateEntityName = AGGREGATE.resolveClassname(aggregateName);
             imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
             imports.add(findFullyQualifiedClassName(AGGREGATE, aggregateEntityName, contents));
-            imports.add(findFullyQualifiedClassName(ENTITY_DATA, ENTITY_DATA.resolveClassname(aggregateName), contents));
+            imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
         }
         if(useCQRS) {
             imports.addAll(queriesParameter.getQualifiedNames());

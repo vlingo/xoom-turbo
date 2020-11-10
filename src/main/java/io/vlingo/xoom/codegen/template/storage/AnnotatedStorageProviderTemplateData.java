@@ -16,6 +16,7 @@ import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
@@ -59,6 +60,7 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                 .and(IMPORTS, resolveImports(projectionType, contents))
                 .and(PACKAGE_NAME, persistencePackage)
                 .and(STORAGE_TYPE, storageType.name())
+                .and(DATA_OBJECTS, resolveDataObjectNames(contents))
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, AdapterParameter.from(templatesData))
                 .and(PROJECTIONS, ProjectionParameter.from(projectionType, contents))
@@ -74,6 +76,11 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                         new TemplateStandard[]{AGGREGATE_STATE};
 
         return ImportParameter.of(ContentQuery.findFullyQualifiedClassNames(contents, relatedStandards));
+    }
+
+    private String resolveDataObjectNames(final List<Content> contents) {
+        return ContentQuery.findClassNames(DATA_OBJECT, contents).stream()
+                .map(name -> name + ".class").collect(Collectors.joining(", "));
     }
 
     @Override

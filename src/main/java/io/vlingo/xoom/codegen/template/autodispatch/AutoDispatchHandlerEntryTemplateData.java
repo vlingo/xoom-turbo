@@ -13,7 +13,6 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat;
-import io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.MethodInvocation;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
 
 import java.util.List;
@@ -23,7 +22,7 @@ import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.FACTORY_METHOD;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
@@ -46,7 +45,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
                 TemplateParameters.with(METHOD_NAME, route.value)
                         .and(FACTORY_METHOD, factoryMethod)
                         .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
-                        .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregate.value))
+                        .and(DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
                         .and(AGGREGATE_PROTOCOL_VARIABLE, ClassFormatter.simpleNameToAttribute(aggregate.value))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
                         .and(INDEX_NAME, AutoDispatchMappingValueFormatter.format(route.value))

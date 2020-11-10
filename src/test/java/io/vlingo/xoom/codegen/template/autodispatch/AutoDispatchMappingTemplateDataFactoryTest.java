@@ -66,7 +66,7 @@ public class AutoDispatchMappingTemplateDataFactoryTest {
         Assert.assertEquals("AuthorResource", autoDispatchMappingParameters.find(TemplateParameter.AUTO_DISPATCH_MAPPING_NAME));
         Assert.assertEquals("Author", autoDispatchMappingParameters.find(TemplateParameter.AGGREGATE_PROTOCOL_NAME));
         Assert.assertEquals("AuthorEntity", autoDispatchMappingParameters.find(TemplateParameter.ENTITY_NAME));
-        Assert.assertEquals("AuthorData", autoDispatchMappingParameters.find(TemplateParameter.ENTITY_DATA_NAME));
+        Assert.assertEquals("AuthorData", autoDispatchMappingParameters.find(TemplateParameter.DATA_OBJECT_NAME));
         Assert.assertEquals("AuthorQueries", autoDispatchMappingParameters.find(TemplateParameter.QUERIES_NAME));
         Assert.assertEquals("AuthorQueriesActor", autoDispatchMappingParameters.find(TemplateParameter.QUERIES_ACTOR_NAME));
         Assert.assertEquals("authors", autoDispatchMappingParameters.find(TemplateParameter.URI_ROOT));
@@ -85,7 +85,7 @@ public class AutoDispatchMappingTemplateDataFactoryTest {
         Assert.assertEquals("io.vlingo.xoomapp.resource", autoDispatchHandlersMappingParameters.find(TemplateParameter.PACKAGE_NAME));
         Assert.assertEquals("AuthorResourceHandlers", autoDispatchHandlersMappingParameters.find(AUTO_DISPATCH_HANDLERS_MAPPING_NAME));
         Assert.assertEquals("Author", autoDispatchHandlersMappingParameters.find(TemplateParameter.AGGREGATE_PROTOCOL_NAME));
-        Assert.assertEquals("AuthorData", autoDispatchHandlersMappingParameters.find(TemplateParameter.ENTITY_DATA_NAME));
+        Assert.assertEquals("AuthorData", autoDispatchHandlersMappingParameters.find(TemplateParameter.DATA_OBJECT_NAME));
         Assert.assertEquals("AuthorQueries", autoDispatchHandlersMappingParameters.find(TemplateParameter.QUERIES_NAME));
         Assert.assertEquals("authors", autoDispatchHandlersMappingParameters.find(TemplateParameter.QUERY_ALL_METHOD_NAME));
         Assert.assertEquals(true, autoDispatchHandlersMappingParameters.find(TemplateParameter.USE_CQRS));
@@ -150,8 +150,8 @@ public class AutoDispatchMappingTemplateDataFactoryTest {
                 Content.with(AGGREGATE,  new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookEntity.java"), null, null, BOOK_AGGREGATE_CONTENT_TEXT),
                 Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
                 Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
-                Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
-                Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT),
+                Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
+                Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "BookQueries.java"), null, null, BOOK_QUERIES_CONTENT_TEXT),
                 Content.with(QUERIES_ACTOR, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueriesActor.java"), null, null, AUTHOR_QUERIES_ACTOR_CONTENT_TEXT),

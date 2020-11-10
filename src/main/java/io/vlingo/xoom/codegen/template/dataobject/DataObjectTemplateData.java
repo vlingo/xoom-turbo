@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.entitydata;
+package io.vlingo.xoom.codegen.template.dataobject;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
@@ -22,12 +22,12 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
 import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.MEMBER_DECLARATION;
 import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.STATE_BASED_ASSIGNMENT;
 
-public class EntityDataTemplateData extends TemplateData {
+public class DataObjectTemplateData extends TemplateData {
 
     private final static String PACKAGE_PATTERN = "%s.%s";
     private final static String INFRA_PACKAGE_NAME = "infrastructure";
@@ -39,12 +39,12 @@ public class EntityDataTemplateData extends TemplateData {
                                           final Stream<CodeGenerationParameter> aggregates,
                                           final List<Content> contents) {
         final Function<CodeGenerationParameter, TemplateData> mapper =
-                aggregate -> new EntityDataTemplateData(basePackage, aggregate, contents);
+                aggregate -> new DataObjectTemplateData(basePackage, aggregate, contents);
 
         return aggregates.map(mapper).collect(Collectors.toList());
     }
 
-    private EntityDataTemplateData(final String basePackage,
+    private DataObjectTemplateData(final String basePackage,
                                    final CodeGenerationParameter aggregate,
                                    final List<Content> contents) {
         this.protocolName = aggregate.value;
@@ -59,13 +59,13 @@ public class EntityDataTemplateData extends TemplateData {
         final String stateQualifiedClassName =
                 ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents);
 
-        final String dataName = ENTITY_DATA.resolveClassname(protocolName);
+        final String dataName = DATA_OBJECT.resolveClassname(protocolName);
 
         return TemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(STATE_NAME, stateName).and(ENTITY_DATA_NAME, dataName)
+                .and(STATE_NAME, stateName).and(DATA_OBJECT_NAME, dataName)
                 .and(MEMBERS, MEMBER_DECLARATION.format(aggregate))
                 .and(MEMBERS_ASSIGNMENT, STATE_BASED_ASSIGNMENT.format(aggregate))
-                .and(ENTITY_DATA_QUALIFIED_NAME, packageName.concat(".").concat(dataName))
+                .and(DATA_OBJECT_QUALIFIED_NAME, packageName.concat(".").concat(dataName))
                 .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
                 .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName)
                 .and(DEFAULT_ID, StateFieldDetail.resolveDefaultValue(aggregate, "id"));
@@ -88,7 +88,7 @@ public class EntityDataTemplateData extends TemplateData {
 
     @Override
     public TemplateStandard standard() {
-        return ENTITY_DATA;
+        return DATA_OBJECT;
     }
 
 }

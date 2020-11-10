@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.entitydata;
+package io.vlingo.xoom.codegen.template.dataobject;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -14,11 +14,11 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
-public class EntityDataGenerationStep extends TemplateProcessingStep {
+public class DataObjectGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        return EntityDataTemplateData.from(context.parameterOf(Label.PACKAGE),
+        return DataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
                 context.parametersOf(Label.AGGREGATE), context.contents());
     }
 

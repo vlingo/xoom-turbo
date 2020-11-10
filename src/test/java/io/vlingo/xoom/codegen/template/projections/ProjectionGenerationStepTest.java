@@ -16,8 +16,8 @@ import org.junit.Test;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class ProjectionGenerationStepTest {
 
@@ -83,8 +83,8 @@ public class ProjectionGenerationStepTest {
         context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT);
         context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookSoldOut.java"), BOOK_SOLD_OUT_CONTENT_TEXT);
         context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), BOOK_PURCHASED_CONTENT_TEXT);
-        context.addContent(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), AUTHOR_DATA_CONTENT_TEXT);
-        context.addContent(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), BOOK_DATA_CONTENT_TEXT);
+        context.addContent(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), AUTHOR_DATA_CONTENT_TEXT);
+        context.addContent(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), BOOK_DATA_CONTENT_TEXT);
     }
 
     private void loadParameters(final CodeGenerationContext context, final String projections) {

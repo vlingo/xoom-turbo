@@ -10,7 +10,6 @@ package io.vlingo.xoom.codegen.template.autodispatch;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -91,8 +90,8 @@ public class AutoDispatchMappingGenerationStepTest {
                 Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookEntity.java"), null, null, BOOK_AGGREGATE_CONTENT_TEXT),
                 Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
                 Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
-                Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
-                Content.with(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT),
+                Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
+                Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "BookQueries.java"), null, null, BOOK_QUERIES_CONTENT_TEXT),
                 Content.with(QUERIES_ACTOR, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueriesActor.java"), null, null, AUTHOR_QUERIES_ACTOR_CONTENT_TEXT),

@@ -59,40 +59,40 @@ public class ProjectionTemplateData extends TemplateData {
                                               final List<TemplateData> templatesData) {
         final String stateName = AGGREGATE_STATE.resolveClassname(protocolName);
         final String projectionName = PROJECTION.resolveClassname(protocolName);
-        final String entityDataName = ENTITY_DATA.resolveClassname(protocolName);
+        final String dataObjectName = DATA_OBJECT.resolveClassname(protocolName);
         final String modelPackage = ContentQuery.findPackage(AGGREGATE_STATE, stateName, contents);
 
         final Set<ImportParameter> imports =
-                resolveImports(stateName, entityDataName, contents,
+                resolveImports(stateName, dataObjectName, contents,
                         projectionType, templatesData);
 
         return TemplateParameters.with(PACKAGE_NAME, packageName).and(IMPORTS, imports)
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
                 .and(MODEL, QUERY).and(STORAGE_TYPE, STATE_STORE)
                 .and(EVENT_TYPES_NAME, EVENT_TYPES.resolveClassname())
-                .and(ENTITY_DATA_NAME, entityDataName).and(PROJECTION_TYPE, projectionType)
+                .and(DATA_OBJECT_NAME, dataObjectName).and(PROJECTION_TYPE, projectionType)
                 .and(EVENTS_NAMES, ContentQuery.findClassNames(DOMAIN_EVENT, modelPackage, contents))
                 .andResolve(STORE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param));
     }
 
     private Set<ImportParameter> resolveImports(final String stateName,
-                                                final String entityDataName,
+                                                final String dataObjectName,
                                                 final List<Content> contents,
                                                 final ProjectionType projectionType,
                                                 final List<TemplateData> templatesData) {
         final String stateQualifiedName =
                 ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents);
 
-        final String entityDataQualifiedName =
-                ContentQuery.findFullyQualifiedClassName(ENTITY_DATA, entityDataName, contents);
+        final String dataObjectQualifiedName =
+                ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents);
 
         if(projectionType.isOperationBased()) {
-            return ImportParameter.of(stateQualifiedName, entityDataQualifiedName);
+            return ImportParameter.of(stateQualifiedName, dataObjectQualifiedName);
         }
 
         return templatesData.stream().filter(data -> data.hasStandard(EVENT_TYPES))
                 .map(data -> data.parameters().<String>find(EVENT_TYPES_QUALIFIED_NAME))
-                .map(qualifiedName -> ImportParameter.of(entityDataQualifiedName, qualifiedName))
+                .map(qualifiedName -> ImportParameter.of(dataObjectQualifiedName, qualifiedName))
                 .flatMap(imports -> imports.stream()).collect(Collectors.toSet());
     }
 

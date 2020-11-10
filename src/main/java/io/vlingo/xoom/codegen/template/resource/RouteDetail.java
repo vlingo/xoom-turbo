@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.http.Method.*;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class RouteDetail {
 
@@ -51,7 +51,7 @@ public class RouteDetail {
         }
 
         if(route.parent().isLabeled(AGGREGATE)) {
-            return ENTITY_DATA.resolveClassname(route.parent(AGGREGATE).value);
+            return DATA_OBJECT.resolveClassname(route.parent(AGGREGATE).value);
         }
 
         return route.relatedParameterValueOf(BODY_TYPE);
@@ -81,7 +81,7 @@ public class RouteDetail {
                         String.format(METHOD_PARAMETER_PATTERN, "String", "id") : "";
 
         final CodeGenerationParameter method = AggregateDetail.methodWithName(routeSignature.parent(), routeSignature.value);
-        final String dataClassname = ENTITY_DATA.resolveClassname(routeSignature.parent().value);
+        final String dataClassname = DATA_OBJECT.resolveClassname(routeSignature.parent().value);
         final String dataParameterDeclaration = String.format(METHOD_PARAMETER_PATTERN, dataClassname, "data");
         final String dataParameter = method.hasAny(METHOD_PARAMETER) ? dataParameterDeclaration : "";
         final String parameters =

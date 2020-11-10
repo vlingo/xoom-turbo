@@ -21,6 +21,7 @@ import static io.vlingo.xoom.annotation.persistence.Persistence.StorageType.STAT
         @QueriesEntry(protocol = OtherDummyQueries.class, actor = OtherDummyQueriesActor.class),
 })
 @Adapters({DummyState.class, OtherDummyState.class})
+@DataObjects({DummyData.class, OtherDummyData.class})
 public class PersistenceSetup {
 
 

@@ -16,7 +16,7 @@ import io.vlingo.xoom.codegen.template.model.MethodScope;
 import static io.vlingo.xoom.codegen.content.ClassFormatter.simpleNameToAttribute;
 import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 
@@ -36,7 +36,7 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
     @Override
     public String resolveAdapterHandlerInvocation(final CodeGenerationParameter aggregateParameter,
                                                   final CodeGenerationParameter routeSignatureParameter) {
-        return String.format(ADAPTER_PATTERN, ENTITY_DATA.resolveClassname(aggregateParameter.value));
+        return String.format(ADAPTER_PATTERN, DATA_OBJECT.resolveClassname(aggregateParameter.value));
     }
 
     private String resolveCommandMethodInvocation(final CodeGenerationParameter aggregateParameter,

@@ -149,9 +149,11 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(!context.contents().get(16).contains("AuthorState.class,"));
         Assert.assertTrue(context.contents().get(16).contains("import io.vlingo.xoom.annotation.persistence.EnableQueries;"));
         Assert.assertTrue(context.contents().get(16).contains("import io.vlingo.xoom.annotation.persistence.QueriesEntry;"));
+        Assert.assertTrue(context.contents().get(16).contains("import io.vlingo.xoom.annotation.persistence.DataObjects;"));
         Assert.assertTrue(context.contents().get(16).contains("@EnableQueries({"));
         Assert.assertTrue(context.contents().get(16).contains("@QueriesEntry(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)"));
         Assert.assertTrue(context.contents().get(16).contains("@QueriesEntry(protocol = BookQueries.class, actor = BookQueriesActor.class)"));
+        Assert.assertTrue(context.contents().get(16).contains("@DataObjects({AuthorData.class, BookData.class})"));
     }
 
     private void loadProperties(final CodeGenerationContext context,
@@ -177,8 +179,8 @@ public class StorageGenerationStepTest {
         context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookRented.java"), BOOK_RENTED_TEXT);
         context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), BOOK_PURCHASED_TEXT);
         context.addContent(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT_TEXT);
-        context.addContent(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), AUTHOR_DATA_CONTENT_TEXT);
-        context.addContent(ENTITY_DATA, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), BOOK_DATA_CONTENT_TEXT);
+        context.addContent(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), AUTHOR_DATA_CONTENT_TEXT);
+        context.addContent(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), BOOK_DATA_CONTENT_TEXT);
     }
 
     private static final String HOME_DIRECTORY = OperatingSystem.detect().isWindows() ? "D:\\projects" : "/home";

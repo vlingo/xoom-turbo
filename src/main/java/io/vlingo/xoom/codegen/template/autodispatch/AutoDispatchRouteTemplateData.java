@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class AutoDispatchRouteTemplateData extends TemplateData {
 
@@ -37,7 +37,7 @@ public class AutoDispatchRouteTemplateData extends TemplateData {
                         .and(ID_TYPE, StateFieldDetail.typeOf(aggregate, "id"))
                         .and(ROUTE_METHOD, route.relatedParameterValueOf(Label.ROUTE_METHOD))
                         .and(ROUTE_PATH, route.relatedParameterValueOf(Label.ROUTE_PATH))
-                        .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregate.value))
+                        .and(DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
                         .and(ROUTE_MAPPING_VALUE, AutoDispatchMappingValueFormatter.format(route.value))
                         .and(REQUIRE_ENTITY_LOADING, route.relatedParameterValueOf(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf))
                         .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, AUTO_DISPATCH_HANDLERS_MAPPING.resolveClassname(aggregate.value))

@@ -42,7 +42,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
                 TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage))
                         .and(AGGREGATE_PROTOCOL_NAME, aggregateName)
                         .and(ENTITY_NAME, AGGREGATE.resolveClassname(aggregateName))
-                        .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateName))
+                        .and(DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregateName))
                         .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateName))
                         .and(QUERIES_ACTOR_NAME, QUERIES_ACTOR.resolveClassname(aggregateName))
                         .and(AUTO_DISPATCH_MAPPING_NAME, AUTO_DISPATCH_MAPPING.resolveClassname(aggregateName))
@@ -89,7 +89,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
             put(AGGREGATE_PROTOCOL, aggregateName);
             put(QUERIES, QUERIES.resolveClassname(aggregateName));
             put(QUERIES_ACTOR, QUERIES_ACTOR.resolveClassname(aggregateName));
-            put(ENTITY_DATA, ENTITY_DATA.resolveClassname(aggregateName));
+            put(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName));
         }};
     }
 

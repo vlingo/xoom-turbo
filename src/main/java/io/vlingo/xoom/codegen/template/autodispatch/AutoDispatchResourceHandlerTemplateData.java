@@ -75,7 +75,7 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                         .and(HANDLERS_CONFIG_NAME, autoDispatchParameter.relatedParameterValueOf(Label.HANDLERS_CONFIG_NAME))
                         .and(STORE_PROVIDER_NAME, queryStoreProviderName).and(ROUTE_METHODS, new ArrayList<String>())
                         .and(AUTO_DISPATCH_MAPPING_NAME, restResourceName).and(USE_AUTO_DISPATCH, true)
-                        .and(ENTITY_DATA_NAME, ENTITY_DATA.resolveClassname(aggregateProtocolClassName))
+                        .and(DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregateProtocolClassName))
                         .and(USE_CQRS, context.parameterOf(CQRS, Boolean::valueOf))
                         .addImports(resolveImports(context, autoDispatchParameter, queryStoreProviderName));
 

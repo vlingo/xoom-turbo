@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.ENTITY_DATA;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class QueriesTemplateDataFactory {
 
@@ -55,17 +55,17 @@ public class QueriesTemplateDataFactory {
         final String queryAllMethodName =
                 buildQueryAllMethodName(aggregateProtocol);
 
-        final String entityDataName =
-                ENTITY_DATA.resolveClassname(aggregateProtocol);
+        final String dataObjectName =
+                DATA_OBJECT.resolveClassname(aggregateProtocol);
 
-        final String entityDataQualifiedName =
-                ContentQuery.findFullyQualifiedClassName(ENTITY_DATA, entityDataName, contents);
+        final String dataObjectQualifiedName =
+                ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents);
 
         return TemplateParameters.with(PACKAGE_NAME, persistencePackage)
-                .and(ENTITY_DATA_NAME, entityDataName)
+                .and(DATA_OBJECT_NAME, dataObjectName)
                 .and(QUERY_ID_METHOD_NAME, queryByIdMethodName)
                 .and(QUERY_ALL_METHOD_NAME, queryAllMethodName)
-                .and(IMPORTS, ImportParameter.of(entityDataQualifiedName));
+                .and(IMPORTS, ImportParameter.of(dataObjectQualifiedName));
     }
 
     private static String buildQueryByIdMethodName(final String aggregateProtocol) {

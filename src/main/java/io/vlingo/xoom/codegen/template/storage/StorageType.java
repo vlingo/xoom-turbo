@@ -99,7 +99,7 @@ public enum StorageType {
 
     public Set<String> findPersistentQualifiedTypes(final Model model, final List<Content> contents) {
         if(model.isQueryModel() || isStateful()) {
-            final TemplateStandard typeStandard = model.isQueryModel() ? ENTITY_DATA : AGGREGATE_STATE;
+            final TemplateStandard typeStandard = model.isQueryModel() ? DATA_OBJECT : AGGREGATE_STATE;
             return ContentQuery.findFullyQualifiedClassNames(typeStandard, contents);
         }
         return new HashSet<>();

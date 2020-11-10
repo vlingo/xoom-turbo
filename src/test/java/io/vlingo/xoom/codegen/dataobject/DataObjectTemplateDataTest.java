@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.entitydata;
+package io.vlingo.xoom.codegen.dataobject;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -13,7 +13,7 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.codegen.template.entitydata.EntityDataTemplateData;
+import io.vlingo.xoom.codegen.template.dataobject.DataObjectTemplateData;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,36 +25,36 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
-public class EntityDataTemplateDataTest {
+public class DataObjectTemplateDataTest {
 
     @Test
     public void testThatTemplateParametersAreMapped() {
         final List<TemplateData> templatesData =
-                EntityDataTemplateData.from("io.vlingo.xoomapp",
+                DataObjectTemplateData.from("io.vlingo.xoomapp",
                         Stream.of(authorAggregate(), bookAggregate()),
                         contents());
 
         Assert.assertEquals(2, templatesData.size());
 
-        final TemplateParameters authorEntityDataParameters =
+        final TemplateParameters authorDataParameters =
                 templatesData.stream().filter(data -> data.filename().equals("AuthorData.java"))
                         .map(TemplateData::parameters).findFirst().get();
 
-        Assert.assertEquals("0", authorEntityDataParameters.find(DEFAULT_ID));
-        Assert.assertEquals("AuthorData", authorEntityDataParameters.find(ENTITY_DATA_NAME));
-        Assert.assertEquals("AuthorState", authorEntityDataParameters.find(STATE_NAME));
-        Assert.assertEquals("io.vlingo.xoomapp.infrastructure", authorEntityDataParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("public final long id;", authorEntityDataParameters.<List<String>>find(MEMBERS).get(0));
-        Assert.assertEquals("public final String name;", authorEntityDataParameters.<List<String>>find(MEMBERS).get(1));
-        Assert.assertEquals("public final int rank;", authorEntityDataParameters.<List<String>>find(MEMBERS).get(2));
-        Assert.assertEquals("public final boolean status;", authorEntityDataParameters.<List<String>>find(MEMBERS).get(3));
-        Assert.assertEquals("this.id = state.id;", authorEntityDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(0));
-        Assert.assertEquals("this.name = state.name;", authorEntityDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(1));
-        Assert.assertEquals("this.rank = state.rank;", authorEntityDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(2));
-        Assert.assertEquals("this.status = state.status;", authorEntityDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(3));
-        Assert.assertEquals("final long id, final String name, final int rank, final boolean status", authorEntityDataParameters.find(CONSTRUCTOR_PARAMETERS));
-        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.AuthorData", authorEntityDataParameters.find(ENTITY_DATA_QUALIFIED_NAME));
-        Assert.assertEquals("io.vlingo.xoomapp.model.author.AuthorState", authorEntityDataParameters.find(STATE_QUALIFIED_CLASS_NAME));
+        Assert.assertEquals("0", authorDataParameters.find(DEFAULT_ID));
+        Assert.assertEquals("AuthorData", authorDataParameters.find(DATA_OBJECT_NAME));
+        Assert.assertEquals("AuthorState", authorDataParameters.find(STATE_NAME));
+        Assert.assertEquals("io.vlingo.xoomapp.infrastructure", authorDataParameters.find(PACKAGE_NAME));
+        Assert.assertEquals("public final long id;", authorDataParameters.<List<String>>find(MEMBERS).get(0));
+        Assert.assertEquals("public final String name;", authorDataParameters.<List<String>>find(MEMBERS).get(1));
+        Assert.assertEquals("public final int rank;", authorDataParameters.<List<String>>find(MEMBERS).get(2));
+        Assert.assertEquals("public final boolean status;", authorDataParameters.<List<String>>find(MEMBERS).get(3));
+        Assert.assertEquals("this.id = state.id;", authorDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(0));
+        Assert.assertEquals("this.name = state.name;", authorDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(1));
+        Assert.assertEquals("this.rank = state.rank;", authorDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(2));
+        Assert.assertEquals("this.status = state.status;", authorDataParameters.<List<String>>find(MEMBERS_ASSIGNMENT).get(3));
+        Assert.assertEquals("final long id, final String name, final int rank, final boolean status", authorDataParameters.find(CONSTRUCTOR_PARAMETERS));
+        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.AuthorData", authorDataParameters.find(DATA_OBJECT_QUALIFIED_NAME));
+        Assert.assertEquals("io.vlingo.xoomapp.model.author.AuthorState", authorDataParameters.find(STATE_QUALIFIED_CLASS_NAME));
     }
 
     private CodeGenerationParameter authorAggregate() {
@@ -127,4 +127,5 @@ public class EntityDataTemplateDataTest {
                     "public class Book { \\n" +
                     "... \\n" +
                     "}";
+
 }
