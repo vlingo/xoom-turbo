@@ -61,9 +61,9 @@ public class RestResourceTemplateData extends TemplateData {
 
         return TemplateParameters.with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
                 .and(QUERIES, queriesParameter).and(PACKAGE_NAME, packageName).and(USE_CQRS, useCQRS)
-                .addImports(resolveImports(aggregateParameter, queriesParameter, contents, useCQRS))
-                .and(URI_ROOT, aggregateParameter.relatedParameterValueOf(Label.URI_ROOT))
                 .and(ROUTE_DECLARATIONS, RouteDeclarationParameter.from(aggregateParameter))
+                .and(URI_ROOT, aggregateParameter.relatedParameterValueOf(Label.URI_ROOT))
+                .addImports(resolveImports(aggregateParameter, contents, useCQRS))
                 .and(MODEL_ACTOR, AGGREGATE.resolveClassname(aggregateName))
                 .and(STORE_PROVIDER_NAME, resolveQueryStoreProviderName())
                 .andResolve(MODEL_PROTOCOL, modelProtocolResolver)
@@ -72,19 +72,23 @@ public class RestResourceTemplateData extends TemplateData {
     }
 
     private Set<String> resolveImports(final CodeGenerationParameter aggregateParameter,
-                                       final QueriesParameter queriesParameter,
                                        final List<Content> contents,
                                        final Boolean useCQRS) {
         final Set<String> imports = new HashSet<>();
-        if(requireModelTypes(aggregateParameter)) {
+        if(RouteDetail.requireEntityLoad(aggregateParameter)) {
             final String aggregateEntityName = AGGREGATE.resolveClassname(aggregateName);
-            imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
             imports.add(findFullyQualifiedClassName(AGGREGATE, aggregateEntityName, contents));
+            imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
+            imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
+        }
+        if(RouteDetail.requireModelFactory(aggregateParameter)) {
+            imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
             imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
         }
         if(useCQRS) {
-            imports.addAll(queriesParameter.getQualifiedNames());
+            final String queriesName = TemplateStandard.QUERIES.resolveClassname(aggregateName);
             imports.add(findFullyQualifiedClassName(STORE_PROVIDER, resolveQueryStoreProviderName(), contents));
+            imports.add(findFullyQualifiedClassName(TemplateStandard.QUERIES, queriesName, contents));
         }
         return imports;
     }

@@ -55,7 +55,6 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorEntity"));
         Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
         Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries"));
-        Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueriesActor"));
         Assert.assertEquals("io.vlingo.xoomapp.resource", templateParameters.find(TemplateParameter.PACKAGE_NAME));
         Assert.assertEquals("AuthorResource", templateParameters.find(TemplateParameter.REST_RESOURCE_NAME));
         Assert.assertEquals("Author", templateParameters.find(TemplateParameter.MODEL_PROTOCOL));

@@ -63,6 +63,12 @@ public class RouteDetail {
                 .anyMatch(route -> route.relatedParameterValueOf(REQUIRE_ENTITY_LOADING, Boolean::valueOf));
     }
 
+    public static boolean requireModelFactory(final CodeGenerationParameter aggregateParameter) {
+        return aggregateParameter.retrieveAll(ROUTE_SIGNATURE)
+                .map(methodSignature -> AggregateDetail.methodWithName(aggregateParameter, methodSignature.value))
+                .anyMatch(method -> method.relatedParameterValueOf(FACTORY_METHOD, Boolean::valueOf));
+    }
+
     public static String resolveMethodSignature(final CodeGenerationParameter routeSignature) {
         if(hasValidMethodSignature(routeSignature.value)) {
             return routeSignature.value;

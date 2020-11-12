@@ -74,12 +74,14 @@ public class AnnotatedStorageProviderTemplateDataTest {
         Assert.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
         Assert.assertEquals("io.vlingo.xoomapp", storeProviderParameters.find(BASE_PACKAGE));
         Assert.assertEquals("PersistenceSetup", storeProviderParameters.find(STORE_PROVIDER_NAME));
-        Assert.assertEquals(5, storeProviderParameters.<Set<ImportParameter>>find(IMPORTS).size());
+        Assert.assertEquals(7, storeProviderParameters.<Set<ImportParameter>>find(IMPORTS).size());
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorState"));
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookState"));
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorRated"));
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookRented"));
         Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookPurchased"));
+        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.infrastructure.BookData"));
 
         Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
         Assert.assertEquals(false, storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).isLast());

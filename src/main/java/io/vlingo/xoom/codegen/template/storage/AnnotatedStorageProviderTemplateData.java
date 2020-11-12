@@ -72,8 +72,8 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
 
     private Set<ImportParameter> resolveImports(final ProjectionType projectionType, final List<Content> contents) {
         final TemplateStandard[] relatedStandards =
-                projectionType.isEventBased() ? new TemplateStandard[]{AGGREGATE_STATE, DOMAIN_EVENT} :
-                        new TemplateStandard[]{AGGREGATE_STATE};
+                projectionType.isEventBased() ? new TemplateStandard[]{AGGREGATE_STATE, DATA_OBJECT, DOMAIN_EVENT} :
+                        new TemplateStandard[]{AGGREGATE_STATE, DATA_OBJECT};
 
         return ImportParameter.of(ContentQuery.findFullyQualifiedClassNames(contents, relatedStandards));
     }
