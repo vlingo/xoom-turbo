@@ -61,7 +61,7 @@ public enum Label {
     GROUP_ID("groupId"),
     ARTIFACT_ID("artifactId"),
     VERSION("version"),
-    XOOM_SERVER_VERSION("xoomServerVersion"),
+    XOOM_VERSION("xoomVersion"),
     DOCKER_IMAGE("dockerImage"),
     KUBERNETES_IMAGE("kubernetesImages"),
     KUBERNETES_POD_NAME("kubernetesPod"),
