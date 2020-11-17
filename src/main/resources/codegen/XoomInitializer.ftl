@@ -4,8 +4,10 @@ import io.vlingo.actors.Stage;
 import io.vlingo.actors.World;
 import io.vlingo.http.resource.*;
 import io.vlingo.xoom.XoomInitializationAware;
-import io.vlingo.xoom.actors.Settings;
 import java.util.Arrays;
+<#if blockingMessaging>
+import io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;
+</#if>
 
 <#list imports as import>
 import ${import.qualifiedClassName};
@@ -30,12 +32,10 @@ public class XoomInitializer implements XoomInitializationAware {
   public final World world;
 
   public XoomInitializer(String[] args) {
+    world = World.start("${appName}");
     <#if blockingMessaging>
-    Settings.enableBlockingMailbox();
-    <#else>
-    Settings.disableBlockingMailbox();
+    new BlockingMailboxPlugin().start(world);
     </#if>
-    world = World.start("${appName}", Settings.properties());
     final Stage stage = world.stageNamed(${stageInstantiationVariables});
 
     final XoomInitializationAware initializer =

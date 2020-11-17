@@ -80,7 +80,8 @@ public class BootstrapGenerationStepTest {
 
         Assert.assertEquals(6, context.contents().size());
         Assert.assertEquals("XoomInitializer", context.contents().get(5).retrieveClassName());
-        Assert.assertTrue(context.contents().get(5).contains("Settings.enableBlockingMailbox();"));
+        Assert.assertTrue(context.contents().get(5).contains("import io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;"));
+        Assert.assertTrue(context.contents().get(5).contains("new BlockingMailboxPlugin().start(world);"));
         Assert.assertTrue(context.contents().get(5).contains("world.stageNamed(\"xoom-app\")"));
         Assert.assertTrue(context.contents().get(5).contains("new AnnotatedBootstrap();" ));
         Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry)"));

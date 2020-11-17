@@ -31,7 +31,7 @@ public class Boot {
      * @return {@code World}
      */
     public static World start(final String name) {
-        xoomBootWorld = World.start(name, Settings.properties());
+        xoomBootWorld = World.start(name);
 
         return xoomBootWorld;
     }
