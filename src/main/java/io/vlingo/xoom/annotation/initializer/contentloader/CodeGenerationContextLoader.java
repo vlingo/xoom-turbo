@@ -66,6 +66,7 @@ public class CodeGenerationContextLoader {
                 new StateContentLoader(persistenceSetupClass, environment),
                 new DataObjectContentLoader(persistenceSetupClass, environment),
                 new QueriesContentLoader(persistenceSetupClass, environment),
+                new AggregateContentLoader(persistenceSetupClass, environment),
                 new RestResourceContentLoader(bootstrapClass, environment));
     }
 
