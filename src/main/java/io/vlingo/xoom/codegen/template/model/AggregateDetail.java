@@ -19,7 +19,7 @@ public class AggregateDetail {
     }
 
     private static Optional<CodeGenerationParameter> findMethod(final CodeGenerationParameter aggregate, final String methodName) {
-        return aggregate.retrieveAll(Label.AGGREGATE_METHOD)
+        return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
                 .filter(method -> methodName.equals(method.value) || method.value.startsWith(methodName + "("))
                 .findFirst();
     }

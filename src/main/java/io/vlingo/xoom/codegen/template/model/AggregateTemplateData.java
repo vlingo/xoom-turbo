@@ -51,7 +51,7 @@ public class AggregateTemplateData extends TemplateData {
     }
 
     private List<String> resolveEventNames(final CodeGenerationParameter aggregate) {
-        return aggregate.retrieveAll(DOMAIN_EVENT).map(event -> TemplateStandard.DOMAIN_EVENT.resolveClassname(event.value))
+        return aggregate.retrieveAllRelated(DOMAIN_EVENT).map(event -> TemplateStandard.DOMAIN_EVENT.resolveClassname(event.value))
                 .collect(Collectors.toList());
     }
 

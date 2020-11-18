@@ -63,8 +63,8 @@ public class QueriesParameter {
         if(!autoDispatchParameter.hasAny(Label.QUERIES_PROTOCOL)) {
             return QueriesParameter.empty();
         }
-        return new QueriesParameter(autoDispatchParameter.relatedParameterValueOf(Label.QUERIES_PROTOCOL),
-                autoDispatchParameter.relatedParameterValueOf(Label.QUERIES_ACTOR));
+        return new QueriesParameter(autoDispatchParameter.retrieveRelatedValue(Label.QUERIES_PROTOCOL),
+                autoDispatchParameter.retrieveRelatedValue(Label.QUERIES_ACTOR));
     }
 
     public static QueriesParameter from(final CodeGenerationParameter aggregateParameter,

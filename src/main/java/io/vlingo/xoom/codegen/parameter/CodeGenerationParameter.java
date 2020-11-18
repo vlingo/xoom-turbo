@@ -47,11 +47,11 @@ public class CodeGenerationParameter {
         return this;
     }
 
-    public CodeGenerationParameter relatedParameterOf(final Label label) {
-        return this.relatedParameters.retrieve(label);
+    public CodeGenerationParameter retrieveOneRelated(final Label label) {
+        return this.relatedParameters.retrieveOne(label);
     }
 
-    public Stream<CodeGenerationParameter> retrieveAll(final Label label) {
+    public Stream<CodeGenerationParameter> retrieveAllRelated(final Label label) {
         return relatedParameters.retrieveAll(label);
     }
 
@@ -84,12 +84,12 @@ public class CodeGenerationParameter {
         this.parent = parent;
     }
 
-    public String relatedParameterValueOf(final Label label) {
-        return relatedParameterValueOf(label, value -> value);
+    public String retrieveRelatedValue(final Label label) {
+        return retrieveRelatedValue(label, value -> value);
     }
 
-    public <T> T relatedParameterValueOf(final Label label, final Function<String, T> mapper) {
-        return mapper.apply(relatedParameterOf(label).value);
+    public <T> T retrieveRelatedValue(final Label label, final Function<String, T> mapper) {
+        return mapper.apply(retrieveOneRelated(label).value);
     }
 
     public boolean isLabeled(final Label label) {

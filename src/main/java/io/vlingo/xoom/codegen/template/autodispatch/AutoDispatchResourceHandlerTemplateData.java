@@ -61,18 +61,18 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                 STORE_PROVIDER.resolveClassname(queryStoreProviderParameters);
 
         final String aggregateProtocolClassName =
-                ClassFormatter.simpleNameOf(autoDispatchParameter.relatedParameterValueOf(Label.MODEL_PROTOCOL));
+                ClassFormatter.simpleNameOf(autoDispatchParameter.retrieveRelatedValue(Label.MODEL_PROTOCOL));
 
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, ClassFormatter.packageOf(autoDispatchParameter.value))
                         .and(QUERIES, QueriesParameter.from(autoDispatchParameter))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregateProtocolClassName))
                         .and(REST_RESOURCE_NAME, standard().resolveClassname(restResourceName))
-                        .and(URI_ROOT, autoDispatchParameter.relatedParameterValueOf(Label.URI_ROOT))
+                        .and(URI_ROOT, autoDispatchParameter.retrieveRelatedValue(Label.URI_ROOT))
                         .and(ROUTE_DECLARATIONS, RouteDeclarationParameter.from(autoDispatchParameter))
-                        .and(MODEL_PROTOCOL, autoDispatchParameter.relatedParameterValueOf(Label.MODEL_PROTOCOL))
-                        .and(MODEL_ACTOR, autoDispatchParameter.relatedParameterValueOf(Label.MODEL_ACTOR))
-                        .and(HANDLERS_CONFIG_NAME, autoDispatchParameter.relatedParameterValueOf(Label.HANDLERS_CONFIG_NAME))
+                        .and(MODEL_PROTOCOL, autoDispatchParameter.retrieveRelatedValue(Label.MODEL_PROTOCOL))
+                        .and(MODEL_ACTOR, autoDispatchParameter.retrieveRelatedValue(Label.MODEL_ACTOR))
+                        .and(HANDLERS_CONFIG_NAME, autoDispatchParameter.retrieveRelatedValue(Label.HANDLERS_CONFIG_NAME))
                         .and(STORE_PROVIDER_NAME, queryStoreProviderName).and(ROUTE_METHODS, new ArrayList<String>())
                         .and(AUTO_DISPATCH_MAPPING_NAME, restResourceName).and(USE_AUTO_DISPATCH, true)
                         .and(DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregateProtocolClassName))
@@ -90,7 +90,7 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                         queryStoreProviderName, context.contents());
 
         final String queriesProtocolQualifiedName =
-                autoDispatchParameter.relatedParameterValueOf(QUERIES_PROTOCOL);
+                autoDispatchParameter.retrieveRelatedValue(QUERIES_PROTOCOL);
 
         return Stream.of(queryStoreProviderQualifiedName, queriesProtocolQualifiedName).collect(toSet());
     }

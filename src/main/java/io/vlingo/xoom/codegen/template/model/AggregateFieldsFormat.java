@@ -27,7 +27,7 @@ public interface AggregateFieldsFormat<T> {
     AggregateFieldsFormat<String> DEFAULT_VALUE = AlternateReference.handlingDefaultFieldsValue();
 
     default T format(final CodeGenerationParameter aggregate) {
-        return format(aggregate, aggregate.retrieveAll(STATE_FIELD));
+        return format(aggregate, aggregate.retrieveAllRelated(STATE_FIELD));
     }
 
     T format(final CodeGenerationParameter parameter, final Stream<CodeGenerationParameter> fields);
@@ -101,7 +101,7 @@ public interface AggregateFieldsFormat<T> {
             final Function<CodeGenerationParameter, String> mapper = field ->
                     isPresent(field, presentFields) ? field.value : absenceHandler.apply(field);
 
-            return para.retrieveAll(STATE_FIELD).map(mapper).collect(Collectors.joining(", "));
+            return para.retrieveAllRelated(STATE_FIELD).map(mapper).collect(Collectors.joining(", "));
         }
 
         private boolean isPresent(final CodeGenerationParameter field,

@@ -27,7 +27,7 @@ public class AggregateStateMethodTemplateData extends TemplateData {
     private final TemplateParameters parameters;
 
     public static List<TemplateData> from(final CodeGenerationParameter aggregate) {
-        return aggregate.retrieveAll(AGGREGATE_METHOD)
+        return aggregate.retrieveAllRelated(AGGREGATE_METHOD)
                 .map(method -> new AggregateStateMethodTemplateData(aggregate, method))
                 .collect(toList());
     }
@@ -42,7 +42,7 @@ public class AggregateStateMethodTemplateData extends TemplateData {
     }
 
     private String resolveConstructorParameters(final CodeGenerationParameter method) {
-        return SELF_ALTERNATE_REFERENCE.format(method.parent(), method.retrieveAll(METHOD_PARAMETER));
+        return SELF_ALTERNATE_REFERENCE.format(method.parent(), method.retrieveAllRelated(METHOD_PARAMETER));
     }
 
     @Override

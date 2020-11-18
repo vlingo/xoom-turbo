@@ -62,7 +62,7 @@ public class RestResourceTemplateData extends TemplateData {
         return TemplateParameters.with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
                 .and(QUERIES, queriesParameter).and(PACKAGE_NAME, packageName).and(USE_CQRS, useCQRS)
                 .and(ROUTE_DECLARATIONS, RouteDeclarationParameter.from(aggregateParameter))
-                .and(URI_ROOT, aggregateParameter.relatedParameterValueOf(Label.URI_ROOT))
+                .and(URI_ROOT, aggregateParameter.retrieveRelatedValue(Label.URI_ROOT))
                 .addImports(resolveImports(aggregateParameter, contents, useCQRS))
                 .and(MODEL_ACTOR, AGGREGATE.resolveClassname(aggregateName))
                 .and(STORE_PROVIDER_NAME, resolveQueryStoreProviderName())

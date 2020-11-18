@@ -28,7 +28,7 @@ public class AggregateMethodTemplateData extends TemplateData {
 
     public static List<TemplateData> from(final CodeGenerationParameter aggregate,
                                           final StorageType storageType) {
-        return aggregate.retrieveAll(AGGREGATE_METHOD)
+        return aggregate.retrieveAllRelated(AGGREGATE_METHOD)
                 .map(method -> new AggregateMethodTemplateData(method, storageType))
                 .collect(toList());
     }
@@ -37,7 +37,7 @@ public class AggregateMethodTemplateData extends TemplateData {
                                         final StorageType storageType) {
         this.parameters =
                 TemplateParameters.with(METHOD_NAME, method.value).and(STORAGE_TYPE, storageType)
-                        .and(DOMAIN_EVENT_NAME, method.relatedParameterValueOf(DOMAIN_EVENT))
+                        .and(DOMAIN_EVENT_NAME, method.retrieveRelatedValue(DOMAIN_EVENT))
                         .and(METHOD_INVOCATION_PARAMETERS, METHOD_INVOCATION.format(method))
                         .and(METHOD_PARAMETERS, SIGNATURE_DECLARATION.format(method))
                         .and(SOURCED_EVENTS, SourcedEventParameter.from(method.parent()))

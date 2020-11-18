@@ -24,7 +24,7 @@ public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationR
     public String resolveRouteHandlerInvocation(final CodeGenerationParameter parentParameter,
                                                 final CodeGenerationParameter routeSignatureParameter) {
         final Method httpMethod =
-                routeSignatureParameter.relatedParameterValueOf(ROUTE_METHOD, Method::from);
+                routeSignatureParameter.retrieveRelatedValue(ROUTE_METHOD, Method::from);
 
         final String defaultParameter = httpMethod.isGET() ? QUERIES_PARAMETER : DEFAULT_FACTORY_METHOD_PARAMETER;
 
@@ -46,14 +46,14 @@ public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationR
         }
 
         final String handlersConfigQualifiedName =
-                parentParameter.relatedParameterValueOf(Label.HANDLERS_CONFIG_NAME);
+                parentParameter.retrieveRelatedValue(Label.HANDLERS_CONFIG_NAME);
 
         final String handlersConfigClassName =
                 ClassFormatter.simpleNameOf(handlersConfigQualifiedName);
 
-        final String invocation = routeSignatureParameter.relatedParameterValueOf(invocationLabel);
+        final String invocation = routeSignatureParameter.retrieveRelatedValue(invocationLabel);
 
-        if(routeSignatureParameter.relatedParameterValueOf(customParamsLabel, Boolean::valueOf)) {
+        if(routeSignatureParameter.retrieveRelatedValue(customParamsLabel, Boolean::valueOf)) {
             return String.format(HANDLER_INVOCATION_PATTERN, handlersConfigClassName, invocation);
         }
 

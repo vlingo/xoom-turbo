@@ -30,21 +30,21 @@ public class RouteDetail {
     private static final List<Method> BODY_SUPPORTED_HTTP_METHODS = Arrays.asList(POST, PUT, PATCH);
 
     public static String resolveBodyName(final CodeGenerationParameter route) {
-        final Method httpMethod = route.relatedParameterValueOf(ROUTE_METHOD, Method::from);
+        final Method httpMethod = route.retrieveRelatedValue(ROUTE_METHOD, Method::from);
 
         if(!BODY_SUPPORTED_HTTP_METHODS.contains(httpMethod)) {
             return "";
         }
 
         if(route.hasAny(BODY)) {
-            return route.relatedParameterValueOf(BODY);
+            return route.retrieveRelatedValue(BODY);
         }
 
         return BODY_DEFAULT_NAME;
     }
 
     public static String resolveBodyType(final CodeGenerationParameter route) {
-        final Method httpMethod = route.relatedParameterValueOf(ROUTE_METHOD, Method::from);
+        final Method httpMethod = route.retrieveRelatedValue(ROUTE_METHOD, Method::from);
 
         if(!BODY_SUPPORTED_HTTP_METHODS.contains(httpMethod)) {
             return "";
@@ -54,19 +54,19 @@ public class RouteDetail {
             return DATA_OBJECT.resolveClassname(route.parent(AGGREGATE).value);
         }
 
-        return route.relatedParameterValueOf(BODY_TYPE);
+        return route.retrieveRelatedValue(BODY_TYPE);
     }
 
     public static boolean requireEntityLoad(final CodeGenerationParameter aggregateParameter) {
-        return aggregateParameter.retrieveAll(ROUTE_SIGNATURE)
+        return aggregateParameter.retrieveAllRelated(ROUTE_SIGNATURE)
                 .filter(route -> route.hasAny(REQUIRE_ENTITY_LOADING))
-                .anyMatch(route -> route.relatedParameterValueOf(REQUIRE_ENTITY_LOADING, Boolean::valueOf));
+                .anyMatch(route -> route.retrieveRelatedValue(REQUIRE_ENTITY_LOADING, Boolean::valueOf));
     }
 
     public static boolean requireModelFactory(final CodeGenerationParameter aggregateParameter) {
-        return aggregateParameter.retrieveAll(ROUTE_SIGNATURE)
+        return aggregateParameter.retrieveAllRelated(ROUTE_SIGNATURE)
                 .map(methodSignature -> AggregateDetail.methodWithName(aggregateParameter, methodSignature.value))
-                .anyMatch(method -> method.relatedParameterValueOf(FACTORY_METHOD, Boolean::valueOf));
+                .anyMatch(method -> method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf));
     }
 
     public static String resolveMethodSignature(final CodeGenerationParameter routeSignature) {
@@ -74,7 +74,7 @@ public class RouteDetail {
             return routeSignature.value;
         }
 
-        if(routeSignature.relatedParameterValueOf(Label.ROUTE_METHOD, Method::from).isGET()) {
+        if(routeSignature.retrieveRelatedValue(Label.ROUTE_METHOD, Method::from).isGET()) {
             return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, "");
         }
 
@@ -83,7 +83,7 @@ public class RouteDetail {
 
     private static String resolveMethodSignatureWithParams(final CodeGenerationParameter routeSignature) {
         final String idParameter =
-                routeSignature.relatedParameterValueOf(REQUIRE_ENTITY_LOADING, Boolean::valueOf) ?
+                routeSignature.retrieveRelatedValue(REQUIRE_ENTITY_LOADING, Boolean::valueOf) ?
                         String.format(METHOD_PARAMETER_PATTERN, "String", "id") : "";
 
         final CodeGenerationParameter method = AggregateDetail.methodWithName(routeSignature.parent(), routeSignature.value);

@@ -36,7 +36,7 @@ public class AggregateProtocolMethodTemplateData extends TemplateData {
         final Function<CodeGenerationParameter, List<TemplateData>> mapper =
                 method -> fromInferredScopes(parentParameters, method);
 
-        return aggregateParameter.retrieveAll(AGGREGATE_METHOD).map(mapper)
+        return aggregateParameter.retrieveAllRelated(AGGREGATE_METHOD).map(mapper)
                 .flatMap(List::stream).collect(toList());
     }
 

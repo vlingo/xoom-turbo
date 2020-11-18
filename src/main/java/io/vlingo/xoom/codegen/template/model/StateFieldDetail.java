@@ -21,9 +21,9 @@ public class StateFieldDetail {
     private static final List<String> NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "integer", "long", "double", "float");
 
     public static String typeOf(final CodeGenerationParameter aggregate, final String stateFieldName) {
-        return aggregate.retrieveAll(STATE_FIELD)
+        return aggregate.retrieveAllRelated(STATE_FIELD)
                 .filter(stateField -> stateField.value.equals(stateFieldName))
-                .map(stateField -> stateField.relatedParameterValueOf(FIELD_TYPE)).findFirst()
+                .map(stateField -> stateField.retrieveRelatedValue(FIELD_TYPE)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(stateFieldName, aggregate.value)));
     }
 
