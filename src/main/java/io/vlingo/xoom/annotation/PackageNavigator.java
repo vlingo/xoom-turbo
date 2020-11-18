@@ -50,10 +50,6 @@ public class PackageNavigator {
                 .collect(Collectors.toSet());
     }
 
-    public Set<String> retrieveChild() {
-        return retrieveChild(basePackage);
-    }
-
     public Set<String> retrieveAll() {
         String nextPackage = null;
         String currentPackage = null;
