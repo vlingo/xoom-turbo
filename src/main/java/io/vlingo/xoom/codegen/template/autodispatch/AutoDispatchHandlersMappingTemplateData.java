@@ -67,7 +67,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
     private List<String> resolveHandlerIndexes(final CodeGenerationParameter aggregate, final Boolean useCQRS) {
         final List<CodeGenerationParameter> handlers =
-                Stream.of(aggregate.retrieveAll(ROUTE_SIGNATURE), Stream.of(STATE_ADAPTER_HANDLER))
+                Stream.of(aggregate.retrieveAllRelated(ROUTE_SIGNATURE), Stream.of(STATE_ADAPTER_HANDLER))
                         .flatMap(stream -> stream).collect(Collectors.toList());
 
         return IntStream.range(0, handlers.size()).mapToObj(index -> {

@@ -30,7 +30,7 @@ public class DomainEventTemplateData extends TemplateData {
 
     public static List<TemplateData> from(final String packageName,
                                           final CodeGenerationParameter aggregate) {
-        return aggregate.retrieveAll(Label.DOMAIN_EVENT).map(event ->
+        return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).map(event ->
                 new DomainEventTemplateData(packageName, event, aggregate))
                 .collect(Collectors.toList());
     }
@@ -42,8 +42,8 @@ public class DomainEventTemplateData extends TemplateData {
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, packageName).and(DOMAIN_EVENT_NAME, name)
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
-                        .and(MEMBERS, MEMBER_DECLARATION.format(aggregate, event.retrieveAll(STATE_FIELD)))
-                        .and(MEMBERS_ASSIGNMENT, STATE_BASED_ASSIGNMENT.format(aggregate, event.retrieveAll(STATE_FIELD)));
+                        .and(MEMBERS, MEMBER_DECLARATION.format(aggregate, event.retrieveAllRelated(STATE_FIELD)))
+                        .and(MEMBERS_ASSIGNMENT, STATE_BASED_ASSIGNMENT.format(aggregate, event.retrieveAllRelated(STATE_FIELD)));
     }
 
     @Override

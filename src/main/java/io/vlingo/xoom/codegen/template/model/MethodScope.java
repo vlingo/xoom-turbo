@@ -37,7 +37,7 @@ public enum MethodScope {
     }
 
     public static Stream<MethodScope> infer(final CodeGenerationParameter method) {
-        if(method.relatedParameterValueOf(FACTORY_METHOD, Boolean::valueOf)) {
+        if(method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf)) {
             return Stream.of(values());
         }
         return Stream.of(INSTANCE);

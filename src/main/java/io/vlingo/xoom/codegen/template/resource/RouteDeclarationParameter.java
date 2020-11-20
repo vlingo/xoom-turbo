@@ -32,7 +32,7 @@ public class RouteDeclarationParameter {
 
     public static List<RouteDeclarationParameter> from(final CodeGenerationParameter mainParameter) {
         final List<CodeGenerationParameter> routeSignatures =
-                mainParameter.retrieveAll(Label.ROUTE_SIGNATURE).collect(toList());
+                mainParameter.retrieveAllRelated(Label.ROUTE_SIGNATURE).collect(toList());
 
         return IntStream.range(0, routeSignatures.size()).mapToObj(index ->
                 new RouteDeclarationParameter(index, routeSignatures.size(), routeSignatures.get(index)))
@@ -46,17 +46,17 @@ public class RouteDeclarationParameter {
         this.handlerName = resolveHandlerName();
         this.path = resolvePath(routeSignatureParameter);
         this.bodyType = RouteDetail.resolveBodyType(routeSignatureParameter);
-        this.builderMethod = routeSignatureParameter.relatedParameterValueOf(ROUTE_METHOD);
+        this.builderMethod = routeSignatureParameter.retrieveRelatedValue(ROUTE_METHOD);
         this.parameterTypes.addAll(resolveParameterTypes(routeSignatureParameter));
         this.last = routeIndex == numberOfRoutes - 1;
     }
 
     private String resolvePath(final CodeGenerationParameter routeSignatureParameter) {
         final StringBuilder path = new StringBuilder();
-        final String uriRoot = "/" + routeSignatureParameter.parent().relatedParameterValueOf(URI_ROOT);
+        final String uriRoot = "/" + routeSignatureParameter.parent().retrieveRelatedValue(URI_ROOT);
 
         path.append(routeSignatureParameter.hasAny(ROUTE_PATH) ?
-                "/" + routeSignatureParameter.relatedParameterValueOf(ROUTE_PATH) : uriRoot);
+                "/" + routeSignatureParameter.retrieveRelatedValue(ROUTE_PATH) : uriRoot);
 
         if (path.indexOf(uriRoot) == -1) {
             path.insert(0, uriRoot);

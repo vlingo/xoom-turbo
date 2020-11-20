@@ -8,7 +8,6 @@
 package io.vlingo.xoom.codegen.template.model;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.parameter.Label;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class SourcedEventParameter {
     private final String domainEventName;
 
     public static List<SourcedEventParameter> from(final CodeGenerationParameter aggregate) {
-        return aggregate.retrieveAll(DOMAIN_EVENT)
+        return aggregate.retrieveAllRelated(DOMAIN_EVENT)
                 .map(event -> new SourcedEventParameter(aggregate, event))
                 .collect(toList());
     }

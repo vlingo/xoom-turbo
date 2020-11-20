@@ -47,7 +47,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
                         .and(QUERIES_ACTOR_NAME, QUERIES_ACTOR.resolveClassname(aggregateName))
                         .and(AUTO_DISPATCH_MAPPING_NAME, AUTO_DISPATCH_MAPPING.resolveClassname(aggregateName))
                         .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, AUTO_DISPATCH_HANDLERS_MAPPING.resolveClassname(aggregateName))
-                        .and(URI_ROOT, aggregate.relatedParameterValueOf(Label.URI_ROOT))
+                        .and(URI_ROOT, aggregate.retrieveRelatedValue(Label.URI_ROOT))
                         .addImports(resolveImports(aggregateName, contents))
                         .and(ROUTE_DECLARATIONS, new ArrayList<String>())
                         .and(USE_CQRS, useCQRS);
@@ -59,7 +59,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
         if(useCQRS) {
             aggregate.relate(RouteDetail.defaultQueryRouteParameter(aggregate));
         }
-        this.dependOn(AutoDispatchRouteTemplateData.from(aggregate.retrieveAll(ROUTE_SIGNATURE)));
+        this.dependOn(AutoDispatchRouteTemplateData.from(aggregate.retrieveAllRelated(ROUTE_SIGNATURE)));
     }
 
     @Override

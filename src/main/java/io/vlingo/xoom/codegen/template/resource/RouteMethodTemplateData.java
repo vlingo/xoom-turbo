@@ -44,13 +44,13 @@ public class RouteMethodTemplateData extends TemplateData {
     public static List<TemplateData> from(final CodeGenerationParameter mainParameter,
                                           final TemplateParameters parentParameters) {
         final Predicate<CodeGenerationParameter> filter =
-                parameter -> !parameter.relatedParameterValueOf(CUSTOM_ROUTE, Boolean::valueOf);
+                parameter -> !parameter.retrieveRelatedValue(CUSTOM_ROUTE, Boolean::valueOf);
 
         final Function<CodeGenerationParameter, RouteMethodTemplateData> mapper =
                 routeSignatureParameter -> new RouteMethodTemplateData(mainParameter,
                         routeSignatureParameter, parentParameters);
 
-        return mainParameter.retrieveAll(Label.ROUTE_SIGNATURE)
+        return mainParameter.retrieveAllRelated(Label.ROUTE_SIGNATURE)
                 .filter(filter).map(mapper).collect(Collectors.toList());
     }
 
@@ -82,7 +82,7 @@ public class RouteMethodTemplateData extends TemplateData {
         this.parameters =
                 TemplateParameters.with(ROUTE_SIGNATURE, RouteDetail.resolveMethodSignature(routeSignatureParameter))
                         .and(MODEL_ATTRIBUTE, resolveModelAttributeName(mainParameter, Label.MODEL_PROTOCOL))
-                        .and(ROUTE_METHOD, routeSignatureParameter.relatedParameterValueOf(Label.ROUTE_METHOD))
+                        .and(ROUTE_METHOD, routeSignatureParameter.retrieveRelatedValue(Label.ROUTE_METHOD))
                         .and(REQUIRE_ENTITY_LOADING, resolveEntityLoading(routeSignatureParameter))
                         .and(ADAPTER_HANDLER_INVOCATION, adapterHandlerInvocation)
                         .and(ROUTE_HANDLER_INVOCATION, routeHandlerInvocation)
@@ -94,11 +94,11 @@ public class RouteMethodTemplateData extends TemplateData {
     private Set<String> resolveImports(final CodeGenerationParameter mainParameter,
                                        final CodeGenerationParameter routeSignatureParameter) {
         return Stream.of(retrieveIdTypeQualifiedName(routeSignatureParameter),
-                routeSignatureParameter.relatedParameterValueOf(Label.BODY_TYPE),
-                mainParameter.relatedParameterValueOf(Label.HANDLERS_CONFIG_NAME),
-                mainParameter.relatedParameterValueOf(Label.MODEL_PROTOCOL),
-                mainParameter.relatedParameterValueOf(Label.MODEL_ACTOR),
-                mainParameter.relatedParameterValueOf(Label.MODEL_DATA))
+                routeSignatureParameter.retrieveRelatedValue(Label.BODY_TYPE),
+                mainParameter.retrieveRelatedValue(Label.HANDLERS_CONFIG_NAME),
+                mainParameter.retrieveRelatedValue(Label.MODEL_PROTOCOL),
+                mainParameter.retrieveRelatedValue(Label.MODEL_ACTOR),
+                mainParameter.retrieveRelatedValue(Label.MODEL_DATA))
                 .filter(qualifiedName -> !qualifiedName.isEmpty())
                 .collect(Collectors.toSet());
     }
@@ -106,18 +106,18 @@ public class RouteMethodTemplateData extends TemplateData {
     private Boolean resolveEntityLoading(final CodeGenerationParameter routeSignatureParameter) {
         return routeSignatureParameter.hasAny(Label.ID) ||
                 (routeSignatureParameter.hasAny(Label.REQUIRE_ENTITY_LOADING) &&
-                        routeSignatureParameter.relatedParameterValueOf(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf));
+                        routeSignatureParameter.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf));
     }
 
     private String resolveIdName(final CodeGenerationParameter routeSignatureParameter) {
         if(!routeSignatureParameter.hasAny(Label.ID)) {
             return DEFAULT_ID_NAME;
         }
-        return routeSignatureParameter.relatedParameterValueOf(Label.ID);
+        return routeSignatureParameter.retrieveRelatedValue(Label.ID);
     }
 
     private String retrieveIdTypeQualifiedName(final CodeGenerationParameter routeSignatureParameter) {
-        final String idType = routeSignatureParameter.relatedParameterValueOf(Label.ID_TYPE);
+        final String idType = routeSignatureParameter.retrieveRelatedValue(Label.ID_TYPE);
         return idType.contains(".") ? "" : idType;
     }
 
@@ -126,7 +126,7 @@ public class RouteMethodTemplateData extends TemplateData {
         if (mainParameter.isLabeled(Label.AGGREGATE)) {
             return ClassFormatter.simpleNameToAttribute(mainParameter.value);
         }
-        final String qualifiedName = mainParameter.relatedParameterValueOf(protocolLabel);
+        final String qualifiedName = mainParameter.retrieveRelatedValue(protocolLabel);
         return ClassFormatter.qualifiedNameToAttribute(qualifiedName);
     }
 

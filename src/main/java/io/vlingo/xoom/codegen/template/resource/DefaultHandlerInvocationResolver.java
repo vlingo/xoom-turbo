@@ -27,7 +27,7 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
     @Override
     public String resolveRouteHandlerInvocation(final CodeGenerationParameter aggregateParameter,
                                                 final CodeGenerationParameter routeParameter) {
-        if(routeParameter.relatedParameterValueOf(ROUTE_METHOD, Method::from).isGET()) {
+        if(routeParameter.retrieveRelatedValue(ROUTE_METHOD, Method::from).isGET()) {
             return resolveQueryMethodInvocation(routeParameter.value);
         }
         return resolveCommandMethodInvocation(aggregateParameter, routeParameter);
@@ -43,7 +43,7 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
                                                   final CodeGenerationParameter routeParameter) {
         final AggregateArgumentsFormat argumentsFormat = new AggregateArgumentsFormat.MethodInvocation("stage()", "data");
         final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregateParameter, routeParameter.value);
-        final Boolean factoryMethod = method.relatedParameterValueOf(FACTORY_METHOD, Boolean::valueOf);
+        final Boolean factoryMethod = method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf);
         final MethodScope scope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
         final String methodInvocationParameters = argumentsFormat.format(method, scope);
         final String invoker = factoryMethod ? aggregateParameter.value : simpleNameToAttribute(aggregateParameter.value);

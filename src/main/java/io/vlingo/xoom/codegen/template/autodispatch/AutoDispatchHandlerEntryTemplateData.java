@@ -29,7 +29,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
     private final TemplateParameters parameters;
 
     public static List<TemplateData> from(final CodeGenerationParameter aggregate) {
-        return aggregate.retrieveAll(Label.ROUTE_SIGNATURE)
+        return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
                 .filter(route -> !route.hasAny(READ_ONLY))
                 .map(AutoDispatchHandlerEntryTemplateData::new)
                 .collect(Collectors.toList());
@@ -38,7 +38,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
     private AutoDispatchHandlerEntryTemplateData(final CodeGenerationParameter route) {
         final CodeGenerationParameter aggregate = route.parent(AGGREGATE);
         final CodeGenerationParameter method = findMethod(aggregate, route);
-        final boolean factoryMethod = method.relatedParameterValueOf(Label.FACTORY_METHOD, Boolean::valueOf);
+        final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
         final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
 
         this.parameters =
@@ -54,13 +54,13 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
     private CodeGenerationParameter findMethod(final CodeGenerationParameter aggregate,
                                                final CodeGenerationParameter route) {
-        return aggregate.retrieveAll(AGGREGATE_METHOD)
+        return aggregate.retrieveAllRelated(AGGREGATE_METHOD)
                 .filter(method -> method.value.equals(route.value))
                 .findFirst().get();
     }
 
     private String resolveMethodInvocationParameters(final CodeGenerationParameter method) {
-        final boolean factoryMethod = method.relatedParameterValueOf(Label.FACTORY_METHOD, Boolean::valueOf);
+        final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
         final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
         return new AggregateArgumentsFormat.MethodInvocation("$stage", "data").format(method, methodScope);
     }

@@ -116,7 +116,7 @@ public class AutoDispatchParameterResolver {
     private void resolveRoutesAnnotation(final TypeElement autoDispatchClass,
                                          final TypeElement handlersConfigClass,
                                          final CodeGenerationParameter autoDispatchParameter) {
-        final String uriRoot = autoDispatchParameter.relatedParameterValueOf(URI_ROOT);
+        final String uriRoot = autoDispatchParameter.retrieveRelatedValue(URI_ROOT);
         final Predicate<Element> filter = element -> element instanceof ExecutableElement;
         final Function<Element, ExecutableElement> mapper = element -> (ExecutableElement) element;
         final HandlerResolver handlerResolver = HandlerResolver.with(handlersConfigClass, environment);
