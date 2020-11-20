@@ -38,7 +38,7 @@ public enum Template {
     OPERATION_BASED_PROJECTION("OperationBasedProjection"),
     EVENT_BASED_PROJECTION("EventBasedProjection"),
     DATA_OBJECT("DataObject"),
-    EVENT_TYPES("EventTypes"),
+    PROJECTION_SOURCE_TYPES("ProjectionSourceTypes"),
     DATABASE_PROPERTIES("DatabaseProperties"),
     QUERIES("Queries"),
     REST_RESOURCE_CREATION_METHOD("RestResourceCreationMethod"),

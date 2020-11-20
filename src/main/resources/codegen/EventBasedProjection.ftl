@@ -26,25 +26,21 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   }
 
   @Override
-  protected ${dataName} merge(
-      ${dataName} previousData,
-      final int previousVersion,
-      final ${dataName} currentData,
-      final int currentVersion) {
+  protected ${dataName} merge(${dataName} previousData, int previousVersion, ${dataName} currentData, int currentVersion) {
 
     if (previousData == null) {
       previousData = currentData;
     }
 
     for (final Source<?> event : sources()) {
-      switch (${eventTypesName}.valueOf(event.typeName())) {
-      <#list eventsNames as name>
-        case ${name}:
+      switch (${projectionSourceTypesName}.valueOf(event.typeName())) {
+      <#list sourceNames as source>
+        case ${source}:
           return ${dataName}.empty();   // TODO: implement actual merge
       </#list>
-      default:
-        logger().warn("Event of type " + event.typeName() + " was not matched.");
-        break;
+        default:
+          logger().warn("Event of type " + event.typeName() + " was not matched.");
+          break;
       }
     }
 

@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -53,7 +54,7 @@ public class ProjectionParameter {
             return "";
         }
 
-        final List<String> eventNames =
+        final Set<String> eventNames =
                 ContentQuery.findClassNames(DOMAIN_EVENT,
                         protocol.retrievePackage(), contents);
 

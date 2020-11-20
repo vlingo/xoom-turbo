@@ -26,18 +26,17 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   protected ${dataName} merge(${dataName} previousData, int previousVersion, ${dataName} currentData, int currentVersion) {
     ${dataName} merged;
 
-    switch (becauseOf) {
-    case "CreationCase1":   // TODO: replace with operation text
-      merged = currentData; // TODO: confirm creational merge 
-      break;
-    case "ChangeCase2":     // TODO: replace with operation text
-      merged = currentData; // TODO: implement actual merge
-      break;
-    case "ChangeCase3":     // TODO: replace with operation text
-      merged = currentData; // TODO: implement actual merge
-      break;
-    default:
-      merged = currentData;
+    if (previousData == null) {
+      previousData = currentData;
+    }
+
+    switch (${projectionSourceTypesName}.valueOf(becauseOf)) {
+      <#list sourceNames as source>
+      case ${source}:
+        return ${dataName}.empty();   // TODO: implement actual merge
+      </#list>
+      default:
+        merged = currentData;
     }
 
     return merged;

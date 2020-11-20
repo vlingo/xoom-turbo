@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class ProjectToDescriptionParameter {
 
@@ -37,8 +38,8 @@ public class ProjectToDescriptionParameter {
 
         return IntStream.range(0, projectionNames.size()).mapToObj(index ->{
                 final String joinedEventNames = projectablesPerProjection.get(index);
-                final List<String> eventNames = Stream.of(joinedEventNames.split(","))
-                        .map(String::trim).collect(toList());
+                final Set<String> eventNames = Stream.of(joinedEventNames.split(","))
+                        .map(String::trim).collect(toSet());
                 return new ProjectToDescriptionParameter(index, projectionNames.size(), iterator.next(), eventNames);
         }).collect(toList());
     }
@@ -66,7 +67,7 @@ public class ProjectToDescriptionParameter {
     private ProjectToDescriptionParameter(final int index,
                                           final int numberOfProtocols,
                                           final String projectionClassName,
-                                          final List<String> eventNames) {
+                                          final Set<String> eventNames) {
         this(index, numberOfProtocols, projectionClassName, formatEventNames(eventNames));
     }
 
@@ -85,7 +86,7 @@ public class ProjectToDescriptionParameter {
         final String protocolPackage =
                 ContentQuery.findPackage(AGGREGATE_PROTOCOL, aggregateProtocol, contents);
 
-        final List<String> eventNames =
+        final Set<String> eventNames =
                 ContentQuery.findClassNames(DOMAIN_EVENT, protocolPackage, contents);
 
         if(projectionType.isOperationBased() || eventNames.isEmpty()) {
@@ -96,7 +97,7 @@ public class ProjectToDescriptionParameter {
         return formatEventNames(eventNames);
     }
 
-    private static String formatEventNames(final List<String> eventNames) {
+    private static String formatEventNames(final Set<String> eventNames) {
         return eventNames.stream().map(s -> s + ".class.getName()").collect(Collectors.joining(", "));
     }
 

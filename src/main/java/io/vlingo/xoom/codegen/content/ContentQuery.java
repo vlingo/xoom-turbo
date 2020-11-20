@@ -34,11 +34,11 @@ public class ContentQuery {
                 .stream()).collect(Collectors.toSet());
     }
 
-    public static List<String> findClassNames(final TemplateStandard standard, final String packageName, final List<Content> contents) {
+    public static Set<String> findClassNames(final TemplateStandard standard, final String packageName, final List<Content> contents) {
         return filterByStandard(standard, contents)
                 .filter(content -> content.retrievePackage().equals(packageName))
                 .map(content -> content.retrieveClassName())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     public static Set<String> findFullyQualifiedClassNames(final List<Content> contents, final TemplateStandard ...standards) {

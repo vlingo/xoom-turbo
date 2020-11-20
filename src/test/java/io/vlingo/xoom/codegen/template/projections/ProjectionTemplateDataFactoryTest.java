@@ -54,7 +54,7 @@ public class ProjectionTemplateDataFactoryTest {
                 ProjectionTemplateDataFactory.build(context).get(0).parameters();
 
         Assert.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, AuthorRegistered.class.getName(), AuthorRated.class.getName()),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
+        Assert.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, AuthorRated.class.getName(), AuthorRegistered.class.getName()),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
         Assert.assertEquals("ProjectToDescription.with(BookProjectionActor.class, BookSoldOut.class.getName(), BookPurchased.class.getName())", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
     }
 
@@ -78,7 +78,7 @@ public class ProjectionTemplateDataFactoryTest {
 
         Assert.assertEquals(4, allTemplatesData.size());
         Assert.assertEquals(1, allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION_DISPATCHER_PROVIDER)).count());
-        Assert.assertEquals(1, allTemplatesData.stream().filter(data -> data.hasStandard(EVENT_TYPES)).count());
+        Assert.assertEquals(1, allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION_SOURCE_TYPES)).count());
         Assert.assertEquals(2, allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION)).count());
 
         //Assert for ProjectionDispatcherProvider
@@ -101,7 +101,7 @@ public class ProjectionTemplateDataFactoryTest {
             final String rootName = templateIndex == 0 ? "Book" : "Author";
             final String expectedName = rootName + "ProjectionActor";
             final String expectedStateName = rootName + "State";
-            final String expectedStaticEventTypes = "io.vlingo.xoomapp.infrastructure.EventTypes";
+            final String expectedStaticEventTypes = "io.vlingo.xoomapp.infrastructure.Events";
             final TemplateData projectionTemplateData = projectionsTemplatesData.get(templateIndex);
             final TemplateParameters projectionTemplateDataParameters = projectionTemplateData.parameters();
             Assert.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, projectionTemplateDataParameters.find(PACKAGE_NAME));
@@ -130,8 +130,9 @@ public class ProjectionTemplateDataFactoryTest {
 
         //General Assert
 
-        Assert.assertEquals(3, allTemplatesData.size());
+        Assert.assertEquals(4, allTemplatesData.size());
         Assert.assertEquals(1, allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION_DISPATCHER_PROVIDER)).count());
+        Assert.assertEquals(1, allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION_SOURCE_TYPES)).count());
         Assert.assertEquals(2, allTemplatesData.stream().filter(data -> data.hasStandard(PROJECTION)).count());
 
         //Assert for ProjectionDispatcherProvider

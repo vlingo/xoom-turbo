@@ -46,10 +46,7 @@ public class ProjectionTemplateDataFactory {
                 ContentQuery.findClassNames(AGGREGATE_PROTOCOL, context.contents());
 
         final List<TemplateData> templatesData = new ArrayList<>();
-
-        if(!projectionType.isOperationBased()) {
-            templatesData.add(EventTypesTemplateData.from(basePackage, context.contents()));
-        }
+        templatesData.add(ProjectionSourceTypesTemplateData.from(basePackage, projectionType, context.contents()));
 
         if(!context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf)) {
             templatesData.add(ProjectionDispatcherProviderTemplateData.from(basePackage,

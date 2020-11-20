@@ -68,10 +68,11 @@ public class ProjectionTemplateData extends TemplateData {
 
         return TemplateParameters.with(PACKAGE_NAME, packageName).and(IMPORTS, imports)
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
-                .and(MODEL, QUERY).and(STORAGE_TYPE, STATE_STORE)
-                .and(EVENT_TYPES_NAME, EVENT_TYPES.resolveClassname())
+                .and(PROJECTION_TYPE, projectionType).and(MODEL, QUERY)
+                .and(STORAGE_TYPE, STATE_STORE)
                 .and(DATA_OBJECT_NAME, dataObjectName).and(PROJECTION_TYPE, projectionType)
-                .and(EVENTS_NAMES, ContentQuery.findClassNames(DOMAIN_EVENT, modelPackage, contents))
+                .and(PROJECTION_SOURCE_NAMES, ContentQuery.findClassNames(DOMAIN_EVENT, modelPackage, contents))
+                .andResolve(PROJECTION_SOURCE_TYPES_NAME, param -> PROJECTION_SOURCE_TYPES.resolveClassname(param))
                 .andResolve(STORE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param));
     }
 
@@ -90,8 +91,8 @@ public class ProjectionTemplateData extends TemplateData {
             return ImportParameter.of(stateQualifiedName, dataObjectQualifiedName);
         }
 
-        return templatesData.stream().filter(data -> data.hasStandard(EVENT_TYPES))
-                .map(data -> data.parameters().<String>find(EVENT_TYPES_QUALIFIED_NAME))
+        return templatesData.stream().filter(data -> data.hasStandard(PROJECTION_SOURCE_TYPES))
+                .map(data -> data.parameters().<String>find(PROJECTION_SOURCE_TYPES_QUALIFIED_NAME))
                 .map(qualifiedName -> ImportParameter.of(dataObjectQualifiedName, qualifiedName))
                 .flatMap(imports -> imports.stream()).collect(Collectors.toSet());
     }

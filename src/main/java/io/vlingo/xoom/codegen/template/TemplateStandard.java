@@ -3,6 +3,7 @@ package io.vlingo.xoom.codegen.template;
 import io.vlingo.http.Method;
 import io.vlingo.xoom.codegen.CodeGenerationSetup;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
+import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
@@ -39,8 +40,7 @@ public enum TemplateStandard {
     QUERIES_ACTOR(parameters -> Template.QUERIES_ACTOR.filename,
             (name, parameters) -> name + "QueriesActor"),
 
-    EVENT_TYPES(parameters -> Template.EVENT_TYPES.filename,
-            (name, parameters) -> "EventTypes"),
+
 
     DATA_OBJECT(parameters -> Template.DATA_OBJECT.filename,
             (name, parameters) -> name + "Data"),
@@ -84,6 +84,12 @@ public enum TemplateStandard {
 
     PROJECTION_DISPATCHER_PROVIDER(parameters -> Template.PROJECTION_DISPATCHER_PROVIDER.filename,
             (name, parameters) -> "ProjectionDispatcherProvider"),
+
+    PROJECTION_SOURCE_TYPES(parameters -> Template.PROJECTION_SOURCE_TYPES.filename,
+            (name, parameters) -> {
+                final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
+                return projectionType.isEventBased() ? "Events" : "Operations";
+            }),
 
     XOOM_INITIALIZER(templateParameters -> Template.XOOM_INITIALIZER.filename,
             (name, parameters) -> "XoomInitializer"),
