@@ -126,16 +126,21 @@ public class AutoDispatchParameterResolver {
                     method.getAnnotation(Route.class);
 
             if(routeAnnotation != null) {
+                final Boolean internalRouteHandler = method.getModifiers().contains(DEFAULT);
+
                 final CodeGenerationParameter routeParameter =
                     CodeGenerationParameter.of(ROUTE_SIGNATURE, buildMethodSignature(method));
 
-                final HandlerInvocation handlerInvocation = handlerResolver.find(routeAnnotation.handler());
-
-                routeParameter.relate(ROUTE_HANDLER_INVOCATION, handlerInvocation.invocation)
-                        .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, handlerInvocation.hasCustomParamNames())
-                        .relate(ROUTE_METHOD, routeAnnotation.method())
-                        .relate(CUSTOM_ROUTE, method.getModifiers().contains(DEFAULT))
+                routeParameter.relate(ROUTE_METHOD, routeAnnotation.method())
+                        .relate(INTERNAL_ROUTE_HANDLER, internalRouteHandler)
                         .relate(ROUTE_PATH, RoutePath.resolve(uriRoot, routeAnnotation.path()));
+
+                if(!internalRouteHandler) {
+                    final HandlerInvocation handlerInvocation = handlerResolver.find(routeAnnotation.handler());
+
+                    routeParameter.relate(ROUTE_HANDLER_INVOCATION, handlerInvocation.invocation)
+                            .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, handlerInvocation.hasCustomParamNames());
+                }
 
                 resolveVariablesAnnotation(method, routeParameter);
                 resolveResponseAnnotation(method, routeParameter, handlerResolver);

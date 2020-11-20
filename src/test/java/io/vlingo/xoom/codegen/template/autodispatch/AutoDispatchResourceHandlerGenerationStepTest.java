@@ -61,7 +61,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
                         .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
                         .relate(ROUTE_PATH, "/authors/{authorId}/name")
                         .relate(ROUTE_METHOD, "PATCH")
-                        .relate(CUSTOM_ROUTE, "false")
+                        .relate(INTERNAL_ROUTE_HANDLER, "false")
                         .relate(ID, "authorId")
                         .relate(ID_TYPE, "java.lang.String")
                         .relate(BODY, "authorData")
@@ -75,7 +75,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
                         .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
                         .relate(ROUTE_PATH, "/authors/{authorId}")
                         .relate(ROUTE_METHOD, "GET")
-                        .relate(CUSTOM_ROUTE, "false")
+                        .relate(INTERNAL_ROUTE_HANDLER, "false")
                         .relate(ID, "authorId")
                         .relate(ID_TYPE, "java.lang.String");
 
@@ -96,7 +96,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
                         .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "false")
                         .relate(ROUTE_PATH, "/books")
                         .relate(ROUTE_METHOD, "GET")
-                        .relate(CUSTOM_ROUTE, "false");
+                        .relate(INTERNAL_ROUTE_HANDLER, "false");
 
         final CodeGenerationParameter bookResourceParameter =
                 CodeGenerationParameter.of(AUTO_DISPATCH_NAME, "io.vlingo.xoomapp.resources.BookResource")

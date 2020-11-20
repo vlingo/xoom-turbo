@@ -34,4 +34,9 @@ public interface DummyResource {
     @Route(method = GET, handler= QUERY_ALL)
     Completes<Response> queryDummies();
 
+    @Route(method = GET, path = "/{dummyId}")
+    default Completes<Response> queryById(@Id String dummyId) {
+        return Completes.withSuccess(Response.of(Response.Status.Ok, "[{}]"));
+    }
+
 }

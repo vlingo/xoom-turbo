@@ -55,7 +55,7 @@ public enum Label {
     ADAPTER_HANDLER_INVOCATION("adapterHandlerIndex"),
     USE_CUSTOM_ADAPTER_HANDLER_PARAM("useCustomAdapterHandlerParam"),
     USE_ADAPTER("useAdapter"),
-    CUSTOM_ROUTE("customRoute"),
+    INTERNAL_ROUTE_HANDLER("customRoute"),
     USE_ANNOTATIONS("annotations"),
     USE_AUTO_DISPATCH("useAutoDispatch"),
     GROUP_ID("groupId"),

@@ -12,7 +12,6 @@ import io.vlingo.xoom.annotation.TypeReader;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -38,7 +37,7 @@ public class HandlerResolver {
 
     public HandlerInvocation find(final int index) {
         return handlerInvocations.stream().filter(invocation -> invocation.index == index).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Handler Invocation with index " + index + "not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Handler Invocation with index " + index + " not found"));
     }
 
     private List<HandlerInvocation> resolveInvocations() {

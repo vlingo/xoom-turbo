@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.parameter.Label.CUSTOM_ROUTE;
+import static io.vlingo.xoom.codegen.parameter.Label.INTERNAL_ROUTE_HANDLER;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
@@ -44,7 +44,7 @@ public class RouteMethodTemplateData extends TemplateData {
     public static List<TemplateData> from(final CodeGenerationParameter mainParameter,
                                           final TemplateParameters parentParameters) {
         final Predicate<CodeGenerationParameter> filter =
-                parameter -> !parameter.retrieveRelatedValue(CUSTOM_ROUTE, Boolean::valueOf);
+                parameter -> !parameter.retrieveRelatedValue(INTERNAL_ROUTE_HANDLER, Boolean::valueOf);
 
         final Function<CodeGenerationParameter, RouteMethodTemplateData> mapper =
                 routeSignatureParameter -> new RouteMethodTemplateData(mainParameter,
