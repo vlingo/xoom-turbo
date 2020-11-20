@@ -53,12 +53,12 @@ public class RouteDeclarationParameter {
 
     private String resolvePath(final CodeGenerationParameter routeSignatureParameter) {
         final StringBuilder path = new StringBuilder();
-        final String uriRoot = "/" + routeSignatureParameter.parent().retrieveRelatedValue(URI_ROOT);
+        final String uriRoot = routeSignatureParameter.parent().retrieveRelatedValue(URI_ROOT);
 
         path.append(routeSignatureParameter.hasAny(ROUTE_PATH) ?
                 "/" + routeSignatureParameter.retrieveRelatedValue(ROUTE_PATH) : uriRoot);
 
-        if (path.indexOf(uriRoot) == -1) {
+        if (path.toString().startsWith(uriRoot)) {
             path.insert(0, uriRoot);
         }
 
