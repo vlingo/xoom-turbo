@@ -1,17 +1,12 @@
 package ${packageName};
 
-import java.util.ArrayList;
-import java.util.List;
-
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
 
-import io.vlingo.lattice.model.DomainEvent;
-import io.vlingo.lattice.model.IdentifiedDomainEvent;
 import io.vlingo.lattice.model.projection.Projectable;
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
-import io.vlingo.symbio.Entry;
+import io.vlingo.symbio.Source;
 
 public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   private static final ${dataName} Empty = ${dataName}.empty();

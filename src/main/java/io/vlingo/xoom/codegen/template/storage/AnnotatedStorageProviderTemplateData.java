@@ -57,25 +57,21 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                                               final List<TemplateData> templatesData,
                                               final List<Content> contents)  {
         return TemplateParameters.with(BASE_PACKAGE, basePackage)
-                .and(IMPORTS, resolveImports(projectionType, contents))
+                .and(IMPORTS, resolveImports(contents))
                 .and(PACKAGE_NAME, persistencePackage)
                 .and(STORAGE_TYPE, storageType.name())
                 .and(DATA_OBJECTS, resolveDataObjectNames(contents))
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, AdapterParameter.from(templatesData))
-                .and(PROJECTIONS, ProjectionParameter.from(projectionType, contents))
+                .and(PROJECTIONS, ProjectionParameter.from(contents))
                 .and(QUERIES, QueriesParameter.from(useCQRS, contents, templatesData))
                 .and(USE_CQRS, useCQRS).and(USE_ANNOTATIONS, true)
                 .andResolve(REQUIRE_ADAPTERS, params -> !params.<List>find(ADAPTERS).isEmpty())
                 .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
     }
 
-    private Set<ImportParameter> resolveImports(final ProjectionType projectionType, final List<Content> contents) {
-        final TemplateStandard[] relatedStandards =
-                projectionType.isEventBased() ? new TemplateStandard[]{AGGREGATE_STATE, DATA_OBJECT, DOMAIN_EVENT} :
-                        new TemplateStandard[]{AGGREGATE_STATE, DATA_OBJECT};
-
-        return ImportParameter.of(ContentQuery.findFullyQualifiedClassNames(contents, relatedStandards));
+    private Set<ImportParameter> resolveImports(final List<Content> contents) {
+        return ImportParameter.of(ContentQuery.findFullyQualifiedClassNames(contents, AGGREGATE_STATE, DATA_OBJECT, DOMAIN_EVENT));
     }
 
     private String resolveDataObjectNames(final List<Content> contents) {

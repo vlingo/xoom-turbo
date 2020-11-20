@@ -87,14 +87,14 @@ public class ProjectionTemplateData extends TemplateData {
         final String dataObjectQualifiedName =
                 ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents);
 
-        if(projectionType.isOperationBased()) {
-            return ImportParameter.of(stateQualifiedName, dataObjectQualifiedName);
-        }
-
         return templatesData.stream().filter(data -> data.hasStandard(PROJECTION_SOURCE_TYPES))
                 .map(data -> data.parameters().<String>find(PROJECTION_SOURCE_TYPES_QUALIFIED_NAME))
-                .map(qualifiedName -> ImportParameter.of(dataObjectQualifiedName, qualifiedName))
-                .flatMap(imports -> imports.stream()).collect(Collectors.toSet());
+                .map(qualifiedName -> {
+                    if(projectionType.isOperationBased()) {
+                        return ImportParameter.of(stateQualifiedName, dataObjectQualifiedName, qualifiedName);
+                    }
+                    return ImportParameter.of(dataObjectQualifiedName, qualifiedName);
+                }).flatMap(imports -> imports.stream()).collect(Collectors.toSet());
     }
 
     private String resolvePackage(final String basePackage) {

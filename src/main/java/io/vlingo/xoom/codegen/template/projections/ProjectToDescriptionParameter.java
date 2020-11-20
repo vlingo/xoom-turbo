@@ -89,7 +89,7 @@ public class ProjectToDescriptionParameter {
         final Set<String> eventNames =
                 ContentQuery.findClassNames(DOMAIN_EVENT, protocolPackage, contents);
 
-        if(projectionType.isOperationBased() || eventNames.isEmpty()) {
+        if(eventNames.isEmpty()) {
             return String.format(FIRST_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName) + ", " +
                     String.format(SECOND_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName);
         }
