@@ -68,7 +68,12 @@ public class QueriesParameter {
     }
 
     public static QueriesParameter from(final CodeGenerationParameter aggregateParameter,
-                                        final List<Content> contents) {
+                                        final List<Content> contents,
+                                        final Boolean useCQRS) {
+        if(!useCQRS) {
+            return QueriesParameter.empty();
+        }
+
         final String queriesProtocol = QUERIES.resolveClassname(aggregateParameter.value);
         final String queriesActor = QUERIES_ACTOR.resolveClassname(aggregateParameter.value);
         return new QueriesParameter(ContentQuery.findFullyQualifiedClassName(QUERIES, queriesProtocol, contents),

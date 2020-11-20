@@ -50,7 +50,8 @@ public class RestResourceTemplateData extends TemplateData {
     private TemplateParameters loadParameters(final CodeGenerationParameter aggregateParameter,
                                               final List<Content> contents,
                                               final Boolean useCQRS) {
-        final QueriesParameter queriesParameter = QueriesParameter.from(aggregateParameter, contents);
+        final QueriesParameter queriesParameter =
+                QueriesParameter.from(aggregateParameter, contents, useCQRS);
 
         final Function<TemplateParameters, Object> modelProtocolResolver =
                 params -> requireModelTypes(aggregateParameter) ? aggregateName : "";

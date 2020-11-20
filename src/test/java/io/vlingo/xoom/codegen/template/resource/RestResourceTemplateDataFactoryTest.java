@@ -33,7 +33,7 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 public class RestResourceTemplateDataFactoryTest {
 
     @Test
-    public void testRestResourceTemplateDataBuild() {
+    public void testThatRestResourceIsGeneratedWithCQRS() {
         final CodeGenerationParameter packageParameter =
                 CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp");
 
@@ -69,6 +69,54 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertEquals("AuthorQueries", queriesParameter.getProtocolName());
         Assert.assertEquals("AuthorQueriesActor", queriesParameter.getActorName());
         Assert.assertEquals("authorQueries", queriesParameter.getAttributeName());
+
+        final List<RouteDeclarationParameter> routeDeclarationParameters =
+                templateParameters.find(TemplateParameter.ROUTE_DECLARATIONS);
+
+        final RouteDeclarationParameter nameUpdateRouteDeclaration =
+                routeDeclarationParameters.stream().filter(parameter ->
+                        parameter.getHandlerName().equals("withName"))
+                        .findFirst().get();
+
+        Assert.assertEquals("AuthorData", nameUpdateRouteDeclaration.getBodyType());
+        Assert.assertEquals("post", nameUpdateRouteDeclaration.getBuilderMethod());
+        Assert.assertEquals("/authors/", nameUpdateRouteDeclaration.getPath());
+    }
+
+    @Test
+    public void testThatRestResourceIsGeneratedWithoutCQRS() {
+        final CodeGenerationParameter packageParameter =
+                CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp");
+
+        final CodeGenerationParameter useCQRSParameter =
+                CodeGenerationParameter.of(CQRS, "false");
+
+        final CodeGenerationParameters parameters =
+                CodeGenerationParameters.from(packageParameter,
+                        useCQRSParameter, authorAggregate());
+
+        final List<TemplateData> templatesData =
+                RestResourceTemplateDataFactory.build(parameters, contents());
+
+        Assert.assertEquals(1, templatesData.size());
+
+        final TemplateParameters templateParameters = templatesData.get(0).parameters();
+
+        Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.Author"));
+        Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorEntity"));
+        Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+        Assert.assertFalse(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries"));
+        Assert.assertEquals("io.vlingo.xoomapp.resource", templateParameters.find(TemplateParameter.PACKAGE_NAME));
+        Assert.assertEquals("AuthorResource", templateParameters.find(TemplateParameter.REST_RESOURCE_NAME));
+        Assert.assertEquals("Author", templateParameters.find(TemplateParameter.MODEL_PROTOCOL));
+        Assert.assertEquals("AuthorEntity", templateParameters.find(TemplateParameter.MODEL_ACTOR));
+        Assert.assertEquals("authors", templateParameters.find(TemplateParameter.URI_ROOT));
+        Assert.assertEquals(false, templateParameters.find(TemplateParameter.USE_CQRS));
+
+        final QueriesParameter queriesParameter =
+                templateParameters.find(TemplateParameter.QUERIES);
+
+        Assert.assertEquals(true, queriesParameter.isEmpty());
 
         final List<RouteDeclarationParameter> routeDeclarationParameters =
                 templateParameters.find(TemplateParameter.ROUTE_DECLARATIONS);
