@@ -68,7 +68,7 @@ public class CodeGenerationContext {
     }
 
     public CodeGenerationContext contents(final List<ContentLoader> loaders) {
-        loaders.forEach(loader -> loader.load(this));
+        loaders.stream().filter(ContentLoader::shouldLoad).forEach(loader -> loader.load(this));
         return this;
     }
 

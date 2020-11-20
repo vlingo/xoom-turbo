@@ -24,9 +24,7 @@ public class DataObjectContentLoader extends TypeBasedContentLoader {
 
     @Override
     protected List<TypeElement> retrieveContentSource() {
-        final DataObjects dataObjects =
-                annotatedClass == null ? null :
-                        annotatedClass.getAnnotation(DataObjects.class);
+        final DataObjects dataObjects = annotatedClass.getAnnotation(DataObjects.class);
 
         if(dataObjects == null) {
             return Collections.emptyList();

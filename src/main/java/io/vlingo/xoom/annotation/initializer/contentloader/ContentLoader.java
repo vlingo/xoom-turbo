@@ -27,6 +27,10 @@ public abstract class ContentLoader<T> {
 
     public abstract void load(final CodeGenerationContext context);
 
+    public boolean shouldLoad() {
+        return annotatedClass != null;
+    }
+
     protected abstract T retrieveContentSource();
 
 }

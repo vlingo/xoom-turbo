@@ -37,10 +37,7 @@ public class QueriesContentLoader extends ContentLoader<Map<TypeElement, TypeEle
 
     @Override
     protected Map<TypeElement, TypeElement> retrieveContentSource() {
-        final EnableQueries queries =
-                annotatedClass == null ? null :
-                        annotatedClass.getAnnotation(EnableQueries.class);
-
+        final EnableQueries queries = annotatedClass.getAnnotation(EnableQueries.class);
 
         if(queries == null) {
             return Collections.emptyMap();
