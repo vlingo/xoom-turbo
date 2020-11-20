@@ -17,11 +17,8 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   @Override
   protected ${dataName} currentDataFor(Projectable projectable) {
     becauseOf = projectable.becauseOf()[0];
-
-    // TODO: set state and current
     final ${stateName} state = projectable.object();
     final ${dataName} current = ${dataName}.from(state);
-
     return current;
   }
 

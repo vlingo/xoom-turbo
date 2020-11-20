@@ -16,12 +16,8 @@ import io.vlingo.symbio.Entry;
 public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   private static final ${dataName} Empty = ${dataName}.empty();
 
-  private String dataId;
-  private final List<IdentifiedDomainEvent> events;
-
   public ${projectionName}() {
     super(${storeProviderName}.instance().store);
-    this.events = new ArrayList<>(2);
   }
 
   @Override
@@ -30,23 +26,17 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   }
 
   @Override
-  protected String dataIdFor(final Projectable projectable) {
-    dataId = events.get(0).identity();
-    return dataId;
-  }
-
-  @Override
   protected ${dataName} merge(
-      final ${dataName} previousData,
+      ${dataName} previousData,
       final int previousVersion,
       final ${dataName} currentData,
       final int currentVersion) {
 
-    if (previousVersion == currentVersion) {
-      return currentData;
+    if (previousData == null) {
+      previousData = currentData;
     }
 
-    for (final DomainEvent event : events) {
+    for (final Source<?> event : sources()) {
       switch (${eventTypesName}.valueOf(event.typeName())) {
       <#list eventsNames as name>
         case ${name}:
@@ -59,14 +49,5 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
     }
 
     return previousData;
-  }
-
-  @Override
-  protected void prepareForMergeWith(final Projectable projectable) {
-    events.clear();
-
-    for (Entry <?> entry : projectable.entries()) {
-      events.add(entryAdapter().anyTypeFromEntry(entry));
-    }
   }
 }
