@@ -6,8 +6,20 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation.model;
 
-import io.vlingo.lattice.model.DomainEvent;
+import io.vlingo.lattice.model.IdentifiedDomainEvent;
 
-public class DummyCreated extends DomainEvent {
+import java.util.UUID;
 
+public class DummyCreated extends IdentifiedDomainEvent {
+
+    private final UUID eventId;
+
+    public DummyCreated() {
+        this.eventId = UUID.randomUUID();
+    }
+
+    @Override
+    public String identity() {
+        return eventId.toString();
+    }
 }

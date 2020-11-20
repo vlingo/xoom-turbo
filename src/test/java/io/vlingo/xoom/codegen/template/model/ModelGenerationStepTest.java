@@ -1,7 +1,6 @@
 package io.vlingo.xoom.codegen.template.model;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -16,7 +15,7 @@ import static io.vlingo.xoom.codegen.template.storage.StorageType.STATE_STORE;
 public class ModelGenerationStepTest {
 
     @Test
-    public void testStatefulModelGeneration() {
+    public void testThatStatefulModelIsGenerated() {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, STATE_STORE),
@@ -43,12 +42,12 @@ public class ModelGenerationStepTest {
         Assert.assertTrue(context.contents().get(1).contains("public Completes<AuthorState> withName(final String name)"));
         Assert.assertTrue(context.contents().get(1).contains("return apply(state.withName(name), new AuthorRegistered(state), () -> state)"));
         Assert.assertTrue(context.contents().get(2).contains("class AuthorState"));
-        Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered extends DomainEvent"));
-        Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends DomainEvent"));
+        Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered extends IdentifiedDomainEvent"));
+        Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends IdentifiedDomainEvent"));
     }
 
     @Test
-    public void testSourcedModelGeneration() {
+    public void testThatSourcedModelIsGenerated() {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, JOURNAL),
@@ -75,8 +74,8 @@ public class ModelGenerationStepTest {
         Assert.assertTrue(context.contents().get(1).contains("public Completes<AuthorState> withName(final String name) {"));
         Assert.assertTrue(context.contents().get(1).contains("return apply(new AuthorRegistered(state), () -> state);"));
         Assert.assertTrue(context.contents().get(2).contains("class AuthorState"));
-        Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered extends DomainEvent"));
-        Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends DomainEvent"));
+        Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered extends IdentifiedDomainEvent"));
+        Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends IdentifiedDomainEvent"));
     }
 
     private CodeGenerationParameter authorAggregate() {
