@@ -85,8 +85,8 @@ public class PersistenceParameterResolver {
 
     private String resolveCauseTypes(final Projection projection) {
         return typeRetriever.typesFrom(projection, Projection::becauseOf)
-                .stream().map(typeElement -> typeElement.getSimpleName().toString())
-                .map(name -> "\"" + name + "\"").collect(Collectors.joining(", "));
+                .stream().map(typeElement -> typeElement.getQualifiedName().toString())
+                .collect(Collectors.joining(","));
     }
 
 }

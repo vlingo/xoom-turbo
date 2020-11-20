@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static java.util.stream.Collectors.toList;
 
 public class ProjectToDescriptionParameter {
 
@@ -33,10 +35,12 @@ public class ProjectToDescriptionParameter {
                                                            final List<String> projectablesPerProjection)  {
         final Iterator<String> iterator = projectionNames.iterator();
 
-        return IntStream.range(0, projectionNames.size()).mapToObj(index ->
-            new ProjectToDescriptionParameter(index, projectionNames.size(),
-                    iterator.next(), projectablesPerProjection.get(index))
-        ).collect(Collectors.toList());
+        return IntStream.range(0, projectionNames.size()).mapToObj(index ->{
+                final String joinedEventNames = projectablesPerProjection.get(index);
+                final List<String> eventNames = Stream.of(joinedEventNames.split(","))
+                        .map(String::trim).collect(toList());
+                return new ProjectToDescriptionParameter(index, projectionNames.size(), iterator.next(), eventNames);
+        }).collect(toList());
     }
 
     public static List<ProjectToDescriptionParameter> from(final ProjectionType projectionType,
@@ -56,16 +60,23 @@ public class ProjectToDescriptionParameter {
                     buildCauseTypesExpression(aggregateProtocol, projectionType, contents);
 
             return new ProjectToDescriptionParameter(index, aggregateProtocols.size(), projectionName, becauseOf);
-        }).collect(Collectors.toList());
+        }).collect(toList());
     }
 
     private ProjectToDescriptionParameter(final int index,
                                           final int numberOfProtocols,
                                           final String projectionClassName,
-                                          final String sourceTypes) {
-        this.joinedTypes = sourceTypes;
+                                          final List<String> eventNames) {
+        this(index, numberOfProtocols, projectionClassName, formatEventNames(eventNames));
+    }
+
+    private ProjectToDescriptionParameter(final int index,
+                                          final int numberOfProtocols,
+                                          final String projectionClassName,
+                                          final String joinedTypes) {
         this.projectionClassName = projectionClassName;
         this.lastParameter = index == numberOfProtocols - 1;
+        this.joinedTypes = joinedTypes;
     }
 
     private static String buildCauseTypesExpression(final String aggregateProtocol,
@@ -82,7 +93,11 @@ public class ProjectToDescriptionParameter {
                     String.format(SECOND_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName);
         }
 
-        return eventNames.stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(", "));
+        return formatEventNames(eventNames);
+    }
+
+    private static String formatEventNames(final List<String> eventNames) {
+        return eventNames.stream().map(s -> s + ".class.getName()").collect(Collectors.joining(", "));
     }
 
     public String getInitializationCommand() {

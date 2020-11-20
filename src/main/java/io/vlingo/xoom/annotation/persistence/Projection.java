@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.annotation.persistence;
 
+import io.vlingo.lattice.model.IdentifiedDomainEvent;
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
 
 import java.lang.annotation.ElementType;
@@ -19,6 +20,6 @@ import java.lang.annotation.Target;
 public @interface Projection {
 
     Class<? extends StateStoreProjectionActor> actor();
-    Class<?>[] becauseOf();
+    Class<? extends IdentifiedDomainEvent>[] becauseOf();
 
 }

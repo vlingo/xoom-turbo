@@ -18,8 +18,7 @@ import java.util.Set;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PROJECTION_TO_DESCRIPTION;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
@@ -41,7 +40,7 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
     }
 
     private ProjectionDispatcherProviderTemplateData(final String projectables,
-                                                    final List<Content> contents) {
+                                                     final List<Content> contents) {
         final String packageName = ContentQuery.findPackage(PROJECTION, contents);
 
         final List<String> projectablesPerProjection = Arrays.asList(projectables.split(";"));
@@ -64,7 +63,8 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
                 ProjectToDescriptionParameter.from(projectionType, contents);
 
         this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionParameters);
+                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionParameters)
+                .addImports(ContentQuery.findFullyQualifiedClassNames(DOMAIN_EVENT, contents));
     }
 
     private String resolvePackage(final String basePackage) {

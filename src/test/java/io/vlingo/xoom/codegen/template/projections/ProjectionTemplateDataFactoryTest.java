@@ -29,6 +29,7 @@ import java.util.stream.IntStream;
 import static io.vlingo.xoom.codegen.parameter.Label.PROJECTION_TYPE;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class ProjectionTemplateDataFactoryTest {
@@ -39,7 +40,7 @@ public class ProjectionTemplateDataFactoryTest {
                 new HashMap<Label, String>() {{
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(PROJECTION_TYPE, ProjectionType.CUSTOM.name());
-                    put(PROJECTABLES, "\"AuthorRegistered\", \"AuthorRated\";\"BookSoldOut\", \"BookPurchased\"");
+                    put(PROJECTABLES, "AuthorRegistered,AuthorRated;BookSoldOut,BookPurchased");
                 }};
 
         final CodeGenerationContext context =
@@ -53,8 +54,8 @@ public class ProjectionTemplateDataFactoryTest {
                 ProjectionTemplateDataFactory.build(context).get(0).parameters();
 
         Assert.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"AuthorRegistered\", \"AuthorRated\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
-        Assert.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"BookSoldOut\", \"BookPurchased\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
+        Assert.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, AuthorRegistered.class.getName(), AuthorRated.class.getName()),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
+        Assert.assertEquals("ProjectToDescription.with(BookProjectionActor.class, BookSoldOut.class.getName(), BookPurchased.class.getName())", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
     }
 
     @Test
@@ -146,12 +147,15 @@ public class ProjectionTemplateDataFactoryTest {
         context.addContent(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT);
         context.addContent(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT);
         context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"),  AUTHOR_CONTENT_TEXT);
+        context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRegistered.java"),  AUTHOR_REGISTERED_CONTENT_TEXT);
+        context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRated.java"),  AUTHOR_RATED_CONTENT_TEXT);
         context.addContent(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"),  BOOK_CONTENT_TEXT);
+        context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"),  BOOK_PURCHASED_CONTENT_TEXT);
+        context.addContent(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookSoldOut.java"),  BOOK_SOLD_OUT_CONTENT_TEXT);
         context.addContent(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), AUTHOR_DATA_CONTENT_TEXT);
         context.addContent(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), BOOK_DATA_CONTENT_TEXT);
     }
 
-    private static final String EXPECTED_INFRA_PACKAGE = "io.vlingo.xoomapp.infrastructure";
     private static final String EXPECTED_PERSISTENCE_PACKAGE = "io.vlingo.xoomapp.infrastructure.persistence";
 
     private static final String PROJECT_PATH =
@@ -204,6 +208,30 @@ public class ProjectionTemplateDataFactoryTest {
     private static final String BOOK_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model; \\n" +
                     "public interface Book { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_SOLD_OUT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public class BookSoldOut extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_PURCHASED_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public class BookPurchased extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_RATED_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorRated extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_REGISTERED_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorRegistered extends DomainEvent { \\n" +
                     "... \\n" +
                     "}";
 
