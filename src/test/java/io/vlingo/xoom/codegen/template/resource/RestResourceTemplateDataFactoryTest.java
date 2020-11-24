@@ -60,7 +60,7 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertEquals("Author", templateParameters.find(TemplateParameter.MODEL_PROTOCOL));
         Assert.assertEquals("AuthorEntity", templateParameters.find(TemplateParameter.MODEL_ACTOR));
         Assert.assertEquals("QueryModelStateStoreProvider", templateParameters.find(TemplateParameter.STORE_PROVIDER_NAME));
-        Assert.assertEquals("authors", templateParameters.find(TemplateParameter.URI_ROOT));
+        Assert.assertEquals("/authors", templateParameters.find(TemplateParameter.URI_ROOT));
         Assert.assertEquals(true, templateParameters.find(TemplateParameter.USE_CQRS));
 
         final QueriesParameter queriesParameter =
@@ -80,7 +80,7 @@ public class RestResourceTemplateDataFactoryTest {
 
         Assert.assertEquals("AuthorData", nameUpdateRouteDeclaration.getBodyType());
         Assert.assertEquals("post", nameUpdateRouteDeclaration.getBuilderMethod());
-        Assert.assertEquals("/authors/", nameUpdateRouteDeclaration.getPath());
+        Assert.assertEquals("/authors", nameUpdateRouteDeclaration.getPath());
     }
 
     @Test
@@ -110,7 +110,7 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertEquals("AuthorResource", templateParameters.find(TemplateParameter.REST_RESOURCE_NAME));
         Assert.assertEquals("Author", templateParameters.find(TemplateParameter.MODEL_PROTOCOL));
         Assert.assertEquals("AuthorEntity", templateParameters.find(TemplateParameter.MODEL_ACTOR));
-        Assert.assertEquals("authors", templateParameters.find(TemplateParameter.URI_ROOT));
+        Assert.assertEquals("/authors", templateParameters.find(TemplateParameter.URI_ROOT));
         Assert.assertEquals(false, templateParameters.find(TemplateParameter.USE_CQRS));
 
         final QueriesParameter queriesParameter =
@@ -128,7 +128,7 @@ public class RestResourceTemplateDataFactoryTest {
 
         Assert.assertEquals("AuthorData", nameUpdateRouteDeclaration.getBodyType());
         Assert.assertEquals("post", nameUpdateRouteDeclaration.getBuilderMethod());
-        Assert.assertEquals("/authors/", nameUpdateRouteDeclaration.getPath());
+        Assert.assertEquals("/authors", nameUpdateRouteDeclaration.getPath());
     }
 
     private CodeGenerationParameter authorAggregate() {
@@ -166,17 +166,17 @@ public class RestResourceTemplateDataFactoryTest {
         final CodeGenerationParameter withNameRoute =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "withName")
                         .relate(ROUTE_METHOD, "POST")
-                        .relate(ROUTE_PATH, "/authors/")
+                        .relate(ROUTE_PATH, "/")
                         .relate(REQUIRE_ENTITY_LOADING, "false");
 
         final CodeGenerationParameter changeRankRoute =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeRank")
                         .relate(ROUTE_METHOD, "PATCH")
-                        .relate(ROUTE_PATH, "/authors/{id}/rank")
+                        .relate(ROUTE_PATH, "/{id}/rank")
                         .relate(REQUIRE_ENTITY_LOADING, "true");
 
         return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-                .relate(URI_ROOT, "authors").relate(idField)
+                .relate(URI_ROOT, "/authors").relate(idField)
                 .relate(nameField).relate(rankField).relate(factoryMethod)
                 .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
                 .relate(authorRegisteredEvent).relate(authorRankedEvent);

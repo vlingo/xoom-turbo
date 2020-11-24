@@ -119,7 +119,7 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeAuthorName(final String authorId, final AuthorData authorData)")
                         .relate(ROUTE_HANDLER_INVOCATION, "changeAuthorNameHandler.handler.handle(author,authorData)")
                         .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
-                        .relate(ROUTE_PATH, "/authors/{authorId}/name")
+                        .relate(ROUTE_PATH, "/{authorId}/name")
                         .relate(ROUTE_METHOD, "PATCH")
                         .relate(INTERNAL_ROUTE_HANDLER, "false")
                         .relate(ID, "authorId")
@@ -133,7 +133,7 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryById(final String authorId)")
                         .relate(ROUTE_HANDLER_INVOCATION, "queryByIdHandler.handler.handle(authorId, authorQueries)")
                         .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
-                        .relate(ROUTE_PATH, "/authors/{authorId}")
+                        .relate(ROUTE_PATH, "/{authorId}")
                         .relate(ROUTE_METHOD, "GET")
                         .relate(INTERNAL_ROUTE_HANDLER, "false")
                         .relate(ID, "authorId")
@@ -154,7 +154,7 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryBooks()")
                         .relate(ROUTE_HANDLER_INVOCATION, "queryAllHandler.handler.handle")
                         .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "false")
-                        .relate(ROUTE_PATH, "/books")
+                        .relate(ROUTE_PATH, "")
                         .relate(ROUTE_METHOD, "GET")
                         .relate(INTERNAL_ROUTE_HANDLER, "false");
 

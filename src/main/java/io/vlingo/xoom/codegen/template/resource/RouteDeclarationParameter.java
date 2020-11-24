@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
 import static java.util.stream.Collectors.toList;
 
 public class RouteDeclarationParameter {
@@ -44,29 +44,11 @@ public class RouteDeclarationParameter {
                                       final CodeGenerationParameter routeSignatureParameter) {
         this.signature = RouteDetail.resolveMethodSignature(routeSignatureParameter);
         this.handlerName = resolveHandlerName();
-        this.path = resolvePath(routeSignatureParameter);
+        this.path = RoutePathFormatter.formatFullPath(routeSignatureParameter);
         this.bodyType = RouteDetail.resolveBodyType(routeSignatureParameter);
         this.builderMethod = routeSignatureParameter.retrieveRelatedValue(ROUTE_METHOD);
         this.parameterTypes.addAll(resolveParameterTypes(routeSignatureParameter));
         this.last = routeIndex == numberOfRoutes - 1;
-    }
-
-    private String resolvePath(final CodeGenerationParameter routeSignatureParameter) {
-        final StringBuilder path = new StringBuilder();
-        final String uriRoot = routeSignatureParameter.parent().retrieveRelatedValue(URI_ROOT);
-
-        path.append(routeSignatureParameter.hasAny(ROUTE_PATH) ?
-                "/" + routeSignatureParameter.retrieveRelatedValue(ROUTE_PATH) : uriRoot);
-
-        if (path.toString().startsWith(uriRoot)) {
-            path.insert(0, uriRoot);
-        }
-
-        String resolvedPath = path.toString();
-        while(resolvedPath.contains("//")) {
-            resolvedPath = resolvedPath.replaceAll("//", "/");
-        }
-        return resolvedPath;
     }
 
     private String resolveHandlerName() {

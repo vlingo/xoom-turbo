@@ -41,13 +41,16 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
 
         Assert.assertTrue(authorResourceHandlerContent.contains("import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;"));
         Assert.assertTrue(authorResourceHandlerContent.contains(".andThenTo(author -> AuthorHandlers.changeAuthorNameHandler.handler.handle(author,authorData))"));
-        Assert.assertTrue(authorResourceHandlerContent.contains("return AuthorHandlers.queryByIdHandler.handler.handle(authorId, authorQueries)"));
+        Assert.assertTrue(authorResourceHandlerContent.contains("return AuthorHandlers.queryByIdHandler.handler.handle(id, authorQueries)"));
+        Assert.assertTrue(authorResourceHandlerContent.contains("patch(\"/authors/{id}/name\")"));
+        Assert.assertTrue(authorResourceHandlerContent.contains("get(\"/authors/{id}\")"));
 
         final Content bookResourceHandlerContent =
                 context.contents().stream().filter(content ->
                         content.retrieveClassName().equals("BookResourceHandler")).findFirst().get();
 
         Assert.assertTrue(bookResourceHandlerContent.contains("import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;"));
+        Assert.assertTrue(bookResourceHandlerContent.contains("get(\"/books\")"));
         Assert.assertTrue(bookResourceHandlerContent.contains("return BookHandlers.queryAllHandler.handler.handle($queries)"));
     }
 
@@ -56,10 +59,10 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
                 CodeGenerationParameter.of(USE_AUTO_DISPATCH, true);
 
         final CodeGenerationParameter firstAuthorRouteParameter =
-                CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeAuthorName(final String authorId, final AuthorData authorData)")
+                CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeAuthorName(final String id, final AuthorData authorData)")
                         .relate(ROUTE_HANDLER_INVOCATION, "changeAuthorNameHandler.handler.handle(author,authorData)")
                         .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
-                        .relate(ROUTE_PATH, "/authors/{authorId}/name")
+                        .relate(ROUTE_PATH, "/{id}/name")
                         .relate(ROUTE_METHOD, "PATCH")
                         .relate(INTERNAL_ROUTE_HANDLER, "false")
                         .relate(ID, "authorId")
@@ -70,10 +73,10 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
                         .relate(USE_CUSTOM_ADAPTER_HANDLER_PARAM, "false");
 
         final CodeGenerationParameter secondAuthorRouteParameter =
-                CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryById(final String authorId)")
-                        .relate(ROUTE_HANDLER_INVOCATION, "queryByIdHandler.handler.handle(authorId, authorQueries)")
+                CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryById(final String id)")
+                        .relate(ROUTE_HANDLER_INVOCATION, "queryByIdHandler.handler.handle(id, authorQueries)")
                         .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
-                        .relate(ROUTE_PATH, "/authors/{authorId}")
+                        .relate(ROUTE_PATH, "/{id}")
                         .relate(ROUTE_METHOD, "GET")
                         .relate(INTERNAL_ROUTE_HANDLER, "false")
                         .relate(ID, "authorId")
@@ -94,7 +97,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "queryBooks()")
                         .relate(ROUTE_HANDLER_INVOCATION, "queryAllHandler.handler.handle")
                         .relate(USE_CUSTOM_ROUTE_HANDLER_PARAM, "false")
-                        .relate(ROUTE_PATH, "/books")
+                        .relate(ROUTE_PATH, "")
                         .relate(ROUTE_METHOD, "GET")
                         .relate(INTERNAL_ROUTE_HANDLER, "false");
 
