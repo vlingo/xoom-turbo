@@ -16,17 +16,25 @@ public class TemplateFile {
 
     private final String absolutePath;
     private final String filename;
+    private final boolean placeholder;
 
     public TemplateFile(final CodeGenerationContext context,
                         final TemplateData templateData) {
         this(context.isInternalGeneration() ? "" : FileLocationResolver.from(context, templateData),
-                templateData.filename());
+                templateData.filename(), templateData.isPlaceholder());
     }
 
     public TemplateFile(final String absolutePath,
                         final String filename) {
+        this(absolutePath, filename, false);
+    }
+
+    private TemplateFile(final String absolutePath,
+                        final String filename,
+                        final boolean placeholder) {
         this.absolutePath = absolutePath;
         this.filename = filename;
+        this.placeholder = placeholder;
     }
 
     public String filename() {

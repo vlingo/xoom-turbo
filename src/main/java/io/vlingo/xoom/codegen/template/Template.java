@@ -23,7 +23,7 @@ public enum Template {
     AGGREGATE_STATE("AggregateState"),
     DOMAIN_EVENT("DomainEvent"),
     JOURNAL_PROVIDER("JournalProvider"),
-    ANNOTATED_STORE_PROVIDER("PersistenceSetup"),
+    PERSISTENCE_SETUP("PersistenceSetup"),
     STATE_STORE_PROVIDER("StateStoreProvider"),
     OBJECT_STORE_PROVIDER("ObjectStoreProvider"),
     ENTRY_ADAPTER("EntryAdapter"),

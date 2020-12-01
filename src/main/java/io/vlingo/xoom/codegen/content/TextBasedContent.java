@@ -83,7 +83,7 @@ public class TextBasedContent extends Content {
 
     @Override
     public String retrieveQualifiedName() {
-        return String.format("%s.%s", retrievePackage(), retrieveClassName());
+        return ClassFormatter.qualifiedNameOf(retrievePackage(), retrieveClassName());
     }
 
     @Override

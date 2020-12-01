@@ -26,7 +26,7 @@ import static io.vlingo.xoom.codegen.template.projections.ProjectionType.EVENT_B
 import static io.vlingo.xoom.codegen.template.storage.Model.COMMAND;
 import static io.vlingo.xoom.codegen.template.storage.Model.QUERY;
 
-public class AnnotatedStorageProviderTemplateDataTest {
+public class PersistenceSetupTemplateDataTest {
 
     @Test
     public void testWithAdaptersAndProjections() {
@@ -35,9 +35,10 @@ public class AnnotatedStorageProviderTemplateDataTest {
                         StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, true, true);
 
         //General Assert
-        Assert.assertEquals(8, allTemplatesData.size());
+        Assert.assertEquals(9, allTemplatesData.size());
         Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(QUERIES)).count());
         Assert.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(QUERIES_ACTOR)).count());
+        Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(PERSISTENCE_SETUP)).count());
         Assert.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(STORE_PROVIDER)).count());
 
         //Assert for Queries
@@ -66,39 +67,44 @@ public class AnnotatedStorageProviderTemplateDataTest {
         Assert.assertEquals("BookQueriesActor", queriesActorParameters.find(QUERIES_ACTOR_NAME));
 
         //Assert for StoreProvider
-        final TemplateData storeProviderTemplateData =
+        final TemplateData storeProviderData =
                 allTemplatesData.stream().filter(templateData -> templateData.hasStandard(STORE_PROVIDER)).findFirst().get();
 
-        final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
+        Assert.assertTrue(storeProviderData.isPlaceholder());
 
-        Assert.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
-        Assert.assertEquals("io.vlingo.xoomapp", storeProviderParameters.find(BASE_PACKAGE));
-        Assert.assertEquals("PersistenceSetup", storeProviderParameters.find(STORE_PROVIDER_NAME));
-        Assert.assertEquals(7, storeProviderParameters.<Set<ImportParameter>>find(IMPORTS).size());
-        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorState"));
-        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookState"));
-        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorRated"));
-        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookRented"));
-        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.model.book.BookPurchased"));
-        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
-        Assert.assertTrue(storeProviderParameters.hasImport("io.vlingo.xoomapp.infrastructure.BookData"));
+        //Assert for PersistenceSetup
+        final TemplateData persistenceSetupData =
+                allTemplatesData.stream().filter(templateData -> templateData.hasStandard(PERSISTENCE_SETUP)).findFirst().get();
 
-        Assert.assertEquals("BookState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
-        Assert.assertEquals(false, storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).isLast());
-        Assert.assertEquals("AuthorState", storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
-        Assert.assertEquals(true, storeProviderParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).isLast());
-        Assert.assertEquals("AuthorProjectionActor", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getActor());
-        Assert.assertEquals("AuthorRated.class", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getCauses());
-        Assert.assertEquals(false, storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).isLast());
-        Assert.assertEquals("BookProjectionActor", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getActor());
-        Assert.assertEquals("BookRented.class, BookPurchased.class", storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getCauses());
-        Assert.assertEquals(true, storeProviderParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).isLast());
-        Assert.assertEquals("PersistenceSetup.java", storeProviderTemplateData.filename());
-        Assert.assertEquals("AuthorData.class, BookData.class", storeProviderParameters.find(DATA_OBJECTS));
-        Assert.assertEquals(true, storeProviderParameters.find(REQUIRE_ADAPTERS));
-        Assert.assertEquals(true, storeProviderParameters.find(USE_PROJECTIONS));
-        Assert.assertEquals(true, storeProviderParameters.find(USE_ANNOTATIONS));
-        Assert.assertEquals(true, storeProviderParameters.find(USE_CQRS));
+        final TemplateParameters persistenceSetupParameters = persistenceSetupData.parameters();
+
+        Assert.assertEquals(EXPECTED_PACKAGE, persistenceSetupParameters.find(PACKAGE_NAME));
+        Assert.assertEquals("io.vlingo.xoomapp", persistenceSetupParameters.find(BASE_PACKAGE));
+        Assert.assertEquals(7, persistenceSetupParameters.<Set<ImportParameter>>find(IMPORTS).size());
+        Assert.assertTrue(persistenceSetupParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorState"));
+        Assert.assertTrue(persistenceSetupParameters.hasImport("io.vlingo.xoomapp.model.book.BookState"));
+        Assert.assertTrue(persistenceSetupParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorRated"));
+        Assert.assertTrue(persistenceSetupParameters.hasImport("io.vlingo.xoomapp.model.book.BookRented"));
+        Assert.assertTrue(persistenceSetupParameters.hasImport("io.vlingo.xoomapp.model.book.BookPurchased"));
+        Assert.assertTrue(persistenceSetupParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+        Assert.assertTrue(persistenceSetupParameters.hasImport("io.vlingo.xoomapp.infrastructure.BookData"));
+
+        Assert.assertEquals("BookState", persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
+        Assert.assertEquals(false, persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).isLast());
+        Assert.assertEquals("AuthorState", persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
+        Assert.assertEquals(true, persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).isLast());
+        Assert.assertEquals("AuthorProjectionActor", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getActor());
+        Assert.assertEquals("AuthorRated.class", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getCauses());
+        Assert.assertEquals(false, persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).isLast());
+        Assert.assertEquals("BookProjectionActor", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getActor());
+        Assert.assertEquals("BookRented.class, BookPurchased.class", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getCauses());
+        Assert.assertEquals(true, persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).isLast());
+        Assert.assertEquals("PersistenceSetup.java", persistenceSetupData.filename());
+        Assert.assertEquals("AuthorData.class, BookData.class", persistenceSetupParameters.find(DATA_OBJECTS));
+        Assert.assertEquals(true, persistenceSetupParameters.find(REQUIRE_ADAPTERS));
+        Assert.assertEquals(true, persistenceSetupParameters.find(USE_PROJECTIONS));
+        Assert.assertEquals(true, persistenceSetupParameters.find(USE_ANNOTATIONS));
+        Assert.assertEquals(true, persistenceSetupParameters.find(USE_CQRS));
     }
 
     private List<Content> contents() {

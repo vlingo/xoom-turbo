@@ -36,20 +36,24 @@ public class StorageProviderTemplateData extends TemplateData {
                                           final ProjectionType projectionType,
                                           final List<TemplateData> stateAdaptersTemplateData,
                                           final List<Content> contents,
-                                          final Stream<Model> models) {
-        return models.sorted().map(model -> new StorageProviderTemplateData(persistencePackage, storageType,
-                projectionType, stateAdaptersTemplateData, contents, model)).collect(Collectors.toList());
+                                          final Stream<Model> models,
+                                          final boolean useAnnotation) {
+        return models.sorted().filter(model -> supportModel(model, useAnnotation))
+                .map(model -> new StorageProviderTemplateData(persistencePackage, storageType,
+                projectionType, stateAdaptersTemplateData, contents, useAnnotation, model))
+                .collect(Collectors.toList());
     }
 
-    private StorageProviderTemplateData(final String persistencePackage,
-                                        final StorageType storageType,
-                                        final ProjectionType projectionType,
-                                        final List<TemplateData> stateAdaptersTemplateData,
-                                        final List<Content> contents,
-                                        final Model model) {
+    protected StorageProviderTemplateData(final String persistencePackage,
+                                          final StorageType storageType,
+                                          final ProjectionType projectionType,
+                                          final List<TemplateData> stateAdaptersTemplateData,
+                                          final List<Content> contents,
+                                          final boolean useAnnotation,
+                                          final Model model) {
         this.templateParameters =
                 loadParameters(persistencePackage, storageType, projectionType,
-                        stateAdaptersTemplateData, contents, model);
+                        stateAdaptersTemplateData, contents, useAnnotation, model);
     }
 
     private TemplateParameters loadParameters(final String packageName,
@@ -57,6 +61,7 @@ public class StorageProviderTemplateData extends TemplateData {
                                               final ProjectionType projectionType,
                                               final List<TemplateData> templatesData,
                                               final List<Content> contents,
+                                              final boolean useAnnotation,
                                               final Model model) {
         final List<AdapterParameter> adapterParameters = AdapterParameter.from(templatesData);
         final List<QueriesParameter> queriesParameters = QueriesParameter.from(model, contents, templatesData);
@@ -70,7 +75,8 @@ public class StorageProviderTemplateData extends TemplateData {
                 .and(ADAPTERS, adapterParameters).and(QUERIES, queriesParameters)
                 .and(AGGREGATES, ContentQuery.findClassNames(AGGREGATE, contents))
                 .and(PERSISTENT_TYPES, persistentTypes.map(ClassFormatter::simpleNameOf).collect(toSet()))
-                .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
+                .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
+                .and(USE_ANNOTATIONS, useAnnotation);
     }
 
     private Set<ImportParameter> resolveImports(final Model model,
@@ -94,6 +100,13 @@ public class StorageProviderTemplateData extends TemplateData {
                 aggregateActorQualifiedNames, persistentTypes);
     }
 
+    private static boolean supportModel(final Model model, final boolean useAnnotation) {
+        if(useAnnotation) {
+            return model.isQueryModel();
+        }
+        return true;
+    }
+
     @Override
     public TemplateParameters parameters() {
         return templateParameters;
@@ -102,6 +115,11 @@ public class StorageProviderTemplateData extends TemplateData {
     @Override
     public TemplateStandard standard() {
         return STORE_PROVIDER;
+    }
+
+    @Override
+    public boolean isPlaceholder() {
+        return templateParameters.find(USE_ANNOTATIONS);
     }
 
 }

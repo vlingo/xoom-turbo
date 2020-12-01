@@ -136,24 +136,24 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assert.assertEquals(17, context.contents().size());
-        Assert.assertEquals("PersistenceSetup", context.contents().get(16).retrieveClassName());
-        Assert.assertTrue(context.contents().get(16).contains("class PersistenceSetup"));
-        Assert.assertTrue(context.contents().get(16).contains("@Persistence(basePackage = \"io.vlingo\", storageType = StorageType.STATE_STORE, cqrs = true)"));
-        Assert.assertTrue(context.contents().get(16).contains("@Projections({"));
-        Assert.assertTrue(context.contents().get(16).contains("@Projection(actor = AuthorProjectionActor.class, becauseOf = {}),"));
-        Assert.assertTrue(context.contents().get(16).contains("@Projection(actor = BookProjectionActor.class, becauseOf = {BookRented.class, BookPurchased.class})"));
-        Assert.assertTrue(context.contents().get(16).contains("@Adapters({"));
-        Assert.assertTrue(context.contents().get(16).contains("BookState.class,"));
-        Assert.assertTrue(context.contents().get(16).contains("AuthorState.class"));
-        Assert.assertTrue(!context.contents().get(16).contains("AuthorState.class,"));
-        Assert.assertTrue(context.contents().get(16).contains("import io.vlingo.xoom.annotation.persistence.EnableQueries;"));
-        Assert.assertTrue(context.contents().get(16).contains("import io.vlingo.xoom.annotation.persistence.QueriesEntry;"));
-        Assert.assertTrue(context.contents().get(16).contains("import io.vlingo.xoom.annotation.persistence.DataObjects;"));
-        Assert.assertTrue(context.contents().get(16).contains("@EnableQueries({"));
-        Assert.assertTrue(context.contents().get(16).contains("@QueriesEntry(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)"));
-        Assert.assertTrue(context.contents().get(16).contains("@QueriesEntry(protocol = BookQueries.class, actor = BookQueriesActor.class)"));
-        Assert.assertTrue(context.contents().get(16).contains("@DataObjects({AuthorData.class, BookData.class})"));
+        Assert.assertEquals(18, context.contents().size());
+        Assert.assertEquals("PersistenceSetup", context.contents().get(17).retrieveClassName());
+        Assert.assertTrue(context.contents().get(17).contains("class PersistenceSetup"));
+        Assert.assertTrue(context.contents().get(17).contains("@Persistence(basePackage = \"io.vlingo\", storageType = StorageType.STATE_STORE, cqrs = true)"));
+        Assert.assertTrue(context.contents().get(17).contains("@Projections({"));
+        Assert.assertTrue(context.contents().get(17).contains("@Projection(actor = AuthorProjectionActor.class, becauseOf = {}),"));
+        Assert.assertTrue(context.contents().get(17).contains("@Projection(actor = BookProjectionActor.class, becauseOf = {BookRented.class, BookPurchased.class})"));
+        Assert.assertTrue(context.contents().get(17).contains("@Adapters({"));
+        Assert.assertTrue(context.contents().get(17).contains("BookState.class,"));
+        Assert.assertTrue(context.contents().get(17).contains("AuthorState.class"));
+        Assert.assertTrue(!context.contents().get(17).contains("AuthorState.class,"));
+        Assert.assertTrue(context.contents().get(17).contains("import io.vlingo.xoom.annotation.persistence.EnableQueries;"));
+        Assert.assertTrue(context.contents().get(17).contains("import io.vlingo.xoom.annotation.persistence.QueriesEntry;"));
+        Assert.assertTrue(context.contents().get(17).contains("import io.vlingo.xoom.annotation.persistence.DataObjects;"));
+        Assert.assertTrue(context.contents().get(17).contains("@EnableQueries({"));
+        Assert.assertTrue(context.contents().get(17).contains("@QueriesEntry(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)"));
+        Assert.assertTrue(context.contents().get(17).contains("@QueriesEntry(protocol = BookQueries.class, actor = BookQueriesActor.class)"));
+        Assert.assertTrue(context.contents().get(17).contains("@DataObjects({AuthorData.class, BookData.class})"));
     }
 
     private void loadProperties(final CodeGenerationContext context,

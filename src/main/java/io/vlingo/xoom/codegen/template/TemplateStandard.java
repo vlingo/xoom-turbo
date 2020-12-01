@@ -103,22 +103,17 @@ public enum TemplateStandard {
 
     DOMAIN_EVENT(parameters -> Template.DOMAIN_EVENT.filename),
 
-    STORE_PROVIDER(parameters -> {
-        if(parameters.find(USE_ANNOTATIONS, false)) {
-            return Template.ANNOTATED_STORE_PROVIDER.filename;
-        }
-        return storeProviderTemplatesFrom(parameters.find(MODEL))
-                .get(parameters.find(STORAGE_TYPE));
-    }, (name, parameters) -> {
-        if(parameters.find(USE_ANNOTATIONS, false)) {
-            return "PersistenceSetup";
-        }
-        final StorageType storageType = parameters.find(STORAGE_TYPE);
-        final Model model = parameters.find(MODEL);
-        if(model.isQueryModel()) {
-            return STATE_STORE.resolveProviderNameFrom(model);
-        }
-        return storageType.resolveProviderNameFrom(model);
+    PERSISTENCE_SETUP(parameters -> Template.PERSISTENCE_SETUP.filename,
+            (name, parameters) -> "PersistenceSetup"),
+
+    STORE_PROVIDER(parameters -> storeProviderTemplatesFrom(parameters.find(MODEL)).get(parameters.find(STORAGE_TYPE)),
+            (name, parameters) -> {
+                final StorageType storageType = parameters.find(STORAGE_TYPE);
+                final Model model = parameters.find(MODEL);
+                if(model.isQueryModel()) {
+                    return STATE_STORE.resolveProviderNameFrom(model);
+                }
+                return storageType.resolveProviderNameFrom(model);
     });
 
     private static final String DEFAULT_FILE_EXTENSION = ".java";

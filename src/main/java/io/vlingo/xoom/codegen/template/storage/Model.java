@@ -21,7 +21,7 @@ public enum Model {
         this.title = title;
     }
 
-    public static Stream<Model> applicableFor(final Boolean useCQRS) {
+    public static Stream<Model> applicableTo(final Boolean useCQRS) {
         if(useCQRS) {
             return Stream.of(QUERY, COMMAND);
         }

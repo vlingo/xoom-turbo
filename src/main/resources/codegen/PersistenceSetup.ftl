@@ -53,7 +53,7 @@ import ${import.qualifiedClassName};
 <#if dataObjects?has_content>
 @DataObjects({${dataObjects}})
 </#if>
-public class ${storeProviderName} {
+public class PersistenceSetup {
 
 
 }

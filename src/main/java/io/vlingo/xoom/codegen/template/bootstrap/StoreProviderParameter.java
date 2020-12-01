@@ -37,7 +37,7 @@ public class StoreProviderParameter {
             return Collections.emptyList();
         }
 
-        return Model.applicableFor(useCQRS)
+        return Model.applicableTo(useCQRS)
                 .map(model -> new StoreProviderParameter(storageType, model, useProjections))
                 .collect(Collectors.toList());
     }

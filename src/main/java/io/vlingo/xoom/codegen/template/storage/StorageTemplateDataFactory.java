@@ -12,7 +12,6 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -45,9 +44,13 @@ public class StorageTemplateDataFactory {
                 useCQRS, useAnnotations, storageType, projectionType, templatesData,
                 contents));
 
+        if(useAnnotations) {
+            templatesData.add(PersistenceSetupTemplateData.from(basePackage, persistencePackage,
+                    useCQRS, storageType, projectionType, templatesData, contents));
+        }
+
         return templatesData;
     }
-
 
     private static List<TemplateData> buildStoreProvidersTemplateData(final String basePackage,
                                                                       final String persistencePackage,
@@ -57,18 +60,9 @@ public class StorageTemplateDataFactory {
                                                                       final ProjectionType projectionType,
                                                                       final List<TemplateData> templatesData,
                                                                       final List<Content> contents) {
-        if(useAnnotations) {
-            final TemplateData annotatedTemplateData =
-                    AnnotatedStorageProviderTemplateData.from(basePackage, persistencePackage,
-                            useCQRS, storageType, projectionType, templatesData, contents);
-
-            return Arrays.asList(annotatedTemplateData);
-        }
-
         return StorageProviderTemplateData.from(persistencePackage, storageType, projectionType,
-                templatesData, contents, Model.applicableFor(useCQRS));
+                templatesData, contents, Model.applicableTo(useCQRS), useAnnotations);
     }
-
 
     private static String resolvePackage(final String basePackage) {
         if(basePackage.endsWith(".infrastructure")) {

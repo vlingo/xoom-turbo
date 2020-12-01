@@ -22,7 +22,7 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
-public class AnnotatedStorageProviderTemplateData extends TemplateData {
+public class PersistenceSetupTemplateData extends TemplateData {
 
     private final TemplateParameters templateParameters;
 
@@ -33,19 +33,19 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                                     final ProjectionType projectionType,
                                     final List<TemplateData> templatesData,
                                     final List<Content> contents) {
-        return new AnnotatedStorageProviderTemplateData(basePackage, persistencePackage, useCQRS,
+        return new PersistenceSetupTemplateData(basePackage, persistencePackage, useCQRS,
                 storageType, projectionType, templatesData, contents);
     }
 
-    private AnnotatedStorageProviderTemplateData(final String basePackage,
-                                                 final String persistencePackage,
-                                                 final Boolean useCQRS,
-                                                 final StorageType storageType,
-                                                 final ProjectionType projectionType,
-                                                 final List<TemplateData> templatesData,
-                                                 final List<Content> contents){
+    private PersistenceSetupTemplateData(final String basePackage,
+                                         final String persistencePackage,
+                                         final Boolean useCQRS,
+                                         final StorageType storageType,
+                                         final ProjectionType projectionType,
+                                         final List<TemplateData> templatesData,
+                                         final List<Content> contents){
         this.templateParameters =
-                loadParameters(basePackage, persistencePackage,useCQRS, storageType,
+                loadParameters(basePackage, persistencePackage, useCQRS, storageType,
                         projectionType, templatesData, contents);
     }
 
@@ -66,8 +66,7 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
                 .and(PROJECTIONS, ProjectionParameter.from(contents))
                 .and(QUERIES, QueriesParameter.from(useCQRS, contents, templatesData))
                 .and(USE_CQRS, useCQRS).and(USE_ANNOTATIONS, true)
-                .andResolve(REQUIRE_ADAPTERS, params -> !params.<List>find(ADAPTERS).isEmpty())
-                .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params));
+                .andResolve(REQUIRE_ADAPTERS, params -> !params.<List>find(ADAPTERS).isEmpty());
     }
 
     private Set<ImportParameter> resolveImports(final List<Content> contents) {
@@ -86,7 +85,7 @@ public class AnnotatedStorageProviderTemplateData extends TemplateData {
 
     @Override
     public TemplateStandard standard() {
-        return STORE_PROVIDER;
+        return PERSISTENCE_SETUP;
     }
 
 }

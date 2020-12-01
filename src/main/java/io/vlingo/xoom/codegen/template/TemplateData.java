@@ -47,4 +47,8 @@ public abstract class TemplateData {
         return Collections.unmodifiableList(dependencies);
     }
 
+    public boolean isPlaceholder() {
+        return false;
+    }
+
 }
