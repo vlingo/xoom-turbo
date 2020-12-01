@@ -30,11 +30,15 @@ public class TemplateFile {
     }
 
     private TemplateFile(final String absolutePath,
-                        final String filename,
-                        final boolean placeholder) {
+                         final String filename,
+                         final boolean placeholder) {
         this.absolutePath = absolutePath;
         this.filename = filename;
         this.placeholder = placeholder;
+    }
+
+    public boolean isPlaceholder() {
+        return placeholder;
     }
 
     public String filename() {

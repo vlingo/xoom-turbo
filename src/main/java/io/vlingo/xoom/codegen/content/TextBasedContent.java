@@ -26,6 +26,7 @@ public class TextBasedContent extends Content {
     public final String text;
     private final Filer filer;
     private final Element source;
+    private final boolean placeholder;
 
     public TextBasedContent(final TemplateStandard standard,
                             final TemplateFile templateFile,
@@ -37,6 +38,7 @@ public class TextBasedContent extends Content {
         this.filer = filer;
         this.source = source;
         this.file = templateFile.toFile();
+        this.placeholder = templateFile.isPlaceholder();
     }
 
     @Override
@@ -93,7 +95,7 @@ public class TextBasedContent extends Content {
 
     @Override
     public boolean canWrite() {
-        return true;
+        return !placeholder;
     }
 
 }
