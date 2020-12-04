@@ -7,11 +7,11 @@
 
 package io.vlingo.xoom.codegen;
 
-import com.google.common.collect.Maps;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +20,7 @@ import static io.vlingo.xoom.codegen.template.Template.*;
 public class CodeGenerationSetup {
 
     public static final Map<StorageType, String> AGGREGATE_TEMPLATES =
-            Maps.immutableEnumMap(
+            Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
                         put(StorageType.OBJECT_STORE, OBJECT_ENTITY.filename);
                         put(StorageType.STATE_STORE, STATEFUL_ENTITY.filename);
@@ -29,7 +29,7 @@ public class CodeGenerationSetup {
             );
 
     public static final Map<StorageType, String> AGGREGATE_METHOD_TEMPLATES =
-            Maps.immutableEnumMap(
+            Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
                         put(StorageType.OBJECT_STORE, "");
                         put(StorageType.STATE_STORE, STATEFUL_ENTITY_METHOD.filename);
@@ -38,7 +38,7 @@ public class CodeGenerationSetup {
             );
 
     public static final Map<StorageType, String> ADAPTER_TEMPLATES =
-            Maps.immutableEnumMap(
+            Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
                         put(StorageType.OBJECT_STORE, "");
                         put(StorageType.STATE_STORE, STATE_ADAPTER.filename);
@@ -47,7 +47,7 @@ public class CodeGenerationSetup {
             );
 
     public static final Map<ProjectionType, String> PROJECTION_TEMPLATES =
-            Maps.immutableEnumMap(
+            Collections.unmodifiableMap(
                     new HashMap<ProjectionType, String>(){{
                         put(ProjectionType.EVENT_BASED, EVENT_BASED_PROJECTION.filename);
                         put(ProjectionType.OPERATION_BASED, OPERATION_BASED_PROJECTION.filename);
@@ -55,7 +55,7 @@ public class CodeGenerationSetup {
             );
 
     private static final Map<StorageType, String> COMMAND_MODEL_STORE_TEMPLATES =
-            Maps.immutableEnumMap(
+            Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
                         put(StorageType.OBJECT_STORE, OBJECT_STORE_PROVIDER.filename);
                         put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
@@ -64,7 +64,7 @@ public class CodeGenerationSetup {
             );
 
     private static final Map<StorageType, String> QUERY_MODEL_STORE_TEMPLATES =
-            Maps.immutableEnumMap(
+            Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
                         put(StorageType.OBJECT_STORE, STATE_STORE_PROVIDER.filename);
                         put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
