@@ -8,6 +8,7 @@ package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -15,6 +16,8 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PROJECTION_TO_DESCRIPTION;
@@ -34,21 +37,17 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
         return new ProjectionDispatcherProviderTemplateData(basePackage, projectionType, contents);
     }
 
-    public static ProjectionDispatcherProviderTemplateData from(final String projectables,
+    public static ProjectionDispatcherProviderTemplateData from(final Stream<CodeGenerationParameter> projectionActors,
                                                                 final List<Content> contents) {
-        return new ProjectionDispatcherProviderTemplateData(projectables, contents);
+        return new ProjectionDispatcherProviderTemplateData(projectionActors, contents);
     }
 
-    private ProjectionDispatcherProviderTemplateData(final String projectables,
+    private ProjectionDispatcherProviderTemplateData(final Stream<CodeGenerationParameter> projectionActors,
                                                      final List<Content> contents) {
         final String packageName = ContentQuery.findPackage(PROJECTION, contents);
 
-        final List<String> projectablesPerProjection = Arrays.asList(projectables.split(";"));
-
-        final Set<String> projectionNames = ContentQuery.findClassNames(PROJECTION, contents);
-
         final List<ProjectToDescriptionParameter> projectToDescriptionParameters =
-                ProjectToDescriptionParameter.from(projectionNames, projectablesPerProjection);
+                ProjectToDescriptionParameter.from(projectionActors.collect(Collectors.toList()));
 
         this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
                 .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionParameters);

@@ -50,14 +50,6 @@ public class CodeGenerationParameters {
         return this;
     }
 
-    public CodeGenerationParameters child(final CodeGenerationParameter parameter) {
-        if(this.parameters.isEmpty()) {
-            throw new UnsupportedOperationException("Unable to add a parameter child without a parent");
-        }
-        this.parameters.get(this.parameters.size() - 1).relate(parameter);
-        return this;
-    }
-
     public void addAll(final Map<Label, String> parameterEntries) {
         final Function<Entry<Label, String>, CodeGenerationParameter> mapper =
                 entry -> CodeGenerationParameter.of(entry.getKey(), entry.getValue());
@@ -69,8 +61,9 @@ public class CodeGenerationParameters {
         addAll(parameters.list());
     }
 
-    public void addAll(final List<CodeGenerationParameter> parameters) {
+    public CodeGenerationParameters addAll(final List<CodeGenerationParameter> parameters) {
         this.parameters.addAll(parameters);
+        return this;
     }
 
     public String retrieveValue(final Label label) {

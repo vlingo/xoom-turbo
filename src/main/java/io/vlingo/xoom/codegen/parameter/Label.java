@@ -27,6 +27,8 @@ public enum Label {
     CQRS("cqrs"),
     PROJECTION_TYPE("projections"),
     PROJECTABLES("projectables"),
+    PROJECTION_ACTOR("projectionActor"),
+    SOURCE("source"),
     DATABASE("database"),
     REST_RESOURCES("resources"),
     MAIN_CLASS("main.class"),

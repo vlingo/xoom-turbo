@@ -10,6 +10,8 @@ package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 
 import java.util.Iterator;
 import java.util.List;
@@ -32,15 +34,12 @@ public class ProjectToDescriptionParameter {
     private final boolean lastParameter;
     private final String projectionClassName;
 
-    public static List<ProjectToDescriptionParameter> from(final Set<String> projectionNames,
-                                                           final List<String> projectablesPerProjection)  {
-        final Iterator<String> iterator = projectionNames.iterator();
-
-        return IntStream.range(0, projectionNames.size()).mapToObj(index ->{
-                final String joinedEventNames = projectablesPerProjection.get(index);
-                final Set<String> eventNames = Stream.of(joinedEventNames.split(","))
-                        .map(String::trim).collect(toSet());
-                return new ProjectToDescriptionParameter(index, projectionNames.size(), iterator.next(), eventNames);
+    public static List<ProjectToDescriptionParameter> from(final List<CodeGenerationParameter> projectionActors)  {
+        return IntStream.range(0, projectionActors.size()).mapToObj(index ->{
+                final CodeGenerationParameter projectionActor = projectionActors.get(index);
+                final Set<String> eventNames = projectionActor.retrieveAllRelated(Label.SOURCE)
+                        .map(source -> source.value).map(String::trim).collect(toSet());
+                return new ProjectToDescriptionParameter(index, projectionActors.size(), projectionActor.value, eventNames);
         }).collect(toList());
     }
 

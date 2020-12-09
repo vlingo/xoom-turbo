@@ -8,12 +8,15 @@
 package io.vlingo.xoom.annotation.persistence;
 
 import io.vlingo.xoom.annotation.TypeRetriever;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,9 +40,8 @@ public class PersistenceParameterResolver {
 
     public CodeGenerationParameters resolve() {
         return CodeGenerationParameters.from(STORAGE_TYPE, resolveStorageType())
-                .add(PROJECTION_TYPE, resolveProjections())
-                .add(PROJECTABLES, resolveProjectables())
-                .add(CQRS, resolveCQRS());
+                .add(CQRS, resolveCQRS()).add(PROJECTION_TYPE, resolveProjections())
+                .addAll(resolveProjectables());
     }
 
     private String resolveStorageType() {
@@ -70,23 +72,31 @@ public class PersistenceParameterResolver {
         return ProjectionType.CUSTOM.name();
     }
 
-    private String resolveProjectables() {
+    private List<CodeGenerationParameter> resolveProjectables() {
         final Projections projections =
                 persistenceSetupClass == null ? null :
                         persistenceSetupClass.getAnnotation(Projections.class);
 
         if(projections == null) {
-            return "";
+            return Collections.emptyList();
         }
 
         return Stream.of(projections.value()).map(this::resolveCauseTypes)
-                .collect(Collectors.joining(";"));
+                .collect(Collectors.toList());
     }
 
-    private String resolveCauseTypes(final Projection projection) {
-        return typeRetriever.typesFrom(projection, Projection::becauseOf)
-                .stream().map(typeElement -> typeElement.getQualifiedName().toString())
-                .collect(Collectors.joining(","));
+    private CodeGenerationParameter resolveCauseTypes(final Projection projection) {
+        final String projectionActorQualifiedName =
+                typeRetriever.from(projection, Projection::actor)
+                        .getQualifiedName().toString();
+
+        final CodeGenerationParameter projectionActor =
+                CodeGenerationParameter.of(PROJECTION_ACTOR, projectionActorQualifiedName);
+
+        typeRetriever.typesFrom(projection, Projection::becauseOf)
+                .forEach(source -> projectionActor.relate(SOURCE, source.getQualifiedName().toString()));
+
+        return projectionActor;
     }
 
 }

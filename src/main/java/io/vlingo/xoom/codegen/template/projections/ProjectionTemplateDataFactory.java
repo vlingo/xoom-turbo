@@ -33,7 +33,7 @@ public class ProjectionTemplateDataFactory {
     }
 
     private TemplateData handleInternalGeneration(final CodeGenerationContext context) {
-        return ProjectionDispatcherProviderTemplateData.from(context.parameterOf(PROJECTABLES), context.contents());
+        return ProjectionDispatcherProviderTemplateData.from(context.parametersOf(PROJECTION_ACTOR), context.contents());
     }
 
     private List<TemplateData> handleExternalGeneration(final CodeGenerationContext context) {

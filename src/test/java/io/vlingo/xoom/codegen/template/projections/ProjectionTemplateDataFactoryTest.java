@@ -9,6 +9,8 @@ package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
@@ -40,11 +42,19 @@ public class ProjectionTemplateDataFactoryTest {
                 new HashMap<Label, String>() {{
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(PROJECTION_TYPE, ProjectionType.CUSTOM.name());
-                    put(PROJECTABLES, "AuthorRegistered,AuthorRated;BookSoldOut,BookPurchased");
                 }};
+
+        final CodeGenerationParameter authorProjectionActor =
+                CodeGenerationParameter.of(PROJECTION_ACTOR, "AuthorProjectionActor")
+                    .relate(SOURCE, "AuthorRated").relate(SOURCE, "AuthorRegistered");
+
+        final CodeGenerationParameter bookProjectionActor =
+                CodeGenerationParameter.of(PROJECTION_ACTOR, "BookProjectionActor")
+                        .relate(SOURCE, "BookSoldOut").relate(SOURCE, "BookPurchased");
 
         final CodeGenerationContext context =
                 CodeGenerationContext.using(Mockito.mock(Filer.class), Mockito.mock(Element.class)).on(parameters)
+                        .on(CodeGenerationParameters.from(authorProjectionActor, bookProjectionActor))
                         .addContent(PROJECTION, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorProjectionActor.java"),  AUTHOR_PROJECTION_ACTOR_CONTENT_TEXT)
                         .addContent(PROJECTION, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "BookProjectionActor.java"),  BOOK_PROJECTION_ACTOR_CONTENT_TEXT);
 
