@@ -44,7 +44,7 @@ public class RouteDeclarationParameter {
                                       final CodeGenerationParameter routeSignatureParameter) {
         this.signature = RouteDetail.resolveMethodSignature(routeSignatureParameter);
         this.handlerName = resolveHandlerName();
-        this.path = RoutePathFormatter.formatFullPath(routeSignatureParameter);
+        this.path = PathFormatter.formatRoutePath(routeSignatureParameter);
         this.bodyType = RouteDetail.resolveBodyType(routeSignatureParameter);
         this.builderMethod = routeSignatureParameter.retrieveRelatedValue(ROUTE_METHOD);
         this.parameterTypes.addAll(resolveParameterTypes(routeSignatureParameter));

@@ -10,6 +10,7 @@ package io.vlingo.xoom.annotation.autodispatch;
 import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.template.resource.PathFormatter;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
@@ -133,7 +134,7 @@ public class AutoDispatchParameterResolver {
 
                 routeParameter.relate(ROUTE_METHOD, routeAnnotation.method())
                         .relate(INTERNAL_ROUTE_HANDLER, internalRouteHandler)
-                        .relate(ROUTE_PATH, RoutePath.resolve(uriRoot, routeAnnotation.path()));
+                        .relate(ROUTE_PATH, PathFormatter.formatRoutePath(uriRoot, routeAnnotation.path()));
 
                 if(!internalRouteHandler) {
                     final HandlerInvocation handlerInvocation = handlerResolver.find(routeAnnotation.handler());

@@ -50,6 +50,9 @@ public class RestResourceTemplateData extends TemplateData {
     private TemplateParameters loadParameters(final CodeGenerationParameter aggregateParameter,
                                               final List<Content> contents,
                                               final Boolean useCQRS) {
+        final String uriRoot =
+                aggregateParameter.retrieveRelatedValue(Label.URI_ROOT);
+
         final QueriesParameter queriesParameter =
                 QueriesParameter.from(aggregateParameter, contents, useCQRS);
 
@@ -63,10 +66,10 @@ public class RestResourceTemplateData extends TemplateData {
         return TemplateParameters.with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
                 .and(QUERIES, queriesParameter).and(PACKAGE_NAME, packageName).and(USE_CQRS, useCQRS)
                 .and(ROUTE_DECLARATIONS, RouteDeclarationParameter.from(aggregateParameter))
-                .and(URI_ROOT, aggregateParameter.retrieveRelatedValue(Label.URI_ROOT))
                 .addImports(resolveImports(aggregateParameter, contents, useCQRS))
                 .and(MODEL_ACTOR, AGGREGATE.resolveClassname(aggregateName))
                 .and(STORE_PROVIDER_NAME, resolveQueryStoreProviderName())
+                .and(URI_ROOT, PathFormatter.formatRootPath(uriRoot))
                 .andResolve(MODEL_PROTOCOL, modelProtocolResolver)
                 .and(ROUTE_METHODS, new ArrayList<String>())
                 .and(USE_AUTO_DISPATCH, false);
