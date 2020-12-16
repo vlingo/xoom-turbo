@@ -4,40 +4,46 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.annotation;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.TypeElement;
-import javax.tools.FileObject;
-
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static javax.tools.StandardLocation.SOURCE_OUTPUT;
-import static javax.tools.StandardLocation.SOURCE_PATH;
+import java.nio.file.Path;
 
 public class ClassFile {
 
-    private final FileObject fileObject;
+    private final File file;
 
     public static final ClassFile from(final Filer filer,
-                                       final TypeElement typeElement) throws IOException {
+                                       final TypeElement typeElement) {
         return new ClassFile(filer, typeElement);
     }
 
     private ClassFile(final Filer filer,
-                      final TypeElement typeElement) throws IOException {
+                      final TypeElement typeElement) {
         final String className =
                 typeElement.getSimpleName() + ".java";
 
         final String packageName =
                 typeElement.getEnclosingElement().toString();
 
-        this.fileObject =
-                filer.getResource(SOURCE_PATH, packageName, className);
+        this.file = findFile(filer, packageName, className);
+    }
+
+    private File findFile(final Filer filer,
+                          final String packageName,
+                          final String className) {
+        final Path sourceFolder = Context.locateSourceFolder(filer);
+        final String packagePath = packageName.replaceAll("\\.", "/");
+        return sourceFolder.resolve(packagePath).resolve(className).toFile();
     }
 
     public InputStream openInputStream() throws IOException {
-        return fileObject.openInputStream();
+        return new FileInputStream(file);
     }
 }
