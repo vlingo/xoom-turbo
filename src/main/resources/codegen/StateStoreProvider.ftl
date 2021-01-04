@@ -20,6 +20,7 @@ import io.vlingo.symbio.StateAdapterProvider;
 </#if>
 import io.vlingo.symbio.EntryAdapterProvider;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
+import io.vlingo.symbio.store.dispatch.NoOpDispatcher;
 import io.vlingo.symbio.store.dispatch.DispatcherControl;
 import io.vlingo.symbio.store.dispatch.Dispatchable;
 import io.vlingo.symbio.store.state.StateStore;
@@ -42,12 +43,7 @@ public class ${storeProviderName} {
   }
 
   public static ${storeProviderName} using(final Stage stage, final StatefulTypeRegistry registry) {
-    final Dispatcher noop = new Dispatcher() {
-      public void controlWith(final DispatcherControl control) { }
-      public void dispatch(Dispatchable d) { }
-    };
-
-    return using(stage, registry, noop);
+    return using(stage, registry, new NoOpDispatcher());
   }
 
   @SuppressWarnings("rawtypes")
