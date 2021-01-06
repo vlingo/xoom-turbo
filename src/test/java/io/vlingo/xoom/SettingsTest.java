@@ -15,7 +15,7 @@ public class SettingsTest {
 
     @Test
     public void testThatSettingsAreLoadedForBlockingMailbox() {
-        Assert.assertEquals(14, Settings.properties().size());
+        Assert.assertEquals(25, Settings.properties().size());
     }
 
 }

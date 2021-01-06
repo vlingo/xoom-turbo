@@ -7,7 +7,7 @@
 package io.vlingo.xoom.storage;
 
 import io.vlingo.symbio.store.common.jdbc.Configuration;
-import io.vlingo.xoom.actors.Settings;
+import io.vlingo.xoom.ApplicationProperty;
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,42 +53,8 @@ public class DatabaseParameters {
         this.autoCreate = autoCreate;
     }
 
-    private String valueFromIndex(final Integer index, Properties properties) {
-        final String key = keys.get(index);
-        final String propertiesValue = retrieveFromProperties(key, properties);
-        if(propertiesValue != null) {
-            return propertiesValue;
-        }
-        return retrieveFromEnvironment(key);
-    }
-
-    private String retrieveFromProperties(final String key, final Properties properties) {
-        if(!properties.containsKey(key)) {
-            return null;
-        }
-        final String value = properties.get(key).toString().trim();
-        return value.isEmpty() ? null : value;
-    }
-
-    private String retrieveFromEnvironment(final String key) {
-        final String envKey =
-                resolveEnvironmentVariable(key);
-
-        if(!System.getenv().containsKey(envKey)) {
-            return null;
-        }
-
-        final String value = System.getenv(envKey);
-
-        if(value == null || value.trim().isEmpty()) {
-            return null;
-        }
-
-        return value.trim();
-    }
-
-    private String resolveEnvironmentVariable(final String key) {
-        return String.format(COMBINATION_PATTERN, XOOM_PREFIX, key).replace("\\.", "_");
+    private String valueFromIndex(final Integer index, final Properties properties) {
+        return ApplicationProperty.readValue(keys.get(index), properties);
     }
 
     private void validate() {
