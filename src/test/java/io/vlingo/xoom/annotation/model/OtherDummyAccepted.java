@@ -10,12 +10,12 @@ import io.vlingo.lattice.model.IdentifiedDomainEvent;
 
 import java.util.UUID;
 
-public class OtherDummyPromoted extends IdentifiedDomainEvent {
+public class OtherDummyAccepted extends IdentifiedDomainEvent {
 
     private final UUID eventId;
     public final String name = "";
 
-    public OtherDummyPromoted() {
+    public OtherDummyAccepted() {
         this.eventId = UUID.randomUUID();
     }
 
