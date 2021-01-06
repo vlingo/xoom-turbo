@@ -17,11 +17,21 @@ public final class ${entityName} extends StatefulEntity<${stateName}> implements
   <#list methods as method>
   ${method}
   </#list>
+  /*
+   * Received when my current state has been applied and restored.
+   *
+   * @param state the ${stateName}
+   */
   @Override
   protected void state(final ${stateName} state) {
     this.state = state;
   }
 
+  /*
+   * Received when I must provide my state type.
+   *
+   * @return {@code Class<${stateName}>}
+   */
   @Override
   protected Class<${stateName}> stateType() {
     return ${stateName}.class;

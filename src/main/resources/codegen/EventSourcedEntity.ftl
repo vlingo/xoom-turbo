@@ -31,4 +31,28 @@ public final class ${entityName} extends EventSourced implements ${aggregateProt
   }
 
   </#list>
+  /*
+   * Restores my initial state by means of {@code state}.
+   *
+   * @param snapshot the {@code ${stateName}} holding my state
+   * @param currentVersion the int value of my current version; may be helpful in determining if snapshot is needed
+   */
+  @Override
+  protected <AccountState> void restoreSnapshot(final ${stateName} snapshot, final int currentVersion) {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/vlingo-lattice/entity-cqrs#eventsourced
+  }
+
+  /*
+   * Answer the valid {@code ${stateName}} instance if a snapshot should
+   * be taken and persisted along with applied {@code Source<T>} instance(s).
+   *
+   * @return AccountState
+   */
+  @Override
+  protected ${stateName} snapshot() {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/vlingo-lattice/entity-cqrs#eventsourced
+    return null;
+  }
 }
