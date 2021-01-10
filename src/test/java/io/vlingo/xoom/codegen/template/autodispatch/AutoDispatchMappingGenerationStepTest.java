@@ -56,6 +56,7 @@ public class AutoDispatchMappingGenerationStepTest {
                 context.contents().stream().filter(content -> content.retrieveClassName().equals("AuthorResource"))
                         .findFirst().get();
 
+        Assert.assertTrue(authorMappingContent.contains("@AutoDispatch(path=\"/authors\", handlers=AuthorResourceHandlers.class)"));
         Assert.assertTrue(authorMappingContent.contains("@Queries(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)"));
         Assert.assertTrue(authorMappingContent.contains("@Route(method = POST, handler = AuthorResourceHandlers.WITH_NAME)"));
         Assert.assertTrue(authorMappingContent.contains("@ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)"));
@@ -143,7 +144,7 @@ public class AutoDispatchMappingGenerationStepTest {
                         .relate(REQUIRE_ENTITY_LOADING, "true");
 
         return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-                .relate(URI_ROOT, "authors").relate(idField)
+                .relate(URI_ROOT, "/authors").relate(idField)
                 .relate(nameField).relate(rankField).relate(factoryMethod)
                 .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
                 .relate(authorRegisteredEvent).relate(authorRankedEvent);
