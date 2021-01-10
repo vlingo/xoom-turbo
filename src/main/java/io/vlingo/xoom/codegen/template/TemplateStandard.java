@@ -40,8 +40,6 @@ public enum TemplateStandard {
     QUERIES_ACTOR(parameters -> Template.QUERIES_ACTOR.filename,
             (name, parameters) -> name + "QueriesActor"),
 
-
-
     DATA_OBJECT(parameters -> Template.DATA_OBJECT.filename,
             (name, parameters) -> name + "Data"),
 
@@ -90,6 +88,10 @@ public enum TemplateStandard {
                 final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
                 return projectionType.isEventBased() ? "Events" : "Operations";
             }),
+
+    EXCHANGE_MAPPER(parameters -> Template.EXCHANGE_MAPPER.filename,
+            (name, parameters) -> parameters.find(LOCAL_TYPE_NAME) +
+                    "MapperFor" + parameters.find(AGGREGATE_PROTOCOL_NAME)),
 
     XOOM_INITIALIZER(templateParameters -> Template.XOOM_INITIALIZER.filename,
             (name, parameters) -> "XoomInitializer"),

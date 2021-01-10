@@ -95,7 +95,8 @@ public enum TemplateParameter {
     XOOM_INITIALIZER_CLASS("xoomInitializerClass"),
     STAGE_INSTANTIATION_VARIABLES("stageInstantiationVariables"),
     PROJECTION_DISPATCHER_PROVIDER_NAME("projectionDispatcherProviderName"),
-    PROVIDERS("providers");
+    PROVIDERS("providers"),
+    LOCAL_TYPE_NAME("localTypeName");
 
     public final String key;
 
