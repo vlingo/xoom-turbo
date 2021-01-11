@@ -4,24 +4,40 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.codegen.template.exchange;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class ExchangeGenerationStep extends TemplateProcessingStep {
 
+    private static final String PACKAGE_PATTERN = "%.%.%";
+
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        return null;
+        final String exchangePackage = resolvePackage(context.parameterOf(PACKAGE));
+        final Stream<CodeGenerationParameter> aggregates = context.parametersOf(AGGREGATE);
+        return Stream.of(ExchangeMapperTemplateData.from(exchangePackage, aggregates),
+                ExchangeAdapterTemplateData.from(exchangePackage, aggregates))
+                .flatMap(templates -> templates.stream())
+                .collect(Collectors.toList());
+    }
+
+    private String resolvePackage(final String basePackage) {
+        return String.format(PACKAGE_PATTERN, basePackage, "infrastructure", "exchange");
     }
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        return context.hasParameter(Label.EXCHANGE);
+        return context.hasParameter(AGGREGATE) && context.parametersOf(AGGREGATE).anyMatch(aggregate -> aggregate.hasAny(EXCHANGE));
     }
 }

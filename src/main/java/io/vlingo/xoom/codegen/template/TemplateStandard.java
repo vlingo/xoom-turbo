@@ -90,8 +90,11 @@ public enum TemplateStandard {
             }),
 
     EXCHANGE_MAPPER(parameters -> Template.EXCHANGE_MAPPER.filename,
-            (name, parameters) -> parameters.find(LOCAL_TYPE_NAME) +
-                    "MapperFor" + parameters.find(AGGREGATE_PROTOCOL_NAME)),
+            (name, parameters) -> parameters.find(LOCAL_TYPE_NAME) + "Mapper"),
+
+    EXCHANGE_ADAPTER(parameters -> Template.EXCHANGE_ADAPTER.filename,
+            (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +
+                    parameters.<String>find(EXCHANGE_ROLE) + "ExchangeAdapter"),
 
     XOOM_INITIALIZER(templateParameters -> Template.XOOM_INITIALIZER.filename,
             (name, parameters) -> "XoomInitializer"),

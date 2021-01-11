@@ -96,7 +96,12 @@ public enum TemplateParameter {
     STAGE_INSTANTIATION_VARIABLES("stageInstantiationVariables"),
     PROJECTION_DISPATCHER_PROVIDER_NAME("projectionDispatcherProviderName"),
     PROVIDERS("providers"),
-    LOCAL_TYPE_NAME("localTypeName");
+    LOCAL_TYPE_NAME("localTypeName"),
+    EXTERNAL_CLASS("externalClass"),
+    SCHEMA_NAME("schemaName"),
+    EXCHANGE_MAPPER_NAME("exchangeMapperName"),
+    EXCHANGE_ADAPTER_NAME("exchangeAdapterName"),
+    EXCHANGE_ROLE("exchangeRole");
 
     public final String key;
 

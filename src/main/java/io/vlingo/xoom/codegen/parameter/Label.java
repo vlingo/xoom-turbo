@@ -69,7 +69,9 @@ public enum Label {
     KUBERNETES_POD_NAME("kubernetesPod"),
     TARGET_FOLDER("targetFolder"),
     LOCAL_TYPE("localType"),
-    EXCHANGE("exchange");
+    EXCHANGE("exchange"),
+    SCHEMA("schema"),
+    ROLE("role");
 
     private final String key;
 
