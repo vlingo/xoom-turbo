@@ -3,6 +3,10 @@ package ${packageName};
 import io.vlingo.lattice.exchange.ExchangeMapper;
 import io.vlingo.common.serialization.JsonSerialization;
 
+<#list imports as import>
+import ${import.qualifiedClassName};
+</#list>
+
 public class ${exchangeMapperName} implements ExchangeMapper<${localTypeName},String> {
 
   @Override

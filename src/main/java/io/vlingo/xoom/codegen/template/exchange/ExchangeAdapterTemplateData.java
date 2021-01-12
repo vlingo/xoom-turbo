@@ -6,6 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.exchange;
 
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
@@ -26,22 +28,30 @@ public class ExchangeAdapterTemplateData extends TemplateData {
     private final TemplateParameters parameters;
 
     public static List<TemplateData> from(final String exchangePackage,
-                                           final Stream<CodeGenerationParameter> aggregates) {
+                                          final Stream<CodeGenerationParameter> aggregates,
+                                          final List<Content> contents) {
         return aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
-                .map(exchange -> new ExchangeAdapterTemplateData(exchangePackage, exchange.parent(), exchange))
+                .map(exchange -> new ExchangeAdapterTemplateData(exchangePackage, exchange, contents))
                 .collect(Collectors.toList());
     }
 
     private ExchangeAdapterTemplateData(final String exchangePackage,
-                                        final CodeGenerationParameter aggregate,
-                                        final CodeGenerationParameter exchange) {
-        parameters =
+                                        final CodeGenerationParameter exchange,
+                                        final List<Content> contents) {
+        this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, exchangePackage)
-                        .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
+                        .and(AGGREGATE_PROTOCOL_NAME, exchange.parent().value)
                         .and(EXCHANGE_ROLE, exchange.retrieveRelatedValue(ROLE))
-                        .and(LOCAL_TYPE_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
+                        .and(LOCAL_TYPE_NAME, DATA_OBJECT.resolveClassname(exchange.parent().value))
                         .andResolve(EXCHANGE_ADAPTER_NAME, params -> standard().resolveClassname(params))
-                        .andResolve(EXCHANGE_MAPPER_NAME, params -> EXCHANGE_MAPPER.resolveClassname(params));
+                        .andResolve(EXCHANGE_MAPPER_NAME, params -> EXCHANGE_MAPPER.resolveClassname(params))
+                        .addImport(resolveLocalTypeImport(exchange.parent(), contents));
+    }
+
+    private String resolveLocalTypeImport(final CodeGenerationParameter aggregate,
+                                          final List<Content> contents) {
+        final String dataObjectName = DATA_OBJECT.resolveClassname(aggregate.value);
+        return ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents);
     }
 
     @Override
