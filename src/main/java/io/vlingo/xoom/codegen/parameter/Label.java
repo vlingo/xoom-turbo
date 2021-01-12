@@ -71,6 +71,7 @@ public enum Label {
     LOCAL_TYPE("localType"),
     EXCHANGE("exchange"),
     SCHEMA("schema"),
+    SCHEMA_GROUP("schemaGroup"),
     ROLE("role");
 
     private final String key;
