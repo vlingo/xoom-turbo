@@ -96,6 +96,10 @@ public enum TemplateStandard {
             (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +
                     parameters.<String>find(EXCHANGE_ROLE) + "ExchangeAdapter"),
 
+    EXCHANGE_RECEIVER_HOLDER(parameters -> Template.EXCHANGE_RECEIVER_HOLDER.filename,
+            (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +
+                    "ExchangeReceivers"),
+
     XOOM_INITIALIZER(templateParameters -> Template.XOOM_INITIALIZER.filename,
             (name, parameters) -> "XoomInitializer"),
 

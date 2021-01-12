@@ -46,13 +46,13 @@ public enum Template {
     REST_RESOURCE_RETRIEVE_METHOD("RestResourceRetrieveMethod"),
     REST_RESOURCE_UPDATE_METHOD("RestResourceUpdateMethod"),
     QUERIES_ACTOR("QueriesActor"),
-    EXCHANGE_ADAPTER("ExchangeAdapter");
+    EXCHANGE_ADAPTER("ExchangeAdapter"),
+    EXCHANGE_RECEIVER_HOLDER("ExchangeReceiverHolder");
 
     public final String filename;
 
     Template(final String filename) {
         this.filename = filename;
     }
-
 
 }

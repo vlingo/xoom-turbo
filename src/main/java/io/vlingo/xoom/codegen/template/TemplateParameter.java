@@ -101,7 +101,9 @@ public enum TemplateParameter {
     SCHEMA_NAME("schemaName"),
     EXCHANGE_MAPPER_NAME("exchangeMapperName"),
     EXCHANGE_ADAPTER_NAME("exchangeAdapterName"),
-    EXCHANGE_ROLE("exchangeRole");
+    EXCHANGE_RECEIVER_HOLDER_NAME("exchangeReceiverHolderName"),
+    EXCHANGE_ROLE("exchangeRole"),
+    EXCHANGE_RECEIVERS("exchangeReceivers");
 
     public final String key;
 
