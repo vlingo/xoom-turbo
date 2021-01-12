@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen.template.exchange;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
@@ -24,10 +25,12 @@ public class ExchangeGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
+        final List<Content> contents = context.contents();
         final String exchangePackage = resolvePackage(context.parameterOf(PACKAGE));
         final Stream<CodeGenerationParameter> aggregates = context.parametersOf(AGGREGATE);
-        return Stream.of(ExchangeMapperTemplateData.from(exchangePackage, aggregates),
-                ExchangeAdapterTemplateData.from(exchangePackage, aggregates))
+        return Stream.of(ExchangeMapperTemplateData.from(exchangePackage, aggregates, contents),
+                ExchangeReceiverHolderTemplateData.from(exchangePackage, aggregates, contents),
+                ExchangeAdapterTemplateData.from(exchangePackage, aggregates, contents))
                 .flatMap(templates -> templates.stream())
                 .collect(Collectors.toList());
     }
