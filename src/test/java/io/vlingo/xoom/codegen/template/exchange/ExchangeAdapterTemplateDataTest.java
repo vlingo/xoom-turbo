@@ -33,7 +33,8 @@ public class ExchangeAdapterTemplateDataTest {
                 Content.with(DATA_OBJECT, new TemplateFile("", "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT);
 
         final List<TemplateData> data =
-                ExchangeAdapterTemplateData.from("io.vlingo.xoomapp.infrastructure.exchange", buildGenerationParameters(), Arrays.asList(authorDataObject));
+                ExchangeAdapterTemplateData.from("io.vlingo.xoomapp.infrastructure.exchange",
+                        buildGenerationParameters(), Arrays.asList(authorDataObject));
 
         Assert.assertEquals(3, data.size());
 
