@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.parameter.Label.ROLE;
+import static io.vlingo.xoom.codegen.parameter.Label.SCHEMA_GROUP;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.EXCHANGE_MAPPER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class ExchangeAdapterTemplateData extends TemplateData {
 
@@ -43,10 +43,9 @@ public class ExchangeAdapterTemplateData extends TemplateData {
                 TemplateParameters.with(PACKAGE_NAME, exchangePackage)
                         .and(AGGREGATE_PROTOCOL_NAME, exchange.parent().value)
                         .and(SCHEMA_GROUP_NAME, exchange.retrieveRelatedValue(SCHEMA_GROUP))
-                        .and(DOMAIN_EVENT_NAME, exchange.retrieveRelatedValue(DOMAIN_EVENT))
                         .and(EXCHANGE_ROLE, exchange.retrieveRelatedValue(ROLE, ExchangeRole::of))
                         .and(LOCAL_TYPE_NAME, DATA_OBJECT.resolveClassname(exchange.parent().value))
-                        .andResolve(EXCHANGE_ADAPTER_NAME, params -> standard().resolveClassname(params))
+                        .andResolve(EXCHANGE_ADAPTER_NAME, params -> EXCHANGE_ADAPTER.resolveClassname(params))
                         .andResolve(EXCHANGE_MAPPER_NAME, params -> EXCHANGE_MAPPER.resolveClassname(params))
                         .addImport(resolveImports(exchange, contents));
     }
@@ -67,7 +66,7 @@ public class ExchangeAdapterTemplateData extends TemplateData {
 
     @Override
     public TemplateStandard standard() {
-        return TemplateStandard.EXCHANGE_ADAPTER;
+        return EXCHANGE_ADAPTER;
     }
 
 }

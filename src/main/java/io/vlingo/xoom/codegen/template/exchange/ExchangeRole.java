@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.codegen.template.exchange;
 
+import freemarker.template.utility.StringUtil;
+
 public enum ExchangeRole {
 
     CONSUMER,
@@ -20,4 +22,7 @@ public enum ExchangeRole {
         return equals(CONSUMER);
     }
 
+    public String formatName() {
+        return StringUtil.capitalize(name().toLowerCase());
+    }
 }

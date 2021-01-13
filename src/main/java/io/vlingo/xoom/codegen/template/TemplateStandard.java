@@ -94,13 +94,13 @@ public enum TemplateStandard {
             (name, parameters) -> parameters.find(LOCAL_TYPE_NAME) + "Mapper"),
 
     EXCHANGE_ADAPTER(parameters -> parameters.<ExchangeRole>find(EXCHANGE_ROLE).isConsumer() ?
-                    Template.CONSUMER_EXCHANGE_ADAPTER.filename : PRODUCER_EXCHANGE_ADAPTER.filename,
+                    CONSUMER_EXCHANGE_ADAPTER.filename : PRODUCER_EXCHANGE_ADAPTER.filename,
             (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +
-                    parameters.<ExchangeRole>find(EXCHANGE_ROLE) + "ExchangeAdapter"),
+                    parameters.<ExchangeRole>find(EXCHANGE_ROLE).formatName() + "Adapter"),
 
     EXCHANGE_RECEIVER_HOLDER(parameters -> Template.EXCHANGE_RECEIVER_HOLDER.filename,
             (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +
-                    "ExchangeReceivers"),
+                    "Receivers"),
 
     EXCHANGE_PROPERTIES(templateParameters -> Template.EXCHANGE_PROPERTIES.filename,
             (name, parameters) -> "vlingo-xoom.properties"),
