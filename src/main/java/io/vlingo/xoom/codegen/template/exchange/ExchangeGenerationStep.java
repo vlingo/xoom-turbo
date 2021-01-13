@@ -8,14 +8,11 @@
 package io.vlingo.xoom.codegen.template.exchange;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
@@ -26,24 +23,19 @@ public class ExchangeGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final List<Content> contents = context.contents();
-        final String exchangePackage = resolvePackage(context.parameterOf(PACKAGE));
+        final String exchangePackage = resolvePackage(context);
         final Stream<CodeGenerationParameter> aggregates = context.parametersOf(AGGREGATE);
-
-        return Stream.of(ExchangeMapperTemplateData.from(exchangePackage, aggregates, contents),
-                ExchangeReceiverHolderTemplateData.from(exchangePackage, aggregates, contents),
-                ExchangeAdapterTemplateData.from(exchangePackage, aggregates, contents),
-                Arrays.asList(ExchangePropertiesTemplateData.from(aggregates)))
-                .flatMap(templates -> templates.stream())
-                .collect(Collectors.toList());
+        return ExchangeTemplateDataFactory.build(exchangePackage, aggregates, context.contents());
     }
 
-    private String resolvePackage(final String basePackage) {
-        return String.format(PACKAGE_PATTERN, basePackage, "infrastructure", "exchange");
+    private String resolvePackage(final CodeGenerationContext context) {
+        return String.format(PACKAGE_PATTERN, context.parameterOf(PACKAGE), "infrastructure", "exchange");
     }
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        return context.hasParameter(AGGREGATE) && context.parametersOf(AGGREGATE).anyMatch(aggregate -> aggregate.hasAny(EXCHANGE));
+        return context.hasParameter(AGGREGATE) &&
+                context.parametersOf(AGGREGATE).anyMatch(aggregate -> aggregate.hasAny(EXCHANGE));
     }
+
 }
