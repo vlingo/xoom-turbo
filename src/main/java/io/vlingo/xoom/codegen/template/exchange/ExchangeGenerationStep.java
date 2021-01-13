@@ -19,8 +19,6 @@ import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class ExchangeGenerationStep extends TemplateProcessingStep {
 
-    private static final String PACKAGE_PATTERN = "%.%.%";
-
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
         final String exchangePackage = resolvePackage(context);
@@ -29,13 +27,15 @@ public class ExchangeGenerationStep extends TemplateProcessingStep {
     }
 
     private String resolvePackage(final CodeGenerationContext context) {
-        return String.format(PACKAGE_PATTERN, context.parameterOf(PACKAGE), "infrastructure", "exchange");
+        return String.format("%.%.%", context.parameterOf(PACKAGE), "infrastructure", "exchange");
     }
 
     @Override
     public boolean shouldProcess(final CodeGenerationContext context) {
-        return context.hasParameter(AGGREGATE) &&
-                context.parametersOf(AGGREGATE).anyMatch(aggregate -> aggregate.hasAny(EXCHANGE));
+        if(!context.hasParameter(AGGREGATE)) {
+            return false;
+        }
+        return context.parametersOf(AGGREGATE).anyMatch(aggregate -> aggregate.hasAny(EXCHANGE));
     }
 
 }
