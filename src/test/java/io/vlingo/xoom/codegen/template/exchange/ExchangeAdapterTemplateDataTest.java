@@ -22,7 +22,7 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 public class ExchangeAdapterTemplateDataTest {
 
     @Test
-    public void testThatExchangeAdapterTemplateDataAreMapped() {
+    public void testThatTemplateParametersAreMapped() {
         final List<TemplateData> data =
                 ExchangeAdapterTemplateData.from("io.vlingo.xoomapp.infrastructure.exchange",
                         CodeGenerationParametersBuilder.threeExchanges(),
