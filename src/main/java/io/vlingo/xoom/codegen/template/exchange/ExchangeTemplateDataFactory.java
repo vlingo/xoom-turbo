@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
 import static java.util.stream.Collectors.toList;
 
 public class ExchangeTemplateDataFactory {
@@ -22,17 +23,20 @@ public class ExchangeTemplateDataFactory {
     public static List<TemplateData> build(final String exchangePackage,
                                            final Stream<CodeGenerationParameter> aggregates,
                                            final List<Content> contents) {
+        final Stream<CodeGenerationParameter> filteredAggregates =
+                aggregates.filter(aggregate -> aggregate.hasAny(EXCHANGE));
+
         final List<TemplateData> mappers =
-                ExchangeMapperTemplateData.from(exchangePackage, aggregates, contents);
+                ExchangeMapperTemplateData.from(exchangePackage, filteredAggregates, contents);
 
         final List<TemplateData> holders =
-                ExchangeReceiverHolderTemplateData.from(exchangePackage, aggregates, contents);
+                ExchangeReceiverHolderTemplateData.from(exchangePackage, filteredAggregates, contents);
 
         final List<TemplateData> adapters =
-                ExchangeAdapterTemplateData.from(exchangePackage, aggregates, contents);
+                ExchangeAdapterTemplateData.from(exchangePackage, filteredAggregates, contents);
 
         final List<TemplateData> properties =
-                Arrays.asList(ExchangePropertiesTemplateData.from(aggregates));
+                Arrays.asList(ExchangePropertiesTemplateData.from(filteredAggregates));
 
         return Stream.of(mappers, holders, adapters, properties).flatMap(List::stream).collect(toList());
     }

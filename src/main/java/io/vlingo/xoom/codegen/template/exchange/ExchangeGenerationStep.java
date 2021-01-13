@@ -21,9 +21,10 @@ public class ExchangeGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final String exchangePackage = resolvePackage(context);
-        final Stream<CodeGenerationParameter> aggregates = context.parametersOf(AGGREGATE);
-        return ExchangeTemplateDataFactory.build(exchangePackage, aggregates, context.contents());
+        final Stream<CodeGenerationParameter> aggregates =
+                context.parametersOf(AGGREGATE).filter(aggregate -> aggregate.hasAny(EXCHANGE));
+
+        return ExchangeTemplateDataFactory.build(resolvePackage(context), aggregates, context.contents());
     }
 
     private String resolvePackage(final CodeGenerationContext context) {

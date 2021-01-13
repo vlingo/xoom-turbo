@@ -15,9 +15,12 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
+import static io.vlingo.xoom.codegen.parameter.Label.ROLE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.EXCHANGE_MAPPER;
@@ -29,10 +32,16 @@ public class ExchangeMapperTemplateData extends TemplateData {
     public static List<TemplateData> from(final String exchangePackage,
                                           final Stream<CodeGenerationParameter> aggregates,
                                           final List<Content> contents) {
+        final Predicate<CodeGenerationParameter> consumerPresent =
+                exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer();
+
+        final Predicate<CodeGenerationParameter> withConsumerExchange =
+                aggregate -> aggregate.retrieveAllRelated(EXCHANGE).anyMatch(consumerPresent);
+
         final Function<CodeGenerationParameter, TemplateData> mapper =
                 aggregate -> new ExchangeMapperTemplateData(exchangePackage, aggregate, contents);
 
-        return aggregates.map(mapper).collect(Collectors.toList());
+        return aggregates.filter(withConsumerExchange).map(mapper).collect(Collectors.toList());
     }
 
     private ExchangeMapperTemplateData(final String exchangePackage,
