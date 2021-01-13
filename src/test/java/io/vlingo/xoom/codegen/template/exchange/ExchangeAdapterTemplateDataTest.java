@@ -8,9 +8,7 @@
 package io.vlingo.xoom.codegen.template.exchange;
 
 import io.vlingo.lattice.model.IdentifiedDomainEvent;
-import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,18 +18,15 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class ExchangeAdapterTemplateDataTest {
 
     @Test
     public void testThatExchangeAdapterTemplateDataAreMapped() {
-        final Content authorDataObject =
-                Content.with(DATA_OBJECT, new TemplateFile("", "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT);
-
         final List<TemplateData> data =
                 ExchangeAdapterTemplateData.from("io.vlingo.xoomapp.infrastructure.exchange",
-                        CodeGenerationParametersBuilder.threeExchanges(), Arrays.asList(authorDataObject));
+                        CodeGenerationParametersBuilder.threeExchanges(),
+                        Arrays.asList(ContentBuilder.authorDataObjectContent()));
 
         Assert.assertEquals(3, data.size());
 
@@ -61,10 +56,5 @@ public class ExchangeAdapterTemplateDataTest {
         Assert.assertTrue(bookProduceAdapterParameters.hasImport(IdentifiedDomainEvent.class.getCanonicalName()));
     }
 
-    private static final String AUTHOR_DATA_CONTENT_TEXT =
-            "package io.vlingo.xoomapp.infrastructure; \\n" +
-                    "public class AuthorData { \\n" +
-                    "... \\n" +
-                    "}";
 
 }
