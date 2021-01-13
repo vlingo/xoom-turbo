@@ -48,7 +48,8 @@ public enum Template {
     QUERIES_ACTOR("QueriesActor"),
     CONSUMER_EXCHANGE_ADAPTER("ConsumerExchangeAdapter"),
     PRODUCER_EXCHANGE_ADAPTER("ProducerExchangeAdapter"),
-    EXCHANGE_RECEIVER_HOLDER("ExchangeReceiverHolder");
+    EXCHANGE_RECEIVER_HOLDER("ExchangeReceiverHolder"),
+    EXCHANGE_PROPERTIES("ExchangeProperties");
 
     public final String filename;
 

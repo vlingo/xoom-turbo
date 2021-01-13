@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,9 +29,11 @@ public class ExchangeGenerationStep extends TemplateProcessingStep {
         final List<Content> contents = context.contents();
         final String exchangePackage = resolvePackage(context.parameterOf(PACKAGE));
         final Stream<CodeGenerationParameter> aggregates = context.parametersOf(AGGREGATE);
+
         return Stream.of(ExchangeMapperTemplateData.from(exchangePackage, aggregates, contents),
                 ExchangeReceiverHolderTemplateData.from(exchangePackage, aggregates, contents),
-                ExchangeAdapterTemplateData.from(exchangePackage, aggregates, contents))
+                ExchangeAdapterTemplateData.from(exchangePackage, aggregates, contents),
+                Arrays.asList(ExchangePropertiesTemplateData.from(aggregates)))
                 .flatMap(templates -> templates.stream())
                 .collect(Collectors.toList());
     }
