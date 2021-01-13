@@ -9,7 +9,7 @@ import io.vlingo.lattice.exchange.MessageParameters.DeliveryMode;
 import ${import.qualifiedClassName};
 </#list>
 
-public class ${exchangeAdapterName} implements ExchangeAdapter<${localTypeName}, String, Message> {
+public class ${exchangeAdapterName} implements ExchangeAdapter<String, ${}, Message> {
 
   private final String supportedSchemaName;
 
@@ -23,8 +23,9 @@ public class ${exchangeAdapterName} implements ExchangeAdapter<${localTypeName},
   }
 
   @Override
-  public Message toExchange(final String localMessage) {
-    return new Message(localMessage, MessageParameters.bare().deliveryMode(DeliveryMode.Durable));
+  public Message toExchange(final ${localTypeName} local) {
+    final String messagePayload = new ${exchangeMapperName}().localToExternal(local);
+    return new Message(messagePayload, MessageParameters.bare().deliveryMode(DeliveryMode.Durable));
   }
 
   @Override

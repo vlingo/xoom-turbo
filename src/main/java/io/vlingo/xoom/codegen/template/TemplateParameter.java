@@ -103,7 +103,8 @@ public enum TemplateParameter {
     EXCHANGE_ADAPTER_NAME("exchangeAdapterName"),
     EXCHANGE_RECEIVER_HOLDER_NAME("exchangeReceiverHolderName"),
     EXCHANGE_ROLE("exchangeRole"),
-    EXCHANGE_RECEIVERS("exchangeReceivers");
+    EXCHANGE_RECEIVERS("exchangeReceivers"),
+    SCHEMA_GROUP_NAME("schemaGroupName");
 
     public final String key;
 

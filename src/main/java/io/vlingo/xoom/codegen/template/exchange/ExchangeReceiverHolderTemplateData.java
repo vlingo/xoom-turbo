@@ -10,7 +10,6 @@ package io.vlingo.xoom.codegen.template.exchange;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -19,6 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
+import static io.vlingo.xoom.codegen.parameter.Label.ROLE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.EXCHANGE_RECEIVER_HOLDER;
@@ -30,8 +31,8 @@ public class ExchangeReceiverHolderTemplateData extends TemplateData {
     public static List<TemplateData> from(final String exchangePackage,
                                           final Stream<CodeGenerationParameter> aggregates,
                                           final List<Content> contents) {
-        return aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
-                .filter(exchange -> exchange.retrieveOneRelated(Label.ROLE).value.equalsIgnoreCase("consumer"))
+        return aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
+                .filter(exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer())
                 .map(exchange -> new ExchangeReceiverHolderTemplateData(exchangePackage, exchange, contents))
                 .collect(Collectors.toList());
     }

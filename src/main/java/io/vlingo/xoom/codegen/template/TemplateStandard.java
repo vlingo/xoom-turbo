@@ -2,6 +2,7 @@ package io.vlingo.xoom.codegen.template;
 
 import io.vlingo.http.Method;
 import io.vlingo.xoom.codegen.CodeGenerationSetup;
+import io.vlingo.xoom.codegen.template.exchange.ExchangeRole;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.Model;
@@ -92,9 +93,11 @@ public enum TemplateStandard {
     EXCHANGE_MAPPER(parameters -> Template.EXCHANGE_MAPPER.filename,
             (name, parameters) -> parameters.find(LOCAL_TYPE_NAME) + "Mapper"),
 
-    EXCHANGE_ADAPTER(parameters -> Template.EXCHANGE_ADAPTER.filename,
+    EXCHANGE_ADAPTER(parameters ->
+            parameters.<ExchangeRole>find(EXCHANGE_ROLE).isConsumer() ?
+                    Template.CONSUMER_EXCHANGE_ADAPTER.filename : PRODUCER_EXCHANGE_ADAPTER.filename,
             (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +
-                    parameters.<String>find(EXCHANGE_ROLE) + "ExchangeAdapter"),
+                    parameters.<ExchangeRole>find(EXCHANGE_ROLE) + "ExchangeAdapter"),
 
     EXCHANGE_RECEIVER_HOLDER(parameters -> Template.EXCHANGE_RECEIVER_HOLDER.filename,
             (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +
