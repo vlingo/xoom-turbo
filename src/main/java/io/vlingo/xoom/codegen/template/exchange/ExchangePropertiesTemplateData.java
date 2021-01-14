@@ -12,29 +12,34 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
+import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.EXCHANGE_NAMES;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.INLINE_EXCHANGE_NAMES;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 
 public class ExchangePropertiesTemplateData extends TemplateData {
 
     private final TemplateParameters parameters;
 
     public static TemplateData from(final Stream<CodeGenerationParameter> aggregates) {
-        final Stream<String> exchangeNames =
+        final List<CodeGenerationParameter> exchanges =
                 aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
-                        .map(exchange -> exchange.value).distinct();
+                        .collect(Collectors.toList());
+
+        final Supplier<Stream<String>> exchangeNames = () ->
+                exchanges.stream().map(exchange -> exchange.value).distinct();
 
         return new ExchangePropertiesTemplateData(exchangeNames);
     }
 
-    private ExchangePropertiesTemplateData(final Stream<String> exchangeNames) {
+    private ExchangePropertiesTemplateData(final Supplier<Stream<String>> exchangeNames) {
         this.parameters =
-                TemplateParameters.with(EXCHANGE_NAMES, exchangeNames.collect(Collectors.toList()))
-                        .and(INLINE_EXCHANGE_NAMES, exchangeNames.collect(Collectors.joining(";")));
+                TemplateParameters.with(EXCHANGE_NAMES, exchangeNames.get().collect(Collectors.toList()))
+                        .and(INLINE_EXCHANGE_NAMES, exchangeNames.get().collect(Collectors.joining(";")))
+                        .and(RESOURCE_FILE, true);
     }
 
     @Override
@@ -46,4 +51,5 @@ public class ExchangePropertiesTemplateData extends TemplateData {
     public TemplateStandard standard() {
         return TemplateStandard.EXCHANGE_PROPERTIES;
     }
+
 }
