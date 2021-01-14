@@ -9,14 +9,15 @@ package io.vlingo.xoom.codegen.template.exchange;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
+
 public class ExchangeReceiversParameter {
 
-    private final String schemaName;
+    private final String schemaTypeName;
     private final String localTypeName;
 
     public static List<ExchangeReceiversParameter> from(final CodeGenerationParameter exchange) {
@@ -27,8 +28,20 @@ public class ExchangeReceiversParameter {
 
     private ExchangeReceiversParameter(final CodeGenerationParameter exchange,
                                        final CodeGenerationParameter schema) {
-        this.schemaName = schema.value;
-        this.localTypeName = TemplateStandard.DATA_OBJECT.resolveClassname(exchange.parent().value);
+        this.schemaTypeName = resolveSchemaTypeName(schema);
+        this.localTypeName = DATA_OBJECT.resolveClassname(exchange.parent().value);
+    }
+
+    private String resolveSchemaTypeName(final CodeGenerationParameter schema) {
+        return schema.value.split(":")[3];
+    }
+
+    public String getSchemaTypeName() {
+        return schemaTypeName;
+    }
+
+    public String getLocalTypeName() {
+        return localTypeName;
     }
 
 }

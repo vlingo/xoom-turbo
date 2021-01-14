@@ -9,10 +9,10 @@ import ${import.qualifiedClassName};
 public class ${exchangeReceiverHolderName} {
 
   <#list exchangeReceivers as receiver>
-  class ${receiver.schemaName} implements ExchangeReceiver<${receiver.localTypeName}> {
+  class ${receiver.schemaTypeName} implements ExchangeReceiver<${receiver.localTypeName}> {
     @Override
     public void receive(final ${receiver.localTypeName} data) {
-      //TODO: Handle ${receiver.schemaName} here
+      //TODO: Handle ${receiver.schemaTypeName} here
     }
   }
 

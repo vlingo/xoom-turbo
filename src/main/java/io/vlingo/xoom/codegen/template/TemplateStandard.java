@@ -100,7 +100,7 @@ public enum TemplateStandard {
 
     EXCHANGE_RECEIVER_HOLDER(parameters -> Template.EXCHANGE_RECEIVER_HOLDER.filename,
             (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +
-                    "Receivers"),
+                    "ExchangeReceivers"),
 
     EXCHANGE_PROPERTIES(templateParameters -> Template.EXCHANGE_PROPERTIES.filename,
             (name, parameters) -> "vlingo-xoom.properties"),
