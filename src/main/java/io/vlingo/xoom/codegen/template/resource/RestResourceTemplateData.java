@@ -30,9 +30,6 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class RestResourceTemplateData extends TemplateData {
 
-    private final static String PACKAGE_PATTERN = "%s.%s";
-    private final static String PARENT_PACKAGE_NAME = "resource";
-
     private final String packageName;
     private final String aggregateName;
     private final TemplateParameters parameters;
@@ -106,7 +103,7 @@ public class RestResourceTemplateData extends TemplateData {
     }
 
     private String resolvePackage(final String basePackage) {
-        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME);
+        return String.format("%s.%s.%s", basePackage, "infrastructure", "resource");
     }
 
     private boolean requireModelTypes(final CodeGenerationParameter aggregateParameter) {

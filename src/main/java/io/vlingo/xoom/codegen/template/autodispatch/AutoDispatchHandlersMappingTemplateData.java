@@ -29,8 +29,6 @@ import static io.vlingo.xoom.codegen.template.autodispatch.AutoDispatchMappingVa
 
 public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
-    private final static String PACKAGE_PATTERN = "%s.%s";
-    private final static String PARENT_PACKAGE_NAME = "resource";
     private final static String HANDLER_INDEX_PATTERN = "public static final int %s = %d;";
     private final static CodeGenerationParameter STATE_ADAPTER_HANDLER =
             CodeGenerationParameter.of(ROUTE_SIGNATURE, "adaptState");
@@ -122,7 +120,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
     }
 
     private String resolvePackage(final String basePackage) {
-        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME).toLowerCase();
+        return String.format("%s.%s.%s", basePackage, "infrastructure", "resource").toLowerCase();
     }
 
     @Override
