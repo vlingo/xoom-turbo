@@ -38,7 +38,7 @@ public class ModelGenerationStepTest {
         Assert.assertEquals("AuthorRanked", context.contents().get(4).retrieveClassName());
 
         Assert.assertTrue(context.contents().get(0).contains("interface Author "));
-        Assert.assertTrue(context.contents().get(0).contains("final Address address = stage.addressFactory().uniquePrefixedWith(\"g-\");"));
+        Assert.assertTrue(context.contents().get(0).contains("final Address _address = stage.addressFactory().uniquePrefixedWith(\"g-\");"));
         Assert.assertTrue(context.contents().get(1).contains("class AuthorEntity extends StatefulEntity"));
         Assert.assertTrue(context.contents().get(1).contains("public Completes<AuthorState> withName(final String name)"));
         Assert.assertTrue(context.contents().get(1).contains("final AuthorState stateArg = state.withName(name);"));
@@ -72,7 +72,7 @@ public class ModelGenerationStepTest {
         Assert.assertEquals("AuthorRanked", context.contents().get(4).retrieveClassName());
 
         Assert.assertTrue(context.contents().get(0).contains("interface Author "));
-        Assert.assertTrue(context.contents().get(0).contains("final Address address = stage.addressFactory().uniquePrefixedWith(\"g-\");"));
+        Assert.assertTrue(context.contents().get(0).contains("final Address _address = stage.addressFactory().uniquePrefixedWith(\"g-\");"));
         Assert.assertTrue(context.contents().get(1).contains("class AuthorEntity extends EventSourced"));
         Assert.assertTrue(context.contents().get(1).contains("public Completes<AuthorState> withName(final String name) {"));
         Assert.assertTrue(context.contents().get(1).contains("return apply(new AuthorRegistered(state), () -> state);"));
