@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.resource;
 
+import io.vlingo.http.resource.ResourceBuilder;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 
@@ -85,7 +86,7 @@ public class RouteDeclarationParameter {
     }
 
     public String getBuilderMethod() {
-        return builderMethod.toLowerCase();
+        return ResourceBuilder.class.getCanonicalName()  + "." + builderMethod.toLowerCase();
     }
 
     public List<String> getParameterTypes() {
