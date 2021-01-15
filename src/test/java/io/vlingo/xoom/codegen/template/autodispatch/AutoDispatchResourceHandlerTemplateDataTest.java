@@ -72,7 +72,7 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
                         .findFirst().get();
 
         Assert.assertEquals("io.vlingo.xoomapp.infrastructure.AuthorData", nameUpdateRouteDeclaration.getBodyType());
-        Assert.assertEquals("patch", nameUpdateRouteDeclaration.getBuilderMethod());
+        Assert.assertEquals("io.vlingo.http.resource.ResourceBuilder.patch", nameUpdateRouteDeclaration.getBuilderMethod());
         Assert.assertEquals("/authors/{authorId}/name", nameUpdateRouteDeclaration.getPath());
         Assert.assertEquals(1, nameUpdateRouteDeclaration.getParameterTypes().size());
         Assert.assertEquals("String", nameUpdateRouteDeclaration.getParameterTypes().get(0));
