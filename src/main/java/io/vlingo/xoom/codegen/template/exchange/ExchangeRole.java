@@ -22,6 +22,10 @@ public enum ExchangeRole {
         return equals(CONSUMER);
     }
 
+    public boolean isProducer() {
+        return equals(PRODUCER);
+    }
+
     public String formatName() {
         return StringUtil.capitalize(name().toLowerCase());
     }

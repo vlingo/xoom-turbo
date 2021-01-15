@@ -38,6 +38,9 @@ public class ExchangeTemplateDataFactory {
         final List<TemplateData> properties =
                 Arrays.asList(ExchangePropertiesTemplateData.from(filteredAggregates));
 
-        return Stream.of(mappers, holders, adapters, properties).flatMap(List::stream).collect(toList());
+        final List<TemplateData> bootstrap =
+                Arrays.asList(ExchangeBootstrapTemplateData.from(exchangePackage, filteredAggregates, contents));
+
+        return Stream.of(mappers, holders, adapters, properties, bootstrap).flatMap(List::stream).collect(toList());
     }
 }

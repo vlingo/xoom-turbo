@@ -97,8 +97,6 @@ public enum TemplateParameter {
     PROJECTION_DISPATCHER_PROVIDER_NAME("projectionDispatcherProviderName"),
     PROVIDERS("providers"),
     LOCAL_TYPE_NAME("localTypeName"),
-    EXTERNAL_CLASS("externalClass"),
-    SCHEMA_NAME("schemaName"),
     EXCHANGE_MAPPER_NAME("exchangeMapperName"),
     EXCHANGE_ADAPTER_NAME("exchangeAdapterName"),
     EXCHANGE_RECEIVER_HOLDER_NAME("exchangeReceiverHolderName"),
@@ -106,7 +104,9 @@ public enum TemplateParameter {
     EXCHANGE_RECEIVERS("exchangeReceivers"),
     INLINE_EXCHANGE_NAMES("inlineExchangeNames"),
     EXCHANGE_NAMES("exchangeNames"),
-    SCHEMA_GROUP_NAME("schemaGroupName");
+    SCHEMA_GROUP_NAME("schemaGroupName"),
+    EXCHANGES("exchanges"),
+    PRODUCER_EXCHANGES("producerExchanges");
 
     public final String key;
 

@@ -90,6 +90,9 @@ public enum TemplateStandard {
                 return projectionType.isEventBased() ? "Events" : "Operations";
             }),
 
+    EXCHANGE_BOOTSTRAP(parameters -> Template.EXCHANGE_BOOTSTRAP.filename,
+            (name, parameters) -> "ExchangeBootstrap"),
+
     EXCHANGE_MAPPER(parameters -> Template.EXCHANGE_MAPPER.filename,
             (name, parameters) -> parameters.find(LOCAL_TYPE_NAME) + "Mapper"),
 
