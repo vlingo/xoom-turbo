@@ -9,7 +9,7 @@ import io.vlingo.lattice.exchange.MessageParameters.DeliveryMode;
 import ${import.qualifiedClassName};
 </#list>
 
-public class ${exchangeAdapterName} implements ExchangeAdapter<String, ${}, Message> {
+public class ${exchangeAdapterName} implements ExchangeAdapter<${localTypeName}, String, Message> {
 
   private final String supportedSchemaName;
 
