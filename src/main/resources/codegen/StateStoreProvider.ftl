@@ -47,7 +47,7 @@ public class ${storeProviderName} {
   }
 
   @SuppressWarnings("rawtypes")
-  public static ${storeProviderName} using(final Stage stage, final StatefulTypeRegistry registry, final Dispatcher dispatcher) {
+  public static ${storeProviderName} using(final Stage stage, final StatefulTypeRegistry registry, final Dispatcher ...dispatchers) {
     if (instance != null) {
       return instance;
     }
@@ -66,7 +66,7 @@ public class ${storeProviderName} {
 </#list>
 
     final StateStore store =
-            StoreActorBuilder.from(stage, Model.${model}, dispatcher, StorageType.STATE_STORE, Settings.properties(), true);
+            StoreActorBuilder.from(stage, Model.${model}, Arrays.asList(dispatchers), StorageType.STATE_STORE, Settings.properties(), true);
 
 <#if requireAdapters>
 <#list adapters as stateAdapter>

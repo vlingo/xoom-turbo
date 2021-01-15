@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.exchange.ExchangeRole;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
 import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
 import static io.vlingo.xoom.codegen.parameter.Label.PROJECTION_TYPE;
 import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
@@ -68,6 +70,9 @@ public abstract class BootstrapTemplateData extends TemplateData {
         final Boolean useAnnotations = context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
         final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
+        final Boolean hasProducerExchange =
+                context.parametersOf(AGGREGATE).flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
+                        .anyMatch(exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer());
 
         final Set<ImportParameter> imports =
                 loadImports(storageType, context.contents(), useCQRS, useAnnotations);
@@ -76,7 +81,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
                 TypeRegistryParameter.from(storageType, useCQRS);
 
         final List<StoreProviderParameter> storeProviderParameters =
-                StoreProviderParameter.from(storageType, useCQRS, projectionType.isProjectionEnabled());
+                StoreProviderParameter.from(storageType, useCQRS, projectionType.isProjectionEnabled(), hasProducerExchange);
 
         return this.parameters.and(IMPORTS, imports)
                 .and(PACKAGE_NAME, packageName)
@@ -103,7 +108,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
 
         final Set<String> otherFullyQualifiedNames =
                 ContentQuery.findFullyQualifiedClassNames(contents,
-                        STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER);
+                        STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER, EXCHANGE_DISPATCHER);
 
         final Set<String> typeRegistriesFullyQualifiedNames =
                 storageType.resolveTypeRegistryQualifiedNames(useCQRS);

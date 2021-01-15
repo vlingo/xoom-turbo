@@ -24,15 +24,14 @@ import io.vlingo.symbio.store.journal.jdbc.JDBCJournalInstantWriter;
 import io.vlingo.symbio.store.journal.jdbc.JDBCJournalWriter;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
-import java.sql.SQLException;
-import java.util.Collections;
+import java.util.List;
 
 public class DefaultJournalActorBuilder implements StoreActorBuilder {
 
     @Override
-    public Object build(final Stage stage,
-                        final Dispatcher dispatcher,
-                        final Configuration configuration) {
+    public <T> T build(final Stage stage,
+                       final List<Dispatcher> dispatchers,
+                       final Configuration configuration) {
         try {
             final JDBCDispatcherControlDelegate dispatcherControlDelegate =
                     new JDBCDispatcherControlDelegate(Configuration.cloneOf(configuration), stage.world().defaultLogger());
@@ -40,22 +39,22 @@ public class DefaultJournalActorBuilder implements StoreActorBuilder {
             final DispatcherControl dispatcherControl = stage.actorFor(DispatcherControl.class,
                     Definition.has(DispatcherControlActor.class,
                             new DispatcherControl.DispatcherControlInstantiator(
-                                    Collections.singletonList(typed(dispatcher)),
+                                    dispatchers,
                                     dispatcherControlDelegate,
                                     Journal.DefaultCheckConfirmationExpirationInterval,
                                     Journal.DefaultConfirmationExpiration)));
 
             final JDBCJournalWriter journalWriter =
-                    new JDBCJournalInstantWriter(configuration, Collections.singletonList(typed(dispatcher)), dispatcherControl);
+                    new JDBCJournalInstantWriter(configuration, typed(dispatchers), dispatcherControl);
 
-            return stage.world().actorFor(Journal.class, JDBCJournalActor.class, configuration, journalWriter);
+            return (T) stage.world().actorFor(Journal.class, JDBCJournalActor.class, configuration, journalWriter);
         } catch (final Exception e) {
             throw new StorageException(Result.Error, e.getMessage());
         }
     }
 
-    private Dispatcher<Dispatchable<Entry<String>, State.TextState>> typed(Dispatcher dispatcher) {
-        return dispatcher;
+    private List<Dispatcher<Dispatchable<Entry<String>, State.TextState>>> typed(final List<?> dispatchers) {
+        return (List<Dispatcher<Dispatchable<Entry<String>, State.TextState>>>) dispatchers;
     }
 
     @Override

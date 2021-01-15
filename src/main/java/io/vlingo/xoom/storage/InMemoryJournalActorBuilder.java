@@ -16,13 +16,15 @@ import io.vlingo.symbio.store.journal.Journal;
 import io.vlingo.symbio.store.journal.inmemory.InMemoryJournalActor;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
+import java.util.List;
+
 public class InMemoryJournalActorBuilder implements StoreActorBuilder {
 
     @Override
-    public Object build(final Stage stage,
-                        final Dispatcher dispatcher,
+    public <T> T build(final Stage stage,
+                        final List<Dispatcher> dispatchers,
                         final Configuration configuration) {
-        return Journal.using(stage, InMemoryJournalActor.class, dispatcher);
+        return (T) Journal.using(stage, InMemoryJournalActor.class, dispatchers.get(0));
     }
 
     private Dispatcher<Dispatchable<Entry<?>,?>> typed(Dispatcher dispatcher) {

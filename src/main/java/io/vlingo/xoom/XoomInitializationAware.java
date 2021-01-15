@@ -11,6 +11,8 @@ import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.StaticFilesConfiguration;
 import io.vlingo.http.resource.feed.FeedConfiguration;
 import io.vlingo.http.resource.sse.SseConfiguration;
+import io.vlingo.symbio.store.dispatch.Dispatcher;
+import io.vlingo.symbio.store.dispatch.NoOpDispatcher;
 
 public interface XoomInitializationAware {
 
@@ -21,6 +23,10 @@ public interface XoomInitializationAware {
     default Configuration configureServer(final Stage stage, final String[] args) {
         final int port = resolvePort(stage, args);
         return Configuration.define().withPort(port);
+    }
+
+    default Dispatcher exchangeDispatcher() {
+        return new NoOpDispatcher();
     }
 
     /**

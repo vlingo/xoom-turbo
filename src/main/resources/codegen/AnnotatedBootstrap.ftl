@@ -21,4 +21,10 @@ public class Bootstrap implements XoomInitializationAware {
   public void onInit(final Stage stage) {
   }
 
+<#if hasProducerExchange>
+  @Override
+  public Dispatcher exchangeDispatcher() {
+     return ExchangeBootstrap.init().dispatcher();
+  }
+</#if>
 }

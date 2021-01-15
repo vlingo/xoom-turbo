@@ -1,5 +1,6 @@
 package ${packageName};
 
+import java.util.Arrays;
 import java.util.List;
 
 <#list imports as import>
@@ -35,7 +36,7 @@ public class ${storeProviderName}  {
  }
 
   @SuppressWarnings({ "unchecked", "unused" })
-  public static ${storeProviderName} using(final Stage stage, final SourcedTypeRegistry registry, final Dispatcher dispatcher) {
+  public static ${storeProviderName} using(final Stage stage, final SourcedTypeRegistry registry, final Dispatcher ...dispatchers) {
     if (instance != null) {
       return instance;
     }
@@ -47,7 +48,7 @@ public class ${storeProviderName}  {
 </#list>
 
     final Journal<String> journal =
-              StoreActorBuilder.from(stage, Model.${model}, dispatcher, StorageType.JOURNAL, Settings.properties(), true);
+              StoreActorBuilder.from(stage, Model.${model}, Arrays.asList(dispatchers), StorageType.JOURNAL, Settings.properties(), true);
 
 <#list aggregates as aggregate>
     registry.register(new Info(journal, ${aggregate}.class, ${aggregate}.class.getSimpleName()));

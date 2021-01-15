@@ -55,7 +55,7 @@ public class StorageGenerationStepTest {
         Assert.assertFalse(context.contents().get(18).contains("public final BookQueries bookQueries;"));
         Assert.assertTrue(context.contents().get(18).contains("registry.register(new Info(journal, AuthorEntity.class, AuthorEntity.class.getSimpleName()));"));
         Assert.assertTrue(context.contents().get(18).contains("registry.register(new Info(journal, BookEntity.class, BookEntity.class.getSimpleName()));"));
-        Assert.assertTrue(context.contents().get(18).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.JOURNAL, Settings.properties(), true"));
+        Assert.assertTrue(context.contents().get(18).contains("StoreActorBuilder.from(stage, Model.COMMAND, Arrays.asList(dispatchers), StorageType.JOURNAL, Settings.properties(), true"));
         Assert.assertTrue(context.contents().get(19).contains("class QueryModelStateStoreProvider"));
         Assert.assertTrue(context.contents().get(19).contains("import io.vlingo.xoomapp.infrastructure.AuthorData;"));
         Assert.assertTrue(context.contents().get(19).contains("import io.vlingo.xoomapp.infrastructure.BookData;"));
@@ -63,7 +63,7 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(19).contains("public final BookQueries bookQueries;"));
         Assert.assertTrue(context.contents().get(19).contains("this.authorQueries = stage.actorFor(AuthorQueries.class, AuthorQueriesActor.class, store)"));
         Assert.assertTrue(context.contents().get(19).contains("this.bookQueries = stage.actorFor(BookQueries.class, BookQueriesActor.class, store)"));
-        Assert.assertTrue(context.contents().get(19).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
+        Assert.assertTrue(context.contents().get(19).contains("StoreActorBuilder.from(stage, Model.QUERY, Arrays.asList(dispatchers), StorageType.STATE_STORE, Settings.properties(), true"));
         Assert.assertTrue(context.contents().get(19).contains("StateTypeStateStoreMap.stateTypeToStoreName(AuthorData.class, AuthorData.class.getSimpleName())"));
         Assert.assertTrue(context.contents().get(19).contains("StateTypeStateStoreMap.stateTypeToStoreName(BookData.class, BookData.class.getSimpleName())"));
         Assert.assertFalse(context.contents().get(19).contains("BookRented"));
@@ -95,11 +95,11 @@ public class StorageGenerationStepTest {
         Assert.assertTrue(context.contents().get(18).contains("import io.vlingo.xoomapp.model.book.BookState;"));
         Assert.assertTrue(context.contents().get(18).contains("StateTypeStateStoreMap.stateTypeToStoreName(AuthorState.class, AuthorState.class.getSimpleName())"));
         Assert.assertTrue(context.contents().get(18).contains("StateTypeStateStoreMap.stateTypeToStoreName(BookState.class, BookState.class.getSimpleName())"));
-        Assert.assertTrue(context.contents().get(18).contains("StoreActorBuilder.from(stage, Model.COMMAND, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
+        Assert.assertTrue(context.contents().get(18).contains("StoreActorBuilder.from(stage, Model.COMMAND, Arrays.asList(dispatchers), StorageType.STATE_STORE, Settings.properties(), true"));
         Assert.assertTrue(context.contents().get(19).contains("class QueryModelStateStoreProvider"));
         Assert.assertTrue(context.contents().get(19).contains("import io.vlingo.xoomapp.infrastructure.AuthorData;"));
         Assert.assertTrue(context.contents().get(19).contains("import io.vlingo.xoomapp.infrastructure.BookData;"));
-        Assert.assertTrue(context.contents().get(19).contains("StoreActorBuilder.from(stage, Model.QUERY, dispatcher, StorageType.STATE_STORE, Settings.properties(), true"));
+        Assert.assertTrue(context.contents().get(19).contains("StoreActorBuilder.from(stage, Model.QUERY, Arrays.asList(dispatchers), StorageType.STATE_STORE, Settings.properties(), true"));
         Assert.assertTrue(context.contents().get(19).contains("StateTypeStateStoreMap.stateTypeToStoreName(AuthorData.class, AuthorData.class.getSimpleName())"));
         Assert.assertTrue(context.contents().get(19).contains("StateTypeStateStoreMap.stateTypeToStoreName(BookData.class, BookData.class.getSimpleName())"));
     }

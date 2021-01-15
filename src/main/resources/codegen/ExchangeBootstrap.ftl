@@ -15,9 +15,15 @@ import ${import.qualifiedClassName};
 
 public class ExchangeBootstrap {
 
+  private static ExchangeBootstrap instance;
+
   private final Dispatcher dispatcher;
 
   public static ExchangeBootstrap init() {
+    if(instance != null) {
+      return instance;
+    }
+
     ExchangeParameters.load(Settings.properties());
 
     <#list exchanges as exchange>
@@ -46,7 +52,9 @@ public class ExchangeBootstrap {
         System.out.println("==================");
     }));
 
-    return new ExchangeBootstrap(${producerExchanges});
+    instance = new ExchangeBootstrap(${producerExchanges});
+
+    return instance;
   }
 
   private ExchangeBootstrap(final Exchange ...exchanges) {

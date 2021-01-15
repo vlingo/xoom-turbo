@@ -28,46 +28,53 @@ public class StoreProviderParameter {
     private final String arguments;
 
     private static final String STORE_PROVIDER_ARGS_PATTERN = "stage, %s";
+    private static final String EXCHANGE_DISPATCHER = ", ExchangeBootstrap.init().dispatcher()";
     private static final String STORE_PROVIDER_ARGS_WITH_PROJECTIONS_PATTERN = STORE_PROVIDER_ARGS_PATTERN + ", %s.using(stage).storeDispatcher";
 
     public static List<StoreProviderParameter> from(final StorageType storageType,
                                                     final Boolean useCQRS,
-                                                    final Boolean useProjections) {
+                                                    final Boolean useProjections,
+                                                    final Boolean hasProducerExchange) {
         if(!storageType.isEnabled()) {
             return Collections.emptyList();
         }
 
         return Model.applicableTo(useCQRS)
-                .map(model -> new StoreProviderParameter(storageType, model, useProjections))
+                .map(model -> new StoreProviderParameter(storageType, model, useProjections, hasProducerExchange))
                 .collect(Collectors.toList());
     }
 
     private StoreProviderParameter(final StorageType storageType,
                                    final Model model,
-                                   final Boolean useProjections) {
+                                   final Boolean useProjections,
+                                   final Boolean hasProducerExchange) {
         final TemplateParameters parameters =
                 TemplateParameters.with(STORAGE_TYPE, storageType)
                         .and(MODEL, model);
 
         this.className = STORE_PROVIDER.resolveClassname(parameters);
-        this.arguments = resolveArguments(model, storageType, useProjections);
+        this.arguments = resolveArguments(model, storageType, useProjections, hasProducerExchange);
     }
 
     private String resolveArguments(final Model model,
                                     final StorageType storageType,
-                                    final Boolean useProjections) {
+                                    final Boolean useProjections,
+                                    final Boolean hasProducerExchange) {
         final String typeRegistryObjectName =
                 storageType.resolveTypeRegistryObjectName(model);
 
         final String dispatcherProviderClassName =
                 PROJECTION_DISPATCHER_PROVIDER.resolveClassname();
 
-        if(model.isQueryModel() || !useProjections) {
-            return String.format(STORE_PROVIDER_ARGS_PATTERN, typeRegistryObjectName);
-        }
+        final String firstArguments =
+                model.isQueryModel() || !useProjections ?
+                        String.format(STORE_PROVIDER_ARGS_PATTERN, typeRegistryObjectName) :
+                        String.format(STORE_PROVIDER_ARGS_WITH_PROJECTIONS_PATTERN, typeRegistryObjectName, dispatcherProviderClassName);
 
-        return String.format(STORE_PROVIDER_ARGS_WITH_PROJECTIONS_PATTERN, typeRegistryObjectName, dispatcherProviderClassName);
+        return hasProducerExchange ? firstArguments + EXCHANGE_DISPATCHER : firstArguments;
     }
+
+
 
     public String getClassName() {
         return className;

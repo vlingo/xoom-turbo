@@ -38,9 +38,12 @@ public class ExchangeTemplateDataFactory {
         final List<TemplateData> properties =
                 Arrays.asList(ExchangePropertiesTemplateData.from(filteredAggregates));
 
+        final List<TemplateData> dispatcher =
+                Arrays.asList(ExchangeDispatcherTemplateData.from(exchangePackage, filteredAggregates, contents));
+
         final List<TemplateData> bootstrap =
                 Arrays.asList(ExchangeBootstrapTemplateData.from(exchangePackage, filteredAggregates, contents));
 
-        return Stream.of(mappers, holders, adapters, properties, bootstrap).flatMap(List::stream).collect(toList());
+        return Stream.of(mappers, holders, adapters, properties, dispatcher, bootstrap).flatMap(List::stream).collect(toList());
     }
 }

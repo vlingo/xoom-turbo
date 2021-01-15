@@ -13,13 +13,13 @@ import io.vlingo.symbio.store.state.StateStore;
 import io.vlingo.symbio.store.state.inmemory.InMemoryStateStoreActor;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class InMemoryStateStoreActorBuilder implements StoreActorBuilder {
 
     @Override
-    public Object build(final Stage stage, final Dispatcher dispatcher, final Configuration configuration) {
-        return stage.actorFor(StateStore.class, InMemoryStateStoreActor.class, Arrays.asList(dispatcher));
+    public <T> T build(final Stage stage, final List<Dispatcher> dispatchers, final Configuration configuration) {
+        return (T) stage.actorFor(StateStore.class, InMemoryStateStoreActor.class, dispatchers);
     }
 
     @Override

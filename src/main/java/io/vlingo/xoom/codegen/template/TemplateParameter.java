@@ -106,7 +106,8 @@ public enum TemplateParameter {
     EXCHANGE_NAMES("exchangeNames"),
     SCHEMA_GROUP_NAME("schemaGroupName"),
     EXCHANGES("exchanges"),
-    PRODUCER_EXCHANGES("producerExchanges");
+    PRODUCER_EXCHANGES("producerExchanges"),
+    HAS_PRODUCER_EXCHANGE("hasProducerExchange");
 
     public final String key;
 

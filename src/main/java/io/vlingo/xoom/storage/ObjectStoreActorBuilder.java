@@ -12,10 +12,12 @@ import io.vlingo.symbio.store.common.jdbc.Configuration;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
+import java.util.List;
+
 public class ObjectStoreActorBuilder implements StoreActorBuilder {
 
     @Override
-    public Object build(final Stage stage, final Dispatcher dispatcher, final Configuration configuration) {
+    public <T> T build(final Stage stage, final List<Dispatcher> dispatchers, final Configuration configuration) {
         //TODO: Implement Object Store Actor Builder
         throw new UnsupportedOperationException("Object Store is not supported");
     }

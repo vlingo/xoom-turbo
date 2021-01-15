@@ -36,7 +36,7 @@ public class ExchangeBootstrapTemplateData extends TemplateData {
                                     final Stream<CodeGenerationParameter> aggregates,
                                     final List<Content> contents) {
         final List<CodeGenerationParameter> exchanges =
-                aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
+                 aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
                         .collect(Collectors.toList());
 
         return new ExchangeBootstrapTemplateData(exchangePackage, exchanges, contents);

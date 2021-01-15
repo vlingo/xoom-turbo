@@ -30,6 +30,15 @@ public interface StoreActorBuilder {
                       final StorageType storageType,
                       final Properties properties,
                       final boolean autoDatabaseCreation) {
+        return from(stage, model, Arrays.asList(dispatcher), storageType, properties, autoDatabaseCreation);
+    }
+
+    static <T> T from(final Stage stage,
+                      final Model model,
+                      final List<Dispatcher> dispatcher,
+                      final StorageType storageType,
+                      final Properties properties,
+                      final boolean autoDatabaseCreation) {
         final Configuration configuration =
                 new DatabaseParameters(model, properties, autoDatabaseCreation)
                         .mapToConfiguration();
@@ -44,7 +53,7 @@ public interface StoreActorBuilder {
                 .build(stage, dispatcher, configuration);
     }
 
-    <T> T build(final Stage stage, final Dispatcher dispatcher, final Configuration configuration);
+    <T> T build(final Stage stage, final List<Dispatcher> dispatchers, final Configuration configuration);
 
     boolean support(final StorageType storageType, final DatabaseType databaseType);
 
