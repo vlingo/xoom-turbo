@@ -9,12 +9,37 @@ package io.vlingo.xoom.codegen.template.exchange;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 
 public class ContentBuilder {
 
     public static Content authorDataObjectContent() {
         return Content.with(DATA_OBJECT, new TemplateFile("", "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT);
+    }
+
+    public static Content authorRatedEvent() {
+        return Content.with(DOMAIN_EVENT, new TemplateFile("", "AuthorRated.java"), null, null, AUTHOR_RATED_CONTENT_TEXT);
+    }
+
+    public static Content authorBlockedEvent() {
+        return Content.with(DOMAIN_EVENT, new TemplateFile("", "AuthorBlocked.java"), null, null, AUTHOR_BLOCKED_CONTENT_TEXT);
+    }
+
+    public static Content bookSoldOutEvent() {
+        return Content.with(DOMAIN_EVENT, new TemplateFile("", "BookSoldOut.java"), null, null, BOOK_SOLD_OUT_CONTENT_TEXT);
+    }
+
+    public static Content bookPurchasedEvent() {
+        return Content.with(DOMAIN_EVENT, new TemplateFile("", "BookPurchased.java"), null, null, BOOK_PURCHASED_CONTENT_TEXT);
+    }
+
+    public static List<Content> dataAndEvents() {
+        return Arrays.asList(authorDataObjectContent(), authorRatedEvent(), authorBlockedEvent(),
+                bookSoldOutEvent(), bookPurchasedEvent());
     }
 
     private static final String AUTHOR_DATA_CONTENT_TEXT =
@@ -23,4 +48,27 @@ public class ContentBuilder {
                     "... \\n" +
                     "}";
 
+    private static final String AUTHOR_RATED_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorRated extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_BLOCKED_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorRated extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_SOLD_OUT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public class BookSoldOut extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_PURCHASED_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public class BookPurchased extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
 }

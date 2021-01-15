@@ -18,6 +18,7 @@ public class ExchangesParameter {
     private final String name;
     private final String exchangeVariableName;
     private final Set<CoveyParameter> coveys;
+
     public static List<ExchangesParameter> from(final List<CodeGenerationParameter> exchanges) {
         return exchanges.stream().map(exchange -> exchange.value).distinct()
                 .map(exchangeName -> new ExchangesParameter(exchangeName, exchanges))
