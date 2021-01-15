@@ -11,11 +11,7 @@ import io.vlingo.symbio.store.dispatch.Dispatcher;
 import io.vlingo.symbio.store.dispatch.DispatcherControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -28,14 +24,14 @@ public class ExchangeDispatcher implements Dispatcher<Dispatchable<Entry<String>
   private static final Logger logger = LoggerFactory.getLogger(ExchangeDispatcher.class);
 
   private DispatcherControl control;
-  private final List<Exchange> producerExchanges = new ArrayList<>();
+  private final List<Exchange> producerExchanges;
   private final Map<String, Set<String>> eventsByExchangeName = new HashMap<>();
 
   public ExchangeDispatcher(final Exchange ...producerExchanges) {
     <#list producerExchanges as exchange>
-    this.eventsByExchangeName.put("${exchange.name}", new ArrayList<>());
+    this.eventsByExchangeName.put("${exchange.name}", new HashSet<>());
     <#list exchange.events as event>
-    this.eventsByExchangeName.get("${exchange.name}").add(${event}.getClass().getCanonicalName());
+    this.eventsByExchangeName.get("${exchange.name}").add(${event}.class.getCanonicalName());
     </#list>
     </#list>
     this.producerExchanges = Arrays.asList(producerExchanges);
@@ -73,7 +69,7 @@ public class ExchangeDispatcher implements Dispatcher<Dispatchable<Entry<String>
              return events.contains(event.getClass().getSimpleName());
          }).map(Map.Entry::getKey).collect(Collectors.toSet());
 
-    return this.exchanges.stream().filter(exchange -> exchangeNames.contains(exchange.name()));
+    return this.producerExchanges.stream().filter(exchange -> exchangeNames.contains(exchange.name()));
   }
 
 }

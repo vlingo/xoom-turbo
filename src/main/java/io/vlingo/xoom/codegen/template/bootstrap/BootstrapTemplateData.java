@@ -103,12 +103,12 @@ public abstract class BootstrapTemplateData extends TemplateData {
                                              final Boolean useCQRS,
                                              final Boolean useAnnotations) {
         if(useAnnotations) {
-            return new HashSet<>();
+            return ImportParameter.of(ContentQuery.findFullyQualifiedClassNames(contents, EXCHANGE_BOOTSTRAP));
         }
 
         final Set<String> otherFullyQualifiedNames =
                 ContentQuery.findFullyQualifiedClassNames(contents,
-                        STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER, EXCHANGE_DISPATCHER);
+                        STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER, EXCHANGE_BOOTSTRAP);
 
         final Set<String> typeRegistriesFullyQualifiedNames =
                 storageType.resolveTypeRegistryQualifiedNames(useCQRS);

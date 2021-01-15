@@ -8,6 +8,8 @@ import io.vlingo.lattice.exchange.ConnectionSettings;
 import io.vlingo.lattice.exchange.rabbitmq.Message;
 import io.vlingo.lattice.exchange.rabbitmq.MessageSender;
 import io.vlingo.symbio.store.dispatch.NoOpDispatcher;
+import io.vlingo.lattice.exchange.Covey;
+import io.vlingo.symbio.store.dispatch.Dispatcher;
 
 <#list imports as import>
 import ${import.qualifiedClassName};
@@ -27,15 +29,15 @@ public class ExchangeBootstrap {
     ExchangeParameters.load(Settings.properties());
 
     <#list exchanges as exchange>
-    final ConnectionSettings ${exchange.settingsName} = ExchangeParameters.of("${exchange.name}");
+    final ConnectionSettings ${exchange.settingsName} = ExchangeParameters.of("${exchange.name}").mapToConnectionSettings();
     final Exchange ${exchange.variableName} = ExchangeFactory.fanOutInstance(${exchange.settingsName}, "${exchange.name}", true);
       <#list exchange.coveys as covey>
-    exchange.register(Covey.of(
+    ${exchange.variableName}.register(Covey.of(
         new MessageSender(${exchange.variableName}.connection()),
         ${covey.receiverInstantiation},
         ${covey.adapterInstantiation},
-        ${covey.localClass},
-        ${covey.externalClass},
+        ${covey.localClass}.class,
+        ${covey.externalClass}.class,
         Message.class));
 
       </#list>
@@ -43,7 +45,7 @@ public class ExchangeBootstrap {
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
         <#list exchanges as exchange>
-        ${exchange.variableName}.stop();
+        ${exchange.variableName}.close();
         </#list>
 
         System.out.println("\n");

@@ -4,6 +4,7 @@ import io.vlingo.lattice.exchange.ExchangeAdapter;
 import io.vlingo.lattice.exchange.ExchangeMapper;
 import io.vlingo.lattice.exchange.MessageParameters;
 import io.vlingo.lattice.exchange.MessageParameters.DeliveryMode;
+import io.vlingo.lattice.exchange.rabbitmq.Message;
 
 <#list imports as import>
 import ${import.qualifiedClassName};
@@ -33,7 +34,7 @@ public class ${exchangeAdapterName} implements ExchangeAdapter<${localTypeName},
     if(!exchangeMessage.getClass().equals(Message.class)) {
       return false;
     }
-    final String schemaName = ((Message) exchangeMessage).messageParameters.typeName;
+    final String schemaName = ((Message) exchangeMessage).messageParameters.typeName();
     return supportedSchemaName.equalsIgnoreCase(schemaName);
   }
 

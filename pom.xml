@@ -68,6 +68,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>io.vlingo</groupId>
+      <artifactId>vlingo-lattice-exchange-rabbitmq</artifactId>
+      <version>1.4.4-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>com.google.auto.service</groupId>
       <artifactId>auto-service</artifactId>
       <version>1.0-rc5</version>

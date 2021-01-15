@@ -23,7 +23,7 @@ public class Bootstrap implements XoomInitializationAware {
 
 <#if hasProducerExchange>
   @Override
-  public Dispatcher exchangeDispatcher() {
+  public io.vlingo.symbio.store.dispatch.Dispatcher exchangeDispatcher() {
      return ExchangeBootstrap.init().dispatcher();
   }
 </#if>
