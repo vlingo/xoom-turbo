@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 public class ExchangesParameter {
 
+    private final String name;
     private final String exchangeVariableName;
     private final Set<CoveyParameter> coveys;
-
     public static List<ExchangesParameter> from(final List<CodeGenerationParameter> exchanges) {
         return exchanges.stream().map(exchange -> exchange.value).distinct()
                 .map(exchangeName -> new ExchangesParameter(exchangeName, exchanges))
@@ -26,7 +26,8 @@ public class ExchangesParameter {
 
     public ExchangesParameter(final String exchangeName,
                               final List<CodeGenerationParameter> allExchangeParameters) {
-        this.exchangeVariableName = formatValidVariableName(exchangeName);
+        this.name = exchangeName;
+        this.exchangeVariableName = Formatter.formatExchangeVariableName(exchangeName);
         this.coveys = resolveCoveyParameters(exchangeName, allExchangeParameters);
     }
 
@@ -51,17 +52,8 @@ public class ExchangesParameter {
         return coveys;
     }
 
-    private String formatValidVariableName(final String exchangeName) {
-        boolean shouldUpper = false;
-        final StringBuilder formatted = new StringBuilder();
-        for(char character : exchangeName.toLowerCase().toCharArray()) {
-            if(!Character.isJavaIdentifierPart(character)) {
-                shouldUpper = true;
-                continue;
-            }
-            formatted.append(shouldUpper ? String.valueOf(character).toUpperCase() : character);
-            shouldUpper = false;
-        }
-        return formatted.toString();
+    public String getName() {
+        return name;
     }
+
 }

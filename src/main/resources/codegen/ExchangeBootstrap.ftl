@@ -31,6 +31,7 @@ public class ExchangeBootstrap {
         ${convey.localClass},
         ${convey.externalClass},
         Message.class));
+
       </#list>
     </#list>
 

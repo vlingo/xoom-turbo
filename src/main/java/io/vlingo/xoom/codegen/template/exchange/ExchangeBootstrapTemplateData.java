@@ -25,7 +25,8 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
 import static io.vlingo.xoom.codegen.parameter.Label.ROLE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.EXCHANGE_BOOTSTRAP;
 
 public class ExchangeBootstrapTemplateData extends TemplateData {
 
@@ -55,28 +56,26 @@ public class ExchangeBootstrapTemplateData extends TemplateData {
         final Predicate<CodeGenerationParameter> onlyProducers =
                 exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
 
-        return exchanges.stream().filter(onlyProducers).map(exchange -> exchange.value)
+        return exchanges.stream().filter(onlyProducers).map(Formatter::formatExchangeVariableName)
                 .distinct().collect(Collectors.joining(", "));
     }
 
     private Set<String> resolveImports(final List<CodeGenerationParameter> exchanges,
                                        final List<Content> contents) {
-        final Set<String> dataObjects = exchanges.stream()
+        final Set<String> imports = exchanges.stream()
                 .filter(exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer())
                 .map(exchange -> DATA_OBJECT.resolveClassname(exchange.parent(Label.AGGREGATE).value))
                 .map(dataObjectName -> ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents))
                 .collect(Collectors.toSet());
 
-        final Set<String> domainEvents =
-                exchanges.stream().flatMap(exchange -> exchange.retrieveAllRelated(Label.DOMAIN_EVENT))
-                        .map(event -> ContentQuery.findFullyQualifiedClassName(DOMAIN_EVENT, event.value, contents))
-                        .collect(Collectors.toSet());
+        final Predicate<CodeGenerationParameter> hasProducerExchanges =
+                exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
 
-        if(exchanges.stream().anyMatch(exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer())) {
-            domainEvents.add(IdentifiedDomainEvent.class.getCanonicalName());
+        if(exchanges.stream().anyMatch(hasProducerExchanges)) {
+            imports.add(IdentifiedDomainEvent.class.getCanonicalName());
         }
 
-        return Stream.of(dataObjects, domainEvents).flatMap(Set::stream).collect(Collectors.toSet());
+        return imports;
     }
 
     @Override

@@ -131,7 +131,10 @@ public enum TemplateStandard {
                     return STATE_STORE.resolveProviderNameFrom(model);
                 }
                 return storageType.resolveProviderNameFrom(model);
-    });
+    }),
+
+    EXCHANGE_DISPATCHER(parameters -> Template.EXCHANGE_DISPATCHER.filename,
+            (name, parameters) -> "ExchangeDispatcher");
 
     private static final String DEFAULT_FILE_EXTENSION = ".java";
 

@@ -4,11 +4,11 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.codegen.template.exchange;
 
 import io.vlingo.lattice.model.IdentifiedDomainEvent;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 
 import java.util.List;
@@ -33,10 +33,10 @@ public class CoveyParameter {
 
     public static Set<CoveyParameter> from(final List<CodeGenerationParameter> exchanges) {
         final Predicate<CodeGenerationParameter> onlyConsumers =
-                exchange -> exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isConsumer();
+                exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer();
 
         final Predicate<CodeGenerationParameter> onlyProducers =
-                exchange -> exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isProducer();
+                exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
 
         final Set<CoveyParameter> consumerCoveys =
                 exchanges.stream().filter(onlyConsumers).flatMap(exchange -> exchange.retrieveAllRelated(SCHEMA))
@@ -53,7 +53,7 @@ public class CoveyParameter {
         this.externalClass = String.class.getSimpleName();
         this.localClass = DATA_OBJECT.resolveClassname(consumerExchange.parent().value);
         this.adapterInstantiation = resolveConsumerAdapterInstantiation(consumerExchange, schema);
-        this.receiverInstantiation = String.format("new %s()", resolveReceiversName(consumerExchange, schema));
+        this.receiverInstantiation = String.format("new %s()", resolveReceiverName(consumerExchange, schema));
     }
 
     private CoveyParameter(final CodeGenerationParameter producerExchange) {
@@ -65,15 +65,18 @@ public class CoveyParameter {
 
     private String resolveConsumerAdapterInstantiation(final CodeGenerationParameter consumerExchange,
                                                        final CodeGenerationParameter schema) {
-        return String.format("new %s(%s)", resolveAdapterName(consumerExchange), schema.value);
+        return String.format("new %s(\"%s\")", resolveAdapterName(consumerExchange), schema.value);
     }
 
-    private String resolveReceiversName(final CodeGenerationParameter consumerExchange,
-                                        final CodeGenerationParameter schema) {
-        final String holderName =
-                EXCHANGE_RECEIVER_HOLDER.resolveClassname(consumerExchange.parent().value);
+    private String resolveReceiverName(final CodeGenerationParameter consumerExchange,
+                                       final CodeGenerationParameter schema) {
+        final String schemaTypeName = Formatter.formatSchemaTypeName(schema);
 
-        final String schemaTypeName = schema.value.split(":")[3];
+        final TemplateParameters aggregateProtocolName =
+                TemplateParameters.with(AGGREGATE_PROTOCOL_NAME, consumerExchange.parent().value);
+
+        final String holderName =
+                EXCHANGE_RECEIVER_HOLDER.resolveClassname(aggregateProtocolName);
 
         return String.format("%s.%s", holderName, schemaTypeName);
     }
@@ -81,7 +84,7 @@ public class CoveyParameter {
     private String resolveAdapterName(final CodeGenerationParameter exchange) {
         final TemplateParameters parameters =
                 TemplateParameters.with(AGGREGATE_PROTOCOL_NAME, exchange.parent().value)
-                        .and(EXCHANGE_ROLE, exchange.retrieveRelatedValue(ROLE));
+                        .and(EXCHANGE_ROLE, exchange.retrieveRelatedValue(ROLE, ExchangeRole::of));
 
         return EXCHANGE_ADAPTER.resolveClassname(parameters);
     }

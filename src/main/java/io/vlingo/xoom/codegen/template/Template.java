@@ -50,7 +50,8 @@ public enum Template {
     PRODUCER_EXCHANGE_ADAPTER("ProducerExchangeAdapter"),
     EXCHANGE_RECEIVER_HOLDER("ExchangeReceiverHolder"),
     EXCHANGE_PROPERTIES("ExchangeProperties"),
-    EXCHANGE_BOOTSTRAP("ExchangeBootstrap");
+    EXCHANGE_BOOTSTRAP("ExchangeBootstrap"),
+    EXCHANGE_DISPATCHER("ExchangeDispatcher");
 
     public final String filename;
 

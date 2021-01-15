@@ -28,12 +28,8 @@ public class ExchangeReceiversParameter {
 
     private ExchangeReceiversParameter(final CodeGenerationParameter exchange,
                                        final CodeGenerationParameter schema) {
-        this.schemaTypeName = resolveSchemaTypeName(schema);
+        this.schemaTypeName = Formatter.formatSchemaTypeName(schema);
         this.localTypeName = DATA_OBJECT.resolveClassname(exchange.parent().value);
-    }
-
-    private String resolveSchemaTypeName(final CodeGenerationParameter schema) {
-        return schema.value.split(":")[3];
     }
 
     public String getSchemaTypeName() {
