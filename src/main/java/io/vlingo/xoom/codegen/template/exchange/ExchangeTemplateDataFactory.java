@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
@@ -21,28 +22,28 @@ import static java.util.stream.Collectors.toList;
 public class ExchangeTemplateDataFactory {
 
     public static List<TemplateData> build(final String exchangePackage,
-                                           final Stream<CodeGenerationParameter> aggregates,
+                                           final List<CodeGenerationParameter> aggregates,
                                            final List<Content> contents) {
-        final Stream<CodeGenerationParameter> filteredAggregates =
-                aggregates.filter(aggregate -> aggregate.hasAny(EXCHANGE));
+        final Supplier<Stream<CodeGenerationParameter>> filteredAggregates = () ->
+                aggregates.stream().filter(aggregate -> aggregate.hasAny(EXCHANGE));
 
         final List<TemplateData> mappers =
-                ExchangeMapperTemplateData.from(exchangePackage, filteredAggregates, contents);
+                ExchangeMapperTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
 
         final List<TemplateData> holders =
-                ExchangeReceiverHolderTemplateData.from(exchangePackage, filteredAggregates, contents);
+                ExchangeReceiverHolderTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
 
         final List<TemplateData> adapters =
-                ExchangeAdapterTemplateData.from(exchangePackage, filteredAggregates, contents);
+                ExchangeAdapterTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
 
         final List<TemplateData> properties =
-                Arrays.asList(ExchangePropertiesTemplateData.from(filteredAggregates));
+                Arrays.asList(ExchangePropertiesTemplateData.from(filteredAggregates.get()));
 
         final List<TemplateData> dispatcher =
-                Arrays.asList(ExchangeDispatcherTemplateData.from(exchangePackage, filteredAggregates, contents));
+                Arrays.asList(ExchangeDispatcherTemplateData.from(exchangePackage, filteredAggregates.get(), contents));
 
         final List<TemplateData> bootstrap =
-                Arrays.asList(ExchangeBootstrapTemplateData.from(exchangePackage, filteredAggregates, contents));
+                Arrays.asList(ExchangeBootstrapTemplateData.from(exchangePackage, filteredAggregates.get(), contents));
 
         return Stream.of(mappers, holders, adapters, properties, dispatcher, bootstrap).flatMap(List::stream).collect(toList());
     }

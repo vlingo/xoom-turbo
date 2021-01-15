@@ -77,7 +77,6 @@ public class CodeGenerationContext {
         return this;
     }
 
-
     public CodeGenerationContext with(final Label label, final String value) {
         on(CodeGenerationParameters.from(label, value));
         return this;

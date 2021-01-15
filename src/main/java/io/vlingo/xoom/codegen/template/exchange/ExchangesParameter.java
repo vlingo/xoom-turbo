@@ -41,11 +41,11 @@ public class ExchangesParameter {
         return CoveyParameter.from(relatedExchangeParameters);
     }
 
-    public String getExchangeVariableName() {
+    public String getVariableName() {
         return exchangeVariableName;
     }
 
-    public String getExchangeSettingsName() {
+    public String getSettingsName() {
         return exchangeVariableName + "Settings";
     }
 

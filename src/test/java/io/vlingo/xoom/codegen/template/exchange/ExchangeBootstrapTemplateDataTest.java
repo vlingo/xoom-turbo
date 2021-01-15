@@ -41,8 +41,8 @@ public class ExchangeBootstrapTemplateDataTest {
         final ExchangesParameter otherAppExchange =
                 exchangesParameters.stream().filter(param -> param.getName().equals("otherapp-exchange")).findFirst().get();
 
-        Assert.assertEquals("otherappExchange", otherAppExchange.getExchangeVariableName());
-        Assert.assertEquals("otherappExchangeSettings", otherAppExchange.getExchangeSettingsName());
+        Assert.assertEquals("otherappExchange", otherAppExchange.getVariableName());
+        Assert.assertEquals("otherappExchangeSettings", otherAppExchange.getSettingsName());
         Assert.assertEquals(3, otherAppExchange.getCoveys().size());
         Assert.assertTrue(otherAppExchange.getCoveys().stream().allMatch(covey -> covey.getLocalClass().equals("AuthorData")));
         Assert.assertTrue(otherAppExchange.getCoveys().stream().allMatch(convey -> convey.getExternalClass().equals("String")));
@@ -57,8 +57,8 @@ public class ExchangeBootstrapTemplateDataTest {
         final ExchangesParameter authorExchange =
                 exchangesParameters.stream().filter(param -> param.getName().equals("author-exchange")).findFirst().get();
 
-        Assert.assertEquals("authorExchange", authorExchange.getExchangeVariableName());
-        Assert.assertEquals("authorExchangeSettings", authorExchange.getExchangeSettingsName());
+        Assert.assertEquals("authorExchange", authorExchange.getVariableName());
+        Assert.assertEquals("authorExchangeSettings", authorExchange.getSettingsName());
         Assert.assertEquals(1, authorExchange.getCoveys().size());
 
         final CoveyParameter authorExchangeCovey = authorExchange.getCoveys().stream().findFirst().get();

@@ -13,7 +13,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 
@@ -21,14 +21,15 @@ public class ExchangeGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final Stream<CodeGenerationParameter> aggregates =
-                context.parametersOf(AGGREGATE).filter(aggregate -> aggregate.hasAny(EXCHANGE));
+        final List<CodeGenerationParameter> aggregates =
+                context.parametersOf(AGGREGATE).filter(aggregate -> aggregate.hasAny(EXCHANGE))
+                .collect(Collectors.toList());
 
         return ExchangeTemplateDataFactory.build(resolvePackage(context), aggregates, context.contents());
     }
 
     private String resolvePackage(final CodeGenerationContext context) {
-        return String.format("%.%.%", context.parameterOf(PACKAGE), "infrastructure", "exchange");
+        return String.format("%s.%s.%s", context.parameterOf(PACKAGE), "infrastructure", "exchange");
     }
 
     @Override

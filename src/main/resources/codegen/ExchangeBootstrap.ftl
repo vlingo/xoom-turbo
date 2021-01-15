@@ -29,13 +29,13 @@ public class ExchangeBootstrap {
     <#list exchanges as exchange>
     final ConnectionSettings ${exchange.settingsName} = ExchangeParameters.of("${exchange.name}");
     final Exchange ${exchange.variableName} = ExchangeFactory.fanOutInstance(${exchange.settingsName}, "${exchange.name}", true);
-      <#list exchange.conveys as convey>
+      <#list exchange.coveys as covey>
     exchange.register(Covey.of(
         new MessageSender(${exchange.variableName}.connection()),
-        ${convey.receiverInstantiation},
-        ${convey.adapterInstantiation},
-        ${convey.localClass},
-        ${convey.externalClass},
+        ${covey.receiverInstantiation},
+        ${covey.adapterInstantiation},
+        ${covey.localClass},
+        ${covey.externalClass},
         Message.class));
 
       </#list>
