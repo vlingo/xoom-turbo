@@ -11,6 +11,12 @@ import io.vlingo.lattice.model.projection.ProjectionDispatcher.ProjectToDescript
 import io.vlingo.lattice.model.projection.TextProjectionDispatcherActor;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
 
+<#if imports?has_content>
+<#list imports as import>
+import ${import.qualifiedClassName};
+</#list>
+</#if>
+
 @SuppressWarnings("rawtypes")
 public class ProjectionDispatcherProvider {
   private static ProjectionDispatcherProvider instance;
