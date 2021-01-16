@@ -7,12 +7,12 @@
 
 package io.vlingo.xoom.exchange;
 
-public class ExchangeParameter {
+public class ExchangeSettingsItem {
 
     public final String key;
     public final String value;
 
-    public ExchangeParameter(final String key, final String value) {
+    public ExchangeSettingsItem(final String key, final String value) {
         this.key = key;
         this.value = value;
     }

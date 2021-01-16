@@ -2,7 +2,7 @@ package ${packageName};
 
 import io.vlingo.xoom.actors.Settings;
 import io.vlingo.lattice.exchange.Exchange;
-import io.vlingo.xoom.exchange.ExchangeParameters;
+import io.vlingo.xoom.exchange.ExchangeSettings;
 import io.vlingo.lattice.exchange.rabbitmq.ExchangeFactory;
 import io.vlingo.lattice.exchange.ConnectionSettings;
 import io.vlingo.lattice.exchange.rabbitmq.Message;
@@ -26,10 +26,10 @@ public class ExchangeBootstrap {
       return instance;
     }
 
-    ExchangeParameters.load(Settings.properties());
+    ExchangeSettings.load(Settings.properties());
 
     <#list exchanges as exchange>
-    final ConnectionSettings ${exchange.settingsName} = ExchangeParameters.of("${exchange.name}").mapToConnectionSettings();
+    final ConnectionSettings ${exchange.settingsName} = ExchangeSettings.of("${exchange.name}").mapToConnection();
     final Exchange ${exchange.variableName} = ExchangeFactory.fanOutInstance(${exchange.settingsName}, "${exchange.name}", true);
       <#list exchange.coveys as covey>
     ${exchange.variableName}.register(Covey.of(

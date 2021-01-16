@@ -10,9 +10,9 @@ package io.vlingo.xoom.exchange;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ExchangeParameterNotFoundException extends RuntimeException {
+public class ExchangeSettingsNotFoundException extends RuntimeException {
 
-    public ExchangeParameterNotFoundException(final List<String> parameters) {
+    public ExchangeSettingsNotFoundException(final List<String> parameters) {
         super("The following exchange parameter(s) were not informed: " + parameters.stream().collect(Collectors.joining(", ")));
     }
 

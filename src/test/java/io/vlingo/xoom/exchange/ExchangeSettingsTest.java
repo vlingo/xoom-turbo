@@ -13,12 +13,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ExchangeParametersTest {
+public class ExchangeSettingsTest {
 
     @Test
     public void testThatConnectionSettingsAreMapped() {
         final ConnectionSettings firstSettings =
-                ExchangeParameters.of("first").mapToConnectionSettings();
+                ExchangeSettings.of("first").mapToConnection();
 
         Assert.assertEquals("first-exchange", firstSettings.hostName);
         Assert.assertEquals("vlingo01", firstSettings.username);
@@ -27,7 +27,7 @@ public class ExchangeParametersTest {
         Assert.assertEquals(1000, firstSettings.port);
 
         final ConnectionSettings secondSettings =
-                ExchangeParameters.of("second").mapToConnectionSettings();
+                ExchangeSettings.of("second").mapToConnection();
 
         Assert.assertEquals("second-exchange", secondSettings.hostName);
         Assert.assertEquals("vlingo02", secondSettings.username);
@@ -35,12 +35,12 @@ public class ExchangeParametersTest {
         Assert.assertEquals("virtual-second-exchange", secondSettings.virtualHost);
         Assert.assertEquals(1001, secondSettings.port);
 
-        Assert.assertEquals(2, ExchangeParameters.all().size());
+        Assert.assertEquals(2, ExchangeSettings.all().size());
     }
 
     @Before
     public void loadParameters() {
-        ExchangeParameters.load(Settings.properties());
+        ExchangeSettings.load(Settings.properties());
     }
 
 
