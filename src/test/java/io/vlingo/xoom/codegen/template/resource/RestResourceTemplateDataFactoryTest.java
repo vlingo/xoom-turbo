@@ -55,7 +55,7 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorEntity"));
         Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
         Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries"));
-        Assert.assertEquals("io.vlingo.xoomapp.resource", templateParameters.find(TemplateParameter.PACKAGE_NAME));
+        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.resource", templateParameters.find(TemplateParameter.PACKAGE_NAME));
         Assert.assertEquals("AuthorResource", templateParameters.find(TemplateParameter.REST_RESOURCE_NAME));
         Assert.assertEquals("Author", templateParameters.find(TemplateParameter.MODEL_PROTOCOL));
         Assert.assertEquals("AuthorEntity", templateParameters.find(TemplateParameter.MODEL_ACTOR));
@@ -79,7 +79,7 @@ public class RestResourceTemplateDataFactoryTest {
                         .findFirst().get();
 
         Assert.assertEquals("AuthorData", nameUpdateRouteDeclaration.getBodyType());
-        Assert.assertEquals("post", nameUpdateRouteDeclaration.getBuilderMethod());
+        Assert.assertEquals("io.vlingo.http.resource.ResourceBuilder.post", nameUpdateRouteDeclaration.getBuilderMethod());
         Assert.assertEquals("/authors", nameUpdateRouteDeclaration.getPath());
     }
 
@@ -106,7 +106,7 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorEntity"));
         Assert.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
         Assert.assertFalse(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries"));
-        Assert.assertEquals("io.vlingo.xoomapp.resource", templateParameters.find(TemplateParameter.PACKAGE_NAME));
+        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.resource", templateParameters.find(TemplateParameter.PACKAGE_NAME));
         Assert.assertEquals("AuthorResource", templateParameters.find(TemplateParameter.REST_RESOURCE_NAME));
         Assert.assertEquals("Author", templateParameters.find(TemplateParameter.MODEL_PROTOCOL));
         Assert.assertEquals("AuthorEntity", templateParameters.find(TemplateParameter.MODEL_ACTOR));
@@ -127,7 +127,7 @@ public class RestResourceTemplateDataFactoryTest {
                         .findFirst().get();
 
         Assert.assertEquals("AuthorData", nameUpdateRouteDeclaration.getBodyType());
-        Assert.assertEquals("post", nameUpdateRouteDeclaration.getBuilderMethod());
+        Assert.assertEquals("io.vlingo.http.resource.ResourceBuilder.post", nameUpdateRouteDeclaration.getBuilderMethod());
         Assert.assertEquals("/authors", nameUpdateRouteDeclaration.getPath());
     }
 

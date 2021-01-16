@@ -1,4 +1,4 @@
 public Completes<${stateName}> ${methodName}(${methodParameters}) {
-    state = state.${methodName}(${methodInvocationParameters});
-    return apply(state, new ${domainEventName}(state), () -> state);
+    final ${stateName} stateArg = state.${methodName}(${methodInvocationParameters});
+    return apply(stateArg, new ${domainEventName}(stateArg), () -> state);
   }

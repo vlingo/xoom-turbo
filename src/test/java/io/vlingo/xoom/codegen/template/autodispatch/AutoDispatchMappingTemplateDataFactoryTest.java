@@ -62,7 +62,7 @@ public class AutoDispatchMappingTemplateDataFactoryTest {
         Assert.assertTrue(autoDispatchMappingParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
         Assert.assertTrue(autoDispatchMappingParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries"));
         Assert.assertTrue(autoDispatchMappingParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueriesActor"));
-        Assert.assertEquals("io.vlingo.xoomapp.resource", autoDispatchMappingParameters.find(TemplateParameter.PACKAGE_NAME));
+        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.resource", autoDispatchMappingParameters.find(TemplateParameter.PACKAGE_NAME));
         Assert.assertEquals("AuthorResource", autoDispatchMappingParameters.find(TemplateParameter.AUTO_DISPATCH_MAPPING_NAME));
         Assert.assertEquals("Author", autoDispatchMappingParameters.find(TemplateParameter.AGGREGATE_PROTOCOL_NAME));
         Assert.assertEquals("AuthorEntity", autoDispatchMappingParameters.find(TemplateParameter.ENTITY_NAME));
@@ -82,7 +82,7 @@ public class AutoDispatchMappingTemplateDataFactoryTest {
         Assert.assertTrue(autoDispatchHandlersMappingParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorState"));
         Assert.assertTrue(autoDispatchHandlersMappingParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
         Assert.assertTrue(autoDispatchHandlersMappingParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries"));
-        Assert.assertEquals("io.vlingo.xoomapp.resource", autoDispatchHandlersMappingParameters.find(TemplateParameter.PACKAGE_NAME));
+        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.resource", autoDispatchHandlersMappingParameters.find(TemplateParameter.PACKAGE_NAME));
         Assert.assertEquals("AuthorResourceHandlers", autoDispatchHandlersMappingParameters.find(AUTO_DISPATCH_HANDLERS_MAPPING_NAME));
         Assert.assertEquals("Author", autoDispatchHandlersMappingParameters.find(TemplateParameter.AGGREGATE_PROTOCOL_NAME));
         Assert.assertEquals("AuthorData", autoDispatchHandlersMappingParameters.find(TemplateParameter.DATA_OBJECT_NAME));

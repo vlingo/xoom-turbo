@@ -26,9 +26,6 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class AutoDispatchMappingTemplateData extends TemplateData {
 
-    private final static String PACKAGE_PATTERN = "%s.%s";
-    private final static String PARENT_PACKAGE_NAME = "resource";
-
     private final String aggregateName;
     private final TemplateParameters parameters;
 
@@ -94,7 +91,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
     }
 
     private String resolvePackage(final String basePackage) {
-        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME).toLowerCase();
+        return String.format("%s.%s.%s", basePackage, "infrastructure", "resource").toLowerCase();
     }
 
     @Override

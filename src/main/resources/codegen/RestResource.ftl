@@ -14,7 +14,6 @@ import io.vlingo.common.Completes;
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.http.Response.Status.*;
 import static io.vlingo.http.ResponseHeader.*;
-import static io.vlingo.http.resource.ResourceBuilder.*;
 <#if useAutoDispatch>
 import io.vlingo.actors.Logger;
 import io.vlingo.xoom.annotation.autodispatch.Handler;

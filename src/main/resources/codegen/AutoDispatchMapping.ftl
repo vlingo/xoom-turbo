@@ -10,7 +10,7 @@ import ${import.qualifiedClassName};
 
 import static io.vlingo.http.Method.*;
 
-@AutoDispatch(path="/${uriRoot}", handlers=${autoDispatchHandlersMappingName}.class)
+@AutoDispatch(path="${uriRoot}", handlers=${autoDispatchHandlersMappingName}.class)
 <#if useCQRS>
 @Queries(protocol = ${queriesName}.class, actor = ${queriesActorName}.class)
 </#if>
