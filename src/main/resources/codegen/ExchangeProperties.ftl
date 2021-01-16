@@ -1,3 +1,4 @@
+
 exchange.names=${inlineExchangeNames}
 
 <#list exchangeNames as exchangeName>

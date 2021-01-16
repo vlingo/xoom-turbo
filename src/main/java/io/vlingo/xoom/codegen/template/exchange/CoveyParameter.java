@@ -57,7 +57,7 @@ public class CoveyParameter {
     }
 
     private CoveyParameter(final CodeGenerationParameter producerExchange) {
-        this.localClass = String.class.getSimpleName();
+        this.localClass = IdentifiedDomainEvent.class.getSimpleName();
         this.externalClass = IdentifiedDomainEvent.class.getSimpleName();
         this.adapterInstantiation = String.format("new %s()", resolveAdapterName(producerExchange));
         this.receiverInstantiation = "received -> {}";

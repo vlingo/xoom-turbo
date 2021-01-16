@@ -10,20 +10,22 @@ import io.vlingo.lattice.exchange.rabbitmq.Message;
 import ${import.qualifiedClassName};
 </#list>
 
-public class ${exchangeAdapterName} implements ExchangeAdapter<String, IdentifiedDomainEvent, Message> {
+public class ${exchangeAdapterName} implements ExchangeAdapter<IdentifiedDomainEvent, IdentifiedDomainEvent, Message> {
 
   private static final String SCHEMA_PREFIX = "${schemaGroupName}:";
 
+  private final ${exchangeMapperName} mapper = new ${exchangeMapperName}();
+
   @Override
-  public String fromExchange(final Message exchangeMessage) {
-    return exchangeMessage.payloadAsText();
+  public IdentifiedDomainEvent fromExchange(final Message exchangeMessage) {
+    return mapper.externalToLocal(exchangeMessage);
   }
 
   @Override
   public Message toExchange(final IdentifiedDomainEvent event) {
-    final String messagePayload = JsonSerialization.serialized(event);
-    final String schemaName = SCHEMA_PREFIX + event.getClass().getSimpleName();
-    return new Message(messagePayload, MessageParameters.bare().deliveryMode(DeliveryMode.Durable).typeName(schemaName));
+    final Message message = mapper.localToExternal(event);
+    message.messageParameters.typeName(SCHEMA_PREFIX + event.getClass().getSimpleName());
+    return message;
   }
 
   @Override

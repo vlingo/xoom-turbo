@@ -4,6 +4,7 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.codegen.template.exchange;
 
 import io.vlingo.xoom.codegen.content.Content;
@@ -27,21 +28,43 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.EXCHANGE_MAPPER;
 
 public class ExchangeMapperTemplateData extends TemplateData {
 
+    private final boolean placeholder;
     private final TemplateParameters parameters;
 
     public static List<TemplateData> from(final String exchangePackage,
                                           final Stream<CodeGenerationParameter> aggregates,
                                           final List<Content> contents) {
+        final List<TemplateData> mappers = forConsumerExchanges(exchangePackage, aggregates, contents);
+        mappers.add(forProducerExchanges(exchangePackage, aggregates));
+        return mappers;
+    }
+
+    private static TemplateData forProducerExchanges(final String exchangePackage,
+                                                     final Stream<CodeGenerationParameter> aggregates) {
+        final Predicate<CodeGenerationParameter> producerPresent =
+                exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
+
+        final Boolean hasProducerExchange =
+                aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
+                        .anyMatch(producerPresent);
+
+        return new ExchangeMapperTemplateData(exchangePackage, !hasProducerExchange);
+    }
+
+
+    private static List<TemplateData> forConsumerExchanges(final String exchangePackage,
+                                                           final Stream<CodeGenerationParameter> aggregates,
+                                                           final List<Content> contents) {
         final Predicate<CodeGenerationParameter> consumerPresent =
                 exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer();
 
-        final Predicate<CodeGenerationParameter> withConsumerExchange =
+        final Predicate<CodeGenerationParameter> onlyConsumerExchanges =
                 aggregate -> aggregate.retrieveAllRelated(EXCHANGE).anyMatch(consumerPresent);
 
         final Function<CodeGenerationParameter, TemplateData> mapper =
                 aggregate -> new ExchangeMapperTemplateData(exchangePackage, aggregate, contents);
 
-        return aggregates.filter(withConsumerExchange).map(mapper).collect(Collectors.toList());
+        return aggregates.filter(onlyConsumerExchanges).map(mapper).collect(Collectors.toList());
     }
 
     private ExchangeMapperTemplateData(final String exchangePackage,
@@ -51,7 +74,19 @@ public class ExchangeMapperTemplateData extends TemplateData {
                 TemplateParameters.with(PACKAGE_NAME, exchangePackage)
                         .and(LOCAL_TYPE_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
                         .andResolve(EXCHANGE_MAPPER_NAME, param -> standard().resolveClassname(param))
-                        .addImport(resolveLocalTypeImport(aggregate, contents));
+                        .addImport(resolveLocalTypeImport(aggregate, contents))
+                        .and(EXCHANGE_ROLE, ExchangeRole.CONSUMER);
+
+        this.placeholder = false;
+    }
+
+    private ExchangeMapperTemplateData(final String exchangePackage,
+                                       final Boolean placeholder) {
+        this.parameters =
+                TemplateParameters.with(PACKAGE_NAME, exchangePackage)
+                        .and(EXCHANGE_ROLE, ExchangeRole.PRODUCER);
+
+        this.placeholder = placeholder;
     }
 
     private String resolveLocalTypeImport(final CodeGenerationParameter aggregate,
@@ -69,4 +104,10 @@ public class ExchangeMapperTemplateData extends TemplateData {
     public TemplateStandard standard() {
         return EXCHANGE_MAPPER;
     }
+
+    @Override
+    public boolean isPlaceholder() {
+        return placeholder;
+    }
+
 }

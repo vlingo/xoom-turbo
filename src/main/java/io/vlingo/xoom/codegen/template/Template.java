@@ -18,7 +18,6 @@ public enum Template {
     OBJECT_ENTITY("ObjectEntity"),
     STATEFUL_ENTITY("StatefulEntity"),
     STATEFUL_ENTITY_METHOD("StatefulEntityMethod"),
-    EXCHANGE_MAPPER("ExchangeMapper"),
     EVENT_SOURCE_ENTITY("EventSourcedEntity"),
     EVENT_SOURCE_ENTITY_METHOD("EventSourcedEntityMethod"),
     AGGREGATE_STATE("AggregateState"),
@@ -49,6 +48,8 @@ public enum Template {
     CONSUMER_EXCHANGE_ADAPTER("ConsumerExchangeAdapter"),
     PRODUCER_EXCHANGE_ADAPTER("ProducerExchangeAdapter"),
     EXCHANGE_RECEIVER_HOLDER("ExchangeReceiverHolder"),
+    CONSUMER_EXCHANGE_MAPPER("ConsumerExchangeMapper"),
+    PRODUCER_EXCHANGE_MAPPER("ProducerExchangeMapper"),
     EXCHANGE_PROPERTIES("ExchangeProperties"),
     EXCHANGE_BOOTSTRAP("ExchangeBootstrap"),
     EXCHANGE_DISPATCHER("ExchangeDispatcher");
