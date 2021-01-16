@@ -1,7 +1,6 @@
 package ${packageName};
 
 import io.vlingo.lattice.exchange.ExchangeAdapter;
-import io.vlingo.lattice.exchange.ExchangeMapper;
 import io.vlingo.lattice.exchange.MessageParameters;
 import io.vlingo.lattice.exchange.MessageParameters.DeliveryMode;
 import io.vlingo.lattice.exchange.rabbitmq.Message;

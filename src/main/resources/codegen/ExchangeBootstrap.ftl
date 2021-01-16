@@ -29,8 +29,12 @@ public class ExchangeBootstrap {
     ExchangeSettings.load(Settings.properties());
 
     <#list exchanges as exchange>
-    final ConnectionSettings ${exchange.settingsName} = ExchangeSettings.of("${exchange.name}").mapToConnection();
-    final Exchange ${exchange.variableName} = ExchangeFactory.fanOutInstance(${exchange.settingsName}, "${exchange.name}", true);
+    final ConnectionSettings ${exchange.settingsName} =
+                ExchangeSettings.of("${exchange.name}").mapToConnection();
+
+    final Exchange ${exchange.variableName} =
+                ExchangeFactory.fanOutInstance(${exchange.settingsName}, "${exchange.name}", true);
+
       <#list exchange.coveys as covey>
     ${exchange.variableName}.register(Covey.of(
         new MessageSender(${exchange.variableName}.connection()),
@@ -42,7 +46,6 @@ public class ExchangeBootstrap {
 
       </#list>
     </#list>
-
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
         <#list exchanges as exchange>
         ${exchange.variableName}.close();
