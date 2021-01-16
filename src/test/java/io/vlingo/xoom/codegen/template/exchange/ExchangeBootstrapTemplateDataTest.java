@@ -63,7 +63,7 @@ public class ExchangeBootstrapTemplateDataTest {
 
         final CoveyParameter authorExchangeCovey = authorExchange.getCoveys().stream().findFirst().get();
 
-        Assert.assertEquals("String", authorExchangeCovey.getLocalClass());
+        Assert.assertEquals("IdentifiedDomainEvent", authorExchangeCovey.getLocalClass());
         Assert.assertEquals("IdentifiedDomainEvent", authorExchangeCovey.getExternalClass());
         Assert.assertEquals("new AuthorProducerAdapter()",authorExchangeCovey.getAdapterInstantiation());
         Assert.assertEquals("received -> {}", authorExchangeCovey.getReceiverInstantiation());

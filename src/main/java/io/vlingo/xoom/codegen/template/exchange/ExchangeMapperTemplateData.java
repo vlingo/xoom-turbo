@@ -25,6 +25,8 @@ import static io.vlingo.xoom.codegen.parameter.Label.ROLE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.EXCHANGE_MAPPER;
+import static io.vlingo.xoom.codegen.template.exchange.ExchangeRole.CONSUMER;
+import static io.vlingo.xoom.codegen.template.exchange.ExchangeRole.PRODUCER;
 
 public class ExchangeMapperTemplateData extends TemplateData {
 
@@ -34,26 +36,26 @@ public class ExchangeMapperTemplateData extends TemplateData {
     public static List<TemplateData> from(final String exchangePackage,
                                           final Stream<CodeGenerationParameter> aggregates,
                                           final List<Content> contents) {
-        final List<TemplateData> mappers = forConsumerExchanges(exchangePackage, aggregates, contents);
-        mappers.add(forProducerExchanges(exchangePackage, aggregates));
+        final List<CodeGenerationParameter> collectedAggregates = aggregates.collect(Collectors.toList());
+        final List<TemplateData> mappers = forConsumerExchanges(exchangePackage, collectedAggregates, contents);
+        mappers.add(forProducerExchanges(exchangePackage, collectedAggregates));
         return mappers;
     }
 
     private static TemplateData forProducerExchanges(final String exchangePackage,
-                                                     final Stream<CodeGenerationParameter> aggregates) {
+                                                     final List<CodeGenerationParameter> aggregates) {
         final Predicate<CodeGenerationParameter> producerPresent =
                 exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
 
         final Boolean hasProducerExchange =
-                aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
+                aggregates.stream().flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
                         .anyMatch(producerPresent);
 
         return new ExchangeMapperTemplateData(exchangePackage, !hasProducerExchange);
     }
 
-
     private static List<TemplateData> forConsumerExchanges(final String exchangePackage,
-                                                           final Stream<CodeGenerationParameter> aggregates,
+                                                           final List<CodeGenerationParameter> aggregates,
                                                            final List<Content> contents) {
         final Predicate<CodeGenerationParameter> consumerPresent =
                 exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer();
@@ -64,18 +66,17 @@ public class ExchangeMapperTemplateData extends TemplateData {
         final Function<CodeGenerationParameter, TemplateData> mapper =
                 aggregate -> new ExchangeMapperTemplateData(exchangePackage, aggregate, contents);
 
-        return aggregates.filter(onlyConsumerExchanges).map(mapper).collect(Collectors.toList());
+        return aggregates.stream().filter(onlyConsumerExchanges).map(mapper).collect(Collectors.toList());
     }
 
     private ExchangeMapperTemplateData(final String exchangePackage,
                                        final CodeGenerationParameter aggregate,
                                        final List<Content> contents) {
         this.parameters =
-                TemplateParameters.with(PACKAGE_NAME, exchangePackage)
+                TemplateParameters.with(PACKAGE_NAME, exchangePackage).and(EXCHANGE_ROLE, CONSUMER)
                         .and(LOCAL_TYPE_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
                         .andResolve(EXCHANGE_MAPPER_NAME, param -> standard().resolveClassname(param))
-                        .addImport(resolveLocalTypeImport(aggregate, contents))
-                        .and(EXCHANGE_ROLE, ExchangeRole.CONSUMER);
+                        .addImport(resolveLocalTypeImport(aggregate, contents));
 
         this.placeholder = false;
     }
@@ -83,8 +84,8 @@ public class ExchangeMapperTemplateData extends TemplateData {
     private ExchangeMapperTemplateData(final String exchangePackage,
                                        final Boolean placeholder) {
         this.parameters =
-                TemplateParameters.with(PACKAGE_NAME, exchangePackage)
-                        .and(EXCHANGE_ROLE, ExchangeRole.PRODUCER);
+                TemplateParameters.with(PACKAGE_NAME, exchangePackage).and(EXCHANGE_ROLE, PRODUCER)
+                        .andResolve(EXCHANGE_MAPPER_NAME, param -> standard().resolveClassname(param));
 
         this.placeholder = placeholder;
     }

@@ -21,19 +21,28 @@ public class ExchangeMapperTemplateDataTest {
 
     @Test
     public void testThatTemplateParametersAreMapped() {
-        final List<TemplateData> data =
+        final List<TemplateData> mappersData =
                 ExchangeMapperTemplateData.from("io.vlingo.xoomapp.infrastructure.exchange",
                         CodeGenerationParametersBuilder.threeExchanges(),
                         Arrays.asList(ContentBuilder.authorDataObjectContent()));
 
-        Assert.assertEquals(1, data.size());
+        Assert.assertEquals(2, mappersData.size());
 
-        final TemplateParameters parameters = data.get(0).parameters();
+        final TemplateParameters consumerMapperParameters =
+                mappersData.stream().map(data -> data.parameters())
+                        .filter(params -> params.find(EXCHANGE_MAPPER_NAME).equals("AuthorDataMapper"))
+                        .findFirst().get();
 
-        Assert.assertEquals("AuthorData", parameters.find(LOCAL_TYPE_NAME));
-        Assert.assertEquals("AuthorDataMapper", parameters.find(EXCHANGE_MAPPER_NAME));
-        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.exchange", parameters.find(PACKAGE_NAME));
-        Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+        Assert.assertEquals("AuthorData", consumerMapperParameters.find(LOCAL_TYPE_NAME));
+        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.exchange", consumerMapperParameters.find(PACKAGE_NAME));
+        Assert.assertTrue(consumerMapperParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+
+        final TemplateParameters producerMapperParameters =
+                mappersData.stream().map(data -> data.parameters())
+                        .filter(params -> params.find(EXCHANGE_MAPPER_NAME).equals("DomainEventMapper"))
+                        .findFirst().get();
+
+        Assert.assertEquals("io.vlingo.xoomapp.infrastructure.exchange", producerMapperParameters.find(PACKAGE_NAME));
     }
 
 }
