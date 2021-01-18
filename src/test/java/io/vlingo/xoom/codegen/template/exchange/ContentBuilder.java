@@ -12,10 +12,21 @@ import io.vlingo.xoom.codegen.template.TemplateFile;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class ContentBuilder {
+
+    public static Content authorContent() {
+        return Content.with(AGGREGATE_PROTOCOL, new TemplateFile("", "Author.java"), null, null, AUTHOR_CONTENT_TEXT);
+    }
+
+    public static Content authorEntityContent() {
+        return Content.with(AGGREGATE, new TemplateFile("", "AuthorEntity.java"), null, null, AUTHOR_ENTITY_CONTENT_TEXT);
+    }
+    
+    public static Content bookContent() {
+        return Content.with(AGGREGATE_PROTOCOL, new TemplateFile("", "Book.java"), null, null, BOOK_CONTENT_TEXT);
+    }
 
     public static Content authorDataObjectContent() {
         return Content.with(DATA_OBJECT, new TemplateFile("", "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT);
@@ -37,10 +48,28 @@ public class ContentBuilder {
         return Content.with(DOMAIN_EVENT, new TemplateFile("", "BookPurchased.java"), null, null, BOOK_PURCHASED_CONTENT_TEXT);
     }
 
-    public static List<Content> dataAndEvents() {
-        return Arrays.asList(authorDataObjectContent(), authorRatedEvent(), authorBlockedEvent(),
-                bookSoldOutEvent(), bookPurchasedEvent());
+    public static List<Content> aggregateAndEvents() {
+        return Arrays.asList(authorContent(), authorEntityContent(), bookContent(), authorDataObjectContent(),
+                authorRatedEvent(), authorBlockedEvent(), bookSoldOutEvent(), bookPurchasedEvent());
     }
+
+    private static final String AUTHOR_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public interface Author { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String BOOK_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.book; \\n" +
+                    "public interface Book { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_ENTITY_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorEntity { \\n" +
+                    "... \\n" +
+                    "}";
 
     private static final String AUTHOR_DATA_CONTENT_TEXT =
             "package io.vlingo.xoomapp.infrastructure; \\n" +

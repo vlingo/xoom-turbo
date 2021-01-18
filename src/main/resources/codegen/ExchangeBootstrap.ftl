@@ -1,5 +1,6 @@
 package ${packageName};
 
+import io.vlingo.actors.Stage;
 import io.vlingo.xoom.actors.Settings;
 import io.vlingo.lattice.exchange.Exchange;
 import io.vlingo.xoom.exchange.ExchangeSettings;
@@ -7,7 +8,6 @@ import io.vlingo.lattice.exchange.rabbitmq.ExchangeFactory;
 import io.vlingo.lattice.exchange.ConnectionSettings;
 import io.vlingo.lattice.exchange.rabbitmq.Message;
 import io.vlingo.lattice.exchange.rabbitmq.MessageSender;
-import io.vlingo.symbio.store.dispatch.NoOpDispatcher;
 import io.vlingo.lattice.exchange.Covey;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
 
@@ -21,7 +21,7 @@ public class ExchangeBootstrap {
 
   private final Dispatcher dispatcher;
 
-  public static ExchangeBootstrap init() {
+  public static ExchangeBootstrap init(final Stage stage) {
     if(instance != null) {
       return instance;
     }

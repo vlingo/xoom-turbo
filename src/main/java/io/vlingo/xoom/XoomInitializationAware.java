@@ -25,7 +25,7 @@ public interface XoomInitializationAware {
         return Configuration.define().withPort(port);
     }
 
-    default Dispatcher exchangeDispatcher() {
+    default Dispatcher exchangeDispatcher(final Stage stage) {
         return new NoOpDispatcher();
     }
 

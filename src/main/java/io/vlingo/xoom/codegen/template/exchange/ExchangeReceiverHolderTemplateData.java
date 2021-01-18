@@ -15,14 +15,14 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
 import static io.vlingo.xoom.codegen.parameter.Label.ROLE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.EXCHANGE_RECEIVER_HOLDER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class ExchangeReceiverHolderTemplateData extends TemplateData {
 
@@ -40,18 +40,30 @@ public class ExchangeReceiverHolderTemplateData extends TemplateData {
     private ExchangeReceiverHolderTemplateData(final String exchangePackage,
                                                final CodeGenerationParameter exchange,
                                                final List<Content> contents) {
+        final List<ExchangeReceiversParameter> receiversParameters = ExchangeReceiversParameter.from(exchange);
+
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, exchangePackage)
                         .and(AGGREGATE_PROTOCOL_NAME, exchange.parent().value)
                         .and(EXCHANGE_RECEIVERS, ExchangeReceiversParameter.from(exchange))
-                        .addImport(resolveLocalTypeImport(exchange.parent(), contents))
+                        .addImports(resolveImports(exchange.parent(), receiversParameters, contents))
                         .andResolve(EXCHANGE_RECEIVER_HOLDER_NAME, params -> standard().resolveClassname(params));
     }
 
-    private String resolveLocalTypeImport(final CodeGenerationParameter aggregate,
-                                          final List<Content> contents) {
-        final String dataObjectName = DATA_OBJECT.resolveClassname(aggregate.value);
-        return ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents);
+    private Set<String> resolveImports(final CodeGenerationParameter aggregate,
+                                       final List<ExchangeReceiversParameter> receiversParameters,
+                                       final List<Content> contents) {
+        final List<TemplateStandard> standards =
+                Stream.of(DATA_OBJECT, AGGREGATE_PROTOCOL).collect(Collectors.toList());
+
+        if(receiversParameters.stream().anyMatch(receiver -> !receiver.isModelFactoryMethod())) {
+            standards.add(AGGREGATE);
+        }
+
+        return standards.stream().map(standard -> {
+            final String typeName = standard.resolveClassname(aggregate.value);
+            return ContentQuery.findFullyQualifiedClassName(standard, typeName, contents);
+        }).collect(Collectors.toSet());
     }
 
     @Override

@@ -26,7 +26,7 @@ public class ExchangeGenerationStepTest {
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters).with(PACKAGE, "io.vlingo.xoomapp");
 
-        context.contents(ContentBuilder.dataAndEvents().toArray(new Content[]{}));
+        context.contents(ContentBuilder.aggregateAndEvents().toArray(new Content[]{}));
 
         new ExchangeGenerationStep().process(context);
     }

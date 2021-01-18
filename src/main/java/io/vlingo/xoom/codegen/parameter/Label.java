@@ -72,6 +72,8 @@ public enum Label {
     EXCHANGE("exchange"),
     SCHEMA("schema"),
     SCHEMA_GROUP("schemaGroup"),
+    RECEIVER("receiver"),
+    MODEL_METHOD("modelMethod"),
     ROLE("role");
 
     private final String key;

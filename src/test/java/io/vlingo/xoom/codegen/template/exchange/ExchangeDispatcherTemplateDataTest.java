@@ -23,7 +23,7 @@ public class ExchangeDispatcherTemplateDataTest {
     public void testThatTemplateParametersAreMapped() {
         final TemplateData dispatcherTemplateData =
                 ExchangeDispatcherTemplateData.from("io.vlingo.xoomapp.infrastructure.exchange",
-                        CodeGenerationParametersBuilder.threeExchanges(), ContentBuilder.dataAndEvents());
+                        CodeGenerationParametersBuilder.threeExchanges(), ContentBuilder.aggregateAndEvents());
 
         final TemplateParameters parameters = dispatcherTemplateData.parameters();
 

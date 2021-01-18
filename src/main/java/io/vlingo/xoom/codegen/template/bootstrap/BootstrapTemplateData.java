@@ -19,7 +19,6 @@ import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -81,7 +80,8 @@ public abstract class BootstrapTemplateData extends TemplateData {
                 TypeRegistryParameter.from(storageType, useCQRS);
 
         final List<StoreProviderParameter> storeProviderParameters =
-                StoreProviderParameter.from(storageType, useCQRS, projectionType.isProjectionEnabled(), hasProducerExchange);
+                StoreProviderParameter.from(storageType, useCQRS, projectionType.isProjectionEnabled(),
+                        useAnnotations, hasProducerExchange);
 
         return this.parameters.and(IMPORTS, imports)
                 .and(PACKAGE_NAME, packageName)

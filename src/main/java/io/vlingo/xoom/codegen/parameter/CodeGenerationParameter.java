@@ -17,6 +17,10 @@ public class CodeGenerationParameter {
     private CodeGenerationParameter parent;
     private final CodeGenerationParameters relatedParameters;
 
+    public static CodeGenerationParameter of(final Label label) {
+        return of(label, label.name());
+    }
+
     public static CodeGenerationParameter of(final Label label, final Object value) {
         return of(label, value.toString());
     }

@@ -18,8 +18,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.parameter.Label.ROLE;
-import static io.vlingo.xoom.codegen.parameter.Label.SCHEMA;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.EXCHANGE_ROLE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
@@ -39,8 +38,11 @@ public class CoveyParameter {
                 exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
 
         final Set<CoveyParameter> consumerCoveys =
-                exchanges.stream().filter(onlyConsumers).flatMap(exchange -> exchange.retrieveAllRelated(SCHEMA))
-                        .map(schema -> new CoveyParameter(schema.parent(), schema)).collect(Collectors.toSet());
+                exchanges.stream().filter(onlyConsumers)
+                        .flatMap(exchange -> exchange.retrieveAllRelated(RECEIVER))
+                        .map(receiver -> receiver.retrieveOneRelated(SCHEMA))
+                        .map(schema -> new CoveyParameter(schema.parent(EXCHANGE), schema))
+                        .collect(Collectors.toSet());
 
         final Set<CoveyParameter> producerCoveys =
                 exchanges.stream().filter(onlyProducers).map(CoveyParameter::new).collect(Collectors.toSet());
@@ -53,7 +55,7 @@ public class CoveyParameter {
         this.externalClass = String.class.getSimpleName();
         this.localClass = DATA_OBJECT.resolveClassname(consumerExchange.parent().value);
         this.adapterInstantiation = resolveConsumerAdapterInstantiation(consumerExchange, schema);
-        this.receiverInstantiation = String.format("new %s()", resolveReceiverName(consumerExchange, schema));
+        this.receiverInstantiation = String.format("new %s(stage)", resolveReceiverName(consumerExchange, schema));
     }
 
     private CoveyParameter(final CodeGenerationParameter producerExchange) {

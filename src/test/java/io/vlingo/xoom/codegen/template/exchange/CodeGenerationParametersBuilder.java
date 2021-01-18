@@ -11,15 +11,48 @@ import io.vlingo.xoom.codegen.parameter.Label;
 
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
+
 public class CodeGenerationParametersBuilder {
 
     public static Stream<CodeGenerationParameter> threeExchanges() {
+        final CodeGenerationParameter idField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter nameField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter rankField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                        .relate(Label.FIELD_TYPE, "int");
+
+        final CodeGenerationParameter factoryMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
+                        .relate(Label.METHOD_PARAMETER, "name")
+                        .relate(FACTORY_METHOD, "true");
+
+        final CodeGenerationParameter rankMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
+                        .relate(Label.METHOD_PARAMETER, "rank");
+
+        final CodeGenerationParameter blockMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "block")
+                        .relate(Label.METHOD_PARAMETER, "name");
+
         final CodeGenerationParameter otherAppExchange =
                 CodeGenerationParameter.of(Label.EXCHANGE, "otherapp-exchange")
                         .relate(Label.ROLE, ExchangeRole.CONSUMER)
-                        .relate(Label.SCHEMA, "vlingo:xoom:io.vlingo.otherapp:OtherAggregateDefined:0.0.1")
-                        .relate(Label.SCHEMA, "vlingo:xoom:io.vlingo.otherapp:OtherAggregateUpdated:0.0.2")
-                        .relate(Label.SCHEMA, "vlingo:xoom:io.vlingo.otherapp:OtherAggregateRemoved:0.0.3");
+                        .relate(CodeGenerationParameter.of(Label.RECEIVER)
+                                .relate(Label.SCHEMA, "vlingo:xoom:io.vlingo.otherapp:OtherAggregateDefined:0.0.1")
+                                .relate(Label.MODEL_METHOD, "withName"))
+                        .relate(CodeGenerationParameter.of(Label.RECEIVER)
+                                .relate(Label.SCHEMA, "vlingo:xoom:io.vlingo.otherapp:OtherAggregateUpdated:0.0.2")
+                                .relate(Label.MODEL_METHOD, "changeRank"))
+                        .relate(CodeGenerationParameter.of(Label.RECEIVER)
+                                .relate(Label.SCHEMA, "vlingo:xoom:io.vlingo.otherapp:OtherAggregateRemoved:0.0.3")
+                                .relate(Label.MODEL_METHOD, "block"));
 
         final CodeGenerationParameter authorExchange =
                 CodeGenerationParameter.of(Label.EXCHANGE, "author-exchange")
@@ -30,8 +63,9 @@ public class CodeGenerationParametersBuilder {
 
         final CodeGenerationParameter authorAggregate =
                 CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-                        .relate(otherAppExchange)
-                        .relate(authorExchange);
+                        .relate(otherAppExchange).relate(authorExchange)
+                        .relate(idField).relate(nameField).relate(rankField)
+                        .relate(factoryMethod).relate(rankMethod).relate(blockMethod);
 
         final CodeGenerationParameter bookExchange =
                 CodeGenerationParameter.of(Label.EXCHANGE, "book-exchange")

@@ -49,7 +49,7 @@ public class ExchangeBootstrapTemplateDataTest {
 
         final CoveyParameter schemaRemovedCovey =
                 otherAppExchange.getCoveys().stream()
-                        .filter(convey -> convey.getReceiverInstantiation().equals("new AuthorExchangeReceivers.OtherAggregateRemoved()"))
+                        .filter(convey -> convey.getReceiverInstantiation().equals("new AuthorExchangeReceivers.OtherAggregateRemoved(stage)"))
                         .findFirst().get();
 
         Assert.assertEquals("new AuthorConsumerAdapter(\"vlingo:xoom:io.vlingo.otherapp:OtherAggregateRemoved:0.0.3\")", schemaRemovedCovey.getAdapterInstantiation());
