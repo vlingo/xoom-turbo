@@ -39,7 +39,6 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
         final CodeGenerationParameter aggregate = route.parent(AGGREGATE);
         final CodeGenerationParameter method = findMethod(aggregate, route);
         final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
-        final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
 
         this.parameters =
                 TemplateParameters.with(METHOD_NAME, route.value)
