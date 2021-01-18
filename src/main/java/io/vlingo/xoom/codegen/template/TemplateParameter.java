@@ -43,6 +43,7 @@ public enum TemplateParameter {
     EVENT_SOURCED("eventSourced"),
     REQUIRE_ADAPTERS("requireAdapters"),
     RESOURCE_FILE("resourceFile"),
+    SCHEMATA_FILE("schemataFile"),
     PROJECTIONS("projections"),
     PROJECTION_NAME("projectionName"),
     PROJECTION_TYPE("projectionType"),
@@ -107,7 +108,9 @@ public enum TemplateParameter {
     SCHEMA_GROUP_NAME("schemaGroupName"),
     EXCHANGES("exchanges"),
     PRODUCER_EXCHANGES("producerExchanges"),
-    HAS_PRODUCER_EXCHANGE("hasProducerExchange");
+    HAS_PRODUCER_EXCHANGE("hasProducerExchange"),
+    SCHEMATA_SPECIFICATION_NAME("schemataSpecificationName"),
+    FIELD_DECLARATIONS("fieldsDeclarations");
 
     public final String key;
 

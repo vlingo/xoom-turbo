@@ -61,11 +61,28 @@ public class CodeGenerationParametersBuilder {
                         .relate(Label.DOMAIN_EVENT, "AuthorBlocked")
                         .relate(Label.DOMAIN_EVENT, "AuthorRated");
 
+        final CodeGenerationParameter authorRatedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRated")
+                        .relate(idField).relate(rankField);
+
+        final CodeGenerationParameter authorBlockedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorBlocked")
+                        .relate(nameField);
+
         final CodeGenerationParameter authorAggregate =
                 CodeGenerationParameter.of(Label.AGGREGATE, "Author")
                         .relate(otherAppExchange).relate(authorExchange)
                         .relate(idField).relate(nameField).relate(rankField)
-                        .relate(factoryMethod).relate(rankMethod).relate(blockMethod);
+                        .relate(factoryMethod).relate(rankMethod).relate(blockMethod)
+                        .relate(authorRatedEvent).relate(authorBlockedEvent);
+
+        final CodeGenerationParameter titleField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter priceField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                        .relate(Label.FIELD_TYPE, "int");
 
         final CodeGenerationParameter bookExchange =
                 CodeGenerationParameter.of(Label.EXCHANGE, "book-exchange")
@@ -74,8 +91,18 @@ public class CodeGenerationParametersBuilder {
                         .relate(Label.DOMAIN_EVENT, "BookSoldOut")
                         .relate(Label.DOMAIN_EVENT, "BookPurchased");
 
+        final CodeGenerationParameter bookSoldOutEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "BookSoldOut")
+                        .relate(titleField);
+
+        final CodeGenerationParameter bookPurchasedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "BookPurchased")
+                        .relate(priceField);
+
         final CodeGenerationParameter bookAggregate =
                 CodeGenerationParameter.of(Label.AGGREGATE, "Book")
+                        .relate(titleField).relate(priceField)
+                        .relate(bookSoldOutEvent).relate(bookPurchasedEvent)
                         .relate(bookExchange);
 
         return Stream.of(authorAggregate, bookAggregate);

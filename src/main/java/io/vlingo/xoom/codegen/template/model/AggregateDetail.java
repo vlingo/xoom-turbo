@@ -18,6 +18,11 @@ public class AggregateDetail {
         return findMethod(aggregate, methodName).orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " not found" ));
     }
 
+    public static CodeGenerationParameter eventWithName(final CodeGenerationParameter aggregate, final String eventName) {
+        return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).filter(event -> event.value.equals(eventName))
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("Event " + eventName + " not found" ));
+    }
+
     private static Optional<CodeGenerationParameter> findMethod(final CodeGenerationParameter aggregate, final String methodName) {
         return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
                 .filter(method -> methodName.equals(method.value) || method.value.startsWith(methodName + "("))

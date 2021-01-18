@@ -125,6 +125,9 @@ public enum TemplateStandard {
     PERSISTENCE_SETUP(parameters -> Template.PERSISTENCE_SETUP.filename,
             (name, parameters) -> "PersistenceSetup"),
 
+    SCHEMATA_SPECIFICATION(parameters -> Template.SCHEMATA_SPECIFICATION.filename,
+            (name, parameters) -> parameters.find(SCHEMATA_SPECIFICATION_NAME) + ".vss"),
+
     STORE_PROVIDER(parameters -> storeProviderTemplatesFrom(parameters.find(MODEL)).get(parameters.find(STORAGE_TYPE)),
             (name, parameters) -> {
                 final StorageType storageType = parameters.find(STORAGE_TYPE);

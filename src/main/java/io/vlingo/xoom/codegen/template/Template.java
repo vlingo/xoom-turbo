@@ -52,7 +52,8 @@ public enum Template {
     PRODUCER_EXCHANGE_MAPPER("ProducerExchangeMapper"),
     EXCHANGE_PROPERTIES("ExchangeProperties"),
     EXCHANGE_BOOTSTRAP("ExchangeBootstrap"),
-    EXCHANGE_DISPATCHER("ExchangeDispatcher");
+    EXCHANGE_DISPATCHER("ExchangeDispatcher"),
+    SCHEMATA_SPECIFICATION("SchemataSpecification");
 
     public final String filename;
 
