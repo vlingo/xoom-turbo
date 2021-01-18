@@ -11,8 +11,9 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
 import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
@@ -21,10 +22,18 @@ public class SchemataGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final Stream<CodeGenerationParameter> exchanges =
-                context.parametersOf(AGGREGATE).flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE));
+        final List<CodeGenerationParameter> exchanges =
+                context.parametersOf(AGGREGATE).flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
+                .collect(Collectors.toList());
 
-        return SchemataSpecificationTemplateData.from(exchanges);
+        final List<TemplateData> templateData = new ArrayList<>();
+        templateData.addAll(SchemataSpecificationTemplateData.from(exchanges));
+        templateData.add(new SchemataPluginTemplateData(exchanges));
+        return templateData;
     }
 
+    @Override
+    public boolean shouldProcess(CodeGenerationContext context) {
+        return context.parametersOf(AGGREGATE).flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE)).count() > 0;
+    }
 }

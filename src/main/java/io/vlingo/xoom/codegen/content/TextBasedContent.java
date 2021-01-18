@@ -19,6 +19,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 
 import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 public class TextBasedContent extends Content {
 
@@ -26,6 +27,7 @@ public class TextBasedContent extends Content {
     public final String text;
     private final Filer filer;
     private final Element source;
+    private final String offset;
     private final boolean placeholder;
 
     public TextBasedContent(final TemplateStandard standard,
@@ -34,11 +36,12 @@ public class TextBasedContent extends Content {
                             final Filer filer,
                             final String text) {
         super(standard);
-        this.text = text;
         this.filer = filer;
         this.source = source;
         this.file = templateFile.toFile();
+        this.offset = templateFile.offset();
         this.placeholder = templateFile.isPlaceholder();
+        this.text = text;
     }
 
     @Override
@@ -56,7 +59,20 @@ public class TextBasedContent extends Content {
 
     private void handleDefaultCreation() throws IOException {
         if(Files.isRegularFile(file.toPath())) {
-            Files.write(file.toPath(), text.getBytes(), APPEND);
+            if(hasOffset()) {
+                final StringBuilder fileContent =
+                        new StringBuilder(new String(Files.readAllBytes(file.toPath())));
+
+                final int offsetPosition =
+                        fileContent.indexOf(offset) + offset.length();
+
+                final String updateContent =
+                        fileContent.insert(offsetPosition, text).toString();
+
+                Files.write(file.toPath(), updateContent.getBytes(), WRITE);
+            } else {
+                Files.write(file.toPath(), text.getBytes(), APPEND);
+            }
         } else {
             file.getParentFile().mkdirs();
             file.createNewFile();
@@ -96,6 +112,10 @@ public class TextBasedContent extends Content {
     @Override
     public boolean canWrite() {
         return !placeholder;
+    }
+
+    private boolean hasOffset() {
+        return offset != null && !offset.isEmpty();
     }
 
 }

@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 public class SchemataGenerationStepTest {
 
     @Test
-    public void testThatSpecificationIsGenerated() {
+    public void testThatSpecificationAndPluginConfigAreGenerated() {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.empty()
                         .addAll(CodeGenerationParametersBuilder.threeExchanges().collect(toList()));
@@ -29,7 +29,7 @@ public class SchemataGenerationStepTest {
 
         new SchemataGenerationStep().process(context);
 
-        Assert.assertEquals(4, context.contents().size());
+        Assert.assertEquals(5, context.contents().size());
 
         final Content authorRatedSpecification =
                 context.contents().stream().filter(content -> content.contains("event AuthorRated {"))

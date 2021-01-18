@@ -109,8 +109,15 @@ public enum TemplateParameter {
     EXCHANGES("exchanges"),
     PRODUCER_EXCHANGES("producerExchanges"),
     HAS_PRODUCER_EXCHANGE("hasProducerExchange"),
+    HAS_CONSUMER_EXCHANGE("hasConsumerExchange"),
     SCHEMATA_SPECIFICATION_NAME("schemataSpecificationName"),
-    FIELD_DECLARATIONS("fieldsDeclarations");
+    FIELD_DECLARATIONS("fieldsDeclarations"),
+    POM_SECTION("pomSection"),
+    OFFSET("offset"),
+    PRODUCER_ORGANIZATION("producerOrganization"),
+    PRODUCER_UNIT("producerUnit"),
+    PRODUCER_SCHEMAS("producerSchemas"),
+    CONSUMER_SCHEMAS("consumerSchemas");
 
     public final String key;
 

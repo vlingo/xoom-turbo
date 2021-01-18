@@ -12,28 +12,33 @@ import io.vlingo.xoom.codegen.file.FileLocationResolver;
 import java.io.File;
 import java.nio.file.Paths;
 
+import static io.vlingo.xoom.codegen.template.TemplateParameter.OFFSET;
+
 public class TemplateFile {
 
     private final String absolutePath;
     private final String filename;
+    private final String offset;
     private final boolean placeholder;
 
     public TemplateFile(final CodeGenerationContext context,
                         final TemplateData templateData) {
         this(context.isInternalGeneration() ? "" : FileLocationResolver.from(context, templateData),
-                templateData.filename(), templateData.isPlaceholder());
+                templateData.filename(), templateData.parameters().find(OFFSET), templateData.isPlaceholder());
     }
 
     public TemplateFile(final String absolutePath,
                         final String filename) {
-        this(absolutePath, filename, false);
+        this(absolutePath, filename, "", false);
     }
 
     private TemplateFile(final String absolutePath,
                          final String filename,
+                         final String offset,
                          final boolean placeholder) {
         this.absolutePath = absolutePath;
         this.filename = filename;
+        this.offset = offset;
         this.placeholder = placeholder;
     }
 
@@ -51,6 +56,10 @@ public class TemplateFile {
 
     public File toFile() {
         return new File(filePath());
+    }
+
+    public String offset() {
+        return offset;
     }
 
 }

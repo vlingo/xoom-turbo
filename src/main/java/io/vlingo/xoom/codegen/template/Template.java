@@ -53,7 +53,8 @@ public enum Template {
     EXCHANGE_PROPERTIES("ExchangeProperties"),
     EXCHANGE_BOOTSTRAP("ExchangeBootstrap"),
     EXCHANGE_DISPATCHER("ExchangeDispatcher"),
-    SCHEMATA_SPECIFICATION("SchemataSpecification");
+    SCHEMATA_SPECIFICATION("SchemataSpecification"),
+    SCHEMATA_PLUGIN("SchemataPlugin");
 
     public final String filename;
 

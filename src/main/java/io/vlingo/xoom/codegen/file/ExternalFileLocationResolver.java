@@ -44,6 +44,9 @@ public class ExternalFileLocationResolver implements FileLocationResolver {
         if(templateData.parameters().find(SCHEMATA_FILE, false)) {
             return SCHEMATA_FOLDER;
         }
+        if(templateData.parameters().find(POM_SECTION, false)) {
+            return new String[]{};
+        }
         final String packageName = templateData.parameters().find(PACKAGE_NAME);
         return ArrayUtils.addAll(SOURCE_FOLDER, packageName.split("\\."));
     }

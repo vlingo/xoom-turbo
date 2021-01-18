@@ -17,7 +17,6 @@ import io.vlingo.xoom.codegen.template.model.StateFieldDetail;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
@@ -26,11 +25,11 @@ public class SchemataSpecificationTemplateData extends TemplateData {
 
     private final TemplateParameters parameters;
 
-    public static List<TemplateData> from(final Stream<CodeGenerationParameter> exchanges) {
+    public static List<TemplateData> from(final List<CodeGenerationParameter> exchanges) {
         final Predicate<CodeGenerationParameter> onlyProducers =
                 exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
 
-        return exchanges.filter(onlyProducers).flatMap(exchange -> exchange.retrieveAllRelated(DOMAIN_EVENT))
+        return exchanges.stream().filter(onlyProducers).flatMap(exchange -> exchange.retrieveAllRelated(DOMAIN_EVENT))
                 .map(SchemataSpecificationTemplateData::new).collect(Collectors.toList());
     }
 

@@ -128,6 +128,9 @@ public enum TemplateStandard {
     SCHEMATA_SPECIFICATION(parameters -> Template.SCHEMATA_SPECIFICATION.filename,
             (name, parameters) -> parameters.find(SCHEMATA_SPECIFICATION_NAME) + ".vss"),
 
+    SCHEMATA_PLUGIN(parameters -> Template.SCHEMATA_PLUGIN.filename,
+            (name, parameters) -> "pom.xml"),
+
     STORE_PROVIDER(parameters -> storeProviderTemplatesFrom(parameters.find(MODEL)).get(parameters.find(STORAGE_TYPE)),
             (name, parameters) -> {
                 final StorageType storageType = parameters.find(STORAGE_TYPE);
