@@ -23,10 +23,11 @@ public class ${exchangeReceiverHolderName} {
       <#if receiver.modelFactoryMethod>
       ${receiver.modelProtocol}.${receiver.modelMethod}(${receiver.modelMethodParameters});
       <#else>
-      stage.actorOf(${receiver.modelProtocol}.class, stage.addressFactory().from(data.id), AccountEntity.class)
+      stage.actorOf(${receiver.modelProtocol}.class, stage.addressFactory().from(data.id), ${receiver.modelActor}.class)
               .andFinallyConsume(${receiver.modelVariable} -> ${receiver.modelVariable}.${receiver.modelMethod}(${receiver.modelMethodParameters}));
       </#if>
     }
   }
+
 </#list>
 }

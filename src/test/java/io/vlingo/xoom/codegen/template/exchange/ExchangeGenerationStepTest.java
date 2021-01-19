@@ -10,6 +10,7 @@ package io.vlingo.xoom.codegen.template.exchange;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static io.vlingo.xoom.codegen.parameter.Label.PACKAGE;
@@ -29,6 +30,20 @@ public class ExchangeGenerationStepTest {
         context.contents(ContentBuilder.aggregateAndEvents().toArray(new Content[]{}));
 
         new ExchangeGenerationStep().process(context);
+
+        Assert.assertEquals(17, context.contents().size());
+
+        final Content authorExchangeReceivers =
+                context.contents().stream().filter(content -> content.retrieveClassName().equals("AuthorExchangeReceivers"))
+                        .findFirst().get();
+
+
+        authorExchangeReceivers.contains("static class OtherAggregateDefined ");
+        authorExchangeReceivers.contains("static class OtherAggregateUpdated ");
+        authorExchangeReceivers.contains("static class OtherAggregateRemoved ");
+        authorExchangeReceivers.contains("Author.withName(data.name)");
+        authorExchangeReceivers.contains("stage.actorOf(Author.class, stage.addressFactory().from(data.id), AuthorEntity.class)");
+        authorExchangeReceivers.contains(".andFinallyConsume(author -> author.block(data.rank)");
     }
 
 }
