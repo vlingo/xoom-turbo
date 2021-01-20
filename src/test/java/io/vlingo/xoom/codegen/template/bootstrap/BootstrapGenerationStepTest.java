@@ -84,7 +84,7 @@ public class BootstrapGenerationStepTest {
         Assert.assertTrue(context.contents().get(5).contains("new BlockingMailboxPlugin().start(world);"));
         Assert.assertTrue(context.contents().get(5).contains("world.stageNamed(\"xoom-app\")"));
         Assert.assertTrue(context.contents().get(5).contains("new AnnotatedBootstrap();" ));
-        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
+        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, initializer.exchangeDispatcher(stage))"));
         Assert.assertTrue(context.contents().get(5).contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
         Assert.assertEquals("XoomInitializer.java", ((TextBasedContent) context.contents().get(5)).file.getName());
     }

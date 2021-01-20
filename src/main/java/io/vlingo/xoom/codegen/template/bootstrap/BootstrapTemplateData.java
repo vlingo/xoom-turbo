@@ -81,7 +81,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
 
         final List<StoreProviderParameter> storeProviderParameters =
                 StoreProviderParameter.from(storageType, useCQRS, projectionType.isProjectionEnabled(),
-                        useAnnotations, hasProducerExchange);
+                        context.isInternalGeneration(), hasProducerExchange);
 
         return this.parameters.and(IMPORTS, imports)
                 .and(PACKAGE_NAME, packageName)

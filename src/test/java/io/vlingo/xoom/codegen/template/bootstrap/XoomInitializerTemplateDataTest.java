@@ -89,7 +89,7 @@ public class XoomInitializerTemplateDataTest {
         Assert.assertEquals("QueryModelStateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getClassName());
         Assert.assertEquals("stage, statefulTypeRegistry", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getArguments());
         Assert.assertEquals("CommandModelStateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(1).getClassName());
-        Assert.assertEquals("stage, statefulTypeRegistry", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(1).getArguments());
+        Assert.assertEquals("stage, statefulTypeRegistry, initializer.exchangeDispatcher(stage)", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(1).getArguments());
 
         Assert.assertEquals(1, parameters.<List>find(TYPE_REGISTRIES).size());
         Assert.assertEquals("StatefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getClassName());

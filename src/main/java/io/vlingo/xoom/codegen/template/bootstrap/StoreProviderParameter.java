@@ -31,21 +31,21 @@ public class StoreProviderParameter {
     public static List<StoreProviderParameter> from(final StorageType storageType,
                                                     final Boolean useCQRS,
                                                     final Boolean useProjections,
-                                                    final Boolean useAnnotations,
+                                                    final Boolean internalGeneration,
                                                     final Boolean hasProducerExchange) {
         if(!storageType.isEnabled()) {
             return Collections.emptyList();
         }
 
         return Model.applicableTo(useCQRS)
-                .map(model -> new StoreProviderParameter(storageType, model, useProjections, useAnnotations, hasProducerExchange))
+                .map(model -> new StoreProviderParameter(storageType, model, useProjections, internalGeneration, hasProducerExchange))
                 .collect(toList());
     }
 
     private StoreProviderParameter(final StorageType storageType,
                                    final Model model,
                                    final Boolean useProjections,
-                                   final Boolean useAnnotations,
+                                   final Boolean internalGeneration,
                                    final Boolean hasProducerExchange) {
         final TemplateParameters parameters =
                 TemplateParameters.with(STORAGE_TYPE, storageType)
@@ -53,19 +53,19 @@ public class StoreProviderParameter {
 
         this.className = STORE_PROVIDER.resolveClassname(parameters);
         this.arguments = resolveArguments(model, storageType, useProjections,
-                        useAnnotations, hasProducerExchange);
+                        internalGeneration, hasProducerExchange);
     }
 
     private String resolveArguments(final Model model,
                                     final StorageType storageType,
                                     final Boolean useProjections,
-                                    final Boolean useAnnotations,
+                                    final Boolean internalGeneration,
                                     final Boolean hasProducerExchange) {
         final String typeRegistryObjectName =
                 storageType.resolveTypeRegistryObjectName(model);
 
         final String exchangeDispatcherAccess =
-                resolveExchangeDispatcherAccess(useAnnotations, hasProducerExchange);
+                resolveExchangeDispatcherAccess(internalGeneration, hasProducerExchange);
 
         final String projectionDispatcher =
                 PROJECTION_DISPATCHER_PROVIDER.resolveClassname() + ".using(stage).storeDispatcher";
@@ -83,9 +83,9 @@ public class StoreProviderParameter {
         return arguments.stream().filter(arg -> !arg.isEmpty()).collect(joining(", "));
     }
 
-    private String resolveExchangeDispatcherAccess(final Boolean useAnnotations,
-                                                    final Boolean hasProducerExchange) {
-        if(useAnnotations) {
+    private String resolveExchangeDispatcherAccess(final Boolean internalGeneration,
+                                                   final Boolean hasProducerExchange) {
+        if(internalGeneration) {
             return "initializer.exchangeDispatcher(stage)";
         }
         if(hasProducerExchange) {
