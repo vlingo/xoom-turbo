@@ -66,7 +66,7 @@ public class ExchangeDispatcher implements Dispatcher<Dispatchable<Entry<String>
     final Set<String> exchangeNames =
           eventsByExchangeName.entrySet().stream().filter(exchange -> {
              final Set<String> events = exchange.getValue();
-             return events.contains(event.getClass().getSimpleName());
+             return events.contains(event.getClass().getCanonicalName());
          }).map(Map.Entry::getKey).collect(Collectors.toSet());
 
     return this.producerExchanges.stream().filter(exchange -> exchangeNames.contains(exchange.name()));
