@@ -30,7 +30,11 @@ public class ${exchangeAdapterName} implements ExchangeAdapter<IdentifiedDomainE
 
   @Override
   public boolean supports(final Object exchangeMessage) {
-    return exchangeMessage.getClass().equals(Message.class);
+    if(!exchangeMessage.getClass().equals(Message.class)) {
+      return false;
+    }
+    final String schemaName = ((Message) exchangeMessage).messageParameters.typeName();
+    return schemaName.startsWith(SCHEMA_PREFIX);
   }
 
 }
