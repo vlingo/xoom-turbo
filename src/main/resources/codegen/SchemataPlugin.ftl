@@ -35,7 +35,7 @@
             </goals>
             <configuration>
               <schemataService>
-                <url>http://localhost:9020</url>
+                <url>http://localhost:9019</url>
                 <clientOrganization>Inform the client organization</clientOrganization>
                 <clientUnit>Inform the client unit</clientUnit>
               </schemataService>
