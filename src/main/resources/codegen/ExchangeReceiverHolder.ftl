@@ -1,5 +1,6 @@
 package ${packageName};
 
+import io.vlingo.actors.Definition;
 import io.vlingo.actors.Stage;
 import io.vlingo.lattice.exchange.ExchangeReceiver;
 
@@ -23,7 +24,7 @@ public class ${exchangeReceiverHolderName} {
       <#if receiver.modelFactoryMethod>
       ${receiver.modelProtocol}.${receiver.modelMethod}(${receiver.modelMethodParameters});
       <#else>
-      stage.actorOf(${receiver.modelProtocol}.class, stage.addressFactory().from(data.id), ${receiver.modelActor}.class)
+      stage.actorOf(${receiver.modelProtocol}.class, stage.addressFactory().from(data.id), Definition.has(${receiver.modelActor}.class, Definition.parameters(data.id)))
               .andFinallyConsume(${receiver.modelVariable} -> ${receiver.modelVariable}.${receiver.modelMethod}(${receiver.modelMethodParameters}));
       </#if>
     }

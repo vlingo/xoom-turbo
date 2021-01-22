@@ -1,5 +1,8 @@
 package ${packageName};
 
+<#if modelProtocol?has_content>
+import io.vlingo.actors.Definition;
+</#if>
 import io.vlingo.actors.Stage;
 import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.DynamicResourceHandler;
@@ -84,7 +87,7 @@ public class ${resourceName} extends DynamicResourceHandler {
 
   <#if modelProtocol?has_content>
   private Completes<${modelProtocol}> resolve(final String id) {
-    return stage().actorOf(${modelProtocol}.class, stage().addressFactory().from(id), ${modelActor}.class);
+    return stage().actorOf(${modelProtocol}.class, stage().addressFactory().from(id), Definition.has(${modelActor}.class, Definition.parameters(id)));
   }
   </#if>
 
