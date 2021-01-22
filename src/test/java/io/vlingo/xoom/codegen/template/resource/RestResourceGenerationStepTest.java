@@ -51,7 +51,7 @@ public class RestResourceGenerationStepTest {
         Assert.assertTrue(contents.get(7).contains("class AuthorResource"));
         Assert.assertTrue(contents.get(7).contains("Author.withName(stage(), data.name)"));
         Assert.assertTrue(contents.get(7).contains("package io.vlingo.xoomapp.infrastructure.resource;"));
-        Assert.assertTrue(contents.get(7).contains("return stage().actorOf(Author.class, stage().addressFactory().from(id), AuthorEntity.class);"));
+        Assert.assertTrue(contents.get(7).contains("return stage().actorOf(Author.class, stage().addressFactory().from(id), Definition.has(AuthorEntity.class, Definition.parameters(id)));"));
     }
 
     private CodeGenerationParameter authorAggregate() {
