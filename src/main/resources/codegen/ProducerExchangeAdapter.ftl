@@ -1,9 +1,7 @@
 package ${packageName};
 
+import io.vlingo.common.version.SemanticVersion;
 import io.vlingo.lattice.exchange.ExchangeAdapter;
-import io.vlingo.lattice.exchange.ExchangeMapper;
-import io.vlingo.lattice.exchange.MessageParameters;
-import io.vlingo.lattice.exchange.MessageParameters.DeliveryMode;
 import io.vlingo.lattice.exchange.rabbitmq.Message;
 
 <#list imports as import>
@@ -12,7 +10,7 @@ import ${import.qualifiedClassName};
 
 public class ${exchangeAdapterName} implements ExchangeAdapter<IdentifiedDomainEvent, IdentifiedDomainEvent, Message> {
 
-  private static final String SCHEMA_PREFIX = "${schemaGroupName}:";
+  private static final String SCHEMA_PREFIX = "${schemaGroupName}";
 
   private final ${exchangeMapperName} mapper = new ${exchangeMapperName}();
 
@@ -24,7 +22,7 @@ public class ${exchangeAdapterName} implements ExchangeAdapter<IdentifiedDomainE
   @Override
   public Message toExchange(final IdentifiedDomainEvent event) {
     final Message message = mapper.localToExternal(event);
-    message.messageParameters.typeName(SCHEMA_PREFIX + event.getClass().getSimpleName());
+    message.messageParameters.typeName(resolveFullSchemaReference(event));
     return message;
   }
 
@@ -35,6 +33,11 @@ public class ${exchangeAdapterName} implements ExchangeAdapter<IdentifiedDomainE
     }
     final String schemaName = ((Message) exchangeMessage).messageParameters.typeName();
     return schemaName.startsWith(SCHEMA_PREFIX);
+  }
+
+  private String resolveFullSchemaReference(final IdentifiedDomainEvent event) {
+    final String semanticVersion = SemanticVersion.toString(event.sourceTypeVersion);
+    return String.format("%s:%s:%s", SCHEMA_PREFIX, event.getClass().getSimpleName(), semanticVersion);
   }
 
 }
