@@ -25,6 +25,7 @@ public interface XoomInitializationAware {
         return Configuration.define().withPort(port);
     }
 
+    @SuppressWarnings("rawtypes")
     default Dispatcher exchangeDispatcher(final Stage stage) {
         return new NoOpDispatcher();
     }
