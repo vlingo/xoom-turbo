@@ -7,15 +7,14 @@
 
 package io.vlingo.xoom.codegen.template.autodispatch;
 
-import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
+import static io.vlingo.xoom.codegen.parameter.Label.USE_AUTO_DISPATCH;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.parameter.Label.REST_RESOURCES;
-import static io.vlingo.xoom.codegen.parameter.Label.USE_AUTO_DISPATCH;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 public class AutoDispatchMappingGenerationStep extends TemplateProcessingStep {
 

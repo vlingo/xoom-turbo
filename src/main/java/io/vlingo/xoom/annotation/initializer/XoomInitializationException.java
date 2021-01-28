@@ -8,6 +8,7 @@
 package io.vlingo.xoom.annotation.initializer;
 
 public class XoomInitializationException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 
     public XoomInitializationException(final Exception exception) {
         super(exception.getMessage(), exception);

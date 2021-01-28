@@ -76,6 +76,7 @@ public enum Label {
     MODEL_METHOD("modelMethod"),
     ROLE("role");
 
+    @SuppressWarnings("unused")
     private final String key;
 
     Label(final String key) {

@@ -7,6 +7,38 @@
 
 package io.vlingo.xoom.codegen.template.autodispatch;
 
+import static io.vlingo.xoom.codegen.parameter.Label.AUTO_DISPATCH_NAME;
+import static io.vlingo.xoom.codegen.parameter.Label.CQRS;
+import static io.vlingo.xoom.codegen.parameter.Label.QUERIES_PROTOCOL;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.AUTO_DISPATCH_MAPPING_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.DATA_OBJECT_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.HANDLERS_CONFIG_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL_ACTOR;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL_PROTOCOL;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.ROUTE_DECLARATIONS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.ROUTE_METHODS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STATE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STORE_PROVIDER_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.URI_ROOT;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_AUTO_DISPATCH;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_CQRS;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
+
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.content.ContentQuery;
@@ -21,24 +53,6 @@ import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
-
-import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.HANDLERS_CONFIG_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL_ACTOR;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL_PROTOCOL;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.URI_ROOT;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_AUTO_DISPATCH;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-
 public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
 
     private final String restResourceName;
@@ -50,6 +64,7 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                 .collect(toList());
     }
 
+    @SuppressWarnings("unchecked")
     private AutoDispatchResourceHandlerTemplateData(final CodeGenerationContext context,
                                                     final CodeGenerationParameter autoDispatchParameter) {
         this.restResourceName = ClassFormatter.simpleNameOf(autoDispatchParameter.value);

@@ -7,19 +7,20 @@
 
 package io.vlingo.xoom.codegen.template.model;
 
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import static io.vlingo.xoom.codegen.parameter.Label.FIELD_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.parameter.Label.FIELD_TYPE;
-import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 
 public class StateFieldDetail {
 
     private static String UNKNOWN_FIELD_MESSAGE = "%s is not a field in %s state";
     private static final List<String> NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "integer", "long", "double", "float");
 
+    @SuppressWarnings("static-access")
     public static String typeOf(final CodeGenerationParameter aggregate, final String stateFieldName) {
         return aggregate.retrieveAllRelated(STATE_FIELD)
                 .filter(stateField -> stateField.value.equals(stateFieldName))

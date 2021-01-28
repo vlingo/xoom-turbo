@@ -8,7 +8,6 @@
 package io.vlingo.xoom;
 
 import io.vlingo.actors.World;
-import io.vlingo.xoom.actors.Settings;
 
 public class Boot {
 

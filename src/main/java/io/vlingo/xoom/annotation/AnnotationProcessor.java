@@ -7,22 +7,18 @@
 
 package io.vlingo.xoom.annotation;
 
+import static javax.tools.Diagnostic.Kind.ERROR;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static javax.tools.Diagnostic.Kind.ERROR;
 
 public abstract class AnnotationProcessor extends AbstractProcessor {
 
@@ -51,18 +47,20 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
         return true;
     }
 
-    private Map<Class, Set<Element>> filterAnnotatedElements(final RoundEnvironment environment) {
-        final Function<Class, SimpleEntry<Class, Set<Element>>> mapper =
-                annotationClass ->
-                        new SimpleEntry<Class, Set<Element>>(
-                                annotationClass, environment.getElementsAnnotatedWith(annotationClass));
-
-        return supportedAnnotationClasses().map(mapper)
-                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-    }
+//    @SuppressWarnings({ "rawtypes", "unchecked" })
+//    private Map<Class, Set<Element>> filterAnnotatedElements(final RoundEnvironment environment) {
+//        final Function<Class, SimpleEntry<Class, Set<Element>>> mapper =
+//                annotationClass ->
+//                        new SimpleEntry<Class, Set<Element>>(
+//                                annotationClass, environment.getElementsAnnotatedWith(annotationClass));
+//
+//        return supportedAnnotationClasses().map(mapper)
+//                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+//    }
 
     protected abstract void generate(final AnnotatedElements annotatedElements);
 
+    @SuppressWarnings("rawtypes")
     public abstract Stream<Class> supportedAnnotationClasses();
 
     private void printError(final Messager messager,

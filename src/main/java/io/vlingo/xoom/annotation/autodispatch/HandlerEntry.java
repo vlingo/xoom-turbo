@@ -12,9 +12,10 @@ public class HandlerEntry<T extends Handler> {
     public final int index;
     public final T handler;
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T extends Handler> HandlerEntry<T> of(final int index,
                                                          final T handler){
-        return (HandlerEntry<T>) new HandlerEntry(index, handler);
+        return new HandlerEntry(index, handler);
     }
 
     private HandlerEntry(final int index,

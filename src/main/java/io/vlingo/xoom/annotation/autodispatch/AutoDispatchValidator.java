@@ -7,14 +7,25 @@
 
 package io.vlingo.xoom.annotation.autodispatch;
 
-import io.vlingo.xoom.annotation.AnnotatedElements;
+import static io.vlingo.xoom.annotation.Validation.classVisibilityValidation;
+import static io.vlingo.xoom.annotation.Validation.isInterface;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.bodyForRouteValidator;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.entityActorValidation;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.handlerTypeValidation;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.handlerWithoutValidMethodValidator;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.hasAutoDispatchAnnotation;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.isProtocolModelAnInterface;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.isQueriesProtocolAnInterface;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.modelWithoutQueryValidator;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.queryWithoutModelValidator;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.routeHasQueryOrModel;
+import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.routeWithoutResponseValidator;
 
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
 import java.util.Arrays;
 
-import static io.vlingo.xoom.annotation.Validation.*;
-import static io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidations.*;
+import javax.annotation.processing.ProcessingEnvironment;
+
+import io.vlingo.xoom.annotation.AnnotatedElements;
 
 public class AutoDispatchValidator {
 

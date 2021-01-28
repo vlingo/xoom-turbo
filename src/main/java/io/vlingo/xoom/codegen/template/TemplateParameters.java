@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template;
 
-import io.vlingo.xoom.codegen.parameter.ImportParameter;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
 
 public class TemplateParameters {
 
@@ -45,6 +45,7 @@ public class TemplateParameters {
         return addImport(clazz.getCanonicalName());
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public TemplateParameters addImport(final String qualifiedClassName) {
         if(this.find(TemplateParameter.IMPORTS) == null) {
             this.and(TemplateParameter.IMPORTS, new HashSet<ImportParameter>());
@@ -60,11 +61,13 @@ public class TemplateParameters {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public boolean hasImport(final String qualifiedName) {
         return ((Set<ImportParameter>) find(IMPORTS)).stream()
                 .anyMatch(imp -> imp.matchClass(qualifiedName));
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T find(final TemplateParameter parameter) {
         return (T) this.parameters.get(parameter.key);
     }

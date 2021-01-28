@@ -7,15 +7,15 @@
 
 package io.vlingo.xoom.storage;
 
-import io.vlingo.actors.Stage;
-import io.vlingo.symbio.store.common.jdbc.Configuration;
-import io.vlingo.symbio.store.dispatch.Dispatcher;
-import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.function.Predicate;
+
+import io.vlingo.actors.Stage;
+import io.vlingo.symbio.store.common.jdbc.Configuration;
+import io.vlingo.symbio.store.dispatch.Dispatcher;
+import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
 public interface StoreActorBuilder {
 
@@ -24,6 +24,7 @@ public interface StoreActorBuilder {
                     new InMemoryJournalActorBuilder(), new DefaultJournalActorBuilder(),
                     new ObjectStoreActorBuilder());
 
+    @SuppressWarnings("rawtypes")
     static <T> T from(final Stage stage,
                       final Model model,
                       final Dispatcher dispatcher,
@@ -33,6 +34,7 @@ public interface StoreActorBuilder {
         return from(stage, model, Arrays.asList(dispatcher), storageType, properties, autoDatabaseCreation);
     }
 
+    @SuppressWarnings("rawtypes")
     static <T> T from(final Stage stage,
                       final Model model,
                       final List<Dispatcher> dispatcher,
@@ -53,6 +55,7 @@ public interface StoreActorBuilder {
                 .build(stage, dispatcher, configuration);
     }
 
+    @SuppressWarnings("rawtypes")
     <T> T build(final Stage stage, final List<Dispatcher> dispatchers, final Configuration configuration);
 
     boolean support(final StorageType storageType, final DatabaseType databaseType);

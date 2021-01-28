@@ -7,12 +7,12 @@
 
 package io.vlingo.xoom.codegen.template.bootstrap;
 
+import java.util.function.BiFunction;
+
 import io.vlingo.actors.GridAddressFactory;
 import io.vlingo.actors.UUIDAddressFactory;
 import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.xoom.annotation.initializer.AddressFactory;
-
-import java.util.function.BiFunction;
 
 public enum AddressFactoryType {
 
@@ -41,7 +41,8 @@ public enum AddressFactoryType {
     }
 
     public String resolveParameters(final String appName, final IdentityGeneratorType generator) {
-        return String.format(parametersPattern, this.parametersReplacer.apply(appName, generator));
+        final Object[] args = this.parametersReplacer.apply(appName, generator);
+        return String.format(parametersPattern, args);
     }
 
     public boolean isBasic() {

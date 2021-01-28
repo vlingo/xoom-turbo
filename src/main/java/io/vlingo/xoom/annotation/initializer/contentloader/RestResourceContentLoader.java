@@ -7,19 +7,19 @@
 
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
-import io.vlingo.http.resource.DynamicResourceHandler;
-import io.vlingo.http.resource.ResourceHandler;
-import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
-import io.vlingo.xoom.codegen.template.TemplateStandard;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import io.vlingo.http.resource.DynamicResourceHandler;
+import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 public class RestResourceContentLoader extends TypeBasedContentLoader {
 

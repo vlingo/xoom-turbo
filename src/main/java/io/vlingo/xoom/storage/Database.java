@@ -7,17 +7,16 @@
 
 package io.vlingo.xoom.storage;
 
+import java.util.function.Function;
+
 import io.vlingo.symbio.store.DataFormat;
 import io.vlingo.symbio.store.Result;
 import io.vlingo.symbio.store.StorageException;
 import io.vlingo.symbio.store.common.jdbc.Configuration;
-import io.vlingo.symbio.store.common.jdbc.DatabaseType;
 import io.vlingo.symbio.store.common.jdbc.hsqldb.HSQLDBConfigurationProvider;
 import io.vlingo.symbio.store.common.jdbc.mysql.MySQLConfigurationProvider;
 import io.vlingo.symbio.store.common.jdbc.postgres.PostgresConfigurationProvider;
 import io.vlingo.symbio.store.common.jdbc.yugabyte.YugaByteConfigurationProvider;
-
-import java.util.function.Function;
 
 public enum Database {
 

@@ -6,6 +6,31 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.bootstrap;
 
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
+import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
+import static io.vlingo.xoom.codegen.parameter.Label.CQRS;
+import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
+import static io.vlingo.xoom.codegen.parameter.Label.PACKAGE;
+import static io.vlingo.xoom.codegen.parameter.Label.PROJECTION_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.ROLE;
+import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.parameter.Label.USE_ANNOTATIONS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PROJECTION_DISPATCHER_PROVIDER_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PROVIDERS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.TYPE_REGISTRIES;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_PROJECTIONS;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.BOOTSTRAP;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.EXCHANGE_BOOTSTRAP;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
@@ -17,20 +42,6 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.exchange.ExchangeRole;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-
-import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
-import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
-import static io.vlingo.xoom.codegen.parameter.Label.PROJECTION_TYPE;
-import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
-import static io.vlingo.xoom.codegen.parameter.Label.USE_ANNOTATIONS;
-import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public abstract class BootstrapTemplateData extends TemplateData {
 
@@ -98,6 +109,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
 
     protected abstract boolean support(final CodeGenerationContext context);
 
+    @SuppressWarnings("unchecked")
     private Set<ImportParameter> loadImports(final StorageType storageType,
                                              final List<Content> contents,
                                              final Boolean useCQRS,

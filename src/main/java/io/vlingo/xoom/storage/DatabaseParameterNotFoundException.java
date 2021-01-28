@@ -8,6 +8,7 @@
 package io.vlingo.xoom.storage;
 
 public class DatabaseParameterNotFoundException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 
     private static final String EXCEPTION_MESSAGE_PATTERN = "%s Database %s not informed";
 

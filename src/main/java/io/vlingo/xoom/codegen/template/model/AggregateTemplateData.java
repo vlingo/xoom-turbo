@@ -8,6 +8,23 @@
 
 package io.vlingo.xoom.codegen.template.model;
 
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.DOMAIN_EVENT;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.ENTITY_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.ID_TYPE;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.METHODS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.SOURCED_EVENTS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STATE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import io.vlingo.common.Completes;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
@@ -15,21 +32,12 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE_METHOD;
-import static io.vlingo.xoom.codegen.parameter.Label.DOMAIN_EVENT;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-
 public class AggregateTemplateData extends TemplateData {
 
     private final String protocolName;
     private final TemplateParameters parameters;
 
+    @SuppressWarnings("unchecked")
     public AggregateTemplateData(final String packageName,
                                  final CodeGenerationParameter aggregate,
                                  final StorageType storageType) {

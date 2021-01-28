@@ -7,29 +7,29 @@
 
 package io.vlingo.xoom.storage;
 
+import java.util.List;
+
 import io.vlingo.actors.Stage;
-import io.vlingo.symbio.Entry;
 import io.vlingo.symbio.store.common.jdbc.Configuration;
-import io.vlingo.symbio.store.dispatch.Dispatchable;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
 import io.vlingo.symbio.store.journal.Journal;
 import io.vlingo.symbio.store.journal.inmemory.InMemoryJournalActor;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
-import java.util.List;
-
 public class InMemoryJournalActorBuilder implements StoreActorBuilder {
 
     @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public <T> T build(final Stage stage,
                         final List<Dispatcher> dispatchers,
                         final Configuration configuration) {
         return (T) Journal.using(stage, InMemoryJournalActor.class, dispatchers.get(0));
     }
 
-    private Dispatcher<Dispatchable<Entry<?>,?>> typed(Dispatcher dispatcher) {
-        return dispatcher;
-    }
+//    @SuppressWarnings("unchecked")
+//    private Dispatcher<Dispatchable<Entry<?>,?>> typed(Dispatcher dispatcher) {
+//        return dispatcher;
+//    }
 
     @Override
     public boolean support(final StorageType storageType, final DatabaseType databaseType) {

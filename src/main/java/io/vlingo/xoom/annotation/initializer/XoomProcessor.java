@@ -7,15 +7,21 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
-import com.google.auto.service.AutoService;
-import io.vlingo.xoom.annotation.AnnotatedElements;
-import io.vlingo.xoom.annotation.AnnotationProcessor;
-import io.vlingo.xoom.annotation.autodispatch.*;
-import io.vlingo.xoom.annotation.persistence.Persistence;
-import io.vlingo.xoom.annotation.persistence.PersistenceValidator;
+import java.util.stream.Stream;
 
 import javax.annotation.processing.Processor;
-import java.util.stream.Stream;
+
+import com.google.auto.service.AutoService;
+
+import io.vlingo.xoom.annotation.AnnotatedElements;
+import io.vlingo.xoom.annotation.AnnotationProcessor;
+import io.vlingo.xoom.annotation.autodispatch.AutoDispatch;
+import io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidator;
+import io.vlingo.xoom.annotation.autodispatch.Model;
+import io.vlingo.xoom.annotation.autodispatch.Queries;
+import io.vlingo.xoom.annotation.autodispatch.Route;
+import io.vlingo.xoom.annotation.persistence.Persistence;
+import io.vlingo.xoom.annotation.persistence.PersistenceValidator;
 
 @AutoService(Processor.class)
 public class XoomProcessor extends AnnotationProcessor {
@@ -32,6 +38,7 @@ public class XoomProcessor extends AnnotationProcessor {
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public Stream<Class> supportedAnnotationClasses() {
         return Stream.of(Xoom.class, Persistence.class, Model.class, Queries.class ,AutoDispatch.class, Route.class);
     }

@@ -6,15 +6,16 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation.initializer;
 
+import javax.annotation.processing.ProcessingEnvironment;
+
 import io.vlingo.xoom.annotation.AnnotatedElements;
 import io.vlingo.xoom.annotation.ProcessingAnnotationException;
 import io.vlingo.xoom.annotation.Validation;
 
-import javax.annotation.processing.ProcessingEnvironment;
-
 public class AddressFactoryValidation implements Validation {
 
     @Override
+    @SuppressWarnings("rawtypes")
     public void validate(ProcessingEnvironment processingEnvironment, final Class annotation, final AnnotatedElements annotatedElements) {
         annotatedElements.elementsWith(Xoom.class).forEach(element -> {
             final Xoom xoom = element.getAnnotation(Xoom.class);
