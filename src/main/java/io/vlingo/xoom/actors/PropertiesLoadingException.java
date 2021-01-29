@@ -8,6 +8,7 @@
 package io.vlingo.xoom.actors;
 
 public class PropertiesLoadingException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 
     public PropertiesLoadingException(final String message) {
         super(message);

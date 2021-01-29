@@ -7,13 +7,13 @@
 
 package io.vlingo.xoom.codegen.template;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 public abstract class TemplateData {
 
@@ -23,10 +23,12 @@ public abstract class TemplateData {
 
     public abstract TemplateStandard standard();
 
+    @SuppressWarnings("unchecked")
     protected void dependOn(final TemplateData templateData) {
         this.dependOn(Arrays.asList(templateData));
     }
 
+    @SuppressWarnings("unchecked")
     protected void dependOn(final List<TemplateData> ...templatesData) {
         this.dependencies.addAll(Stream.of(templatesData).flatMap(List::stream).collect(toList()));
     }

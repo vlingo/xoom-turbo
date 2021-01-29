@@ -6,27 +6,38 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.model;
 
+import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.CONSTRUCTOR_PARAMETERS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.EVENT_SOURCED;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.ID_TYPE;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.MEMBERS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.MEMBERS_ASSIGNMENT;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.METHODS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.METHOD_INVOCATION_PARAMETERS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STATE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.ASSIGNMENT;
+import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.DEFAULT_VALUE;
+import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.MEMBER_DECLARATION;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.*;
-
 public class AggregateStateTemplateData extends TemplateData {
 
     private final String protocolName;
     private final TemplateParameters parameters;
 
+    @SuppressWarnings("unchecked")
     public AggregateStateTemplateData(final String packageName,
                                       final CodeGenerationParameter aggregate,
                                       final StorageType storageType) {

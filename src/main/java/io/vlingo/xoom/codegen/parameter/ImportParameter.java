@@ -25,6 +25,7 @@ public class ImportParameter {
         return of(Stream.of(qualifiedClassNames));
     }
 
+    @SuppressWarnings("unchecked")
     public static Set<ImportParameter> of(final Set<String> ...qualifiedNames) {
         return of(Stream.of(qualifiedNames).flatMap(Collection::stream));
     }

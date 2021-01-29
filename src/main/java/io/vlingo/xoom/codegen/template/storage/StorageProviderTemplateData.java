@@ -7,6 +7,29 @@
 
 package io.vlingo.xoom.codegen.template.storage;
 
+import static io.vlingo.xoom.codegen.template.TemplateParameter.ADAPTERS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.AGGREGATES;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PERSISTENT_TYPES;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PROJECTION_TYPE;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.REQUIRE_ADAPTERS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STORE_PROVIDER_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_ANNOTATIONS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_PROJECTIONS;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static java.util.stream.Collectors.toSet;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
@@ -15,17 +38,6 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
-import static java.util.stream.Collectors.toSet;
 
 public class StorageProviderTemplateData extends TemplateData {
 
@@ -79,6 +91,7 @@ public class StorageProviderTemplateData extends TemplateData {
                 .and(USE_ANNOTATIONS, useAnnotation);
     }
 
+    @SuppressWarnings("unchecked")
     private Set<ImportParameter> resolveImports(final Model model,
                                                 final StorageType storageType,
                                                 final List<Content> contents,

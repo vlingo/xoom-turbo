@@ -6,16 +6,17 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.storage;
 
-import io.vlingo.symbio.store.common.jdbc.Configuration;
-import io.vlingo.xoom.ApplicationProperty;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import io.vlingo.symbio.store.common.jdbc.Configuration;
+import io.vlingo.xoom.ApplicationProperty;
+
 public class DatabaseParameters {
 
+    @SuppressWarnings("unused")
     private static final String XOOM_PREFIX = "VLINGO_XOOM";
     private static final String QUERY_MODEL_PREFIX = "query";
     private static final String COMBINATION_PATTERN = "%s.%s";

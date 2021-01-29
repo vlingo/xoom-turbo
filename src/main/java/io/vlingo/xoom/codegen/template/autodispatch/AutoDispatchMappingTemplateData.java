@@ -7,6 +7,33 @@
 
 package io.vlingo.xoom.codegen.template.autodispatch;
 
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_SIGNATURE;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.AUTO_DISPATCH_HANDLERS_MAPPING_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.AUTO_DISPATCH_MAPPING_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.DATA_OBJECT_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.ENTITY_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES_ACTOR_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.ROUTE_DECLARATIONS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.URI_ROOT;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_CQRS;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AUTO_DISPATCH_MAPPING;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -15,14 +42,6 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.resource.RouteDetail;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_SIGNATURE;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class AutoDispatchMappingTemplateData extends TemplateData {
 
@@ -52,6 +71,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
         this.loadDependencies(aggregate, useCQRS);
     }
 
+    @SuppressWarnings("unchecked")
     private void loadDependencies(final CodeGenerationParameter aggregate, final boolean useCQRS) {
         if(useCQRS) {
             aggregate.relate(RouteDetail.defaultQueryRouteParameter(aggregate));
@@ -80,6 +100,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
         }).collect(Collectors.toSet());
     }
 
+    @SuppressWarnings("serial")
     private Map<TemplateStandard, String> mapClassesWithTemplateStandards(final String aggregateName) {
         return new HashMap<TemplateStandard, String>(){{
             put(AGGREGATE, AGGREGATE.resolveClassname(aggregateName));

@@ -7,6 +7,29 @@
 
 package io.vlingo.xoom.codegen;
 
+import static io.vlingo.xoom.codegen.CodeGenerationLocation.EXTERNAL;
+import static io.vlingo.xoom.codegen.CodeGenerationLocation.INTERNAL;
+import static io.vlingo.xoom.codegen.parameter.Label.COMMAND_MODEL_DATABASE;
+import static io.vlingo.xoom.codegen.parameter.Label.CQRS;
+import static io.vlingo.xoom.codegen.parameter.Label.DATABASE;
+import static io.vlingo.xoom.codegen.parameter.Label.GENERATION_LOCATION;
+import static io.vlingo.xoom.codegen.parameter.Label.QUERY_MODEL_DATABASE;
+import static io.vlingo.xoom.codegen.template.storage.DatabaseType.IN_MEMORY;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.annotation.processing.Filer;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+
 import io.vlingo.xoom.annotation.initializer.contentloader.ContentLoader;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -17,19 +40,6 @@ import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
 import io.vlingo.xoom.codegen.template.storage.Model;
-
-import javax.annotation.processing.Filer;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static io.vlingo.xoom.codegen.CodeGenerationLocation.EXTERNAL;
-import static io.vlingo.xoom.codegen.CodeGenerationLocation.INTERNAL;
-import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.storage.DatabaseType.IN_MEMORY;
 
 public class CodeGenerationContext {
 
@@ -67,6 +77,7 @@ public class CodeGenerationContext {
                         EXTERNAL.name() : INTERNAL.name());
     }
 
+    @SuppressWarnings("rawtypes")
     public CodeGenerationContext contents(final List<ContentLoader> loaders) {
         loaders.stream().filter(ContentLoader::shouldLoad).forEach(loader -> loader.load(this));
         return this;
@@ -92,13 +103,14 @@ public class CodeGenerationContext {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T parameterOf(final Label label) {
         return (T) parameterOf(label, value -> value);
     }
 
     public <T> T parameterOf(final Label label, final Function<String, T> mapper) {
         final String value = parameters.retrieveValue(label);
-        return (T) mapper.apply(value);
+        return mapper.apply(value);
     }
 
     public List<TemplateData> templateParametersOf(final TemplateStandard standard) {
@@ -132,6 +144,7 @@ public class CodeGenerationContext {
         return this;
     }
 
+    @SuppressWarnings("serial")
     public Map<Model, DatabaseType> databases() {
         if(parameterOf(CQRS, Boolean::valueOf)) {
             return new HashMap<Model, DatabaseType>(){{

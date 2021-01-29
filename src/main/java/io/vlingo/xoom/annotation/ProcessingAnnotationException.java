@@ -10,6 +10,7 @@ package io.vlingo.xoom.annotation;
 import javax.lang.model.element.Element;
 
 public class ProcessingAnnotationException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 
     public final Element element;
 

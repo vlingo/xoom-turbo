@@ -7,22 +7,25 @@
 
 package io.vlingo.xoom.codegen.template.model;
 
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.codegen.template.TemplateStandard;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.METHODS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 public class AggregateProtocolTemplateData extends TemplateData {
 
     private final String protocolName;
     private final TemplateParameters parameters;
 
+    @SuppressWarnings("unchecked")
     public AggregateProtocolTemplateData(final String packageName,
                                          final CodeGenerationParameter aggregate) {
         this.protocolName = aggregate.value;

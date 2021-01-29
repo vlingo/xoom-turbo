@@ -12,6 +12,7 @@ import javax.lang.model.element.Modifier;
 
 public interface Validation {
 
+    @SuppressWarnings("rawtypes")
     void validate(final ProcessingEnvironment processingEnvironment,
                   final Class annotation,
                   final AnnotatedElements annotatedElements);
