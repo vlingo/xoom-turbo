@@ -34,7 +34,8 @@ public class TypeRetriever {
 
     public Stream<TypeMirror> subclassesOf(final Class superclass,
                                            final String[] packages) {
-        return Stream.of(packages).map(packageName -> elements.getPackageElement(packageName))
+        return Stream.of(packages).filter(this::isValidPackage)
+                .map(packageName -> elements.getPackageElement(packageName))
                 .flatMap(packageElement -> packageElement.getEnclosedElements().stream())
                 .filter(element -> isSubclass(element, superclass))
                 .map(element -> element.asType());
@@ -88,10 +89,6 @@ public class TypeRetriever {
         return getTypeElement(annotation, retriever).getQualifiedName().toString();
     }
 
-    public List<ExecutableElement> getMethods(final Annotation annotation, final Function<Object, Class<?>> retriever) {
-        return (List<ExecutableElement>)getTypeElement(annotation, retriever).getEnclosedElements();
-    }
-
     public TypeElement getGenericType(final Annotation annotation, final Function<Object, Class<?>> retriever) {
         final DeclaredType declaredType = (DeclaredType)getTypeElement(annotation, retriever).getSuperclass();
         if(declaredType.getTypeArguments().isEmpty()) {
@@ -100,13 +97,12 @@ public class TypeRetriever {
         return (TypeElement)((DeclaredType)declaredType.getTypeArguments().get(0)).asElement();
     }
 
-    public List<Element> getElements(final Annotation annotation, final Function<Object, Class<?>> retriever) {
-        return (List<Element>)getTypeElement(annotation, retriever).getEnclosedElements();
-    }
-
     public TypeElement getTypeElement(final Annotation annotation,
                                        final Function<Object, Class<?>> retriever) {
         return from(annotation, retriever);
     }
 
+    public boolean isValidPackage(final String packageName) {
+        return elements.getPackageElement(packageName) != null;
+    }
 }
