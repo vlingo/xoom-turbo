@@ -25,8 +25,6 @@ public class XoomInitializerGenerator {
 
     private static XoomInitializerGenerator instance;
 
-    public static final String XOOM_INITIALIZER_CLASS_NAME = "XoomInitializer";
-
     private XoomInitializerGenerator() {
     }
 
