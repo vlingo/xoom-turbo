@@ -23,7 +23,7 @@ public class InMemoryJournalActorBuilder implements StoreActorBuilder {
     public <T> T build(final Stage stage,
                         final List<Dispatcher> dispatchers,
                         final Configuration configuration) {
-        return (T) Journal.using(stage, InMemoryJournalActor.class, dispatchers.get(0));
+        return (T) Journal.using(stage, InMemoryJournalActor.class, dispatchers);
     }
 
 //    @SuppressWarnings("unchecked")
