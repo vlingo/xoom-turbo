@@ -21,7 +21,7 @@ public class PathFormatter {
     }
 
     public static String formatRootPath(final String uriRoot) {
-        return removeSurplusesSlashes(String.format("/%s/", uriRoot));
+        return removeSurplusesSlashes(String.format("/%s", uriRoot));
     }
 
     public static String formatRoutePath(final String rootPath, final String routePath) {

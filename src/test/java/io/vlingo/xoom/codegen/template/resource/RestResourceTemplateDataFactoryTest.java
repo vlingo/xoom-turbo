@@ -60,7 +60,7 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertEquals("Author", templateParameters.find(TemplateParameter.MODEL_PROTOCOL));
         Assert.assertEquals("AuthorEntity", templateParameters.find(TemplateParameter.MODEL_ACTOR));
         Assert.assertEquals("QueryModelStateStoreProvider", templateParameters.find(TemplateParameter.STORE_PROVIDER_NAME));
-        Assert.assertEquals("/authors/", templateParameters.find(TemplateParameter.URI_ROOT));
+        Assert.assertEquals("/authors", templateParameters.find(TemplateParameter.URI_ROOT));
         Assert.assertEquals(true, templateParameters.find(TemplateParameter.USE_CQRS));
 
         final QueriesParameter queriesParameter =
@@ -110,7 +110,7 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertEquals("AuthorResource", templateParameters.find(TemplateParameter.REST_RESOURCE_NAME));
         Assert.assertEquals("Author", templateParameters.find(TemplateParameter.MODEL_PROTOCOL));
         Assert.assertEquals("AuthorEntity", templateParameters.find(TemplateParameter.MODEL_ACTOR));
-        Assert.assertEquals("/authors/", templateParameters.find(TemplateParameter.URI_ROOT));
+        Assert.assertEquals("/authors", templateParameters.find(TemplateParameter.URI_ROOT));
         Assert.assertEquals(false, templateParameters.find(TemplateParameter.USE_CQRS));
 
         final QueriesParameter queriesParameter =
