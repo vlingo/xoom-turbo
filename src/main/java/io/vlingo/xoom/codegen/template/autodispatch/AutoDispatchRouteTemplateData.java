@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.StateFieldDetail;
+import io.vlingo.xoom.codegen.template.resource.PathFormatter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class AutoDispatchRouteTemplateData extends TemplateData {
                 TemplateParameters.with(RETRIEVAL_ROUTE, isRetrievalRoute(route))
                         .and(ID_TYPE, StateFieldDetail.typeOf(aggregate, "id"))
                         .and(ROUTE_METHOD, route.retrieveRelatedValue(Label.ROUTE_METHOD))
-                        .and(ROUTE_PATH, route.retrieveRelatedValue(Label.ROUTE_PATH))
+                        .and(ROUTE_PATH, PathFormatter.formatRelativeRoutePath(route))
                         .and(DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
                         .and(ROUTE_MAPPING_VALUE, AutoDispatchMappingValueFormatter.format(route.value))
                         .and(REQUIRE_ENTITY_LOADING, route.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf))

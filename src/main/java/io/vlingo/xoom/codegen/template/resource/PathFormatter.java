@@ -14,17 +14,28 @@ import static io.vlingo.xoom.codegen.parameter.Label.URI_ROOT;
 
 public class PathFormatter {
 
-    public static String formatRoutePath(final CodeGenerationParameter routeParameter) {
+    public static String formatAbsoluteRoutePath(final CodeGenerationParameter routeParameter) {
         final String routePath = routeParameter.retrieveRelatedValue(ROUTE_PATH);
         final String uriRoot = routeParameter.parent().retrieveRelatedValue(URI_ROOT);
-        return formatRoutePath(uriRoot, routePath);
+        return formatAbsoluteRoutePath(uriRoot, routePath);
+    }
+
+    public static String formatRelativeRoutePath(final CodeGenerationParameter routeParameter) {
+        final String routePath = routeParameter.retrieveRelatedValue(ROUTE_PATH);
+        if(routePath.isEmpty() || removeSurplusesSlashes(routePath).equals("/")) {
+            return "";
+        }
+        if(routePath.endsWith("/")) {
+            return routePath.substring(0, routePath.length()-1);
+        }
+        return routePath;
     }
 
     public static String formatRootPath(final String uriRoot) {
         return removeSurplusesSlashes(String.format("/%s", uriRoot));
     }
 
-    public static String formatRoutePath(final String rootPath, final String routePath) {
+    public static String formatAbsoluteRoutePath(final String rootPath, final String routePath) {
         if(routePath.isEmpty() || routePath.equals("/") ){
             return rootPath;
         } else if(!routePath.startsWith(rootPath)) {

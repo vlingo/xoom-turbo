@@ -135,6 +135,7 @@ public class AutoDispatchMappingGenerationStepTest {
         final CodeGenerationParameter withNameRoute =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "withName")
                         .relate(ROUTE_METHOD, "POST")
+                        .relate(ROUTE_PATH, "/")
                         .relate(REQUIRE_ENTITY_LOADING, "false");
 
         final CodeGenerationParameter changeRankRoute =

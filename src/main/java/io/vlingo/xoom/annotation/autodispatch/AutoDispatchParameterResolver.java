@@ -134,7 +134,7 @@ public class AutoDispatchParameterResolver {
 
                 routeParameter.relate(ROUTE_METHOD, routeAnnotation.method())
                         .relate(INTERNAL_ROUTE_HANDLER, internalRouteHandler)
-                        .relate(ROUTE_PATH, PathFormatter.formatRoutePath(uriRoot, routeAnnotation.path()));
+                        .relate(ROUTE_PATH, PathFormatter.formatAbsoluteRoutePath(uriRoot, routeAnnotation.path()));
 
                 if(!internalRouteHandler) {
                     final HandlerInvocation handlerInvocation = handlerResolver.find(routeAnnotation.handler());
