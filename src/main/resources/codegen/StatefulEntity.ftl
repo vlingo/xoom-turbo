@@ -6,6 +6,9 @@ import ${import.qualifiedClassName};
 
 import io.vlingo.lattice.model.stateful.StatefulEntity;
 
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#stateful">StatefulEntity</a>
+ */
 public final class ${entityName} extends StatefulEntity<${stateName}> implements ${aggregateProtocolName} {
   private ${stateName} state;
 

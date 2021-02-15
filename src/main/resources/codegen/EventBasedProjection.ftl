@@ -8,6 +8,12 @@ import io.vlingo.lattice.model.projection.Projectable;
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
 import io.vlingo.symbio.Source;
 
+/**
+ * See
+ * <a href="https://docs.vlingo.io/vlingo-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   StateStoreProjectionActor
+ * </a>
+ */
 public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   private static final ${dataName} Empty = ${dataName}.empty();
 

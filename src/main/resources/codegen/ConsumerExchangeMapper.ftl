@@ -7,6 +7,9 @@ import io.vlingo.common.serialization.JsonSerialization;
 import ${import.qualifiedClassName};
 </#list>
 
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangemapper">ExchangeMapper</a>
+ */
 public class ${exchangeMapperName} implements ExchangeMapper<${localTypeName},String> {
 
   @Override

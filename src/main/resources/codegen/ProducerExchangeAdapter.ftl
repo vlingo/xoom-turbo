@@ -8,6 +8,9 @@ import io.vlingo.lattice.exchange.rabbitmq.Message;
 import ${import.qualifiedClassName};
 </#list>
 
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangeadapter">ExchangeAdapter</a>
+ */
 public class ${exchangeAdapterName} implements ExchangeAdapter<IdentifiedDomainEvent, IdentifiedDomainEvent, Message> {
 
   private static final String SCHEMA_PREFIX = "${schemaGroupName}";

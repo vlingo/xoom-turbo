@@ -9,6 +9,12 @@ import io.vlingo.symbio.Metadata;
 import io.vlingo.symbio.State.TextState;
 import io.vlingo.symbio.StateAdapter;
 
+/**
+ * See
+ * <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#stateadapter-and-stateadapterprovider">
+ *   StateAdapter and StateAdapterProvider
+ * </a>
+ */
 public final class ${adapterName} implements StateAdapter<${sourceName},TextState> {
 
   @Override

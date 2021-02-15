@@ -6,6 +6,9 @@ import ${import.qualifiedClassName};
 
 import io.vlingo.lattice.model.sourcing.EventSourced;
 
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#sourced">EventSourced</a>
+ */
 public final class ${entityName} extends EventSourced implements ${aggregateProtocolName} {
   private ${stateName} state;
 
