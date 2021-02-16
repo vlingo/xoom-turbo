@@ -6,6 +6,9 @@ import io.vlingo.lattice.exchange.MessageParameters;
 import io.vlingo.lattice.exchange.rabbitmq.Message;
 import io.vlingo.lattice.model.IdentifiedDomainEvent;
 
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangemapper">ExchangeMapper</a>
+ */
 public class ${exchangeMapperName} implements ExchangeMapper<IdentifiedDomainEvent, Message> {
 
   @Override
