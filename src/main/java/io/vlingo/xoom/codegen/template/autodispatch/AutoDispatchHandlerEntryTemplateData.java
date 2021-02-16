@@ -13,13 +13,14 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat;
+import io.vlingo.xoom.codegen.template.model.AggregateDetail;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.FACTORY_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
+import static io.vlingo.xoom.codegen.parameter.Label.READ_ONLY;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
@@ -37,7 +38,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
     private AutoDispatchHandlerEntryTemplateData(final CodeGenerationParameter route) {
         final CodeGenerationParameter aggregate = route.parent(AGGREGATE);
-        final CodeGenerationParameter method = findMethod(aggregate, route);
+        final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregate, route.value);
         final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
 
         this.parameters =
@@ -49,13 +50,6 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
                         .and(INDEX_NAME, AutoDispatchMappingValueFormatter.format(route.value))
                         .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method));
-    }
-
-    private CodeGenerationParameter findMethod(final CodeGenerationParameter aggregate,
-                                               final CodeGenerationParameter route) {
-        return aggregate.retrieveAllRelated(AGGREGATE_METHOD)
-                .filter(method -> method.value.equals(route.value))
-                .findFirst().get();
     }
 
     private String resolveMethodInvocationParameters(final CodeGenerationParameter method) {
