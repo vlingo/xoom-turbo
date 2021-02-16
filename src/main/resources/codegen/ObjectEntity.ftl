@@ -6,6 +6,10 @@ import java.util.List;
 import io.vlingo.common.Completes;
 import io.vlingo.lattice.model.object.ObjectEntity;
 
+/**
+ * See
+ * <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#entity-types">Entity Types</a>
+ */
 public final class ${entityName} extends ObjectEntity<${stateName}> implements ${aggregateProtocolName} {
   private ${stateName} state;
 
