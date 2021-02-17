@@ -16,9 +16,11 @@ import java.util.stream.Stream;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+<#if imports?has_content>
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
+</#if>
 
 /**
  * See
