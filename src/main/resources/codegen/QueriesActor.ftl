@@ -11,6 +11,9 @@ import io.vlingo.symbio.store.state.StateStore;
 import ${import.qualifiedClassName};
 </#list>
 
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#querying-a-statestore">Querying a StateStore</a>
+ */
 public class ${queriesActorName} extends StateStoreQueryActor implements ${queriesName} {
 
   public ${queriesActorName}(StateStore store) {

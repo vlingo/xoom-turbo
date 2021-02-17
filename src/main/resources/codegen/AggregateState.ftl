@@ -5,6 +5,9 @@ public final class ${stateName} {
 <#else>
 import io.vlingo.symbio.store.object.StateObject;
 
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-symbio/object-storage">Object Storage</a>
+ */
 public final class ${stateName} extends StateObject {
 </#if>
 

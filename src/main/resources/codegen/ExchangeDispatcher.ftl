@@ -20,6 +20,12 @@ import java.util.stream.Collectors;
 import ${import.qualifiedClassName};
 </#list>
 
+/**
+ * See
+ * <a href="https://docs.vlingo.io/vlingo-lattice/projections#dispatcher-and-projectiondispatcher">
+ *   Dispatcher and ProjectionDispatcher
+ * </a>
+ */
 public class ExchangeDispatcher implements Dispatcher<Dispatchable<Entry<String>, State<String>>>, ConfirmDispatchedResultInterest {
   private static final Logger logger = LoggerFactory.getLogger(ExchangeDispatcher.class);
 

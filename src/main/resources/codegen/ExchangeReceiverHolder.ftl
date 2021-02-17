@@ -11,6 +11,9 @@ import ${import.qualifiedClassName};
 public class ${exchangeReceiverHolderName} {
 
 <#list exchangeReceivers as receiver>
+  /**
+   * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
+   */
   static class ${receiver.schemaTypeName} implements ExchangeReceiver<${receiver.localTypeName}> {
 
     private final Stage stage;

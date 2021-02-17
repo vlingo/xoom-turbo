@@ -22,6 +22,9 @@ import io.vlingo.actors.Logger;
 import io.vlingo.xoom.annotation.autodispatch.Handler;
 </#if>
 
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-xoom/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
+ */
 <#if useAutoDispatch>
 public class ${resourceName} extends DynamicResourceHandler implements ${autoDispatchMappingName} {
 <#else>

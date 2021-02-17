@@ -9,8 +9,14 @@ import io.vlingo.symbio.BaseEntry.TextEntry;
 import io.vlingo.symbio.EntryAdapter;
 import io.vlingo.symbio.Metadata;
 
+/**
+ * See
+ * <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#entryadapter-and-entryadapterprovider">
+ *   EntryAdapter and EntryAdapterProvider
+ * </a>
+ */
 public final class ${adapterName} implements EntryAdapter<${sourceName},TextEntry> {
-  
+
   @Override
   public ${sourceName} fromEntry(final TextEntry entry) {
     return JsonSerialization.deserialized(entry.entryData(), entry.typed());

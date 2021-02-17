@@ -7,6 +7,12 @@ import ${import.qualifiedClassName};
 import io.vlingo.lattice.model.projection.Projectable;
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
 
+/**
+ * See
+ * <a href="https://docs.vlingo.io/vlingo-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   Implementing With the StateStoreProjectionActor
+ * </a>
+ */
 public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   private String becauseOf;
 
