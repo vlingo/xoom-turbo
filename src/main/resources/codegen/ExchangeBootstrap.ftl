@@ -63,11 +63,16 @@ public class ExchangeBootstrap {
   }
 
   private ExchangeBootstrap(final Exchange ...exchanges) {
+    <#if producerExchanges?has_content>
     this.dispatcher = new ExchangeDispatcher(exchanges);
+    <#else>
+    this.dispatcher = new io.vlingo.symbio.store.dispatch.NoOpDispatcher();
+    </#if>
   }
 
   public Dispatcher dispatcher() {
     return dispatcher;
   }
+
 
 }
