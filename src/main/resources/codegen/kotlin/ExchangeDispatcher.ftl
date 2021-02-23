@@ -49,7 +49,7 @@ public class ExchangeDispatcher : Dispatcher<Dispatchable<Entry<String>, State<S
   public override fun dispatch(dispatchable: Dispatchable<Entry<String>, State<String>>) {
     logger.debug("Going to dispatch id {}", dispatchable.id())
 
-    for (val entry : dispatchable.entries()) {
+    for (entry in dispatchable.entries()) {
       this.send(JsonSerialization.deserialized(entry.entryData(), entry.typed()))
     }
 

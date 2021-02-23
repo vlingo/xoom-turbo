@@ -33,7 +33,7 @@ public class ${projectionName} : StateStoreProjectionActor<${dataName}> {
       previousData = currentData
     }
 
-    for (val event : sources()) {
+    for (event in sources()) {
       when (${projectionSourceTypesName}.valueOf(event.typeName())) {
       <#list sourceNames as source>
         ${source} -> return ${dataName}.empty()   // TODO: implement actual merge
