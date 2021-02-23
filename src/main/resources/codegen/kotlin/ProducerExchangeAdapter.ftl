@@ -33,7 +33,7 @@ public class ${exchangeAdapterName} : ExchangeAdapter<IdentifiedDomainEvent, Ide
     if(!exchangeMessage.javaClass.equals(Message::class.java)) {
       return false
     }
-    val schemaName = ((Message) exchangeMessage).messageParameters.typeName()
+    val schemaName = (exchangeMessage as Message).messageParameters.typeName()
     return schemaName.startsWith(SCHEMA_PREFIX)
   }
 

@@ -33,7 +33,7 @@ public class ${exchangeAdapterName} : ExchangeAdapter<${localTypeName}, String, 
     if(!exchangeMessage.javaClass.equals(Message::class.java)) {
       return false
     }
-    val schemaName = ((Message) exchangeMessage).messageParameters.typeName()
+    val schemaName = (exchangeMessage as Message).messageParameters.typeName()
     return supportedSchemaName.equalsIgnoreCase(schemaName)
   }
 
