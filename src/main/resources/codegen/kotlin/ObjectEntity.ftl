@@ -19,7 +19,7 @@ public class ${entityName} : ObjectEntity<${stateName}>, ${aggregateProtocolName
 
   public fun definePlaceholder(value: String): Completes<${stateName}> {
     state.withPlaceholderValue(value)
-    return apply(state, ${domainEventName}(state.id, value), () -> state)
+    return apply(state, ${domainEventName}(state.id, value)){state}
   }
 
   //=====================================

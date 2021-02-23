@@ -27,7 +27,7 @@ public class ${exchangeReceiverHolderName} {
       ${receiver.modelProtocol}.${receiver.modelMethod}(${receiver.modelMethodParameters})
       <#else>
       stage.actorOf(${receiver.modelProtocol}::class.java, stage.addressFactory().from(data.id), Definition.has(${receiver.modelActor}::class.java, Definition.parameters(data.id)))
-              .andFinallyConsume(${receiver.modelVariable} -> ${receiver.modelVariable}.${receiver.modelMethod}(${receiver.modelMethodParameters}))
+              .andFinallyConsume{${receiver.modelVariable} -> ${receiver.modelVariable}.${receiver.modelMethod}(${receiver.modelMethodParameters})}
       </#if>
     }
   }

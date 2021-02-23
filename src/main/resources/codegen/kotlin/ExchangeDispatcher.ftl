@@ -65,17 +65,17 @@ public class ExchangeDispatcher : Dispatcher<Dispatchable<Entry<String>, State<S
   }
 
   fun send(event: Object) {
-    this.findInterestedIn(event).forEach(exchange -> exchange.send(event))
+    this.findInterestedIn(event).forEach{exchange -> exchange.send(event)}
   }
 
   fun findInterestedIn(event: Object): Stream<Exchange> {
     val exchangeNames: Set<String> =
-          eventsByExchangeName.entrySet().stream().filter(exchange -> {
+          eventsByExchangeName.entrySet().stream().filter{exchange ->
              val events: Set<String> = exchange.getValue()
-             return events.contains(event.getClass().getCanonicalName())
-         }).map(Map.Entry::getKey).collect(Collectors.toSet())
+             events.contains(event.getClass().getCanonicalName())
+         }.map(Map.Entry::getKey).collect(Collectors.toSet())
 
-    return this.producerExchanges.stream().filter(exchange -> exchangeNames.contains(exchange.name()))
+    return this.producerExchanges.stream().filter{exchange -> exchangeNames.contains(exchange.name())}
   }
 
 }
