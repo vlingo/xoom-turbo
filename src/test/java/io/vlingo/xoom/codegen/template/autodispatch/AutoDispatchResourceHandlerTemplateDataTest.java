@@ -48,7 +48,7 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
 
     private void assertAuthorResource(final List<TemplateData> templatesData) {
         final TemplateData resourceHandlerData =
-                templatesData.stream().filter(data -> data.filename().endsWith("AuthorResourceHandler.java")).findFirst().get();
+                templatesData.stream().filter(data -> data.filename().endsWith("AuthorResourceHandler")).findFirst().get();
 
         Assert.assertEquals("/authors", resourceHandlerData.parameters().find(TemplateParameter.URI_ROOT));
         Assert.assertEquals("io.vlingo.xoomapp.resources", resourceHandlerData.parameters().find(TemplateParameter.PACKAGE_NAME));
@@ -94,7 +94,7 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
 
     private void assertBookResource(final List<TemplateData> templatesData) {
         final TemplateData resourceHandlerData =
-                templatesData.stream().filter(data -> data.filename().endsWith("BookResourceHandler.java")).findFirst().get();
+                templatesData.stream().filter(data -> data.filename().endsWith("BookResourceHandler")).findFirst().get();
 
         Assert.assertEquals("/books", resourceHandlerData.parameters().find(TemplateParameter.URI_ROOT));
         Assert.assertEquals("io.vlingo.xoomapp.resources", resourceHandlerData.parameters().find(TemplateParameter.PACKAGE_NAME));

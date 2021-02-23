@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.Language;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.storage.QueriesTemplateDataFactory;
 import org.junit.Assert;
@@ -45,7 +46,7 @@ public class AutoDispatchMappingGenerationStepTest {
         QueriesTemplateDataFactory.from(persistencePackage, true, Arrays.asList(contents())).stream()
                 .forEach(data -> {
                     final String packageName = data.parameters().find(PACKAGE_NAME);
-                    context.registerTemplateProcessing(data, "package " + packageName + ";");
+                    context.registerTemplateProcessing(Language.JAVA, data, "package " + packageName + ";");
                 });
 
         new AutoDispatchMappingGenerationStep().process(context);

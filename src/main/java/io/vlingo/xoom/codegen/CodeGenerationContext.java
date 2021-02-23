@@ -7,39 +7,30 @@
 
 package io.vlingo.xoom.codegen;
 
-import static io.vlingo.xoom.codegen.CodeGenerationLocation.EXTERNAL;
-import static io.vlingo.xoom.codegen.CodeGenerationLocation.INTERNAL;
-import static io.vlingo.xoom.codegen.parameter.Label.COMMAND_MODEL_DATABASE;
-import static io.vlingo.xoom.codegen.parameter.Label.CQRS;
-import static io.vlingo.xoom.codegen.parameter.Label.DATABASE;
-import static io.vlingo.xoom.codegen.parameter.Label.GENERATION_LOCATION;
-import static io.vlingo.xoom.codegen.parameter.Label.QUERY_MODEL_DATABASE;
-import static io.vlingo.xoom.codegen.template.storage.DatabaseType.IN_MEMORY;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.annotation.processing.Filer;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
-
 import io.vlingo.xoom.annotation.initializer.contentloader.ContentLoader;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.Language;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
 import io.vlingo.xoom.codegen.template.storage.Model;
+
+import javax.annotation.processing.Filer;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static io.vlingo.xoom.codegen.CodeGenerationLocation.EXTERNAL;
+import static io.vlingo.xoom.codegen.CodeGenerationLocation.INTERNAL;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.template.storage.DatabaseType.IN_MEMORY;
 
 public class CodeGenerationContext {
 
@@ -118,8 +109,8 @@ public class CodeGenerationContext {
                 .collect(Collectors.toList());
     }
 
-    public void registerTemplateProcessing(final TemplateData templateData, final String text) {
-        this.addContent(templateData.standard(), new TemplateFile(this, templateData), text);
+    public void registerTemplateProcessing(final Language language, final TemplateData templateData, final String text) {
+        this.addContent(templateData.standard(), new TemplateFile(this, templateData, language), text);
         this.templatesData.add(templateData);
     }
 

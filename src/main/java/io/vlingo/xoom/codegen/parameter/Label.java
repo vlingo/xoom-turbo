@@ -74,7 +74,8 @@ public enum Label {
     SCHEMA_GROUP("schemaGroup"),
     RECEIVER("receiver"),
     MODEL_METHOD("modelMethod"),
-    ROLE("role");
+    ROLE("role"),
+    LANGUAGE("language");
 
     @SuppressWarnings("unused")
     private final String key;

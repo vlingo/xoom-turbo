@@ -118,7 +118,7 @@ public class ProjectionTemplateDataFactoryTest {
             Assert.assertEquals(expectedName, projectionTemplateDataParameters.find(PROJECTION_NAME));
             Assert.assertEquals(expectedStateName, projectionTemplateDataParameters.find(STATE_NAME));
             Assert.assertTrue(projectionTemplateDataParameters.hasImport(expectedStaticEventTypes));
-            Assert.assertEquals(expectedName + ".java", projectionTemplateData.filename());
+            Assert.assertEquals(expectedName, projectionTemplateData.filename());
         });
     }
 

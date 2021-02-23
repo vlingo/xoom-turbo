@@ -37,7 +37,7 @@ public class DataObjectTemplateDataTest {
         Assert.assertEquals(2, templatesData.size());
 
         final TemplateParameters authorDataParameters =
-                templatesData.stream().filter(data -> data.filename().equals("AuthorData.java"))
+                templatesData.stream().filter(data -> data.filename().equals("AuthorData"))
                         .map(TemplateData::parameters).findFirst().get();
 
         Assert.assertEquals("0", authorDataParameters.find(DEFAULT_ID));

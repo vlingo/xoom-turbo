@@ -22,9 +22,11 @@ public class TemplateFile {
     private final boolean placeholder;
 
     public TemplateFile(final CodeGenerationContext context,
-                        final TemplateData templateData) {
+                        final TemplateData templateData,
+                        final Language language) {
         this(context.isInternalGeneration() ? "" : FileLocationResolver.from(context, templateData),
-                templateData.filename(), templateData.parameters().find(OFFSET), templateData.isPlaceholder());
+                language.formatFilename(templateData.filename()), templateData.parameters().find(OFFSET),
+                templateData.isPlaceholder());
     }
 
     public TemplateFile(final String absolutePath,

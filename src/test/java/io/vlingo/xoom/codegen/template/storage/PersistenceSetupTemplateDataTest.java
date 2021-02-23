@@ -99,7 +99,7 @@ public class PersistenceSetupTemplateDataTest {
         Assert.assertEquals("BookProjectionActor", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getActor());
         Assert.assertEquals("BookRented.class, BookPurchased.class", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getCauses());
         Assert.assertEquals(true, persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).isLast());
-        Assert.assertEquals("PersistenceSetup.java", persistenceSetupData.filename());
+        Assert.assertEquals("PersistenceSetup", persistenceSetupData.filename());
         Assert.assertEquals("AuthorData.class, BookData.class", persistenceSetupParameters.find(DATA_OBJECTS));
         Assert.assertEquals(true, persistenceSetupParameters.find(REQUIRE_ADAPTERS));
         Assert.assertEquals(true, persistenceSetupParameters.find(USE_PROJECTIONS));

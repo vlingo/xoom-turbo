@@ -144,8 +144,6 @@ public enum TemplateStandard {
     EXCHANGE_DISPATCHER(parameters -> Template.EXCHANGE_DISPATCHER.filename,
             (name, parameters) -> "ExchangeDispatcher");
 
-    private static final String DEFAULT_FILE_EXTENSION = ".java";
-
     private final Function<TemplateParameters, String> templateFileRetriever;
     private final BiFunction<String, TemplateParameters, String> nameResolver;
 
@@ -184,8 +182,7 @@ public enum TemplateStandard {
     }
 
     public String resolveFilename(final String name, final TemplateParameters parameters) {
-        final String fileName = this.nameResolver.apply(name, parameters);
-        return fileName.contains(".") ? fileName : fileName + DEFAULT_FILE_EXTENSION;
+        return this.nameResolver.apply(name, parameters);
     }
 
 }

@@ -31,17 +31,16 @@ public class ModelTemplateDataFactoryTest {
         Assert.assertEquals("Author", templatesData.get(0).parameters().find(AGGREGATE_PROTOCOL_NAME));
         Assert.assertEquals(JOURNAL, templatesData.get(1).parameters().find(STORAGE_TYPE));
         Assert.assertEquals("io.vlingo.xoomapp.model.author", templatesData.get(1).parameters().find(PACKAGE_NAME));
-        Assert.assertEquals("Author.java", templatesData.get(0).filename());
-        Assert.assertEquals("AuthorEntity.java", templatesData.get(1).filename());
-        Assert.assertEquals("AuthorState.java", templatesData.get(2).filename());
+        Assert.assertEquals("AuthorEntity", templatesData.get(1).filename());
+        Assert.assertEquals("AuthorState", templatesData.get(2).filename());
 
         Assert.assertEquals("AuthorRegistered", templatesData.get(3).parameters().find(DOMAIN_EVENT_NAME));
         Assert.assertEquals("io.vlingo.xoomapp.model.author", templatesData.get(3).parameters().find(PACKAGE_NAME));
-        Assert.assertEquals("AuthorRegistered.java", templatesData.get(3).filename());
+        Assert.assertEquals("AuthorRegistered", templatesData.get(3).filename());
 
         Assert.assertEquals("AuthorRanked", templatesData.get(4).parameters().find(DOMAIN_EVENT_NAME));
         Assert.assertEquals("io.vlingo.xoomapp.model.author", templatesData.get(4).parameters().find(PACKAGE_NAME));
-        Assert.assertEquals("AuthorRanked.java", templatesData.get(4).filename());
+        Assert.assertEquals("AuthorRanked", templatesData.get(4).filename());
 
 
 //        Assert.assertEquals("Book", templatesData.get(6).parameters().find(AGGREGATE_PROTOCOL_NAME));
