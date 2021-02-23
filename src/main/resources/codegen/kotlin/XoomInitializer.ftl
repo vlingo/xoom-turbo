@@ -80,8 +80,8 @@ public class XoomInitializer : XoomInitializationAware {
 
     val resources: Array<Resource> =
             Stream.of(sseResources, feedResources, staticResources, restResources)
-                    .flatMap(Collection::stream).collect(Collectors.toList())
-                    .toArray(Array<Resource<?>>{})
+                    .flatMap{it.stream()}
+                    .toArray{size -> arrayOfNulls<Resource<*>>(size)}
 
     server = Server.startWith(stage, Resources.are(resources), serverConfiguration.port(), serverConfiguration.sizing(), serverConfiguration.timing())
 
