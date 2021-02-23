@@ -72,7 +72,7 @@ public class ExchangeDispatcher : Dispatcher<Dispatchable<Entry<String>, State<S
     val exchangeNames: Set<String> =
           eventsByExchangeName.entrySet().stream().filter{exchange ->
              val events: Set<String> = exchange.getValue()
-             events.contains(event.getClass().getCanonicalName())
+             events.contains(event.javaClass.getCanonicalName())
          }.map(Map.Entry::getKey).collect(Collectors.toSet())
 
     return this.producerExchanges.stream().filter{exchange -> exchangeNames.contains(exchange.name())}

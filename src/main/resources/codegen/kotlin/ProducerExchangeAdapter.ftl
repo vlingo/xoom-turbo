@@ -30,7 +30,7 @@ public class ${exchangeAdapterName} : ExchangeAdapter<IdentifiedDomainEvent, Ide
   }
 
   public override fun supports(exchangeMessage: Object): boolean {
-    if(!exchangeMessage.getClass().equals(Message::class.java)) {
+    if(!exchangeMessage.javaClass.equals(Message::class.java)) {
       return false
     }
     val schemaName = ((Message) exchangeMessage).messageParameters.typeName()
@@ -39,7 +39,7 @@ public class ${exchangeAdapterName} : ExchangeAdapter<IdentifiedDomainEvent, Ide
 
   fun resolveFullSchemaReference(event: IdentifiedDomainEvent): String {
     val semanticVersion = SemanticVersion.toString(event.sourceTypeVersion)
-    return String.format("%s:%s:%s", SCHEMA_PREFIX, event.getClass().getSimpleName(), semanticVersion)
+    return String.format("%s:%s:%s", SCHEMA_PREFIX, event.javaClass.getSimpleName(), semanticVersion)
   }
 
 }

@@ -30,7 +30,7 @@ public class ${exchangeAdapterName} : ExchangeAdapter<${localTypeName}, String, 
   }
 
   public override boolean supports(exchangeMessage: Object) {
-    if(!exchangeMessage.getClass().equals(Message::class.java)) {
+    if(!exchangeMessage.javaClass.equals(Message::class.java)) {
       return false
     }
     val schemaName = ((Message) exchangeMessage).messageParameters.typeName()
