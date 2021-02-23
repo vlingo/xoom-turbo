@@ -34,13 +34,11 @@ public class ${projectionName} : StateStoreProjectionActor<${dataName}> {
       previousData = currentData
     }
 
-    switch (${projectionSourceTypesName}.valueOf(becauseOf)) {
+    when (${projectionSourceTypesName}.valueOf(becauseOf)) {
       <#list sourceNames as source>
-      case ${source}:
-        return ${dataName}.empty()   // TODO: implement actual merge
+      ${source} -> return ${dataName}.empty()   // TODO: implement actual merge
       </#list>
-      default:
-        merged = currentData
+      else -> merged = currentData
     }
 
     return merged

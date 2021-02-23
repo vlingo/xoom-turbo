@@ -34,14 +34,11 @@ public class ${projectionName} : StateStoreProjectionActor<${dataName}> {
     }
 
     for (val event : sources()) {
-      switch (${projectionSourceTypesName}.valueOf(event.typeName())) {
+      when (${projectionSourceTypesName}.valueOf(event.typeName())) {
       <#list sourceNames as source>
-        case ${source}:
-          return ${dataName}.empty()   // TODO: implement actual merge
+        ${source} -> return ${dataName}.empty()   // TODO: implement actual merge
       </#list>
-        default:
-          logger().warn("Event of type " + event.typeName() + " was not matched.")
-          break
+        else -> logger().warn("Event of type " + event.typeName() + " was not matched.")
       }
     }
 
