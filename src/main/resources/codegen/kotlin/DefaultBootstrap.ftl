@@ -72,22 +72,21 @@ public class Bootstrap {
     }
     instance.server.stop()
   }
+}
 
-  @JvmStatic
-  fun main(args: Array<String>) {
-    println("=========================")
-    println("service: ${appName}.")
-    println("=========================")
+fun main(args: Array<String>) {
+  println("=========================")
+  println("service: ${appName}.")
+  println("=========================")
 
-    var port: Int
+  var port: Int
 
-    try {
-      port = Integer.parseInt(args[0])
-    } catch (Exception e) {
-      port = DefaultPort
-      println("${appName}: Command line does not provide a valid port; defaulting to: " + port)
-    }
+  try {
+    port = Integer.parseInt(args[0])
+  } catch (Exception e) {
+    port = DefaultPort
+    println("${appName}: Command line does not provide a valid port; defaulting to: " + port)
+  }
 
-    instance = Bootstrap(port)
-    }
+  Bootstrap.instance = Bootstrap(port)
 }

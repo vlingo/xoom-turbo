@@ -26,7 +26,7 @@ public class XoomInitializer : XoomInitializationAware {
   companion object {
     val DEFAULT_PORT = 18080
 
-    val instance: XoomInitializer
+    var instance: XoomInitializer
 
     public fun instance(): XoomInitializer {
       return instance
@@ -95,15 +95,13 @@ public class XoomInitializer : XoomInitializationAware {
     })
   }
 
-  @JvmStatic
-  public fun main(args: Array<String>) {
-    println("=========================")
-    println("service: ${appName}.")
-    println("=========================")
-    instance = XoomInitializer(args)
-  }
-
   public void onInit(stage: Stage) {
   }
+}
 
+fun main(args: Array<String>) {
+  println("=========================")
+  println("service: ${appName}.")
+  println("=========================")
+  XoomInitializer.instance = XoomInitializer(args)
 }
