@@ -6,27 +6,28 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom;
 
-import io.vlingo.actors.World;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
-public class BootTest {
+import org.junit.Test;
+
+import io.vlingo.actors.World;
+
+public class XoomTest {
 
     private static final String BootWorldName = "test-boot";
 
     @Test
     public void testThatWorldBoots() {
-        Boot.main(new String[] { BootWorldName });
+        Xoom.main(new String[] { BootWorldName });
 
-        final World world = Boot.xoomBootWorld();
+        final World world = Xoom.xoom().world();
 
         assertEquals(BootWorldName, world.name());
     }
 
     @Test
     public void testThatWorldStarts() {
-        final World world = Boot.start(BootWorldName);
+        final World world = Xoom.start(BootWorldName).world();
 
         assertEquals(BootWorldName, world.name());
     }
