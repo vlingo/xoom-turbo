@@ -37,6 +37,7 @@ public class DatabaseParametersTest {
         Assert.assertEquals("vlingo_test", parameters.username);
         Assert.assertEquals("vlingo123", parameters.password);
         Assert.assertEquals("MAIN", parameters.originator);
+        Assert.assertEquals("5", parameters.attempts);
         Assert.assertTrue(parameters.autoCreate);
     }
 
