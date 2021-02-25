@@ -110,13 +110,13 @@ public class DatabaseParameters {
 
     private Configuration tryToCreateConfiguration() throws InterruptedException {
         int failedAttempts = 1;
-        IllegalStateException connectionException = null;
+        StorageException connectionException = null;
         final Integer maximumAttempts = attempts == null ? 1 : Integer.valueOf(attempts);
         while(failedAttempts <= maximumAttempts) {
             try {
                 System.out.println("Database connection attempt #" + failedAttempts);
                 return Database.from(database).mapper.apply(this);
-            } catch (final IllegalStateException exception) {
+            } catch (final StorageException exception) {
                 connectionException = exception;
                 Thread.sleep(2000);
                 failedAttempts++;
