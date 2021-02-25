@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.storage;
 
+import io.vlingo.symbio.store.StorageException;
 import io.vlingo.symbio.store.common.jdbc.Configuration;
 import io.vlingo.xoom.ApplicationProperty;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -99,11 +100,15 @@ public class DatabaseParameters {
     }
 
     public Configuration mapToConfiguration() {
-        validate();
-        return tryToCreateConfiguration();
+        try {
+            validate();
+            return tryToCreateConfiguration();
+        } catch (final InterruptedException e) {
+            throw new StorageException(null, "Unable to connect to the database", e);
+        }
     }
 
-    private Configuration tryToCreateConfiguration() {
+    private Configuration tryToCreateConfiguration() throws InterruptedException {
         int failedAttempts = 1;
         IllegalStateException connectionException = null;
         final Integer maximumAttempts = attempts == null ? 1 : Integer.valueOf(attempts);
@@ -113,6 +118,7 @@ public class DatabaseParameters {
                 return Database.from(database).mapper.apply(this);
             } catch (final IllegalStateException exception) {
                 connectionException = exception;
+                Thread.sleep(2000);
                 failedAttempts++;
             }
         }
