@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.Language;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import org.junit.Assert;
 import org.junit.Test;
@@ -52,6 +53,36 @@ public class RestResourceGenerationStepTest {
         Assert.assertTrue(contents.get(7).contains("Author.withName(stage(), data.name)"));
         Assert.assertTrue(contents.get(7).contains("package io.vlingo.xoomapp.infrastructure.resource;"));
         Assert.assertTrue(contents.get(7).contains("return stage().actorOf(Author.class, stage().addressFactory().from(id), Definition.has(AuthorEntity.class, Definition.parameters(id)));"));
+    }
+
+    @Test
+    public void testRestResourceGenerationOnKotlin() {
+        final CodeGenerationParameter packageParameter =
+                CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp");
+
+        final CodeGenerationParameter useCQRSParameter =
+                CodeGenerationParameter.of(CQRS, "true");
+
+        final CodeGenerationParameter languageParameter =
+                CodeGenerationParameter.of(Label.LANGUAGE, Language.KOTLIN);
+
+        final CodeGenerationParameters parameters =
+                CodeGenerationParameters.from(packageParameter,
+                        useCQRSParameter, languageParameter,
+                        authorAggregate());
+
+        final CodeGenerationContext context =
+                CodeGenerationContext.with(parameters).contents(contents());
+
+        new RestResourceGenerationStep().process(context);
+
+        final List<Content> contents = context.contents();
+        Assert.assertEquals(8, contents.size());
+        Assert.assertEquals("AuthorResource", contents.get(7).retrieveClassName());
+        Assert.assertTrue(contents.get(7).contains("class AuthorResource : DynamicResourceHandler"));
+        Assert.assertTrue(contents.get(7).contains("Author.withName(stage(), data.name)"));
+        Assert.assertTrue(contents.get(7).contains("package io.vlingo.xoomapp.infrastructure.resource"));
+        Assert.assertTrue(contents.get(7).contains("return stage().actorOf(Author::class.java, stage().addressFactory().from(id), Definition.has(AuthorEntity::class.java, Definition.parameters(id)))"));
     }
 
     private CodeGenerationParameter authorAggregate() {
