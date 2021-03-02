@@ -9,10 +9,10 @@ package io.vlingo.xoom.codegen;
 
 import io.vlingo.xoom.annotation.initializer.contentloader.ContentLoader;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.template.Language;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -135,19 +135,6 @@ public class CodeGenerationContext {
         return this;
     }
 
-    @SuppressWarnings("serial")
-    public Map<Model, DatabaseType> databases() {
-        if(parameterOf(CQRS, Boolean::valueOf)) {
-            return new HashMap<Model, DatabaseType>(){{
-                put(Model.COMMAND, parameterOf(COMMAND_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
-                put(Model.QUERY, parameterOf(QUERY_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
-            }};
-        }
-        return new HashMap<Model, DatabaseType>(){{
-            put(Model.DOMAIN, parameterOf(DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
-        }};
-    }
-
     public boolean isInternalGeneration() {
         return parameterOf(GENERATION_LOCATION, CodeGenerationLocation::valueOf).isInternal();
     }
@@ -167,5 +154,25 @@ public class CodeGenerationContext {
 
     public CodeGenerationParameters parameters() {
         return parameters;
+    }
+
+    public Language language() {
+        if(hasParameter(LANGUAGE)) {
+            return parameterOf(Label.LANGUAGE, Language::valueOf);
+        }
+        return Language.findDefault();
+    }
+
+    @SuppressWarnings("serial")
+    public Map<Model, DatabaseType> databases() {
+        if(parameterOf(CQRS, Boolean::valueOf)) {
+            return new HashMap<Model, DatabaseType>(){{
+                put(Model.COMMAND, parameterOf(COMMAND_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
+                put(Model.QUERY, parameterOf(QUERY_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
+            }};
+        }
+        return new HashMap<Model, DatabaseType>(){{
+            put(Model.DOMAIN, parameterOf(DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
+        }};
     }
 }

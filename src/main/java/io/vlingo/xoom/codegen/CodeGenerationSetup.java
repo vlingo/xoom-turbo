@@ -7,30 +7,19 @@
 
 package io.vlingo.xoom.codegen;
 
-import static io.vlingo.xoom.codegen.template.Template.ENTRY_ADAPTER;
-import static io.vlingo.xoom.codegen.template.Template.EVENT_BASED_PROJECTION;
-import static io.vlingo.xoom.codegen.template.Template.EVENT_SOURCE_ENTITY;
-import static io.vlingo.xoom.codegen.template.Template.EVENT_SOURCE_ENTITY_METHOD;
-import static io.vlingo.xoom.codegen.template.Template.JOURNAL_PROVIDER;
-import static io.vlingo.xoom.codegen.template.Template.OBJECT_ENTITY;
-import static io.vlingo.xoom.codegen.template.Template.OBJECT_STORE_PROVIDER;
-import static io.vlingo.xoom.codegen.template.Template.OPERATION_BASED_PROJECTION;
-import static io.vlingo.xoom.codegen.template.Template.STATEFUL_ENTITY;
-import static io.vlingo.xoom.codegen.template.Template.STATEFUL_ENTITY_METHOD;
-import static io.vlingo.xoom.codegen.template.Template.STATE_ADAPTER;
-import static io.vlingo.xoom.codegen.template.Template.STATE_STORE_PROVIDER;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
+import java.util.*;
+
+import static io.vlingo.xoom.codegen.template.Template.*;
+
 public class CodeGenerationSetup {
 
-    @SuppressWarnings("serial")
+  public static final List<String> KOTLIN_RESERVED_WORDS = Arrays.asList("object", "public", "get", "set");
+
+  @SuppressWarnings("serial")
     public static final Map<StorageType, String> AGGREGATE_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
@@ -40,7 +29,7 @@ public class CodeGenerationSetup {
                     }}
             );
 
-    @SuppressWarnings("serial")
+  @SuppressWarnings("serial")
     public static final Map<StorageType, String> AGGREGATE_METHOD_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
@@ -50,7 +39,7 @@ public class CodeGenerationSetup {
                     }}
             );
 
-    @SuppressWarnings("serial")
+  @SuppressWarnings("serial")
     public static final Map<StorageType, String> ADAPTER_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
@@ -60,7 +49,7 @@ public class CodeGenerationSetup {
                     }}
             );
 
-    @SuppressWarnings("serial")
+  @SuppressWarnings("serial")
     public static final Map<ProjectionType, String> PROJECTION_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<ProjectionType, String>(){{
@@ -69,7 +58,7 @@ public class CodeGenerationSetup {
                     }}
             );
 
-    @SuppressWarnings("serial")
+  @SuppressWarnings("serial")
     private static final Map<StorageType, String> COMMAND_MODEL_STORE_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
@@ -79,7 +68,7 @@ public class CodeGenerationSetup {
                     }}
             );
 
-    @SuppressWarnings("serial")
+  @SuppressWarnings("serial")
     private static final Map<StorageType, String> QUERY_MODEL_STORE_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
@@ -88,6 +77,7 @@ public class CodeGenerationSetup {
                         put(StorageType.JOURNAL, STATE_STORE_PROVIDER.filename);
                     }}
             );
+
 
     public static Map<StorageType, String> storeProviderTemplatesFrom(final Model model) {
         if(model.isQueryModel()) {

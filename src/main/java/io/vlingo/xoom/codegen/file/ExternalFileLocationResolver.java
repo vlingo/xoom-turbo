@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen.file;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -26,8 +27,9 @@ public class ExternalFileLocationResolver implements FileLocationResolver {
     @Override
     public String resolve(final CodeGenerationContext context,
                           final TemplateData templateData) {
+
         final String projectPath = resolveProjectPath(context);
-        final String[] sourceFolders = listSourceFolders(templateData);
+        final String[] sourceFolders = listSourceFolders(context, templateData);
         return Paths.get(projectPath, sourceFolders).toString();
     }
 
@@ -37,7 +39,8 @@ public class ExternalFileLocationResolver implements FileLocationResolver {
         return Paths.get(targetFolder, appName).toString();
     }
 
-    private String[] listSourceFolders(final TemplateData templateData) {
+    private String[] listSourceFolders(final CodeGenerationContext context,
+                                       final TemplateData templateData) {
         if(templateData.parameters().find(RESOURCE_FILE, false)) {
             return RESOURCE_FOLDER;
         }
@@ -46,9 +49,11 @@ public class ExternalFileLocationResolver implements FileLocationResolver {
         }
         if(templateData.parameters().find(POM_SECTION, false)) {
             return new String[]{};
+
         }
+        final Language language = context.language();
         final String packageName = templateData.parameters().find(PACKAGE_NAME);
-        return ArrayUtils.addAll(SOURCE_FOLDER, packageName.split("\\."));
+        return ArrayUtils.addAll(language.sourceFolder, packageName.split("\\."));
     }
     
 }

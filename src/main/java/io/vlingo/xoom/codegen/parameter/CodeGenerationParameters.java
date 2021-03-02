@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.codegen.parameter;
 
+import io.vlingo.xoom.codegen.language.Language;
+
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Function;
@@ -15,6 +17,7 @@ import java.util.stream.Stream;
 
 public class CodeGenerationParameters {
 
+    private final Map<Label, Language> conversionEntries = new HashMap<>();
     private final List<CodeGenerationParameter> parameters = new ArrayList<>();
 
     public static CodeGenerationParameters from(final Label label, final Object value) {
@@ -90,6 +93,56 @@ public class CodeGenerationParameters {
 
     public boolean isEmpty() {
         return parameters.isEmpty();
+    }
+
+    public void convertValuesSyntax(final Language language,
+                                    final Label parentLabel,
+                                    final Label relatedLabel,
+                                    final Function<String, String> converter) {
+        if(!isAlreadyConverted(language, relatedLabel)) {
+            conversionEntries.remove(relatedLabel);
+
+            collectAll(parentLabel).forEach(parent -> parent.convertValuesSyntax(relatedLabel, converter));
+
+            conversionEntries.put(relatedLabel, language);
+        }
+    }
+
+    protected void applySyntaxConverter(final Label label, final Function<String, String> converter) {
+        final List<CodeGenerationParameter> affectedParameters =
+                parameters.stream().filter(param -> param.isLabeled(label))
+                        .map(param -> param.formatValue(converter))
+                        .collect(Collectors.toList());
+
+        final List<CodeGenerationParameter> nonAffectedParameters =
+                parameters.stream().filter(param -> !param.isLabeled(label)).collect(Collectors.toList());
+
+        parameters.clear();
+        parameters.addAll(affectedParameters);
+        parameters.addAll(nonAffectedParameters);
+    }
+
+    private boolean isAlreadyConverted(final Language language, final Label label) {
+        if(conversionEntries.containsKey(label)) {
+            return conversionEntries.get(label).equals(language);
+        }
+        return false;
+    }
+
+    private Stream<CodeGenerationParameter> collectAll(final Label label) {
+        final List<CodeGenerationParameter> collected = new ArrayList<>();
+        collectAll(label, parameters.stream(), collected);
+        return collected.stream();
+    }
+
+    private void collectAll(final Label label, final Stream<CodeGenerationParameter> source, final List<CodeGenerationParameter> collected) {
+        source.forEach(parameter -> {
+            if(parameter.isLabeled(label)) {
+                collected.add(parameter);
+            } else {
+                collectAll(label, parameter.relatedParametersAsStream(), collected);
+            }
+        });
     }
 
 }

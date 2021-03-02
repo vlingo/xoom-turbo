@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.dataobject;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -27,7 +28,8 @@ public class DataObjectGenerationStepTest {
     public void testThatDataObjectsAreGenerated() {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(PACKAGE, "io.vlingo.xoomapp")
-                .add(authorAggregate()).add(bookAggregate());
+                        .add(Label.LANGUAGE, Language.JAVA)
+                        .add(authorAggregate()).add(bookAggregate());
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters)

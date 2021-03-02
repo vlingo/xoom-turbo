@@ -1,5 +1,6 @@
 package io.vlingo.xoom.codegen.template.model;
 
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -21,6 +22,7 @@ public class ModelTemplateDataFactoryTest {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, JOURNAL),
+                        CodeGenerationParameter.of(Label.LANGUAGE, Language.JAVA),
                         authorAggregate());
 
         final List<TemplateData> templatesData = ModelTemplateDataFactory.from(parameters);

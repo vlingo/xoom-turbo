@@ -18,8 +18,8 @@ import java.util.List;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.METHOD_INVOCATION;
-import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat.METHOD_INVOCATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodTemplateData extends TemplateData {

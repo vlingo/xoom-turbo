@@ -9,11 +9,13 @@ package io.vlingo.xoom.codegen.template.dataobject;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.StateFieldDetail;
+import io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat;
 
 import java.util.List;
 import java.util.function.Function;
@@ -23,9 +25,9 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.MEMBER_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.STATE_BASED_ASSIGNMENT;
+import static io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat.Style.MEMBER_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat.Style.STATE_BASED_ASSIGNMENT;
 
 public class DataObjectTemplateData extends TemplateData {
 
@@ -36,24 +38,28 @@ public class DataObjectTemplateData extends TemplateData {
     private final TemplateParameters parameters;
 
     public static List<TemplateData> from(final String basePackage,
+                                          final Language language,
                                           final Stream<CodeGenerationParameter> aggregates,
                                           final List<Content> contents) {
         final Function<CodeGenerationParameter, TemplateData> mapper =
-                aggregate -> new DataObjectTemplateData(basePackage, aggregate, contents);
+                aggregate -> new DataObjectTemplateData(basePackage, language, aggregate, contents);
 
         return aggregates.map(mapper).collect(Collectors.toList());
     }
 
     private DataObjectTemplateData(final String basePackage,
+                                   final Language language,
                                    final CodeGenerationParameter aggregate,
                                    final List<Content> contents) {
         this.protocolName = aggregate.value;
-        this.parameters = loadParameters(resolvePackage(basePackage), aggregate, contents);
+        this.parameters = loadParameters(resolvePackage(basePackage), language, aggregate, contents);
     }
 
     private TemplateParameters loadParameters(final String packageName,
+                                              final Language language,
                                               final CodeGenerationParameter aggregate,
                                               final List<Content> contents) {
+
         final String stateName = AGGREGATE_STATE.resolveClassname(aggregate.value);
 
         final String stateQualifiedClassName =
@@ -61,10 +67,15 @@ public class DataObjectTemplateData extends TemplateData {
 
         final String dataName = DATA_OBJECT.resolveClassname(protocolName);
 
+        final List<String> members =
+                AggregateFieldsFormat.format(MEMBER_DECLARATION, language, aggregate);
+
+        final List<String> membersAssignment =
+                AggregateFieldsFormat.format(STATE_BASED_ASSIGNMENT, language, aggregate);
+
         return TemplateParameters.with(PACKAGE_NAME, packageName)
                 .and(STATE_NAME, stateName).and(DATA_OBJECT_NAME, dataName)
-                .and(MEMBERS, MEMBER_DECLARATION.format(aggregate))
-                .and(MEMBERS_ASSIGNMENT, STATE_BASED_ASSIGNMENT.format(aggregate))
+                .and(MEMBERS, members).and(MEMBERS_ASSIGNMENT, membersAssignment)
                 .and(DATA_OBJECT_QUALIFIED_NAME, packageName.concat(".").concat(dataName))
                 .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
                 .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName)

@@ -1,10 +1,10 @@
 package io.vlingo.xoom.codegen.template.model;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.template.Language;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,6 +20,7 @@ public class ModelGenerationStepTest {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, STATE_STORE),
+                        CodeGenerationParameter.of(Label.LANGUAGE, Language.JAVA),
                         authorAggregate());
 
         final CodeGenerationContext context =
@@ -45,8 +46,15 @@ public class ModelGenerationStepTest {
         Assert.assertTrue(context.contents().get(1).contains("final AuthorState stateArg = state.withName(name);"));
         Assert.assertTrue(context.contents().get(1).contains("return apply(stateArg, new AuthorRegistered(stateArg), () -> state)"));
         Assert.assertTrue(context.contents().get(2).contains("class AuthorState"));
+        Assert.assertTrue(context.contents().get(2).contains("public final long id;"));
+        Assert.assertTrue(context.contents().get(2).contains("public final String name;"));
+        Assert.assertTrue(context.contents().get(2).contains("public final int rank;"));
         Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered extends IdentifiedDomainEvent"));
+        Assert.assertTrue(context.contents().get(3).contains("public final long id;"));
+        Assert.assertTrue(context.contents().get(3).contains("public final String name;"));
         Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends IdentifiedDomainEvent"));
+        Assert.assertTrue(context.contents().get(4).contains("public final long id;"));
+        Assert.assertTrue(context.contents().get(4).contains("public final int rank;"));
     }
 
     @Test
@@ -54,6 +62,7 @@ public class ModelGenerationStepTest {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, JOURNAL),
+                        CodeGenerationParameter.of(Label.LANGUAGE, Language.JAVA),
                         authorAggregate());
 
         final CodeGenerationContext context =
@@ -78,8 +87,15 @@ public class ModelGenerationStepTest {
         Assert.assertTrue(context.contents().get(1).contains("public Completes<AuthorState> withName(final String name) {"));
         Assert.assertTrue(context.contents().get(1).contains("return apply(new AuthorRegistered(state), () -> state);"));
         Assert.assertTrue(context.contents().get(2).contains("class AuthorState"));
+        Assert.assertTrue(context.contents().get(2).contains("public final long id;"));
+        Assert.assertTrue(context.contents().get(2).contains("public final String name;"));
+        Assert.assertTrue(context.contents().get(2).contains("public final int rank;"));
         Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered extends IdentifiedDomainEvent"));
+        Assert.assertTrue(context.contents().get(3).contains("public final long id;"));
+        Assert.assertTrue(context.contents().get(3).contains("public final String name;"));
         Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends IdentifiedDomainEvent"));
+        Assert.assertTrue(context.contents().get(4).contains("public final long id;"));
+        Assert.assertTrue(context.contents().get(4).contains("public final int rank;"));
     }
 
     @Test
@@ -115,8 +131,15 @@ public class ModelGenerationStepTest {
         Assert.assertTrue(context.contents().get(1).contains("val stateArg: AuthorState = state.withName(name)"));
         Assert.assertTrue(context.contents().get(1).contains("return apply(stateArg, AuthorRegistered(stateArg)){state}"));
         Assert.assertTrue(context.contents().get(2).contains("class AuthorState"));
+        Assert.assertTrue(context.contents().get(2).contains("val id: Long;"));
+        Assert.assertTrue(context.contents().get(2).contains("val name: String;"));
+        Assert.assertTrue(context.contents().get(2).contains("val rank: Int;"));
         Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered : IdentifiedDomainEvent"));
+        Assert.assertTrue(context.contents().get(3).contains("val id: Long;"));
+        Assert.assertTrue(context.contents().get(3).contains("val name: String;"));
         Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked : IdentifiedDomainEvent"));
+        Assert.assertTrue(context.contents().get(4).contains("val id: Long;"));
+        Assert.assertTrue(context.contents().get(4).contains("val rank: Int;"));
     }
 
     private CodeGenerationParameter authorAggregate() {

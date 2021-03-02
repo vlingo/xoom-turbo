@@ -7,15 +7,16 @@
 
 package io.vlingo.xoom.codegen.template;
 
-import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import io.vlingo.xoom.codegen.parameter.ImportParameter;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
 
 public class TemplateParameters {
 
@@ -61,6 +62,17 @@ public class TemplateParameters {
         return this;
     }
 
+    public void convertImportSyntax(final Function<String, String> syntaxResolver){
+        if(hasImports()) {
+            final Set<ImportParameter> imports = this.find(IMPORTS);
+            final Set<String> resolvedImports =
+                    imports.stream().map(ImportParameter::getQualifiedClassName)
+                            .map(syntaxResolver).collect(Collectors.toSet());
+            remove(IMPORTS);
+            addImports(resolvedImports);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public boolean hasImport(final String qualifiedName) {
         return ((Set<ImportParameter>) find(IMPORTS)).stream()
@@ -79,6 +91,15 @@ public class TemplateParameters {
         return find(parameter);
     }
 
+    private void update(final TemplateParameter parameter, final Object object) {
+        this.parameters.remove(parameter.key);
+        this.parameters.put(parameter.key, object);
+    }
+
+    private void remove(final TemplateParameter parameter) {
+        this.parameters.remove(parameter.key);
+    }
+
     public Map<String, Object> map() {
         return parameters;
     }
@@ -93,4 +114,7 @@ public class TemplateParameters {
         return has(parameter) && this.parameters.get(parameter.key).equals(value);
     }
 
+    private boolean hasImports() {
+        return this.parameters.containsKey(IMPORTS);
+    }
 }

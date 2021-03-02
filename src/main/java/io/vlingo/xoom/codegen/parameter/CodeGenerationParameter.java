@@ -30,9 +30,17 @@ public class CodeGenerationParameter {
     }
 
     private CodeGenerationParameter(final Label label, final String value) {
+        this(label, value, null, CodeGenerationParameters.empty());
+    }
+
+    private CodeGenerationParameter(final Label label,
+                                    final String value,
+                                    final CodeGenerationParameter parent,
+                                    final CodeGenerationParameters relatedParameters) {
         this.label = label;
         this.value = value;
-        this.relatedParameters = CodeGenerationParameters.empty();
+        this.parent = parent;
+        this.relatedParameters = relatedParameters;
     }
 
     public CodeGenerationParameter relate(final Label label, final Object value) {
@@ -57,6 +65,10 @@ public class CodeGenerationParameter {
 
     public Stream<CodeGenerationParameter> retrieveAllRelated(final Label label) {
         return relatedParameters.retrieveAll(label);
+    }
+
+    public Stream<CodeGenerationParameter> retrieveAllRelated() {
+        return relatedParameters.list().stream();
     }
 
     public CodeGenerationParameter parent() {
@@ -100,8 +112,20 @@ public class CodeGenerationParameter {
         return this.label.equals(label);
     }
 
+    public Stream<CodeGenerationParameter> relatedParametersAsStream() {
+        return relatedParameters.list().stream();
+    }
+
     public boolean hasAny(final Label label) {
         return isLabeled(label) || relatedParameters.list().stream().anyMatch(parameter -> parameter.isLabeled(label) && parameter.value != null && !parameter.value.isEmpty());
+    }
+
+    public void convertValuesSyntax(final Label label, final Function<String, String> formatter)  {
+        relatedParameters.applySyntaxConverter(label, formatter);
+    }
+
+    protected CodeGenerationParameter formatValue(final Function<String, String> formatter) {
+        return new CodeGenerationParameter(label, formatter.apply(value), parent, relatedParameters);
     }
 
 }

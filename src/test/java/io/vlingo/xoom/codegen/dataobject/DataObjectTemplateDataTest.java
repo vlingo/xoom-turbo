@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen.dataobject;
 
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
@@ -30,7 +31,7 @@ public class DataObjectTemplateDataTest {
     @Test
     public void testThatTemplateParametersAreMapped() {
         final List<TemplateData> templatesData =
-                DataObjectTemplateData.from("io.vlingo.xoomapp",
+                DataObjectTemplateData.from("io.vlingo.xoomapp", Language.JAVA,
                         Stream.of(authorAggregate(), bookAggregate()),
                         contents());
 

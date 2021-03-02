@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen.template.dataobject;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
@@ -19,6 +20,7 @@ public class DataObjectGenerationStep extends TemplateProcessingStep {
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
         return DataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
+                context.parameterOf(Label.LANGUAGE, Language::valueOf),
                 context.parametersOf(Label.AGGREGATE), context.contents());
     }
 

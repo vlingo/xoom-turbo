@@ -6,31 +6,23 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.model;
 
-import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.CONSTRUCTOR_PARAMETERS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.EVENT_SOURCED;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.ID_TYPE;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.MEMBERS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.MEMBERS_ASSIGNMENT;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.METHODS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.METHOD_INVOCATION_PARAMETERS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.STATE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.codegen.template.model.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.ASSIGNMENT;
-import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.DEFAULT_VALUE;
-import static io.vlingo.xoom.codegen.template.model.AggregateFieldsFormat.MEMBER_DECLARATION;
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.storage.StorageType;
+import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat.Style.*;
 
 public class AggregateStateTemplateData extends TemplateData {
 
@@ -39,26 +31,27 @@ public class AggregateStateTemplateData extends TemplateData {
 
     @SuppressWarnings("unchecked")
     public AggregateStateTemplateData(final String packageName,
+                                      final Language language,
                                       final CodeGenerationParameter aggregate,
                                       final StorageType storageType) {
         this.protocolName = aggregate.value;
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, packageName)
                         .and(EVENT_SOURCED, storageType.isSourced())
-                        .and(MEMBERS, MEMBER_DECLARATION.format(aggregate))
-                        .and(MEMBERS_ASSIGNMENT, ASSIGNMENT.format(aggregate))
+                        .and(MEMBERS, AggregateFieldsFormat.format(MEMBER_DECLARATION, language, aggregate))
+                        .and(MEMBERS_ASSIGNMENT, AggregateFieldsFormat.format(ASSIGNMENT, language, aggregate))
                         .and(ID_TYPE, StateFieldDetail.typeOf(aggregate, "id"))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
                         .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
-                        .and(METHOD_INVOCATION_PARAMETERS, resolveIdBasedConstructorParameters(aggregate))
+                        .and(METHOD_INVOCATION_PARAMETERS, resolveIdBasedConstructorParameters(language, aggregate))
                         .and(METHODS, new ArrayList<String>());
 
-        this.dependOn(AggregateStateMethodTemplateData.from(aggregate));
+        this.dependOn(AggregateStateMethodTemplateData.from(language, aggregate));
     }
 
-    private String resolveIdBasedConstructorParameters(final CodeGenerationParameter aggregate) {
+    private String resolveIdBasedConstructorParameters(final Language language, final CodeGenerationParameter aggregate) {
         final CodeGenerationParameter idField = CodeGenerationParameter.of(STATE_FIELD, "id");
-        return DEFAULT_VALUE.format(aggregate, Stream.of(idField));
+        return AggregateFieldsFormat.format(ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE, language, aggregate, Stream.of(idField));
     }
 
     @Override

@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.model;
 
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.TemplateData;
@@ -26,21 +27,23 @@ public class ModelTemplateDataFactory {
 
     public static List<TemplateData> from(final CodeGenerationParameters parameters) {
         final String basePackage = parameters.retrieveValue(PACKAGE);
+        final Language language = parameters.retrieveValue(LANGUAGE, Language::valueOf);
         final StorageType storageType = StorageType.of(parameters.retrieveValue(STORAGE_TYPE));
         return parameters.retrieveAll(AGGREGATE).flatMap(aggregate -> {
             final String packageName = resolvePackage(basePackage, aggregate.value);
-            return loadTemplates(packageName, aggregate, storageType);
+            return loadTemplates(packageName, language, aggregate, storageType);
         }).collect(Collectors.toList());
     }
 
     private static Stream<TemplateData> loadTemplates(final String packageName,
+                                                      final Language language,
                                                       final CodeGenerationParameter aggregateParameter,
                                                       final StorageType storageType) {
         final List<TemplateData> templatesData = new ArrayList<>();
         templatesData.add(new AggregateProtocolTemplateData(packageName, aggregateParameter));
         templatesData.add(new AggregateTemplateData(packageName, aggregateParameter, storageType));
-        templatesData.add(new AggregateStateTemplateData(packageName, aggregateParameter, storageType));
-        templatesData.addAll(DomainEventTemplateData.from(packageName, aggregateParameter));
+        templatesData.add(new AggregateStateTemplateData(packageName, language, aggregateParameter, storageType));
+        templatesData.addAll(DomainEventTemplateData.from(packageName, language, aggregateParameter));
         return templatesData.stream();
     }
 

@@ -3,7 +3,7 @@ package ${packageName}
 <#if eventSourced>
 public class ${stateName} {
 <#else>
-import io.vlingo.symbio.store.object.StateObject
+import io.vlingo.symbio.store.`object`.StateObject
 
 /**
  * See <a href="https://docs.vlingo.io/vlingo-symbio/object-storage">Object Storage</a>
