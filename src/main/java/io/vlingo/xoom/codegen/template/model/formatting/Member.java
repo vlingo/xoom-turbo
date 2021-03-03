@@ -8,7 +8,7 @@ package io.vlingo.xoom.codegen.template.model.formatting;
 
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.model.StateFieldDetail;
+import io.vlingo.xoom.codegen.template.model.aggregate.FieldDetail;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.language.Language.JAVA;
 import static io.vlingo.xoom.codegen.language.Language.KOTLIN;
 
-public class Member implements AggregateFieldsFormat<List<String>> {
+public class Member extends Formatters.Fields<List<String>> {
 
     private final BiFunction<String, String, String> declarationResolver;
 
@@ -36,7 +36,7 @@ public class Member implements AggregateFieldsFormat<List<String>> {
     public List<String> format(final CodeGenerationParameter aggregate,
                                final Stream<CodeGenerationParameter> fields) {
         return fields.map(field -> {
-            final String fieldType = StateFieldDetail.typeOf(aggregate, field.value);
+            final String fieldType = FieldDetail.typeOf(aggregate, field.value);
             return declarationResolver.apply(fieldType, field.value);
         }).collect(Collectors.toList());
     }

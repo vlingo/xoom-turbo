@@ -75,7 +75,9 @@ public enum Label {
     RECEIVER("receiver"),
     MODEL_METHOD("modelMethod"),
     ROLE("role"),
-    LANGUAGE("language");
+    LANGUAGE("language"),
+    VALUE_OBJECT("valueObject"),
+    VALUE_OBJECT_FIELD("valueObjectField");
 
     @SuppressWarnings("unused")
     private final String key;

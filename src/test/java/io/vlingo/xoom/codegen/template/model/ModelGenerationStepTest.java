@@ -1,5 +1,6 @@
 package io.vlingo.xoom.codegen.template.model;
 
+import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -7,6 +8,8 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.PACKAGE;
@@ -16,12 +19,12 @@ import static io.vlingo.xoom.codegen.template.storage.StorageType.STATE_STORE;
 public class ModelGenerationStepTest {
 
     @Test
-    public void testThatStatefulModelIsGenerated() {
+    public void testThatStatefulModelIsGenerated() throws IOException {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, STATE_STORE),
                         CodeGenerationParameter.of(Label.LANGUAGE, Language.JAVA),
-                        authorAggregate());
+                        authorAggregate(), nameValueObject(), rankValueObject());
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters);
@@ -32,7 +35,7 @@ public class ModelGenerationStepTest {
 
         modelGenerationStep.process(context);
 
-        Assert.assertEquals(5, context.contents().size());
+        Assert.assertEquals(7, context.contents().size());
         Assert.assertEquals("Author", context.contents().get(0).retrieveClassName());
         Assert.assertEquals("AuthorEntity", context.contents().get(1).retrieveClassName());
         Assert.assertEquals("AuthorState", context.contents().get(2).retrieveClassName());
@@ -55,6 +58,8 @@ public class ModelGenerationStepTest {
         Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends IdentifiedDomainEvent"));
         Assert.assertTrue(context.contents().get(4).contains("public final long id;"));
         Assert.assertTrue(context.contents().get(4).contains("public final int rank;"));
+        Assert.assertTrue(context.contents().get(5).contains(TextExpectation.read("name-value-object")));
+        Assert.assertTrue(context.contents().get(6).contains(TextExpectation.read("rank-value-object")));
     }
 
     @Test
@@ -63,7 +68,7 @@ public class ModelGenerationStepTest {
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, JOURNAL),
                         CodeGenerationParameter.of(Label.LANGUAGE, Language.JAVA),
-                        authorAggregate());
+                        authorAggregate(), nameValueObject(), rankValueObject());
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters);
@@ -74,7 +79,7 @@ public class ModelGenerationStepTest {
 
         modelGenerationStep.process(context);
 
-        Assert.assertEquals(5, context.contents().size());
+        Assert.assertEquals(7, context.contents().size());
         Assert.assertEquals("Author", context.contents().get(0).retrieveClassName());
         Assert.assertEquals("AuthorEntity", context.contents().get(1).retrieveClassName());
         Assert.assertEquals("AuthorState", context.contents().get(2).retrieveClassName());
@@ -143,6 +148,19 @@ public class ModelGenerationStepTest {
     }
 
     private CodeGenerationParameter authorAggregate() {
+        final CodeGenerationParameter nameValueObject =
+                CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+                                .relate(Label.FIELD_TYPE, "String"))
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+                                .relate(Label.FIELD_TYPE, "String"));
+
+        final CodeGenerationParameter rankValueObject =
+                CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+                                .relate(Label.FIELD_TYPE, "int"))
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+                                .relate(Label.FIELD_TYPE, "String"));
 
         final CodeGenerationParameter idField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "id")
@@ -179,6 +197,22 @@ public class ModelGenerationStepTest {
                 .relate(idField).relate(nameField).relate(rankField)
                 .relate(factoryMethod).relate(rankMethod)
                 .relate(authorRegisteredEvent).relate(authorRankedEvent);
+    }
+
+    private CodeGenerationParameter nameValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+                                .relate(Label.FIELD_TYPE, "String"))
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+                                .relate(Label.FIELD_TYPE, "String"));
+    }
+
+    private CodeGenerationParameter rankValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+                                .relate(Label.FIELD_TYPE, "int"))
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+                                .relate(Label.FIELD_TYPE, "String"));
     }
 
 }

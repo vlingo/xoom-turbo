@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.model;
+package io.vlingo.xoom.codegen.template.model.domainevent;
 
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -13,7 +13,7 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat;
+import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,8 +22,8 @@ import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat.Style.MEMBER_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat.Style.STATE_BASED_ASSIGNMENT;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.MEMBER_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.STATE_BASED_ASSIGNMENT;
 
 public class DomainEventTemplateData extends TemplateData {
 
@@ -46,8 +46,8 @@ public class DomainEventTemplateData extends TemplateData {
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, packageName).and(DOMAIN_EVENT_NAME, name)
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
-                        .and(MEMBERS, AggregateFieldsFormat.format(MEMBER_DECLARATION, language, aggregate, event.retrieveAllRelated(STATE_FIELD)))
-                        .and(MEMBERS_ASSIGNMENT, AggregateFieldsFormat.format(STATE_BASED_ASSIGNMENT, language, aggregate, event.retrieveAllRelated(STATE_FIELD)));
+                        .and(MEMBERS, Formatters.Fields.format(MEMBER_DECLARATION, language, aggregate, event.retrieveAllRelated(STATE_FIELD)))
+                        .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(STATE_BASED_ASSIGNMENT, language, aggregate, event.retrieveAllRelated(STATE_FIELD)));
     }
 
     @Override

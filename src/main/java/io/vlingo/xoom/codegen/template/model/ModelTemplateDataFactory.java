@@ -11,6 +11,11 @@ import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateProtocolTemplateData;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateStateTemplateData;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateTemplateData;
+import io.vlingo.xoom.codegen.template.model.domainevent.DomainEventTemplateData;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
@@ -30,7 +35,7 @@ public class ModelTemplateDataFactory {
         final Language language = parameters.retrieveValue(LANGUAGE, Language::valueOf);
         final StorageType storageType = StorageType.of(parameters.retrieveValue(STORAGE_TYPE));
         return parameters.retrieveAll(AGGREGATE).flatMap(aggregate -> {
-            final String packageName = resolvePackage(basePackage, aggregate.value);
+            final String packageName = AggregateDetail.resolvePackage(basePackage, aggregate.value);
             return loadTemplates(packageName, language, aggregate, storageType);
         }).collect(Collectors.toList());
     }
@@ -47,8 +52,6 @@ public class ModelTemplateDataFactory {
         return templatesData.stream();
     }
 
-    private static String resolvePackage(final String basePackage, final String protocolName) {
-        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, protocolName).toLowerCase();
-    }
+
 
 }

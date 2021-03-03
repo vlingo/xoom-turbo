@@ -11,8 +11,11 @@ package io.vlingo.xoom.codegen.template.model;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectTemplateData;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
 
@@ -20,7 +23,10 @@ public class ModelGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        return ModelTemplateDataFactory.from(context.parameters());
+        final List<TemplateData> mainModelTemplatesData = ModelTemplateDataFactory.from(context.parameters());
+        final List<TemplateData> valueObjectTemplatesData = ValueObjectTemplateData.from(context.parameters());
+        return Stream.of(mainModelTemplatesData, valueObjectTemplatesData)
+                .flatMap(List::stream).collect(Collectors.toList());
     }
 
     @Override

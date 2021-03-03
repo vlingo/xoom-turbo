@@ -35,6 +35,8 @@ public enum TemplateStandard {
 
     AGGREGATE_STATE_METHOD(parameters -> Template.AGGREGATE_STATE_METHOD.filename),
 
+    VALUE_OBJECT(parameters -> Template.VALUE_OBJECT.filename),
+
     QUERIES(parameters -> Template.QUERIES.filename,
             (name, parameters) -> name + "Queries"),
 

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-public class Constructor implements AggregateFieldsFormat<List<String>> {
+public class Constructor extends Formatters.Fields<List<String>> {
 
     private final String carrierName;
     private static final String PATTERN = "this.%s = %s;";

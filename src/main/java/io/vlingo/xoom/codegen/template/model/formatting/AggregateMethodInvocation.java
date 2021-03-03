@@ -17,17 +17,17 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.METHOD_PARAMETER;
 
-public class MethodInvocation implements AggregateArgumentsFormat {
+public class AggregateMethodInvocation implements Formatters.Arguments {
 
     private final String carrier;
     private final String stageVariableName;
     private static final String FIELD_ACCESS_PATTERN = "%s.%s";
 
-    public MethodInvocation(final String stageVariableName) {
+    public AggregateMethodInvocation(final String stageVariableName) {
         this(stageVariableName, "");
     }
 
-    public MethodInvocation(final String stageVariableName, final String carrier) {
+    public AggregateMethodInvocation(final String stageVariableName, final String carrier) {
         this.carrier = carrier;
         this.stageVariableName = stageVariableName;
     }

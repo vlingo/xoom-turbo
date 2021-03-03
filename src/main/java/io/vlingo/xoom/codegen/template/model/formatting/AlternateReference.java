@@ -7,7 +7,7 @@
 package io.vlingo.xoom.codegen.template.model.formatting;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.model.StateFieldDetail;
+import io.vlingo.xoom.codegen.template.model.aggregate.FieldDetail;
 
 import java.util.List;
 import java.util.function.Function;
@@ -18,7 +18,7 @@ import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
 import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
 import static java.util.stream.Collectors.toList;
 
-public class AlternateReference implements AggregateFieldsFormat<String> {
+public class AlternateReference extends Formatters.Fields<String> {
 
     private final Function<CodeGenerationParameter, String> absenceHandler;
 
@@ -31,7 +31,7 @@ public class AlternateReference implements AggregateFieldsFormat<String> {
     }
 
     static AlternateReference handlingDefaultFieldsValue() {
-        return new AlternateReference(field -> StateFieldDetail.resolveDefaultValue(field.parent(AGGREGATE), field.value));
+        return new AlternateReference(field -> FieldDetail.resolveDefaultValue(field.parent(AGGREGATE), field.value));
     }
 
     @Override

@@ -1,0 +1,17 @@
+package io.vlingo.xoomapp.model.author;
+
+public class Rank {
+
+  public final int points;
+  public final String classification;
+
+  public static Rank of(final int points, final String classification) {
+    return new Rank(points, classification);
+  }
+
+  private Rank (final int points, final String classification) {
+    this.points = points;
+    this.classification = classification;
+  }
+
+}

@@ -5,12 +5,13 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.model;
+package io.vlingo.xoom.codegen.template.model.aggregate;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.model.MethodScope;
 
 import java.util.List;
 import java.util.Set;
@@ -23,8 +24,8 @@ import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE_METHOD;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat.METHOD_INVOCATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.AGGREGATE_METHOD_INVOCATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateProtocolMethodTemplateData extends TemplateData {
@@ -55,7 +56,7 @@ public class AggregateProtocolMethodTemplateData extends TemplateData {
                 TemplateParameters.with(METHOD_SCOPE, methodScope).and(METHOD_NAME, method.value)
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(method.parent().value))
                         .and(ENTITY_NAME, AGGREGATE.resolveClassname(method.parent().value))
-                        .and(METHOD_INVOCATION_PARAMETERS, METHOD_INVOCATION.format(method))
+                        .and(METHOD_INVOCATION_PARAMETERS, AGGREGATE_METHOD_INVOCATION.format(method))
                         .and(METHOD_PARAMETERS, SIGNATURE_DECLARATION.format(method, methodScope))
                         .and(AGGREGATE_PROTOCOL_VARIABLE, simpleNameToAttribute(method.parent().value))
                         .and(AGGREGATE_PROTOCOL_NAME, method.parent().value);

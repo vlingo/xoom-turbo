@@ -14,8 +14,8 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.model.StateFieldDetail;
-import io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat;
+import io.vlingo.xoom.codegen.template.model.aggregate.FieldDetail;
+import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 
 import java.util.List;
 import java.util.function.Function;
@@ -25,9 +25,9 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat.Style.MEMBER_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat.Style.STATE_BASED_ASSIGNMENT;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.MEMBER_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.STATE_BASED_ASSIGNMENT;
 
 public class DataObjectTemplateData extends TemplateData {
 
@@ -68,10 +68,10 @@ public class DataObjectTemplateData extends TemplateData {
         final String dataName = DATA_OBJECT.resolveClassname(protocolName);
 
         final List<String> members =
-                AggregateFieldsFormat.format(MEMBER_DECLARATION, language, aggregate);
+                Formatters.Fields.format(MEMBER_DECLARATION, language, aggregate);
 
         final List<String> membersAssignment =
-                AggregateFieldsFormat.format(STATE_BASED_ASSIGNMENT, language, aggregate);
+                Formatters.Fields.format(STATE_BASED_ASSIGNMENT, language, aggregate);
 
         return TemplateParameters.with(PACKAGE_NAME, packageName)
                 .and(STATE_NAME, stateName).and(DATA_OBJECT_NAME, dataName)
@@ -79,7 +79,7 @@ public class DataObjectTemplateData extends TemplateData {
                 .and(DATA_OBJECT_QUALIFIED_NAME, packageName.concat(".").concat(dataName))
                 .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
                 .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName)
-                .and(DEFAULT_ID, StateFieldDetail.resolveDefaultValue(aggregate, "id"));
+                .and(DEFAULT_ID, FieldDetail.resolveDefaultValue(aggregate, "id"));
     }
 
     private String resolvePackage(final String basePackage) {

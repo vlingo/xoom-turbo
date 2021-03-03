@@ -9,10 +9,10 @@ package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.http.Method;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.model.AggregateDetail;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
-import io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat;
-import io.vlingo.xoom.codegen.template.model.formatting.MethodInvocation;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.codegen.template.model.formatting.AggregateMethodInvocation;
+import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 
 import static io.vlingo.xoom.codegen.content.ClassFormatter.simpleNameToAttribute;
 import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
@@ -42,7 +42,7 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
 
     private String resolveCommandMethodInvocation(final CodeGenerationParameter aggregateParameter,
                                                   final CodeGenerationParameter routeParameter) {
-        final AggregateArgumentsFormat argumentsFormat = new MethodInvocation("stage()", "data");
+        final Formatters.Arguments argumentsFormat = new AggregateMethodInvocation("stage()", "data");
         final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregateParameter, routeParameter.value);
         final Boolean factoryMethod = method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf);
         final MethodScope scope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;

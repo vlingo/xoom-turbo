@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.model;
+package io.vlingo.xoom.codegen.template.model.aggregate;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -13,6 +13,10 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import java.util.Optional;
 
 public class AggregateDetail {
+
+    public static String resolvePackage(final String basePackage, final String aggregateProtocolName) {
+        return String.format("%s.%s.%s", basePackage, "model", aggregateProtocolName).toLowerCase();
+    }
 
     public static CodeGenerationParameter methodWithName(final CodeGenerationParameter aggregate, final String methodName) {
         return findMethod(aggregate, methodName).orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " not found" ));

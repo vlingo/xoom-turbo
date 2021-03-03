@@ -11,8 +11,8 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.exchange.ExchangeRole;
-import io.vlingo.xoom.codegen.template.model.AggregateDetail;
-import io.vlingo.xoom.codegen.template.model.StateFieldDetail;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.codegen.template.model.aggregate.FieldDetail;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -44,7 +44,7 @@ public class SchemataSpecificationTemplateData extends TemplateData {
         final CodeGenerationParameter aggregate = outgoingEvent.parent(AGGREGATE);
         final CodeGenerationParameter event = AggregateDetail.eventWithName(aggregate, outgoingEvent.value);
         return event.retrieveAllRelated(STATE_FIELD).map(field -> {
-            final String fieldType = StateFieldDetail.typeOf(aggregate, field.value);
+            final String fieldType = FieldDetail.typeOf(aggregate, field.value);
             return fieldType.toLowerCase() + " " + field.value;
         }).collect(Collectors.toList());
     }

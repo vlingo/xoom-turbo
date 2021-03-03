@@ -6,24 +6,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.model;
-
-import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE_METHOD;
-import static io.vlingo.xoom.codegen.parameter.Label.DOMAIN_EVENT;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.ENTITY_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.ID_TYPE;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.METHODS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.SOURCED_EVENTS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.STATE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+package io.vlingo.xoom.codegen.template.model.aggregate;
 
 import io.vlingo.common.Completes;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -31,6 +14,16 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.DOMAIN_EVENT;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
 public class AggregateTemplateData extends TemplateData {
 
@@ -46,7 +39,7 @@ public class AggregateTemplateData extends TemplateData {
                 .and(AGGREGATE_PROTOCOL_NAME, protocolName)
                 .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
                 .and(ENTITY_NAME, AGGREGATE.resolveClassname(protocolName))
-                .and(ID_TYPE, StateFieldDetail.typeOf(aggregate, "id"))
+                .and(ID_TYPE, FieldDetail.typeOf(aggregate, "id"))
                 .and(SOURCED_EVENTS, resolveEventNames(aggregate))
                 .and(METHODS, new ArrayList<String>())
                 .and(STORAGE_TYPE, storageType);

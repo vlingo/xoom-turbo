@@ -10,7 +10,7 @@ package io.vlingo.xoom.codegen.template.resource;
 import io.vlingo.http.Method;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.template.model.AggregateDetail;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
 
 import java.beans.Introspector;
 import java.util.Arrays;

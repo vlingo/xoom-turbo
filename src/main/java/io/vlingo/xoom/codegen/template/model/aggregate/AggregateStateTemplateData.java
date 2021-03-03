@@ -4,14 +4,14 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.codegen.template.model;
+package io.vlingo.xoom.codegen.template.model.aggregate;
 
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat;
+import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
@@ -21,8 +21,8 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateFieldsFormat.Style.*;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.*;
 
 public class AggregateStateTemplateData extends TemplateData {
 
@@ -38,9 +38,9 @@ public class AggregateStateTemplateData extends TemplateData {
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, packageName)
                         .and(EVENT_SOURCED, storageType.isSourced())
-                        .and(MEMBERS, AggregateFieldsFormat.format(MEMBER_DECLARATION, language, aggregate))
-                        .and(MEMBERS_ASSIGNMENT, AggregateFieldsFormat.format(ASSIGNMENT, language, aggregate))
-                        .and(ID_TYPE, StateFieldDetail.typeOf(aggregate, "id"))
+                        .and(MEMBERS, Formatters.Fields.format(MEMBER_DECLARATION, language, aggregate))
+                        .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(ASSIGNMENT, language, aggregate))
+                        .and(ID_TYPE, FieldDetail.typeOf(aggregate, "id"))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
                         .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
                         .and(METHOD_INVOCATION_PARAMETERS, resolveIdBasedConstructorParameters(language, aggregate))
@@ -51,7 +51,7 @@ public class AggregateStateTemplateData extends TemplateData {
 
     private String resolveIdBasedConstructorParameters(final Language language, final CodeGenerationParameter aggregate) {
         final CodeGenerationParameter idField = CodeGenerationParameter.of(STATE_FIELD, "id");
-        return AggregateFieldsFormat.format(ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE, language, aggregate, Stream.of(idField));
+        return Formatters.Fields.format(ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE, language, aggregate, Stream.of(idField));
     }
 
     @Override

@@ -11,9 +11,9 @@ import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.model.AggregateDetail;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
-import io.vlingo.xoom.codegen.template.model.formatting.MethodInvocation;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.codegen.template.model.formatting.AggregateMethodInvocation;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,7 +52,7 @@ public class ExchangeReceiversParameter {
     private String resolveModelMethodParameters(final CodeGenerationParameter method) {
         final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
         final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
-        return new MethodInvocation("stage", "data").format(method, methodScope);
+        return new AggregateMethodInvocation("stage", "data").format(method, methodScope);
     }
 
     public String getSchemaTypeName() {

@@ -5,20 +5,18 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.model;
-
-import static io.vlingo.xoom.codegen.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.METHODS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-
-import java.util.ArrayList;
-import java.util.List;
+package io.vlingo.xoom.codegen.template.model.aggregate;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 
 public class AggregateProtocolTemplateData extends TemplateData {
 

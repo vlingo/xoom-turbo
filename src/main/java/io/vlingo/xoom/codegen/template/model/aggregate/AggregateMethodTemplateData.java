@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.model;
+package io.vlingo.xoom.codegen.template.model.aggregate;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
@@ -18,8 +18,8 @@ import java.util.List;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat.METHOD_INVOCATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.AggregateArgumentsFormat.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.AGGREGATE_METHOD_INVOCATION;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodTemplateData extends TemplateData {
@@ -38,7 +38,7 @@ public class AggregateMethodTemplateData extends TemplateData {
         this.parameters =
                 TemplateParameters.with(METHOD_NAME, method.value).and(STORAGE_TYPE, storageType)
                         .and(DOMAIN_EVENT_NAME, method.retrieveRelatedValue(DOMAIN_EVENT))
-                        .and(METHOD_INVOCATION_PARAMETERS, METHOD_INVOCATION.format(method))
+                        .and(METHOD_INVOCATION_PARAMETERS, AGGREGATE_METHOD_INVOCATION.format(method))
                         .and(METHOD_PARAMETERS, SIGNATURE_DECLARATION.format(method))
                         .and(SOURCED_EVENTS, SourcedEventParameter.from(method.parent()))
                         .and(STATE_NAME, TemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(AGGREGATE).value));
