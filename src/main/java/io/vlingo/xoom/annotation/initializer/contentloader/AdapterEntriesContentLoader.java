@@ -8,6 +8,7 @@
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.annotation.persistence.Adapters;
+import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -17,11 +18,12 @@ import java.util.Collections;
 import java.util.List;
 
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
 
-public class StateContentLoader extends TypeBasedContentLoader {
+public class AdapterEntriesContentLoader extends TypeBasedContentLoader {
 
-    protected StateContentLoader(final Element annotatedClass,
-                                 final ProcessingEnvironment environment) {
+    protected AdapterEntriesContentLoader(final Element annotatedClass,
+                                          final ProcessingEnvironment environment) {
         super(annotatedClass, environment);
     }
 
@@ -38,6 +40,10 @@ public class StateContentLoader extends TypeBasedContentLoader {
 
     @Override
     protected TemplateStandard standard() {
+        final Persistence persistence = annotatedClass.getAnnotation(Persistence.class);
+        if(persistence.storageType().isJournal()) {
+            return DOMAIN_EVENT;
+        }
         return AGGREGATE_STATE;
     }
 

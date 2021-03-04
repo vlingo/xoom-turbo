@@ -7,16 +7,18 @@
 
 package io.vlingo.xoom.annotation;
 
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.NotFileFilter;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static org.apache.commons.io.filefilter.DirectoryFileFilter.DIRECTORY;
+import static org.apache.commons.io.filefilter.TrueFileFilter.INSTANCE;
 
 public class PackageNavigator {
 
@@ -32,34 +34,24 @@ public class PackageNavigator {
         this.basePackage = basePackage;
     }
 
-    private String findNextPackage(final String currentPackage,
-                                   final Set<String> knownPackages) {
-        final Predicate<String> skipKnownPackages = aPackage -> !knownPackages.contains(aPackage);
-        return retrieveChild(currentPackage).stream().filter(skipKnownPackages).findFirst().orElse(basePackage);
-    }
-
     private Path resolvePackagePath(final String packageName) {
-        final String projectPath = System.getProperty("user.dir");
-        return Paths.get(projectPath, ArrayUtils.addAll(SOURCE_FOLDER_PATH, packageName.split("\\.")));
+        final String sourceFolderPath = resolveSourceFolderPath().toString();
+        return Paths.get(sourceFolderPath, packageName.split("\\."));
     }
 
-    private Set<String> retrieveChild(final String parentPackage) {
-        final Path currentPackagePath = resolvePackagePath(parentPackage);
-        return Stream.of(currentPackagePath.toFile().listFiles(File::isDirectory))
-                .map(dir -> parentPackage + "." + dir.getName())
-                .collect(Collectors.toSet());
+    private Path resolveSourceFolderPath() {
+        final String projectPath = System.getProperty("user.dir");
+        return Paths.get(projectPath, SOURCE_FOLDER_PATH);
     }
 
     public Set<String> retrieveAll() {
-        String nextPackage = null;
-        String currentPackage = null;
-        final Set<String> packages = new HashSet<>();
-        while (currentPackage == null || !nextPackage.equals(currentPackage)) {
-            currentPackage = nextPackage == null ? this.basePackage : nextPackage;
-            packages.add(currentPackage);
-            nextPackage = findNextPackage(currentPackage, packages);
-        }
-        return packages;
+        final File basePackageDirectory = resolvePackagePath(this.basePackage).toFile();
+        final int sourceFolderPathLength = resolveSourceFolderPath().toString().length();
+        final Function<String, String> rootPathRemover = path -> path.substring(sourceFolderPathLength + 1);
+        final Function<String, String> packageFormatter = path -> path.replaceAll("(\\\\|/)", ".");
+        return FileUtils.listFilesAndDirs(basePackageDirectory, new NotFileFilter(INSTANCE), DIRECTORY).stream()
+                .map(File::getAbsolutePath).map(rootPathRemover).map(packageFormatter)
+                .collect(Collectors.toSet());
     }
 
 }
