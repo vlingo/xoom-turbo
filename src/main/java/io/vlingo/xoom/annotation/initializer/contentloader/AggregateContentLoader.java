@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
+import io.vlingo.lattice.model.sourcing.EventSourced;
 import io.vlingo.xoom.annotation.PackageNavigator;
 import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.scooter.model.sourced.EventSourcedEntity;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
@@ -39,7 +39,7 @@ public class AggregateContentLoader extends TypeBasedContentLoader {
                 PackageNavigator.from(persistence.basePackage())
                         .retrieveAll().toArray(new String[]{});
 
-        return typeRetriever.subclassesOf(EventSourcedEntity.class, allPackages)
+        return typeRetriever.subclassesOf(EventSourced.class, allPackages)
                 .map(this::toType).collect(Collectors.toList());
     }
 

@@ -6,13 +6,16 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.storage;
 
+import io.vlingo.symbio.store.StorageException;
+import io.vlingo.symbio.store.common.jdbc.Configuration;
+import io.vlingo.xoom.ApplicationProperty;
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
-
-import io.vlingo.symbio.store.common.jdbc.Configuration;
-import io.vlingo.xoom.ApplicationProperty;
+import java.util.stream.IntStream;
 
 public class DatabaseParameters {
 
@@ -22,7 +25,7 @@ public class DatabaseParameters {
     private static final String COMBINATION_PATTERN = "%s.%s";
     private static final List<String> PROPERTIES_KEYS =
             Arrays.asList("database", "database.name", "database.driver", "database.url",
-                    "database.username", "database.password", "database.originator");
+                    "database.username", "database.password", "database.originator", "database.connection.attempts");
 
     public final Model model;
     public final String database;
@@ -32,6 +35,7 @@ public class DatabaseParameters {
     public final String username;
     public final String password;
     public final String originator;
+    public final String attempts;
     public final List<String> keys;
     public final boolean autoCreate;
 
@@ -51,6 +55,7 @@ public class DatabaseParameters {
         this.username = valueFromIndex(4, properties);
         this.password = valueFromIndex(5, properties);
         this.originator = valueFromIndex(6, properties);
+        this.attempts = valueFromIndex(7, properties);
         this.autoCreate = autoCreate;
     }
 
@@ -78,6 +83,10 @@ public class DatabaseParameters {
             if(originator == null) {
                 throw new DatabaseParameterNotFoundException(model, "originator");
             }
+            if(attempts != null && !NumberUtils.isCreatable(attempts)) {
+                throw new IllegalArgumentException("Error reading database settings. " +
+                        "The value of connection attempts must be a number");
+            }
         }
     }
 
@@ -91,7 +100,30 @@ public class DatabaseParameters {
     }
 
     public Configuration mapToConfiguration() {
-        validate();
-        return Database.from(database).mapper.apply(this);
+        try {
+            validate();
+            return tryToCreateConfiguration();
+        } catch (final InterruptedException e) {
+            throw new StorageException(null, "Unable to connect to the database", e);
+        }
     }
+
+    private Configuration tryToCreateConfiguration() throws InterruptedException {
+        int failedAttempts = 1;
+        StorageException connectionException = null;
+        final Integer maximumAttempts = attempts == null ? 1 : Integer.valueOf(attempts);
+        while(failedAttempts <= maximumAttempts) {
+            try {
+                System.out.println("Database connection attempt #" + failedAttempts);
+                return Database.from(database).mapper.apply(this);
+            } catch (final StorageException exception) {
+                connectionException = exception;
+                Thread.sleep(2000);
+                failedAttempts++;
+            }
+        }
+        throw connectionException;
+    }
+
+
 }

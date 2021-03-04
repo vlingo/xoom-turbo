@@ -28,7 +28,7 @@
           </execution>
           </#if>
           <#if hasConsumerExchange>
-          <execution>
+<execution>
             <id>pullSchemata</id>
             <goals>
               <goal>pull-schemata</goal>
