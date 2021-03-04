@@ -7,41 +7,27 @@
 
 package io.vlingo.xoom.codegen.template.autodispatch;
 
-import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_SIGNATURE;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.AUTO_DISPATCH_HANDLERS_MAPPING_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.DATA_OBJECT_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.HANDLER_ENTRIES;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.HANDLER_INDEXES;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERY_ALL_INDEX_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERY_ALL_METHOD_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.STATE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_CQRS;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
-import static io.vlingo.xoom.codegen.template.autodispatch.AutoDispatchMappingValueFormatter.format;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
+import io.vlingo.xoom.codegen.template.resource.RouteDetail;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_SIGNATURE;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.autodispatch.AutoDispatchMappingValueFormatter.format;
 
 public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
@@ -65,12 +51,12 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregateName))
                         .and(DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregateName))
                         .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateName)).and(USE_CQRS, useCQRS)
-                        .and(QUERY_ALL_METHOD_NAME, findQueryMethodName(aggregateName, queriesTemplateData))
+                        .and(QUERY_ALL_METHOD_NAME, findQueryMethodName(queriesTemplateData))
                         .andResolve(QUERY_ALL_INDEX_NAME, params -> format(params.find(QUERY_ALL_METHOD_NAME)))
                         .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, standard().resolveClassname(aggregateName))
                         .and(HANDLER_INDEXES, resolveHandlerIndexes(aggregate, useCQRS))
                         .and(HANDLER_ENTRIES, new ArrayList<String>())
-                        .addImports(resolveImports(aggregateName, contents));
+                        .addImports(resolveImports(aggregate, contents));
 
         this.dependOn(AutoDispatchHandlerEntryTemplateData.from(aggregate));
     }
@@ -92,8 +78,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
         }).collect(Collectors.toList());
     }
 
-    private String findQueryMethodName(final String aggregateName,
-                                       final List<TemplateData> queriesTemplateData) {
+    private String findQueryMethodName(final List<TemplateData> queriesTemplateData) {
         if(queriesTemplateData.isEmpty()) {
             return "";
         }
@@ -111,20 +96,23 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                 .map(queryMethodNameMapper).findFirst().get();
     }
 
-    private Set<String> resolveImports(final String aggregateName,
+    private Set<String> resolveImports(final CodeGenerationParameter aggregate,
                                        final List<Content> contents) {
-        final Map<TemplateStandard, String> classes =
-                mapClassesWithTemplateStandards(aggregateName);
+        final Set<String> aggregateRelatedImports =
+                mapClassesWithTemplateStandards(aggregate.value).entrySet().stream().map(entry -> {
+                    try {
+                        final String className = entry.getValue();
+                        final TemplateStandard standard = entry.getKey();
+                        return ContentQuery.findFullyQualifiedClassName(standard, className, contents);
+                    } catch (final IllegalArgumentException exception) {
+                        return null;
+                    }
+                }).collect(Collectors.toSet());
 
-        return classes.entrySet().stream().map(entry -> {
-            try {
-                final String className = entry.getValue();
-                final TemplateStandard standard = entry.getKey();
-                return ContentQuery.findFullyQualifiedClassName(standard, className, contents);
-            } catch (final IllegalArgumentException exception) {
-                return null;
-            }
-        }).collect(Collectors.toSet());
+        final Set<String> valueObjectImports =
+                ValueObjectDetail.retrieveQualifiedNames(contents, RouteDetail.allRouteParameters(aggregate));
+
+        return Stream.of(aggregateRelatedImports, valueObjectImports).flatMap(Set::stream).collect(Collectors.toSet());
     }
 
     @SuppressWarnings("serial")

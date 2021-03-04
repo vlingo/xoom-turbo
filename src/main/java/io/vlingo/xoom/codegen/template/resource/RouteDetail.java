@@ -57,15 +57,15 @@ public class RouteDetail {
         return route.retrieveRelatedValue(BODY_TYPE);
     }
 
-    public static boolean requireEntityLoad(final CodeGenerationParameter aggregateParameter) {
-        return aggregateParameter.retrieveAllRelated(ROUTE_SIGNATURE)
+    public static boolean requireEntityLoad(final CodeGenerationParameter aggregate) {
+        return aggregate.retrieveAllRelated(ROUTE_SIGNATURE)
                 .filter(route -> route.hasAny(REQUIRE_ENTITY_LOADING))
                 .anyMatch(route -> route.retrieveRelatedValue(REQUIRE_ENTITY_LOADING, Boolean::valueOf));
     }
 
-    public static boolean requireModelFactory(final CodeGenerationParameter aggregateParameter) {
-        return aggregateParameter.retrieveAllRelated(ROUTE_SIGNATURE)
-                .map(methodSignature -> AggregateDetail.methodWithName(aggregateParameter, methodSignature.value))
+    public static boolean requireModelFactory(final CodeGenerationParameter aggregate) {
+        return aggregate.retrieveAllRelated(ROUTE_SIGNATURE)
+                .map(methodSignature -> AggregateDetail.methodWithName(aggregate, methodSignature.value))
                 .anyMatch(method -> method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf));
     }
 
@@ -79,6 +79,12 @@ public class RouteDetail {
         }
 
         return resolveMethodSignatureWithParams(routeSignature);
+    }
+
+    public static Stream<CodeGenerationParameter> allRouteParameters(final CodeGenerationParameter aggregate) {
+        return aggregate.retrieveAllRelated(ROUTE_SIGNATURE)
+                .map(route -> AggregateDetail.methodWithName(aggregate, route.value))
+                .flatMap(method -> method.retrieveAllRelated(METHOD_PARAMETER));
     }
 
     private static String resolveMethodSignatureWithParams(final CodeGenerationParameter routeSignature) {

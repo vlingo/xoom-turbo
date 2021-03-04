@@ -88,6 +88,13 @@ public class CodeGenerationParameters {
     }
 
     public Stream<CodeGenerationParameter> retrieveAll(final Label label) {
+        return retrieveAll(label, HierarchicalLevels.ONE);
+    }
+
+    public Stream<CodeGenerationParameter> retrieveAll(final Label label, final HierarchicalLevels hierarchicalLevels) {
+        if(HierarchicalLevels.ALL.equals(hierarchicalLevels)) {
+            return performBulkRetrieval(label);
+        }
         return parameters.stream().filter(param -> param.isLabeled(label));
     }
 
@@ -102,7 +109,7 @@ public class CodeGenerationParameters {
         if(!isAlreadyConverted(language, relatedLabel)) {
             conversionEntries.remove(relatedLabel);
 
-            collectAll(parentLabel).forEach(parent -> parent.convertValuesSyntax(relatedLabel, converter));
+            performBulkRetrieval(parentLabel).forEach(parent -> parent.convertValuesSyntax(relatedLabel, converter));
 
             conversionEntries.put(relatedLabel, language);
         }
@@ -129,20 +136,23 @@ public class CodeGenerationParameters {
         return false;
     }
 
-    private Stream<CodeGenerationParameter> collectAll(final Label label) {
+    private Stream<CodeGenerationParameter> performBulkRetrieval(final Label label) {
         final List<CodeGenerationParameter> collected = new ArrayList<>();
-        collectAll(label, parameters.stream(), collected);
+        performBulkRetrieval(label, parameters.stream(), collected);
         return collected.stream();
     }
 
-    private void collectAll(final Label label, final Stream<CodeGenerationParameter> source, final List<CodeGenerationParameter> collected) {
+    private void performBulkRetrieval(final Label label, final Stream<CodeGenerationParameter> source, final List<CodeGenerationParameter> collected) {
         source.forEach(parameter -> {
             if(parameter.isLabeled(label)) {
                 collected.add(parameter);
             } else {
-                collectAll(label, parameter.relatedParametersAsStream(), collected);
+                performBulkRetrieval(label, parameter.relatedParametersAsStream(), collected);
             }
         });
     }
 
+    public enum HierarchicalLevels {
+        ONE, ALL;
+    }
 }

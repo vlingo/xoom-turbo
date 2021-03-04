@@ -64,7 +64,11 @@ public class CodeGenerationParameter {
     }
 
     public Stream<CodeGenerationParameter> retrieveAllRelated(final Label label) {
-        return relatedParameters.retrieveAll(label);
+        return retrieveAllRelated(label, CodeGenerationParameters.HierarchicalLevels.ONE);
+    }
+
+    public Stream<CodeGenerationParameter> retrieveAllRelated(final Label label, final CodeGenerationParameters.HierarchicalLevels levels) {
+        return relatedParameters.retrieveAll(label, levels);
     }
 
     public Stream<CodeGenerationParameter> retrieveAllRelated() {
