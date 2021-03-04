@@ -58,10 +58,10 @@ public class ProjectionGenerationStepTest {
         final String sourceTypesName = projectionType.isEventBased() ? "Events" : "Operations";
 
         Assert.assertEquals(13, context.contents().size());
-        Assert.assertEquals(sourceTypesName, context.contents().get(9).retrieveClassName());
-        Assert.assertEquals("ProjectionDispatcherProvider", context.contents().get(10).retrieveClassName());
-        Assert.assertEquals("BookProjectionActor", context.contents().get(11).retrieveClassName());
-        Assert.assertEquals("AuthorProjectionActor", context.contents().get(12).retrieveClassName());
+        Assert.assertEquals(sourceTypesName, context.contents().get(9).retrieveName());
+        Assert.assertEquals("ProjectionDispatcherProvider", context.contents().get(10).retrieveName());
+        Assert.assertEquals("BookProjectionActor", context.contents().get(11).retrieveName());
+        Assert.assertEquals("AuthorProjectionActor", context.contents().get(12).retrieveName());
 
         Assert.assertTrue(context.contents().get(10).contains("class ProjectionDispatcherProvider"));
 

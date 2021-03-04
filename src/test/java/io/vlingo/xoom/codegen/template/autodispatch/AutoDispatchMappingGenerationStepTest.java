@@ -54,7 +54,7 @@ public class AutoDispatchMappingGenerationStepTest {
         Assert.assertEquals(18, context.contents().size());
 
         final Content authorMappingContent =
-                context.contents().stream().filter(content -> content.retrieveClassName().equals("AuthorResource"))
+                context.contents().stream().filter(content -> content.retrieveName().equals("AuthorResource"))
                         .findFirst().get();
 
         Assert.assertTrue(authorMappingContent.contains("@AutoDispatch(path=\"/authors\", handlers=AuthorResourceHandlers.class)"));
@@ -68,7 +68,7 @@ public class AutoDispatchMappingGenerationStepTest {
         Assert.assertTrue(authorMappingContent.contains("Completes<Response> authors();"));
 
         final Content authorHandlersMappingContent =
-                context.contents().stream().filter(content -> content.retrieveClassName().equals("AuthorResourceHandlers"))
+                context.contents().stream().filter(content -> content.retrieveName().equals("AuthorResourceHandlers"))
                         .findFirst().get();
 
         Assert.assertTrue(authorHandlersMappingContent.contains("public static final int WITH_NAME = 0;"));

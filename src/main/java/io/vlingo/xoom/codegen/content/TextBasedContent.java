@@ -88,7 +88,7 @@ public class TextBasedContent extends Content {
     }
 
     @Override
-    public String retrieveClassName() {
+    public String retrieveName() {
         return FilenameUtils.removeExtension(file.getName());
     }
 
@@ -99,7 +99,7 @@ public class TextBasedContent extends Content {
 
     @Override
     public String retrieveQualifiedName() {
-        return ClassFormatter.qualifiedNameOf(retrievePackage(), retrieveClassName());
+        return ClassFormatter.qualifiedNameOf(retrievePackage(), retrieveName());
     }
 
     @Override

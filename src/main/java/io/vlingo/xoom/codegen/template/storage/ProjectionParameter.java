@@ -42,7 +42,7 @@ public class ProjectionParameter {
                                 final int numberOfProjections) {
         this.causes = joinEvents(protocol, contents);
         this.last = index == numberOfProjections - 1;
-        this.actor = PROJECTION.resolveClassname(protocol.retrieveClassName());
+        this.actor = PROJECTION.resolveClassname(protocol.retrieveName());
     }
 
     private String joinEvents(final Content protocol,

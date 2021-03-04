@@ -148,6 +148,11 @@ public class CodeGenerationContext {
                 !this.<String>parameterOf(label).trim().isEmpty();
     }
 
+    public Content findContent(final TemplateStandard standard, final String contentName) {
+        return contents.stream().filter(content -> content.has(standard) && content.isNamed(contentName)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unable to find content " + standard + " - " + contentName));
+    }
+
     public List<Content> contents() {
         return Collections.unmodifiableList(contents);
     }

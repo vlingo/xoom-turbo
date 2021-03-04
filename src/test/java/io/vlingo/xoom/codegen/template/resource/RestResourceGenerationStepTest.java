@@ -48,7 +48,7 @@ public class RestResourceGenerationStepTest {
 
         final List<Content> contents = context.contents();
         Assert.assertEquals(8, contents.size());
-        Assert.assertEquals("AuthorResource", contents.get(7).retrieveClassName());
+        Assert.assertEquals("AuthorResource", contents.get(7).retrieveName());
         Assert.assertTrue(contents.get(7).contains("class AuthorResource"));
         Assert.assertTrue(contents.get(7).contains("Author.withName(stage(), data.name)"));
         Assert.assertTrue(contents.get(7).contains("package io.vlingo.xoomapp.infrastructure.resource;"));
@@ -78,7 +78,7 @@ public class RestResourceGenerationStepTest {
 
         final List<Content> contents = context.contents();
         Assert.assertEquals(8, contents.size());
-        Assert.assertEquals("AuthorResource", contents.get(7).retrieveClassName());
+        Assert.assertEquals("AuthorResource", contents.get(7).retrieveName());
         Assert.assertTrue(contents.get(7).contains("class AuthorResource : DynamicResourceHandler"));
         Assert.assertTrue(contents.get(7).contains("Author.withName(stage(), data.name)"));
         Assert.assertTrue(contents.get(7).contains("package io.vlingo.xoomapp.infrastructure.resource"));

@@ -9,7 +9,7 @@ package io.vlingo.xoom.codegen.template.model.formatting;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
-import io.vlingo.xoom.codegen.template.model.aggregate.FieldDetail;
+import io.vlingo.xoom.codegen.template.model.FieldDetail;
 
 import java.util.Arrays;
 import java.util.Collection;

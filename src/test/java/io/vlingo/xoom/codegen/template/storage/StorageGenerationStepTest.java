@@ -40,10 +40,10 @@ public class StorageGenerationStepTest {
         new StorageGenerationStep().process(context);
 
         Assert.assertEquals(20, context.contents().size());
-        Assert.assertEquals("BookRentedAdapter", context.contents().get(11).retrieveClassName());
-        Assert.assertEquals("BookPurchasedAdapter", context.contents().get(12).retrieveClassName());
-        Assert.assertEquals("CommandModelJournalProvider", context.contents().get(18).retrieveClassName());
-        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(19).retrieveClassName());
+        Assert.assertEquals("BookRentedAdapter", context.contents().get(11).retrieveName());
+        Assert.assertEquals("BookPurchasedAdapter", context.contents().get(12).retrieveName());
+        Assert.assertEquals("CommandModelJournalProvider", context.contents().get(18).retrieveName());
+        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(19).retrieveName());
 
         Assert.assertTrue(context.contents().get(11).contains("class BookRentedAdapter implements EntryAdapter<BookRented,TextEntry>"));
         Assert.assertTrue(context.contents().get(12).contains("class BookPurchasedAdapter implements EntryAdapter<BookPurchased,TextEntry>"));
@@ -83,10 +83,10 @@ public class StorageGenerationStepTest {
         new StorageGenerationStep().process(context);
 
         Assert.assertEquals(20, context.contents().size());
-        Assert.assertEquals("BookStateAdapter", context.contents().get(11).retrieveClassName());
-        Assert.assertEquals("AuthorStateAdapter", context.contents().get(12).retrieveClassName());
-        Assert.assertEquals("CommandModelStateStoreProvider", context.contents().get(18).retrieveClassName());
-        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(19).retrieveClassName());
+        Assert.assertEquals("BookStateAdapter", context.contents().get(11).retrieveName());
+        Assert.assertEquals("AuthorStateAdapter", context.contents().get(12).retrieveName());
+        Assert.assertEquals("CommandModelStateStoreProvider", context.contents().get(18).retrieveName());
+        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(19).retrieveName());
 
         Assert.assertTrue(context.contents().get(11).contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
         Assert.assertTrue(context.contents().get(12).contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
@@ -115,10 +115,10 @@ public class StorageGenerationStepTest {
         new StorageGenerationStep().process(context);
 
         Assert.assertEquals(20, context.contents().size());
-        Assert.assertEquals("BookStateAdapter", context.contents().get(11).retrieveClassName());
-        Assert.assertEquals("AuthorStateAdapter", context.contents().get(12).retrieveClassName());
-        Assert.assertEquals("CommandModelStateStoreProvider", context.contents().get(18).retrieveClassName());
-        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(19).retrieveClassName());
+        Assert.assertEquals("BookStateAdapter", context.contents().get(11).retrieveName());
+        Assert.assertEquals("AuthorStateAdapter", context.contents().get(12).retrieveName());
+        Assert.assertEquals("CommandModelStateStoreProvider", context.contents().get(18).retrieveName());
+        Assert.assertEquals("QueryModelStateStoreProvider", context.contents().get(19).retrieveName());
 
         Assert.assertTrue(context.contents().get(11).contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
         Assert.assertTrue(context.contents().get(12).contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
@@ -137,7 +137,7 @@ public class StorageGenerationStepTest {
         new StorageGenerationStep().process(context);
 
         Assert.assertEquals(18, context.contents().size());
-        Assert.assertEquals("PersistenceSetup", context.contents().get(17).retrieveClassName());
+        Assert.assertEquals("PersistenceSetup", context.contents().get(17).retrieveName());
         Assert.assertTrue(context.contents().get(17).contains("class PersistenceSetup"));
         Assert.assertTrue(context.contents().get(17).contains("@Persistence(basePackage = \"io.vlingo\", storageType = StorageType.STATE_STORE, cqrs = true)"));
         Assert.assertTrue(context.contents().get(17).contains("@Projections({"));

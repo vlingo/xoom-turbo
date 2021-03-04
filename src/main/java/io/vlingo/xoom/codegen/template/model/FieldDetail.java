@@ -5,20 +5,18 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.template.model.aggregate;
+package io.vlingo.xoom.codegen.template.model;
 
+import io.vlingo.xoom.codegen.CodeGenerationSetup;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 
-import java.util.Arrays;
-import java.util.List;
-
+import static io.vlingo.xoom.codegen.CodeGenerationSetup.SCALAR_NUMERIC_TYPES;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class FieldDetail {
 
     private static String UNKNOWN_FIELD_MESSAGE = "%s is not a field in %s state";
-    private static final List<String> NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "integer", "long", "double", "float");
 
     @SuppressWarnings("static-access")
     public static String typeOf(final CodeGenerationParameter parent, final String fieldName) {
@@ -33,10 +31,17 @@ public class FieldDetail {
         if(type.equalsIgnoreCase(Boolean.class.getSimpleName())) {
             return "false";
         }
-        if(NUMERIC_TYPES.contains(typeOf(parent, stateFieldName).toLowerCase())) {
+        if(SCALAR_NUMERIC_TYPES.contains(typeOf(parent, stateFieldName).toLowerCase())) {
             return "0";
         }
         return "null";
+    }
+
+    public static boolean hasScalarType(final CodeGenerationParameter field) {
+        final String fieldType =
+                field.retrieveRelatedValue(Label.FIELD_TYPE, String::toLowerCase);
+
+        return CodeGenerationSetup.SCALAR_TYPES.contains(fieldType);
     }
 
     private static Label resolveFieldTypeLabel(final CodeGenerationParameter parent) {

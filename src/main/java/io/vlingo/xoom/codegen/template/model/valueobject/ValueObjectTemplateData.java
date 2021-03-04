@@ -9,16 +9,17 @@ package io.vlingo.xoom.codegen.template.model.valueobject;
 
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail.resolvePackage;
@@ -27,27 +28,25 @@ public class ValueObjectTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
 
-  public static List<TemplateData> from(final CodeGenerationParameters parameters) {
-    final String basePackage =
-            parameters.retrieveValue(Label.PACKAGE);
+  public static List<TemplateData> from(final String basePackage,
+                                        final Language language,
+                                        final Stream<CodeGenerationParameter> aggregates,
+                                        final Stream<CodeGenerationParameter> valueObjects) {
+    final List<CodeGenerationParameter> dependentAggregates =
+            AggregateDetail.findAggregatesWithValueObjects(aggregates);
 
-    final Language language =
-            parameters.retrieveValue(Label.LANGUAGE, Language::valueOf);
+    final Function<CodeGenerationParameter, TemplateData> mapper =
+            vo -> new ValueObjectTemplateData(basePackage, language, vo, dependentAggregates);
 
-    final List<CodeGenerationParameter> aggregates =
-            parameters.retrieveAll(Label.AGGREGATE).collect(Collectors.toList());
-
-    return parameters.retrieveAll(Label.VALUE_OBJECT).map(valueObject ->
-            new ValueObjectTemplateData(basePackage, language, valueObject, aggregates))
-            .collect(Collectors.toList());
+    return valueObjects.map(mapper).collect(Collectors.toList());
   }
 
   private ValueObjectTemplateData(final String basePackage,
                                   final Language language,
                                   final CodeGenerationParameter valueObject,
-                                  final List<CodeGenerationParameter> aggregates) {
+                                  final List<CodeGenerationParameter> dependentAggregates) {
     this.parameters =
-            TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage, valueObject, aggregates))
+            TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage, valueObject.value, dependentAggregates))
                     .and(VALUE_OBJECT_NAME, valueObject.value)
                     .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(valueObject))
                     .and(CONSTRUCTOR_INVOCATION_PARAMETERS, Formatters.Arguments.VALUE_OBJECT_CONSTRUCTOR_INVOCATION.format(valueObject))

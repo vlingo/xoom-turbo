@@ -25,7 +25,7 @@ public class ContentQuery {
 
     public static Set<String> findClassNames(final TemplateStandard standard, final List<Content> contents) {
         return filterByStandard(standard, contents)
-                .map(Content::retrieveClassName)
+                .map(Content::retrieveName)
                 .collect(Collectors.toSet());
     }
 
@@ -37,7 +37,7 @@ public class ContentQuery {
     public static Set<String> findClassNames(final TemplateStandard standard, final String packageName, final List<Content> contents) {
         return filterByStandard(standard, contents)
                 .filter(content -> content.retrievePackage().equals(packageName))
-                .map(content -> content.retrieveClassName())
+                .map(content -> content.retrieveName())
                 .collect(Collectors.toSet());
     }
 
@@ -63,7 +63,7 @@ public class ContentQuery {
 
     public static String findPackage(final TemplateStandard standard, final String className, final List<Content> contents) {
         return filterByStandard(standard, contents)
-                .filter(content -> content.retrieveClassName().equals(className))
+                .filter(content -> content.retrieveName().equals(className))
                 .map(Content::retrievePackage).findAny().orElse("");
     }
 

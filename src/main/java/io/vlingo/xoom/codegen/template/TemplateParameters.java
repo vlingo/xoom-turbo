@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.codegen.template;
 
+import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.parameter.ImportParameter;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
 
 public class TemplateParameters {
 
@@ -51,10 +53,25 @@ public class TemplateParameters {
         if(this.find(TemplateParameter.IMPORTS) == null) {
             this.and(TemplateParameter.IMPORTS, new HashSet<ImportParameter>());
         }
-        if(qualifiedClassName != null && !qualifiedClassName.trim().isEmpty()) {
+        if(validateImport(qualifiedClassName)) {
             this.<Set>find(TemplateParameter.IMPORTS).add(new ImportParameter(qualifiedClassName.trim()));
         }
         return this;
+    }
+
+    private boolean validateImport(final String qualifiedClassName) {
+        if(qualifiedClassName == null || qualifiedClassName.trim().isEmpty()) {
+            return false;
+        }
+
+        final String classPackage = ClassFormatter.packageOf(qualifiedClassName);
+
+        if(parameters.containsKey(PACKAGE_NAME) &&
+                parameters.get(PACKAGE_NAME).equals(classPackage)) {
+            return false;
+        }
+
+        return true;
     }
 
     public TemplateParameters addImports(final Set<String> qualifiedClassNames) {
@@ -89,11 +106,6 @@ public class TemplateParameters {
             return defaultValue;
         }
         return find(parameter);
-    }
-
-    private void update(final TemplateParameter parameter, final Object object) {
-        this.parameters.remove(parameter.key);
-        this.parameters.put(parameter.key, object);
     }
 
     private void remove(final TemplateParameter parameter) {

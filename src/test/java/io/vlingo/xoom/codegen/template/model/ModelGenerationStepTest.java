@@ -1,7 +1,8 @@
 package io.vlingo.xoom.codegen.template.model;
 
-import io.vlingo.xoom.TextExpectation;
+import io.vlingo.xoom.ExpectationReader;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
@@ -13,6 +14,7 @@ import java.io.IOException;
 
 import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.PACKAGE;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.storage.StorageType.JOURNAL;
 import static io.vlingo.xoom.codegen.template.storage.StorageType.STATE_STORE;
 
@@ -35,31 +37,29 @@ public class ModelGenerationStepTest {
 
         modelGenerationStep.process(context);
 
-        Assert.assertEquals(7, context.contents().size());
-        Assert.assertEquals("Author", context.contents().get(0).retrieveClassName());
-        Assert.assertEquals("AuthorEntity", context.contents().get(1).retrieveClassName());
-        Assert.assertEquals("AuthorState", context.contents().get(2).retrieveClassName());
-        Assert.assertEquals("AuthorRegistered", context.contents().get(3).retrieveClassName());
-        Assert.assertEquals("AuthorRanked", context.contents().get(4).retrieveClassName());
+        final Content author = context.findContent(AGGREGATE_PROTOCOL, "Author");
+        final Content authorEntity = context.findContent(AGGREGATE, "AuthorEntity");
+        final Content authorState = context.findContent(AGGREGATE_STATE, "AuthorState");
+        final Content authorRegistered = context.findContent(DOMAIN_EVENT, "AuthorRegistered");
+        final Content authorRanked = context.findContent(DOMAIN_EVENT, "AuthorRanked");
 
-        Assert.assertTrue(context.contents().get(0).contains("interface Author "));
-        Assert.assertTrue(context.contents().get(0).contains("final Address _address = stage.addressFactory().uniquePrefixedWith(\"g-\");"));
-        Assert.assertTrue(context.contents().get(1).contains("class AuthorEntity extends StatefulEntity"));
-        Assert.assertTrue(context.contents().get(1).contains("public Completes<AuthorState> withName(final String name)"));
-        Assert.assertTrue(context.contents().get(1).contains("final AuthorState stateArg = state.withName(name);"));
-        Assert.assertTrue(context.contents().get(1).contains("return apply(stateArg, new AuthorRegistered(stateArg), () -> state)"));
-        Assert.assertTrue(context.contents().get(2).contains("class AuthorState"));
-        Assert.assertTrue(context.contents().get(2).contains("public final long id;"));
-        Assert.assertTrue(context.contents().get(2).contains("public final String name;"));
-        Assert.assertTrue(context.contents().get(2).contains("public final int rank;"));
-        Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered extends IdentifiedDomainEvent"));
-        Assert.assertTrue(context.contents().get(3).contains("public final long id;"));
-        Assert.assertTrue(context.contents().get(3).contains("public final String name;"));
-        Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends IdentifiedDomainEvent"));
-        Assert.assertTrue(context.contents().get(4).contains("public final long id;"));
-        Assert.assertTrue(context.contents().get(4).contains("public final int rank;"));
-        Assert.assertTrue(context.contents().get(5).contains(TextExpectation.read("name-value-object")));
-        Assert.assertTrue(context.contents().get(6).contains(TextExpectation.read("rank-value-object")));
+        Assert.assertEquals(5, context.contents().size());
+        Assert.assertTrue(author.contains(ExpectationReader.onJava().read("author-protocol")));
+        Assert.assertTrue(authorEntity.contains("class AuthorEntity extends StatefulEntity"));
+        Assert.assertTrue(authorEntity.contains("class AuthorEntity extends StatefulEntity"));
+        Assert.assertTrue(authorEntity.contains("public Completes<AuthorState> withName(final Name name)"));
+        Assert.assertTrue(authorEntity.contains("final AuthorState stateArg = state.withName(name);"));
+        Assert.assertTrue(authorEntity.contains("return apply(stateArg, new AuthorRegistered(stateArg), () -> state)"));
+        Assert.assertTrue(authorState.contains("class AuthorState"));
+        Assert.assertTrue(authorState.contains("public final long id;"));
+        Assert.assertTrue(authorState.contains("public final Name name;"));
+        Assert.assertTrue(authorState.contains("public final Rank rank;"));
+        Assert.assertTrue(authorRegistered.contains("class AuthorRegistered extends IdentifiedDomainEvent"));
+        Assert.assertTrue(authorRegistered.contains("public final long id;"));
+        Assert.assertTrue(authorRegistered.contains("public final Name name;"));
+        Assert.assertTrue(authorRanked.contains("class AuthorRanked extends IdentifiedDomainEvent"));
+        Assert.assertTrue(authorRanked.contains("public final long id;"));
+        Assert.assertTrue(authorRanked.contains("public final Rank rank;"));
     }
 
     @Test
@@ -79,28 +79,28 @@ public class ModelGenerationStepTest {
 
         modelGenerationStep.process(context);
 
-        Assert.assertEquals(7, context.contents().size());
-        Assert.assertEquals("Author", context.contents().get(0).retrieveClassName());
-        Assert.assertEquals("AuthorEntity", context.contents().get(1).retrieveClassName());
-        Assert.assertEquals("AuthorState", context.contents().get(2).retrieveClassName());
-        Assert.assertEquals("AuthorRegistered", context.contents().get(3).retrieveClassName());
-        Assert.assertEquals("AuthorRanked", context.contents().get(4).retrieveClassName());
+        Assert.assertEquals(5, context.contents().size());
+        Assert.assertEquals("Author", context.contents().get(0).retrieveName());
+        Assert.assertEquals("AuthorEntity", context.contents().get(1).retrieveName());
+        Assert.assertEquals("AuthorState", context.contents().get(2).retrieveName());
+        Assert.assertEquals("AuthorRegistered", context.contents().get(3).retrieveName());
+        Assert.assertEquals("AuthorRanked", context.contents().get(4).retrieveName());
 
         Assert.assertTrue(context.contents().get(0).contains("interface Author "));
         Assert.assertTrue(context.contents().get(0).contains("final Address _address = stage.addressFactory().uniquePrefixedWith(\"g-\");"));
         Assert.assertTrue(context.contents().get(1).contains("class AuthorEntity extends EventSourced"));
-        Assert.assertTrue(context.contents().get(1).contains("public Completes<AuthorState> withName(final String name) {"));
+        Assert.assertTrue(context.contents().get(1).contains("public Completes<AuthorState> withName(final Name name) {"));
         Assert.assertTrue(context.contents().get(1).contains("return apply(new AuthorRegistered(state), () -> state);"));
         Assert.assertTrue(context.contents().get(2).contains("class AuthorState"));
         Assert.assertTrue(context.contents().get(2).contains("public final long id;"));
-        Assert.assertTrue(context.contents().get(2).contains("public final String name;"));
-        Assert.assertTrue(context.contents().get(2).contains("public final int rank;"));
+        Assert.assertTrue(context.contents().get(2).contains("public final Name name;"));
+        Assert.assertTrue(context.contents().get(2).contains("public final Rank rank;"));
         Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered extends IdentifiedDomainEvent"));
         Assert.assertTrue(context.contents().get(3).contains("public final long id;"));
-        Assert.assertTrue(context.contents().get(3).contains("public final String name;"));
+        Assert.assertTrue(context.contents().get(3).contains("public final Name name;"));
         Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked extends IdentifiedDomainEvent"));
         Assert.assertTrue(context.contents().get(4).contains("public final long id;"));
-        Assert.assertTrue(context.contents().get(4).contains("public final int rank;"));
+        Assert.assertTrue(context.contents().get(4).contains("public final Rank rank;"));
     }
 
     @Test
@@ -121,58 +121,44 @@ public class ModelGenerationStepTest {
         modelGenerationStep.process(context);
 
         Assert.assertEquals(5, context.contents().size());
-        Assert.assertEquals("Author", context.contents().get(0).retrieveClassName());
-        Assert.assertEquals("AuthorEntity", context.contents().get(1).retrieveClassName());
-        Assert.assertEquals("AuthorState", context.contents().get(2).retrieveClassName());
-        Assert.assertEquals("AuthorRegistered", context.contents().get(3).retrieveClassName());
-        Assert.assertEquals("AuthorRanked", context.contents().get(4).retrieveClassName());
+        Assert.assertEquals("Author", context.contents().get(0).retrieveName());
+        Assert.assertEquals("AuthorEntity", context.contents().get(1).retrieveName());
+        Assert.assertEquals("AuthorState", context.contents().get(2).retrieveName());
+        Assert.assertEquals("AuthorRegistered", context.contents().get(3).retrieveName());
+        Assert.assertEquals("AuthorRanked", context.contents().get(4).retrieveName());
 
         Assert.assertTrue(context.contents().get(0).contains("interface Author "));
         Assert.assertTrue(context.contents().get(0).contains("val _address = stage.addressFactory().uniquePrefixedWith(\"g-\") : Address"));
         Assert.assertTrue(context.contents().get(0).contains("val _author = stage.actorFor(Author::class.java, Definition.has(AuthorEntity::class.java, Definition.parameters(_address.idString())), _address) : Author"));
         Assert.assertTrue(context.contents().get(0).contains("return _author.withName(name)"));
         Assert.assertTrue(context.contents().get(1).contains("public class AuthorEntity : StatefulEntity<AuthorState>, Author"));
-        Assert.assertTrue(context.contents().get(1).contains("public fun withName(final String name): Completes<AuthorState>"));
+        Assert.assertTrue(context.contents().get(1).contains("public fun withName(final Name name): Completes<AuthorState>"));
         Assert.assertTrue(context.contents().get(1).contains("val stateArg: AuthorState = state.withName(name)"));
         Assert.assertTrue(context.contents().get(1).contains("return apply(stateArg, AuthorRegistered(stateArg)){state}"));
         Assert.assertTrue(context.contents().get(2).contains("class AuthorState"));
         Assert.assertTrue(context.contents().get(2).contains("val id: Long;"));
-        Assert.assertTrue(context.contents().get(2).contains("val name: String;"));
-        Assert.assertTrue(context.contents().get(2).contains("val rank: Int;"));
+        Assert.assertTrue(context.contents().get(2).contains("val name: Name;"));
+        Assert.assertTrue(context.contents().get(2).contains("val rank: Rank;"));
         Assert.assertTrue(context.contents().get(3).contains("class AuthorRegistered : IdentifiedDomainEvent"));
         Assert.assertTrue(context.contents().get(3).contains("val id: Long;"));
-        Assert.assertTrue(context.contents().get(3).contains("val name: String;"));
+        Assert.assertTrue(context.contents().get(3).contains("val name: Name;"));
         Assert.assertTrue(context.contents().get(4).contains("class AuthorRanked : IdentifiedDomainEvent"));
         Assert.assertTrue(context.contents().get(4).contains("val id: Long;"));
-        Assert.assertTrue(context.contents().get(4).contains("val rank: Int;"));
+        Assert.assertTrue(context.contents().get(4).contains("val rank: Rank;"));
     }
 
     private CodeGenerationParameter authorAggregate() {
-        final CodeGenerationParameter nameValueObject =
-                CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
-                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
-                                .relate(Label.FIELD_TYPE, "String"))
-                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
-                                .relate(Label.FIELD_TYPE, "String"));
-
-        final CodeGenerationParameter rankValueObject =
-                CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
-                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
-                                .relate(Label.FIELD_TYPE, "int"))
-                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
-                                .relate(Label.FIELD_TYPE, "String"));
-
         final CodeGenerationParameter idField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "id")
                         .relate(Label.FIELD_TYPE, "long");
 
         final CodeGenerationParameter nameField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "name")
-                        .relate(Label.FIELD_TYPE, "String");
+                        .relate(Label.FIELD_TYPE, "Name");
 
         final CodeGenerationParameter rankField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                        .relate(Label.FIELD_TYPE, "int");
+                        .relate(Label.FIELD_TYPE, "Rank");
 
         final CodeGenerationParameter authorRegisteredEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")

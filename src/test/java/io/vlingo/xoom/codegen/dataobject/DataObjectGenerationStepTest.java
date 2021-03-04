@@ -41,7 +41,7 @@ public class DataObjectGenerationStepTest {
 
         final Content bookDataContent =
                 context.contents().stream()
-                        .filter(content -> content.retrieveClassName().equals("BookData"))
+                        .filter(content -> content.retrieveName().equals("BookData"))
                         .findFirst().get();
 
         Assert.assertTrue(bookDataContent.contains("public class BookData"));

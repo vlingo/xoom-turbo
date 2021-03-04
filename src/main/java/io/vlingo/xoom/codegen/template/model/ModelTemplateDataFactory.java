@@ -27,9 +27,6 @@ import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class ModelTemplateDataFactory {
 
-    private final static String PACKAGE_PATTERN = "%s.%s.%s";
-    private final static String PARENT_PACKAGE_NAME = "model";
-
     public static List<TemplateData> from(final CodeGenerationParameters parameters) {
         final String basePackage = parameters.retrieveValue(PACKAGE);
         final Language language = parameters.retrieveValue(LANGUAGE, Language::valueOf);
@@ -51,7 +48,5 @@ public class ModelTemplateDataFactory {
         templatesData.addAll(DomainEventTemplateData.from(packageName, language, aggregateParameter));
         return templatesData.stream();
     }
-
-
 
 }

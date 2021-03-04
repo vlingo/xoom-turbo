@@ -37,7 +37,7 @@ public class BootstrapGenerationStepTest {
         new BootstrapGenerationStep().process(context);
 
         Assert.assertEquals(6, context.contents().size());
-        Assert.assertEquals("Bootstrap", context.contents().get(5).retrieveClassName());
+        Assert.assertEquals("Bootstrap", context.contents().get(5).retrieveName());
         Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, ProjectionDispatcherProvider.using(stage).storeDispatcher)"));
         Assert.assertTrue(context.contents().get(5).contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
         Assert.assertTrue(context.contents().get(5).contains("final AuthorResource authorResource = new AuthorResource(stage);"));
@@ -58,7 +58,7 @@ public class BootstrapGenerationStepTest {
         new BootstrapGenerationStep().process(context);
 
         Assert.assertEquals(6, context.contents().size());
-        Assert.assertEquals("Bootstrap", context.contents().get(5).retrieveClassName());
+        Assert.assertEquals("Bootstrap", context.contents().get(5).retrieveName());
         Assert.assertTrue(context.contents().get(5).contains("@ResourceHandlers(packages = \"io.vlingo.xoomapp.resource\")"));
         Assert.assertEquals(Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "Bootstrap.java").toString(), ((TextBasedContent) context.contents().get(5)).file.getAbsolutePath());
     }
@@ -79,7 +79,7 @@ public class BootstrapGenerationStepTest {
         new BootstrapGenerationStep().process(context);
 
         Assert.assertEquals(6, context.contents().size());
-        Assert.assertEquals("XoomInitializer", context.contents().get(5).retrieveClassName());
+        Assert.assertEquals("XoomInitializer", context.contents().get(5).retrieveName());
         Assert.assertTrue(context.contents().get(5).contains("import io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;"));
         Assert.assertTrue(context.contents().get(5).contains("new BlockingMailboxPlugin().start(world);"));
         Assert.assertTrue(context.contents().get(5).contains("world.stageNamed(\"xoom-app\")"));

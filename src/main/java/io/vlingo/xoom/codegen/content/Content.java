@@ -36,7 +36,7 @@ public abstract class Content {
 
     public abstract void create();
 
-    public abstract String retrieveClassName();
+    public abstract String retrieveName();
 
     public abstract String retrievePackage();
 
@@ -56,6 +56,10 @@ public abstract class Content {
 
     public boolean has(final TemplateStandard standard) {
         return this.standard.equals(standard);
+    }
+
+    public boolean isNamed(final String name) {
+        return retrieveName().equals(name);
     }
 
 }

@@ -12,12 +12,17 @@ import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.Template.*;
 
 public class CodeGenerationSetup {
 
   public static final List<String> KOTLIN_RESERVED_WORDS = Arrays.asList("object", "public", "get", "set");
+  public static final List<String> SCALAR_NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "long", "double");
+  public static final List<String> SCALAR_TYPES = Stream.of(SCALAR_NUMERIC_TYPES, Arrays.asList("boolean", "string"))
+                  .flatMap(List::stream).collect(Collectors.toList());
 
   @SuppressWarnings("serial")
     public static final Map<StorageType, String> AGGREGATE_TEMPLATES =
@@ -79,7 +84,7 @@ public class CodeGenerationSetup {
             );
 
 
-    public static Map<StorageType, String> storeProviderTemplatesFrom(final Model model) {
+  public static Map<StorageType, String> storeProviderTemplatesFrom(final Model model) {
         if(model.isQueryModel()) {
             return QUERY_MODEL_STORE_TEMPLATES;
         }

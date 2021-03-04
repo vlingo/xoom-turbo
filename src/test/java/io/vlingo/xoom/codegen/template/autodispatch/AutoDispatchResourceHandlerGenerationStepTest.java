@@ -37,7 +37,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
 
         final Content authorResourceHandlerContent =
                 context.contents().stream().filter(content ->
-                        content.retrieveClassName().equals("AuthorResourceHandler")).findFirst().get();
+                        content.retrieveName().equals("AuthorResourceHandler")).findFirst().get();
 
         Assert.assertTrue(authorResourceHandlerContent.contains("import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;"));
         Assert.assertTrue(authorResourceHandlerContent.contains(".andThenTo(author -> AuthorHandlers.changeAuthorNameHandler.handler.handle(author,authorData))"));
@@ -47,7 +47,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
 
         final Content bookResourceHandlerContent =
                 context.contents().stream().filter(content ->
-                        content.retrieveClassName().equals("BookResourceHandler")).findFirst().get();
+                        content.retrieveName().equals("BookResourceHandler")).findFirst().get();
 
         Assert.assertTrue(bookResourceHandlerContent.contains("import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;"));
         Assert.assertTrue(bookResourceHandlerContent.contains("get(\"/books\")"));

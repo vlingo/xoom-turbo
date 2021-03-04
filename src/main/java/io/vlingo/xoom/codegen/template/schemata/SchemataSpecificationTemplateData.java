@@ -12,7 +12,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.exchange.ExchangeRole;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.codegen.template.model.aggregate.FieldDetail;
+import io.vlingo.xoom.codegen.template.model.FieldDetail;
 
 import java.util.List;
 import java.util.function.Predicate;

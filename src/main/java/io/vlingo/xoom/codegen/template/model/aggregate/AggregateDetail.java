@@ -9,8 +9,12 @@ package io.vlingo.xoom.codegen.template.model.aggregate;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AggregateDetail {
 
@@ -27,9 +31,14 @@ public class AggregateDetail {
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("Event " + eventName + " not found" ));
     }
 
+    public static List<CodeGenerationParameter> findAggregatesWithValueObjects(final Stream<CodeGenerationParameter> aggregates) {
+        return aggregates.filter(aggregate -> ValueObjectDetail.useValueObject(aggregate)).collect(Collectors.toList());
+    }
+
     private static Optional<CodeGenerationParameter> findMethod(final CodeGenerationParameter aggregate, final String methodName) {
         return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
                 .filter(method -> methodName.equals(method.value) || method.value.startsWith(methodName + "("))
                 .findFirst();
     }
+
 }

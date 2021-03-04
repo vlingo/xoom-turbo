@@ -1,0 +1,20 @@
+package io.vlingo.xoomapp.model.author;
+
+import io.vlingo.actors.Definition;
+import io.vlingo.actors.Address;
+import io.vlingo.actors.Stage;
+import io.vlingo.common.Completes;
+
+public interface Author {
+
+  Completes<AuthorState> withName(final Name name);
+
+  static Completes<AuthorState> withName(final Stage stage, final Name name) {
+    final Address _address = stage.addressFactory().uniquePrefixedWith("g-");
+    final Author _author = stage.actorFor(Author.class, Definition.has(AuthorEntity.class, Definition.parameters(_address.idString())), _address);
+    return _author.withName(name);
+  }
+
+  Completes<AuthorState> changeRank(final Rank rank);
+
+}

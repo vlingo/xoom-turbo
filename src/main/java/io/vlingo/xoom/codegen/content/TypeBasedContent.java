@@ -27,7 +27,7 @@ public class TypeBasedContent extends Content {
     }
 
     @Override
-    public String retrieveClassName() {
+    public String retrieveName() {
         return contentType.getSimpleName().toString();
     }
 
