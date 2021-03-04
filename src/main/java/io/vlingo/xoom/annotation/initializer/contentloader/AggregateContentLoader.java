@@ -39,10 +39,8 @@ public class AggregateContentLoader extends TypeBasedContentLoader {
                 PackageNavigator.from(persistence.basePackage())
                         .retrieveAll().toArray(new String[]{});
 
-        final List<TypeElement> allElements =
-                typeRetriever.subclassesOf(EventSourced.class, allPackages)
-                        .map(this::toType).collect(Collectors.toList());
-        return allElements;
+        return typeRetriever.subclassesOf(EventSourced.class, allPackages)
+                .map(this::toType).collect(Collectors.toList());
     }
 
     private TypeElement toType(final TypeMirror typeMirror) {
