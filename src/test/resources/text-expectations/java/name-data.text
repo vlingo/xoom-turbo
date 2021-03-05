@@ -1,4 +1,4 @@
-package io.vlingo.xoomapp;
+package io.vlingo.xoomapp.infrastructure;
 
 public class NameData {
 

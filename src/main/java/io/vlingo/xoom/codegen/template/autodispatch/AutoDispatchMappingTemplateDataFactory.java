@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -18,6 +19,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
+import static io.vlingo.xoom.codegen.parameter.Label.VALUE_OBJECT;
 import static java.util.stream.Collectors.toList;
 
 public class AutoDispatchMappingTemplateDataFactory {
@@ -25,14 +27,24 @@ public class AutoDispatchMappingTemplateDataFactory {
     public static List<TemplateData> build(final CodeGenerationParameters parameters,
                                            final List<TemplateData> queriesData,
                                            final List<Content> contents) {
-        final String basePackage = parameters.retrieveValue(Label.PACKAGE);
-        final boolean useCQRS = parameters.retrieveValue(Label.CQRS, Boolean::valueOf);
+        final String basePackage =
+                parameters.retrieveValue(Label.PACKAGE);
+
+
+        final boolean useCQRS =
+                parameters.retrieveValue(Label.CQRS, Boolean::valueOf);
+
+        final Language language =
+                parameters.retrieveValue(Label.LANGUAGE, Language::valueOf);
+
+        final List<CodeGenerationParameter> valueObjects =
+                parameters.retrieveAll(VALUE_OBJECT).collect(toList());
 
         final Function<CodeGenerationParameter, Stream<TemplateData>> mapper = aggregate ->
                 Stream.of(new AutoDispatchMappingTemplateData(basePackage,
                                 aggregate, useCQRS, contents),
-                        new AutoDispatchHandlersMappingTemplateData(basePackage, aggregate,
-                                queriesData, contents, useCQRS));
+                        new AutoDispatchHandlersMappingTemplateData(basePackage, language,
+                                aggregate, queriesData, valueObjects, contents, useCQRS));
 
         return parameters.retrieveAll(AGGREGATE).flatMap(mapper).collect(toList());
     }

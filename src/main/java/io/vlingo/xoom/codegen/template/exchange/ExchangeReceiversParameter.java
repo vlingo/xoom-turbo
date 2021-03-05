@@ -13,7 +13,7 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.codegen.template.model.formatting.AggregateMethodInvocation;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateMethodInvocation;
 
 import java.util.List;
 import java.util.stream.Collectors;

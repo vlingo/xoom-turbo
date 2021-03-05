@@ -80,6 +80,7 @@ public enum TemplateParameter {
     MEMBERS("members"),
     MEMBERS_ASSIGNMENT("membersAssignment"),
     VALUE_OBJECT_ASSIGNMENT("valueObjectAssignment"),
+    VALUE_OBJECT_INITIALIZERS("valueObjectInitializers"),
     DATA_VALUE_OBJECT_ASSIGNMENT("dataValueObjectAssignment"),
     METHODS("methods"),
     METHOD_NAME("methodName"),

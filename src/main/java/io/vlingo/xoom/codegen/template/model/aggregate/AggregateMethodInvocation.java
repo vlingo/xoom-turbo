@@ -4,10 +4,12 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.codegen.template.model.formatting;
+package io.vlingo.xoom.codegen.template.model.aggregate;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
+import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,7 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
 import static io.vlingo.xoom.codegen.parameter.Label.METHOD_PARAMETER;
+import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodInvocation implements Formatters.Arguments {
 
@@ -42,9 +46,17 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
     }
 
     private List<String> formatMethodParameters(final CodeGenerationParameter method) {
-        return method.retrieveAllRelated(METHOD_PARAMETER).map(param -> carrier.isEmpty() ?
-                param.value : String.format(FIELD_ACCESS_PATTERN, carrier, param.value))
-                .collect(Collectors.toList());
+        return method.retrieveAllRelated(METHOD_PARAMETER).map(this::resolveFieldAccess).collect(toList());
+    }
+
+    private String resolveFieldAccess(final CodeGenerationParameter parameter) {
+        final CodeGenerationParameter stateField =
+                AggregateDetail.stateFieldWithName(parameter.parent(AGGREGATE), parameter.value);
+
+        if(carrier.isEmpty() || ValueObjectDetail.isValueObject(stateField))  {
+            return parameter.value;
+        }
+        return String.format(FIELD_ACCESS_PATTERN, carrier, parameter.value);
     }
 
 }

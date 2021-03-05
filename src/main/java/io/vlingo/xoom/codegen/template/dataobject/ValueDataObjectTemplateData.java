@@ -28,18 +28,20 @@ public class ValueDataObjectTemplateData extends TemplateData {
   public static List<TemplateData> from(final String basePackage,
                                         final Language language,
                                         final Stream<CodeGenerationParameter> valueObjects) {
+    final String packageName = String.format("%s.%s", basePackage, "infrastructure");
+
     final Function<CodeGenerationParameter, TemplateData> mapper =
-            valueObject -> new ValueDataObjectTemplateData(basePackage, language, valueObject);
+            valueObject -> new ValueDataObjectTemplateData(packageName, language, valueObject);
 
     return valueObjects.map(mapper).collect(Collectors.toList());
   }
 
-  private ValueDataObjectTemplateData(final String basePackage,
+  private ValueDataObjectTemplateData(final String packageName,
                                       final Language language,
                                       final CodeGenerationParameter valueObject) {
     this.valueObjectName = valueObject.value;
     this.parameters =
-            TemplateParameters.with(PACKAGE_NAME, String.format(basePackage))
+            TemplateParameters.with(PACKAGE_NAME, packageName)
                     .and(DATA_VALUE_OBJECT_NAME, standard().resolveClassname(valueObjectName))
                     .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(valueObject))
                     .and(CONSTRUCTOR_INVOCATION_PARAMETERS, Formatters.Arguments.VALUE_OBJECT_CONSTRUCTOR_INVOCATION.format(valueObject))

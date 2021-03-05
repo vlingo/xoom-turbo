@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.xoom.OperatingSystem;
+import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
@@ -19,6 +20,7 @@ import io.vlingo.xoom.codegen.template.storage.QueriesTemplateDataFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
@@ -27,18 +29,20 @@ import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.VALUE_OBJECT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class AutoDispatchMappingGenerationStepTest {
 
     @Test
-    public void testThatAutoDispatchMappingsAreGenerated() {
+    public void testThatAutoDispatchMappingsAreGenerated() throws IOException {
         final String basePackage = "io.vlingo.xoomapp";
         final String persistencePackage = basePackage + ".infrastructure.persistence";
 
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, basePackage),
-                        CodeGenerationParameter.of(CQRS, true), authorAggregate());
+                        CodeGenerationParameter.of(CQRS, true), CodeGenerationParameter.of(LANGUAGE, Language.JAVA),
+                        authorAggregate(), nameValueObject(), rankValueObject());
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters).contents(contents());
@@ -51,37 +55,28 @@ public class AutoDispatchMappingGenerationStepTest {
 
         new AutoDispatchMappingGenerationStep().process(context);
 
-        Assert.assertEquals(18, context.contents().size());
+        final Content authorMappingContent = context.findContent(AUTO_DISPATCH_MAPPING, "AuthorResource");
+        final Content authorHandlersMappingContent = context.findContent(AUTO_DISPATCH_HANDLERS_MAPPING, "AuthorResourceHandlers");
 
-        final Content authorMappingContent =
-                context.contents().stream().filter(content -> content.retrieveName().equals("AuthorResource"))
-                        .findFirst().get();
+        Assert.assertEquals(20, context.contents().size());
+        Assert.assertTrue(authorMappingContent.contains(TextExpectation.onJava().read("author-dispatch-mapping")));
+        Assert.assertTrue(authorHandlersMappingContent.contains(TextExpectation.onJava().read("author-dispatch-handlers-mapping")));
+    }
 
-        Assert.assertTrue(authorMappingContent.contains("@AutoDispatch(path=\"/authors\", handlers=AuthorResourceHandlers.class)"));
-        Assert.assertTrue(authorMappingContent.contains("@Queries(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)"));
-        Assert.assertTrue(authorMappingContent.contains("@Route(method = POST, handler = AuthorResourceHandlers.WITH_NAME)"));
-        Assert.assertTrue(authorMappingContent.contains("@ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)"));
-        Assert.assertTrue(authorMappingContent.contains("Completes<Response> withName(@Body final AuthorData data);"));
-        Assert.assertTrue(authorMappingContent.contains("@Route(method = PATCH, path = \"/{id}/rank\", handler = AuthorResourceHandlers.CHANGE_RANK)"));
-        Assert.assertTrue(authorMappingContent.contains("Completes<Response> changeRank(@Id final long id, @Body final AuthorData data);"));
-        Assert.assertTrue(authorMappingContent.contains("@Route(method = GET, handler = AuthorResourceHandlers.AUTHORS)"));
-        Assert.assertTrue(authorMappingContent.contains("Completes<Response> authors();"));
+    private CodeGenerationParameter nameValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+                        .relate(Label.FIELD_TYPE, "String"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+                        .relate(Label.FIELD_TYPE, "String"));
+    }
 
-        final Content authorHandlersMappingContent =
-                context.contents().stream().filter(content -> content.retrieveName().equals("AuthorResourceHandlers"))
-                        .findFirst().get();
-
-        Assert.assertTrue(authorHandlersMappingContent.contains("public static final int WITH_NAME = 0;"));
-        Assert.assertTrue(authorHandlersMappingContent.contains("public static final int CHANGE_RANK = 1;"));
-        Assert.assertTrue(authorHandlersMappingContent.contains("public static final int AUTHORS = 2;"));
-        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Three<Completes<AuthorState>, Stage, AuthorData>> WITH_NAME_HANDLER ="));
-        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(WITH_NAME, ($stage, data) -> Author.withName($stage, data.name));"));
-        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> CHANGE_RANK_HANDLER ="));
-        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(CHANGE_RANK, (author, data) -> author.changeRank(data.rank));"));
-        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<AuthorData, AuthorState>> ADAPT_STATE_HANDLER ="));
-        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(ADAPT_STATE, AuthorData::from);"));
-        Assert.assertTrue(authorHandlersMappingContent.contains("public static final HandlerEntry<Two<Completes<Collection<AuthorData>>, AuthorQueries>> QUERY_ALL_HANDLER ="));
-        Assert.assertTrue(authorHandlersMappingContent.contains("HandlerEntry.of(AUTHORS, AuthorQueries::authors);"));
+    private CodeGenerationParameter rankValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+                        .relate(Label.FIELD_TYPE, "int"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+                        .relate(Label.FIELD_TYPE, "String"));
     }
 
     private Content[] contents() {
@@ -94,6 +89,8 @@ public class AutoDispatchMappingGenerationStepTest {
                 Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
                 Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
                 Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT),
+                Content.with(VALUE_OBJECT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Rank.java"), null, null, RANK_VALUE_OBJECT_CONTENT_TEXT),
+                Content.with(VALUE_OBJECT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "BookQueries.java"), null, null, BOOK_QUERIES_CONTENT_TEXT),
                 Content.with(QUERIES_ACTOR, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueriesActor.java"), null, null, AUTHOR_QUERIES_ACTOR_CONTENT_TEXT),
@@ -108,11 +105,11 @@ public class AutoDispatchMappingGenerationStepTest {
 
         final CodeGenerationParameter nameField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "name")
-                        .relate(Label.FIELD_TYPE, "String");
+                        .relate(Label.FIELD_TYPE, "Name");
 
         final CodeGenerationParameter rankField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                        .relate(Label.FIELD_TYPE, "int");
+                        .relate(Label.FIELD_TYPE, "Rank");
 
         final CodeGenerationParameter authorRegisteredEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
@@ -201,6 +198,18 @@ public class AutoDispatchMappingGenerationStepTest {
     private static final String BOOK_AGGREGATE_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model.book; \\n" +
                     "public class BookEntity { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String NAME_VALUE_OBJECT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class Name { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String RANK_VALUE_OBJECT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model; \\n" +
+                    "public class Rank { \\n" +
                     "... \\n" +
                     "}";
 

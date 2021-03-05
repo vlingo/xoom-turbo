@@ -1,0 +1,42 @@
+package io.vlingo.xoomapp.infrastructure.resource;
+
+import io.vlingo.actors.Stage;
+import io.vlingo.common.Completes;
+import io.vlingo.xoom.annotation.autodispatch.Handler.Three;
+import io.vlingo.xoom.annotation.autodispatch.Handler.Two;
+import io.vlingo.xoom.annotation.autodispatch.HandlerEntry;
+
+import io.vlingo.xoomapp.model.Rank;
+import io.vlingo.xoomapp.infrastructure.AuthorData;
+import io.vlingo.xoomapp.model.author.Author;
+import io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries;
+import io.vlingo.xoomapp.model.author.Name;
+import io.vlingo.xoomapp.model.author.AuthorState;
+import java.util.Collection;
+
+public class AuthorResourceHandlers {
+
+  public static final int WITH_NAME = 0;
+  public static final int CHANGE_RANK = 1;
+  public static final int AUTHORS = 2;
+  public static final int ADAPT_STATE = 3;
+
+  public static final HandlerEntry<Three<Completes<AuthorState>, Stage, AuthorData>> WITH_NAME_HANDLER =
+          HandlerEntry.of(WITH_NAME, ($stage, data) -> {
+              final Name name = Name.of(data.name.firstName, data.name.lastName);
+              return Author.withName($stage, name));
+          });
+
+  public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> CHANGE_RANK_HANDLER =
+          HandlerEntry.of(CHANGE_RANK, (author, data) -> {
+              final Rank rank = Rank.of(data.rank.points, data.rank.classification);
+              return author.changeRank(rank));
+          });
+
+  public static final HandlerEntry<Two<AuthorData, AuthorState>> ADAPT_STATE_HANDLER =
+          HandlerEntry.of(ADAPT_STATE, AuthorData::from);
+
+  public static final HandlerEntry<Two<Completes<Collection<AuthorData>>, AuthorQueries>> QUERY_ALL_HANDLER =
+          HandlerEntry.of(AUTHORS, AuthorQueries::authors);
+
+}

@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
@@ -40,8 +41,10 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
     @SuppressWarnings("unchecked")
     protected AutoDispatchHandlersMappingTemplateData(final String basePackage,
+                                                      final Language language,
                                                       final CodeGenerationParameter aggregate,
                                                       final List<TemplateData> queriesTemplateData,
+                                                      final List<CodeGenerationParameter> valueObjects,
                                                       final List<Content> contents,
                                                       final Boolean useCQRS) {
         this.aggregateName = aggregate.value;
@@ -58,7 +61,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                         .and(HANDLER_ENTRIES, new ArrayList<String>())
                         .addImports(resolveImports(aggregate, contents));
 
-        this.dependOn(AutoDispatchHandlerEntryTemplateData.from(aggregate));
+        this.dependOn(AutoDispatchHandlerEntryTemplateData.from(language, aggregate, valueObjects));
     }
 
     @Override
