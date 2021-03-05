@@ -31,7 +31,7 @@ public class ExchangeGenerationStepTest {
 
         new ExchangeGenerationStep().process(context);
 
-        Assert.assertEquals(17, context.contents().size());
+        Assert.assertEquals(19, context.contents().size());
 
         final Content authorExchangeReceivers =
                 context.contents().stream().filter(content -> content.retrieveName().equals("AuthorExchangeReceivers"))

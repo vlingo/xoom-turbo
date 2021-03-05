@@ -47,12 +47,18 @@ public class ValueObjectDetail {
             .collect(Collectors.toSet());
   }
 
+  public static CodeGenerationParameter valueObjectOf(final String valueObjectType,
+                                                      final Stream<CodeGenerationParameter> valueObjects) {
+      return valueObjects.filter(valueObject -> valueObject.value.equals(valueObjectType)).findFirst()
+              .orElseThrow(() -> new IllegalArgumentException("Unable to find " + valueObjectType));
+  }
+
   public static boolean useValueObject(final CodeGenerationParameter aggregate) {
     return aggregate.retrieveAllRelated(STATE_FIELD).anyMatch(ValueObjectDetail::isValueObject);
   }
 
-  private static boolean isValueObject(final CodeGenerationParameter field) {
-    return !FieldDetail.scalarTyped(field);
+  public static boolean isValueObject(final CodeGenerationParameter field) {
+    return !FieldDetail.isScalar(field);
   }
 
 }

@@ -14,15 +14,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class ExpectationReader {
+public class TextExpectation {
 
   private final Language language;
 
-  public static ExpectationReader onJava() {
-    return new ExpectationReader(Language.JAVA);
+  public static TextExpectation onJava() {
+    return new TextExpectation(Language.JAVA);
   }
 
-  private ExpectationReader(final Language language) {
+  private TextExpectation(final Language language) {
     this.language = language;
   }
 
@@ -31,7 +31,7 @@ public class ExpectationReader {
             String.format("/text-expectations/%s/%s.text",
                     language.name().toLowerCase(), textFileName);
 
-    final InputStream stream = ExpectationReader.class.getResourceAsStream(path);
+    final InputStream stream = TextExpectation.class.getResourceAsStream(path);
 
     return IOUtils.toString(stream, StandardCharsets.UTF_8.name());
   }

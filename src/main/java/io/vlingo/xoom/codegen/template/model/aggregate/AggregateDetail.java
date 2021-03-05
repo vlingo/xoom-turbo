@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.template.model.aggregate;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.METHOD_PARAMETER;
+import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
 
 public class AggregateDetail {
 
@@ -48,10 +50,17 @@ public class AggregateDetail {
         return methodParameters.map(parameter -> stateFieldWithName(aggregate, parameter.value));
     }
 
+    public static Stream<CodeGenerationParameter> findScalarStateFields(final CodeGenerationParameter aggregate) {
+        return aggregate.retrieveAllRelated(STATE_FIELD).filter(FieldDetail::isScalar);
+    }
+
+    public static Stream<CodeGenerationParameter> findValueObjects(final CodeGenerationParameter aggregate) {
+        return aggregate.retrieveAllRelated(STATE_FIELD).filter(ValueObjectDetail::isValueObject);
+    }
+
     private static Optional<CodeGenerationParameter> findMethod(final CodeGenerationParameter aggregate, final String methodName) {
         return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
                 .filter(method -> methodName.equals(method.value) || method.value.startsWith(methodName + "("))
                 .findFirst();
     }
-
 }

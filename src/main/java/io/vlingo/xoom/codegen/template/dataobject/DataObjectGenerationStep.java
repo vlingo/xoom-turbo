@@ -14,14 +14,27 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DataObjectGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        return DataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
-                context.parameterOf(Label.LANGUAGE, Language::valueOf),
-                context.parametersOf(Label.AGGREGATE), context.contents());
+        final List<TemplateData> stateDataObjectTemplateData =
+                StateDataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
+                        context.parameterOf(Label.LANGUAGE, Language::valueOf),
+                        context.parametersOf(Label.AGGREGATE),
+                        context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList()),
+                        context.contents());
+
+        final List<TemplateData> valueDataObjectTemplateData =
+                ValueDataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
+                        context.parameterOf(Label.LANGUAGE, Language::valueOf),
+                        context.parametersOf(Label.VALUE_OBJECT));
+
+        return Stream.of(stateDataObjectTemplateData, valueDataObjectTemplateData)
+                .flatMap(List::stream).collect(Collectors.toList());
     }
 
 }

@@ -37,7 +37,7 @@ public class FieldDetail {
         return "null";
     }
 
-    public static boolean scalarTyped(final CodeGenerationParameter field) {
+    public static boolean isScalar(final CodeGenerationParameter field) {
         final String fieldType =
                 field.retrieveRelatedValue(Label.FIELD_TYPE, String::toLowerCase);
 

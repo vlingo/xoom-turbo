@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.codegen.dataobject;
 
+import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
@@ -14,9 +15,12 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.dataobject.DataObjectGenerationStep;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static io.vlingo.xoom.codegen.parameter.Label.PACKAGE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
@@ -25,11 +29,12 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 public class DataObjectGenerationStepTest {
 
     @Test
-    public void testThatDataObjectsAreGenerated() {
+    public void testThatDataObjectsAreGenerated() throws IOException {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(PACKAGE, "io.vlingo.xoomapp")
                         .add(Label.LANGUAGE, Language.JAVA)
-                        .add(authorAggregate()).add(bookAggregate());
+                        .add(authorAggregate()).add(bookAggregate())
+                        .add(nameValueObject()).add(rankValueObject());
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters)
@@ -37,17 +42,14 @@ public class DataObjectGenerationStepTest {
 
         new DataObjectGenerationStep().process(context);
 
-        Assert.assertEquals(6, context.contents().size());
+        final Content authorData = context.findContent(TemplateStandard.DATA_OBJECT, "AuthorData");
+        final Content nameDataValueObject = context.findContent(TemplateStandard.DATA_OBJECT, "NameData");
+        final Content bookDataContent = context.findContent(TemplateStandard.DATA_OBJECT, "BookData");
 
-        final Content bookDataContent =
-                context.contents().stream()
-                        .filter(content -> content.retrieveName().equals("BookData"))
-                        .findFirst().get();
-
-        Assert.assertTrue(bookDataContent.contains("public class BookData"));
-        Assert.assertTrue(bookDataContent.contains("final BookState state"));
-        Assert.assertTrue(bookDataContent.contains("import io.vlingo.xoomapp.model.book.BookState;"));
-        Assert.assertTrue(bookDataContent.contains("return new BookData(BookState.identifiedBy(0));"));
+        Assert.assertEquals(8, context.contents().size());
+        Assert.assertTrue(authorData.contains(TextExpectation.onJava().read("author-data")));
+        Assert.assertTrue(nameDataValueObject.contains(TextExpectation.onJava().read("name-data")));
+        Assert.assertTrue(bookDataContent.contains(TextExpectation.onJava().read("book-data")));
     }
 
     private CodeGenerationParameter authorAggregate() {
@@ -57,11 +59,11 @@ public class DataObjectGenerationStepTest {
 
         final CodeGenerationParameter nameField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "name")
-                        .relate(Label.FIELD_TYPE, "String");
+                        .relate(Label.FIELD_TYPE, "Name");
 
         final CodeGenerationParameter rankField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                        .relate(Label.FIELD_TYPE, "int");
+                        .relate(Label.FIELD_TYPE, "Rank");
 
         final CodeGenerationParameter statusField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "status")
@@ -86,6 +88,22 @@ public class DataObjectGenerationStepTest {
 
         return CodeGenerationParameter.of(Label.AGGREGATE, "Book")
                 .relate(idField).relate(nameField).relate(rankField);
+    }
+
+    private CodeGenerationParameter nameValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+                        .relate(Label.FIELD_TYPE, "String"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+                        .relate(Label.FIELD_TYPE, "String"));
+    }
+
+    private CodeGenerationParameter rankValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+                        .relate(Label.FIELD_TYPE, "int"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+                        .relate(Label.FIELD_TYPE, "String"));
     }
 
     private Content[] contents() {

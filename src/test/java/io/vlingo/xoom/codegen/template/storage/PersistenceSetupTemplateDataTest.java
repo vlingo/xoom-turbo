@@ -50,7 +50,7 @@ public class PersistenceSetupTemplateDataTest {
 
         Assert.assertEquals(EXPECTED_PACKAGE, queriesParameters.find(PACKAGE_NAME));
         Assert.assertEquals("BookQueries", queriesParameters.find(QUERIES_NAME));
-        Assert.assertEquals("BookData", queriesParameters.find(DATA_OBJECT_NAME));
+        Assert.assertEquals("BookData", queriesParameters.find(STATE_DATA_OBJECT_NAME));
         Assert.assertEquals("bookOf", queriesParameters.find(QUERY_ID_METHOD_NAME));
         Assert.assertEquals("books", queriesParameters.find(QUERY_ALL_METHOD_NAME));
         Assert.assertEquals(1, queriesParameters.<Set<ImportParameter>>find(IMPORTS).size());

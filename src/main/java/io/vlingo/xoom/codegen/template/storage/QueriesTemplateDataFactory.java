@@ -62,7 +62,7 @@ public class QueriesTemplateDataFactory {
                 ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents);
 
         return TemplateParameters.with(PACKAGE_NAME, persistencePackage)
-                .and(DATA_OBJECT_NAME, dataObjectName)
+                .and(STATE_DATA_OBJECT_NAME, dataObjectName)
                 .and(QUERY_ID_METHOD_NAME, queryByIdMethodName)
                 .and(QUERY_ALL_METHOD_NAME, queryAllMethodName)
                 .and(IMPORTS, ImportParameter.of(dataObjectQualifiedName));

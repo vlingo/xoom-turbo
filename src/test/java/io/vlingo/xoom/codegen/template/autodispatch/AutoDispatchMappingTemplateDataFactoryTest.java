@@ -67,7 +67,7 @@ public class AutoDispatchMappingTemplateDataFactoryTest {
         Assert.assertEquals("AuthorResource", autoDispatchMappingParameters.find(TemplateParameter.AUTO_DISPATCH_MAPPING_NAME));
         Assert.assertEquals("Author", autoDispatchMappingParameters.find(TemplateParameter.AGGREGATE_PROTOCOL_NAME));
         Assert.assertEquals("AuthorEntity", autoDispatchMappingParameters.find(TemplateParameter.ENTITY_NAME));
-        Assert.assertEquals("AuthorData", autoDispatchMappingParameters.find(TemplateParameter.DATA_OBJECT_NAME));
+        Assert.assertEquals("AuthorData", autoDispatchMappingParameters.find(TemplateParameter.STATE_DATA_OBJECT_NAME));
         Assert.assertEquals("AuthorQueries", autoDispatchMappingParameters.find(TemplateParameter.QUERIES_NAME));
         Assert.assertEquals("AuthorQueriesActor", autoDispatchMappingParameters.find(TemplateParameter.QUERIES_ACTOR_NAME));
         Assert.assertEquals("authors", autoDispatchMappingParameters.find(TemplateParameter.URI_ROOT));
@@ -88,7 +88,7 @@ public class AutoDispatchMappingTemplateDataFactoryTest {
         Assert.assertEquals("io.vlingo.xoomapp.infrastructure.resource", autoDispatchHandlersMappingParameters.find(TemplateParameter.PACKAGE_NAME));
         Assert.assertEquals("AuthorResourceHandlers", autoDispatchHandlersMappingParameters.find(AUTO_DISPATCH_HANDLERS_MAPPING_NAME));
         Assert.assertEquals("Author", autoDispatchHandlersMappingParameters.find(TemplateParameter.AGGREGATE_PROTOCOL_NAME));
-        Assert.assertEquals("AuthorData", autoDispatchHandlersMappingParameters.find(TemplateParameter.DATA_OBJECT_NAME));
+        Assert.assertEquals("AuthorData", autoDispatchHandlersMappingParameters.find(TemplateParameter.STATE_DATA_OBJECT_NAME));
         Assert.assertEquals("AuthorQueries", autoDispatchHandlersMappingParameters.find(TemplateParameter.QUERIES_NAME));
         Assert.assertEquals("authors", autoDispatchHandlersMappingParameters.find(TemplateParameter.QUERY_ALL_METHOD_NAME));
         Assert.assertEquals(true, autoDispatchHandlersMappingParameters.find(TemplateParameter.USE_CQRS));

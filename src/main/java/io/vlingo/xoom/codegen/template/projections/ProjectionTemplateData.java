@@ -70,7 +70,7 @@ public class ProjectionTemplateData extends TemplateData {
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
                 .and(PROJECTION_TYPE, projectionType).and(MODEL, QUERY)
                 .and(STORAGE_TYPE, STATE_STORE)
-                .and(DATA_OBJECT_NAME, dataObjectName).and(PROJECTION_TYPE, projectionType)
+                .and(STATE_DATA_OBJECT_NAME, dataObjectName).and(PROJECTION_TYPE, projectionType)
                 .and(PROJECTION_SOURCE_NAMES, ContentQuery.findClassNames(DOMAIN_EVENT, modelPackage, contents))
                 .andResolve(PROJECTION_SOURCE_TYPES_NAME, param -> PROJECTION_SOURCE_TYPES.resolveClassname(param))
                 .andResolve(STORE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param));

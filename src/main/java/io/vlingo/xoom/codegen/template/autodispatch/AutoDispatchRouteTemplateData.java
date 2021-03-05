@@ -38,7 +38,7 @@ public class AutoDispatchRouteTemplateData extends TemplateData {
                         .and(ID_TYPE, FieldDetail.typeOf(aggregate, "id"))
                         .and(ROUTE_METHOD, route.retrieveRelatedValue(Label.ROUTE_METHOD))
                         .and(ROUTE_PATH, PathFormatter.formatRelativeRoutePath(route))
-                        .and(DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
+                        .and(STATE_DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
                         .and(ROUTE_MAPPING_VALUE, AutoDispatchMappingValueFormatter.format(route.value))
                         .and(REQUIRE_ENTITY_LOADING, route.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf))
                         .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, AUTO_DISPATCH_HANDLERS_MAPPING.resolveClassname(aggregate.value))

@@ -19,17 +19,17 @@ import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail.findScalarStateFields;
 import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.MEMBER_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.STATE_BASED_ASSIGNMENT;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.*;
+import static java.util.stream.Collectors.toList;
 
-public class DataObjectTemplateData extends TemplateData {
+public class StateDataObjectTemplateData extends TemplateData {
 
     private final static String PACKAGE_PATTERN = "%s.%s";
     private final static String INFRA_PACKAGE_NAME = "infrastructure";
@@ -40,24 +40,29 @@ public class DataObjectTemplateData extends TemplateData {
     public static List<TemplateData> from(final String basePackage,
                                           final Language language,
                                           final Stream<CodeGenerationParameter> aggregates,
+                                          final List<CodeGenerationParameter> valueObjects,
                                           final List<Content> contents) {
         final Function<CodeGenerationParameter, TemplateData> mapper =
-                aggregate -> new DataObjectTemplateData(basePackage, language, aggregate, contents);
+                aggregate -> new StateDataObjectTemplateData(basePackage, language,
+                        aggregate, valueObjects, contents);
 
-        return aggregates.map(mapper).collect(Collectors.toList());
+        return aggregates.map(mapper).collect(toList());
     }
 
-    private DataObjectTemplateData(final String basePackage,
-                                   final Language language,
-                                   final CodeGenerationParameter aggregate,
-                                   final List<Content> contents) {
+    private StateDataObjectTemplateData(final String basePackage,
+                                        final Language language,
+                                        final CodeGenerationParameter aggregate,
+                                        final List<CodeGenerationParameter> valueObjects,
+                                        final List<Content> contents) {
         this.protocolName = aggregate.value;
-        this.parameters = loadParameters(resolvePackage(basePackage), language, aggregate, contents);
+        this.parameters =
+                loadParameters(resolvePackage(basePackage), language, aggregate, valueObjects, contents);
     }
 
     private TemplateParameters loadParameters(final String packageName,
                                               final Language language,
                                               final CodeGenerationParameter aggregate,
+                                              final List<CodeGenerationParameter> valueObjects,
                                               final List<Content> contents) {
 
         final String stateName = AGGREGATE_STATE.resolveClassname(aggregate.value);
@@ -68,14 +73,18 @@ public class DataObjectTemplateData extends TemplateData {
         final String dataName = DATA_OBJECT.resolveClassname(protocolName);
 
         final List<String> members =
-                Formatters.Fields.format(MEMBER_DECLARATION, language, aggregate);
+                Formatters.Fields.format(DATA_OBJECT_MEMBER_DECLARATION, language, aggregate);
 
         final List<String> membersAssignment =
-                Formatters.Fields.format(STATE_BASED_ASSIGNMENT, language, aggregate);
+                Formatters.Fields.format(STATE_BASED_ASSIGNMENT, language, aggregate, findScalarStateFields(aggregate));
+
+        final List<String> dataValueObjectAssignment =
+                Formatters.Fields.format(STATE_BASED_DATA_VALUE_OBJECT_ASSIGNMENT, language, aggregate, valueObjects.stream());
 
         return TemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(STATE_NAME, stateName).and(DATA_OBJECT_NAME, dataName)
+                .and(STATE_NAME, stateName).and(STATE_DATA_OBJECT_NAME, dataName)
                 .and(MEMBERS, members).and(MEMBERS_ASSIGNMENT, membersAssignment)
+                .and(DATA_VALUE_OBJECT_ASSIGNMENT, dataValueObjectAssignment)
                 .and(DATA_OBJECT_QUALIFIED_NAME, packageName.concat(".").concat(dataName))
                 .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
                 .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName)

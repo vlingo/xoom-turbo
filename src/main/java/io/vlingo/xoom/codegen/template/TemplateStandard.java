@@ -43,7 +43,8 @@ public enum TemplateStandard {
     QUERIES_ACTOR(parameters -> Template.QUERIES_ACTOR.filename,
             (name, parameters) -> name + "QueriesActor"),
 
-    DATA_OBJECT(parameters -> Template.DATA_OBJECT.filename,
+    DATA_OBJECT(parameters -> parameters.has(STATE_DATA_OBJECT_NAME) ?
+            Template.STATE_DATA_OBJECT.filename : VALUE_DATA_OBJECT.filename ,
             (name, parameters) -> name + "Data"),
 
     REST_RESOURCE(parameters -> Template.REST_RESOURCE.filename,

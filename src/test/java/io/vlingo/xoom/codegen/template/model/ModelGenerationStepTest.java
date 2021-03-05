@@ -1,7 +1,7 @@
 package io.vlingo.xoom.codegen.template.model;
 
-import io.vlingo.xoom.ExpectationReader;
 import io.vlingo.xoom.OperatingSystem;
+import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
@@ -47,11 +47,11 @@ public class ModelGenerationStepTest {
         final Content authorRanked = context.findContent(DOMAIN_EVENT, "AuthorRanked");
 
         Assert.assertEquals(7, context.contents().size());
-        Assert.assertTrue(author.contains(ExpectationReader.onJava().read("author-protocol")));
-        Assert.assertTrue(authorEntity.contains(ExpectationReader.onJava().read("author-stateful-entity")));
-        Assert.assertTrue(authorState.contains(ExpectationReader.onJava().read("author-state")));
-        Assert.assertTrue(authorRegistered.contains(ExpectationReader.onJava().read("author-registered")));
-        Assert.assertTrue(authorRanked.contains(ExpectationReader.onJava().read("author-ranked")));
+        Assert.assertTrue(author.contains(TextExpectation.onJava().read("author-protocol")));
+        Assert.assertTrue(authorEntity.contains(TextExpectation.onJava().read("author-stateful-entity")));
+        Assert.assertTrue(authorState.contains(TextExpectation.onJava().read("author-state")));
+        Assert.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
+        Assert.assertTrue(authorRanked.contains(TextExpectation.onJava().read("author-ranked")));
     }
 
     @Test

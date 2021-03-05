@@ -45,7 +45,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
                 TemplateParameters.with(METHOD_NAME, route.value)
                         .and(FACTORY_METHOD, factoryMethod)
                         .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
-                        .and(DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
+                        .and(STATE_DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
                         .and(AGGREGATE_PROTOCOL_VARIABLE, ClassFormatter.simpleNameToAttribute(aggregate.value))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
                         .and(INDEX_NAME, AutoDispatchMappingValueFormatter.format(route.value))

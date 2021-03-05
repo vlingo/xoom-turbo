@@ -7,36 +7,35 @@
 
 package io.vlingo.xoom.codegen.template.schemata;
 
+import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.exchange.CodeGenerationParametersBuilder;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static java.util.stream.Collectors.toList;
 
 public class SchemataGenerationStepTest {
 
     @Test
-    public void testThatSpecificationAndPluginConfigAreGenerated() {
+    public void testThatSpecificationAndPluginConfigAreGenerated() throws IOException {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.empty()
                         .addAll(CodeGenerationParametersBuilder.threeExchanges().collect(toList()));
 
-        final CodeGenerationContext context =
-                CodeGenerationContext.with(parameters);
+        final CodeGenerationContext context = CodeGenerationContext.with(parameters);
 
         new SchemataGenerationStep().process(context);
 
-        Assert.assertEquals(5, context.contents().size());
-
         final Content authorRatedSpecification =
-                context.contents().stream().filter(content -> content.contains("event AuthorRated {"))
-                .findFirst().get();
+                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "AuthorRated");
 
-        Assert.assertTrue(authorRatedSpecification.contains("string id"));
-        Assert.assertTrue(authorRatedSpecification.contains("int rank"));
-        Assert.assertTrue(authorRatedSpecification.contains("version semanticVersion"));
+        Assert.assertEquals(5, context.contents().size());
+        Assert.assertTrue(authorRatedSpecification.contains(TextExpectation.onJava().read("author-rated-specification")));
     }
 }

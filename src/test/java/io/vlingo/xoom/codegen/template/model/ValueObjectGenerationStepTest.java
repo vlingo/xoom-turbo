@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.model;
 
-import io.vlingo.xoom.ExpectationReader;
+import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.Content;
@@ -48,8 +48,8 @@ public class ValueObjectGenerationStepTest {
     final Content nameValueObject = context.findContent(VALUE_OBJECT, "Name");
     final Content rankValueObject = context.findContent(VALUE_OBJECT, "Rank");
 
-    Assert.assertTrue(nameValueObject.contains(ExpectationReader.onJava().read("name-value-object")));
-    Assert.assertTrue(rankValueObject.contains(ExpectationReader.onJava().read("rank-value-object")));
+    Assert.assertTrue(nameValueObject.contains(TextExpectation.onJava().read("name-value-object")));
+    Assert.assertTrue(rankValueObject.contains(TextExpectation.onJava().read("rank-value-object")));
   }
 
   private CodeGenerationParameter authorAggregate() {

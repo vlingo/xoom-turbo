@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.codegen.template.resource;
 
-import io.vlingo.xoom.ExpectationReader;
 import io.vlingo.xoom.OperatingSystem;
+import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
@@ -52,7 +52,7 @@ public class RestResourceGenerationStepTest {
         final Content authorResource = context.findContent(REST_RESOURCE, "AuthorResource");
 
         Assert.assertEquals(10, context.contents().size());
-        Assert.assertTrue(authorResource.contains(ExpectationReader.onJava().read("author-rest-resource")));
+        Assert.assertTrue(authorResource.contains(TextExpectation.onJava().read("author-rest-resource")));
     }
 
     @Test

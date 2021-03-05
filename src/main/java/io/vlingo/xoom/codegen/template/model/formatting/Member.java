@@ -22,23 +22,37 @@ import static io.vlingo.xoom.codegen.language.Language.KOTLIN;
 
 public class Member extends Formatters.Fields<List<String>> {
 
+    private final String valueObjectTypeSuffix;
     private final BiFunction<String, String, String> declarationResolver;
 
     Member(final Language language) {
+        this(language, "");
+    }
+
+    Member(final Language language, final String valueObjectTypeSuffix) {
         if(!RESOLVERS.containsKey(language)) {
             throw new IllegalArgumentException("Unable to format members on " + language);
         }
         this.declarationResolver = RESOLVERS.get(language);
-
+        this.valueObjectTypeSuffix = valueObjectTypeSuffix;
     }
 
     @Override
     public List<String> format(final CodeGenerationParameter aggregate,
                                final Stream<CodeGenerationParameter> fields) {
         return fields.map(field -> {
-            final String fieldType = FieldDetail.typeOf(aggregate, field.value);
+            final String fieldType = resolveFieldType(aggregate, field);
             return declarationResolver.apply(fieldType, field.value);
         }).collect(Collectors.toList());
+    }
+
+    private String resolveFieldType(final CodeGenerationParameter aggregate,
+                                    final CodeGenerationParameter field) {
+        final String fieldType = FieldDetail.typeOf(aggregate, field.value);
+        if(FieldDetail.isScalar(field)) {
+            return fieldType;
+        }
+        return fieldType + valueObjectTypeSuffix;
     }
 
     private static final Map<Language, BiFunction<String, String, String>> RESOLVERS =
