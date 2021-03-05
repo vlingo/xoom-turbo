@@ -48,9 +48,18 @@ public class ContentBuilder {
         return Content.with(DOMAIN_EVENT, new TemplateFile("", "BookPurchased.java"), null, null, BOOK_PURCHASED_CONTENT_TEXT);
     }
 
-    public static List<Content> aggregateAndEvents() {
+    public static Content rankValueObject() {
+        return Content.with(VALUE_OBJECT, new TemplateFile("", "Rank.java"), null, null, RANK_VALUE_OBJECT_CONTENT_TEXT);
+    }
+
+    public static Content nameValueObject() {
+        return Content.with(VALUE_OBJECT, new TemplateFile("", "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT);
+    }
+
+    public static List<Content> contents() {
         return Arrays.asList(authorContent(), authorEntityContent(), bookContent(), authorDataObjectContent(),
-                authorRatedEvent(), authorBlockedEvent(), bookSoldOutEvent(), bookPurchasedEvent());
+                authorRatedEvent(), authorBlockedEvent(), bookSoldOutEvent(), bookPurchasedEvent(),
+                rankValueObject(), nameValueObject());
     }
 
     private static final String AUTHOR_CONTENT_TEXT =
@@ -98,6 +107,18 @@ public class ContentBuilder {
     private static final String BOOK_PURCHASED_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model.book; \\n" +
                     "public class BookPurchased extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String NAME_VALUE_OBJECT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class Name { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String RANK_VALUE_OBJECT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model; \\n" +
+                    "public class Rank { \\n" +
                     "... \\n" +
                     "}";
 }

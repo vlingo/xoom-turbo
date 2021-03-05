@@ -7,41 +7,27 @@
 
 package io.vlingo.xoom.codegen.template.resource;
 
-import static io.vlingo.xoom.codegen.content.ContentQuery.findFullyQualifiedClassName;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL_ACTOR;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL_PROTOCOL;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.ROUTE_DECLARATIONS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.ROUTE_METHODS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.STORE_PROVIDER_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.URI_ROOT;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_AUTO_DISPATCH;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.USE_CQRS;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
-
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static io.vlingo.xoom.codegen.content.ContentQuery.findFullyQualifiedClassName;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.QUERIES;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class RestResourceTemplateData extends TemplateData {
 
@@ -88,17 +74,18 @@ public class RestResourceTemplateData extends TemplateData {
                 .and(USE_AUTO_DISPATCH, false);
     }
 
-    private Set<String> resolveImports(final CodeGenerationParameter aggregateParameter,
+    private Set<String> resolveImports(final CodeGenerationParameter aggregate,
                                        final List<Content> contents,
                                        final Boolean useCQRS) {
-        final Set<String> imports = new HashSet<>();
-        if(RouteDetail.requireEntityLoad(aggregateParameter)) {
+        final Stream<CodeGenerationParameter> involvedStateFields = RouteDetail.findInvolvedStateFieldTypes(aggregate);
+        final Set<String> imports = ValueObjectDetail.retrieveQualifiedNames(contents, involvedStateFields);
+        if(RouteDetail.requireEntityLoad(aggregate)) {
             final String aggregateEntityName = AGGREGATE.resolveClassname(aggregateName);
             imports.add(findFullyQualifiedClassName(AGGREGATE, aggregateEntityName, contents));
             imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
             imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
         }
-        if(RouteDetail.requireModelFactory(aggregateParameter)) {
+        if(RouteDetail.requireModelFactory(aggregate)) {
             imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
             imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
         }

@@ -110,7 +110,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                 }).collect(Collectors.toSet());
 
         final Set<String> valueObjectImports =
-                ValueObjectDetail.retrieveQualifiedNames(contents, RouteDetail.allRouteParameters(aggregate));
+                ValueObjectDetail.retrieveQualifiedNames(contents, RouteDetail.findInvolvedStateFieldTypes(aggregate));
 
         return Stream.of(aggregateRelatedImports, valueObjectImports).flatMap(Set::stream).collect(Collectors.toSet());
     }

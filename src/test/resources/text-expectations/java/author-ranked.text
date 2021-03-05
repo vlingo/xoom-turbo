@@ -1,12 +1,10 @@
-package ${packageName};
+package io.vlingo.xoomapp.model.author;
 
 import java.util.UUID;
 import io.vlingo.common.version.SemanticVersion;
 import io.vlingo.lattice.model.IdentifiedDomainEvent;
 
-<#list imports as import>
-import ${import.qualifiedClassName};
-</#list>
+import io.vlingo.xoomapp.model.Rank;
 
 /**
  * See
@@ -14,18 +12,16 @@ import ${import.qualifiedClassName};
  *   Commands, Domain Events, and Identified Domain Events
  * </a>
  */
-public final class ${domainEventName} extends IdentifiedDomainEvent {
+public final class AuthorRanked extends IdentifiedDomainEvent {
 
   private final UUID eventId;
-  <#list members as member>
-  ${member}
-  </#list>
+  public final long id;
+  public final Rank rank;
 
-  public ${domainEventName}(final ${stateName} state) {
+  public AuthorRanked(final AuthorState state) {
     super(SemanticVersion.from("0.0.1").toValue());
-    <#list membersAssignment as assignment>
-    ${assignment}
-    </#list>
+    this.id = state.id;
+    this.rank = state.rank;
     this.eventId = UUID.randomUUID(); //TODO: Define the event id
   }
 

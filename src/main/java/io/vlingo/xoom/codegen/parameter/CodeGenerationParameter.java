@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.codegen.parameter;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters.RetrievalLevel;
+
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -64,10 +66,10 @@ public class CodeGenerationParameter {
     }
 
     public Stream<CodeGenerationParameter> retrieveAllRelated(final Label label) {
-        return retrieveAllRelated(label, CodeGenerationParameters.HierarchicalLevels.ONE);
+        return retrieveAllRelated(label, RetrievalLevel.SUPERFICIAL);
     }
 
-    public Stream<CodeGenerationParameter> retrieveAllRelated(final Label label, final CodeGenerationParameters.HierarchicalLevels levels) {
+    public Stream<CodeGenerationParameter> retrieveAllRelated(final Label label, final RetrievalLevel levels) {
         return relatedParameters.retrieveAll(label, levels);
     }
 

@@ -81,10 +81,11 @@ public class RouteDetail {
         return resolveMethodSignatureWithParams(routeSignature);
     }
 
-    public static Stream<CodeGenerationParameter> allRouteParameters(final CodeGenerationParameter aggregate) {
-        return aggregate.retrieveAllRelated(ROUTE_SIGNATURE)
+    public static Stream<CodeGenerationParameter> findInvolvedStateFieldTypes(final CodeGenerationParameter aggregate) {
+        return aggregate.retrieveAllRelated(ROUTE_SIGNATURE).filter(RouteDetail::hasBody)
                 .map(route -> AggregateDetail.methodWithName(aggregate, route.value))
-                .flatMap(method -> method.retrieveAllRelated(METHOD_PARAMETER));
+                .flatMap(method -> method.retrieveAllRelated(METHOD_PARAMETER))
+                .map(parameter -> AggregateDetail.stateFieldWithName(aggregate, parameter.value));
     }
 
     private static String resolveMethodSignatureWithParams(final CodeGenerationParameter routeSignature) {
@@ -114,5 +115,9 @@ public class RouteDetail {
     private static String buildQueryAllMethodName(final String aggregateProtocol) {
         final String formatted = Introspector.decapitalize(aggregateProtocol);
         return formatted.endsWith("s") ? formatted : formatted + "s";
+    }
+
+    private static boolean hasBody(final CodeGenerationParameter route) {
+        return !resolveBodyName(route).isEmpty();
     }
 }

@@ -1,0 +1,34 @@
+package io.vlingo.xoomapp.model.author;
+
+import io.vlingo.xoomapp.model.Rank;
+
+import io.vlingo.symbio.store.object.StateObject;
+
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-symbio/object-storage">Object Storage</a>
+ */
+public final class AuthorState extends StateObject {
+
+  public final long id;
+  public final Name name;
+  public final Rank rank;
+
+  public static AuthorState identifiedBy(final long id) {
+    return new AuthorState(id, null, null);
+  }
+
+  public AuthorState (final long id, final Name name, final Rank rank) {
+    this.id = id;
+    this.name = name;
+    this.rank = rank;
+  }
+
+  public AuthorState withName(final Name name) {
+    return new AuthorState(this.id, name, this.rank);
+  }
+
+  public AuthorState changeRank(final Rank rank) {
+    return new AuthorState(this.id, this.name, rank);
+  }
+
+}

@@ -1,5 +1,9 @@
 package ${packageName};
 
+<#list imports as import>
+import ${import.qualifiedClassName};
+</#list>
+
 <#if eventSourced>
 public final class ${stateName} {
 <#else>

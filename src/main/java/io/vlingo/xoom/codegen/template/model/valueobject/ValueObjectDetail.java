@@ -39,16 +39,16 @@ public class ValueObjectDetail {
     return String.format("%s.%s", basePackage, "model");
   }
 
-  public static boolean useValueObject(final CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(STATE_FIELD).anyMatch(ValueObjectDetail::isValueObject);
-  }
-
-  public static Set<String> retrieveQualifiedNames(final List<Content> contexts,
+  public static Set<String> retrieveQualifiedNames(final List<Content> contents,
                                                    final Stream<CodeGenerationParameter> arguments) {
     return arguments.filter(ValueObjectDetail::isValueObject)
             .map(arg -> arg.retrieveRelatedValue(FIELD_TYPE))
-            .map(valueObjectName -> findFullyQualifiedClassName(VALUE_OBJECT, valueObjectName, contexts))
+            .map(valueObjectName -> findFullyQualifiedClassName(VALUE_OBJECT, valueObjectName, contents))
             .collect(Collectors.toSet());
+  }
+
+  public static boolean useValueObject(final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(STATE_FIELD).anyMatch(ValueObjectDetail::isValueObject);
   }
 
   private static boolean isValueObject(final CodeGenerationParameter field) {

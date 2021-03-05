@@ -22,11 +22,11 @@ public class CodeGenerationParametersBuilder {
 
         final CodeGenerationParameter nameField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "name")
-                        .relate(Label.FIELD_TYPE, "String");
+                        .relate(Label.FIELD_TYPE, "Name");
 
         final CodeGenerationParameter rankField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                        .relate(Label.FIELD_TYPE, "int");
+                        .relate(Label.FIELD_TYPE, "Rank");
 
         final CodeGenerationParameter factoryMethod =
                 CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")

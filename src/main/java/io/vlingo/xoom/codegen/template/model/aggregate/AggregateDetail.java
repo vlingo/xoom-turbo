@@ -16,10 +16,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.parameter.Label.METHOD_PARAMETER;
+
 public class AggregateDetail {
 
     public static String resolvePackage(final String basePackage, final String aggregateProtocolName) {
         return String.format("%s.%s.%s", basePackage, "model", aggregateProtocolName).toLowerCase();
+    }
+
+    public static CodeGenerationParameter stateFieldWithName(final CodeGenerationParameter aggregate, final String fieldName) {
+        return aggregate.retrieveAllRelated(Label.STATE_FIELD).filter(field -> field.value.equals(fieldName))
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("Field " + fieldName + " not found" ));
     }
 
     public static CodeGenerationParameter methodWithName(final CodeGenerationParameter aggregate, final String methodName) {
@@ -33,6 +40,12 @@ public class AggregateDetail {
 
     public static List<CodeGenerationParameter> findAggregatesWithValueObjects(final Stream<CodeGenerationParameter> aggregates) {
         return aggregates.filter(aggregate -> ValueObjectDetail.useValueObject(aggregate)).collect(Collectors.toList());
+    }
+
+    public static Stream<CodeGenerationParameter> findInvolvedStateFields(final CodeGenerationParameter aggregate, final String methodName) {
+        final CodeGenerationParameter method = methodWithName(aggregate, methodName);
+        final Stream<CodeGenerationParameter> methodParameters = method.retrieveAllRelated(METHOD_PARAMETER);
+        return methodParameters.map(parameter -> stateFieldWithName(aggregate, parameter.value));
     }
 
     private static Optional<CodeGenerationParameter> findMethod(final CodeGenerationParameter aggregate, final String methodName) {

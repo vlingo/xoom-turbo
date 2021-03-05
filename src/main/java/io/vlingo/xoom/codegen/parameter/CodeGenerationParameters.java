@@ -88,11 +88,11 @@ public class CodeGenerationParameters {
     }
 
     public Stream<CodeGenerationParameter> retrieveAll(final Label label) {
-        return retrieveAll(label, HierarchicalLevels.ONE);
+        return retrieveAll(label, RetrievalLevel.SUPERFICIAL);
     }
 
-    public Stream<CodeGenerationParameter> retrieveAll(final Label label, final HierarchicalLevels hierarchicalLevels) {
-        if(HierarchicalLevels.ALL.equals(hierarchicalLevels)) {
+    public Stream<CodeGenerationParameter> retrieveAll(final Label label, final RetrievalLevel retrievalLevel) {
+        if(RetrievalLevel.EXTENSIVE.equals(retrievalLevel)) {
             return performBulkRetrieval(label);
         }
         return parameters.stream().filter(param -> param.isLabeled(label));
@@ -152,7 +152,7 @@ public class CodeGenerationParameters {
         });
     }
 
-    public enum HierarchicalLevels {
-        ONE, ALL;
+    public enum RetrievalLevel {
+        SUPERFICIAL, EXTENSIVE;
     }
 }

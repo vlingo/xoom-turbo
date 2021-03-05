@@ -22,7 +22,7 @@ public class ExchangeReceiverHolderTemplateDataTest {
         final List<TemplateData> data =
                 ExchangeReceiverHolderTemplateData.from("io.vlingo.xoomapp.infrastructure.exchange",
                         CodeGenerationParametersBuilder.threeExchanges(),
-                        ContentBuilder.aggregateAndEvents());
+                        ContentBuilder.contents());
 
         Assert.assertEquals(1, data.size());
 
@@ -34,6 +34,8 @@ public class ExchangeReceiverHolderTemplateDataTest {
         Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.model.author.Author"));
         Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.model.author.AuthorEntity"));
         Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+        Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.model.author.Name"));
+        Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.model.Rank"));
 
         final List<ExchangeReceiversParameter> receiversParameter = parameters.find(TemplateParameter.EXCHANGE_RECEIVERS);
 

@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.model.aggregate;
 
+import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
@@ -13,10 +14,12 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
@@ -34,20 +37,27 @@ public class AggregateStateTemplateData extends TemplateData {
     public AggregateStateTemplateData(final String packageName,
                                       final Language language,
                                       final CodeGenerationParameter aggregate,
-                                      final StorageType storageType) {
+                                      final StorageType storageType,
+                                      final List<Content> contents) {
         this.protocolName = aggregate.value;
+
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, packageName)
                         .and(EVENT_SOURCED, storageType.isSourced())
                         .and(MEMBERS, Formatters.Fields.format(MEMBER_DECLARATION, language, aggregate))
                         .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(ASSIGNMENT, language, aggregate))
                         .and(ID_TYPE, FieldDetail.typeOf(aggregate, "id"))
+                        .addImports(resolveImports(contents, aggregate))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
                         .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
                         .and(METHOD_INVOCATION_PARAMETERS, resolveIdBasedConstructorParameters(language, aggregate))
                         .and(METHODS, new ArrayList<String>());
 
         this.dependOn(AggregateStateMethodTemplateData.from(language, aggregate));
+    }
+
+    private Set<String> resolveImports(final List<Content> contents, final CodeGenerationParameter aggregate) {
+        return ValueObjectDetail.retrieveQualifiedNames(contents, aggregate.retrieveAllRelated(STATE_FIELD));
     }
 
     private String resolveIdBasedConstructorParameters(final Language language, final CodeGenerationParameter aggregate) {

@@ -1,5 +1,6 @@
 package io.vlingo.xoomapp.model.author;
 
+import io.vlingo.xoomapp.model.Rank;
 import io.vlingo.actors.Definition;
 import io.vlingo.actors.Address;
 import io.vlingo.actors.Stage;

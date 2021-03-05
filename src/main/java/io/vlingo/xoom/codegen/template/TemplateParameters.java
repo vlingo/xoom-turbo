@@ -44,10 +44,6 @@ public class TemplateParameters {
         return this;
     }
 
-    public TemplateParameters addImport(final Class<?> clazz) {
-        return addImport(clazz.getCanonicalName());
-    }
-
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public TemplateParameters addImport(final String qualifiedClassName) {
         if(this.find(TemplateParameter.IMPORTS) == null) {
@@ -66,8 +62,7 @@ public class TemplateParameters {
 
         final String classPackage = ClassFormatter.packageOf(qualifiedClassName);
 
-        if(parameters.containsKey(PACKAGE_NAME) &&
-                parameters.get(PACKAGE_NAME).equals(classPackage)) {
+        if(find(PACKAGE_NAME).equals(classPackage)) {
             return false;
         }
 

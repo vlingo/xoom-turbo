@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.resource;
 
+import io.vlingo.xoom.ExpectationReader;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
@@ -18,6 +19,7 @@ import io.vlingo.xoom.codegen.template.TemplateFile;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -25,12 +27,13 @@ import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.VALUE_OBJECT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class RestResourceGenerationStepTest {
 
     @Test
-    public void testRestResourceGeneration() {
+    public void testRestResourceGeneration() throws IOException {
         final CodeGenerationParameter packageParameter =
                 CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp");
 
@@ -46,13 +49,10 @@ public class RestResourceGenerationStepTest {
 
         new RestResourceGenerationStep().process(context);
 
-        final List<Content> contents = context.contents();
-        Assert.assertEquals(8, contents.size());
-        Assert.assertEquals("AuthorResource", contents.get(7).retrieveName());
-        Assert.assertTrue(contents.get(7).contains("class AuthorResource"));
-        Assert.assertTrue(contents.get(7).contains("Author.withName(stage(), data.name)"));
-        Assert.assertTrue(contents.get(7).contains("package io.vlingo.xoomapp.infrastructure.resource;"));
-        Assert.assertTrue(contents.get(7).contains("return stage().actorOf(Author.class, stage().addressFactory().from(id), Definition.has(AuthorEntity.class, Definition.parameters(id)));"));
+        final Content authorResource = context.findContent(REST_RESOURCE, "AuthorResource");
+
+        Assert.assertEquals(10, context.contents().size());
+        Assert.assertTrue(authorResource.contains(ExpectationReader.onJava().read("author-rest-resource")));
     }
 
     @Test
@@ -77,12 +77,13 @@ public class RestResourceGenerationStepTest {
         new RestResourceGenerationStep().process(context);
 
         final List<Content> contents = context.contents();
-        Assert.assertEquals(8, contents.size());
-        Assert.assertEquals("AuthorResource", contents.get(7).retrieveName());
-        Assert.assertTrue(contents.get(7).contains("class AuthorResource : DynamicResourceHandler"));
-        Assert.assertTrue(contents.get(7).contains("Author.withName(stage(), data.name)"));
-        Assert.assertTrue(contents.get(7).contains("package io.vlingo.xoomapp.infrastructure.resource"));
-        Assert.assertTrue(contents.get(7).contains("return stage().actorOf(Author::class.java, stage().addressFactory().from(id), Definition.has(AuthorEntity::class.java, Definition.parameters(id)))"));
+
+        Assert.assertEquals(10, contents.size());
+        final Content authorResource= context.findContent(REST_RESOURCE, "AuthorResource");
+        Assert.assertTrue(authorResource.contains("class AuthorResource : DynamicResourceHandler"));
+        Assert.assertTrue(authorResource.contains("Author.withName(stage(), data.name)"));
+        Assert.assertTrue(authorResource.contains("package io.vlingo.xoomapp.infrastructure.resource"));
+        Assert.assertTrue(authorResource.contains("return stage().actorOf(Author::class.java, stage().addressFactory().from(id), Definition.has(AuthorEntity::class.java, Definition.parameters(id)))"));
     }
 
     private CodeGenerationParameter authorAggregate() {
@@ -92,11 +93,11 @@ public class RestResourceGenerationStepTest {
 
         final CodeGenerationParameter nameField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "name")
-                        .relate(Label.FIELD_TYPE, "String");
+                        .relate(Label.FIELD_TYPE, "Name");
 
         final CodeGenerationParameter rankField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                        .relate(Label.FIELD_TYPE, "int");
+                        .relate(Label.FIELD_TYPE, "Rank");
 
         final CodeGenerationParameter authorRegisteredEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
@@ -141,6 +142,8 @@ public class RestResourceGenerationStepTest {
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
                 Content.with(AGGREGATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_AGGREGATE_CONTENT_TEXT),
                 Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+                Content.with(VALUE_OBJECT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Rank.java"), null, null, RANK_VALUE_OBJECT_CONTENT_TEXT),
+                Content.with(VALUE_OBJECT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT),
                 Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
                 Content.with(QUERIES, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
                 Content.with(QUERIES_ACTOR, new TemplateFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueriesActor.java"), null, null, AUTHOR_QUERIES_ACTOR_CONTENT_TEXT),
@@ -185,6 +188,18 @@ public class RestResourceGenerationStepTest {
     private static final String AUTHOR_DATA_CONTENT_TEXT =
             "package io.vlingo.xoomapp.infrastructure; \\n" +
                     "public class AuthorData { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String NAME_VALUE_OBJECT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class Name { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String RANK_VALUE_OBJECT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model; \\n" +
+                    "public class Rank { \\n" +
                     "... \\n" +
                     "}";
 
