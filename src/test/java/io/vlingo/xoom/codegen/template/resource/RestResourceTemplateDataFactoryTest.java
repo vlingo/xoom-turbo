@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -40,8 +41,11 @@ public class RestResourceTemplateDataFactoryTest {
         final CodeGenerationParameter useCQRSParameter =
                 CodeGenerationParameter.of(CQRS, "true");
 
+        final CodeGenerationParameter language =
+                CodeGenerationParameter.of(LANGUAGE, Language.JAVA);
+
         final CodeGenerationParameters parameters =
-                CodeGenerationParameters.from(packageParameter,
+                CodeGenerationParameters.from(packageParameter, language,
                         useCQRSParameter, authorAggregate());
 
         final List<TemplateData> templatesData =
@@ -91,8 +95,11 @@ public class RestResourceTemplateDataFactoryTest {
         final CodeGenerationParameter useCQRSParameter =
                 CodeGenerationParameter.of(CQRS, "false");
 
+        final CodeGenerationParameter language =
+                CodeGenerationParameter.of(LANGUAGE, Language.JAVA);
+
         final CodeGenerationParameters parameters =
-                CodeGenerationParameters.from(packageParameter,
+                CodeGenerationParameters.from(packageParameter, language,
                         useCQRSParameter, authorAggregate());
 
         final List<TemplateData> templatesData =

@@ -8,8 +8,10 @@
 package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static java.util.stream.Collectors.toList;
 
 public class RestResourceTemplateDataFactory {
 
@@ -24,8 +27,11 @@ public class RestResourceTemplateDataFactory {
                                            final List<Content> contents) {
         final String basePackage = parameters.retrieveValue(PACKAGE);
         final Boolean useCQRS = parameters.retrieveValue(CQRS, Boolean::valueOf);
+        final Language language = parameters.retrieveValue(Label.LANGUAGE, Language::valueOf);
+        final List<CodeGenerationParameter> valueObjects = parameters.retrieveAll(VALUE_OBJECT).collect(toList());
+
         final Function<CodeGenerationParameter, TemplateData> mapper =
-                aggregateParameter -> new RestResourceTemplateData(basePackage, aggregateParameter, contents, useCQRS);
+                aggregateParameter -> new RestResourceTemplateData(basePackage, language, aggregateParameter, valueObjects, contents, useCQRS);
 
         return parameters.retrieveAll(AGGREGATE)
                 .filter(aggregateParameter -> aggregateParameter.hasAny(ROUTE_SIGNATURE))

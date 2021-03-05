@@ -24,6 +24,9 @@ public class ${exchangeReceiverHolderName} {
 
     @Override
     public void receive(final ${receiver.localTypeName} data) {
+      <#list receiver.valueObjectInitializers as initializer>
+      ${initializer}
+      </#list>
       <#if receiver.modelFactoryMethod>
       ${receiver.modelProtocol}.${receiver.modelMethod}(${receiver.modelMethodParameters});
       <#else>

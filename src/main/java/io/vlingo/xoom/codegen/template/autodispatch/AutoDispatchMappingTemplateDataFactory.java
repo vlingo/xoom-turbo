@@ -30,7 +30,6 @@ public class AutoDispatchMappingTemplateDataFactory {
         final String basePackage =
                 parameters.retrieveValue(Label.PACKAGE);
 
-
         final boolean useCQRS =
                 parameters.retrieveValue(Label.CQRS, Boolean::valueOf);
 

@@ -40,9 +40,12 @@ public class RestResourceGenerationStepTest {
         final CodeGenerationParameter useCQRSParameter =
                 CodeGenerationParameter.of(CQRS, "true");
 
+        final CodeGenerationParameter language =
+                CodeGenerationParameter.of(LANGUAGE, Language.JAVA);
+
         final CodeGenerationParameters parameters =
-                CodeGenerationParameters.from(packageParameter,
-                        useCQRSParameter, authorAggregate());
+                CodeGenerationParameters.from(packageParameter, language, useCQRSParameter,
+                        authorAggregate(), nameValueObject(), rankValueObject());
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters).contents(contents());
@@ -81,7 +84,7 @@ public class RestResourceGenerationStepTest {
         Assert.assertEquals(10, contents.size());
         final Content authorResource= context.findContent(REST_RESOURCE, "AuthorResource");
         Assert.assertTrue(authorResource.contains("class AuthorResource : DynamicResourceHandler"));
-        Assert.assertTrue(authorResource.contains("Author.withName(stage(), data.name)"));
+        Assert.assertTrue(authorResource.contains("Author.withName(stage(), name)"));
         Assert.assertTrue(authorResource.contains("package io.vlingo.xoomapp.infrastructure.resource"));
         Assert.assertTrue(authorResource.contains("return stage().actorOf(Author::class.java, stage().addressFactory().from(id), Definition.has(AuthorEntity::class.java, Definition.parameters(id)))"));
     }
@@ -131,10 +134,26 @@ public class RestResourceGenerationStepTest {
                         .relate(REQUIRE_ENTITY_LOADING, "true");
 
         return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-                .relate(URI_ROOT, "authors").relate(idField)
+                .relate(URI_ROOT, "/authors").relate(idField)
                 .relate(nameField).relate(rankField).relate(factoryMethod)
                 .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
                 .relate(authorRegisteredEvent).relate(authorRankedEvent);
+    }
+
+    private CodeGenerationParameter nameValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+                        .relate(Label.FIELD_TYPE, "String"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+                        .relate(Label.FIELD_TYPE, "String"));
+    }
+
+    private CodeGenerationParameter rankValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+                        .relate(Label.FIELD_TYPE, "int"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+                        .relate(Label.FIELD_TYPE, "String"));
     }
 
     private Content[] contents() {
@@ -202,6 +221,7 @@ public class RestResourceGenerationStepTest {
                     "public class Rank { \\n" +
                     "... \\n" +
                     "}";
+
 
     private static final String AUTHOR_QUERIES_CONTENT_TEXT =
             "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +

@@ -80,7 +80,7 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                         .and(USE_CQRS, context.parameterOf(CQRS, Boolean::valueOf))
                         .addImports(resolveImports(context, autoDispatchParameter, queryStoreProviderName));
 
-        this.dependOn(RouteMethodTemplateData.from(autoDispatchParameter, parameters));
+        this.dependOn(RouteMethodTemplateData.from(autoDispatchParameter, parameters, context.contents()));
     }
 
     private Set<String> resolveImports(final CodeGenerationContext context,

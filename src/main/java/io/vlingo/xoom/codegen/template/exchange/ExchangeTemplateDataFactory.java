@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen.template.exchange;
 
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 
@@ -21,8 +22,10 @@ import static java.util.stream.Collectors.toList;
 
 public class ExchangeTemplateDataFactory {
 
-    public static List<TemplateData> build(final String exchangePackage,
+    public static List<TemplateData> build(final Language language,
+                                           final String exchangePackage,
                                            final List<CodeGenerationParameter> aggregates,
+                                           final List<CodeGenerationParameter> valueObjects,
                                            final List<Content> contents) {
         final Supplier<Stream<CodeGenerationParameter>> filteredAggregates = () ->
                 aggregates.stream().filter(aggregate -> aggregate.hasAny(EXCHANGE));
@@ -31,7 +34,7 @@ public class ExchangeTemplateDataFactory {
                 ExchangeMapperTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
 
         final List<TemplateData> holders =
-                ExchangeReceiverHolderTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
+                ExchangeReceiverHolderTemplateData.from(language, exchangePackage, filteredAggregates.get(), valueObjects, contents);
 
         final List<TemplateData> adapters =
                 ExchangeAdapterTemplateData.from(exchangePackage, filteredAggregates.get(), contents);

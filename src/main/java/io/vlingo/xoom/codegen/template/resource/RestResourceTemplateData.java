@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
@@ -37,13 +38,15 @@ public class RestResourceTemplateData extends TemplateData {
 
     @SuppressWarnings("unchecked")
     public RestResourceTemplateData(final String basePackage,
+                                    final Language language,
                                     final CodeGenerationParameter aggregateParameter,
+                                    final List<CodeGenerationParameter> valueObjects,
                                     final List<Content> contents,
                                     final Boolean useCQRS) {
         this.aggregateName = aggregateParameter.value;
         this.packageName = resolvePackage(basePackage);
         this.parameters = loadParameters(aggregateParameter, contents, useCQRS);
-        this.dependOn(RouteMethodTemplateData.from(aggregateParameter, parameters));
+        this.dependOn(RouteMethodTemplateData.from(language, aggregateParameter, valueObjects, parameters));
     }
 
     private TemplateParameters loadParameters(final CodeGenerationParameter aggregateParameter,

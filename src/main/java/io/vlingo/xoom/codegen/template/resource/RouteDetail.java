@@ -117,7 +117,7 @@ public class RouteDetail {
         return formatted.endsWith("s") ? formatted : formatted + "s";
     }
 
-    private static boolean hasBody(final CodeGenerationParameter route) {
+    public static boolean hasBody(final CodeGenerationParameter route) {
         return !resolveBodyName(route).isEmpty();
     }
 }

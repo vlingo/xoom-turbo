@@ -6,16 +6,21 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.exchange;
 
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.LANGUAGE;
 
 public class CodeGenerationParametersBuilder {
 
     public static Stream<CodeGenerationParameter> threeExchanges() {
+        final CodeGenerationParameter language =
+                CodeGenerationParameter.of(LANGUAGE, Language.JAVA);
+
         final CodeGenerationParameter idField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "id")
                         .relate(Label.FIELD_TYPE, "String");
@@ -105,7 +110,22 @@ public class CodeGenerationParametersBuilder {
                         .relate(bookSoldOutEvent).relate(bookPurchasedEvent)
                         .relate(bookExchange);
 
-        return Stream.of(authorAggregate, bookAggregate);
+        final CodeGenerationParameter nameValueObject =
+             CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
+                    .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+                            .relate(Label.FIELD_TYPE, "String"))
+                    .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+                            .relate(Label.FIELD_TYPE, "String"));
+
+        final CodeGenerationParameter rankValueObject =
+            CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
+                    .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+                            .relate(Label.FIELD_TYPE, "int"))
+                    .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+                            .relate(Label.FIELD_TYPE, "String"));
+
+        return Stream.of(language, authorAggregate, bookAggregate, nameValueObject, rankValueObject);
     }
+
 
 }

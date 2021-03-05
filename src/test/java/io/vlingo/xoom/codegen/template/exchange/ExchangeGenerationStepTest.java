@@ -7,11 +7,15 @@
 
 package io.vlingo.xoom.codegen.template.exchange;
 
+import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static io.vlingo.xoom.codegen.parameter.Label.PACKAGE;
 import static java.util.stream.Collectors.toList;
@@ -19,7 +23,7 @@ import static java.util.stream.Collectors.toList;
 public class ExchangeGenerationStepTest {
 
     @Test
-    public void testThatExchangeCodeIsGenerated() {
+    public void testThatExchangeCodeIsGenerated() throws IOException {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.empty()
                         .addAll(CodeGenerationParametersBuilder.threeExchanges().collect(toList()));
@@ -34,16 +38,8 @@ public class ExchangeGenerationStepTest {
         Assert.assertEquals(19, context.contents().size());
 
         final Content authorExchangeReceivers =
-                context.contents().stream().filter(content -> content.retrieveName().equals("AuthorExchangeReceivers"))
-                        .findFirst().get();
+                context.findContent(TemplateStandard.EXCHANGE_RECEIVER_HOLDER, "AuthorExchangeReceivers");
 
-
-        authorExchangeReceivers.contains("static class OtherAggregateDefined ");
-        authorExchangeReceivers.contains("static class OtherAggregateUpdated ");
-        authorExchangeReceivers.contains("static class OtherAggregateRemoved ");
-        authorExchangeReceivers.contains("Author.withName(data.name)");
-        authorExchangeReceivers.contains("stage.actorOf(Author.class, stage.addressFactory().from(data.id), AuthorEntity.class)");
-        authorExchangeReceivers.contains(".andFinallyConsume(author -> author.block(data.rank)");
+        authorExchangeReceivers.contains(TextExpectation.onJava().read("author-exchange-receivers"));
     }
-
 }

@@ -63,22 +63,6 @@ public class AutoDispatchMappingGenerationStepTest {
         Assert.assertTrue(authorHandlersMappingContent.contains(TextExpectation.onJava().read("author-dispatch-handlers-mapping")));
     }
 
-    private CodeGenerationParameter nameValueObject() {
-        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
-                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
-                        .relate(Label.FIELD_TYPE, "String"))
-                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
-                        .relate(Label.FIELD_TYPE, "String"));
-    }
-
-    private CodeGenerationParameter rankValueObject() {
-        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
-                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
-                        .relate(Label.FIELD_TYPE, "int"))
-                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
-                        .relate(Label.FIELD_TYPE, "String"));
-    }
-
     private Content[] contents() {
         return new Content[]{
                 Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
@@ -147,6 +131,22 @@ public class AutoDispatchMappingGenerationStepTest {
                 .relate(nameField).relate(rankField).relate(factoryMethod)
                 .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
                 .relate(authorRegisteredEvent).relate(authorRankedEvent);
+    }
+
+    private CodeGenerationParameter nameValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+                        .relate(Label.FIELD_TYPE, "String"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+                        .relate(Label.FIELD_TYPE, "String"));
+    }
+
+    private CodeGenerationParameter rankValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+                        .relate(Label.FIELD_TYPE, "int"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+                        .relate(Label.FIELD_TYPE, "String"));
     }
 
     private static final String PROJECT_PATH =
