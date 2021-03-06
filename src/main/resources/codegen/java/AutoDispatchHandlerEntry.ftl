@@ -4,7 +4,7 @@ public static final HandlerEntry<Three<Completes<${stateName}>, Stage, ${dataNam
               <#list valueObjectInitializers as initializer>
               ${initializer}
               </#list>
-              return ${aggregateProtocolName}.${methodName}(${methodInvocationParameters}));
+              return ${aggregateProtocolName}.${methodName}(${methodInvocationParameters});
           });
 <#else>
 public static final HandlerEntry<Three<Completes<${stateName}>, ${aggregateProtocolName}, ${dataName}>> ${indexName}_HANDLER =
@@ -12,6 +12,6 @@ public static final HandlerEntry<Three<Completes<${stateName}>, ${aggregateProto
               <#list valueObjectInitializers as initializer>
               ${initializer}
               </#list>
-              return ${aggregateProtocolVariable}.${methodName}(${methodInvocationParameters}));
+              return ${aggregateProtocolVariable}.${methodName}(${methodInvocationParameters});
           });
 </#if>

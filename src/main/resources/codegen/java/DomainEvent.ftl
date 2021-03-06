@@ -4,9 +4,11 @@ import java.util.UUID;
 import io.vlingo.common.version.SemanticVersion;
 import io.vlingo.lattice.model.IdentifiedDomainEvent;
 
+<#if imports?has_content>
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
+</#if>
 
 /**
  * See

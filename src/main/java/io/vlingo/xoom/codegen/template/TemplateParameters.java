@@ -24,7 +24,9 @@ public class TemplateParameters {
 
     private final Map<String, Object> parameters = new HashMap<>();
 
-    private TemplateParameters() {}
+    private TemplateParameters() {
+
+    }
 
     public static TemplateParameters empty() {
         return new TemplateParameters();

@@ -89,12 +89,8 @@ public class ProjectionTemplateData extends TemplateData {
 
         return templatesData.stream().filter(data -> data.hasStandard(PROJECTION_SOURCE_TYPES))
                 .map(data -> data.parameters().<String>find(PROJECTION_SOURCE_TYPES_QUALIFIED_NAME))
-                .map(qualifiedName -> {
-                    if(projectionType.isOperationBased()) {
-                        return ImportParameter.of(stateQualifiedName, dataObjectQualifiedName, qualifiedName);
-                    }
-                    return ImportParameter.of(dataObjectQualifiedName, qualifiedName);
-                }).flatMap(imports -> imports.stream()).collect(Collectors.toSet());
+                .map(qualifiedName -> ImportParameter.of(stateQualifiedName, dataObjectQualifiedName, qualifiedName))
+                .flatMap(imports -> imports.stream()).collect(Collectors.toSet());
     }
 
     private String resolvePackage(final String basePackage) {

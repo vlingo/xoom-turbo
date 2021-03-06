@@ -23,7 +23,9 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
 
   @Override
   protected ${dataName} currentDataFor(final Projectable projectable) {
-    return Empty;
+    final ${stateName} state = projectable.object();
+    final ${dataName} current = ${dataName}.from(state);
+    return current;
   }
 
   @Override

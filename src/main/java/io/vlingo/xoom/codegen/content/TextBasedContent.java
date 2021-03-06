@@ -94,7 +94,9 @@ public class TextBasedContent extends Content {
 
     @Override
     public String retrievePackage() {
-        return PackageRetriever.retrieve(text);
+        final int packageStartIndex = text.indexOf("package");
+        final int packageEndIndex = text.indexOf(";");
+        return text.substring(packageStartIndex + 8, packageEndIndex);
     }
 
     @Override
