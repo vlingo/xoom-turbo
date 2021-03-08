@@ -79,7 +79,7 @@ public class ModelGenerationStepTest {
 
         Assert.assertEquals(7, context.contents().size());
         Assert.assertTrue(author.contains("interface Author "));
-        Assert.assertTrue(author.contains("final Address _address = stage.addressFactory().uniquePrefixedWith(\"g-\");"));
+        Assert.assertTrue(author.contains("final io.vlingo.actors.Address _address = stage.addressFactory().uniquePrefixedWith(\"g-\");"));
         Assert.assertTrue(authorEntity.contains("class AuthorEntity extends EventSourced"));
         Assert.assertTrue(authorEntity.contains("public Completes<AuthorState> withName(final Name name) {"));
         Assert.assertTrue(authorEntity.contains("return apply(new AuthorRegistered(state), () -> state);"));

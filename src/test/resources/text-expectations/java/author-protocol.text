@@ -11,7 +11,7 @@ public interface Author {
   Completes<AuthorState> withName(final Name name);
 
   static Completes<AuthorState> withName(final Stage stage, final Name name) {
-    final Address _address = stage.addressFactory().uniquePrefixedWith("g-");
+    final io.vlingo.actors.Address _address = stage.addressFactory().uniquePrefixedWith("g-");
     final Author _author = stage.actorFor(Author.class, Definition.has(AuthorEntity.class, Definition.parameters(_address.idString())), _address);
     return _author.withName(name);
   }
