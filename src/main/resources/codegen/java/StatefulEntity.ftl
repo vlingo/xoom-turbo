@@ -1,8 +1,10 @@
 package ${packageName};
 
+<#if imports?has_content>
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
+</#if>
 
 import io.vlingo.lattice.model.stateful.StatefulEntity;
 
