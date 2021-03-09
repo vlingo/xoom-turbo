@@ -19,6 +19,10 @@ import static io.vlingo.xoom.codegen.template.Template.*;
 
 public class CodeGenerationSetup {
 
+  public static final String DATA_SCHEMA_CATEGORY = "data";
+  public static final String EVENT_SCHEMA_CATEGORY = "event";
+  public static final String DEFAULT_SCHEMA_VERSION = "1.0.0";
+
   public static final List<String> KOTLIN_RESERVED_WORDS = Arrays.asList("object", "public", "get", "set");
   public static final List<String> SCALAR_NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "long", "double");
   public static final List<String> SCALAR_TYPES = Stream.of(SCALAR_NUMERIC_TYPES, Arrays.asList("boolean", "string"))

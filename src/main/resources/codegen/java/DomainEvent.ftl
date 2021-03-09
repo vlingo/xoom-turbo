@@ -24,7 +24,7 @@ public final class ${domainEventName} extends IdentifiedDomainEvent {
   </#list>
 
   public ${domainEventName}(final ${stateName} state) {
-    super(SemanticVersion.from("0.0.1").toValue());
+    super(SemanticVersion.from("${defaultSchemaVersion}").toValue());
     <#list membersAssignment as assignment>
     ${assignment}
     </#list>

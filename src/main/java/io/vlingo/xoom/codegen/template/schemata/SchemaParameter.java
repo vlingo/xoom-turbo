@@ -10,6 +10,8 @@ package io.vlingo.xoom.codegen.template.schemata;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 
+import static io.vlingo.xoom.codegen.CodeGenerationSetup.DEFAULT_SCHEMA_VERSION;
+
 public class SchemaParameter {
 
     public final String reference;
@@ -24,12 +26,12 @@ public class SchemaParameter {
     }
 
     public SchemaParameter(final String schemaGroup,
-                           final CodeGenerationParameter domainEvent) {
-        if(!domainEvent.isLabeled(Label.DOMAIN_EVENT)) {
-            throw new IllegalArgumentException("A Domain Event parameter is expected.");
+                           final CodeGenerationParameter publishedLanguage) {
+        if(! (publishedLanguage.isLabeled(Label.DOMAIN_EVENT) || publishedLanguage.isLabeled(Label.VALUE_OBJECT))) {
+            throw new IllegalArgumentException("A Domain Event or Value Object parameter is expected.");
         }
-        this.reference = String.format("%s:%s:0.0.1", schemaGroup, domainEvent.value) ;
-        this.file = domainEvent.value + ".vss";
+        this.reference = String.format("%s:%s:%s", schemaGroup, publishedLanguage.value, DEFAULT_SCHEMA_VERSION) ;
+        this.file = publishedLanguage.value + ".vss";
     }
 
     public String getReference() {
