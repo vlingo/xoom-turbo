@@ -40,14 +40,14 @@ public class ModelGenerationStepTest {
 
         modelGenerationStep.process(context);
 
-        final Content author = context.findContent(AGGREGATE_PROTOCOL, "Author");
+        final Content authorProtocol = context.findContent(AGGREGATE_PROTOCOL, "Author");
         final Content authorEntity = context.findContent(AGGREGATE, "AuthorEntity");
         final Content authorState = context.findContent(AGGREGATE_STATE, "AuthorState");
         final Content authorRegistered = context.findContent(DOMAIN_EVENT, "AuthorRegistered");
         final Content authorRanked = context.findContent(DOMAIN_EVENT, "AuthorRanked");
 
         Assert.assertEquals(7, context.contents().size());
-        Assert.assertTrue(author.contains(TextExpectation.onJava().read("author-protocol")));
+        Assert.assertTrue(authorProtocol.contains(TextExpectation.onJava().read("author-protocol")));
         Assert.assertTrue(authorEntity.contains(TextExpectation.onJava().read("author-stateful-entity")));
         Assert.assertTrue(authorState.contains(TextExpectation.onJava().read("author-state")));
         Assert.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
@@ -210,7 +210,7 @@ public class ModelGenerationStepTest {
                     "io", "vlingo", "xoomapp", "model").toString();
 
     private static final String NAME_VALUE_OBJECT_CONTENT_TEXT =
-            "package io.vlingo.xoomapp.model.author; \\n" +
+            "package io.vlingo.xoomapp.model; \\n" +
                     "public class Name { \\n" +
                     "... \\n" +
                     "}";

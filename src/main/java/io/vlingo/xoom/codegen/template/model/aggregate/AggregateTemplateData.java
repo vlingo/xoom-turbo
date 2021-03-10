@@ -56,7 +56,7 @@ public class AggregateTemplateData extends TemplateData {
 
     private Set<String> resolveImports(final List<Content> contents, final CodeGenerationParameter aggregate) {
         final Set<String> imports =
-                ValueObjectDetail.retrieveQualifiedNames(contents, aggregate.retrieveAllRelated(STATE_FIELD));
+                ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(STATE_FIELD));
 
         if(aggregate.hasAny(AGGREGATE_METHOD)) {
             imports.add(Completes.class.getCanonicalName());

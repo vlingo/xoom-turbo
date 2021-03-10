@@ -1,4 +1,4 @@
-package io.vlingo.xoomapp.model.author;
+package io.vlingo.xoomapp.model;
 
 public class Name {
 

@@ -69,7 +69,7 @@ public class DomainEventTemplateData extends TemplateData {
         final Stream<CodeGenerationParameter> stateFields =
                 aggregate.retrieveAllRelated(STATE_FIELD).filter(field -> eventFields.contains(field.value));
 
-        return ValueObjectDetail.retrieveQualifiedNames(contents, stateFields);
+        return ValueObjectDetail.resolveImports(contents, stateFields);
     }
 
     @Override

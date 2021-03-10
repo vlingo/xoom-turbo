@@ -78,7 +78,7 @@ public class ExchangeReceiverHolderTemplateData extends TemplateData {
                 ExchangeDetail.findInvolvedStateFieldsOnReceivers(exchange);
 
         final Set<String> valueObjects =
-                ValueObjectDetail.retrieveQualifiedNames(contents, involvedStateFields);
+                ValueObjectDetail.resolveImports(contents, involvedStateFields);
 
         return Stream.of(imports, valueObjects).flatMap(Set::stream).collect(Collectors.toSet());
     }

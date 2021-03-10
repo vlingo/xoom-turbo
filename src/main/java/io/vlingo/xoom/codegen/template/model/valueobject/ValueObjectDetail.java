@@ -7,14 +7,13 @@
 
 package io.vlingo.xoom.codegen.template.model.valueobject;
 
+import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,27 +24,24 @@ import static io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail.ev
 
 public class ValueObjectDetail {
 
-  public static String resolvePackage(final String basePackage,
-                                      final String valueObject,
-                                      final List<CodeGenerationParameter> aggregates) {
-    final List<CodeGenerationParameter> dependentAggregates =
-            aggregates.stream().filter(aggregate -> aggregate.retrieveAllRelated(STATE_FIELD)
-            .anyMatch(field -> field.retrieveRelatedValue(FIELD_TYPE).equals(valueObject)))
-            .collect(Collectors.toList());
-
-    if(dependentAggregates.size() == 1) {
-      return AggregateDetail.resolvePackage(basePackage, aggregates.get(0).value);
-    }
-
+  public static String resolvePackage(final String basePackage) {
     return String.format("%s.%s", basePackage, "model");
   }
 
-  public static Set<String> retrieveQualifiedNames(final List<Content> contents,
-                                                   final Stream<CodeGenerationParameter> arguments) {
-    return arguments.filter(ValueObjectDetail::isValueObject)
-            .map(arg -> arg.retrieveRelatedValue(FIELD_TYPE))
-            .map(valueObjectName -> findFullyQualifiedClassName(VALUE_OBJECT, valueObjectName, contents))
-            .collect(Collectors.toSet());
+  public static Set<String> resolveImports(final List<Content> contents,
+                                           final Stream<CodeGenerationParameter> arguments) {
+    final Optional<String> anyQualifiedName =
+            arguments.filter(ValueObjectDetail::isValueObject)
+                    .map(arg -> arg.retrieveRelatedValue(FIELD_TYPE))
+                    .map(valueObjectName -> findFullyQualifiedClassName(VALUE_OBJECT, valueObjectName, contents))
+                    .findAny();
+
+    if(anyQualifiedName.isPresent()) {
+      final String packageName = ClassFormatter.packageOf(anyQualifiedName.get());
+      return Stream.of(ClassFormatter.importAllFrom(packageName)).collect(Collectors.toSet());
+    }
+
+    return Collections.emptySet();
   }
 
   public static Stream<CodeGenerationParameter> orderByDependency(final Stream<CodeGenerationParameter> valueObjects) {

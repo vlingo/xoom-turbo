@@ -20,6 +20,7 @@ import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -80,8 +81,8 @@ public class RestResourceTemplateData extends TemplateData {
     private Set<String> resolveImports(final CodeGenerationParameter aggregate,
                                        final List<Content> contents,
                                        final Boolean useCQRS) {
+        final Set<String> imports = new HashSet<>();
         final Stream<CodeGenerationParameter> involvedStateFields = RouteDetail.findInvolvedStateFieldTypes(aggregate);
-        final Set<String> imports = ValueObjectDetail.retrieveQualifiedNames(contents, involvedStateFields);
         if(RouteDetail.requireEntityLoad(aggregate)) {
             final String aggregateEntityName = AGGREGATE.resolveClassname(aggregateName);
             imports.add(findFullyQualifiedClassName(AGGREGATE, aggregateEntityName, contents));
@@ -97,6 +98,7 @@ public class RestResourceTemplateData extends TemplateData {
             imports.add(findFullyQualifiedClassName(STORE_PROVIDER, resolveQueryStoreProviderName(), contents));
             imports.add(findFullyQualifiedClassName(TemplateStandard.QUERIES, queriesName, contents));
         }
+        imports.addAll(ValueObjectDetail.resolveImports(contents, involvedStateFields));
         return imports;
     }
 

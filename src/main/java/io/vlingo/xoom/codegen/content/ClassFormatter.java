@@ -31,4 +31,8 @@ public class ClassFormatter {
     public static String packageOf(final String qualifiedName) {
         return qualifiedName.substring(0, qualifiedName.lastIndexOf("."));
     }
+
+    public static String importAllFrom(final String packageName) {
+        return packageName + ".*";
+    }
 }
