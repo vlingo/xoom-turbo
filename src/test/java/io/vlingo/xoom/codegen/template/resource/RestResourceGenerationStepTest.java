@@ -45,7 +45,8 @@ public class RestResourceGenerationStepTest {
 
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(packageParameter, language, useCQRSParameter,
-                        authorAggregate(), nameValueObject(), rankValueObject());
+                        authorAggregate(), nameValueObject(), rankValueObject(),
+                        classificationValueObject(), classifierValueObject());
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters).contents(contents());
@@ -150,11 +151,27 @@ public class RestResourceGenerationStepTest {
 
     private CodeGenerationParameter rankValueObject() {
         return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
-                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
-                        .relate(Label.FIELD_TYPE, "int"))
-                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
-                        .relate(Label.FIELD_TYPE, "String"));
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+                                .relate(Label.FIELD_TYPE, "int"))
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+                                .relate(Label.FIELD_TYPE, "Classification"));
     }
+
+    private CodeGenerationParameter classificationValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classification")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
+                        .relate(Label.FIELD_TYPE, "String"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifier")
+                        .relate(Label.FIELD_TYPE, "Classifier"));
+    }
+
+    private CodeGenerationParameter classifierValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
+                        .relate(Label.FIELD_TYPE, "String"));
+
+    }
+
 
     private Content[] contents() {
         return new Content[] {

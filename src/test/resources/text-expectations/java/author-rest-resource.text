@@ -39,7 +39,9 @@ public class AuthorResource extends DynamicResourceHandler {
   }
 
   public Completes<Response> changeRank(final String id, final AuthorData data) {
-    final Rank rank = Rank.of(data.rank.points, data.rank.classification);
+    final Classifier classifier = Classifier.of(data.rank.classification.classifier.name);
+    final Classification classification = Classification.of(data.rank.classification.label, classifier);
+    final Rank rank = Rank.of(data.rank.points, classification);
     return resolve(id)
             .andThenTo(author -> author.changeRank(rank))
             .andThenTo(state -> Completes.withSuccess(Response.of(Ok, serialized(AuthorData.from(state)))))

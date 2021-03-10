@@ -10,6 +10,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -30,17 +31,44 @@ public class ValueObjectInitializer extends Formatters.Fields<List<String>> {
                              final Stream<CodeGenerationParameter> fields) {
     final CodeGenerationParameter aggregate = method.parent(AGGREGATE);
     final List<CodeGenerationParameter> valueObjects = fields.collect(Collectors.toList());
-    return method.retrieveAllRelated(METHOD_PARAMETER).map(param -> AggregateDetail.stateFieldWithName(aggregate, param.value))
-            .filter(field -> ValueObjectDetail.isValueObject(field)).map(field -> concatenateInitializer(field, valueObjects))
+    return method.retrieveAllRelated(METHOD_PARAMETER)
+            .map(param -> AggregateDetail.stateFieldWithName(aggregate, param.value))
+            .filter(ValueObjectDetail::isValueObject)
+            .flatMap(field -> buildExpressions(field, valueObjects).stream())
             .collect(Collectors.toList());
   }
 
-  private String concatenateInitializer(final CodeGenerationParameter stateField, final List<CodeGenerationParameter> valueObjects) {
-    final String fieldType = stateField.retrieveRelatedValue(FIELD_TYPE);
-    final CodeGenerationParameter valueObject = ValueObjectDetail.valueObjectOf(fieldType, valueObjects.stream());
-    final Function<CodeGenerationParameter, String> formatter =
-            valueObjectField -> String.format("%s.%s.%s", carrierName, stateField.value, valueObjectField.value);
-    final String args = valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(formatter).collect(Collectors.joining(", "));
-    return String.format("final %s %s = %s.of(%s);", valueObject.value, stateField.value, valueObject.value, args);
+  private List<String> buildExpressions(final CodeGenerationParameter stateField, final List<CodeGenerationParameter> valueObjects) {
+    final List<String> expressions = new ArrayList<>();
+    buildExpression(carrierName, stateField, valueObjects, expressions);
+    return expressions;
   }
+
+  private void buildExpression(final String carrierReferencePath,
+                               final CodeGenerationParameter field,
+                               final List<CodeGenerationParameter> valueObjects,
+                               final List<String> expressions) {
+    final CodeGenerationParameter valueObject =
+            ValueObjectDetail.valueObjectOf(field.retrieveRelatedValue(FIELD_TYPE), valueObjects.stream());
+
+    final String fieldReferencePath =
+            String.format("%s.%s", carrierReferencePath, field.value);
+
+    valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
+            .filter(ValueObjectDetail::isValueObject)
+            .forEach(valueObjectField -> buildExpression(fieldReferencePath, valueObjectField, valueObjects, expressions));
+
+    final Function<CodeGenerationParameter, String> pathResolver = valueObjectField ->
+            ValueObjectDetail.isValueObject(valueObjectField) ? valueObjectField.value :
+                    String.format("%s.%s", fieldReferencePath, valueObjectField.value);
+
+    final String args =
+            valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(pathResolver).collect(Collectors.joining(", "));
+
+    final String expression =
+            String.format("final %s %s = %s.of(%s);", valueObject.value, field.value, valueObject.value, args);
+
+    expressions.add(expression);
+  }
+
 }
