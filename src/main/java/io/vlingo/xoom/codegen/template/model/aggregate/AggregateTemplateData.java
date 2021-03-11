@@ -19,6 +19,7 @@ import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,8 +56,9 @@ public class AggregateTemplateData extends TemplateData {
     }
 
     private Set<String> resolveImports(final List<Content> contents, final CodeGenerationParameter aggregate) {
-        final Set<String> imports =
-                ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(STATE_FIELD));
+        final Set<String> imports = new HashSet<>();
+
+        imports.addAll(ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(STATE_FIELD)));
 
         if(aggregate.hasAny(AGGREGATE_METHOD)) {
             imports.add(Completes.class.getCanonicalName());
