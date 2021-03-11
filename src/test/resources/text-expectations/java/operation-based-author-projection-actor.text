@@ -1,0 +1,48 @@
+package io.vlingo.infrastructure.persistence;
+
+import io.vlingo.infrastructure.Operations;
+import io.vlingo.xoomapp.infrastructure.AuthorData;
+import io.vlingo.xoomapp.model.author.AuthorState;
+
+import io.vlingo.lattice.model.projection.Projectable;
+import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/vlingo-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   Implementing With the StateStoreProjectionActor
+ * </a>
+ */
+public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData> {
+  private String becauseOf;
+
+  public AuthorProjectionActor() {
+    super(QueryModelStateStoreProvider.instance().store);
+  }
+
+  @Override
+  protected AuthorData currentDataFor(Projectable projectable) {
+    becauseOf = projectable.becauseOf()[0];
+    final AuthorState state = projectable.object();
+    final AuthorData current = AuthorData.from(state);
+    return current;
+  }
+
+  @Override
+  protected AuthorData merge(AuthorData previousData, int previousVersion, AuthorData currentData, int currentVersion) {
+    AuthorData merged;
+
+    if (previousData == null) {
+      previousData = currentData;
+    }
+
+    switch (Operations.valueOf(becauseOf)) {
+      case AuthorRated:
+        return AuthorData.empty();   // TODO: implement actual merge
+      default:
+        merged = currentData;
+    }
+
+    return merged;
+  }
+}

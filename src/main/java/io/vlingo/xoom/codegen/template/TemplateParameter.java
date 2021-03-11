@@ -42,6 +42,7 @@ public enum TemplateParameter {
     DEFAULT_ID("defaultId"),
     STATE_QUALIFIED_CLASS_NAME("stateQualifiedClassName"),
     STORAGE_TYPE("storageType"),
+    STATEFUL("stateful"),
     EVENT_SOURCED("eventSourced"),
     REQUIRE_ADAPTERS("requireAdapters"),
     RESOURCE_FILE("resourceFile"),
