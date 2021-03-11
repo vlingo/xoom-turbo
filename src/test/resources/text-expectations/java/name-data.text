@@ -1,17 +1,19 @@
 package io.vlingo.xoomapp.infrastructure;
 
+import io.vlingo.xoomapp.model.Name;
+
 public class NameData {
 
   public final String firstName;
   public final String lastName;
 
-  public static NameData of(final String firstName, final String lastName) {
-    return new NameData(firstName, lastName);
+  public static NameData of(final Name name) {
+    return new NameData(name);
   }
 
-  private NameData (final String firstName, final String lastName) {
-    this.firstName = firstName;
-    this.lastName = lastName;
+  private NameData (final Name name) {
+    this.firstName = name.firstName;
+    this.lastName = name.lastName;
   }
 
 }

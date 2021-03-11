@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.template.model.valueobject;
 
 import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
@@ -17,7 +18,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.content.ContentQuery.findFullyQualifiedClassName;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.VALUE_OBJECT;
 import static io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail.eventWithName;
@@ -33,7 +33,7 @@ public class ValueObjectDetail {
     final Optional<String> anyQualifiedName =
             arguments.filter(ValueObjectDetail::isValueObject)
                     .map(arg -> arg.retrieveRelatedValue(FIELD_TYPE))
-                    .map(valueObjectName -> findFullyQualifiedClassName(VALUE_OBJECT, valueObjectName, contents))
+                    .map(valueObjectName -> resolveImport(valueObjectName, contents))
                     .findAny();
 
     if(anyQualifiedName.isPresent()) {
@@ -42,6 +42,11 @@ public class ValueObjectDetail {
     }
 
     return Collections.emptySet();
+  }
+
+  public static String resolveImport(final String valueObjectName,
+                                     final List<Content> contents) {
+    return ContentQuery.findFullyQualifiedClassName(VALUE_OBJECT, valueObjectName, contents);
   }
 
   public static Stream<CodeGenerationParameter> orderByDependency(final Stream<CodeGenerationParameter> valueObjects) {

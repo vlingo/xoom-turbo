@@ -1,0 +1,19 @@
+package io.vlingo.xoomapp.infrastructure;
+
+import io.vlingo.xoomapp.model.Classification;
+
+public class ClassificationData {
+
+  public final String label;
+  public final Classifier classifier;
+
+  public static ClassificationData of(final Classification classification) {
+    return new ClassificationData(classification);
+  }
+
+  private ClassificationData (final Classification classification) {
+    this.label = classification.label;
+    this.classifier = classification.classifier != null ? ClassifierData.of(classification.classifier) : null;
+  }
+
+}

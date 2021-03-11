@@ -26,9 +26,6 @@ public class ${dataName} {
     <#list membersAssignment as assignment>
     ${assignment}
     </#list>
-    <#list dataValueObjectAssignment as assignment>
-    ${assignment}
-    </#list>
   }
 
 }

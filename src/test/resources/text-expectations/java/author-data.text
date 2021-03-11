@@ -25,9 +25,9 @@ public class AuthorData {
 
   private AuthorData (final AuthorState state) {
     this.id = state.id;
+    this.name = state.name != null ? NameData.of(state.name) : null;
+    this.rank = state.rank != null ? RankData.of(state.rank) : null;
     this.status = state.status;
-    this.name = NameData.of(state.name.firstName, state.name.lastName);
-    this.rank = RankData.of(state.rank.points, state.rank.classification);
   }
 
 }

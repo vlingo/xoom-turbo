@@ -50,7 +50,7 @@ public class ContentQuery {
     public static String findFullyQualifiedClassName(final TemplateStandard standard, final String className, final List<Content> contents) {
         return findFullyQualifiedClassNames(standard, contents).stream()
                 .filter(qualifiedClassName -> qualifiedClassName.endsWith("." + className))
-                .findFirst().orElseThrow(IllegalArgumentException::new);
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find class with name " + className));
     }
 
     public static Set<String> findFullyQualifiedClassNames(final TemplateStandard standard, final List<Content> contents) {

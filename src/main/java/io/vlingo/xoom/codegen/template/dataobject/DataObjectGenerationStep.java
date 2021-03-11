@@ -31,7 +31,8 @@ public class DataObjectGenerationStep extends TemplateProcessingStep {
         final List<TemplateData> valueDataObjectTemplateData =
                 ValueDataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
                         context.parameterOf(Label.LANGUAGE, Language::valueOf),
-                        context.parametersOf(Label.VALUE_OBJECT));
+                        context.parametersOf(Label.VALUE_OBJECT),
+                        context.contents());
 
         return Stream.of(stateDataObjectTemplateData, valueDataObjectTemplateData)
                 .flatMap(List::stream).collect(Collectors.toList());

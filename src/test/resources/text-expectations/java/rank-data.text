@@ -1,0 +1,19 @@
+package io.vlingo.xoomapp.infrastructure;
+
+import io.vlingo.xoomapp.model.Rank;
+
+public class RankData {
+
+  public final int points;
+  public final Classification classification;
+
+  public static RankData of(final Rank rank) {
+    return new RankData(rank);
+  }
+
+  private RankData (final Rank rank) {
+    this.points = rank.points;
+    this.classification = rank.classification != null ? ClassificationData.of(rank.classification) : null;
+  }
+
+}
