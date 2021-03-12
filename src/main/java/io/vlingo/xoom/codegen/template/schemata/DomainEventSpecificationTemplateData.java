@@ -35,12 +35,12 @@ public class DomainEventSpecificationTemplateData extends TemplateData {
         final CodeGenerationParameter producerExchange =
                 exchanges.stream().filter(onlyProducers).findAny().get();
 
-        final List<CodeGenerationParameter> domainEvents =
-                producerExchange.retrieveAllRelated(DOMAIN_EVENT).collect(toList());
-
         final String schemaGroup = producerExchange.retrieveRelatedValue(SCHEMA_GROUP);
 
-        return domainEvents.stream().map(e -> new DomainEventSpecificationTemplateData(EVENT_SCHEMA_CATEGORY, schemaGroup, e)).collect(toList());
+        return exchanges.stream().filter(exchange -> exchange.hasAny(DOMAIN_EVENT))
+                .flatMap(exchange -> exchange.retrieveAllRelated(DOMAIN_EVENT))
+                .map(e -> new DomainEventSpecificationTemplateData(EVENT_SCHEMA_CATEGORY, schemaGroup, e))
+                .collect(toList());
     }
 
     private DomainEventSpecificationTemplateData(final String schemaCategory,

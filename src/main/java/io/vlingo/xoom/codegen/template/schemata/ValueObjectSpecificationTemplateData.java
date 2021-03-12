@@ -35,17 +35,19 @@ public class ValueObjectSpecificationTemplateData extends TemplateData {
     final CodeGenerationParameter producerExchange =
             exchanges.stream().filter(onlyProducers).findAny().get();
 
-    final List<CodeGenerationParameter> relatedValueObjects = valueObjects;
     final String schemaGroup = producerExchange.retrieveRelatedValue(SCHEMA_GROUP);
 
-    return relatedValueObjects.stream().map(vo -> {
+    final Stream<CodeGenerationParameter> publishedValueObjects =
+            ValueObjectDetail.findPublishedValueObjects(exchanges, valueObjects);
+
+    return ValueObjectDetail.orderByDependency(publishedValueObjects).map(vo -> {
             return new ValueObjectSpecificationTemplateData(DATA_SCHEMA_CATEGORY, schemaGroup, vo);
     }).collect(toList());
   }
 
   private ValueObjectSpecificationTemplateData(final String schemaCategory,
-                                            final String schemaGroup,
-                                            final CodeGenerationParameter publishedLanguage) {
+                                               final String schemaGroup,
+                                               final CodeGenerationParameter publishedLanguage) {
     this.parameters =
             TemplateParameters.with(SCHEMA_CATEGORY, schemaCategory)
                     .and(SCHEMATA_SPECIFICATION_NAME, publishedLanguage.value)
