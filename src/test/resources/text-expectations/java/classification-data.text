@@ -5,7 +5,7 @@ import io.vlingo.xoomapp.model.Classification;
 public class ClassificationData {
 
   public final String label;
-  public final Classifier classifier;
+  public final ClassifierData classifier;
 
   public static ClassificationData of(final Classification classification) {
     return new ClassificationData(classification);

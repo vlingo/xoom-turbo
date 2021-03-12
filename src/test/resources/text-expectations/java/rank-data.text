@@ -5,7 +5,7 @@ import io.vlingo.xoomapp.model.Rank;
 public class RankData {
 
   public final int points;
-  public final Classification classification;
+  public final ClassificationData classification;
 
   public static RankData of(final Rank rank) {
     return new RankData(rank);

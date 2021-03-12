@@ -18,10 +18,6 @@
               </schemataService>
               <schemata>
                 <schema>
-                  <ref>vlingo:xoom:io.vlingo.xoomapp:Name:1.0.0</ref>
-                  <src>Name.vss</src>
-                </schema>
-                <schema>
                   <ref>vlingo:xoom:io.vlingo.xoomapp:Classifier:1.0.0</ref>
                   <src>Classifier.vss</src>
                 </schema>
@@ -32,6 +28,10 @@
                 <schema>
                   <ref>vlingo:xoom:io.vlingo.xoomapp:Rank:1.0.0</ref>
                   <src>Rank.vss</src>
+                </schema>
+                <schema>
+                  <ref>vlingo:xoom:io.vlingo.xoomapp:Name:1.0.0</ref>
+                  <src>Name.vss</src>
                 </schema>
                 <schema>
                   <ref>vlingo:xoom:io.vlingo.xoomapp:AuthorBlocked:1.0.0</ref>

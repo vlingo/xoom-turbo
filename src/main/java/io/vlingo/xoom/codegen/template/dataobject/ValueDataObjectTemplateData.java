@@ -51,7 +51,7 @@ public class ValueDataObjectTemplateData extends TemplateData {
                     .and(DATA_VALUE_OBJECT_NAME, standard().resolveClassname(valueObjectName))
                     .and(CONSTRUCTOR_PARAMETERS, formatConstructorParameters())
                     .and(CONSTRUCTOR_INVOCATION_PARAMETERS, formatConstructorInvocationParameters())
-                    .and(MEMBERS, Formatters.Fields.format(Style.MEMBER_DECLARATION, language, valueObject))
+                    .and(MEMBERS, Formatters.Fields.format(Style.DATA_OBJECT_MEMBER_DECLARATION, language, valueObject))
                     .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Style.DATA_VALUE_OBJECT_ASSIGNMENT, language, valueObject))
                     .addImport(ValueObjectDetail.resolveImport(valueObjectName, contents));
   }

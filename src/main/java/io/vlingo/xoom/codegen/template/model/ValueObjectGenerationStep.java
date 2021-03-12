@@ -25,9 +25,8 @@ public class ValueObjectGenerationStep extends TemplateProcessingStep {
   protected List<TemplateData> buildTemplatesData(CodeGenerationContext context) {
     final String basePackage = context.parameterOf(Label.PACKAGE);
     final Language language = context.parameterOf(Label.LANGUAGE, Language::valueOf);
-    final Stream<CodeGenerationParameter> aggregates = context.parametersOf(Label.AGGREGATE);
     final Stream<CodeGenerationParameter> valueObjects = context.parametersOf(Label.VALUE_OBJECT);
-    return ValueObjectTemplateData.from(basePackage, language, aggregates, valueObjects);
+    return ValueObjectTemplateData.from(basePackage, language, valueObjects);
   }
 
   @Override

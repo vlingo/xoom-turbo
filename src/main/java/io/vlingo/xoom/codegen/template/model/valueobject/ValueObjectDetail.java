@@ -55,14 +55,26 @@ public class ValueObjectDetail {
 
   public static Stream<CodeGenerationParameter> findPublishedValueObjects(final List<CodeGenerationParameter> exchanges,
                                                                           final List<CodeGenerationParameter> valueObjects) {
-    return exchanges.stream().filter(exchange -> exchange.hasAny(DOMAIN_EVENT))
-            .flatMap(event -> event.retrieveAllRelated(DOMAIN_EVENT))
-            .map(event -> eventWithName(event.parent(AGGREGATE), event.value))
-            .flatMap(event -> event.retrieveAllRelated(STATE_FIELD))
-            .map(stateField -> AggregateDetail.stateFieldWithName(stateField.parent(AGGREGATE), stateField.value))
-            .filter(ValueObjectDetail::isValueObject)
-            .map(field -> field.retrieveRelatedValue(FIELD_TYPE))
-            .distinct().map(type -> valueObjectOf(type, valueObjects.stream()));
+    final Map<String, CodeGenerationParameter> publishedValueObjects = new HashMap<>();
+
+    final List<CodeGenerationParameter> topLevelValueObjects =
+            exchanges.stream().filter(exchange -> exchange.hasAny(DOMAIN_EVENT))
+                    .flatMap(event -> event.retrieveAllRelated(DOMAIN_EVENT))
+                    .map(event -> eventWithName(event.parent(AGGREGATE), event.value))
+                    .flatMap(event -> event.retrieveAllRelated(STATE_FIELD))
+                    .map(stateField -> AggregateDetail.stateFieldWithName(stateField.parent(AGGREGATE), stateField.value))
+                    .filter(ValueObjectDetail::isValueObject)
+                    .map(field -> field.retrieveRelatedValue(FIELD_TYPE))
+                    .map(type -> valueObjectOf(type, valueObjects.stream()))
+                    .collect(Collectors.toList());
+
+    final List<CodeGenerationParameter> relatedValueObjects =
+            topLevelValueObjects.stream().flatMap(vo -> collectRelatedValueObjects(vo, valueObjects))
+                    .collect(Collectors.toList());
+
+    Stream.of(topLevelValueObjects, relatedValueObjects).flatMap(List::stream).forEach(vo -> publishedValueObjects.putIfAbsent(vo.value, vo));
+
+    return publishedValueObjects.values().stream();
   }
 
   public static CodeGenerationParameter valueObjectOf(final String valueObjectType,

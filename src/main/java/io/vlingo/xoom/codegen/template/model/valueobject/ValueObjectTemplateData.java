@@ -29,7 +29,6 @@ public class ValueObjectTemplateData extends TemplateData {
 
   public static List<TemplateData> from(final String basePackage,
                                         final Language language,
-                                        final Stream<CodeGenerationParameter> aggregates,
                                         final Stream<CodeGenerationParameter> valueObjects) {
     final Function<CodeGenerationParameter, TemplateData> mapper =
             vo -> new ValueObjectTemplateData(basePackage, language, vo);
