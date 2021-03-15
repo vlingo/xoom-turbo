@@ -37,7 +37,9 @@ public class DefaultJournalActorBuilder implements StoreActorBuilder {
             final JDBCDispatcherControlDelegate dispatcherControlDelegate =
                     new JDBCDispatcherControlDelegate(Configuration.cloneOf(configuration), stage.world().defaultLogger());
 
-            final DispatcherControl dispatcherControl = stage.actorFor(DispatcherControl.class,
+            final Stage local = stage.world().stage();
+
+            final DispatcherControl dispatcherControl = local.actorFor(DispatcherControl.class,
                     Definition.has(DispatcherControlActor.class,
                             new DispatcherControl.DispatcherControlInstantiator(
                                     dispatchers,
@@ -48,7 +50,7 @@ public class DefaultJournalActorBuilder implements StoreActorBuilder {
             final JDBCJournalWriter journalWriter =
                     new JDBCJournalInstantWriter(configuration, typed(dispatchers), dispatcherControl);
 
-            return (T) stage.world().actorFor(Journal.class, JDBCJournalActor.class, configuration, journalWriter);
+            return (T) local.world().actorFor(Journal.class, JDBCJournalActor.class, configuration, journalWriter);
         } catch (final Exception e) {
             throw new StorageException(Result.Error, e.getMessage());
         }
