@@ -75,7 +75,7 @@ public class AuthorResource extends DynamicResourceHandler {
   }
 
   private String location(final String id) {
-    return "/authors" + id;
+    return "/authors/" + id;
   }
 
   private Completes<Author> resolve(final String id) {

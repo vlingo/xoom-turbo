@@ -83,7 +83,7 @@ public class ${resourceName} : DynamicResourceHandler {
   }
 
   fun location(id: String): String {
-    return "${uriRoot}" + id
+    return "${uriRoot}/" + id
   }
 
   <#if modelProtocol?has_content>
