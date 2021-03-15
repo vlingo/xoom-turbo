@@ -15,7 +15,6 @@ import io.vlingo.symbio.Source;
  * </a>
  */
 public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
-  private static final ${dataName} Empty = ${dataName}.empty();
 
   public ${projectionName}() {
     super(${storeProviderName}.instance().store);
@@ -23,9 +22,13 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
 
   @Override
   protected ${dataName} currentDataFor(final Projectable projectable) {
+    <#if stateful>
     final ${stateName} state = projectable.object();
     final ${dataName} current = ${dataName}.from(state);
     return current;
+    <#else>
+    return ${dataName}.empty();
+    </#if>
   }
 
   @Override

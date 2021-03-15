@@ -6,12 +6,10 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.model.formatting;
 
-import io.vlingo.xoom.codegen.language.Language;
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.model.MethodScope;
-import io.vlingo.xoom.codegen.template.model.aggregate.AggregateMethodInvocation;
-import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectConstructorInvocation;
-import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectInitializer;
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
+import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
+import static io.vlingo.xoom.codegen.parameter.Label.VALUE_OBJECT;
+import static io.vlingo.xoom.codegen.parameter.Label.VALUE_OBJECT_FIELD;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,8 +17,12 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.DATA_VALUE_OBJECT_ASSIGNMENT;
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.model.MethodScope;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateMethodInvocation;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectConstructorInvocation;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectInitializer;
 
 public class Formatters {
 
@@ -50,6 +52,7 @@ public class Formatters {
       throw new UnsupportedOperationException("Unable to format fields from " + parent.label);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T format(final Style style,
                                final Language language,
                                final CodeGenerationParameter parent,
@@ -62,17 +65,18 @@ public class Formatters {
 
     public static enum Style {
       ASSIGNMENT, MEMBER_DECLARATION, DATA_OBJECT_MEMBER_DECLARATION, VALUE_OBJECT_INITIALIZER,
-      STATE_BASED_DATA_VALUE_OBJECT_ASSIGNMENT, STATE_BASED_ASSIGNMENT,
+      DATA_VALUE_OBJECT_ASSIGNMENT, STATE_BASED_ASSIGNMENT,
       SELF_ALTERNATE_REFERENCE, ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE
     }
 
+    @SuppressWarnings("serial")
     private static Map<Style, Function<Language, Fields<?>>> INSTANTIATORS = Collections.unmodifiableMap(
       new HashMap<Style, Function<Language, Fields<?>>>() {{
-        put(Style.ASSIGNMENT, lang -> new Constructor());
+        put(Style.ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment());
         put(Style.MEMBER_DECLARATION, lang -> new Member(lang));
         put(Style.DATA_OBJECT_MEMBER_DECLARATION, lang -> new Member(lang, "Data"));
-        put(Style.STATE_BASED_ASSIGNMENT, lang -> new Constructor("state"));
-        put(Style.STATE_BASED_DATA_VALUE_OBJECT_ASSIGNMENT, lang -> new Constructor("state", DATA_VALUE_OBJECT_ASSIGNMENT));
+        put(Style.STATE_BASED_ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment("state"));
+        put(Style.DATA_VALUE_OBJECT_ASSIGNMENT, lang -> new DataObjectConstructorAssignment());
         put(Style.VALUE_OBJECT_INITIALIZER, lang -> new ValueObjectInitializer("data"));
         put(Style.SELF_ALTERNATE_REFERENCE, lang -> AlternateReference.handlingSelfReferencedFields());
         put(Style.ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE, lang -> AlternateReference.handlingDefaultFieldsValue());

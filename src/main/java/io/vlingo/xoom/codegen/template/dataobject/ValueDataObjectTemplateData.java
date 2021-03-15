@@ -6,13 +6,17 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.dataobject;
 
+import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
+import java.beans.Introspector;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -27,27 +31,39 @@ public class ValueDataObjectTemplateData extends TemplateData {
 
   public static List<TemplateData> from(final String basePackage,
                                         final Language language,
-                                        final Stream<CodeGenerationParameter> valueObjects) {
+                                        final Stream<CodeGenerationParameter> valueObjects,
+                                        final List<Content> contents) {
     final String packageName = String.format("%s.%s", basePackage, "infrastructure");
 
     final Function<CodeGenerationParameter, TemplateData> mapper =
-            valueObject -> new ValueDataObjectTemplateData(packageName, language, valueObject);
+            valueObject -> new ValueDataObjectTemplateData(packageName, language, valueObject, contents);
 
     return valueObjects.map(mapper).collect(Collectors.toList());
   }
 
   private ValueDataObjectTemplateData(final String packageName,
                                       final Language language,
-                                      final CodeGenerationParameter valueObject) {
+                                      final CodeGenerationParameter valueObject,
+                                      final List<Content> contents) {
     this.valueObjectName = valueObject.value;
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, packageName)
                     .and(DATA_VALUE_OBJECT_NAME, standard().resolveClassname(valueObjectName))
-                    .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(valueObject))
-                    .and(CONSTRUCTOR_INVOCATION_PARAMETERS, Formatters.Arguments.VALUE_OBJECT_CONSTRUCTOR_INVOCATION.format(valueObject))
-                    .and(MEMBERS, Formatters.Fields.format(Formatters.Fields.Style.MEMBER_DECLARATION, language, valueObject))
-                    .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Formatters.Fields.Style.ASSIGNMENT, language, valueObject));
+                    .and(CONSTRUCTOR_PARAMETERS, formatConstructorParameters())
+                    .and(CONSTRUCTOR_INVOCATION_PARAMETERS, formatConstructorInvocationParameters())
+                    .and(MEMBERS, Formatters.Fields.format(Style.DATA_OBJECT_MEMBER_DECLARATION, language, valueObject))
+                    .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Style.DATA_VALUE_OBJECT_ASSIGNMENT, language, valueObject))
+                    .addImport(ValueObjectDetail.resolveImport(valueObjectName, contents));
   }
+
+  private String formatConstructorParameters() {
+    return String.format("final %s %s", valueObjectName, Introspector.decapitalize(valueObjectName));
+  }
+
+  private String formatConstructorInvocationParameters() {
+    return Introspector.decapitalize(valueObjectName);
+  }
+
 
   @Override
   public TemplateParameters parameters() {

@@ -20,7 +20,9 @@ public class InMemoryStateStoreActorBuilder implements StoreActorBuilder {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public <T> T build(final Stage stage, final List<Dispatcher> dispatchers, final Configuration configuration) {
-        return (T) stage.actorFor(StateStore.class, InMemoryStateStoreActor.class, dispatchers);
+        final Stage local = stage.world().stage();
+
+        return (T) local.actorFor(StateStore.class, InMemoryStateStoreActor.class, dispatchers);
     }
 
     @Override

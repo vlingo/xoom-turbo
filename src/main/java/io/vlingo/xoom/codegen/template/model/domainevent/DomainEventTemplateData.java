@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.model.domainevent;
 
+import io.vlingo.xoom.codegen.CodeGenerationSetup;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -53,6 +54,7 @@ public class DomainEventTemplateData extends TemplateData {
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, packageName).and(DOMAIN_EVENT_NAME, name)
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
+                        .and(DEFAULT_SCHEMA_VERSION, CodeGenerationSetup.DEFAULT_SCHEMA_VERSION)
                         .and(MEMBERS, Formatters.Fields.format(MEMBER_DECLARATION, language, aggregate, event.retrieveAllRelated(STATE_FIELD)))
                         .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(STATE_BASED_ASSIGNMENT, language, aggregate, event.retrieveAllRelated(STATE_FIELD)))
                         .addImports(resolveImports(aggregate, event, contents));
@@ -67,7 +69,7 @@ public class DomainEventTemplateData extends TemplateData {
         final Stream<CodeGenerationParameter> stateFields =
                 aggregate.retrieveAllRelated(STATE_FIELD).filter(field -> eventFields.contains(field.value));
 
-        return ValueObjectDetail.retrieveQualifiedNames(contents, stateFields);
+        return ValueObjectDetail.resolveImports(contents, stateFields);
     }
 
     @Override

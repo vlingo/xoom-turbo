@@ -35,7 +35,38 @@ public class SchemataGenerationStepTest {
         final Content authorRatedSpecification =
                 context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "AuthorRated");
 
-        Assert.assertEquals(5, context.contents().size());
+        final Content authorBlockedSpecification =
+                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "AuthorBlocked");
+
+        final Content bookSoldOutSpecification =
+                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "BookSoldOut");
+
+        final Content bookPurchasedSpecification =
+                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "BookPurchased");
+
+        final Content nameSpecification =
+                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "Name");
+
+        final Content rankSpecification =
+                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "Rank");
+
+        final Content classificationSpecification =
+                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "Classification");
+
+        final Content classifierSpecification =
+                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "Classifier");
+
+        final Content plugin =
+                context.findContent(TemplateStandard.SCHEMATA_PLUGIN, "pom");
+
+        Assert.assertEquals(9, context.contents().size());
         Assert.assertTrue(authorRatedSpecification.contains(TextExpectation.onJava().read("author-rated-specification")));
+        Assert.assertTrue(authorBlockedSpecification.contains(TextExpectation.onJava().read("author-blocked-specification")));
+        Assert.assertTrue(bookSoldOutSpecification.contains(TextExpectation.onJava().read("book-sold-out")));
+        Assert.assertTrue(bookPurchasedSpecification.contains(TextExpectation.onJava().read("book-purchased")));
+        Assert.assertTrue(nameSpecification.contains(TextExpectation.onJava().read("name-specification")));
+        Assert.assertTrue(rankSpecification.contains(TextExpectation.onJava().read("rank-specification")));
+        Assert.assertTrue(classificationSpecification.contains(TextExpectation.onJava().read("classification-specification")));
+        Assert.assertTrue(classifierSpecification.contains(TextExpectation.onJava().read("classifier-specification")));
     }
 }

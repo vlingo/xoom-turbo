@@ -15,6 +15,7 @@
                 <url>http://localhost:9019</url>
                 <clientOrganization>${producerOrganization}</clientOrganization>
                 <clientUnit>${producerUnit}</clientUnit>
+                <hierarchicalCascade>true</hierarchicalCascade>
               </schemataService>
               <schemata>
                 <#list producerSchemas as schema>
@@ -28,7 +29,7 @@
           </execution>
           </#if>
           <#if hasConsumerExchange>
-<execution>
+          <execution>
             <id>pullSchemata</id>
             <goals>
               <goal>pull-schemata</goal>

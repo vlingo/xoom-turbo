@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.List;
 import java.util.Set;
@@ -35,19 +36,21 @@ public class ProjectionTemplateData extends TemplateData {
                                               final String protocolName,
                                               final List<Content> contents,
                                               final ProjectionType projectionType,
+                                              final StorageType storageType,
                                               final List<TemplateData> templatesData) {
         return new ProjectionTemplateData(basePackage, protocolName,
-                contents, projectionType, templatesData);
+                contents, projectionType, storageType, templatesData);
     }
 
-    private ProjectionTemplateData (final String basePackage,
-                                    final String protocolName,
-                                    final List<Content> contents,
-                                    final ProjectionType projectionType,
-                                    final List<TemplateData> templatesData) {
+    private ProjectionTemplateData(final String basePackage,
+                                   final String protocolName,
+                                   final List<Content> contents,
+                                   final ProjectionType projectionType,
+                                   final StorageType storageType,
+                                   final List<TemplateData> templatesData) {
         this.parameters =
                 loadParameters(resolvePackage(basePackage), protocolName,
-                        contents, projectionType, templatesData);
+                        contents, projectionType, storageType, templatesData);
 
         this.protocolName = protocolName;
     }
@@ -56,6 +59,7 @@ public class ProjectionTemplateData extends TemplateData {
                                               final String protocolName,
                                               final List<Content> contents,
                                               final ProjectionType projectionType,
+                                              final StorageType storageType,
                                               final List<TemplateData> templatesData) {
         final String stateName = AGGREGATE_STATE.resolveClassname(protocolName);
         final String projectionName = PROJECTION.resolveClassname(protocolName);
@@ -69,7 +73,7 @@ public class ProjectionTemplateData extends TemplateData {
         return TemplateParameters.with(PACKAGE_NAME, packageName).and(IMPORTS, imports)
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
                 .and(PROJECTION_TYPE, projectionType).and(MODEL, QUERY)
-                .and(STORAGE_TYPE, STATE_STORE)
+                .and(STORAGE_TYPE, STATE_STORE).and(STATEFUL, storageType.isStateful())
                 .and(STATE_DATA_OBJECT_NAME, dataObjectName).and(PROJECTION_TYPE, projectionType)
                 .and(PROJECTION_SOURCE_NAMES, ContentQuery.findClassNames(DOMAIN_EVENT, modelPackage, contents))
                 .andResolve(PROJECTION_SOURCE_TYPES_NAME, param -> PROJECTION_SOURCE_TYPES.resolveClassname(param))

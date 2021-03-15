@@ -46,7 +46,7 @@ public class AggregateProtocolTemplateData extends TemplateData {
     }
 
     private Set<String> resolveImports(final CodeGenerationParameter aggregate, final List<Content> contents) {
-        return ValueObjectDetail.retrieveQualifiedNames(contents, aggregate.retrieveAllRelated(STATE_FIELD));
+        return ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(STATE_FIELD));
     }
 
     @Override

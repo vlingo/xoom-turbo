@@ -13,9 +13,11 @@ import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.exchange.ExchangeRole;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.exchange.ExchangeRole.CONSUMER;
@@ -25,13 +27,14 @@ public class SchemataPluginTemplateData extends TemplateData {
 
     private final TemplateParameters parameters;
 
-    public SchemataPluginTemplateData(final List<CodeGenerationParameter> exchanges) {
+    public SchemataPluginTemplateData(final List<CodeGenerationParameter> exchanges,
+                                      final List<CodeGenerationParameter> valueObjects) {
         final String schemaGroup = retrieveSchemaGroup(exchanges);
 
         this.parameters =
                 TemplateParameters.with(TemplateParameter.POM_SECTION, true)
                         .and(TemplateParameter.OFFSET, "<plugins>")
-                        .and(TemplateParameter.PRODUCER_SCHEMAS, retrieveProducerSchemas(schemaGroup, exchanges))
+                        .and(TemplateParameter.PRODUCER_SCHEMAS, retrieveProducerSchemas(schemaGroup, exchanges, valueObjects))
                         .and(TemplateParameter.CONSUMER_SCHEMAS, retrieveConsumerSchemas(exchanges))
                         .and(TemplateParameter.PRODUCER_ORGANIZATION, retrieveProducerOrganization(schemaGroup))
                         .and(TemplateParameter.PRODUCER_UNIT, retrieveProducerUnit(schemaGroup))
@@ -62,10 +65,19 @@ public class SchemataPluginTemplateData extends TemplateData {
                 .map(schema -> new SchemaParameter(schema)).collect(Collectors.toList());
     }
 
-    private List<SchemaParameter> retrieveProducerSchemas(final String schemaGroup, final List<CodeGenerationParameter> exchanges) {
-        return exchanges.stream().filter(ex -> ex.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer())
-                .flatMap(ex -> ex.retrieveAllRelated(DOMAIN_EVENT)).map(event -> new SchemaParameter(schemaGroup, event))
-                .collect(Collectors.toList());
+    private List<SchemaParameter> retrieveProducerSchemas(final String schemaGroup,
+                                                          final List<CodeGenerationParameter> exchanges,
+                                                          final List<CodeGenerationParameter> valueObjects) {
+        final Stream<SchemaParameter> valueObjectSchemas =
+                ValueObjectDetail.orderByDependency(valueObjects.stream())
+                        .map(vo -> new SchemaParameter(schemaGroup, vo));
+
+        final Stream<SchemaParameter> domainEventSchemas =
+                exchanges.stream().filter(ex -> ex.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer())
+                        .flatMap(ex -> ex.retrieveAllRelated(DOMAIN_EVENT))
+                        .map(event -> new SchemaParameter(schemaGroup, event));
+
+        return Stream.of(valueObjectSchemas, domainEventSchemas).flatMap(s -> s).collect(Collectors.toList());
     }
 
     private boolean hasExchangesWithRole(final ExchangeRole role, final List<CodeGenerationParameter> exchanges) {

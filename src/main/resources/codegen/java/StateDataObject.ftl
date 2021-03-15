@@ -1,6 +1,5 @@
 package ${packageName};
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import ${stateQualifiedClassName};
@@ -24,9 +23,6 @@ public class ${dataName} {
 
   private ${dataName} (final ${stateName} state) {
     <#list membersAssignment as assignment>
-    ${assignment}
-    </#list>
-    <#list dataValueObjectAssignment as assignment>
     ${assignment}
     </#list>
   }

@@ -10,6 +10,7 @@ package io.vlingo.xoom.codegen.template.projections;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,9 @@ public class ProjectionTemplateDataFactory {
         final ProjectionType projectionType =
                 context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
 
+        final StorageType storageType =
+                context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
+
         final Set<String> aggregateProtocols =
                 ContentQuery.findClassNames(AGGREGATE_PROTOCOL, context.contents());
 
@@ -55,7 +59,7 @@ public class ProjectionTemplateDataFactory {
 
         aggregateProtocols.forEach(protocolName -> {
             templatesData.add(ProjectionTemplateData.from(basePackage, protocolName,
-                            context.contents(), projectionType, templatesData));
+                            context.contents(), projectionType, storageType, templatesData));
         });
 
         return templatesData;

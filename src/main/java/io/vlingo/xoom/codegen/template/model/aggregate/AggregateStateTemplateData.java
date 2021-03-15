@@ -57,7 +57,7 @@ public class AggregateStateTemplateData extends TemplateData {
     }
 
     private Set<String> resolveImports(final List<Content> contents, final CodeGenerationParameter aggregate) {
-        return ValueObjectDetail.retrieveQualifiedNames(contents, aggregate.retrieveAllRelated(STATE_FIELD));
+        return ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(STATE_FIELD));
     }
 
     private String resolveIdBasedConstructorParameters(final Language language, final CodeGenerationParameter aggregate) {

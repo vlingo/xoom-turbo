@@ -7,12 +7,11 @@ import io.vlingo.http.resource.DynamicResourceHandler;
 import static io.vlingo.http.resource.ResourceBuilder.resource;
 
 import io.vlingo.xoomapp.model.author.AuthorEntity;
-import io.vlingo.xoomapp.model.Rank;
 import io.vlingo.xoomapp.infrastructure.AuthorData;
 import io.vlingo.xoomapp.model.author.Author;
 import io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries;
-import io.vlingo.xoomapp.model.author.Name;
 import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;
+import io.vlingo.xoomapp.model.*;
 
 import io.vlingo.http.Response;
 import io.vlingo.common.Completes;
@@ -40,7 +39,9 @@ public class AuthorResource extends DynamicResourceHandler {
   }
 
   public Completes<Response> changeRank(final String id, final AuthorData data) {
-    final Rank rank = Rank.of(data.rank.points, data.rank.classification);
+    final Classifier classifier = Classifier.of(data.rank.classification.classifier.name);
+    final Classification classification = Classification.of(data.rank.classification.label, classifier);
+    final Rank rank = Rank.of(data.rank.points, classification);
     return resolve(id)
             .andThenTo(author -> author.changeRank(rank))
             .andThenTo(state -> Completes.withSuccess(Response.of(Ok, serialized(AuthorData.from(state)))))

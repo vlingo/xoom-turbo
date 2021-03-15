@@ -16,6 +16,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style;
 
 import java.util.List;
 import java.util.function.Function;
@@ -24,9 +25,8 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail.findScalarStateFields;
 import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.*;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.DATA_OBJECT_MEMBER_DECLARATION;
 import static java.util.stream.Collectors.toList;
 
 public class StateDataObjectTemplateData extends TemplateData {
@@ -76,15 +76,11 @@ public class StateDataObjectTemplateData extends TemplateData {
                 Formatters.Fields.format(DATA_OBJECT_MEMBER_DECLARATION, language, aggregate);
 
         final List<String> membersAssignment =
-                Formatters.Fields.format(STATE_BASED_ASSIGNMENT, language, aggregate, findScalarStateFields(aggregate));
-
-        final List<String> dataValueObjectAssignment =
-                Formatters.Fields.format(STATE_BASED_DATA_VALUE_OBJECT_ASSIGNMENT, language, aggregate, valueObjects.stream());
+                Formatters.Fields.format(Style.DATA_VALUE_OBJECT_ASSIGNMENT, language, aggregate);
 
         return TemplateParameters.with(PACKAGE_NAME, packageName)
                 .and(STATE_NAME, stateName).and(STATE_DATA_OBJECT_NAME, dataName)
                 .and(MEMBERS, members).and(MEMBERS_ASSIGNMENT, membersAssignment)
-                .and(DATA_VALUE_OBJECT_ASSIGNMENT, dataValueObjectAssignment)
                 .and(DATA_OBJECT_QUALIFIED_NAME, packageName.concat(".").concat(dataName))
                 .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
                 .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName)

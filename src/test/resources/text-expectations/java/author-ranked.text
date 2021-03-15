@@ -1,10 +1,9 @@
 package io.vlingo.xoomapp.model.author;
 
-import java.util.UUID;
 import io.vlingo.common.version.SemanticVersion;
 import io.vlingo.lattice.model.IdentifiedDomainEvent;
 
-import io.vlingo.xoomapp.model.Rank;
+import io.vlingo.xoomapp.model.*;
 
 /**
  * See
@@ -14,19 +13,17 @@ import io.vlingo.xoomapp.model.Rank;
  */
 public final class AuthorRanked extends IdentifiedDomainEvent {
 
-  private final UUID eventId;
   public final long id;
   public final Rank rank;
 
   public AuthorRanked(final AuthorState state) {
-    super(SemanticVersion.from("0.0.1").toValue());
+    super(SemanticVersion.from("1.0.0").toValue());
     this.id = state.id;
     this.rank = state.rank;
-    this.eventId = UUID.randomUUID(); //TODO: Define the event id
   }
 
   @Override
   public String identity() {
-    return eventId.toString();
+    return id;
   }
 }

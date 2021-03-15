@@ -8,11 +8,15 @@
 package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.OperatingSystem;
+import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
@@ -32,45 +36,72 @@ public class ProjectionGenerationStepTest {
                     "io", "vlingo", "xoomapp", "infrastructure").toString();
 
     @Test
-    public void testEventBasedProjectionGeneration() {
+    public void testThatEventBasedProjectionClassesAreGeneratedForSourcedEntities() throws IOException {
         final CodeGenerationContext context =
                 CodeGenerationContext.empty();
 
-        loadParameters(context, ProjectionType.EVENT_BASED.name());
+        loadParameters(context, StorageType.JOURNAL.name(), ProjectionType.EVENT_BASED.name());
         loadContents(context);
         new ProjectionGenerationStep().process(context);
-        performAssertion(context);
+
+        final Content bookProjectionActor =
+                context.findContent(PROJECTION, "BookProjectionActor");
+
+        final Content authorProjectionActor =
+                context.findContent(PROJECTION, "AuthorProjectionActor");
+
+        final Content dispatcherProvider =
+                context.findContent(PROJECTION_DISPATCHER_PROVIDER, "ProjectionDispatcherProvider");
+
+        Assert.assertTrue(authorProjectionActor.contains(TextExpectation.onJava().read("event-based-author-projection-actor-for-sourced-entities")));
+        Assert.assertTrue(bookProjectionActor.contains(TextExpectation.onJava().read("event-based-book-projection-actor-for-sourced-entities")));
+        Assert.assertTrue(dispatcherProvider.contains(TextExpectation.onJava().read("projection-dispatcher-provider")));
     }
 
     @Test
-    public void testOperationBasedProjectionGeneration() {
+    public void testThatEventBasedProjectionClassesAreGeneratedForStatefulEntities() throws IOException {
         final CodeGenerationContext context =
                 CodeGenerationContext.empty();
 
-        loadParameters(context, ProjectionType.OPERATION_BASED.name());
+        loadParameters(context, StorageType.STATE_STORE.name(), ProjectionType.EVENT_BASED.name());
         loadContents(context);
         new ProjectionGenerationStep().process(context);
-        performAssertion(context);
+
+        final Content bookProjectionActor =
+                context.findContent(PROJECTION, "BookProjectionActor");
+
+        final Content authorProjectionActor =
+                context.findContent(PROJECTION, "AuthorProjectionActor");
+
+        final Content dispatcherProvider =
+                context.findContent(PROJECTION_DISPATCHER_PROVIDER, "ProjectionDispatcherProvider");
+
+        Assert.assertTrue(authorProjectionActor.contains(TextExpectation.onJava().read("event-based-author-projection-actor-for-stateful-entities")));
+        Assert.assertTrue(bookProjectionActor.contains(TextExpectation.onJava().read("event-based-book-projection-actor-for-stateful-entities")));
+        Assert.assertTrue(dispatcherProvider.contains(TextExpectation.onJava().read("projection-dispatcher-provider")));
     }
 
-    private void performAssertion(final CodeGenerationContext context) {
-        final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
-        final String sourceTypesName = projectionType.isEventBased() ? "Events" : "Operations";
+    @Test
+    public void testThatOperationBasedProjectionClassesAreGenerated() throws IOException {
+        final CodeGenerationContext context =
+                CodeGenerationContext.empty();
 
-        Assert.assertEquals(13, context.contents().size());
-        Assert.assertEquals(sourceTypesName, context.contents().get(9).retrieveName());
-        Assert.assertEquals("ProjectionDispatcherProvider", context.contents().get(10).retrieveName());
-        Assert.assertEquals("BookProjectionActor", context.contents().get(11).retrieveName());
-        Assert.assertEquals("AuthorProjectionActor", context.contents().get(12).retrieveName());
+        loadParameters(context, StorageType.STATE_STORE.name(), ProjectionType.OPERATION_BASED.name());
+        loadContents(context);
+        new ProjectionGenerationStep().process(context);
 
-        Assert.assertTrue(context.contents().get(10).contains("class ProjectionDispatcherProvider"));
+        final Content bookProjectionActor =
+                context.findContent(PROJECTION, "BookProjectionActor");
 
-        Assert.assertTrue(context.contents().get(11).contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
-        Assert.assertTrue(context.contents().get(11).contains("case BookSoldOut:"));
-        Assert.assertTrue(context.contents().get(11).contains("BookData.empty()"));
-        Assert.assertTrue(context.contents().get(11).contains("case BookPurchased:"));
-        Assert.assertTrue(context.contents().get(12).contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
-        Assert.assertTrue(context.contents().get(12).contains("case AuthorRated:"));
+        final Content authorProjectionActor =
+                context.findContent(PROJECTION, "AuthorProjectionActor");
+
+        final Content dispatcherProvider =
+                context.findContent(PROJECTION_DISPATCHER_PROVIDER, "ProjectionDispatcherProvider");
+
+        Assert.assertTrue(authorProjectionActor.contains(TextExpectation.onJava().read("operation-based-author-projection-actor")));
+        Assert.assertTrue(bookProjectionActor.contains(TextExpectation.onJava().read("operation-based-book-projection-actor")));
+        Assert.assertTrue(dispatcherProvider.contains(TextExpectation.onJava().read("projection-dispatcher-provider")));
     }
 
     private void loadContents(final CodeGenerationContext context) {
@@ -85,9 +116,9 @@ public class ProjectionGenerationStepTest {
         context.addContent(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), BOOK_DATA_CONTENT_TEXT);
     }
 
-    private void loadParameters(final CodeGenerationContext context, final String projections) {
+    private void loadParameters(final CodeGenerationContext context, final String storage, final String projections) {
         context.with(PACKAGE, "io.vlingo").with(APPLICATION_NAME, "xoomapp")
-                .with(STORAGE_TYPE, "STATE_STORE").with(PROJECTION_TYPE, projections)
+                .with(STORAGE_TYPE, storage).with(PROJECTION_TYPE, projections)
                 .with(TARGET_FOLDER, HOME_DIRECTORY);
     }
 

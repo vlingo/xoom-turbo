@@ -83,7 +83,7 @@ public class CodeGenerationParametersBuilder {
 
         final CodeGenerationParameter titleField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "name")
-                        .relate(Label.FIELD_TYPE, "String");
+                        .relate(Label.FIELD_TYPE, "Name");
 
         final CodeGenerationParameter priceField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
@@ -122,9 +122,22 @@ public class CodeGenerationParametersBuilder {
                     .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
                             .relate(Label.FIELD_TYPE, "int"))
                     .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
-                            .relate(Label.FIELD_TYPE, "String"));
+                            .relate(Label.FIELD_TYPE, "Classification"));
 
-        return Stream.of(language, authorAggregate, bookAggregate, nameValueObject, rankValueObject);
+        final CodeGenerationParameter classificationValueObject =
+                CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classification")
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
+                                .relate(Label.FIELD_TYPE, "String"))
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifier")
+                                .relate(Label.FIELD_TYPE, "Classifier"));
+
+        final CodeGenerationParameter classifierValueObject =
+                CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
+                                .relate(Label.FIELD_TYPE, "String"));
+
+        return Stream.of(language, authorAggregate, bookAggregate, nameValueObject,
+                rankValueObject, classificationValueObject, classifierValueObject);
     }
 
 

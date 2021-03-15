@@ -111,7 +111,7 @@ public class ContentBuilder {
                     "}";
 
     private static final String NAME_VALUE_OBJECT_CONTENT_TEXT =
-            "package io.vlingo.xoomapp.model.author; \\n" +
+            "package io.vlingo.xoomapp.model; \\n" +
                     "public class Name { \\n" +
                     "... \\n" +
                     "}";
