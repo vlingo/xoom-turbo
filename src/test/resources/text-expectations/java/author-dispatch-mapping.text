@@ -23,7 +23,7 @@ public interface AuthorResource {
 
   @Route(method = PATCH, path = "/{id}/rank", handler = AuthorResourceHandlers.CHANGE_RANK)
   @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
-  Completes<Response> changeRank(@Id final long id, @Body final AuthorData data);
+  Completes<Response> changeRank(@Id final String id, @Body final AuthorData data);
 
   @Route(method = GET, handler = AuthorResourceHandlers.AUTHORS)
   Completes<Response> authors();

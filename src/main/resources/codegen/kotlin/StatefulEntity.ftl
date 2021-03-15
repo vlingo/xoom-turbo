@@ -12,7 +12,7 @@ import io.vlingo.lattice.model.stateful.StatefulEntity
 public class ${entityName} : StatefulEntity<${stateName}>, ${aggregateProtocolName} {
   var state: ${stateName}
 
-  public constructor(id:  ${idType}) : super(String.valueOf(id)){
+  public constructor(id:  ${idType}) : super(id){
     this.state = ${stateName}.identifiedBy(id)
   }
 

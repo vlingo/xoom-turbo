@@ -84,14 +84,14 @@ public class ModelGenerationStepTest {
         Assert.assertTrue(authorEntity.contains("public Completes<AuthorState> withName(final Name name) {"));
         Assert.assertTrue(authorEntity.contains("return apply(new AuthorRegistered(state), () -> state);"));
         Assert.assertTrue(authorState.contains("class AuthorState"));
-        Assert.assertTrue(authorState.contains("public final long id;"));
+        Assert.assertTrue(authorState.contains("public final String id;"));
         Assert.assertTrue(authorState.contains("public final Name name;"));
         Assert.assertTrue(authorState.contains("public final Rank rank;"));
         Assert.assertTrue(authorRegistered.contains("class AuthorRegistered extends IdentifiedDomainEvent"));
-        Assert.assertTrue(authorRegistered.contains("public final long id;"));
+        Assert.assertTrue(authorRegistered.contains("public final String id;"));
         Assert.assertTrue(authorRegistered.contains("public final Name name;"));
         Assert.assertTrue(authorRanked.contains("class AuthorRanked extends IdentifiedDomainEvent"));
-        Assert.assertTrue(authorRanked.contains("public final long id;"));
+        Assert.assertTrue(authorRanked.contains("public final String id;"));
         Assert.assertTrue(authorRanked.contains("public final Rank rank;"));
     }
 
@@ -128,21 +128,21 @@ public class ModelGenerationStepTest {
         Assert.assertTrue(authorEntity.contains("val stateArg: AuthorState = state.withName(name)"));
         Assert.assertTrue(authorEntity.contains("return apply(stateArg, AuthorRegistered(stateArg)){state}"));
         Assert.assertTrue(authorState.contains("class AuthorState"));
-        Assert.assertTrue(authorState.contains("val id: Long;"));
+        Assert.assertTrue(authorState.contains("val id: String;"));
         Assert.assertTrue(authorState.contains("val name: Name;"));
         Assert.assertTrue(authorState.contains("val rank: Rank;"));
         Assert.assertTrue(authorRegistered.contains("class AuthorRegistered : IdentifiedDomainEvent"));
-        Assert.assertTrue(authorRegistered.contains("val id: Long;"));
+        Assert.assertTrue(authorRegistered.contains("val id: String;"));
         Assert.assertTrue(authorRegistered.contains("val name: Name;"));
         Assert.assertTrue(authorRanked.contains("class AuthorRanked : IdentifiedDomainEvent"));
-        Assert.assertTrue(authorRanked.contains("val id: Long;"));
+        Assert.assertTrue(authorRanked.contains("val id: String;"));
         Assert.assertTrue(authorRanked.contains("val rank: Rank;"));
     }
 
     private CodeGenerationParameter authorAggregate() {
         final CodeGenerationParameter idField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "id")
-                        .relate(Label.FIELD_TYPE, "long");
+                        .relate(Label.FIELD_TYPE, "String");
 
         final CodeGenerationParameter nameField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "name")

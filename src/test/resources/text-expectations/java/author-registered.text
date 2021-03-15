@@ -13,7 +13,7 @@ import io.vlingo.xoomapp.model.*;
  */
 public final class AuthorRegistered extends IdentifiedDomainEvent {
 
-  public final long id;
+  public final String id;
   public final Name name;
 
   public AuthorRegistered(final AuthorState state) {

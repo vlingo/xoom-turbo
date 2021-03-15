@@ -14,7 +14,6 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style;
 
@@ -83,8 +82,7 @@ public class StateDataObjectTemplateData extends TemplateData {
                 .and(MEMBERS, members).and(MEMBERS_ASSIGNMENT, membersAssignment)
                 .and(DATA_OBJECT_QUALIFIED_NAME, packageName.concat(".").concat(dataName))
                 .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
-                .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName)
-                .and(DEFAULT_ID, FieldDetail.resolveDefaultValue(aggregate, "id"));
+                .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName);
     }
 
     private String resolvePackage(final String basePackage) {

@@ -9,15 +9,15 @@ import io.vlingo.symbio.store.object.StateObject;
  */
 public final class AuthorState extends StateObject {
 
-  public final long id;
+  public final String id;
   public final Name name;
   public final Rank rank;
 
-  public static AuthorState identifiedBy(final long id) {
+  public static AuthorState identifiedBy(final String id) {
     return new AuthorState(id, null, null);
   }
 
-  public AuthorState (final long id, final Name name, final Rank rank) {
+  public AuthorState (final String id, final Name name, final Rank rank) {
     this.id = id;
     this.name = name;
     this.rank = rank;

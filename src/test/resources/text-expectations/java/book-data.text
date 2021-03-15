@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import io.vlingo.xoomapp.model.book.BookState;
 
 public class BookData {
-  public final long id;
+  public final String id;
   public final String title;
   public final String publisher;
 
@@ -18,7 +18,7 @@ public class BookData {
   }
 
   public static BookData empty() {
-    return new BookData(BookState.identifiedBy(0));
+    return new BookData(BookState.identifiedBy(""));
   }
 
   private BookData (final BookState state) {

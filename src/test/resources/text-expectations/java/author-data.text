@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import io.vlingo.xoomapp.model.author.AuthorState;
 
 public class AuthorData {
-  public final long id;
+  public final String id;
   public final NameData name;
   public final RankData rank;
   public final boolean status;
@@ -19,7 +19,7 @@ public class AuthorData {
   }
 
   public static AuthorData empty() {
-    return new AuthorData(AuthorState.identifiedBy(0));
+    return new AuthorData(AuthorState.identifiedBy(""));
   }
 
   private AuthorData (final AuthorState state) {

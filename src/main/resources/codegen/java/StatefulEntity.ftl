@@ -15,7 +15,7 @@ public final class ${entityName} extends StatefulEntity<${stateName}> implements
   private ${stateName} state;
 
   public ${entityName}(final ${idType} id) {
-    super(String.valueOf(id));
+    super(id);
     this.state = ${stateName}.identifiedBy(id);
   }
 

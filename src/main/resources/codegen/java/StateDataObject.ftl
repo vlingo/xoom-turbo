@@ -18,7 +18,7 @@ public class ${dataName} {
   }
 
   public static ${dataName} empty() {
-    return new ${dataName}(${stateName}.identifiedBy(${defaultId}));
+    return new ${dataName}(${stateName}.identifiedBy(""));
   }
 
   private ${dataName} (final ${stateName} state) {

@@ -11,8 +11,8 @@ import io.vlingo.lattice.model.stateful.StatefulEntity;
 public final class AuthorEntity extends StatefulEntity<AuthorState> implements Author {
   private AuthorState state;
 
-  public AuthorEntity(final long id) {
-    super(String.valueOf(id));
+  public AuthorEntity(final String id) {
+    super(id);
     this.state = AuthorState.identifiedBy(id);
   }
 

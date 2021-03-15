@@ -141,7 +141,7 @@ public class RestResourceTemplateDataFactoryTest {
     private CodeGenerationParameter authorAggregate() {
         final CodeGenerationParameter idField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "id")
-                        .relate(Label.FIELD_TYPE, "long");
+                        .relate(Label.FIELD_TYPE, "String");
 
         final CodeGenerationParameter nameField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "name")

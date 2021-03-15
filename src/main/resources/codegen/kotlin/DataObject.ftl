@@ -20,7 +20,7 @@ public class ${dataName} {
     }
 
     public fun empty(): ${dataName} {
-      return ${dataName}(${stateName}.identifiedBy(${defaultId}))
+      return ${dataName}(${stateName}.identifiedBy(""))
     }
   }
 
