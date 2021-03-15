@@ -85,7 +85,7 @@ public class ${resourceName} extends DynamicResourceHandler {
   }
 
   private String location(final String id) {
-    return "${uriRoot}/" + id;
+    return "${uriRoot?replace("/$", "")}/" + id;
   }
 
   <#if modelProtocol?has_content>
