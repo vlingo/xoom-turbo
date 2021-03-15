@@ -7,25 +7,19 @@
 
 package io.vlingo.xoom.codegen.file;
 
-import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
-import static io.vlingo.xoom.codegen.parameter.Label.TARGET_FOLDER;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.POM_SECTION;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.RESOURCE_FILE;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.SCHEMATA_FILE;
-
-import java.nio.file.Paths;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.template.TemplateData;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.nio.file.Paths;
+
+import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
+import static io.vlingo.xoom.codegen.parameter.Label.TARGET_FOLDER;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 
 public class ExternalFileLocationResolver implements FileLocationResolver {
 
-    @SuppressWarnings("unused")
-    private static final String[] SOURCE_FOLDER = {"src", "main", "java"};
     private static final String[] SCHEMATA_FOLDER = {"src", "main", "vlingo","schemata"};
     private static final String[] RESOURCE_FOLDER = {"src", "main", "resources"};
 
