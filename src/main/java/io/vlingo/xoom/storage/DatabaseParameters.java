@@ -6,16 +6,16 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.storage;
 
-import io.vlingo.symbio.store.StorageException;
-import io.vlingo.symbio.store.common.jdbc.Configuration;
-import io.vlingo.xoom.ApplicationProperty;
-import org.apache.commons.lang3.math.NumberUtils;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
+import org.apache.commons.lang3.math.NumberUtils;
+
+import io.vlingo.symbio.store.StorageException;
+import io.vlingo.symbio.store.common.jdbc.Configuration;
+import io.vlingo.xoom.ApplicationProperty;
 
 public class DatabaseParameters {
 

@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.codegen.template;
 
-import io.vlingo.xoom.codegen.content.ClassFormatter;
-import io.vlingo.xoom.codegen.parameter.ImportParameter;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,8 +17,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
 
 public class TemplateParameters {
 
@@ -124,6 +124,8 @@ public class TemplateParameters {
     }
 
     private boolean hasImports() {
+        // TODO: since keys in the parameters Map are String, this must be wrong
+        // Should it be IMPORTS.key instead?
         return this.parameters.containsKey(IMPORTS);
     }
 }

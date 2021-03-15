@@ -6,12 +6,10 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.model.formatting;
 
-import io.vlingo.xoom.codegen.language.Language;
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.model.MethodScope;
-import io.vlingo.xoom.codegen.template.model.aggregate.AggregateMethodInvocation;
-import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectConstructorInvocation;
-import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectInitializer;
+import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
+import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
+import static io.vlingo.xoom.codegen.parameter.Label.VALUE_OBJECT;
+import static io.vlingo.xoom.codegen.parameter.Label.VALUE_OBJECT_FIELD;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,7 +17,12 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.model.MethodScope;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateMethodInvocation;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectConstructorInvocation;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectInitializer;
 
 public class Formatters {
 
@@ -49,6 +52,7 @@ public class Formatters {
       throw new UnsupportedOperationException("Unable to format fields from " + parent.label);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T format(final Style style,
                                final Language language,
                                final CodeGenerationParameter parent,
@@ -65,6 +69,7 @@ public class Formatters {
       SELF_ALTERNATE_REFERENCE, ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE
     }
 
+    @SuppressWarnings("serial")
     private static Map<Style, Function<Language, Fields<?>>> INSTANTIATORS = Collections.unmodifiableMap(
       new HashMap<Style, Function<Language, Fields<?>>>() {{
         put(Style.ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment());

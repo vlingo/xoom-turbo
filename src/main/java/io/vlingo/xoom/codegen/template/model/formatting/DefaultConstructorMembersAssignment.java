@@ -6,18 +6,18 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.model.formatting;
 
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.TemplateParameter;
+import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateParameter;
 
 public class DefaultConstructorMembersAssignment extends Formatters.Fields<List<String>> {
 
     private final String carrierName;
-    private final TemplateParameter parameter;
+    private final TemplateParameter parameter; // TODO: Why unused? Remove?
 
     DefaultConstructorMembersAssignment() {
         this("");
