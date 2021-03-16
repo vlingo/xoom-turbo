@@ -7,7 +7,7 @@
 package io.vlingo.xoom.codegen.template.exchange;
 
 import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.OutputFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,43 +17,43 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 public class ContentBuilder {
 
     public static Content authorContent() {
-        return Content.with(AGGREGATE_PROTOCOL, new TemplateFile("", "Author.java"), null, null, AUTHOR_CONTENT_TEXT);
+        return Content.with(AGGREGATE_PROTOCOL, new OutputFile("", "Author.java"), null, null, AUTHOR_CONTENT_TEXT);
     }
 
     public static Content authorEntityContent() {
-        return Content.with(AGGREGATE, new TemplateFile("", "AuthorEntity.java"), null, null, AUTHOR_ENTITY_CONTENT_TEXT);
+        return Content.with(AGGREGATE, new OutputFile("", "AuthorEntity.java"), null, null, AUTHOR_ENTITY_CONTENT_TEXT);
     }
     
     public static Content bookContent() {
-        return Content.with(AGGREGATE_PROTOCOL, new TemplateFile("", "Book.java"), null, null, BOOK_CONTENT_TEXT);
+        return Content.with(AGGREGATE_PROTOCOL, new OutputFile("", "Book.java"), null, null, BOOK_CONTENT_TEXT);
     }
 
     public static Content authorDataObjectContent() {
-        return Content.with(DATA_OBJECT, new TemplateFile("", "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT);
+        return Content.with(DATA_OBJECT, new OutputFile("", "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT);
     }
 
     public static Content authorRatedEvent() {
-        return Content.with(DOMAIN_EVENT, new TemplateFile("", "AuthorRated.java"), null, null, AUTHOR_RATED_CONTENT_TEXT);
+        return Content.with(DOMAIN_EVENT, new OutputFile("", "AuthorRated.java"), null, null, AUTHOR_RATED_CONTENT_TEXT);
     }
 
     public static Content authorBlockedEvent() {
-        return Content.with(DOMAIN_EVENT, new TemplateFile("", "AuthorBlocked.java"), null, null, AUTHOR_BLOCKED_CONTENT_TEXT);
+        return Content.with(DOMAIN_EVENT, new OutputFile("", "AuthorBlocked.java"), null, null, AUTHOR_BLOCKED_CONTENT_TEXT);
     }
 
     public static Content bookSoldOutEvent() {
-        return Content.with(DOMAIN_EVENT, new TemplateFile("", "BookSoldOut.java"), null, null, BOOK_SOLD_OUT_CONTENT_TEXT);
+        return Content.with(DOMAIN_EVENT, new OutputFile("", "BookSoldOut.java"), null, null, BOOK_SOLD_OUT_CONTENT_TEXT);
     }
 
     public static Content bookPurchasedEvent() {
-        return Content.with(DOMAIN_EVENT, new TemplateFile("", "BookPurchased.java"), null, null, BOOK_PURCHASED_CONTENT_TEXT);
+        return Content.with(DOMAIN_EVENT, new OutputFile("", "BookPurchased.java"), null, null, BOOK_PURCHASED_CONTENT_TEXT);
     }
 
     public static Content rankValueObject() {
-        return Content.with(VALUE_OBJECT, new TemplateFile("", "Rank.java"), null, null, RANK_VALUE_OBJECT_CONTENT_TEXT);
+        return Content.with(VALUE_OBJECT, new OutputFile("", "Rank.java"), null, null, RANK_VALUE_OBJECT_CONTENT_TEXT);
     }
 
     public static Content nameValueObject() {
-        return Content.with(VALUE_OBJECT, new TemplateFile("", "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT);
+        return Content.with(VALUE_OBJECT, new OutputFile("", "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT);
     }
 
     public static List<Content> contents() {

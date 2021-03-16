@@ -9,8 +9,9 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
@@ -32,6 +33,7 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static io.vlingo.xoom.codegen.template.storage.StorageType.STATE_STORE;
 
+@SuppressWarnings("rawtypes")
 public class DefaultBootstrapTemplateDataTest {
 
     @Test
@@ -49,17 +51,17 @@ public class DefaultBootstrapTemplateDataTest {
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(codeGenerationParameters)
-                        .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT)
-                        .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT)
-                        .addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT)
-                        .addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT)
-                        .addContent(PROJECTION_DISPATCHER_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT);
+                        .addContent(REST_RESOURCE, new OutputFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT)
+                        .addContent(REST_RESOURCE, new OutputFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT)
+                        .addContent(STORE_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT)
+                        .addContent(STORE_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT)
+                        .addContent(PROJECTION_DISPATCHER_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT);
 
         final TemplateParameters parameters =
                 BootstrapTemplateData.from(context).parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
-        Assert.assertEquals(6, parameters.<Set>find(IMPORTS).size());
+        Assert.assertEquals(6, parameters.<Set<ImportParameter>>find(IMPORTS).size());
         Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.CommandModelStateStoreProvider"));
         Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider"));
         Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.ProjectionDispatcherProvider"));
@@ -70,10 +72,10 @@ public class DefaultBootstrapTemplateDataTest {
         Assert.assertEquals(2, parameters.<List>find(REST_RESOURCES).size());
         Assert.assertEquals("AuthorResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).getClassName());
         Assert.assertEquals("authorResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).getObjectName());
-        Assert.assertEquals(false, parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).isLast());
+        Assert.assertFalse(parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).isLast());
         Assert.assertEquals("BookResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(1).getClassName());
         Assert.assertEquals("bookResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(1).getObjectName());
-        Assert.assertEquals(true, parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(1).isLast());
+        Assert.assertTrue(parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(1).isLast());
 
         Assert.assertEquals(2, parameters.<List>find(PROVIDERS).size());
         Assert.assertEquals("QueryModelStateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getClassName());
@@ -104,14 +106,14 @@ public class DefaultBootstrapTemplateDataTest {
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(codeGenerationParameters)
-                        .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT)
-                        .addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "StateStoreProvider.java"), SINGLE_MODEL_STORE_PROVIDER_CONTENT);
+                        .addContent(REST_RESOURCE, new OutputFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT)
+                        .addContent(STORE_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "StateStoreProvider.java"), SINGLE_MODEL_STORE_PROVIDER_CONTENT);
 
         final TemplateParameters parameters =
                 BootstrapTemplateData.from(context).parameters();
 
         Assert.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
-        Assert.assertEquals(3, parameters.<Set>find(IMPORTS).size());
+        Assert.assertEquals(3, parameters.<Set<ImportParameter>>find(IMPORTS).size());
         Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.StateStoreProvider"));
         Assert.assertTrue(parameters.hasImport("io.vlingo.lattice.model.stateful.StatefulTypeRegistry"));
         Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.resource.AuthorResource"));
@@ -119,7 +121,7 @@ public class DefaultBootstrapTemplateDataTest {
         Assert.assertEquals(1, parameters.<List>find(REST_RESOURCES).size());
         Assert.assertEquals("AuthorResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).getClassName());
         Assert.assertEquals("authorResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).getObjectName());
-        Assert.assertEquals(true, parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).isLast());
+        Assert.assertTrue(parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).isLast());
 
         Assert.assertEquals(1, parameters.<List>find(PROVIDERS).size());
         Assert.assertEquals("StateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getClassName());

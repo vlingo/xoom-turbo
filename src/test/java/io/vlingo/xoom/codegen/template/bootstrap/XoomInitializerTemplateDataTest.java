@@ -12,7 +12,7 @@ import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
@@ -59,10 +59,10 @@ public class XoomInitializerTemplateDataTest {
 
         final CodeGenerationContext context =
                 CodeGenerationContext.using(Mockito.mock(Filer.class), Mockito.mock(Element.class)).on(codeGenerationParameters)
-                        .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT)
-                        .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT)
-                        .addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT)
-                        .addContent(STORE_PROVIDER, new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT);
+                        .addContent(REST_RESOURCE, new OutputFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT)
+                        .addContent(REST_RESOURCE, new OutputFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT)
+                        .addContent(STORE_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT)
+                        .addContent(STORE_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT);
 
         final TemplateParameters parameters =
                 BootstrapTemplateData.from(context).parameters();
@@ -80,10 +80,10 @@ public class XoomInitializerTemplateDataTest {
         Assert.assertEquals(2, parameters.<List>find(REST_RESOURCES).size());
         Assert.assertEquals("AuthorResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).getClassName());
         Assert.assertEquals("authorResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).getObjectName());
-        Assert.assertEquals(false, parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).isLast());
+        Assert.assertFalse(parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).isLast());
         Assert.assertEquals("BookResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(1).getClassName());
         Assert.assertEquals("bookResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(1).getObjectName());
-        Assert.assertEquals(true, parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(1).isLast());
+        Assert.assertTrue(parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(1).isLast());
 
         Assert.assertEquals(2, parameters.<List>find(PROVIDERS).size());
         Assert.assertEquals("QueryModelStateStoreProvider", parameters.<List<StoreProviderParameter>>find(PROVIDERS).get(0).getClassName());
@@ -117,7 +117,7 @@ public class XoomInitializerTemplateDataTest {
 
         final CodeGenerationContext context =
                 CodeGenerationContext.using(Mockito.mock(Filer.class), Mockito.mock(Element.class)).on(codeGenerationParameters)
-                        .addContent(REST_RESOURCE, new TemplateFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT);
+                        .addContent(REST_RESOURCE, new OutputFile(RESOURCE_PACKAGE_PATH, "AuthorResource.java"), AUTHOR_RESOURCE_CONTENT);
 
         final TemplateParameters parameters =
                 BootstrapTemplateData.from(context).parameters();
@@ -131,7 +131,7 @@ public class XoomInitializerTemplateDataTest {
         Assert.assertEquals(1, parameters.<List>find(REST_RESOURCES).size());
         Assert.assertEquals("AuthorResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).getClassName());
         Assert.assertEquals("authorResource", parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).getObjectName());
-        Assert.assertEquals(true, parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).isLast());
+        Assert.assertTrue(parameters.<List<RestResourcesParameter>>find(REST_RESOURCES).get(0).isLast());
 
         Assert.assertTrue(parameters.<List>find(PROVIDERS).isEmpty());
         Assert.assertTrue(parameters.<List>find(TYPE_REGISTRIES).isEmpty());

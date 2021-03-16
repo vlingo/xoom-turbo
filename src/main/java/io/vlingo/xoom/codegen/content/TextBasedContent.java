@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.content;
 
-import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import org.apache.commons.io.FilenameUtils;
 
@@ -31,16 +31,16 @@ public class TextBasedContent extends Content {
     private final boolean placeholder;
 
     public TextBasedContent(final TemplateStandard standard,
-                            final TemplateFile templateFile,
+                            final OutputFile outputFile,
                             final Element source,
                             final Filer filer,
                             final String text) {
         super(standard);
         this.filer = filer;
         this.source = source;
-        this.file = templateFile.toFile();
-        this.offset = templateFile.offset();
-        this.placeholder = templateFile.isPlaceholder();
+        this.file = outputFile.toFile();
+        this.offset = outputFile.offset();
+        this.placeholder = outputFile.isPlaceholder();
         this.text = text;
     }
 

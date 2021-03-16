@@ -11,8 +11,8 @@ import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.resource.RouteDeclarationParameter;
@@ -30,12 +30,12 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
 
     @Test
     public void testThatTemplateParametersAreMapped() {
-        final TemplateFile templateFile =
-                new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java");
+        final OutputFile outputFile =
+                new OutputFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java");
 
         final CodeGenerationContext context =
                 CodeGenerationContext.with(loadParameters())
-                        .addContent(STORE_PROVIDER, templateFile, QUERY_MODEL_STORE_PROVIDER_CONTENT);
+                        .addContent(STORE_PROVIDER, outputFile, QUERY_MODEL_STORE_PROVIDER_CONTENT);
 
         final List<TemplateData> templatesData =
                 AutoDispatchResourceHandlerTemplateData.from(context);

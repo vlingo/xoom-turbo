@@ -1,6 +1,6 @@
 package io.vlingo.xoom.codegen.content;
 
-import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.Filer;
@@ -16,7 +16,7 @@ public abstract class Content {
     }
 
     public static Content with(final TemplateStandard standard,
-                               final TemplateFile templatefile,
+                               final OutputFile templatefile,
                                final Filer filer,
                                final Element source,
                                final String text) {

@@ -10,8 +10,8 @@ package io.vlingo.xoom.codegen.template.storage;
 import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.ImportParameter;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import org.junit.Assert;
 import org.junit.Test;
@@ -90,34 +90,34 @@ public class PersistenceSetupTemplateDataTest {
         Assert.assertTrue(persistenceSetupParameters.hasImport("io.vlingo.xoomapp.infrastructure.BookData"));
 
         Assert.assertEquals("BookState", persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
-        Assert.assertEquals(false, persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).isLast());
+        Assert.assertFalse(persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).isLast());
         Assert.assertEquals("AuthorState", persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
-        Assert.assertEquals(true, persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).isLast());
+        Assert.assertTrue(persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).isLast());
         Assert.assertEquals("AuthorProjectionActor", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getActor());
         Assert.assertEquals("AuthorRated.class", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getCauses());
-        Assert.assertEquals(false, persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).isLast());
+        Assert.assertFalse(persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).isLast());
         Assert.assertEquals("BookProjectionActor", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getActor());
         Assert.assertEquals("BookRented.class, BookPurchased.class", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getCauses());
-        Assert.assertEquals(true, persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).isLast());
+        Assert.assertTrue(persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).isLast());
         Assert.assertEquals("PersistenceSetup", persistenceSetupData.filename());
         Assert.assertEquals("AuthorData.class, BookData.class", persistenceSetupParameters.find(DATA_OBJECTS));
-        Assert.assertEquals(true, persistenceSetupParameters.find(REQUIRE_ADAPTERS));
-        Assert.assertEquals(true, persistenceSetupParameters.find(USE_PROJECTIONS));
-        Assert.assertEquals(true, persistenceSetupParameters.find(USE_ANNOTATIONS));
-        Assert.assertEquals(true, persistenceSetupParameters.find(USE_CQRS));
+        Assert.assertTrue(persistenceSetupParameters.find(REQUIRE_ADAPTERS));
+        Assert.assertTrue(persistenceSetupParameters.find(USE_PROJECTIONS));
+        Assert.assertTrue(persistenceSetupParameters.find(USE_ANNOTATIONS));
+        Assert.assertTrue(persistenceSetupParameters.find(USE_CQRS));
     }
 
     private List<Content> contents() {
         return Arrays.asList(
-                Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-                Content.with(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRated.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-                Content.with(AGGREGATE_STATE, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
-                Content.with(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookRented.java"), null, null, BOOK_RENTED_TEXT),
-                Content.with(DOMAIN_EVENT, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), null, null, BOOK_PURCHASED_TEXT),
-                Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
-                Content.with(AGGREGATE_PROTOCOL, new TemplateFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT),
-                Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
-                Content.with(DATA_OBJECT, new TemplateFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT)
+                Content.with(AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+                Content.with(DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRated.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+                Content.with(AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
+                Content.with(DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookRented.java"), null, null, BOOK_RENTED_TEXT),
+                Content.with(DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), null, null, BOOK_PURCHASED_TEXT),
+                Content.with(AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
+                Content.with(AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), null, null, BOOK_CONTENT_TEXT),
+                Content.with(DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
+                Content.with(DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT)
             );
     }
 

@@ -13,8 +13,8 @@ import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
 import io.vlingo.xoom.codegen.template.storage.Model;
@@ -110,13 +110,13 @@ public class CodeGenerationContext {
     }
 
     public void registerTemplateProcessing(final Language language, final TemplateData templateData, final String text) {
-        this.addContent(templateData.standard(), new TemplateFile(this, templateData, language), text);
+        this.addContent(templateData.standard(), new OutputFile(this, templateData, language), text);
         this.templatesData.add(templateData);
     }
 
     //TODO: Make it private
     public CodeGenerationContext addContent(final TemplateStandard standard,
-                                            final TemplateFile file,
+                                            final OutputFile file,
                                             final String text) {
         this.contents.add(Content.with(standard, file, filer, source, text));
         return this;

@@ -15,30 +15,30 @@ import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.OFFSET;
 
-public class TemplateFile {
+public class OutputFile {
 
     private final String absolutePath;
     private final String filename;
     private final String offset;
     private final boolean placeholder;
 
-    public TemplateFile(final CodeGenerationContext context,
-                        final TemplateData templateData,
-                        final Language language) {
+    public OutputFile(final CodeGenerationContext context,
+                      final TemplateData templateData,
+                      final Language language) {
         this(context.isInternalGeneration() ? "" : FileLocationResolver.from(context, templateData),
                 language.formatFilename(templateData.filename()), templateData.parameters().find(OFFSET),
                 templateData.isPlaceholder());
     }
 
-    public TemplateFile(final String absolutePath,
-                        final String filename) {
+    public OutputFile(final String absolutePath,
+                      final String filename) {
         this(absolutePath, filename, "", false);
     }
 
-    private TemplateFile(final String absolutePath,
-                         final String filename,
-                         final String offset,
-                         final boolean placeholder) {
+    private OutputFile(final String absolutePath,
+                       final String filename,
+                       final String offset,
+                       final boolean placeholder) {
         this.absolutePath = absolutePath;
         this.filename = filename;
         this.offset = offset;

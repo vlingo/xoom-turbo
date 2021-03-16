@@ -6,7 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.content;
 
-import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -61,9 +61,9 @@ public class ContentQueryTest {
 
     private List<Content> contents() {
         return Arrays.asList(
-            Content.with(AGGREGATE_STATE, new TemplateFile("/Projects/", "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-            Content.with(AGGREGATE_STATE, new TemplateFile("/Projects/", "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
-            Content.with(AGGREGATE, new TemplateFile("/Projects/", "Author.java"), null, null, AGGREGATE_CONTENT_TEXT)
+            Content.with(AGGREGATE_STATE, new OutputFile("/Projects/", "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+            Content.with(AGGREGATE_STATE, new OutputFile("/Projects/", "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
+            Content.with(AGGREGATE, new OutputFile("/Projects/", "Author.java"), null, null, AGGREGATE_CONTENT_TEXT)
         );
     }
 

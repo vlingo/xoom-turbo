@@ -14,7 +14,7 @@ import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.dataobject.DataObjectGenerationStep;
 import org.junit.Assert;
@@ -129,14 +129,14 @@ public class DataObjectGenerationStepTest {
 
   private Content[] contents() {
     return new Content[]{
-            Content.with(AGGREGATE_STATE, new TemplateFile("/Projects/", "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-            Content.with(AGGREGATE_STATE, new TemplateFile("/Projects/", "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
-            Content.with(VALUE_OBJECT, new TemplateFile("/Projects/", "Rank.java"), null, null, RANK_VALUE_OBJECT_CONTENT_TEXT),
-            Content.with(VALUE_OBJECT, new TemplateFile("/Projects/", "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT),
-            Content.with(VALUE_OBJECT, new TemplateFile("/Projects/", "Classification.java"), null, null, CLASSIFICATION_VALUE_OBJECT_CONTENT_TEXT),
-            Content.with(VALUE_OBJECT, new TemplateFile("/Projects/", "Classifier.java"), null, null, CLASSIFIER_VALUE_OBJECT_CONTENT_TEXT),
-            Content.with(AGGREGATE_PROTOCOL, new TemplateFile("/Projects/", "Author.java"), null, null, AUTHOR_PROTOCOL_CONTENT_TEXT),
-            Content.with(AGGREGATE_PROTOCOL, new TemplateFile("/Projects/", "Book.java"), null, null, BOOK_PROTOCOL_CONTENT_TEXT)
+            Content.with(AGGREGATE_STATE, new OutputFile("/Projects/", "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+            Content.with(AGGREGATE_STATE, new OutputFile("/Projects/", "BookState.java"), null, null, BOOK_STATE_CONTENT_TEXT),
+            Content.with(VALUE_OBJECT, new OutputFile("/Projects/", "Rank.java"), null, null, RANK_VALUE_OBJECT_CONTENT_TEXT),
+            Content.with(VALUE_OBJECT, new OutputFile("/Projects/", "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT),
+            Content.with(VALUE_OBJECT, new OutputFile("/Projects/", "Classification.java"), null, null, CLASSIFICATION_VALUE_OBJECT_CONTENT_TEXT),
+            Content.with(VALUE_OBJECT, new OutputFile("/Projects/", "Classifier.java"), null, null, CLASSIFIER_VALUE_OBJECT_CONTENT_TEXT),
+            Content.with(AGGREGATE_PROTOCOL, new OutputFile("/Projects/", "Author.java"), null, null, AUTHOR_PROTOCOL_CONTENT_TEXT),
+            Content.with(AGGREGATE_PROTOCOL, new OutputFile("/Projects/", "Book.java"), null, null, BOOK_PROTOCOL_CONTENT_TEXT)
     };
   }
 

@@ -12,7 +12,7 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.codegen.template.TemplateFile;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
         final CodeGenerationContext context =
                 CodeGenerationContext.with(loadParameters())
                         .addContent(STORE_PROVIDER,
-                                new TemplateFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"),
+                                new OutputFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"),
                                 QUERY_MODEL_STORE_PROVIDER_CONTENT);
 
         new AutoDispatchResourceHandlerGenerationStep().process(context);
