@@ -2,10 +2,11 @@ package io.vlingo.xoomapp.infrastructure.resource;
 
 import io.vlingo.actors.Definition;
 import io.vlingo.actors.Stage;
+import io.vlingo.common.Completes;
+import io.vlingo.http.Response;
+import io.vlingo.http.ResponseHeader;
 import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.DynamicResourceHandler;
-import static io.vlingo.http.resource.ResourceBuilder.resource;
-
 import io.vlingo.xoomapp.model.author.AuthorEntity;
 import io.vlingo.xoomapp.infrastructure.AuthorData;
 import io.vlingo.xoomapp.model.author.Author;
@@ -13,11 +14,10 @@ import io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries;
 import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;
 import io.vlingo.xoomapp.model.*;
 
-import io.vlingo.http.Response;
-import io.vlingo.common.Completes;
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.http.Response.Status.*;
-import static io.vlingo.http.ResponseHeader.*;
+import static io.vlingo.http.ResponseHeader.Location;
+import static io.vlingo.http.resource.ResourceBuilder.resource;
 
 /**
  * See <a href="https://docs.vlingo.io/vlingo-xoom/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
@@ -33,7 +33,7 @@ public class AuthorResource extends DynamicResourceHandler {
   public Completes<Response> withName(final AuthorData data) {
     final Name name = Name.of(data.name.firstName, data.name.lastName);
     return Author.withName(stage(), name)
-      .andThenTo(state -> Completes.withSuccess(Response.of(Created, headers(of(Location, location(state.id))), serialized(AuthorData.from(state))))
+      .andThenTo(state -> Completes.withSuccess(Response.of(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(state.id))), serialized(AuthorData.from(state))))
       .otherwise(arg -> Response.of(NotFound, location()))
       .recoverFrom(e -> Response.of(InternalServerError, e.getMessage())));
   }
