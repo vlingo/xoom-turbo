@@ -14,8 +14,6 @@ import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 public class ProjectSettingsTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
@@ -29,14 +27,8 @@ public class ProjectSettingsTemplateData extends TemplateData {
   }
 
   private String formatJson(final String generationSettingsPayload) {
-      final JsonElement parsed =
-              new JsonParser().parse(generationSettingsPayload);
-
-      final byte[] bytes =
-              new GsonBuilder().setPrettyPrinting()
-                      .create().toJson(parsed).getBytes(UTF_8);
-
-      return new String(bytes, UTF_8);
+      final JsonElement parsed = new JsonParser().parse(generationSettingsPayload);
+      return new GsonBuilder().setPrettyPrinting().create().toJson(parsed);
   }
 
   @Override
