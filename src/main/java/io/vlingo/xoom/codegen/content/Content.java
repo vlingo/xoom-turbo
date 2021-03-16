@@ -16,11 +16,11 @@ public abstract class Content {
     }
 
     public static Content with(final TemplateStandard standard,
-                               final OutputFile templatefile,
+                               final OutputFile outputFile,
                                final Filer filer,
                                final Element source,
                                final String text) {
-        return new TextBasedContent(standard, templatefile, source, filer, text);
+        return new TextBasedContent(standard, outputFile, source, filer, text);
     }
 
     public static Content with(final TemplateStandard standard,
