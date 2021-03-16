@@ -37,6 +37,9 @@ public enum TemplateStandard {
 
     VALUE_OBJECT(parameters -> Template.VALUE_OBJECT.filename),
 
+    PROJECT_SETTINGS(parameters -> Template.PROJECT_SETTINGS.filename,
+            (name, parameters) -> parameters.find(APPLICATION_NAME) + ".json"),
+
     QUERIES(parameters -> Template.QUERIES.filename,
             (name, parameters) -> name + "Queries"),
 

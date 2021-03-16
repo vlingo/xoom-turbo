@@ -33,6 +33,7 @@ public class SchemataPluginTemplateData extends TemplateData {
 
         this.parameters =
                 TemplateParameters.with(TemplateParameter.POM_SECTION, true)
+                        .and(TemplateParameter.SOURCE_CODE, false)
                         .and(TemplateParameter.OFFSET, "<plugins>")
                         .and(TemplateParameter.PRODUCER_SCHEMAS, retrieveProducerSchemas(schemaGroup, exchanges, valueObjects))
                         .and(TemplateParameter.CONSUMER_SCHEMAS, retrieveConsumerSchemas(exchanges))

@@ -67,6 +67,7 @@ public enum Label {
     DOCKER_IMAGE("dockerImage"),
     KUBERNETES_IMAGE("kubernetesImages"),
     KUBERNETES_POD_NAME("kubernetesPod"),
+    PROJECT_SETTINGS_PAYLOAD("projectSettingsPayload"),
     TARGET_FOLDER("targetFolder"),
     LOCAL_TYPE("localType"),
     EXCHANGE("exchange"),

@@ -17,14 +17,15 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.codegen.template.TemplateParameter.IMPORTS;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 
 public class TemplateParameters {
 
     private final Map<String, Object> parameters = new HashMap<>();
 
-    private TemplateParameters() { }
+    private TemplateParameters() {
+        parameters.put(SOURCE_CODE.key, true);
+    }
 
     public static TemplateParameters empty() {
         return new TemplateParameters();

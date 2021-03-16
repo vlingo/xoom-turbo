@@ -46,6 +46,7 @@ public enum Template {
     REST_RESOURCE_RETRIEVE_METHOD("RestResourceRetrieveMethod"),
     REST_RESOURCE_UPDATE_METHOD("RestResourceUpdateMethod"),
     QUERIES_ACTOR("QueriesActor"),
+    PROJECT_SETTINGS("ProjectSettings"),
     CONSUMER_EXCHANGE_ADAPTER("ConsumerExchangeAdapter"),
     PRODUCER_EXCHANGE_ADAPTER("ProducerExchangeAdapter"),
     EXCHANGE_RECEIVER_HOLDER("ExchangeReceiverHolder"),
