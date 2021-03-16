@@ -4,11 +4,11 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.codegen.template.model.aggregate;
+package io.vlingo.xoom.codegen.template.model.formatting;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.Arrays;

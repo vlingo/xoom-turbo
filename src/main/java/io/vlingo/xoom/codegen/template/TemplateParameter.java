@@ -51,6 +51,7 @@ public enum TemplateParameter {
     PROJECTION_TYPE("projectionType"),
     ID_NAME("idName"),
     ID_TYPE("idType"),
+    EVENT_HANDLERS("eventHandlers"),
     SOURCED_EVENTS("sourcedEvents"),
     ROUTE_DECLARATIONS("routeDeclarations"),
     ROUTE_SIGNATURE("routeSignature"),

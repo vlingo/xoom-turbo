@@ -28,9 +28,12 @@ public final class ${entityName} extends EventSourced implements ${aggregateProt
   <#list methods as method>
   ${method}
   </#list>
-  <#list sourcedEvents as sourcedEvent>
-  private void apply${sourcedEvent}(final ${sourcedEvent} event) {
-    //TODO: Handle ${sourcedEvent} here
+  <#list eventHandlers as eventHandler>
+  private void apply${eventHandler.eventName}(final ${eventHandler.eventName} event) {
+    <#list eventHandler.missingFields as missingField>
+    //TODO: Event is missing ${missingField.fieldName}; using ${missingField.defaultValue} instead
+    </#list>
+    state = state.${eventHandler.methodName}(${eventHandler.methodInvocationParameters});
   }
 
   </#list>

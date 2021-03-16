@@ -48,14 +48,14 @@ public class ModelGenerationStepTest {
 
         Assert.assertEquals(7, context.contents().size());
         Assert.assertTrue(authorProtocol.contains(TextExpectation.onJava().read("author-protocol")));
-        Assert.assertTrue(authorEntity.contains(TextExpectation.onJava().read("author-stateful-entity")));
-        Assert.assertTrue(authorState.contains(TextExpectation.onJava().read("author-state")));
+        Assert.assertTrue(authorEntity.contains(TextExpectation.onJava().read("stateful-author-entity")));
+        Assert.assertTrue(authorState.contains(TextExpectation.onJava().read("stateful-author-state")));
         Assert.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
         Assert.assertTrue(authorRanked.contains(TextExpectation.onJava().read("author-ranked")));
     }
 
     @Test
-    public void testThatSourcedModelIsGenerated() {
+    public void testThatSourcedModelIsGenerated() throws IOException {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, JOURNAL),
@@ -78,21 +78,11 @@ public class ModelGenerationStepTest {
         final Content authorRanked = context.findContent(DOMAIN_EVENT, "AuthorRanked");
 
         Assert.assertEquals(7, context.contents().size());
-        Assert.assertTrue(author.contains("interface Author "));
-        Assert.assertTrue(author.contains("final io.vlingo.actors.Address _address = stage.addressFactory().uniquePrefixedWith(\"g-\");"));
-        Assert.assertTrue(authorEntity.contains("class AuthorEntity extends EventSourced"));
-        Assert.assertTrue(authorEntity.contains("public Completes<AuthorState> withName(final Name name) {"));
-        Assert.assertTrue(authorEntity.contains("return apply(new AuthorRegistered(state), () -> state);"));
-        Assert.assertTrue(authorState.contains("class AuthorState"));
-        Assert.assertTrue(authorState.contains("public final String id;"));
-        Assert.assertTrue(authorState.contains("public final Name name;"));
-        Assert.assertTrue(authorState.contains("public final Rank rank;"));
-        Assert.assertTrue(authorRegistered.contains("class AuthorRegistered extends IdentifiedDomainEvent"));
-        Assert.assertTrue(authorRegistered.contains("public final String id;"));
-        Assert.assertTrue(authorRegistered.contains("public final Name name;"));
-        Assert.assertTrue(authorRanked.contains("class AuthorRanked extends IdentifiedDomainEvent"));
-        Assert.assertTrue(authorRanked.contains("public final String id;"));
-        Assert.assertTrue(authorRanked.contains("public final Rank rank;"));
+        Assert.assertTrue(author.contains(TextExpectation.onJava().read("author-protocol")));
+        Assert.assertTrue(authorEntity.contains(TextExpectation.onJava().read("sourced-author-entity")));
+        Assert.assertTrue(authorState.contains(TextExpectation.onJava().read("sourced-author-state")));
+        Assert.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
+        Assert.assertTrue(authorRanked.contains(TextExpectation.onJava().read("author-ranked")));
     }
 
     @Test

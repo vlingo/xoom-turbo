@@ -20,9 +20,16 @@ import static java.util.stream.Collectors.toList;
 
 public class AlternateReference extends Formatters.Fields<String> {
 
+    private final String carrier;
     private final Function<CodeGenerationParameter, String> absenceHandler;
 
     private AlternateReference(final Function<CodeGenerationParameter, String> absenceHandler) {
+        this("", absenceHandler);
+    }
+
+    private AlternateReference(final String carrier,
+                               final Function<CodeGenerationParameter, String> absenceHandler) {
+        this.carrier = carrier;
         this.absenceHandler = absenceHandler;
     }
 
@@ -34,15 +41,19 @@ public class AlternateReference extends Formatters.Fields<String> {
         return new AlternateReference(field -> FieldDetail.resolveDefaultValue(field.parent(AGGREGATE), field.value));
     }
 
+    static AlternateReference handlingEventFieldsWithDefaultFieldsValue() {
+        return new AlternateReference("event", field -> FieldDetail.resolveDefaultValue(field.parent(AGGREGATE), field.value));
+    }
+
     @Override
-    public String format(final CodeGenerationParameter para,
+    public String format(final CodeGenerationParameter param,
                          final Stream<CodeGenerationParameter> fields) {
         final List<CodeGenerationParameter> presentFields = fields.collect(toList());
 
         final Function<CodeGenerationParameter, String> mapper = field ->
                 isPresent(field, presentFields) ? field.value : absenceHandler.apply(field);
 
-        return para.retrieveAllRelated(STATE_FIELD).map(mapper).collect(Collectors.joining(", "));
+        return param.retrieveAllRelated(STATE_FIELD).map(mapper).collect(Collectors.joining(", "));
     }
 
     private boolean isPresent(final CodeGenerationParameter field,

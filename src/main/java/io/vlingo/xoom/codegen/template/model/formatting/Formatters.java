@@ -6,10 +6,10 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.model.formatting;
 
-import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
-import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
-import static io.vlingo.xoom.codegen.parameter.Label.VALUE_OBJECT;
-import static io.vlingo.xoom.codegen.parameter.Label.VALUE_OBJECT_FIELD;
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.model.MethodScope;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectInitializer;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,19 +17,15 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import io.vlingo.xoom.codegen.language.Language;
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.model.MethodScope;
-import io.vlingo.xoom.codegen.template.model.aggregate.AggregateMethodInvocation;
-import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectConstructorInvocation;
-import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectInitializer;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class Formatters {
 
-  public static interface Arguments {
+  public interface Arguments {
 
       Arguments AGGREGATE_METHOD_INVOCATION = new AggregateMethodInvocation("stage");
       Arguments VALUE_OBJECT_CONSTRUCTOR_INVOCATION = new ValueObjectConstructorInvocation();
+      Arguments SOURCED_STATED_METHOD_INVOCATION = new SourcedStateMethodInvocation();
       Arguments SIGNATURE_DECLARATION = new SignatureDeclaration();
 
       default String format(final CodeGenerationParameter parameter) {
@@ -63,7 +59,7 @@ public class Formatters {
 
     protected abstract T format(final CodeGenerationParameter parameter, final Stream<CodeGenerationParameter> fields);
 
-    public static enum Style {
+    public enum Style {
       ASSIGNMENT, MEMBER_DECLARATION, DATA_OBJECT_MEMBER_DECLARATION, VALUE_OBJECT_INITIALIZER,
       DATA_VALUE_OBJECT_ASSIGNMENT, STATE_BASED_ASSIGNMENT,
       SELF_ALTERNATE_REFERENCE, ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE

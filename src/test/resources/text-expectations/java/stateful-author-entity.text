@@ -16,11 +16,13 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     this.state = AuthorState.identifiedBy(id);
   }
 
+  @Override
   public Completes<AuthorState> withName(final Name name) {
     final AuthorState stateArg = state.withName(name);
     return apply(stateArg, new AuthorRegistered(stateArg), () -> state);
   }
 
+  @Override
   public Completes<AuthorState> changeRank(final Rank rank) {
     final AuthorState stateArg = state.changeRank(rank);
     return apply(stateArg, new AuthorRanked(stateArg), () -> state);

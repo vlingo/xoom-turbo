@@ -47,6 +47,7 @@ public class AggregateTemplateData extends TemplateData {
                 .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
                 .and(ENTITY_NAME, AGGREGATE.resolveClassname(protocolName))
                 .and(ID_TYPE, FieldDetail.typeOf(aggregate, "id"))
+                .and(EVENT_HANDLERS, EventHandlerParameter.from(aggregate))
                 .and(SOURCED_EVENTS, resolveEventNames(aggregate))
                 .addImports(resolveImports(contents, aggregate))
                 .and(METHODS, new ArrayList<String>())

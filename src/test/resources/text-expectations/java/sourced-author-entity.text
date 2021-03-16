@@ -1,0 +1,68 @@
+package io.vlingo.xoomapp.model.author;
+
+import io.vlingo.common.Completes;
+import io.vlingo.xoomapp.model.*;
+
+import io.vlingo.lattice.model.sourcing.EventSourced;
+
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#sourced">EventSourced</a>
+ */
+public final class AuthorEntity extends EventSourced implements Author {
+  private AuthorState state;
+
+  public AuthorEntity(final String id) {
+    super(id);
+    this.state = AuthorState.identifiedBy(id);
+  }
+
+  static {
+    EventSourced.registerConsumer(AuthorEntity.class, AuthorRegistered.class, AuthorEntity::applyAuthorRegistered);
+    EventSourced.registerConsumer(AuthorEntity.class, AuthorRanked.class, AuthorEntity::applyAuthorRanked);
+  }
+
+  @Override
+  public Completes<AuthorState> withName(final Name name) {
+    final AuthorState stateArg = state.withName(name);
+    return apply(new AuthorRegistered(stateArg), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> changeRank(final Rank rank) {
+    final AuthorState stateArg = state.changeRank(rank);
+    return apply(new AuthorRanked(stateArg), () -> state);
+  }
+
+  private void applyAuthorRegistered(final AuthorRegistered event) {
+    state = state.withName(event.name);
+  }
+
+  private void applyAuthorRanked(final AuthorRanked event) {
+    state = state.changeRank(event.rank);
+  }
+
+  /*
+   * Restores my initial state by means of {@code state}.
+   *
+   * @param snapshot the {@code AuthorState} holding my state
+   * @param currentVersion the int value of my current version; may be helpful in determining if snapshot is needed
+   */
+  @Override
+  protected <AuthorState> void restoreSnapshot(final AuthorState snapshot, final int currentVersion) {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/vlingo-lattice/entity-cqrs#eventsourced
+  }
+
+  /*
+   * Answer the valid {@code AuthorState} instance if a snapshot should
+   * be taken and persisted along with applied {@code Source<T>} instance(s).
+   *
+   * @return AuthorState
+   */
+  @Override
+  protected AuthorState snapshot() {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/vlingo-lattice/entity-cqrs#eventsourced
+    return null;
+  }
+}
