@@ -41,8 +41,10 @@ public class DefaultStateStoreActorBuilder implements StoreActorBuilder {
                 DatabaseType.retrieveFromConfiguration(configuration)
                         .buildStorageDelegate(stage, STATE_STORE, configuration);
 
+        final Stage local = stage.world().stage();
+
         final DispatcherControl dispatcherControl =
-                stage.actorFor(DispatcherControl.class,
+                local.actorFor(DispatcherControl.class,
                         Definition.has(DispatcherControlActor.class,
                         new DispatcherControl.DispatcherControlInstantiator(dispatchers,
                                 (DispatcherControlDelegate) delegate, DefaultCheckConfirmationExpirationInterval,
@@ -52,7 +54,7 @@ public class DefaultStateStoreActorBuilder implements StoreActorBuilder {
                 new JDBCEntriesInstantWriter((JDBCStorageDelegate) delegate,
                        typed(dispatchers), dispatcherControl);
 
-        return (T) stage.actorFor(StateStore.class, JDBCStateStoreActor.class, delegate, entriesWriter);
+        return (T) local.actorFor(StateStore.class, JDBCStateStoreActor.class, delegate, entriesWriter);
     }
 
     @SuppressWarnings("unchecked")
