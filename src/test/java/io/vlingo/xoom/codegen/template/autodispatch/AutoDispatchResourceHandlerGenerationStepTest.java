@@ -58,6 +58,9 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
         final CodeGenerationParameter useAutoDispatch =
                 CodeGenerationParameter.of(USE_AUTO_DISPATCH, true);
 
+        final CodeGenerationParameter cqrs =
+                CodeGenerationParameter.of(CQRS, true);
+
         final CodeGenerationParameter firstAuthorRouteParameter =
                 CodeGenerationParameter.of(ROUTE_SIGNATURE, "changeAuthorName(final String id, final AuthorData authorData)")
                         .relate(ROUTE_HANDLER_INVOCATION, "changeAuthorNameHandler.handler.handle(author,authorData)")
@@ -108,7 +111,7 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
                         .relate(QUERIES_PROTOCOL, "io.vlingo.xoomapp.infrastructure.persistence.BookQueries")
                         .relate(QUERIES_ACTOR, "io.vlingo.xoomapp.infrastructure.persistence.BookQueriesActor");
 
-        return CodeGenerationParameters.from(authorResourceParameter, bookResourceParameter, useAutoDispatch);
+        return CodeGenerationParameters.from(authorResourceParameter, bookResourceParameter, useAutoDispatch, cqrs);
     }
 
     private static final String PROJECT_PATH =

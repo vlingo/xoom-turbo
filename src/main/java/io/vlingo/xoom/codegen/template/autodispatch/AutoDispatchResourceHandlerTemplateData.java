@@ -22,6 +22,7 @@ import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -86,6 +87,10 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
     private Set<String> resolveImports(final CodeGenerationContext context,
                                        final CodeGenerationParameter autoDispatchParameter,
                                        final String queryStoreProviderName) {
+        if(!context.parameterOf(CQRS, Boolean::valueOf)) {
+            return Collections.emptySet();
+        }
+
         final String queryStoreProviderQualifiedName =
                 ContentQuery.findFullyQualifiedClassName(STORE_PROVIDER,
                         queryStoreProviderName, context.contents());
