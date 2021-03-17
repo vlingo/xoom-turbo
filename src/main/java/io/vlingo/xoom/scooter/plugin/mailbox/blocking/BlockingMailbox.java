@@ -7,6 +7,10 @@
 
 package io.vlingo.xoom.scooter.plugin.mailbox.blocking;
 
+import io.vlingo.actors.Actor;
+import io.vlingo.actors.Mailbox;
+import io.vlingo.actors.Message;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
@@ -14,10 +18,6 @@ import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-
-import io.vlingo.actors.Actor;
-import io.vlingo.actors.Mailbox;
-import io.vlingo.actors.Message;
 
 public class BlockingMailbox implements Mailbox {
   public static final String Name = "blockingMailbox";

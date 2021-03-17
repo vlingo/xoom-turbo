@@ -85,7 +85,7 @@ public class RestResourceGenerationStepTest {
         Assert.assertEquals(10, contents.size());
         final Content authorResource= context.findContent(REST_RESOURCE, "AuthorResource");
         Assert.assertTrue(authorResource.contains("class AuthorResource : DynamicResourceHandler"));
-        Assert.assertTrue(authorResource.contains("Author.withName(stage(), name)"));
+        Assert.assertTrue(authorResource.contains("Author.withName(grid, name)"));
         Assert.assertTrue(authorResource.contains("package io.vlingo.xoomapp.infrastructure.resource"));
         Assert.assertTrue(authorResource.contains("return stage().actorOf(Author::class.java, stage().addressFactory().from(id), Definition.has(AuthorEntity::class.java, Definition.parameters(id)))"));
     }

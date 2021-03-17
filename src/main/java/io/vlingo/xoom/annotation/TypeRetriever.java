@@ -6,12 +6,6 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation;
 
-import java.lang.annotation.Annotation;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
@@ -21,6 +15,11 @@ import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
+import java.lang.annotation.Annotation;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TypeRetriever {
 

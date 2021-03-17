@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.codegen.template.bootstrap;
 
+import io.vlingo.xoom.codegen.template.storage.StorageType;
+
 import java.util.List;
 import java.util.stream.Collectors;
-
-import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 public class TypeRegistryParameter {
 

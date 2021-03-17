@@ -18,7 +18,7 @@ public class XoomInitializerTest {
 
     @Test
     public void testInitialization() throws Exception {
-        XoomInitializer.main(new String[]{});
+        XoomInitializer.main(new String[]{"node1"});
 
         try {
             new URL("http://127.0.0.1:18080").openConnection().connect();
@@ -28,9 +28,8 @@ public class XoomInitializerTest {
     }
 
     @After
-    public void tearDown() {
-        XoomInitializer.instance().server.shutDown();
-        XoomInitializer.instance().world.terminate();
+    public void tearDown() throws Exception {
+        XoomInitializer.instance().stopServer();
     }
 
 }

@@ -6,8 +6,6 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.storage;
 
-import java.util.List;
-
 import io.vlingo.actors.Definition;
 import io.vlingo.actors.Stage;
 import io.vlingo.symbio.Entry;
@@ -25,6 +23,8 @@ import io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor;
 import io.vlingo.symbio.store.journal.jdbc.JDBCJournalInstantWriter;
 import io.vlingo.symbio.store.journal.jdbc.JDBCJournalWriter;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
+
+import java.util.List;
 
 public class DefaultJournalActorBuilder implements StoreActorBuilder {
 

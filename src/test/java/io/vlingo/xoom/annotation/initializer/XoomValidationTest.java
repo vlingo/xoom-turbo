@@ -21,11 +21,7 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.annotation.initializer.AddressFactory.IdentityGenerator.DEFAULT;
-import static io.vlingo.xoom.annotation.initializer.AddressFactory.IdentityGenerator.RANDOM;
-import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.BASIC;
 import static java.util.stream.Collectors.toSet;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 public class XoomValidationTest {
@@ -84,32 +80,8 @@ public class XoomValidationTest {
         Validation.classVisibilityValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
     }
 
-    @Test
-    public void testThatAddressFactoryValidationPasses() {
-        final Element element = Mockito.mock(Element.class);
-        final Set<Element> elements = Stream.of(element).collect(toSet());
-        final Xoom xoom = createXoomAnnotation("annotation-test", true, BASIC, DEFAULT);
-        final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
-        when(annotatedElements.elementsWith(Mockito.eq(Xoom.class))).thenReturn(elements);
-        when(element.getAnnotation(eq(Xoom.class))).thenReturn(xoom);
-        new AddressFactoryValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
-    }
-
-    @Test(expected = ProcessingAnnotationException.class)
-    public void testThatAddressFactoryValidationFails() {
-        final Element element = Mockito.mock(Element.class);
-        final Set<Element> elements = Stream.of(element).collect(toSet());
-        final Xoom xoom = createXoomAnnotation("annotation-test", false, BASIC, RANDOM);
-        final AnnotatedElements annotatedElements = Mockito.mock(AnnotatedElements.class);
-        when(annotatedElements.elementsWith(Mockito.eq(Xoom.class))).thenReturn(elements);
-        when(element.getAnnotation(eq(Xoom.class))).thenReturn(xoom);
-        new AddressFactoryValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
-    }
-
     private Xoom createXoomAnnotation(final String name,
-                                      final boolean blocking,
-                                      final AddressFactory.Type addressFactoryType,
-                                      final AddressFactory.IdentityGenerator identityGenerator) {
+                                      final boolean blocking) {
       return new Xoom() {
 
             @Override
@@ -127,25 +99,6 @@ public class XoomValidationTest {
                 return blocking;
             }
 
-            @Override
-            public AddressFactory addressFactory() {
-                return new AddressFactory() {
-                    @Override
-                    public Class<? extends Annotation> annotationType() {
-                        return AddressFactory.class;
-                    }
-
-                    @Override
-                    public Type type() {
-                        return addressFactoryType;
-                    }
-
-                    @Override
-                    public IdentityGenerator generator() {
-                        return identityGenerator;
-                    }
-                };
-            }
         };
     }
 

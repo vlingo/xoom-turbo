@@ -7,16 +7,12 @@
 
 package io.vlingo.xoom.stepflow;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import io.vlingo.actors.Actor;
 import io.vlingo.common.Completes;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The default {@link Kernel} {@link Actor} implementation.

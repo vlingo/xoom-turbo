@@ -17,9 +17,6 @@ import static io.vlingo.xoom.codegen.parameter.Label.TARGET_FOLDER;
 
 public class ExternalFileLocationResolver implements FileLocationResolver {
 
-    private static final String[] SCHEMATA_FOLDER = {"src", "main", "vlingo","schemata"};
-    private static final String[] RESOURCE_FOLDER = {"src", "main", "resources"};
-
     @Override
     public String resolve(final CodeGenerationContext context,
                           final TemplateData templateData) {

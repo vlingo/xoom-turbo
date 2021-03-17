@@ -7,15 +7,15 @@
 
 package io.vlingo.xoom.storage;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-import java.util.function.Predicate;
-
 import io.vlingo.actors.Stage;
 import io.vlingo.symbio.store.common.jdbc.Configuration;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+import java.util.function.Predicate;
 
 public interface StoreActorBuilder {
 

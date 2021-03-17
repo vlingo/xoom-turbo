@@ -7,13 +7,13 @@
 
 package io.vlingo.xoom.stepflow;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.vlingo.actors.Actor;
 import io.vlingo.actors.Message;
 import io.vlingo.common.Completes;
 import io.vlingo.common.Scheduled;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The {@link FlowActor} is the default {@link Actor} implementation for a {@link StepFlow}.

@@ -7,11 +7,7 @@
 
 package io.vlingo.xoom.scooter.plugin.mailbox.blocking;
 
-import io.vlingo.actors.Configuration;
-import io.vlingo.actors.Dispatcher;
-import io.vlingo.actors.Mailbox;
-import io.vlingo.actors.MailboxProvider;
-import io.vlingo.actors.Registrar;
+import io.vlingo.actors.*;
 import io.vlingo.actors.plugin.AbstractPlugin;
 import io.vlingo.actors.plugin.Plugin;
 import io.vlingo.actors.plugin.PluginConfiguration;

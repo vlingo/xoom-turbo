@@ -2,11 +2,13 @@ package ${packageName};
 
 <#if modelProtocol?has_content>
 import io.vlingo.actors.Definition;
+import io.vlingo.actors.Address;
 </#if>
 <#if useAutoDispatch>
 import io.vlingo.actors.Logger;
 import io.vlingo.xoom.annotation.autodispatch.Handler;
 </#if>
+import io.vlingo.actors.Grid;
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
@@ -31,18 +33,22 @@ public class ${resourceName} extends DynamicResourceHandler implements ${autoDis
 public class ${resourceName} extends DynamicResourceHandler {
 </#if>
   <#if useAutoDispatch>
-  private final Stage $stage;
+  private final Grid $stage;
   private final Logger $logger;
+  <#else>
+  private final Grid grid;
   </#if>
   <#if queries?has_content && !queries.empty>
   private final ${queries.protocolName} $queries;
   </#if>
 
-  public ${resourceName}(final Stage stage) {
-      super(stage);
+  public ${resourceName}(final Grid grid) {
+      super(grid.world().stage());
       <#if useAutoDispatch>
-      this.$stage = super.stage();
+      this.$stage = grid;
       this.$logger = super.logger();
+      <#else>
+      this.grid = grid;
       </#if>
       <#if queries?has_content && !queries.empty>
       this.$queries = ${storeProviderName}.instance().${queries.attributeName};
@@ -90,7 +96,13 @@ public class ${resourceName} extends DynamicResourceHandler {
 
   <#if modelProtocol?has_content>
   private Completes<${modelProtocol}> resolve(final String id) {
-    return stage().actorOf(${modelProtocol}.class, stage().addressFactory().from(id), Definition.has(${modelActor}.class, Definition.parameters(id)));
+    <#if useAutoDispatch>
+    final Address address = $stage.addressFactory().from(id);
+    return $stage.actorOf(${modelProtocol}.class, address, Definition.has(${modelActor}.class, Definition.parameters(id)));
+    <#else>
+    final Address address = grid.addressFactory().from(id);
+    return grid.actorOf(${modelProtocol}.class, address, Definition.has(${modelActor}.class, Definition.parameters(id)));
+    </#if>
   }
   </#if>
 

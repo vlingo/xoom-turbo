@@ -8,9 +8,9 @@
 package io.vlingo.xoom.codegen.template.storage;
 
 
+import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
-import io.vlingo.xoom.codegen.template.TemplateData;
 
 import java.util.List;
 import java.util.stream.Collectors;

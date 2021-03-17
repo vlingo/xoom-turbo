@@ -27,8 +27,7 @@ public class XoomValidator {
     }
 
     public void validate(final ProcessingEnvironment environment, final AnnotatedElements annotatedElements) {
-        Arrays.asList(singularityValidation(), targetValidation(),
-                classVisibilityValidation(), new AddressFactoryValidation())
+        Arrays.asList(singularityValidation(), targetValidation(), classVisibilityValidation())
                 .forEach(validator -> validator.validate(environment, Xoom.class, annotatedElements));
     }
 

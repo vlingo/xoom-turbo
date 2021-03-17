@@ -4,27 +4,25 @@ package ${packageName};
 import ${import.qualifiedClassName};
 </#list>
 
-import io.vlingo.actors.Stage;
+import io.vlingo.actors.Grid;
 import io.vlingo.xoom.XoomInitializationAware;
-import io.vlingo.xoom.annotation.initializer.AddressFactory;
 import io.vlingo.xoom.annotation.initializer.Xoom;
 
-import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.UUID;
-
-@Xoom(name = "${appName}", addressFactory = @AddressFactory(type = UUID))
+@Xoom(name = "${appName}")
 <#if restResourcePackage?has_content>
 @ResourceHandlers(packages = "${restResourcePackage}")
 </#if>
 public class Bootstrap implements XoomInitializationAware {
 
   @Override
-  public void onInit(final Stage stage) {
+  public void onInit(final Grid grid) {
+    grid.quorumAchieved();
   }
 
 <#if hasProducerExchange>
   @Override
-  public io.vlingo.symbio.store.dispatch.Dispatcher exchangeDispatcher(final Stage stage) {
-     return ExchangeBootstrap.init(stage).dispatcher();
+  public io.vlingo.symbio.store.dispatch.Dispatcher exchangeDispatcher(final Grid grid) {
+     return ExchangeBootstrap.init(grid).dispatcher();
   }
 </#if>
 }

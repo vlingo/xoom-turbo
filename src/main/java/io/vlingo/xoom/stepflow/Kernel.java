@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.stepflow;
 
+import io.vlingo.common.Completes;
+
 import java.util.List;
 import java.util.Map;
-
-import io.vlingo.common.Completes;
 
 /**
  * <p>Kernels implement state machines and validate state mutations by comparing the current state of an object to a

@@ -22,7 +22,6 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-
 public class StoreProviderParameter {
 
     private final String className;
@@ -68,10 +67,10 @@ public class StoreProviderParameter {
                 resolveExchangeDispatcherAccess(internalGeneration, hasProducerExchange);
 
         final String projectionDispatcher =
-                PROJECTION_DISPATCHER_PROVIDER.resolveClassname() + ".using(stage).storeDispatcher";
+                PROJECTION_DISPATCHER_PROVIDER.resolveClassname() + ".using(grid.world().stage()).storeDispatcher";
 
         final List<String> arguments =
-                Stream.of("stage", typeRegistryObjectName).collect(toList());
+                Stream.of("grid.world().stage()", typeRegistryObjectName).collect(toList());
 
         if(!model.isQueryModel()) {
             if(useProjections) {
@@ -86,10 +85,10 @@ public class StoreProviderParameter {
     private String resolveExchangeDispatcherAccess(final Boolean internalGeneration,
                                                    final Boolean hasProducerExchange) {
         if(internalGeneration) {
-            return "initializer.exchangeDispatcher(stage)";
+            return "initializer.exchangeDispatcher(grid)";
         }
         if(hasProducerExchange) {
-            return EXCHANGE_BOOTSTRAP.resolveClassname() + ".init(stage).dispatcher()";
+            return EXCHANGE_BOOTSTRAP.resolveClassname() + ".init(grid).dispatcher()";
         }
         return "";
     }

@@ -1,6 +1,6 @@
 package ${packageName};
 
-import io.vlingo.actors.Stage;
+import io.vlingo.actors.Grid;
 import io.vlingo.xoom.actors.Settings;
 import io.vlingo.lattice.exchange.Exchange;
 import io.vlingo.xoom.exchange.ExchangeSettings;
@@ -21,7 +21,7 @@ public class ExchangeBootstrap {
 
   private final Dispatcher dispatcher;
 
-  public static ExchangeBootstrap init(final Stage stage) {
+  public static ExchangeBootstrap init(final Grid stage) {
     if(instance != null) {
       return instance;
     }

@@ -8,11 +8,10 @@
 package io.vlingo.xoom.codegen.template.projections;
 
 
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 
 import java.util.Iterator;
 import java.util.List;
@@ -20,10 +19,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.parameter.Label;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class ProjectToDescriptionParameter {
 

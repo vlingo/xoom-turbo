@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.codegen.template.bootstrap;
 
-import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.xoom.OperatingSystem;
+import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.content.TextBasedContent;
+import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
@@ -19,6 +19,7 @@ import org.mockito.Mockito;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
+import java.io.IOException;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
@@ -27,7 +28,7 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 public class BootstrapGenerationStepTest {
 
     @Test
-    public void testDefaultBootstrapGeneration() {
+    public void testThatDefaultBootstrapIsGenerated() throws IOException {
         final CodeGenerationContext context =
                 CodeGenerationContext.empty().with(PROJECTION_TYPE, ProjectionType.OPERATION_BASED.name());
 
@@ -36,19 +37,14 @@ public class BootstrapGenerationStepTest {
 
         new BootstrapGenerationStep().process(context);
 
+        final Content bootstrap = context.findContent(BOOTSTRAP, "Bootstrap");
+
         Assert.assertEquals(6, context.contents().size());
-        Assert.assertEquals("Bootstrap", context.contents().get(5).retrieveName());
-        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, ProjectionDispatcherProvider.using(stage).storeDispatcher)"));
-        Assert.assertTrue(context.contents().get(5).contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
-        Assert.assertTrue(context.contents().get(5).contains("final AuthorResource authorResource = new AuthorResource(stage);"));
-        Assert.assertTrue(context.contents().get(5).contains("final BookResource bookResource = new BookResource(stage);"));
-        Assert.assertTrue(context.contents().get(5).contains("authorResource.routes(),"));
-        Assert.assertTrue(context.contents().get(5).contains("bookResource.routes()"));
-        Assert.assertFalse(context.contents().get(5).contains("bookResource.routes(),"));
+        Assert.assertTrue(bootstrap.contains(TextExpectation.onJava().read("default-bootstrap")));
     }
 
     @Test
-    public void testAnnotatedBootstrapGeneration() {
+    public void testThatAnnotatedBootstrapIsGenerated() throws IOException {
         final CodeGenerationContext context =
                 CodeGenerationContext.empty().with(PROJECTION_TYPE, ProjectionType.OPERATION_BASED.name());
 
@@ -57,36 +53,29 @@ public class BootstrapGenerationStepTest {
 
         new BootstrapGenerationStep().process(context);
 
+        final Content bootstrap = context.findContent(BOOTSTRAP, "Bootstrap");
+
         Assert.assertEquals(6, context.contents().size());
-        Assert.assertEquals("Bootstrap", context.contents().get(5).retrieveName());
-        Assert.assertTrue(context.contents().get(5).contains("@ResourceHandlers(packages = \"io.vlingo.xoomapp.resource\")"));
-        Assert.assertEquals(Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "Bootstrap.java").toString(), ((TextBasedContent) context.contents().get(5)).file.getAbsolutePath());
+        Assert.assertTrue(bootstrap.contains(TextExpectation.onJava().read("annotated-bootstrap")));
     }
 
 
     @Test
-    public void testXoomInitializerBootstrapGeneration() {
+    public void testThatXoomInitializerIsGenerated() throws IOException {
         final CodeGenerationContext context =
                 CodeGenerationContext.using(Mockito.mock(Filer.class), Mockito.mock(Element.class))
                         .with(PROJECTION_TYPE, ProjectionType.NONE.name())
-                        .with(XOOM_INITIALIZER_NAME, "AnnotatedBootstrap")
-                        .with(ADDRESS_FACTORY, AddressFactoryType.BASIC.name())
-                        .with(IDENTITY_GENERATOR, IdentityGeneratorType.RANDOM.name());
+                        .with(XOOM_INITIALIZER_NAME, "AnnotatedBootstrap");
 
         loadParameters(context, false);
         loadContents(context);
 
         new BootstrapGenerationStep().process(context);
 
+        final Content xoomInitializer = context.findContent(XOOM_INITIALIZER, "XoomInitializer");
+
         Assert.assertEquals(6, context.contents().size());
-        Assert.assertEquals("XoomInitializer", context.contents().get(5).retrieveName());
-        Assert.assertTrue(context.contents().get(5).contains("import io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;"));
-        Assert.assertTrue(context.contents().get(5).contains("new BlockingMailboxPlugin().start(world);"));
-        Assert.assertTrue(context.contents().get(5).contains("world.stageNamed(\"xoom-app\")"));
-        Assert.assertTrue(context.contents().get(5).contains("new AnnotatedBootstrap();" ));
-        Assert.assertTrue(context.contents().get(5).contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, initializer.exchangeDispatcher(stage))"));
-        Assert.assertTrue(context.contents().get(5).contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
-        Assert.assertEquals("XoomInitializer.java", ((TextBasedContent) context.contents().get(5)).file.getName());
+        Assert.assertTrue(xoomInitializer.contains(TextExpectation.onJava().read("xoom-initializer")));
     }
 
     private void loadParameters(final CodeGenerationContext context, final Boolean useAnnotation) {

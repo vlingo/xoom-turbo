@@ -7,18 +7,17 @@
 
 package io.vlingo.xoom.annotation;
 
-import static javax.tools.Diagnostic.Kind.ERROR;
-
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 public abstract class AnnotationProcessor extends AbstractProcessor {
 

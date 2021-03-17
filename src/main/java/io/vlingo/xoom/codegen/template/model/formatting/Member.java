@@ -6,8 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.model.formatting;
 
-import static io.vlingo.xoom.codegen.language.Language.JAVA;
-import static io.vlingo.xoom.codegen.language.Language.KOTLIN;
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.model.FieldDetail;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +17,8 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import io.vlingo.xoom.codegen.language.Language;
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.template.model.FieldDetail;
+import static io.vlingo.xoom.codegen.language.Language.JAVA;
+import static io.vlingo.xoom.codegen.language.Language.KOTLIN;
 
 public class Member extends Formatters.Fields<List<String>> {
 

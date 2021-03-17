@@ -6,6 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.annotation;
 
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.Element;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,9 +15,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
 
 public class AnnotatedElements {
 

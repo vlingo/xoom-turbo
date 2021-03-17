@@ -6,18 +6,13 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.bootstrap;
 
-import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
@@ -30,31 +25,19 @@ public class XoomInitializerTemplateData extends BootstrapTemplateData {
         final String appName = context.parameterOf(APPLICATION_NAME);
         final String xoomInitializerClass = context.parameterOf(XOOM_INITIALIZER_NAME);
         final Boolean blockingMessaging = context.parameterOf(BLOCKING_MESSAGING, Boolean::valueOf);
-        final AddressFactoryType addressFactoryType = context.parameterOf(ADDRESS_FACTORY, AddressFactoryType::valueOf);
-        final IdentityGeneratorType identityGeneratorType = context.parameterOf(IDENTITY_GENERATOR, IdentityGeneratorType::valueOf);
-        final String stageInstantiationVariables = addressFactoryType.resolveParameters(appName, identityGeneratorType);
         final Boolean customInitialization = !xoomInitializerClass.equals(XOOM_INITIALIZER.resolveClassname());
 
-        loadImports(addressFactoryType, contents);
+        loadImports(contents);
 
         parameters().and(TemplateParameter.BLOCKING_MESSAGING, blockingMessaging)
                 .and(TemplateParameter.XOOM_INITIALIZER_CLASS, xoomInitializerClass)
                 .and(TemplateParameter.CUSTOM_INITIALIZATION, customInitialization)
                 .and(TemplateParameter.REST_RESOURCES, RestResourcesParameter.from(contents))
-                .and(TemplateParameter.STAGE_INSTANTIATION_VARIABLES, stageInstantiationVariables);
+                .and(TemplateParameter.APPLICATION_NAME, appName);
     }
 
-    private void loadImports(final AddressFactoryType addressFactoryType,
-                             final List<Content> contents) {
-
-        final Set<String> addressFactoryImports =
-                addressFactoryType.isBasic() ? Collections.emptySet() :
-                        Stream.of(addressFactoryType.qualifiedName,
-                                IdentityGeneratorType.class.getCanonicalName())
-                                .collect(Collectors.toSet());
-
-        parameters().addImports(addressFactoryImports)
-                .addImports(ContentQuery.findFullyQualifiedClassNames(contents, REST_RESOURCE, AUTO_DISPATCH_RESOURCE_HANDLER));
+    private void loadImports(final List<Content> contents) {
+        parameters().addImports(ContentQuery.findFullyQualifiedClassNames(contents, REST_RESOURCE, AUTO_DISPATCH_RESOURCE_HANDLER));
     }
 
     @Override

@@ -6,7 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom;
 
-import io.vlingo.actors.Stage;
+import io.vlingo.actors.Grid;
+import io.vlingo.cluster.model.Properties;
 import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.StaticFilesConfiguration;
 import io.vlingo.http.resource.feed.FeedConfiguration;
@@ -16,19 +17,7 @@ import io.vlingo.symbio.store.dispatch.NoOpDispatcher;
 
 public interface XoomInitializationAware {
 
-    Integer DEFAULT_PORT = 18080;
-
-    void onInit(final Stage stage);
-
-    default Configuration configureServer(final Stage stage, final String[] args) {
-        final int port = resolvePort(stage, args);
-        return Configuration.define().withPort(port);
-    }
-
-    @SuppressWarnings("rawtypes")
-    default Dispatcher exchangeDispatcher(final Stage stage) {
-        return new NoOpDispatcher();
-    }
+    void onInit(final Grid grid);
 
     /**
      * Answer an unconfigured {@code FeedConfiguration}.
@@ -54,12 +43,33 @@ public interface XoomInitializationAware {
       return StaticFilesConfiguration.define();
     }
 
-    default int resolvePort(final Stage stage, final String[] args) {
-        try {
-            return Integer.parseInt(args[0]);
-        } catch (final Exception e) {
-            System.out.println(stage.world().name() + ": Command line does not provide a valid port; defaulting to: " + DEFAULT_PORT);
-            return DEFAULT_PORT;
-        }
+    @SuppressWarnings("rawtypes")
+    default Dispatcher exchangeDispatcher(final Grid grid) {
+        return new NoOpDispatcher();
     }
+
+    default Configuration configureServer(final Grid grid, final String[] args) {
+        final String nodeName = parseNodeName(args);
+        final int port = resolveServerPort(grid, nodeName);
+        return Configuration.define().withPort(port);
+    }
+
+    default int resolveServerPort(final Grid grid, final String nodeName) {
+        final int port = Properties.instance.getInteger(nodeName, "server.port", 19090);
+        grid.world().defaultLogger().info(nodeName + " server running on " + port);
+        return port;
+    }
+
+    default String parseNodeName(final String[] args) {
+        if (args.length == 0) {
+            System.out.println("The node must be named with a command-line argument.");
+            System.exit(1);
+        } else if (args.length > 1) {
+            System.out.println("Too many arguments; provide node name only.");
+            System.exit(1);
+        }
+        return args[0];
+    }
+
+
 }

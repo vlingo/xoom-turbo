@@ -7,14 +7,14 @@
 
 package io.vlingo.xoom.storage;
 
-import java.util.List;
-
 import io.vlingo.actors.Stage;
 import io.vlingo.symbio.store.common.jdbc.Configuration;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
 import io.vlingo.symbio.store.journal.Journal;
 import io.vlingo.symbio.store.journal.inmemory.InMemoryJournalActor;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
+
+import java.util.List;
 
 public class InMemoryJournalActorBuilder implements StoreActorBuilder {
 

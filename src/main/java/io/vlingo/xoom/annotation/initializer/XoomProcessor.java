@@ -7,21 +7,15 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
-import java.util.stream.Stream;
-
-import javax.annotation.processing.Processor;
-
 import com.google.auto.service.AutoService;
-
 import io.vlingo.xoom.annotation.AnnotatedElements;
 import io.vlingo.xoom.annotation.AnnotationProcessor;
-import io.vlingo.xoom.annotation.autodispatch.AutoDispatch;
-import io.vlingo.xoom.annotation.autodispatch.AutoDispatchValidator;
-import io.vlingo.xoom.annotation.autodispatch.Model;
-import io.vlingo.xoom.annotation.autodispatch.Queries;
-import io.vlingo.xoom.annotation.autodispatch.Route;
+import io.vlingo.xoom.annotation.autodispatch.*;
 import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.annotation.persistence.PersistenceValidator;
+
+import javax.annotation.processing.Processor;
+import java.util.stream.Stream;
 
 @AutoService(Processor.class)
 public class XoomProcessor extends AnnotationProcessor {

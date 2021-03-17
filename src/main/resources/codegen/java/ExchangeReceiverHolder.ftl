@@ -1,7 +1,7 @@
 package ${packageName};
 
+import io.vlingo.actors.Grid;
 import io.vlingo.actors.Definition;
-import io.vlingo.actors.Stage;
 import io.vlingo.lattice.exchange.ExchangeReceiver;
 
 <#list imports as import>
@@ -16,9 +16,9 @@ public class ${exchangeReceiverHolderName} {
    */
   static class ${receiver.schemaTypeName} implements ExchangeReceiver<${receiver.localTypeName}> {
 
-    private final Stage stage;
+    private final Grid stage;
 
-    public ${receiver.schemaTypeName}(final Stage stage) {
+    public ${receiver.schemaTypeName}(final Grid stage) {
       this.stage = stage;
     }
 

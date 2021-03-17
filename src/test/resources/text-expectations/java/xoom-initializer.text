@@ -1,17 +1,18 @@
-package ${packageName};
+package io.vlingo.xoomapp;
 
 import io.vlingo.actors.Grid;
 import io.vlingo.actors.Stage;
 import io.vlingo.http.resource.*;
 import io.vlingo.cluster.model.Properties;
 import io.vlingo.xoom.XoomInitializationAware;
-<#if blockingMessaging>
 import io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;
-</#if>
 
-<#list imports as import>
-import ${import.qualifiedClassName};
-</#list>
+import io.vlingo.xoomapp.resource.BookResource;
+import io.vlingo.xoomapp.resource.AuthorResource;
+import io.vlingo.xoomapp.infrastructure.persistence.ProjectionDispatcherProvider;
+import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;
+import io.vlingo.xoomapp.infrastructure.persistence.CommandModelStateStoreProvider;
+import io.vlingo.lattice.model.stateful.StatefulTypeRegistry;
 
 import java.lang.Exception;
 import java.lang.Integer;
@@ -29,41 +30,26 @@ public class XoomInitializer implements XoomInitializationAware {
 
   public XoomInitializer(final String[] args) throws Exception {
     final XoomInitializationAware initializer =
-          <#if customInitialization>
-          new ${xoomInitializerClass}();
-          <#else>
-          this;
-          </#if>
+          new AnnotatedBootstrap();
 
-    grid = Grid.start("${appName}", initializer.parseNodeName(args));
-    <#if blockingMessaging>
+    grid = Grid.start("xoom-app", initializer.parseNodeName(args));
     new BlockingMailboxPlugin().start(grid.world());
-    </#if>
 
     initializer.onInit(grid);
 
-    <#list registries as registry>
-    final ${registry.className} ${registry.objectName} = new ${registry.className}(grid.world());
-    </#list>
-    <#list providers as provider>
-    ${provider.className}.using(${provider.arguments});
-    </#list>
+    final StatefulTypeRegistry statefulTypeRegistry = new StatefulTypeRegistry(grid.world());
+    QueryModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry);
+    CommandModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry, initializer.exchangeDispatcher(grid));
 
-    <#list restResources as restResource>
-    final ${restResource.className} ${restResource.objectName} = new ${restResource.className}(grid);
-    </#list>
+    final AuthorResource authorResource = new AuthorResource(grid);
+    final BookResource bookResource = new BookResource(grid);
 
     final Collection<Resource<?>> sseResources = Loader.resourcesFrom(initializer.sseConfiguration()).values();
     final Collection<Resource<?>> feedResources = Loader.resourcesFrom(initializer.feedConfiguration()).values();
     final Collection<Resource<?>> staticResources = Loader.resourcesFrom(initializer.staticFilesConfiguration()).values();
     final Collection<Resource<?>> restResources = Arrays.asList(
-          <#list restResources as restResource>
-              <#if restResource.last>
-              ${restResource.objectName}.routes()
-              <#else>
-              ${restResource.objectName}.routes(),
-              </#if>
-          </#list>
+              authorResource.routes(),
+              bookResource.routes()
     );
 
     final Resource[] resources =
@@ -79,7 +65,7 @@ public class XoomInitializer implements XoomInitializationAware {
          if (instance != null) {
         instance.server.stop();
         System.out.println("=========================");
-        System.out.println("Stopping ${appName}.");
+        System.out.println("Stopping xoom-app.");
         System.out.println("=========================");
         }
     }));
@@ -91,7 +77,7 @@ public class XoomInitializer implements XoomInitializationAware {
 
   public static void main(final String[] args) throws Exception {
     System.out.println("=========================");
-    System.out.println("service: ${appName}.");
+    System.out.println("service: xoom-app.");
     System.out.println("=========================");
     instance = new XoomInitializer(args);
   }
@@ -102,7 +88,7 @@ public class XoomInitializer implements XoomInitializationAware {
 
   void stopServer() throws Exception {
     if (instance == null) {
-      throw new IllegalStateException("${appName} server not running");
+      throw new IllegalStateException("xoom-app server not running");
     }
     instance.server.stop();
     instance.grid.world().terminate();

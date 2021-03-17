@@ -6,12 +6,6 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.storage;
 
-import static io.vlingo.symbio.store.state.StateStore.DefaultCheckConfirmationExpirationInterval;
-import static io.vlingo.symbio.store.state.StateStore.DefaultConfirmationExpiration;
-import static io.vlingo.xoom.annotation.persistence.Persistence.StorageType.STATE_STORE;
-
-import java.util.List;
-
 import io.vlingo.actors.Definition;
 import io.vlingo.actors.Stage;
 import io.vlingo.symbio.Entry;
@@ -29,6 +23,12 @@ import io.vlingo.symbio.store.state.jdbc.JDBCEntriesWriter;
 import io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor;
 import io.vlingo.symbio.store.state.jdbc.JDBCStorageDelegate;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
+
+import java.util.List;
+
+import static io.vlingo.symbio.store.state.StateStore.DefaultCheckConfirmationExpirationInterval;
+import static io.vlingo.symbio.store.state.StateStore.DefaultConfirmationExpiration;
+import static io.vlingo.xoom.annotation.persistence.Persistence.StorageType.STATE_STORE;
 
 public class DefaultStateStoreActorBuilder implements StoreActorBuilder {
 

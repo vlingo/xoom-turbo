@@ -7,13 +7,13 @@
 
 package io.vlingo.xoom.annotation.persistence;
 
+import io.vlingo.lattice.model.IdentifiedDomainEvent;
+import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import io.vlingo.lattice.model.IdentifiedDomainEvent;
-import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)

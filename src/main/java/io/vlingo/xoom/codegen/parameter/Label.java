@@ -33,8 +33,6 @@ public enum Label {
     REST_RESOURCES("resources"),
     MAIN_CLASS("main.class"),
     DEPLOYMENT("deployment"),
-    ADDRESS_FACTORY("address.factory"),
-    IDENTITY_GENERATOR("identity.generator"),
     BLOCKING_MESSAGING("blocking.messaging"),
     XOOM_INITIALIZER_NAME("xoom.initialization.classname"),
     COMMAND_MODEL_DATABASE("command.model.database"),

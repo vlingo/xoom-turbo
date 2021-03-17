@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.annotation.initializer;
 
-import io.vlingo.actors.Stage;
+import io.vlingo.actors.Grid;
 import io.vlingo.xoom.XoomInitializationAware;
 
 /**
@@ -17,13 +17,12 @@ import io.vlingo.xoom.XoomInitializationAware;
  *
  * @author Danilo Ambrosio
  */
-@Xoom(name = "annotated-boot", addressFactory = @AddressFactory(type = AddressFactory.Type.UUID, generator = AddressFactory.IdentityGenerator.RANDOM))
+@Xoom(name = "annotated-boot")
 @ResourceHandlers(packages = "io.vlingo.xoom.annotation.initializer.resources")
 public class AnnotatedBootTest implements XoomInitializationAware {
 
     @Override
-    public void onInit(final Stage stage) {
-        //To be invoked after Stage initialization...
-    }
+    public void onInit(Grid grid) {
 
+    }
 }

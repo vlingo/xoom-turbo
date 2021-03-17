@@ -40,8 +40,6 @@ public class XoomInitializerParameterResolver {
     public CodeGenerationParameters resolve() {
         return CodeGenerationParameters.from(PACKAGE, resolveBasePackage())
                 .add(APPLICATION_NAME, resolveApplicationName())
-                .add(ADDRESS_FACTORY, resolveAddressFactoryType())
-                .add(IDENTITY_GENERATOR, resolveIdentityGeneratorType())
                 .add(USE_ANNOTATIONS, Boolean.FALSE.toString())
                 .add(BLOCKING_MESSAGING, resolveBlockingMessaging())
                 .add(XOOM_INITIALIZER_NAME, resolveInitializerClass());
@@ -75,21 +73,6 @@ public class XoomInitializerParameterResolver {
 
     private String resolveBlockingMessaging() {
         return String.valueOf(bootstrapClass.getAnnotation(Xoom.class).blocking());
-    }
-
-    private String resolveAddressFactoryType() {
-        return bootstrapClass.getAnnotation(Xoom.class).addressFactory().type().name();
-    }
-
-    private String resolveIdentityGeneratorType() {
-        final Xoom xoomAnnotation =
-                bootstrapClass.getAnnotation(Xoom.class);
-
-        final AddressFactory.Type addressFactoryType =
-                xoomAnnotation.addressFactory().type();
-
-        return xoomAnnotation.addressFactory()
-                .generator().resolveWith(addressFactoryType).name();
     }
 
 }

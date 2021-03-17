@@ -6,18 +6,6 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.exchange;
 
-import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
-import static io.vlingo.xoom.codegen.parameter.Label.ROLE;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PRODUCER_EXCHANGES;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -25,6 +13,18 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static io.vlingo.xoom.codegen.parameter.Label.EXCHANGE;
+import static io.vlingo.xoom.codegen.parameter.Label.ROLE;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.PRODUCER_EXCHANGES;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
+import static java.util.stream.Collectors.toList;
 
 public class ExchangeDispatcherTemplateData extends TemplateData {
 
