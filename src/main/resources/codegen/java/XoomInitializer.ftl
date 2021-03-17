@@ -28,7 +28,7 @@ public class XoomInitializer implements XoomInitializationAware {
   private final Server server;
   private static XoomInitializer instance;
 
-  public XoomInitializer(final String[] args) throws Exception {
+  private XoomInitializer(final String[] args) throws Exception {
     final XoomInitializationAware initializer =
           <#if customInitialization>
           new ${xoomInitializerClass}();
@@ -100,6 +100,10 @@ public class XoomInitializer implements XoomInitializationAware {
     return instance;
   }
 
+  public Server server() {
+    return server;
+  }
+
   void stopServer() throws Exception {
     if (instance == null) {
       throw new IllegalStateException("${appName} server not running");
@@ -107,5 +111,4 @@ public class XoomInitializer implements XoomInitializationAware {
     instance.server.stop();
     instance.grid.world().terminate();
   }
-
 }
