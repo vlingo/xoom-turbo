@@ -1,5 +1,6 @@
 package io.vlingo.xoomapp;
 
+import io.vlingo.xoom.Boot;
 import io.vlingo.actors.Grid;
 import io.vlingo.actors.Stage;
 import io.vlingo.http.resource.*;
@@ -32,7 +33,7 @@ public class XoomInitializer implements XoomInitializationAware {
     final XoomInitializationAware initializer =
           new AnnotatedBootstrap();
 
-    grid = Grid.start("xoom-app", initializer.parseNodeName(args));
+    grid = Boot.startGrid("xoom-app", initializer.parseNodeName(args));
     new BlockingMailboxPlugin().start(grid.world());
 
     initializer.onInit(grid);
@@ -72,7 +73,6 @@ public class XoomInitializer implements XoomInitializationAware {
   }
 
   public void onInit(final Grid grid) {
-    grid.quorumAchieved();
   }
 
   public static void main(final String[] args) throws Exception {

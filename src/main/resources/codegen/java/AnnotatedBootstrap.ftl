@@ -16,7 +16,6 @@ public class Bootstrap implements XoomInitializationAware {
 
   @Override
   public void onInit(final Grid grid) {
-    grid.quorumAchieved();
   }
 
 <#if hasProducerExchange>

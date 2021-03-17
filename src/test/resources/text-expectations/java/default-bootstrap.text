@@ -7,6 +7,7 @@ import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider
 import io.vlingo.xoomapp.infrastructure.persistence.CommandModelStateStoreProvider;
 import io.vlingo.lattice.model.stateful.StatefulTypeRegistry;
 
+import io.vlingo.xoom.Boot;
 import io.vlingo.actors.Grid;
 import io.vlingo.cluster.model.Properties;
 import io.vlingo.common.identity.IdentityGeneratorType;
@@ -22,7 +23,7 @@ public class Bootstrap {
   private static Bootstrap instance;
 
   public Bootstrap(final String nodeName) throws Exception {
-    grid = Grid.start("xoom-app", nodeName);
+    grid = Boot.startGrid("xoom-app", nodeName);
 
     final StatefulTypeRegistry statefulTypeRegistry = new StatefulTypeRegistry(grid.world());
     QueryModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry);
@@ -48,8 +49,6 @@ public class Bootstrap {
         System.out.println("=========================");
       }
     }));
-
-    grid.quorumAchieved();
   }
 
   void stopServer() throws Exception {

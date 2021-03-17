@@ -4,6 +4,7 @@ package ${packageName};
 import ${import.qualifiedClassName};
 </#list>
 
+import io.vlingo.xoom.Boot;
 import io.vlingo.actors.Grid;
 import io.vlingo.cluster.model.Properties;
 import io.vlingo.common.identity.IdentityGeneratorType;
@@ -19,7 +20,7 @@ public class Bootstrap {
   private static Bootstrap instance;
 
   public Bootstrap(final String nodeName) throws Exception {
-    grid = Grid.start("${appName}", nodeName);
+    grid = Boot.startGrid("${appName}", nodeName);
 
 <#list registries as registry>
     final ${registry.className} ${registry.objectName} = new ${registry.className}(grid.world());
@@ -57,8 +58,6 @@ public class Bootstrap {
         System.out.println("=========================");
       }
     }));
-
-    grid.quorumAchieved();
   }
 
   void stopServer() throws Exception {

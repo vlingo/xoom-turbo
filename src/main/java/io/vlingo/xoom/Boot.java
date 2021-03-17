@@ -7,7 +7,9 @@
 
 package io.vlingo.xoom;
 
+import io.vlingo.actors.Grid;
 import io.vlingo.actors.World;
+import io.vlingo.cluster.model.Properties;
 
 public class Boot {
 
@@ -15,7 +17,6 @@ public class Boot {
 
     public static void main(final String[] args) {
         final String name = args.length > 0 ? args[0] : "vlingo-xoom";
-
         xoomBootWorld = start(name);
     }
 
@@ -34,5 +35,14 @@ public class Boot {
 
         return xoomBootWorld;
     }
+
+    public static Grid startGrid(final String worldName, final String nodeName) throws Exception {
+        final Grid grid = Grid.start(worldName, nodeName);
+        if(Properties.instance.seedNodes().size() == 1) {
+            grid.quorumAchieved();
+        }
+        return grid;
+    }
+
 
 }
