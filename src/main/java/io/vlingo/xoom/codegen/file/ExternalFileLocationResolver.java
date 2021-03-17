@@ -12,7 +12,6 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
 import static io.vlingo.xoom.codegen.parameter.Label.TARGET_FOLDER;
 
 public class ExternalFileLocationResolver implements FileLocationResolver {
@@ -20,16 +19,13 @@ public class ExternalFileLocationResolver implements FileLocationResolver {
     @Override
     public String resolve(final CodeGenerationContext context,
                           final TemplateData templateData) {
+        final String targetFolder =
+                context.parameterOf(TARGET_FOLDER);
 
-        final String projectPath = resolveProjectPath(context);
-        final String[] relativeSourcePath = RelativeSourcePathResolver.resolveWith(context, templateData);
-        return Paths.get(projectPath, relativeSourcePath).toString();
-    }
+        final String[] relativeSourcePath =
+                RelativeSourcePathResolver.resolveWith(context, templateData);
 
-    private String resolveProjectPath(final CodeGenerationContext context) {
-        final String appName = context.parameterOf(APPLICATION_NAME);
-        final String targetFolder = context.parameterOf(TARGET_FOLDER);
-        return Paths.get(targetFolder, appName).toString();
+        return Paths.get(targetFolder, relativeSourcePath).toString();
     }
 
 }
