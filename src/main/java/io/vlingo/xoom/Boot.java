@@ -38,11 +38,14 @@ public class Boot {
 
     public static Grid startGrid(final String worldName, final String nodeName) throws Exception {
         final Grid grid = Grid.start(worldName, nodeName);
-        if(Properties.instance.seedNodes().size() == 1) {
+        if(isRunningOnSingleNode()) {
             grid.quorumAchieved();
         }
         return grid;
     }
 
+    public static boolean isRunningOnSingleNode() {
+        return Properties.instance.seedNodes().size() == 1;
+    }
 
 }

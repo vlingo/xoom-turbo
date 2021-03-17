@@ -62,6 +62,9 @@ public interface XoomInitializationAware {
 
     default String parseNodeName(final String[] args) {
         if (args.length == 0) {
+            if(Boot.isRunningOnSingleNode()) {
+                return Properties.instance.seedNodes().get(0);
+            }
             System.out.println("The node must be named with a command-line argument.");
             System.exit(1);
         } else if (args.length > 1) {
