@@ -21,9 +21,9 @@ public class XoomInitializerTest {
         XoomInitializer.main(new String[]{});
 
         try {
-            new URL("http://127.0.0.1:19090").openConnection().connect();
+            new URL("http://127.0.0.1:18080").openConnection().connect();
         } catch (IOException e) {
-            fail("Server did not open port 19090:" + e.getMessage());
+            fail("Server did not open port 18080:" + e.getMessage());
         }
     }
 

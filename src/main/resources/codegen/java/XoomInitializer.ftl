@@ -36,7 +36,7 @@ public class XoomInitializer implements XoomInitializationAware {
           this;
           </#if>
 
-    grid = Boot.start("${appName}", initializer.parseNodeName(args));
+    grid = Boot.start("${appName}", initializer.parseNodeName(args), initializer.clusterProperties());
     <#if blockingMessaging>
     new BlockingMailboxPlugin().start(grid.world());
     </#if>

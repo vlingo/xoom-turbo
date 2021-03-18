@@ -33,7 +33,7 @@ public class XoomInitializer implements XoomInitializationAware {
     final XoomInitializationAware initializer =
           new AnnotatedBootstrap();
 
-    grid = Boot.start("xoom-app", initializer.parseNodeName(args));
+    grid = Boot.start("xoom-app", initializer.parseNodeName(args), initializer.clusterProperties());
     new BlockingMailboxPlugin().start(grid.world());
 
     initializer.onInit(grid);

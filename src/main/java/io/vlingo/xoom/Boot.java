@@ -12,14 +12,11 @@ import io.vlingo.actors.Grid;
 import io.vlingo.cluster.ClusterProperties;
 import io.vlingo.cluster.model.Properties;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 public class Boot {
 
     private static String resolvedNodeName;
-    private static final Properties clusterProperties = loadClusterProperties();
-    private static final String clusterPropertiesPath = "/vlingo-cluster.properties";
+    private static Properties clusterProperties;
+    private static final int defaultPort = 18080;
 
     /**
      * Answers a new {@code World} with the given {@code name} and that is configured with
@@ -32,7 +29,19 @@ public class Boot {
     }
 
     public static Grid start(final String worldName, final String nodeName) throws Exception {
+        return start(worldName, nodeName, null);
+    }
+
+    public static Grid start(final String worldName, final String nodeName, final Properties customProperties) throws Exception {
+        if(customProperties == null) {
+            System.out.println("Unable to find vlingo-cluster.properties. Using default cluster settings.");
+            clusterProperties = ClusterProperties.oneNode();
+        } else {
+            clusterProperties = customProperties;
+        }
+
         resolvedNodeName = resolveNodeName(nodeName);
+
         final Configuration configuration = Configuration.define();
         final Grid grid = Grid.start(worldName, configuration, clusterProperties, resolvedNodeName);
 
@@ -55,16 +64,7 @@ public class Boot {
     }
 
     public static int serverPort() {
-        return clusterProperties.getInteger(resolvedNodeName, "server.port", 19090);
-    }
-
-    private static Properties loadClusterProperties() {
-        if(Files.exists(Paths.get(clusterPropertiesPath))) {
-            return Properties.instance;
-        } else {
-            System.out.println("Unable to find vlingo-cluster.properties. Using default cluster configuration.");
-            return ClusterProperties.oneNode();
-        }
+        return clusterProperties.getInteger(resolvedNodeName, "server.port", defaultPort);
     }
 
 }

@@ -7,6 +7,7 @@
 package io.vlingo.xoom;
 
 import io.vlingo.actors.Grid;
+import io.vlingo.cluster.model.Properties;
 import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.StaticFilesConfiguration;
 import io.vlingo.http.resource.feed.FeedConfiguration;
@@ -66,6 +67,10 @@ public interface XoomInitializationAware {
             System.exit(1);
         }
         return args[0];
+    }
+
+    default Properties clusterProperties() {
+        return null;
     }
 
 
