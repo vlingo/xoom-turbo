@@ -38,6 +38,8 @@ public class XoomInitializer implements XoomInitializationAware {
 
     initializer.onInit(grid);
 
+    final Configuration serverConfiguration = initializer.configureServer(grid, args);
+
     final StatefulTypeRegistry statefulTypeRegistry = new StatefulTypeRegistry(grid.world());
     QueryModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry);
     CommandModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry, initializer.exchangeDispatcher(grid));
@@ -58,7 +60,6 @@ public class XoomInitializer implements XoomInitializationAware {
                     .flatMap(Collection::stream).collect(Collectors.toList())
                     .toArray(new Resource<?>[]{});
 
-    final Configuration serverConfiguration = initializer.configureServer(grid, args);
 
     server = Server.startWith(grid.world().stage(), Resources.are(resources), serverConfiguration.port(), serverConfiguration.sizing(), serverConfiguration.timing());
 

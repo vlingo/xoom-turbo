@@ -43,6 +43,8 @@ public class XoomInitializer implements XoomInitializationAware {
 
     initializer.onInit(grid);
 
+    final Configuration serverConfiguration = initializer.configureServer(grid, args);
+
     <#list registries as registry>
     final ${registry.className} ${registry.objectName} = new ${registry.className}(grid.world());
     </#list>
@@ -72,7 +74,6 @@ public class XoomInitializer implements XoomInitializationAware {
                     .flatMap(Collection::stream).collect(Collectors.toList())
                     .toArray(new Resource<?>[]{});
 
-    final Configuration serverConfiguration = initializer.configureServer(grid, args);
 
     server = Server.startWith(grid.world().stage(), Resources.are(resources), serverConfiguration.port(), serverConfiguration.sizing(), serverConfiguration.timing());
 
