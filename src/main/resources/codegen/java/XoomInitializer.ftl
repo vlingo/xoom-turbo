@@ -104,7 +104,7 @@ public class XoomInitializer implements XoomInitializationAware {
     return server;
   }
 
-  void stopServer() throws Exception {
+  public void stopServer() throws Exception {
     if (instance == null) {
       throw new IllegalStateException("${appName} server not running");
     }
