@@ -12,10 +12,14 @@ import io.vlingo.actors.Grid;
 import io.vlingo.cluster.ClusterProperties;
 import io.vlingo.cluster.model.Properties;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class Boot {
 
     private static String resolvedNodeName;
     private static final Properties clusterProperties = loadClusterProperties();
+    private static final String clusterPropertiesPath = "/vlingo-cluster.properties";
 
     /**
      * Answers a new {@code World} with the given {@code name} and that is configured with
@@ -55,9 +59,10 @@ public class Boot {
     }
 
     private static Properties loadClusterProperties() {
-        try {
+        if(Files.exists(Paths.get(clusterPropertiesPath))) {
             return Properties.instance;
-        } catch (final IllegalStateException exception) {
+        } else {
+            System.out.println("Unable to find vlingo-cluster.properties. Using default cluster configuration.");
             return ClusterProperties.oneNode();
         }
     }

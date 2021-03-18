@@ -18,10 +18,10 @@ public class XoomInitializerTest {
 
     @Test
     public void testInitialization() throws Exception {
-        XoomInitializer.main(new String[]{"node1"});
+        XoomInitializer.main(new String[]{});
 
         try {
-            new URL("http://127.0.0.1:18080").openConnection().connect();
+            new URL("http://127.0.0.1:19090").openConnection().connect();
         } catch (IOException e) {
             fail("Server did not open port 19090:" + e.getMessage());
         }
