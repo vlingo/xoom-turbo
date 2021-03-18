@@ -20,7 +20,7 @@ public class Bootstrap {
   private static Bootstrap instance;
 
   public Bootstrap(final String nodeName) throws Exception {
-    grid = Boot.startGrid("${appName}", nodeName);
+    grid = Boot.start("${appName}", nodeName);
 
 <#list registries as registry>
     final ${registry.className} ${registry.objectName} = new ${registry.className}(grid.world());
@@ -46,7 +46,7 @@ public class Bootstrap {
     </#list>
     );
 
-    server = Server.startWith(grid.world().stage(), allResources, resolveServerPort(nodeName), Sizing.define(), Timing.define());
+    server = Server.startWith(grid.world().stage(), allResources, Boot.serverPort(), Sizing.define(), Timing.define());
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       if (instance != null) {
@@ -60,17 +60,11 @@ public class Bootstrap {
     }));
   }
 
-  void stopServer() throws Exception {
+  public void stopServer() throws Exception {
     if (instance == null) {
       throw new IllegalStateException("${appName} server not running");
     }
     instance.server.stop();
-  }
-
-  private int resolveServerPort(final String nodeName) {
-    final int port = Properties.instance.getInteger(nodeName, "server.port", 19090);
-    System.out.println(nodeName + " server running on " + port);
-    return port;
   }
 
   public static void main(final String[] args) throws Exception {
@@ -83,14 +77,10 @@ public class Bootstrap {
 
   private static String parseNodeName(final String[] args) {
     if (args.length == 0) {
-      if(Boot.isRunningOnSingleNode()) {
-        return Properties.instance.seedNodes().get(0);
-      }
-      System.err.println("The node must be named with a command-line argument.");
-      System.exit(1);
+        return null;
     } else if (args.length > 1) {
-      System.err.println("Too many arguments; provide node name only.");
-      System.exit(1);
+        System.out.println("Too many arguments; provide node name only.");
+        System.exit(1);
     }
     return args[0];
   }

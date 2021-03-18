@@ -7,45 +7,59 @@
 
 package io.vlingo.xoom;
 
+import io.vlingo.actors.Configuration;
 import io.vlingo.actors.Grid;
-import io.vlingo.actors.World;
+import io.vlingo.cluster.ClusterProperties;
 import io.vlingo.cluster.model.Properties;
 
 public class Boot {
 
-    private static World xoomBootWorld;
-
-    public static void main(final String[] args) {
-        final String name = args.length > 0 ? args[0] : "vlingo-xoom";
-        xoomBootWorld = start(name);
-    }
-
-    public static World xoomBootWorld() {
-        return xoomBootWorld;
-    }
+    private static String resolvedNodeName;
+    private static final Properties clusterProperties = loadClusterProperties();
 
     /**
      * Answers a new {@code World} with the given {@code name} and that is configured with
-     * the contents of the {@code vlingo-zoom.properties} file.
-     * @param name the {@code String} name to assign to the new {@code World} instance
+     * the contents of the {@code vlingo-xoom.properties} file.
+     * @param worldName the {@code String} name to assign to the new {@code World} instance
      * @return {@code World}
      */
-    public static World start(final String name) {
-        xoomBootWorld = World.start(name);
-
-        return xoomBootWorld;
+    public static Grid start(final String worldName) throws Exception {
+        return start(worldName, null);
     }
 
-    public static Grid startGrid(final String worldName, final String nodeName) throws Exception {
-        final Grid grid = Grid.start(worldName, nodeName);
+    public static Grid start(final String worldName, final String nodeName) throws Exception {
+        resolvedNodeName = resolveNodeName(nodeName);
+        final Configuration configuration = Configuration.define();
+        final Grid grid = Grid.start(worldName, configuration, clusterProperties, resolvedNodeName);
+
         if(isRunningOnSingleNode()) {
             grid.quorumAchieved();
         }
+
         return grid;
     }
 
+    private static String resolveNodeName(final String nodeName) {
+        if(nodeName == null || nodeName.isEmpty()) {
+            return clusterProperties.seedNodes().get(0);
+        }
+        return nodeName;
+    }
+
     public static boolean isRunningOnSingleNode() {
-        return Properties.instance.seedNodes().size() == 1;
+        return clusterProperties.seedNodes().size() == 1;
+    }
+
+    public static int serverPort() {
+        return clusterProperties.getInteger(resolvedNodeName, "server.port", 19090);
+    }
+
+    private static Properties loadClusterProperties() {
+        try {
+            return Properties.instance;
+        } catch (final IllegalStateException exception) {
+            return ClusterProperties.oneNode();
+        }
     }
 
 }

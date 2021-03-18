@@ -7,7 +7,6 @@
 package io.vlingo.xoom;
 
 import io.vlingo.actors.Grid;
-import io.vlingo.cluster.model.Properties;
 import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.StaticFilesConfiguration;
 import io.vlingo.http.resource.feed.FeedConfiguration;
@@ -49,24 +48,19 @@ public interface XoomInitializationAware {
     }
 
     default Configuration configureServer(final Grid grid, final String[] args) {
-        final String nodeName = parseNodeName(args);
-        final int port = resolveServerPort(grid, nodeName);
+        final int port = resolveServerPort(grid);
         return Configuration.define().withPort(port);
     }
 
-    default int resolveServerPort(final Grid grid, final String nodeName) {
-        final int port = Properties.instance.getInteger(nodeName, "server.port", 19090);
-        grid.world().defaultLogger().info(nodeName + " server running on " + port);
+    default int resolveServerPort(final Grid grid) {
+        final int port = Boot.serverPort();
+        grid.world().defaultLogger().info("Server running on " + port);
         return port;
     }
 
     default String parseNodeName(final String[] args) {
         if (args.length == 0) {
-            if(Boot.isRunningOnSingleNode()) {
-                return Properties.instance.seedNodes().get(0);
-            }
-            System.out.println("The node must be named with a command-line argument.");
-            System.exit(1);
+            return null;
         } else if (args.length > 1) {
             System.out.println("Too many arguments; provide node name only.");
             System.exit(1);

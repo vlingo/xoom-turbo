@@ -16,18 +16,8 @@ public class BootTest {
     private static final String BootWorldName = "test-boot";
 
     @Test
-    public void testThatWorldBoots() {
-        Boot.main(new String[] { BootWorldName });
-
-        final World world = Boot.xoomBootWorld();
-
-        assertEquals(BootWorldName, world.name());
-    }
-
-    @Test
-    public void testThatWorldStarts() {
-        final World world = Boot.start(BootWorldName);
-
+    public void testThatWorldStarts() throws Exception {
+        final World world = Boot.start(BootWorldName).world();
         assertEquals(BootWorldName, world.name());
     }
 
