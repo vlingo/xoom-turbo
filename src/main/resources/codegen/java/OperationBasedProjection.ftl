@@ -6,6 +6,7 @@ import ${import.qualifiedClassName};
 
 import io.vlingo.lattice.model.projection.Projectable;
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
+import io.vlingo.symbio.store.state.StateStore;
 
 /**
  * See
@@ -17,7 +18,11 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   private String becauseOf;
 
   public ${projectionName}() {
-    super(${storeProviderName}.instance().store);
+    this(${storeProviderName}.instance().store);
+  }
+
+  public ${projectionName}(final StateStore stateStore) {
+    super(stateStore);
   }
 
   @Override

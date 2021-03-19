@@ -7,6 +7,7 @@ import io.vlingo.xoomapp.model.book.BookState;
 import io.vlingo.lattice.model.projection.Projectable;
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
 import io.vlingo.symbio.Source;
+import io.vlingo.symbio.store.state.StateStore;
 
 /**
  * See
@@ -17,7 +18,11 @@ import io.vlingo.symbio.Source;
 public class BookProjectionActor extends StateStoreProjectionActor<BookData> {
 
   public BookProjectionActor() {
-    super(QueryModelStateStoreProvider.instance().store);
+    this(QueryModelStateStoreProvider.instance().store);
+  }
+
+  public BookProjectionActor(final StateStore stateStore) {
+    super(stateStore);
   }
 
   @Override
