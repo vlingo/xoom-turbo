@@ -26,7 +26,7 @@ public interface Handler {
 
     @FunctionalInterface
     interface Five<A, B, C, D, E> extends Handler {
-        A handle(A a, B b, C c, D d, E e);
+        A handle(B b, C c, D d, E e);
     }
 
 }
