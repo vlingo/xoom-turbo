@@ -6,6 +6,9 @@ The VLINGO/XOOM provides a JVM microframework for the VLINGO/PLATFORM that accel
 
 Docs: https://docs.vlingo.io/vlingo-xoom
 
+### Important
+If using snapshot builds [follow these instructions](https://github.com/vlingo/vlingo-platform#snapshots-repository) or you will experience failures.
+
 ### Bintray
 
 ```xml
