@@ -9,8 +9,8 @@ package io.vlingo.xoom;
 
 import io.vlingo.actors.Configuration;
 import io.vlingo.actors.Grid;
-import io.vlingo.cluster.ClusterProperties;
 import io.vlingo.cluster.model.Properties;
+import io.vlingo.lattice.grid.GridClusterProperties;
 
 public class Boot {
 
@@ -34,8 +34,8 @@ public class Boot {
 
     public static Grid start(final String worldName, final String nodeName, final Properties customProperties) throws Exception {
         if(customProperties == null) {
-            System.out.println("Unable to find vlingo-cluster.properties. Using default cluster settings.");
-            clusterProperties = ClusterProperties.oneNode();
+            System.out.println("Unable to find vlingo-cluster.properties. Using default grid cluster settings.");
+            clusterProperties = GridClusterProperties.oneNode();
         } else {
             clusterProperties = customProperties;
         }
