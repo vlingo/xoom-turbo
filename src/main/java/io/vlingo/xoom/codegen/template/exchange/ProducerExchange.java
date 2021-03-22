@@ -14,19 +14,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ProducerExchangesParameter {
+public class ProducerExchange {
 
     private final String name;
     private final Set<String> events;
 
-    public static List<ProducerExchangesParameter> from(final List<CodeGenerationParameter> exchanges) {
+    public static List<ProducerExchange> from(final List<CodeGenerationParameter> exchanges) {
         return exchanges.stream().map(exchange -> exchange.value).distinct()
-                .map(name -> new ProducerExchangesParameter(name, exchanges))
+                .map(name -> new ProducerExchange(name, exchanges))
                 .collect(Collectors.toList());
     }
 
-    private ProducerExchangesParameter(final String exchangeName,
-                                       final List<CodeGenerationParameter> allExchangeParameters) {
+    private ProducerExchange(final String exchangeName,
+                             final List<CodeGenerationParameter> allExchangeParameters) {
         this.name = exchangeName;
         this.events = allExchangeParameters.stream().filter(exchange -> exchange.value.equals(exchangeName))
                         .flatMap(exchange -> exchange.retrieveAllRelated(Label.DOMAIN_EVENT))

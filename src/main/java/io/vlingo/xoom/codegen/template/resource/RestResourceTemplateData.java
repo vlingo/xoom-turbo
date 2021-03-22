@@ -16,7 +16,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.codegen.template.storage.Model;
-import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
+import io.vlingo.xoom.codegen.template.storage.Queries;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
@@ -56,8 +56,8 @@ public class RestResourceTemplateData extends TemplateData {
         final String uriRoot =
                 aggregateParameter.retrieveRelatedValue(Label.URI_ROOT);
 
-        final QueriesParameter queriesParameter =
-                QueriesParameter.from(aggregateParameter, contents, useCQRS);
+        final Queries queries =
+                Queries.from(aggregateParameter, contents, useCQRS);
 
         final Function<TemplateParameters, Object> modelProtocolResolver =
                 params -> requireModelTypes(aggregateParameter) ? aggregateName : "";
@@ -67,8 +67,8 @@ public class RestResourceTemplateData extends TemplateData {
         }
 
         return TemplateParameters.with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
-                .and(QUERIES, queriesParameter).and(PACKAGE_NAME, packageName).and(USE_CQRS, useCQRS)
-                .and(ROUTE_DECLARATIONS, RouteDeclarationParameter.from(aggregateParameter))
+                .and(QUERIES, queries).and(PACKAGE_NAME, packageName).and(USE_CQRS, useCQRS)
+                .and(ROUTE_DECLARATIONS, RouteDeclaration.from(aggregateParameter))
                 .addImports(resolveImports(aggregateParameter, contents, useCQRS))
                 .and(MODEL_ACTOR, AGGREGATE.resolveClassname(aggregateName))
                 .and(STORE_PROVIDER_NAME, resolveQueryStoreProviderName())

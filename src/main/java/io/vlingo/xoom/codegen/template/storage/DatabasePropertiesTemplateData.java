@@ -37,7 +37,7 @@ public class DatabasePropertiesTemplateData extends TemplateData {
                             TemplateParameter.QUERY_DATABASE_PARAMETER :
                             TemplateParameter.DEFAULT_DATABASE_PARAMETER;
 
-            parameters.and(parameter, new DatabaseParameter(entry.getValue()));
+            parameters.and(parameter, new Database(entry.getValue()));
         });
 
         return parameters;

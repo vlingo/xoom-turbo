@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
 import static java.util.stream.Collectors.toList;
 
-public class RouteDeclarationParameter {
+public class RouteDeclaration {
 
     private final boolean last;
     private final String path;
@@ -31,18 +31,18 @@ public class RouteDeclarationParameter {
     private final String signature;
     private final List<String> parameterTypes = new ArrayList<>();
 
-    public static List<RouteDeclarationParameter> from(final CodeGenerationParameter mainParameter) {
+    public static List<RouteDeclaration> from(final CodeGenerationParameter mainParameter) {
         final List<CodeGenerationParameter> routeSignatures =
                 mainParameter.retrieveAllRelated(Label.ROUTE_SIGNATURE).collect(toList());
 
         return IntStream.range(0, routeSignatures.size()).mapToObj(index ->
-                new RouteDeclarationParameter(index, routeSignatures.size(), routeSignatures.get(index)))
+                new RouteDeclaration(index, routeSignatures.size(), routeSignatures.get(index)))
                 .collect(Collectors.toList());
     }
 
-    private RouteDeclarationParameter(final int routeIndex,
-                                      final int numberOfRoutes,
-                                      final CodeGenerationParameter routeSignatureParameter) {
+    private RouteDeclaration(final int routeIndex,
+                             final int numberOfRoutes,
+                             final CodeGenerationParameter routeSignatureParameter) {
         this.signature = RouteDetail.resolveMethodSignature(routeSignatureParameter);
         this.handlerName = resolveHandlerName();
         this.path = PathFormatter.formatAbsoluteRoutePath(routeSignatureParameter);

@@ -22,30 +22,30 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-public class StoreProviderParameter {
+public class StoreProvider {
 
     private final String className;
     private final String arguments;
 
-    public static List<StoreProviderParameter> from(final StorageType storageType,
-                                                    final Boolean useCQRS,
-                                                    final Boolean useProjections,
-                                                    final Boolean internalGeneration,
-                                                    final Boolean hasProducerExchange) {
+    public static List<StoreProvider> from(final StorageType storageType,
+                                           final Boolean useCQRS,
+                                           final Boolean useProjections,
+                                           final Boolean internalGeneration,
+                                           final Boolean hasProducerExchange) {
         if(!storageType.isEnabled()) {
             return Collections.emptyList();
         }
 
         return Model.applicableTo(useCQRS)
-                .map(model -> new StoreProviderParameter(storageType, model, useProjections, internalGeneration, hasProducerExchange))
+                .map(model -> new StoreProvider(storageType, model, useProjections, internalGeneration, hasProducerExchange))
                 .collect(toList());
     }
 
-    private StoreProviderParameter(final StorageType storageType,
-                                   final Model model,
-                                   final Boolean useProjections,
-                                   final Boolean internalGeneration,
-                                   final Boolean hasProducerExchange) {
+    private StoreProvider(final StorageType storageType,
+                          final Model model,
+                          final Boolean useProjections,
+                          final Boolean internalGeneration,
+                          final Boolean hasProducerExchange) {
         final TemplateParameters parameters =
                 TemplateParameters.with(STORAGE_TYPE, storageType)
                         .and(MODEL, model);

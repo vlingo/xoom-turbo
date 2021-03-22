@@ -12,20 +12,20 @@ import io.vlingo.xoom.codegen.template.storage.StorageType;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TypeRegistryParameter {
+public class TypeRegistry {
 
     private final String className;
     private final String objectName;
 
-    public static List<TypeRegistryParameter> from(final StorageType storageType, final Boolean useCQRS) {
+    public static List<TypeRegistry> from(final StorageType storageType, final Boolean useCQRS) {
         return storageType.findRelatedStorageTypes(useCQRS)
                 .map(relatedStorageType ->
-                        new TypeRegistryParameter(relatedStorageType.typeRegistryClassName,
+                        new TypeRegistry(relatedStorageType.typeRegistryClassName,
                                 relatedStorageType.typeRegistryObjectName())
                 ).collect(Collectors.toList());
     }
 
-    private TypeRegistryParameter(String className, String objectName) {
+    private TypeRegistry(String className, String objectName) {
         this.className = className;
         this.objectName = objectName;
     }

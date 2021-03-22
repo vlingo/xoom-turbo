@@ -32,7 +32,7 @@ public class XoomInitializerTemplateData extends BootstrapTemplateData {
         parameters().and(TemplateParameter.BLOCKING_MESSAGING, blockingMessaging)
                 .and(TemplateParameter.XOOM_INITIALIZER_CLASS, xoomInitializerClass)
                 .and(TemplateParameter.CUSTOM_INITIALIZATION, customInitialization)
-                .and(TemplateParameter.REST_RESOURCES, RestResourcesParameter.from(contents))
+                .and(TemplateParameter.REST_RESOURCES, RestResource.from(contents))
                 .and(TemplateParameter.APPLICATION_NAME, appName);
     }
 

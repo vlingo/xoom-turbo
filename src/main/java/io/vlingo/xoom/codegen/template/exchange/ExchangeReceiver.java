@@ -24,7 +24,7 @@ import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.VALUE_OBJECT_INITIALIZER;
 
-public class ExchangeReceiversParameter {
+public class ExchangeReceiver {
 
     private final String schemaTypeName;
     private final String localTypeName;
@@ -34,18 +34,18 @@ public class ExchangeReceiversParameter {
     private final List<String> valueObjectInitializers;
 
     private final boolean modelFactoryMethod;
-    public static List<ExchangeReceiversParameter> from(final Language language,
-                                                        final CodeGenerationParameter exchange,
-                                                        final List<CodeGenerationParameter> valueObjects) {
+    public static List<ExchangeReceiver> from(final Language language,
+                                              final CodeGenerationParameter exchange,
+                                              final List<CodeGenerationParameter> valueObjects) {
         return exchange.retrieveAllRelated(Label.RECEIVER)
-                .map(receiver -> new ExchangeReceiversParameter(language, exchange, receiver, valueObjects))
+                .map(receiver -> new ExchangeReceiver(language, exchange, receiver, valueObjects))
                 .collect(Collectors.toList());
     }
 
-    private ExchangeReceiversParameter(final Language language,
-                                       final CodeGenerationParameter exchange,
-                                       final CodeGenerationParameter receiver,
-                                       final List<CodeGenerationParameter> valueObjects) {
+    private ExchangeReceiver(final Language language,
+                             final CodeGenerationParameter exchange,
+                             final CodeGenerationParameter receiver,
+                             final List<CodeGenerationParameter> valueObjects) {
         final CodeGenerationParameter aggregateMethod =
                 AggregateDetail.methodWithName(exchange.parent(), receiver.retrieveRelatedValue(MODEL_METHOD));
 

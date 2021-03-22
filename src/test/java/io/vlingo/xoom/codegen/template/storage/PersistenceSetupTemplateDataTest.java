@@ -89,16 +89,16 @@ public class PersistenceSetupTemplateDataTest {
         Assert.assertTrue(persistenceSetupParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
         Assert.assertTrue(persistenceSetupParameters.hasImport("io.vlingo.xoomapp.infrastructure.BookData"));
 
-        Assert.assertEquals("BookState", persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).getSourceClass());
-        Assert.assertFalse(persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(0).isLast());
-        Assert.assertEquals("AuthorState", persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).getSourceClass());
-        Assert.assertTrue(persistenceSetupParameters.<List<AdapterParameter>>find(ADAPTERS).get(1).isLast());
-        Assert.assertEquals("AuthorProjectionActor", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getActor());
-        Assert.assertEquals("AuthorRated.class", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).getCauses());
-        Assert.assertFalse(persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(0).isLast());
-        Assert.assertEquals("BookProjectionActor", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getActor());
-        Assert.assertEquals("BookRented.class, BookPurchased.class", persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).getCauses());
-        Assert.assertTrue(persistenceSetupParameters.<List<ProjectionParameter>>find(PROJECTIONS).get(1).isLast());
+        Assert.assertEquals("BookState", persistenceSetupParameters.<List<Adapter>>find(ADAPTERS).get(0).getSourceClass());
+        Assert.assertFalse(persistenceSetupParameters.<List<Adapter>>find(ADAPTERS).get(0).isLast());
+        Assert.assertEquals("AuthorState", persistenceSetupParameters.<List<Adapter>>find(ADAPTERS).get(1).getSourceClass());
+        Assert.assertTrue(persistenceSetupParameters.<List<Adapter>>find(ADAPTERS).get(1).isLast());
+        Assert.assertEquals("AuthorProjectionActor", persistenceSetupParameters.<List<Projection>>find(PROJECTIONS).get(0).getActor());
+        Assert.assertEquals("AuthorRated.class", persistenceSetupParameters.<List<Projection>>find(PROJECTIONS).get(0).getCauses());
+        Assert.assertFalse(persistenceSetupParameters.<List<Projection>>find(PROJECTIONS).get(0).isLast());
+        Assert.assertEquals("BookProjectionActor", persistenceSetupParameters.<List<Projection>>find(PROJECTIONS).get(1).getActor());
+        Assert.assertEquals("BookRented.class, BookPurchased.class", persistenceSetupParameters.<List<Projection>>find(PROJECTIONS).get(1).getCauses());
+        Assert.assertTrue(persistenceSetupParameters.<List<Projection>>find(PROJECTIONS).get(1).isLast());
         Assert.assertEquals("PersistenceSetup", persistenceSetupData.filename());
         Assert.assertEquals("AuthorData.class, BookData.class", persistenceSetupParameters.find(DATA_OBJECTS));
         Assert.assertTrue(persistenceSetupParameters.find(REQUIRE_ADAPTERS));

@@ -12,12 +12,12 @@ import io.vlingo.xoom.codegen.parameter.Label;
 
 import static io.vlingo.xoom.codegen.CodeGenerationSetup.DEFAULT_SCHEMA_VERSION;
 
-public class SchemaParameter {
+public class Schema {
 
     public final String reference;
     public final String file;
 
-    public SchemaParameter(final CodeGenerationParameter schema) {
+    public Schema(final CodeGenerationParameter schema) {
         if(!schema.isLabeled(Label.SCHEMA)) {
             throw new IllegalArgumentException("A schema parameter is expected.");
         }
@@ -25,8 +25,8 @@ public class SchemaParameter {
         this.file = null;
     }
 
-    public SchemaParameter(final String schemaGroup,
-                           final CodeGenerationParameter publishedLanguage) {
+    public Schema(final String schemaGroup,
+                  final CodeGenerationParameter publishedLanguage) {
         if(! (publishedLanguage.isLabeled(Label.DOMAIN_EVENT) || publishedLanguage.isLabeled(Label.VALUE_OBJECT))) {
             throw new IllegalArgumentException("A Domain Event or Value Object parameter is expected.");
         }

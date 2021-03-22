@@ -14,23 +14,23 @@ import io.vlingo.xoom.codegen.template.model.domainevent.DomainEventDetail;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EventMissingFieldParameter {
+public class EventMissingField {
 
   private final String fieldName;
   private final String defaultValue;
 
-  public static List<EventMissingFieldParameter> from(final CodeGenerationParameter method) {
+  public static List<EventMissingField> from(final CodeGenerationParameter method) {
     final CodeGenerationParameter aggregate = method.parent(Label.AGGREGATE);
     final String eventName = method.retrieveRelatedValue(Label.DOMAIN_EVENT);
     final CodeGenerationParameter domainEvent = AggregateDetail.eventWithName(aggregate, eventName);
     return method.retrieveAllRelated(Label.METHOD_PARAMETER)
             .filter(methodParameter -> !DomainEventDetail.hasField(domainEvent, methodParameter.value))
-            .map(parameter -> new EventMissingFieldParameter(aggregate, parameter.value))
+            .map(parameter -> new EventMissingField(aggregate, parameter.value))
             .collect(Collectors.toList());
   }
 
-  private EventMissingFieldParameter(final CodeGenerationParameter aggregate,
-                                     final String fieldName) {
+  private EventMissingField(final CodeGenerationParameter aggregate,
+                            final String fieldName) {
     this.fieldName = fieldName;
     this.defaultValue = FieldDetail.resolveDefaultValue(aggregate, fieldName);
   }

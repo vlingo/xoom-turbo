@@ -15,19 +15,19 @@ import static io.vlingo.xoom.codegen.parameter.Label.DOMAIN_EVENT;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static java.util.stream.Collectors.toList;
 
-public class SourcedEventParameter {
+public class SourcedEvent {
 
     private final String entityName;
     private final String domainEventName;
 
-    public static List<SourcedEventParameter> from(final CodeGenerationParameter aggregate) {
+    public static List<SourcedEvent> from(final CodeGenerationParameter aggregate) {
         return aggregate.retrieveAllRelated(DOMAIN_EVENT)
-                .map(event -> new SourcedEventParameter(aggregate, event))
+                .map(event -> new SourcedEvent(aggregate, event))
                 .collect(toList());
     }
 
-    private SourcedEventParameter(final CodeGenerationParameter aggregate,
-                                  final CodeGenerationParameter event) {
+    private SourcedEvent(final CodeGenerationParameter aggregate,
+                         final CodeGenerationParameter event) {
         this.domainEventName = event.value;
         this.entityName = AGGREGATE.resolveClassname(aggregate.value);
     }

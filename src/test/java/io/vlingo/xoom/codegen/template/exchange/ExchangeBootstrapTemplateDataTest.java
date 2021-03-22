@@ -31,15 +31,15 @@ public class ExchangeBootstrapTemplateDataTest {
         Assert.assertEquals("io.vlingo.xoomapp.infrastructure.exchange", parameters.find(PACKAGE_NAME));
         Assert.assertEquals("authorExchange, bookExchange", parameters.find(PRODUCER_EXCHANGES));
 
-        final List<ExchangesParameter> exchangesParameters = data.parameters().find(EXCHANGES);
+        final List<Exchange> exchanges = data.parameters().find(EXCHANGES);
 
-        Assert.assertEquals(3, exchangesParameters.size());
-        Assert.assertTrue(exchangesParameters.stream().anyMatch(param -> param.getName().equals("author-exchange")));
-        Assert.assertTrue(exchangesParameters.stream().anyMatch(param -> param.getName().equals("book-exchange")));
-        Assert.assertTrue(exchangesParameters.stream().anyMatch(param -> param.getName().equals("otherapp-exchange")));
+        Assert.assertEquals(3, exchanges.size());
+        Assert.assertTrue(exchanges.stream().anyMatch(param -> param.getName().equals("author-exchange")));
+        Assert.assertTrue(exchanges.stream().anyMatch(param -> param.getName().equals("book-exchange")));
+        Assert.assertTrue(exchanges.stream().anyMatch(param -> param.getName().equals("otherapp-exchange")));
 
-        final ExchangesParameter otherAppExchange =
-                exchangesParameters.stream().filter(param -> param.getName().equals("otherapp-exchange")).findFirst().get();
+        final Exchange otherAppExchange =
+                exchanges.stream().filter(param -> param.getName().equals("otherapp-exchange")).findFirst().get();
 
         Assert.assertEquals("otherappExchange", otherAppExchange.getVariableName());
         Assert.assertEquals("otherappExchangeSettings", otherAppExchange.getSettingsName());
@@ -54,8 +54,8 @@ public class ExchangeBootstrapTemplateDataTest {
 
         Assert.assertEquals("new AuthorConsumerAdapter(\"vlingo:xoom:io.vlingo.otherapp:OtherAggregateRemoved:0.0.3\")", schemaRemovedCovey.getAdapterInstantiation());
 
-        final ExchangesParameter authorExchange =
-                exchangesParameters.stream().filter(param -> param.getName().equals("author-exchange")).findFirst().get();
+        final Exchange authorExchange =
+                exchanges.stream().filter(param -> param.getName().equals("author-exchange")).findFirst().get();
 
         Assert.assertEquals("authorExchange", authorExchange.getVariableName());
         Assert.assertEquals("authorExchangeSettings", authorExchange.getSettingsName());

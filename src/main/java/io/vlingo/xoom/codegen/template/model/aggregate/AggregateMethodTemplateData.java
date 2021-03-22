@@ -40,7 +40,7 @@ public class AggregateMethodTemplateData extends TemplateData {
                         .and(DOMAIN_EVENT_NAME, method.retrieveRelatedValue(DOMAIN_EVENT))
                         .and(METHOD_INVOCATION_PARAMETERS, AGGREGATE_METHOD_INVOCATION.format(method))
                         .and(METHOD_PARAMETERS, SIGNATURE_DECLARATION.format(method))
-                        .and(SOURCED_EVENTS, SourcedEventParameter.from(method.parent()))
+                        .and(SOURCED_EVENTS, SourcedEvent.from(method.parent()))
                         .and(STATE_NAME, TemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(AGGREGATE).value));
     }
 

@@ -23,7 +23,7 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
-public class ProjectToDescriptionParameter {
+public class ProjectToDescription {
 
     private static final String FIRST_BECAUSE_OF_PLACEHOLDER = "\"%s name here\"";
     private static final String SECOND_BECAUSE_OF_PLACEHOLDER = "\"Another %s name here\"";
@@ -33,17 +33,17 @@ public class ProjectToDescriptionParameter {
     private final boolean lastParameter;
     private final String projectionClassName;
 
-    public static List<ProjectToDescriptionParameter> from(final List<CodeGenerationParameter> projectionActors)  {
+    public static List<ProjectToDescription> from(final List<CodeGenerationParameter> projectionActors)  {
         return IntStream.range(0, projectionActors.size()).mapToObj(index ->{
                 final CodeGenerationParameter projectionActor = projectionActors.get(index);
                 final Set<String> eventNames = projectionActor.retrieveAllRelated(Label.SOURCE)
                         .map(source -> source.value).map(String::trim).collect(toSet());
-                return new ProjectToDescriptionParameter(index, projectionActors.size(), projectionActor.value, eventNames);
+                return new ProjectToDescription(index, projectionActors.size(), projectionActor.value, eventNames);
         }).collect(toList());
     }
 
-    public static List<ProjectToDescriptionParameter> from(final ProjectionType projectionType,
-                                                           final List<Content> contents) {
+    public static List<ProjectToDescription> from(final ProjectionType projectionType,
+                                                  final List<Content> contents) {
         final Set<String> aggregateProtocols =
                 ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents);
 
@@ -58,21 +58,21 @@ public class ProjectToDescriptionParameter {
             final String becauseOf =
                     buildCauseTypesExpression(aggregateProtocol, projectionType, contents);
 
-            return new ProjectToDescriptionParameter(index, aggregateProtocols.size(), projectionName, becauseOf);
+            return new ProjectToDescription(index, aggregateProtocols.size(), projectionName, becauseOf);
         }).collect(toList());
     }
 
-    private ProjectToDescriptionParameter(final int index,
-                                          final int numberOfProtocols,
-                                          final String projectionClassName,
-                                          final Set<String> eventNames) {
+    private ProjectToDescription(final int index,
+                                 final int numberOfProtocols,
+                                 final String projectionClassName,
+                                 final Set<String> eventNames) {
         this(index, numberOfProtocols, projectionClassName, formatEventNames(eventNames));
     }
 
-    private ProjectToDescriptionParameter(final int index,
-                                          final int numberOfProtocols,
-                                          final String projectionClassName,
-                                          final String joinedTypes) {
+    private ProjectToDescription(final int index,
+                                 final int numberOfProtocols,
+                                 final String projectionClassName,
+                                 final String joinedTypes) {
         this.projectionClassName = projectionClassName;
         this.lastParameter = index == numberOfProtocols - 1;
         this.joinedTypes = joinedTypes;

@@ -60,23 +60,23 @@ public class SchemataPluginTemplateData extends TemplateData {
                 .map(ex -> ex.retrieveOneRelated(SCHEMA_GROUP).value).findFirst().orElse("");
     }
 
-    private List<SchemaParameter> retrieveConsumerSchemas(final List<CodeGenerationParameter> exchanges) {
+    private List<Schema> retrieveConsumerSchemas(final List<CodeGenerationParameter> exchanges) {
         return exchanges.stream().filter(ex -> ex.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer())
                 .flatMap(ex -> ex.retrieveAllRelated(RECEIVER)).flatMap(ex -> ex.retrieveAllRelated(SCHEMA))
-                .map(schema -> new SchemaParameter(schema)).collect(Collectors.toList());
+                .map(schema -> new Schema(schema)).collect(Collectors.toList());
     }
 
-    private List<SchemaParameter> retrieveProducerSchemas(final String schemaGroup,
-                                                          final List<CodeGenerationParameter> exchanges,
-                                                          final List<CodeGenerationParameter> valueObjects) {
-        final Stream<SchemaParameter> valueObjectSchemas =
+    private List<Schema> retrieveProducerSchemas(final String schemaGroup,
+                                                 final List<CodeGenerationParameter> exchanges,
+                                                 final List<CodeGenerationParameter> valueObjects) {
+        final Stream<Schema> valueObjectSchemas =
                 ValueObjectDetail.orderByDependency(valueObjects.stream())
-                        .map(vo -> new SchemaParameter(schemaGroup, vo));
+                        .map(vo -> new Schema(schemaGroup, vo));
 
-        final Stream<SchemaParameter> domainEventSchemas =
+        final Stream<Schema> domainEventSchemas =
                 exchanges.stream().filter(ex -> ex.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer())
                         .flatMap(ex -> ex.retrieveAllRelated(DOMAIN_EVENT))
-                        .map(event -> new SchemaParameter(schemaGroup, event));
+                        .map(event -> new Schema(schemaGroup, event));
 
         return Stream.of(valueObjectSchemas, domainEventSchemas).flatMap(s -> s).collect(Collectors.toList());
     }

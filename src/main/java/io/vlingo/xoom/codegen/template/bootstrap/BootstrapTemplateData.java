@@ -76,17 +76,17 @@ public abstract class BootstrapTemplateData extends TemplateData {
         final Set<ImportParameter> imports =
                 loadImports(storageType, context.contents(), useCQRS, useAnnotations);
 
-        final List<TypeRegistryParameter> typeRegistryParameters =
-                TypeRegistryParameter.from(storageType, useCQRS);
+        final List<TypeRegistry> typeRegistries =
+                TypeRegistry.from(storageType, useCQRS);
 
-        final List<StoreProviderParameter> storeProviderParameters =
-                StoreProviderParameter.from(storageType, useCQRS, projectionType.isProjectionEnabled(),
+        final List<StoreProvider> storeProviders =
+                StoreProvider.from(storageType, useCQRS, projectionType.isProjectionEnabled(),
                         context.isInternalGeneration(), hasProducerExchange);
 
         return this.parameters.and(IMPORTS, imports)
                 .and(PACKAGE_NAME, packageName)
-                .and(PROVIDERS, storeProviderParameters)
-                .and(TYPE_REGISTRIES, typeRegistryParameters)
+                .and(PROVIDERS, storeProviders)
+                .and(TYPE_REGISTRIES, typeRegistries)
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(TemplateParameter.APPLICATION_NAME, context.parameterOf(APPLICATION_NAME))
                 .and(TemplateParameter.USE_ANNOTATIONS, context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf))

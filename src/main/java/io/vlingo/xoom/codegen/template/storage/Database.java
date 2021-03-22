@@ -6,11 +6,11 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.storage;
 
-public class DatabaseParameter {
+public class Database {
 
     private final DatabaseType databaseType;
 
-    public DatabaseParameter(final DatabaseType databaseType) {
+    public Database(final DatabaseType databaseType) {
         this.databaseType = databaseType;
     }
 

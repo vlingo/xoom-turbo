@@ -44,11 +44,11 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
                                                      final List<Content> contents) {
         final String packageName = ContentQuery.findPackage(PROJECTION, contents);
 
-        final List<ProjectToDescriptionParameter> projectToDescriptionParameters =
-                ProjectToDescriptionParameter.from(projectionActors.collect(Collectors.toList()));
+        final List<ProjectToDescription> projectToDescriptionEntries =
+                ProjectToDescription.from(projectionActors.collect(Collectors.toList()));
 
         this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionParameters);
+                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionEntries);
     }
 
     private ProjectionDispatcherProviderTemplateData(final String basePackage,
@@ -56,11 +56,11 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
                                                      final List<Content> contents) {
         final String packageName = resolvePackage(basePackage);
 
-        final List<ProjectToDescriptionParameter> projectToDescriptionParameters =
-                ProjectToDescriptionParameter.from(projectionType, contents);
+        final List<ProjectToDescription> projectToDescriptionEntries =
+                ProjectToDescription.from(projectionType, contents);
 
         this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionParameters)
+                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionEntries)
                 .addImports(ContentQuery.findFullyQualifiedClassNames(DOMAIN_EVENT, contents));
     }
 

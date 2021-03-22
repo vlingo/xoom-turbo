@@ -17,21 +17,21 @@ import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 
-public class StorageProviderParameter {
+public class StorageProvider {
 
     private final String name;
     private final boolean useProjections;
 
-    private StorageProviderParameter(final TemplateParameters parameters) {
+    private StorageProvider(final TemplateParameters parameters) {
         this.name = parameters.find(STORE_PROVIDER_NAME);
         final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
         final Model model = parameters.find(MODEL);
         this.useProjections = projectionType.isProjectionEnabled() && model.isCommandModel();
     }
 
-    public static List<StorageProviderParameter> from(final List<TemplateData> templateData) {
+    public static List<StorageProvider> from(final List<TemplateData> templateData) {
         return templateData.stream()
-                .map(data -> new StorageProviderParameter(data.parameters()))
+                .map(data -> new StorageProvider(data.parameters()))
                 .collect(Collectors.toList());
     }
 

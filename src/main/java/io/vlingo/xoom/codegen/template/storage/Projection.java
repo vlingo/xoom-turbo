@@ -18,28 +18,28 @@ import java.util.stream.IntStream;
 
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
-public class ProjectionParameter {
+public class Projection {
 
     private final String actor;
     private final String causes;
     private final Boolean last;
 
-    public static List<ProjectionParameter> from(final List<Content> contents) {
+    public static List<Projection> from(final List<Content> contents) {
         final List<Content> protocols =
                 ContentQuery.filterByStandard(AGGREGATE_PROTOCOL, contents)
                 .collect(Collectors.toList());
 
-        final IntFunction<ProjectionParameter> mapper =
-                index -> new ProjectionParameter(index, protocols.get(index),
+        final IntFunction<Projection> mapper =
+                index -> new Projection(index, protocols.get(index),
                         contents, protocols.size());
 
         return IntStream.range(0, protocols.size()).mapToObj(mapper).collect(Collectors.toList());
     }
 
-    private ProjectionParameter(final int index,
-                                final Content protocol,
-                                final List<Content> contents,
-                                final int numberOfProjections) {
+    private Projection(final int index,
+                       final Content protocol,
+                       final List<Content> contents,
+                       final int numberOfProjections) {
         this.causes = joinEvents(protocol, contents);
         this.last = index == numberOfProjections - 1;
         this.actor = PROJECTION.resolveClassname(protocol.retrieveName());

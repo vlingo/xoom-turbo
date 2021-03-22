@@ -13,20 +13,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ExchangesParameter {
+public class Exchange {
 
     private final String name;
     private final String exchangeVariableName;
     private final Set<CoveyParameter> coveys;
 
-    public static List<ExchangesParameter> from(final List<CodeGenerationParameter> exchanges) {
+    public static List<Exchange> from(final List<CodeGenerationParameter> exchanges) {
         return exchanges.stream().map(exchange -> exchange.value).distinct()
-                .map(exchangeName -> new ExchangesParameter(exchangeName, exchanges))
+                .map(exchangeName -> new Exchange(exchangeName, exchanges))
                 .collect(Collectors.toList());
     }
 
-    public ExchangesParameter(final String exchangeName,
-                              final List<CodeGenerationParameter> allExchangeParameters) {
+    public Exchange(final String exchangeName,
+                    final List<CodeGenerationParameter> allExchangeParameters) {
         this.name = exchangeName;
         this.exchangeVariableName = Formatter.formatExchangeVariableName(exchangeName);
         this.coveys = resolveCoveyParameters(exchangeName, allExchangeParameters);

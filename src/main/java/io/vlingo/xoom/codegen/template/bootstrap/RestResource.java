@@ -20,13 +20,13 @@ import static io.vlingo.xoom.codegen.template.TemplateStandard.AUTO_DISPATCH_RES
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
 import static java.util.stream.Collectors.toList;
 
-public class RestResourcesParameter {
+public class RestResource {
 
     private final String className;
     private final String objectName;
     private final boolean last;
 
-    public static List<RestResourcesParameter> from(final List<Content> contents) {
+    public static List<RestResource> from(final List<Content> contents) {
         final Set<String> classNames =
                 ContentQuery.findClassNames(contents, REST_RESOURCE,
                         AUTO_DISPATCH_RESOURCE_HANDLER);
@@ -34,13 +34,13 @@ public class RestResourcesParameter {
         final Iterator<String> iterator = classNames.iterator();
 
         return IntStream.range(0, classNames.size()).mapToObj(index ->
-                new RestResourcesParameter(iterator.next(), index,
+                new RestResource(iterator.next(), index,
                         classNames.size())).collect(toList());
     }
 
-    private RestResourcesParameter(final String restResourceName,
-                                  final int resourceIndex,
-                                  final int numberOfResources) {
+    private RestResource(final String restResourceName,
+                         final int resourceIndex,
+                         final int numberOfResources) {
         this.className = restResourceName;
         this.objectName = ClassFormatter.simpleNameToAttribute(restResourceName);
         this.last = resourceIndex == numberOfResources - 1;

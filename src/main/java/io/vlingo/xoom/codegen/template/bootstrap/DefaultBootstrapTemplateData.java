@@ -25,7 +25,7 @@ public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
                 ContentQuery.findFullyQualifiedClassNames(context.contents(),
                         REST_RESOURCE, AUTO_DISPATCH_RESOURCE_HANDLER);
 
-        parameters().and(REST_RESOURCES, RestResourcesParameter.from(context.contents()))
+        parameters().and(REST_RESOURCES, RestResource.from(context.contents()))
                 .addImports(qualifiedNames);
     }
 

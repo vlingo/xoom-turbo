@@ -33,11 +33,11 @@ public class ExchangeDispatcherTemplateDataTest {
         Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.model.book.BookSoldOut"));
         Assert.assertTrue(parameters.hasImport("io.vlingo.xoomapp.model.book.BookPurchased"));
 
-        final List<ProducerExchangesParameter> exchanges = parameters.find(PRODUCER_EXCHANGES);
+        final List<ProducerExchange> exchanges = parameters.find(PRODUCER_EXCHANGES);
 
         Assert.assertEquals(2, exchanges.size());
 
-        final ProducerExchangesParameter authorExchange =
+        final ProducerExchange authorExchange =
             exchanges.stream().filter(exchange -> exchange.getName().equals("author-exchange")).findFirst().get();
 
         Assert.assertEquals(2, authorExchange.getEvents().size());

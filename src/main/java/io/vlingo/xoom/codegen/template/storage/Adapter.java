@@ -19,26 +19,26 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.ADAPTER_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.SOURCE_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.ADAPTER;
 
-public class AdapterParameter {
+public class Adapter {
 
     private final String sourceClass;
     private final String adapterClass;
     private final boolean last;
 
-    private AdapterParameter(final int index,
-                             final int numberOfAdapters,
-                             final String sourceClass,
-                             final String adapterClass) {
+    private Adapter(final int index,
+                    final int numberOfAdapters,
+                    final String sourceClass,
+                    final String adapterClass) {
         this.sourceClass = sourceClass;
         this.adapterClass = adapterClass;
         this.last = index == numberOfAdapters - 1;
     }
 
-    private AdapterParameter(final int index, final int numberOfAdapters, final TemplateParameters parameters) {
+    private Adapter(final int index, final int numberOfAdapters, final TemplateParameters parameters) {
         this(index, numberOfAdapters, parameters.find(SOURCE_NAME), parameters.find(ADAPTER_NAME));
     }
 
-    public static List<AdapterParameter> from(final List<TemplateData> templatesData) {
+    public static List<Adapter> from(final List<TemplateData> templatesData) {
         final Predicate<TemplateData> filter =
                 templateData -> templateData.hasStandard(ADAPTER);
 
@@ -47,7 +47,7 @@ public class AdapterParameter {
 
         return IntStream.range(0, adapterTemplates.size()).mapToObj(index -> {
             final TemplateData templateData = adapterTemplates.get(index);
-            return new AdapterParameter(index, adapterTemplates.size(),
+            return new Adapter(index, adapterTemplates.size(),
                     templateData.parameters());
         }).collect(Collectors.toList());
     }

@@ -15,10 +15,10 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.resource.RouteDeclarationParameter;
+import io.vlingo.xoom.codegen.template.resource.RouteDeclaration;
 import io.vlingo.xoom.codegen.template.resource.RouteMethodTemplateData;
 import io.vlingo.xoom.codegen.template.storage.Model;
-import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
+import io.vlingo.xoom.codegen.template.storage.Queries;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
@@ -67,11 +67,11 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
 
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, ClassFormatter.packageOf(autoDispatchParameter.value))
-                        .and(QUERIES, QueriesParameter.from(autoDispatchParameter))
+                        .and(QUERIES, Queries.from(autoDispatchParameter))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregateProtocolClassName))
                         .and(REST_RESOURCE_NAME, standard().resolveClassname(restResourceName))
                         .and(URI_ROOT, autoDispatchParameter.retrieveRelatedValue(Label.URI_ROOT))
-                        .and(ROUTE_DECLARATIONS, RouteDeclarationParameter.from(autoDispatchParameter))
+                        .and(ROUTE_DECLARATIONS, RouteDeclaration.from(autoDispatchParameter))
                         .and(MODEL_PROTOCOL, autoDispatchParameter.retrieveRelatedValue(Label.MODEL_PROTOCOL))
                         .and(MODEL_ACTOR, autoDispatchParameter.retrieveRelatedValue(Label.MODEL_ACTOR))
                         .and(HANDLERS_CONFIG_NAME, autoDispatchParameter.retrieveRelatedValue(Label.HANDLERS_CONFIG_NAME))

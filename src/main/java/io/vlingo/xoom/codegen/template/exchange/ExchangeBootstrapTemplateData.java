@@ -47,7 +47,7 @@ public class ExchangeBootstrapTemplateData extends TemplateData {
                                          final List<Content> contents) {
         parameters =
             TemplateParameters.with(PACKAGE_NAME, exchangePackage)
-                    .and(EXCHANGES, ExchangesParameter.from(exchanges))
+                    .and(EXCHANGES, Exchange.from(exchanges))
                     .and(PRODUCER_EXCHANGES, joinProducerExchangeNames(exchanges))
                     .addImports(resolveImports(exchanges, contents));
     }

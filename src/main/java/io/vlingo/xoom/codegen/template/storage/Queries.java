@@ -21,7 +21,7 @@ import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 
-public class QueriesParameter {
+public class Queries {
 
     private static final String QUALIFIED_NAME_PATTERN = "%s.%s";
 
@@ -30,9 +30,9 @@ public class QueriesParameter {
     private final String attributeName;
     private final Set<String> qualifiedNames = new HashSet<>();
 
-    public static List<QueriesParameter> from(final Boolean useCQRS,
-                                              final List<Content> contents,
-                                              final List<TemplateData> templatesData) {
+    public static List<Queries> from(final Boolean useCQRS,
+                                     final List<Content> contents,
+                                     final List<TemplateData> templatesData) {
         if(!useCQRS) {
             return Collections.emptyList();
         }
@@ -40,9 +40,9 @@ public class QueriesParameter {
         return from(Model.QUERY, contents, templatesData);
     }
 
-    public static List<QueriesParameter> from(final Model model,
-                                              final List<Content> contents,
-                                              final List<TemplateData> templatesData) {
+    public static List<Queries> from(final Model model,
+                                     final List<Content> contents,
+                                     final List<TemplateData> templatesData) {
         if(!model.isQueryModel()) {
             return Collections.emptyList();
         }
@@ -50,55 +50,55 @@ public class QueriesParameter {
         if(ContentQuery.exists(QUERIES_ACTOR, contents)) {
             return ContentQuery.filterByStandard(QUERIES_ACTOR, contents)
                     .filter(Content::isProtocolBased)
-                    .map(content -> new QueriesParameter(content.retrieveProtocolQualifiedName(),
+                    .map(content -> new Queries(content.retrieveProtocolQualifiedName(),
                             content.retrieveQualifiedName()))
                     .collect(Collectors.toList());
         }
 
         return templatesData.stream().filter(data -> data.hasStandard(QUERIES_ACTOR))
-                .map(data -> new QueriesParameter(data.parameters())).collect(Collectors.toList());
+                .map(data -> new Queries(data.parameters())).collect(Collectors.toList());
     }
 
-    public static QueriesParameter from(final CodeGenerationParameter autoDispatchParameter) {
+    public static Queries from(final CodeGenerationParameter autoDispatchParameter) {
         if(!autoDispatchParameter.hasAny(Label.QUERIES_PROTOCOL)) {
-            return QueriesParameter.empty();
+            return Queries.empty();
         }
-        return new QueriesParameter(autoDispatchParameter.retrieveRelatedValue(Label.QUERIES_PROTOCOL),
+        return new Queries(autoDispatchParameter.retrieveRelatedValue(Label.QUERIES_PROTOCOL),
                 autoDispatchParameter.retrieveRelatedValue(Label.QUERIES_ACTOR));
     }
 
-    public static QueriesParameter from(final CodeGenerationParameter aggregateParameter,
-                                        final List<Content> contents,
-                                        final Boolean useCQRS) {
+    public static Queries from(final CodeGenerationParameter aggregateParameter,
+                               final List<Content> contents,
+                               final Boolean useCQRS) {
         if(!useCQRS) {
-            return QueriesParameter.empty();
+            return Queries.empty();
         }
 
         final String queriesProtocol = QUERIES.resolveClassname(aggregateParameter.value);
         final String queriesActor = QUERIES_ACTOR.resolveClassname(aggregateParameter.value);
-        return new QueriesParameter(ContentQuery.findFullyQualifiedClassName(QUERIES, queriesProtocol, contents),
+        return new Queries(ContentQuery.findFullyQualifiedClassName(QUERIES, queriesProtocol, contents),
                 ContentQuery.findFullyQualifiedClassName(QUERIES_ACTOR, queriesActor, contents));
     }
 
-    private static QueriesParameter empty() {
-        return new QueriesParameter("", "", "", "");
+    private static Queries empty() {
+        return new Queries("", "", "", "");
     }
 
-    private QueriesParameter(final TemplateParameters parameters) {
+    private Queries(final TemplateParameters parameters) {
         this(parameters.find(PACKAGE_NAME), parameters.find(QUERIES_NAME),
                 parameters.find(PACKAGE_NAME), parameters.find(QUERIES_ACTOR_NAME));
     }
 
-    private QueriesParameter(final String protocolQualifiedName,
-                             final String actorQualifiedName) {
+    private Queries(final String protocolQualifiedName,
+                    final String actorQualifiedName) {
         this(ClassFormatter.packageOf(protocolQualifiedName), ClassFormatter.simpleNameOf(protocolQualifiedName),
                 ClassFormatter.packageOf(actorQualifiedName), ClassFormatter.simpleNameOf(actorQualifiedName));
     }
 
-    private QueriesParameter(final String protocolPackageName,
-                             final String protocolName,
-                             final String actorPackageName,
-                             final String actorName) {
+    private Queries(final String protocolPackageName,
+                    final String protocolName,
+                    final String actorPackageName,
+                    final String actorName) {
         this.actorName = actorName;
         this.protocolName = protocolName;
         this.attributeName = ClassFormatter.simpleNameToAttribute(protocolName);

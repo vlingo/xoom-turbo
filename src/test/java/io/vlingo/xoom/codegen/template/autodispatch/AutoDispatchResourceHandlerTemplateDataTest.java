@@ -15,8 +15,8 @@ import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.codegen.template.resource.RouteDeclarationParameter;
-import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
+import io.vlingo.xoom.codegen.template.resource.RouteDeclaration;
+import io.vlingo.xoom.codegen.template.storage.Queries;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -54,20 +54,20 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
         Assert.assertEquals("io.vlingo.xoomapp.resources", resourceHandlerData.parameters().find(TemplateParameter.PACKAGE_NAME));
         Assert.assertEquals("AuthorResourceHandler", resourceHandlerData.parameters().find(TemplateParameter.REST_RESOURCE_NAME));
 
-        final QueriesParameter queriesParameter =
+        final Queries queries =
                 resourceHandlerData.parameters().find(TemplateParameter.QUERIES);
 
-        Assert.assertEquals("AuthorQueries", queriesParameter.getProtocolName());
-        Assert.assertEquals("AuthorQueriesActor", queriesParameter.getActorName());
-        Assert.assertEquals("authorQueries", queriesParameter.getAttributeName());
+        Assert.assertEquals("AuthorQueries", queries.getProtocolName());
+        Assert.assertEquals("AuthorQueriesActor", queries.getActorName());
+        Assert.assertEquals("authorQueries", queries.getAttributeName());
 
-        final List<RouteDeclarationParameter> routeDeclarationParameters =
+        final List<RouteDeclaration> routeDeclarations =
                 resourceHandlerData.parameters().find(TemplateParameter.ROUTE_DECLARATIONS);
 
-        Assert.assertEquals(2, routeDeclarationParameters.size());
+        Assert.assertEquals(2, routeDeclarations.size());
 
-        final RouteDeclarationParameter nameUpdateRouteDeclaration =
-                routeDeclarationParameters.stream().filter(parameter ->
+        final RouteDeclaration nameUpdateRouteDeclaration =
+                routeDeclarations.stream().filter(parameter ->
                         parameter.getHandlerName().equals("changeAuthorName"))
                         .findFirst().get();
 
@@ -100,17 +100,17 @@ public class AutoDispatchResourceHandlerTemplateDataTest {
         Assert.assertEquals("io.vlingo.xoomapp.resources", resourceHandlerData.parameters().find(TemplateParameter.PACKAGE_NAME));
         Assert.assertEquals("BookResourceHandler", resourceHandlerData.parameters().find(TemplateParameter.REST_RESOURCE_NAME));
 
-        final QueriesParameter queriesParameter =
+        final Queries queries =
                 resourceHandlerData.parameters().find(TemplateParameter.QUERIES);
 
-        Assert.assertEquals("BookQueries", queriesParameter.getProtocolName());
-        Assert.assertEquals("BookQueriesActor", queriesParameter.getActorName());
-        Assert.assertEquals("bookQueries", queriesParameter.getAttributeName());
+        Assert.assertEquals("BookQueries", queries.getProtocolName());
+        Assert.assertEquals("BookQueriesActor", queries.getActorName());
+        Assert.assertEquals("bookQueries", queries.getAttributeName());
 
-        final List<RouteDeclarationParameter> routeDeclarationParameters =
+        final List<RouteDeclaration> routeDeclarations =
                 resourceHandlerData.parameters().find(TemplateParameter.ROUTE_DECLARATIONS);
 
-        Assert.assertEquals(1, routeDeclarationParameters.size());
+        Assert.assertEquals(1, routeDeclarations.size());
         Assert.assertEquals(1, resourceHandlerData.dependencies().size());
     }
 

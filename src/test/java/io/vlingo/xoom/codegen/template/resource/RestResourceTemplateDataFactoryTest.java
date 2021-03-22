@@ -17,7 +17,7 @@ import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.codegen.template.storage.QueriesParameter;
+import io.vlingo.xoom.codegen.template.storage.Queries;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -67,18 +67,18 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertEquals("/authors", templateParameters.find(TemplateParameter.URI_ROOT));
         Assert.assertEquals(true, templateParameters.find(TemplateParameter.USE_CQRS));
 
-        final QueriesParameter queriesParameter =
+        final Queries queries =
                 templateParameters.find(TemplateParameter.QUERIES);
 
-        Assert.assertEquals("AuthorQueries", queriesParameter.getProtocolName());
-        Assert.assertEquals("AuthorQueriesActor", queriesParameter.getActorName());
-        Assert.assertEquals("authorQueries", queriesParameter.getAttributeName());
+        Assert.assertEquals("AuthorQueries", queries.getProtocolName());
+        Assert.assertEquals("AuthorQueriesActor", queries.getActorName());
+        Assert.assertEquals("authorQueries", queries.getAttributeName());
 
-        final List<RouteDeclarationParameter> routeDeclarationParameters =
+        final List<RouteDeclaration> routeDeclarations =
                 templateParameters.find(TemplateParameter.ROUTE_DECLARATIONS);
 
-        final RouteDeclarationParameter nameUpdateRouteDeclaration =
-                routeDeclarationParameters.stream().filter(parameter ->
+        final RouteDeclaration nameUpdateRouteDeclaration =
+                routeDeclarations.stream().filter(parameter ->
                         parameter.getHandlerName().equals("withName"))
                         .findFirst().get();
 
@@ -120,16 +120,16 @@ public class RestResourceTemplateDataFactoryTest {
         Assert.assertEquals("/authors", templateParameters.find(TemplateParameter.URI_ROOT));
         Assert.assertEquals(false, templateParameters.find(TemplateParameter.USE_CQRS));
 
-        final QueriesParameter queriesParameter =
+        final Queries queries =
                 templateParameters.find(TemplateParameter.QUERIES);
 
-        Assert.assertTrue(queriesParameter.isEmpty());
+        Assert.assertTrue(queries.isEmpty());
 
-        final List<RouteDeclarationParameter> routeDeclarationParameters =
+        final List<RouteDeclaration> routeDeclarations =
                 templateParameters.find(TemplateParameter.ROUTE_DECLARATIONS);
 
-        final RouteDeclarationParameter nameUpdateRouteDeclaration =
-                routeDeclarationParameters.stream().filter(parameter ->
+        final RouteDeclaration nameUpdateRouteDeclaration =
+                routeDeclarations.stream().filter(parameter ->
                         parameter.getHandlerName().equals("withName"))
                         .findFirst().get();
 

@@ -46,8 +46,8 @@ public class ExchangeReceiverHolderTemplateData extends TemplateData {
                                                final CodeGenerationParameter exchange,
                                                final List<CodeGenerationParameter> valueObjects,
                                                final List<Content> contents) {
-        final List<ExchangeReceiversParameter> receiversParameters =
-                ExchangeReceiversParameter.from(language, exchange, valueObjects);
+        final List<ExchangeReceiver> receiversParameters =
+                ExchangeReceiver.from(language, exchange, valueObjects);
 
         this.parameters =
                 TemplateParameters.with(PACKAGE_NAME, exchangePackage)
@@ -58,7 +58,7 @@ public class ExchangeReceiverHolderTemplateData extends TemplateData {
     }
 
     private Set<String> resolveImports(final CodeGenerationParameter exchange,
-                                       final List<ExchangeReceiversParameter> receiversParameters,
+                                       final List<ExchangeReceiver> receiversParameters,
                                        final List<Content> contents) {
         final CodeGenerationParameter aggregate = exchange.parent();
 

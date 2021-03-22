@@ -63,16 +63,16 @@ public class StorageProviderTemplateData extends TemplateData {
                                               final List<Content> contents,
                                               final boolean useAnnotation,
                                               final Model model) {
-        final List<AdapterParameter> adapterParameters = AdapterParameter.from(templatesData);
-        final List<QueriesParameter> queriesParameters = QueriesParameter.from(model, contents, templatesData);
+        final List<Adapter> adapters = Adapter.from(templatesData);
+        final List<Queries> queries = Queries.from(model, contents, templatesData);
         final Stream<String> persistentTypes = storageType.findPersistentQualifiedTypes(model, contents).stream();
-        final Set<ImportParameter> importParameters = resolveImports(model, storageType, contents, queriesParameters);
+        final Set<ImportParameter> importParameters = resolveImports(model, storageType, contents, queries);
 
         return TemplateParameters.with(STORAGE_TYPE, storageType).and(PROJECTION_TYPE, projectionType)
                 .and(MODEL, model).and(IMPORTS, importParameters).and(PACKAGE_NAME, packageName)
                 .and(REQUIRE_ADAPTERS, storageType.requireAdapters(model))
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
-                .and(ADAPTERS, adapterParameters).and(QUERIES, queriesParameters)
+                .and(ADAPTERS, adapters).and(QUERIES, queries)
                 .and(AGGREGATES, ContentQuery.findClassNames(AGGREGATE, contents))
                 .and(PERSISTENT_TYPES, persistentTypes.map(ClassFormatter::simpleNameOf).collect(toSet()))
                 .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
@@ -83,14 +83,14 @@ public class StorageProviderTemplateData extends TemplateData {
     private Set<ImportParameter> resolveImports(final Model model,
                                                 final StorageType storageType,
                                                 final List<Content> contents,
-                                                final List<QueriesParameter> queriesParameters) {
+                                                final List<Queries> queries) {
         final Set<String> sourceClassQualifiedNames =
                 storageType.resolveAdaptersQualifiedName(model, contents);
 
         final Set<String> persistentTypes =
                 storageType.findPersistentQualifiedTypes(model, contents);
 
-        final Set<String> queriesQualifiedNames = queriesParameters.stream()
+        final Set<String> queriesQualifiedNames = queries.stream()
                         .flatMap(param -> param.getQualifiedNames().stream())
                         .collect(toSet());
 
