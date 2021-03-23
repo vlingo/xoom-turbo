@@ -25,7 +25,6 @@ public class DataObjectGenerationStep extends TemplateProcessingStep {
                 StateDataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
                         context.parameterOf(Label.LANGUAGE, Language::valueOf),
                         context.parametersOf(Label.AGGREGATE),
-                        context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList()),
                         context.contents());
 
         final List<TemplateData> valueDataObjectTemplateData =

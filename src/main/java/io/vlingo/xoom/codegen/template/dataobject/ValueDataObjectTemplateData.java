@@ -9,6 +9,7 @@ package io.vlingo.xoom.codegen.template.dataobject;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -16,13 +17,15 @@ import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style;
 import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
-import java.beans.Introspector;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 
 public class ValueDataObjectTemplateData extends TemplateData {
 
@@ -49,21 +52,22 @@ public class ValueDataObjectTemplateData extends TemplateData {
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, packageName)
                     .and(DATA_VALUE_OBJECT_NAME, standard().resolveClassname(valueObjectName))
-                    .and(CONSTRUCTOR_PARAMETERS, formatConstructorParameters())
-                    .and(CONSTRUCTOR_INVOCATION_PARAMETERS, formatConstructorInvocationParameters())
+                    .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(valueObject))
+                    .and(STATIC_FACTORY_METHODS, StaticFactoryMethod.from(valueObject))
                     .and(MEMBERS, Formatters.Fields.format(Style.DATA_OBJECT_MEMBER_DECLARATION, language, valueObject))
                     .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Style.DATA_VALUE_OBJECT_ASSIGNMENT, language, valueObject))
-                    .addImport(ValueObjectDetail.resolveImport(valueObjectName, contents));
+                    .addImports(resolveImports(valueObject, contents));
   }
 
-  private String formatConstructorParameters() {
-    return String.format("final %s %s", valueObjectName, Introspector.decapitalize(valueObjectName));
+  private Set<String> resolveImports(final CodeGenerationParameter valueObject,
+                                     final List<Content> contents) {
+    final Set<String> imports = new HashSet<>();
+    imports.addAll(ValueObjectDetail.resolveImports(contents, valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)));
+    if(imports.isEmpty()) {
+      imports.add(ValueObjectDetail.resolveImport(valueObject.value, contents));
+    }
+    return imports;
   }
-
-  private String formatConstructorInvocationParameters() {
-    return Introspector.decapitalize(valueObjectName);
-  }
-
 
   @Override
   public TemplateParameters parameters() {

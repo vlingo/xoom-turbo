@@ -25,6 +25,8 @@ public class Formatters {
 
       Arguments AGGREGATE_METHOD_INVOCATION = new AggregateMethodInvocation("stage");
       Arguments VALUE_OBJECT_CONSTRUCTOR_INVOCATION = new ValueObjectConstructorInvocation();
+      Arguments DATA_OBJECT_STATIC_FACTORY_METHOD_PARAMETERS = new DataObjectStaticFactoryMethodParameters();
+      Arguments DATA_OBJECT_CONSTRUCTOR_INVOCATION = new DataObjectConstructorInvocation();
       Arguments SOURCED_STATED_METHOD_INVOCATION = new SourcedStateMethodInvocation();
       Arguments SIGNATURE_DECLARATION = new SignatureDeclaration();
 

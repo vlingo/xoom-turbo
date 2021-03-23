@@ -12,10 +12,12 @@ public class ${dataValueObjectName} {
   ${member}
   </#list>
 
-  public static ${dataValueObjectName} of(${constructorParameters}) {
-    return new ${dataValueObjectName}(${constructorInvocationParameters});
+  <#list staticFactoryMethods as factoryMethod>
+  public static ${factoryMethod.dataObjectName} from(${factoryMethod.parameters}) {
+    return ${factoryMethod.constructorInvocation};
   }
 
+  </#list>
   private ${dataValueObjectName} (${constructorParameters}) {
     <#list membersAssignment as assignment>
     ${assignment}

@@ -126,7 +126,8 @@ public enum TemplateParameter {
     PRODUCER_ORGANIZATION("producerOrganization"),
     PRODUCER_UNIT("producerUnit"),
     PRODUCER_SCHEMAS("producerSchemas"),
-    CONSUMER_SCHEMAS("consumerSchemas");
+    CONSUMER_SCHEMAS("consumerSchemas"),
+    STATIC_FACTORY_METHODS("staticFactoryMethods");
 
     public final String key;
 

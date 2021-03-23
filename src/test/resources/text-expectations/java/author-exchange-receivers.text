@@ -25,7 +25,7 @@ public class AuthorExchangeReceivers {
 
     @Override
     public void receive(final AuthorData data) {
-      final Name name = Name.of(data.name.firstName, data.name.lastName);
+      final Name name = Name.from(data.name.firstName, data.name.lastName);
       Author.withName(stage, name);
     }
   }
@@ -43,7 +43,7 @@ public class AuthorExchangeReceivers {
 
     @Override
     public void receive(final AuthorData data) {
-      final Rank rank = Rank.of(data.rank.points, data.rank.classification);
+      final Rank rank = Rank.from(data.rank.points, data.rank.classification);
       stage.actorOf(Author.class, stage.addressFactory().from(data.id), Definition.has(AuthorEntity.class, Definition.parameters(data.id)))
               .andFinallyConsume(author -> author.changeRank(rank));
     }
@@ -62,7 +62,7 @@ public class AuthorExchangeReceivers {
 
     @Override
     public void receive(final AuthorData data) {
-      final Name name = Name.of(data.name.firstName, data.name.lastName);
+      final Name name = Name.from(data.name.firstName, data.name.lastName);
       stage.actorOf(Author.class, stage.addressFactory().from(data.id), Definition.has(AuthorEntity.class, Definition.parameters(data.id)))
               .andFinallyConsume(author -> author.block(name));
     }

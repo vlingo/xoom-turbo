@@ -22,13 +22,13 @@ public class AuthorResourceHandlers {
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Stage, AuthorData>> WITH_NAME_HANDLER =
           HandlerEntry.of(WITH_NAME, ($stage, data) -> {
-              final Name name = Name.of(data.name.firstName, data.name.lastName);
+              final Name name = Name.from(data.name.firstName, data.name.lastName);
               return Author.withName($stage, name);
           });
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> CHANGE_RANK_HANDLER =
           HandlerEntry.of(CHANGE_RANK, (author, data) -> {
-              final Rank rank = Rank.of(data.rank.points, data.rank.classification);
+              final Rank rank = Rank.from(data.rank.points, data.rank.classification);
               return author.changeRank(rank);
           });
 

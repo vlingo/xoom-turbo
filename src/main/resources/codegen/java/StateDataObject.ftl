@@ -2,26 +2,32 @@ package ${packageName};
 
 import java.util.List;
 import java.util.stream.Collectors;
-import ${stateQualifiedClassName};
+<#if imports?has_content>
+<#list imports as import>
+import ${import.qualifiedClassName};
+</#list>
+</#if>
 
 public class ${dataName} {
   <#list members as member>
   ${member}
   </#list>
 
-  public static ${dataName} from(final ${stateName} state) {
-    return new ${dataName}(state);
+  <#list staticFactoryMethods as factoryMethod>
+  public static ${factoryMethod.dataObjectName} from(${factoryMethod.parameters}) {
+    return ${factoryMethod.constructorInvocation};
   }
 
+  </#list>
   public static List<${dataName}> from(final List<${stateName}> states) {
     return states.stream().map(${dataName}::from).collect(Collectors.toList());
   }
 
   public static ${dataName} empty() {
-    return new ${dataName}(${stateName}.identifiedBy(""));
+    return from(${stateName}.identifiedBy(""));
   }
 
-  private ${dataName} (final ${stateName} state) {
+  private ${dataName} (${constructorParameters}) {
     <#list membersAssignment as assignment>
     ${assignment}
     </#list>

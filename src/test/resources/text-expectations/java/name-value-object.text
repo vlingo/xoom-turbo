@@ -5,7 +5,7 @@ public class Name {
   public final String firstName;
   public final String lastName;
 
-  public static Name of(final String firstName, final String lastName) {
+  public static Name from(final String firstName, final String lastName) {
     return new Name(firstName, lastName);
   }
 

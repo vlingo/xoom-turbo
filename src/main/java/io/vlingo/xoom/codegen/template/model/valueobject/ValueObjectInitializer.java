@@ -66,7 +66,7 @@ public class ValueObjectInitializer extends Formatters.Fields<List<String>> {
             valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(pathResolver).collect(Collectors.joining(", "));
 
     final String expression =
-            String.format("final %s %s = %s.of(%s);", valueObject.value, field.value, valueObject.value, args);
+            String.format("final %s %s = %s.from(%s);", valueObject.value, field.value, valueObject.value, args);
 
     expressions.add(expression);
   }

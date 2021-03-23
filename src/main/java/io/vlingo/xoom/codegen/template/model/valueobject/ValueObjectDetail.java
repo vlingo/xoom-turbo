@@ -45,7 +45,7 @@ public class ValueObjectDetail {
   }
 
   public static String resolveImport(final String valueObjectName,
-                                     final List<Content> contents) {
+                                      final List<Content> contents) {
     return ContentQuery.findFullyQualifiedClassName(VALUE_OBJECT, valueObjectName, contents);
   }
 

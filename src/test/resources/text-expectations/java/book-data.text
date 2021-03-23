@@ -9,8 +9,12 @@ public class BookData {
   public final String title;
   public final String publisher;
 
-  public static BookData from(final BookState state) {
-    return new BookData(state);
+  public static BookData from(final BookState book) {
+    return from(book.id, book.title, book.publisher);
+  }
+
+  public static BookData from(final String id, final String title, final String publisher) {
+    return new BookData(id, title, publisher);
   }
 
   public static List<BookData> from(final List<BookState> states) {
@@ -18,13 +22,13 @@ public class BookData {
   }
 
   public static BookData empty() {
-    return new BookData(BookState.identifiedBy(""));
+    return from(BookState.identifiedBy(""));
   }
 
-  private BookData (final BookState state) {
-    this.id = state.id;
-    this.title = state.title;
-    this.publisher = state.publisher;
+  private BookData (final String id, final String title, final String publisher) {
+    this.id = id;
+    this.title = title;
+    this.publisher = publisher;
   }
 
 }

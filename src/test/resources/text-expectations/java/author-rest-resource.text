@@ -35,7 +35,7 @@ public class AuthorResource extends DynamicResourceHandler {
   }
 
   public Completes<Response> withName(final AuthorData data) {
-    final Name name = Name.of(data.name.firstName, data.name.lastName);
+    final Name name = Name.from(data.name.firstName, data.name.lastName);
     return Author.withName(grid, name)
       .andThenTo(state -> Completes.withSuccess(Response.of(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(state.id))), serialized(AuthorData.from(state))))
       .otherwise(arg -> Response.of(NotFound, location()))
@@ -43,9 +43,9 @@ public class AuthorResource extends DynamicResourceHandler {
   }
 
   public Completes<Response> changeRank(final String id, final AuthorData data) {
-    final Classifier classifier = Classifier.of(data.rank.classification.classifier.name);
-    final Classification classification = Classification.of(data.rank.classification.label, classifier);
-    final Rank rank = Rank.of(data.rank.points, classification);
+    final Classifier classifier = Classifier.from(data.rank.classification.classifier.name);
+    final Classification classification = Classification.from(data.rank.classification.label, classifier);
+    final Rank rank = Rank.from(data.rank.points, classification);
     return resolve(id)
             .andThenTo(author -> author.changeRank(rank))
             .andThenTo(state -> Completes.withSuccess(Response.of(Ok, serialized(AuthorData.from(state)))))

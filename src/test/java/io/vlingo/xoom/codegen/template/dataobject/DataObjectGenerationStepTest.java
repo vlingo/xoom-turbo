@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.codegen.dataobject;
+package io.vlingo.xoom.codegen.template.dataobject;
 
 import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
@@ -16,7 +16,6 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.dataobject.DataObjectGenerationStep;
 import org.junit.Assert;
 import org.junit.Test;
 

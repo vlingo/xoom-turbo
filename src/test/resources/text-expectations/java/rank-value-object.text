@@ -5,7 +5,7 @@ public class Rank {
   public final int points;
   public final String classification;
 
-  public static Rank of(final int points, final String classification) {
+  public static Rank from(final int points, final String classification) {
     return new Rank(points, classification);
   }
 

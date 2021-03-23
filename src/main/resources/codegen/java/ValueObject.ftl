@@ -6,7 +6,7 @@ public class ${valueObjectName} {
   ${member}
   </#list>
 
-  public static ${valueObjectName} of(${constructorParameters}) {
+  public static ${valueObjectName} from(${constructorParameters}) {
     return new ${valueObjectName}(${constructorInvocationParameters});
   }
 

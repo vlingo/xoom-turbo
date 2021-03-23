@@ -7,13 +7,17 @@ public class NameData {
   public final String firstName;
   public final String lastName;
 
-  public static NameData of(final Name name) {
-    return new NameData(name);
+  public static NameData from(final Name name) {
+    return from(name.firstName, name.lastName);
   }
 
-  private NameData (final Name name) {
-    this.firstName = name.firstName;
-    this.lastName = name.lastName;
+  public static NameData from(final String firstName, final String lastName) {
+    return new NameData(firstName, lastName);
+  }
+
+  private NameData (final String firstName, final String lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
   }
 
 }
