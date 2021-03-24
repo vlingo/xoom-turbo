@@ -9,8 +9,8 @@ public class BookData {
   public final String title;
   public final String publisher;
 
-  public static BookData from(final BookState book) {
-    return from(book.id, book.title, book.publisher);
+  public static BookData from(final BookState bookState) {
+    return from(bookState.id, bookState.title, bookState.publisher);
   }
 
   public static BookData from(final String id, final String title, final String publisher) {

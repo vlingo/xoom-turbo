@@ -3,7 +3,6 @@ package io.vlingo.xoomapp.infrastructure;
 import java.util.List;
 import java.util.stream.Collectors;
 import io.vlingo.xoomapp.model.author.AuthorState;
-import io.vlingo.xoomapp.model.*;
 
 public class AuthorData {
   public final String id;
@@ -11,11 +10,13 @@ public class AuthorData {
   public final RankData rank;
   public final boolean status;
 
-  public static AuthorData from(final AuthorState author) {
-    return from(author.id, author.name, author.rank, author.status);
+  public static AuthorData from(final AuthorState authorState) {
+    final NameData name = authorState.name != null ? NameData.from(authorState.name) : null;
+    final RankData rank = authorState.rank != null ? RankData.from(authorState.rank) : null;
+    return from(authorState.id, name, rank, authorState.status);
   }
 
-  public static AuthorData from(final String id, final Name name, final Rank rank, final boolean status) {
+  public static AuthorData from(final String id, final NameData name, final RankData rank, final boolean status) {
     return new AuthorData(id, name, rank, status);
   }
 
@@ -27,10 +28,10 @@ public class AuthorData {
     return from(AuthorState.identifiedBy(""));
   }
 
-  private AuthorData (final String id, final Name name, final Rank rank, final boolean status) {
+  private AuthorData (final String id, final NameData name, final RankData rank, final boolean status) {
     this.id = id;
-    this.name = name != null ? NameData.from(name) : null;
-    this.rank = rank != null ? RankData.from(rank) : null;
+    this.name = name;
+    this.rank = rank;
     this.status = status;
   }
 

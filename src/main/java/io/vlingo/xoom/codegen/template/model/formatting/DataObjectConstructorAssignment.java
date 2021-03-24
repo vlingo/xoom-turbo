@@ -8,8 +8,6 @@ package io.vlingo.xoom.codegen.template.model.formatting;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -22,21 +20,11 @@ public class DataObjectConstructorAssignment extends Formatters.Fields<List<Stri
   @Override
   public List<String> format(final CodeGenerationParameter carrier,
                              final Stream<CodeGenerationParameter> fields) {
-    return carrier.retrieveAllRelated(resolveFieldLabel(carrier)).map(field -> {
-      return ValueObjectDetail.isValueObject(field) ?
-              formatValueObjectAssignment(field) : formatScalarTypeAssignment(field);
-    }).collect(toList());
+    return carrier.retrieveAllRelated(resolveFieldLabel(carrier)).map(this::formatAssignment).collect(toList());
   }
 
-  private String formatScalarTypeAssignment(final CodeGenerationParameter field) {
+  private String formatAssignment(final CodeGenerationParameter field) {
     return String.format("this.%s = %s;", field.value, field.value);
-  }
-
-  private String formatValueObjectAssignment(final CodeGenerationParameter field) {
-    final String valueObjectType = field.retrieveRelatedValue(FIELD_TYPE);
-    final String dataValueObjectType = TemplateStandard.DATA_OBJECT.resolveClassname(valueObjectType);
-    return String.format("this.%s = %s != null ? %s.from(%s) : null;",
-            field.value, field.value, dataValueObjectType, field.value);
   }
 
   private Label resolveFieldLabel(final CodeGenerationParameter carrier) {

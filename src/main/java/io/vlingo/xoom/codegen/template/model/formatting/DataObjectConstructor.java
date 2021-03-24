@@ -8,18 +8,20 @@ package io.vlingo.xoom.codegen.template.model.formatting;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 
-public class DataObjectStaticFactoryMethodParameters implements Formatters.Arguments {
+public class DataObjectConstructor implements Formatters.Arguments {
 
   @Override
   public String format(final CodeGenerationParameter parent, final MethodScope scope) {
     return parent.retrieveAllRelated(resolveFieldLabel(parent))
-            .map(field -> String.format("final %s %s", field.retrieveRelatedValue(FIELD_TYPE), field.value))
+            .map(field -> String.format("final %s %s", resolveFieldType(field), field.value))
             .collect(Collectors.joining(", "));
   }
 
@@ -31,6 +33,14 @@ public class DataObjectStaticFactoryMethodParameters implements Formatters.Argum
       return VALUE_OBJECT_FIELD;
     }
     throw new IllegalArgumentException("Unable to format static method parameters from " + parent.label);
+  }
+
+  private String resolveFieldType(final CodeGenerationParameter field) {
+    final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
+    if(ValueObjectDetail.isValueObject(field)) {
+      return TemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
+    }
+    return fieldType;
   }
 
 }

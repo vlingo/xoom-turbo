@@ -26,7 +26,7 @@ import static io.vlingo.xoom.codegen.parameter.Label.READ_ONLY;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.VALUE_OBJECT_INITIALIZER;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 
 public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
@@ -47,7 +47,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
         final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregate, route.value);
         final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
         final List<String> valueObjectInitializers =
-                Formatters.Fields.format(VALUE_OBJECT_INITIALIZER, language, method, valueObjects.stream());
+                Formatters.Variables.format(VALUE_OBJECT_INITIALIZER, language, method, valueObjects.stream());
 
         this.parameters =
                 TemplateParameters.with(METHOD_NAME, route.value)

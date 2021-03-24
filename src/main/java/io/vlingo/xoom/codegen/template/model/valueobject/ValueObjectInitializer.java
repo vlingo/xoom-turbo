@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 
-public class ValueObjectInitializer extends Formatters.Fields<List<String>> {
+public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
 
   private final String carrierName;
 

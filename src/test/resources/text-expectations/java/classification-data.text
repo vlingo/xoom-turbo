@@ -1,6 +1,6 @@
 package io.vlingo.xoomapp.infrastructure;
 
-import io.vlingo.xoomapp.model.*;
+import io.vlingo.xoomapp.model.Classification;
 
 public class ClassificationData {
 
@@ -8,16 +8,17 @@ public class ClassificationData {
   public final ClassifierData classifier;
 
   public static ClassificationData from(final Classification classification) {
-    return from(classification.label, classification.classifier);
+    final ClassifierData classifier = classification.classifier != null ? ClassifierData.from(classification.classifier) : null;
+    return from(classification.label, classifier);
   }
 
-  public static ClassificationData from(final String label, final Classifier classifier) {
+  public static ClassificationData from(final String label, final ClassifierData classifier) {
     return new ClassificationData(label, classifier);
   }
 
-  private ClassificationData (final String label, final Classifier classifier) {
+  private ClassificationData (final String label, final ClassifierData classifier) {
     this.label = label;
-    this.classifier = classifier != null ? ClassifierData.from(classifier) : null;
+    this.classifier = classifier;
   }
 
 }

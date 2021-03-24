@@ -9,7 +9,9 @@ package io.vlingo.xoom.codegen.template.model.formatting;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
+import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.beans.Introspector;
 import java.util.stream.Collectors;
@@ -20,11 +22,9 @@ public class DataObjectConstructorInvocation implements Formatters.Arguments {
 
   @Override
   public String format(final CodeGenerationParameter parent, final MethodScope scope) {
-    final String carrierName =
-            scope.isStatic() ? Introspector.decapitalize(parent.value) : "";
-
+    final String carrierName = resolveCarrierName(parent);
     return parent.retrieveAllRelated(resolveFieldLabel(parent))
-            .map(field -> resolveParameterName(carrierName, field))
+            .map(field -> resolveParameterName(carrierName, field, scope))
             .collect(Collectors.joining(", "));
   }
 
@@ -38,10 +38,22 @@ public class DataObjectConstructorInvocation implements Formatters.Arguments {
     throw new IllegalArgumentException("Unable to format static method parameters from " + parent.label);
   }
 
-  private String resolveParameterName(final String carrierName, final CodeGenerationParameter field) {
-    if(carrierName.isEmpty()) {
+  private String resolveParameterName(final String carrierName,
+                                      final CodeGenerationParameter field,
+                                      final MethodScope scope) {
+    if(scope.isInstance() || ValueObjectDetail.isValueObject(field)) {
       return field.value;
     }
     return carrierName + "." + field.value;
+  }
+
+  private String resolveCarrierName(final CodeGenerationParameter carrier) {
+    if(carrier.isLabeled(Label.AGGREGATE)) {
+      return Introspector.decapitalize(TemplateStandard.AGGREGATE_STATE.resolveClassname(carrier.value));
+    }
+    if(carrier.isLabeled(Label.VALUE_OBJECT)) {
+      return Introspector.decapitalize(carrier.value);
+    }
+    throw new IllegalArgumentException("Unable to resolve carrier name from " + carrier.label);
   }
 }

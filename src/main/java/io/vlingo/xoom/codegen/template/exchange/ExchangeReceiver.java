@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.VALUE_OBJECT_INITIALIZER;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 
 public class ExchangeReceiver {
 
@@ -71,7 +71,7 @@ public class ExchangeReceiver {
         final CodeGenerationParameter method =
                 AggregateDetail.methodWithName(aggregate, receiver.retrieveRelatedValue(MODEL_METHOD));
 
-        return Formatters.Fields.format(VALUE_OBJECT_INITIALIZER, language, method, valueObjects.stream());
+        return Formatters.Variables.format(VALUE_OBJECT_INITIALIZER, language, method, valueObjects.stream());
     }
 
     public String getSchemaTypeName() {

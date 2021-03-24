@@ -7,28 +7,24 @@
 
 package io.vlingo.xoom.codegen.template.dataobject;
 
+import io.vlingo.xoom.codegen.content.ClassFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style;
-import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 import static java.util.stream.Collectors.toList;
 
 public class StateDataObjectTemplateData extends TemplateData {
@@ -66,9 +62,6 @@ public class StateDataObjectTemplateData extends TemplateData {
 
         final String stateName = AGGREGATE_STATE.resolveClassname(aggregate.value);
 
-        final String stateQualifiedClassName =
-                ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents);
-
         final String dataName = DATA_OBJECT.resolveClassname(protocolName);
 
         final List<String> members =
@@ -81,19 +74,9 @@ public class StateDataObjectTemplateData extends TemplateData {
                 .and(STATE_NAME, stateName).and(STATE_DATA_OBJECT_NAME, dataName)
                 .and(STATIC_FACTORY_METHODS, StaticFactoryMethod.from(aggregate))
                 .and(MEMBERS, members).and(MEMBERS_ASSIGNMENT, membersAssignment)
-                .and(DATA_OBJECT_QUALIFIED_NAME, packageName.concat(".").concat(dataName))
-                .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(aggregate))
-                .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName)
-                .addImports(resolveImports(stateName, aggregate, contents));
-    }
-
-    private Set<String> resolveImports(final String stateName,
-                                       final CodeGenerationParameter aggregate,
-                                       final List<Content> contents) {
-        final Set<String> imports = new HashSet<>();
-        imports.add(ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents));
-        imports.addAll(ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(Label.STATE_FIELD)));
-        return imports;
+                .and(DATA_OBJECT_QUALIFIED_NAME, ClassFormatter.qualifiedNameOf(packageName, dataName))
+                .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(aggregate))
+                .addImport(ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents));
     }
 
     private String resolvePackage(final String basePackage) {

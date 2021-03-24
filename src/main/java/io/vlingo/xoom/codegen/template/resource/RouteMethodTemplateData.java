@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.parameter.Label.INTERNAL_ROUTE_HANDLER;
 import static io.vlingo.xoom.codegen.parameter.Label.MODEL_PROTOCOL;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.VALUE_OBJECT_INITIALIZER;
+import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 
 public class RouteMethodTemplateData extends TemplateData {
 
@@ -137,7 +137,7 @@ public class RouteMethodTemplateData extends TemplateData {
         final CodeGenerationParameter method =
                 AggregateDetail.methodWithName(aggregate, routeSignatureParameter.value);
 
-        return Formatters.Fields.format(VALUE_OBJECT_INITIALIZER, language, method, valueObjects.stream());
+        return Formatters.Variables.format(VALUE_OBJECT_INITIALIZER, language, method, valueObjects.stream());
     }
 
     @Override

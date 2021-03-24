@@ -41,10 +41,6 @@ public class AlternateReference extends Formatters.Fields<String> {
         return new AlternateReference(field -> FieldDetail.resolveDefaultValue(field.parent(AGGREGATE), field.value));
     }
 
-    static AlternateReference handlingEventFieldsWithDefaultFieldsValue() {
-        return new AlternateReference("event", field -> FieldDetail.resolveDefaultValue(field.parent(AGGREGATE), field.value));
-    }
-
     @Override
     public String format(final CodeGenerationParameter param,
                          final Stream<CodeGenerationParameter> fields) {

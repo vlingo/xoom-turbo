@@ -9,7 +9,6 @@ package io.vlingo.xoom.codegen.template.dataobject;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -17,15 +16,12 @@ import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style;
 import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 
 public class ValueDataObjectTemplateData extends TemplateData {
 
@@ -51,22 +47,12 @@ public class ValueDataObjectTemplateData extends TemplateData {
     this.valueObjectName = valueObject.value;
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, packageName)
-                    .and(DATA_VALUE_OBJECT_NAME, standard().resolveClassname(valueObjectName))
-                    .and(CONSTRUCTOR_PARAMETERS, SIGNATURE_DECLARATION.format(valueObject))
                     .and(STATIC_FACTORY_METHODS, StaticFactoryMethod.from(valueObject))
+                    .and(DATA_VALUE_OBJECT_NAME, standard().resolveClassname(valueObjectName))
+                    .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(valueObject))
                     .and(MEMBERS, Formatters.Fields.format(Style.DATA_OBJECT_MEMBER_DECLARATION, language, valueObject))
                     .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Style.DATA_VALUE_OBJECT_ASSIGNMENT, language, valueObject))
-                    .addImports(resolveImports(valueObject, contents));
-  }
-
-  private Set<String> resolveImports(final CodeGenerationParameter valueObject,
-                                     final List<Content> contents) {
-    final Set<String> imports = new HashSet<>();
-    imports.addAll(ValueObjectDetail.resolveImports(contents, valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)));
-    if(imports.isEmpty()) {
-      imports.add(ValueObjectDetail.resolveImport(valueObject.value, contents));
-    }
-    return imports;
+                    .addImport(ValueObjectDetail.resolveImport(valueObject.value, contents));
   }
 
   @Override

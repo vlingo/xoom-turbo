@@ -25,7 +25,7 @@ public class Formatters {
 
       Arguments AGGREGATE_METHOD_INVOCATION = new AggregateMethodInvocation("stage");
       Arguments VALUE_OBJECT_CONSTRUCTOR_INVOCATION = new ValueObjectConstructorInvocation();
-      Arguments DATA_OBJECT_STATIC_FACTORY_METHOD_PARAMETERS = new DataObjectStaticFactoryMethodParameters();
+      Arguments DATA_OBJECT_CONSTRUCTOR = new DataObjectConstructor();
       Arguments DATA_OBJECT_CONSTRUCTOR_INVOCATION = new DataObjectConstructorInvocation();
       Arguments SOURCED_STATED_METHOD_INVOCATION = new SourcedStateMethodInvocation();
       Arguments SIGNATURE_DECLARATION = new SignatureDeclaration();
@@ -37,11 +37,47 @@ public class Formatters {
       String format(final CodeGenerationParameter parameter, final MethodScope scope);
   }
 
+  public abstract static class Variables<T> {
+
+    public static <T> T format(final Variables.Style style,
+                               final Language language,
+                               final CodeGenerationParameter parent) {
+      if(parent.isLabeled(AGGREGATE)) {
+        return format(style, language, parent, parent.retrieveAllRelated(STATE_FIELD));
+      } else if(parent.isLabeled(VALUE_OBJECT)) {
+        return format(style, language, parent, parent.retrieveAllRelated(VALUE_OBJECT_FIELD));
+      }
+      throw new UnsupportedOperationException("Unable to format fields from " + parent.label);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T format(final Variables.Style style,
+                               final Language language,
+                               final CodeGenerationParameter parent,
+                               final Stream<CodeGenerationParameter> fields) {
+      final Function<Language, Variables<?>> instantiator = INSTANTIATORS.get(style);
+      return (T) instantiator.apply(language).format(parent, fields);
+    }
+
+    protected abstract T format(final CodeGenerationParameter parameter, final Stream<CodeGenerationParameter> fields);
+
+    public enum Style {
+      VALUE_OBJECT_INITIALIZER, DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT
+    }
+
+    @SuppressWarnings("serial")
+    private static Map<Variables.Style, Function<Language, Variables<?>>> INSTANTIATORS = Collections.unmodifiableMap(
+            new HashMap<Variables.Style, Function<Language, Variables<?>>>() {{
+              put(Variables.Style.VALUE_OBJECT_INITIALIZER, lang -> new ValueObjectInitializer("data"));
+              put(Variables.Style.DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, language -> new DataObjectStaticFactoryMethodAssignment());
+            }});
+  }
+
   public abstract static class Fields<T> {
 
     public static <T> T format(final Style style,
-                              final Language language,
-                              final CodeGenerationParameter parent) {
+                               final Language language,
+                               final CodeGenerationParameter parent) {
       if(parent.isLabeled(AGGREGATE)) {
         return format(style, language, parent, parent.retrieveAllRelated(STATE_FIELD));
       } else if(parent.isLabeled(VALUE_OBJECT)) {
@@ -62,9 +98,8 @@ public class Formatters {
     protected abstract T format(final CodeGenerationParameter parameter, final Stream<CodeGenerationParameter> fields);
 
     public enum Style {
-      ASSIGNMENT, MEMBER_DECLARATION, DATA_OBJECT_MEMBER_DECLARATION, VALUE_OBJECT_INITIALIZER,
-      DATA_VALUE_OBJECT_ASSIGNMENT, STATE_BASED_ASSIGNMENT,
-      SELF_ALTERNATE_REFERENCE, ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE
+      ASSIGNMENT, MEMBER_DECLARATION, DATA_OBJECT_MEMBER_DECLARATION, DATA_VALUE_OBJECT_ASSIGNMENT,
+      STATE_BASED_ASSIGNMENT, SELF_ALTERNATE_REFERENCE, ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE
     }
 
     @SuppressWarnings("serial")
@@ -75,7 +110,6 @@ public class Formatters {
         put(Style.DATA_OBJECT_MEMBER_DECLARATION, lang -> new Member(lang, "Data"));
         put(Style.STATE_BASED_ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment("state"));
         put(Style.DATA_VALUE_OBJECT_ASSIGNMENT, lang -> new DataObjectConstructorAssignment());
-        put(Style.VALUE_OBJECT_INITIALIZER, lang -> new ValueObjectInitializer("data"));
         put(Style.SELF_ALTERNATE_REFERENCE, lang -> AlternateReference.handlingSelfReferencedFields());
         put(Style.ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE, lang -> AlternateReference.handlingDefaultFieldsValue());
       }});

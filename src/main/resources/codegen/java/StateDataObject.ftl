@@ -15,6 +15,9 @@ public class ${dataName} {
 
   <#list staticFactoryMethods as factoryMethod>
   public static ${factoryMethod.dataObjectName} from(${factoryMethod.parameters}) {
+    <#list factoryMethod.valueObjectInitializers as initializer>
+    ${initializer}
+    </#list>
     return ${factoryMethod.constructorInvocation};
   }
 

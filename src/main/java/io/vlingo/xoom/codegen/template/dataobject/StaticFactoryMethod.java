@@ -7,13 +7,17 @@
 
 package io.vlingo.xoom.codegen.template.dataobject;
 
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.template.model.formatting.Formatters.Variables;
 
 import java.beans.Introspector;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static io.vlingo.xoom.codegen.template.model.MethodScope.INSTANCE;
@@ -25,35 +29,44 @@ public class StaticFactoryMethod {
   private final String dataObjectName;
   private final String constructorInvocation;
 
+  private final List<String> valueObjectInitializers = new ArrayList<>();
+
   public static List<StaticFactoryMethod> from(final CodeGenerationParameter parent) {
-    return Arrays.asList(new StaticFactoryMethod(parent, Type.SINGLE_ARG),
-            new StaticFactoryMethod(parent, Type.ALL_ARGS));
+    return Arrays.asList(new StaticFactoryMethod(parent, Arguments.SINGLE),
+            new StaticFactoryMethod(parent, Arguments.ALL));
   }
 
   private StaticFactoryMethod(final CodeGenerationParameter parent,
-                              final Type staticFactoryMethodType) {
+                              final Arguments staticFactoryMethodArguments) {
     this.dataObjectName = TemplateStandard.DATA_OBJECT.resolveClassname(parent.value);
-    this.parameters = resolveMethodParameters(parent, staticFactoryMethodType);
-    this.constructorInvocation = resolveConstructorInvocation(parent, staticFactoryMethodType);
+    this.parameters = resolveMethodParameters(parent, staticFactoryMethodArguments);
+    this.constructorInvocation = resolveConstructorInvocation(parent, staticFactoryMethodArguments);
+    this.valueObjectInitializers.addAll(resolveValueObjectInitializers(parent, staticFactoryMethodArguments));
   }
 
   private String resolveMethodParameters(final CodeGenerationParameter parent,
-                                         final Type staticFactoryMethodType) {
-    final String parameterPattern = "final %s %s";
-
-    if(staticFactoryMethodType.isSingleArg()) {
-      return String.format(parameterPattern, resolveCarrierName(parent), Introspector.decapitalize(parent.value));
+                                         final Arguments staticFactoryMethodArguments) {
+    if(staticFactoryMethodArguments.isSingleArg()) {
+      final String carrier = resolveCarrierName(parent);
+      return String.format("final %s %s", carrier, Introspector.decapitalize(carrier));
     }
-
-    return Formatters.Arguments.DATA_OBJECT_STATIC_FACTORY_METHOD_PARAMETERS.format(parent);
+    return Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(parent);
   }
 
   private String resolveConstructorInvocation(final CodeGenerationParameter parent,
-                                              final Type staticFactoryMethodType) {
-    if(staticFactoryMethodType.isSingleArg()) {
+                                              final Arguments staticFactoryMethodArguments) {
+    if(staticFactoryMethodArguments.isSingleArg()) {
       return String.format("from(%s)", Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR_INVOCATION.format(parent, STATIC));
     }
     return String.format("new %s(%s)", dataObjectName, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR_INVOCATION.format(parent, INSTANCE));
+  }
+
+  private List<String> resolveValueObjectInitializers(final CodeGenerationParameter parent,
+                                                      final Arguments staticFactoryMethodArguments) {
+    if(staticFactoryMethodArguments.isAllArgs()) {
+      return Collections.emptyList();
+    }
+    return Variables.format(Variables.Style.DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, Language.findDefault(), parent);
   }
 
   private String resolveCarrierName(final CodeGenerationParameter parent) {
@@ -78,16 +91,20 @@ public class StaticFactoryMethod {
     return constructorInvocation;
   }
 
-  private static enum Type {
-    SINGLE_ARG,
-    ALL_ARGS;
+  public List<String> getValueObjectInitializers() {
+    return valueObjectInitializers;
+  }
+
+  private enum Arguments {
+    SINGLE,
+    ALL;
 
     boolean isSingleArg() {
-      return equals(SINGLE_ARG);
+      return equals(SINGLE);
     }
 
     boolean isAllArgs() {
-      return equals(ALL_ARGS);
+      return equals(ALL);
     }
   }
 
