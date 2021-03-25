@@ -6,7 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.autodispatch;
 
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -54,7 +54,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
                         .and(FACTORY_METHOD, factoryMethod)
                         .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
                         .and(STATE_DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
-                        .and(AGGREGATE_PROTOCOL_VARIABLE, ClassFormatter.simpleNameToAttribute(aggregate.value))
+                        .and(AGGREGATE_PROTOCOL_VARIABLE, CodeElementFormatter.simpleNameToAttribute(aggregate.value))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
                         .and(INDEX_NAME, AutoDispatchMappingValueFormatter.format(route.value))
                         .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method))

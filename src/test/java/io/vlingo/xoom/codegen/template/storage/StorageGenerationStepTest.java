@@ -140,7 +140,7 @@ public class StorageGenerationStepTest {
         Assert.assertEquals("PersistenceSetup", context.contents().get(17).retrieveName());
         Assert.assertTrue(context.contents().get(17).contains("class PersistenceSetup"));
         Assert.assertTrue(context.contents().get(17).contains("@Persistence(basePackage = \"io.vlingo\", storageType = StorageType.STATE_STORE, cqrs = true)"));
-        Assert.assertTrue(context.contents().get(17).contains("@Projections({"));
+        Assert.assertTrue(context.contents().get(17).contains("@Projections(value = {"));
         Assert.assertTrue(context.contents().get(17).contains("@Projection(actor = AuthorProjectionActor.class, becauseOf = {}),"));
         Assert.assertTrue(context.contents().get(17).contains("@Projection(actor = BookProjectionActor.class, becauseOf = {BookRented.class, BookPurchased.class})"));
         Assert.assertTrue(context.contents().get(17).contains("@Adapters({"));

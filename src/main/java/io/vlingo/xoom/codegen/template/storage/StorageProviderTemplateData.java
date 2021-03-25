@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.storage;
 
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.ImportParameter;
@@ -74,7 +74,7 @@ public class StorageProviderTemplateData extends TemplateData {
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, adapters).and(QUERIES, queries)
                 .and(AGGREGATES, ContentQuery.findClassNames(AGGREGATE, contents))
-                .and(PERSISTENT_TYPES, persistentTypes.map(ClassFormatter::simpleNameOf).collect(toSet()))
+                .and(PERSISTENT_TYPES, persistentTypes.map(CodeElementFormatter::simpleNameOf).collect(toSet()))
                 .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
                 .and(USE_ANNOTATIONS, useAnnotation);
     }

@@ -35,19 +35,21 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
 
   @Override
   protected ${dataName} merge(${dataName} previousData, int previousVersion, ${dataName} currentData, int currentVersion) {
-    ${dataName} merged;
+    if (previousVersion == currentVersion) return currentData;
 
-    if (previousData == null) {
-      previousData = currentData;
-    }
+    ${dataName} merged = previousData;
 
     switch (${projectionSourceTypesName}.valueOf(becauseOf)) {
-      <#list sourceNames as source>
-      case ${source}:
-        return ${dataName}.empty();   // TODO: implement actual merge
+      <#list sources as source>
+      case ${source.name}: {
+        merged = ${source.dataObjectName}.from(${source.mergeParameters});
+        break;
+      }
+
       </#list>
       default:
-        merged = currentData;
+        logger().warn("Operation of type " + becauseOf + " was not matched.");
+        break;
     }
 
     return merged;

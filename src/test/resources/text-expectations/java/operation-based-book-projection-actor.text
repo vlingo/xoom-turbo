@@ -1,8 +1,8 @@
 package io.vlingo.infrastructure.persistence;
 
 import io.vlingo.infrastructure.Operations;
-import io.vlingo.xoomapp.infrastructure.BookData;
-import io.vlingo.xoomapp.model.book.BookState;
+import io.vlingo.xoomapp.infrastructure.*;
+import io.vlingo.xoomapp.model.book.*;
 
 import io.vlingo.lattice.model.projection.Projectable;
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
@@ -35,19 +35,19 @@ public class BookProjectionActor extends StateStoreProjectionActor<BookData> {
 
   @Override
   protected BookData merge(BookData previousData, int previousVersion, BookData currentData, int currentVersion) {
-    BookData merged;
+    if (previousVersion == currentVersion) return currentData;
 
-    if (previousData == null) {
-      previousData = currentData;
-    }
+    BookData merged = previousData;
 
     switch (Operations.valueOf(becauseOf)) {
-      case BookSoldOut:
-        return BookData.empty();   // TODO: implement actual merge
-      case BookPurchased:
-        return BookData.empty();   // TODO: implement actual merge
+      case BookCataloged: {
+        merged = BookData.from(currentData.id, currentData.title, currentData.publisher);
+        break;
+      }
+
       default:
-        merged = currentData;
+        logger().warn("Operation of type " + becauseOf + " was not matched.");
+        break;
     }
 
     return merged;

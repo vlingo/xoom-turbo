@@ -17,6 +17,8 @@ import io.vlingo.symbio.store.state.StateStore;
  */
 public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
 
+  private static final ${dataName} Empty = ${dataName}.empty();
+
   public ${projectionName}() {
     this(${storeProviderName}.instance().store);
   }
@@ -27,27 +29,28 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
 
   @Override
   protected ${dataName} currentDataFor(final Projectable projectable) {
-    <#if stateful>
-    final ${stateName} state = projectable.object();
-    final ${dataName} current = ${dataName}.from(state);
-    return current;
-    <#else>
-    return ${dataName}.empty();
-    </#if>
+    return Empty;
   }
 
   @Override
   protected ${dataName} merge(${dataName} previousData, int previousVersion, ${dataName} currentData, int currentVersion) {
 
-    if (previousData == null) {
-      previousData = currentData;
-    }
+    if (previousVersion == currentVersion) return currentData;
+
+    ${dataName} merged = previousData;
 
     for (final Source<?> event : sources()) {
       switch (${projectionSourceTypesName}.valueOf(event.typeName())) {
-      <#list sourceNames as source>
-        case ${source}:
-          return ${dataName}.empty();   // TODO: implement actual merge
+      <#list sources as source>
+        case ${source.name}: {
+          final ${source.name} typedEvent = typed(event);
+          <#list source.dataObjectInitializers as initializer>
+          ${initializer}
+          </#list>
+          merged = ${source.dataObjectName}.from(${source.mergeParameters});
+          break;
+        }
+
       </#list>
         default:
           logger().warn("Event of type " + event.typeName() + " was not matched.");
@@ -55,6 +58,6 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
       }
     }
 
-    return previousData;
+    return merged;
   }
 }

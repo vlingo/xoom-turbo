@@ -10,10 +10,22 @@ package io.vlingo.xoom.codegen.template.model.domainevent;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 
+import java.util.List;
+
 public class DomainEventDetail {
+
+  public static boolean hasField(final String eventName, final String fieldName, final List<CodeGenerationParameter> events) {
+    return events.stream().filter(event -> event.value.equals(eventName)).anyMatch(event -> hasField(event, fieldName));
+  }
 
   public static boolean hasField(final CodeGenerationParameter domainEvent, final String fieldName) {
     return domainEvent.retrieveAllRelated(Label.STATE_FIELD).anyMatch(field -> field.value.equals(fieldName));
+  }
+
+  public static boolean isEmittedByFactoryMethod(final String eventName, final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+            .filter(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf))
+            .anyMatch(method -> method.retrieveRelatedValue(Label.DOMAIN_EVENT).equals(eventName));
   }
 
 }

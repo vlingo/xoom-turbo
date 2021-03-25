@@ -11,6 +11,9 @@ import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 import org.junit.Assert;
@@ -38,7 +41,7 @@ public class ProjectionGenerationStepTest {
     @Test
     public void testThatEventBasedProjectionClassesAreGeneratedForSourcedEntities() throws IOException {
         final CodeGenerationContext context =
-                CodeGenerationContext.empty();
+                CodeGenerationContext.with(codeGenerationParameters());
 
         loadParameters(context, StorageType.JOURNAL.name(), ProjectionType.EVENT_BASED.name());
         loadContents(context);
@@ -55,13 +58,13 @@ public class ProjectionGenerationStepTest {
 
         Assert.assertTrue(authorProjectionActor.contains(TextExpectation.onJava().read("event-based-author-projection-actor-for-sourced-entities")));
         Assert.assertTrue(bookProjectionActor.contains(TextExpectation.onJava().read("event-based-book-projection-actor-for-sourced-entities")));
-        Assert.assertTrue(dispatcherProvider.contains(TextExpectation.onJava().read("projection-dispatcher-provider")));
+        Assert.assertTrue(dispatcherProvider.contains(TextExpectation.onJava().read("event-based-projection-dispatcher-provider")));
     }
 
     @Test
     public void testThatEventBasedProjectionClassesAreGeneratedForStatefulEntities() throws IOException {
         final CodeGenerationContext context =
-                CodeGenerationContext.empty();
+                CodeGenerationContext.with(codeGenerationParameters());
 
         loadParameters(context, StorageType.STATE_STORE.name(), ProjectionType.EVENT_BASED.name());
         loadContents(context);
@@ -78,13 +81,13 @@ public class ProjectionGenerationStepTest {
 
         Assert.assertTrue(authorProjectionActor.contains(TextExpectation.onJava().read("event-based-author-projection-actor-for-stateful-entities")));
         Assert.assertTrue(bookProjectionActor.contains(TextExpectation.onJava().read("event-based-book-projection-actor-for-stateful-entities")));
-        Assert.assertTrue(dispatcherProvider.contains(TextExpectation.onJava().read("projection-dispatcher-provider")));
+        Assert.assertTrue(dispatcherProvider.contains(TextExpectation.onJava().read("event-based-projection-dispatcher-provider")));
     }
 
     @Test
     public void testThatOperationBasedProjectionClassesAreGenerated() throws IOException {
         final CodeGenerationContext context =
-                CodeGenerationContext.empty();
+                CodeGenerationContext.with(codeGenerationParameters());
 
         loadParameters(context, StorageType.STATE_STORE.name(), ProjectionType.OPERATION_BASED.name());
         loadContents(context);
@@ -101,17 +104,17 @@ public class ProjectionGenerationStepTest {
 
         Assert.assertTrue(authorProjectionActor.contains(TextExpectation.onJava().read("operation-based-author-projection-actor")));
         Assert.assertTrue(bookProjectionActor.contains(TextExpectation.onJava().read("operation-based-book-projection-actor")));
-        Assert.assertTrue(dispatcherProvider.contains(TextExpectation.onJava().read("projection-dispatcher-provider")));
+        Assert.assertTrue(dispatcherProvider.contains(TextExpectation.onJava().read("operation-based-projection-dispatcher-provider")));
     }
 
     private void loadContents(final CodeGenerationContext context) {
         context.addContent(AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), AUTHOR_STATE_CONTENT_TEXT);
         context.addContent(AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.java"), BOOK_STATE_CONTENT_TEXT);
         context.addContent(AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), AUTHOR_CONTENT_TEXT);
-        context.addContent(DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRated.java"), AUTHOR_RATED_CONTENT_TEXT);
+        context.addContent(DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRegistered.java"), AUTHOR_REGISTERED_CONTENT_TEXT);
+        context.addContent(DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRanked.java"), AUTHOR_RANKED_CONTENT_TEXT);
         context.addContent(AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "Book.java"), BOOK_CONTENT_TEXT);
-        context.addContent(DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookSoldOut.java"), BOOK_SOLD_OUT_CONTENT_TEXT);
-        context.addContent(DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookPurchased.java"), BOOK_PURCHASED_CONTENT_TEXT);
+        context.addContent(DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookCataloged.java"), BOOK_CATALOGED_CONTENT_TEXT);
         context.addContent(DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), AUTHOR_DATA_CONTENT_TEXT);
         context.addContent(DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.java"), BOOK_DATA_CONTENT_TEXT);
     }
@@ -120,6 +123,107 @@ public class ProjectionGenerationStepTest {
         context.with(PACKAGE, "io.vlingo").with(APPLICATION_NAME, "xoomapp")
                 .with(STORAGE_TYPE, storage).with(PROJECTION_TYPE, projections)
                 .with(TARGET_FOLDER, HOME_DIRECTORY);
+    }
+
+    private CodeGenerationParameters aggregates() {
+        final CodeGenerationParameter idField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter nameField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+                        .relate(Label.FIELD_TYPE, "Name");
+
+        final CodeGenerationParameter rankField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                        .relate(Label.FIELD_TYPE, "Rank");
+
+        final CodeGenerationParameter authorRegisteredEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+                        .relate(idField).relate(nameField);
+
+        final CodeGenerationParameter authorRankedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
+                        .relate(idField).relate(rankField);
+
+        final CodeGenerationParameter factoryMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
+                        .relate(Label.METHOD_PARAMETER, "name")
+                        .relate(FACTORY_METHOD, "true")
+                        .relate(authorRegisteredEvent);
+
+        final CodeGenerationParameter rankMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
+                        .relate(Label.METHOD_PARAMETER, "rank")
+                        .relate(authorRankedEvent);
+
+        final CodeGenerationParameter authorAggregate =
+                CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+                        .relate(URI_ROOT, "/authors").relate(idField)
+                        .relate(nameField).relate(rankField).relate(factoryMethod)
+                        .relate(rankMethod).relate(authorRegisteredEvent).relate(authorRankedEvent);
+
+        final CodeGenerationParameter titleField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "title")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter publisherField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "publisher")
+                        .relate(Label.FIELD_TYPE, "String");
+
+        final CodeGenerationParameter bookCatalogedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "BookCataloged")
+                        .relate(idField).relate(titleField).relate(publisherField);
+
+        final CodeGenerationParameter catalogMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "catalog")
+                        .relate(Label.METHOD_PARAMETER, "title")
+                        .relate(Label.METHOD_PARAMETER, "publisher")
+                        .relate(FACTORY_METHOD, "true")
+                        .relate(bookCatalogedEvent);
+
+        final CodeGenerationParameter bookAggregate =
+                CodeGenerationParameter.of(Label.AGGREGATE, "Book")
+                        .relate(idField).relate(titleField)
+                        .relate(publisherField).relate(catalogMethod)
+                        .relate(bookCatalogedEvent);
+
+        return CodeGenerationParameters.from(authorAggregate, bookAggregate);
+    }
+
+    private CodeGenerationParameter nameValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+                        .relate(Label.FIELD_TYPE, "String"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+                        .relate(Label.FIELD_TYPE, "String"));
+    }
+
+    private CodeGenerationParameter rankValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+                        .relate(Label.FIELD_TYPE, "int"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+                        .relate(Label.FIELD_TYPE, "Classification"));
+    }
+
+    private CodeGenerationParameter classificationValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classification")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
+                        .relate(Label.FIELD_TYPE, "String"))
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifier")
+                        .relate(Label.FIELD_TYPE, "Classifier"));
+    }
+
+    private CodeGenerationParameter classifierValueObject() {
+        return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
+                        .relate(Label.FIELD_TYPE, "String"));
+    }
+
+    private CodeGenerationParameters codeGenerationParameters() {
+        return aggregates().add(nameValueObject()).add(rankValueObject())
+                .add(classificationValueObject()).add(classifierValueObject());
     }
 
     private static final String AUTHOR_STATE_CONTENT_TEXT =
@@ -146,21 +250,21 @@ public class ProjectionGenerationStepTest {
                     "... \\n" +
                     "}";
 
-    private static final String BOOK_SOLD_OUT_CONTENT_TEXT =
+    private static final String BOOK_CATALOGED_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model.book; \\n" +
-                    "public class BookSoldOut extends DomainEvent { \\n" +
+                    "public class BookCataloged extends DomainEvent { \\n" +
                     "... \\n" +
                     "}";
 
-    private static final String BOOK_PURCHASED_CONTENT_TEXT =
-            "package io.vlingo.xoomapp.model.book; \\n" +
-                    "public class BookPurchased extends DomainEvent { \\n" +
-                    "... \\n" +
-                    "}";
-
-    private static final String AUTHOR_RATED_CONTENT_TEXT =
+    private static final String AUTHOR_REGISTERED_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model.author; \\n" +
-                    "public class AuthorRated extends DomainEvent { \\n" +
+                    "public class AuthorRegistered extends DomainEvent { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String AUTHOR_RANKED_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model.author; \\n" +
+                    "public class AuthorRanked extends DomainEvent { \\n" +
                     "... \\n" +
                     "}";
 

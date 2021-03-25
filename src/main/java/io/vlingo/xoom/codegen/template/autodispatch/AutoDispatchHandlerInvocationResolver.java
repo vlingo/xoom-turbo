@@ -7,7 +7,7 @@
 package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.http.Method;
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.resource.HandlerInvocationResolver;
@@ -49,7 +49,7 @@ public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationR
                 parentParameter.retrieveRelatedValue(Label.HANDLERS_CONFIG_NAME);
 
         final String handlersConfigClassName =
-                ClassFormatter.simpleNameOf(handlersConfigQualifiedName);
+                CodeElementFormatter.simpleNameOf(handlersConfigQualifiedName);
 
         final String invocation = routeSignatureParameter.retrieveRelatedValue(invocationLabel);
 

@@ -17,5 +17,6 @@ import java.lang.annotation.Target;
 public @interface Projections {
 
     Projection[] value();
+    ProjectionType type() default ProjectionType.EVENT_BASED;
 
 }

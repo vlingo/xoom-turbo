@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.dataobject;
 
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.language.Language;
@@ -74,7 +74,7 @@ public class StateDataObjectTemplateData extends TemplateData {
                 .and(STATE_NAME, stateName).and(STATE_DATA_OBJECT_NAME, dataName)
                 .and(STATIC_FACTORY_METHODS, StaticFactoryMethod.from(aggregate))
                 .and(MEMBERS, members).and(MEMBERS_ASSIGNMENT, membersAssignment)
-                .and(DATA_OBJECT_QUALIFIED_NAME, ClassFormatter.qualifiedNameOf(packageName, dataName))
+                .and(DATA_OBJECT_QUALIFIED_NAME, CodeElementFormatter.qualifiedNameOf(packageName, dataName))
                 .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(aggregate))
                 .addImport(ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents));
     }

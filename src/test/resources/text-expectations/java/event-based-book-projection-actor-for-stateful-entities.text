@@ -1,8 +1,8 @@
 package io.vlingo.infrastructure.persistence;
 
+import io.vlingo.xoomapp.infrastructure.*;
 import io.vlingo.infrastructure.Events;
-import io.vlingo.xoomapp.infrastructure.BookData;
-import io.vlingo.xoomapp.model.book.BookState;
+import io.vlingo.xoomapp.model.book.*;
 
 import io.vlingo.lattice.model.projection.Projectable;
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
@@ -17,6 +17,8 @@ import io.vlingo.symbio.store.state.StateStore;
  */
 public class BookProjectionActor extends StateStoreProjectionActor<BookData> {
 
+  private static final BookData Empty = BookData.empty();
+
   public BookProjectionActor() {
     this(QueryModelStateStoreProvider.instance().store);
   }
@@ -27,30 +29,30 @@ public class BookProjectionActor extends StateStoreProjectionActor<BookData> {
 
   @Override
   protected BookData currentDataFor(final Projectable projectable) {
-    final BookState state = projectable.object();
-    final BookData current = BookData.from(state);
-    return current;
+    return Empty;
   }
 
   @Override
   protected BookData merge(BookData previousData, int previousVersion, BookData currentData, int currentVersion) {
 
-    if (previousData == null) {
-      previousData = currentData;
-    }
+    if (previousVersion == currentVersion) return currentData;
+
+    BookData merged = previousData;
 
     for (final Source<?> event : sources()) {
       switch (Events.valueOf(event.typeName())) {
-        case BookSoldOut:
-          return BookData.empty();   // TODO: implement actual merge
-        case BookPurchased:
-          return BookData.empty();   // TODO: implement actual merge
+        case BookCataloged: {
+          final BookCataloged typedEvent = typed(event);
+          merged = BookData.from(typedEvent.id, typedEvent.title, typedEvent.publisher);
+          break;
+        }
+
         default:
           logger().warn("Event of type " + event.typeName() + " was not matched.");
           break;
       }
     }
 
-    return previousData;
+    return merged;
   }
 }

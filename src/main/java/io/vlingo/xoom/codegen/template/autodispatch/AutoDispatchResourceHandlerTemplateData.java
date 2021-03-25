@@ -8,7 +8,7 @@
 package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -54,7 +54,7 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
     @SuppressWarnings("unchecked")
     private AutoDispatchResourceHandlerTemplateData(final CodeGenerationContext context,
                                                     final CodeGenerationParameter autoDispatchParameter) {
-        this.restResourceName = ClassFormatter.simpleNameOf(autoDispatchParameter.value);
+        this.restResourceName = CodeElementFormatter.simpleNameOf(autoDispatchParameter.value);
 
         final TemplateParameters queryStoreProviderParameters =
                 TemplateParameters.with(STORAGE_TYPE, StorageType.STATE_STORE).and(MODEL, Model.QUERY);
@@ -63,10 +63,10 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                 STORE_PROVIDER.resolveClassname(queryStoreProviderParameters);
 
         final String aggregateProtocolClassName =
-                ClassFormatter.simpleNameOf(autoDispatchParameter.retrieveRelatedValue(Label.MODEL_PROTOCOL));
+                CodeElementFormatter.simpleNameOf(autoDispatchParameter.retrieveRelatedValue(Label.MODEL_PROTOCOL));
 
         this.parameters =
-                TemplateParameters.with(PACKAGE_NAME, ClassFormatter.packageOf(autoDispatchParameter.value))
+                TemplateParameters.with(PACKAGE_NAME, CodeElementFormatter.packageOf(autoDispatchParameter.value))
                         .and(QUERIES, Queries.from(autoDispatchParameter))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregateProtocolClassName))
                         .and(REST_RESOURCE_NAME, standard().resolveClassname(restResourceName))

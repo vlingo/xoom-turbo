@@ -63,6 +63,7 @@ public class PersistenceSetupTemplateData extends TemplateData {
                 .and(STORAGE_TYPE, storageType.name())
                 .and(DATA_OBJECTS, resolveDataObjectNames(contents))
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
+                .and(PROJECTION_TYPE, projectionType.name())
                 .and(ADAPTERS, Adapter.from(templatesData))
                 .and(PROJECTIONS, Projection.from(contents))
                 .and(QUERIES, Queries.from(useCQRS, contents, templatesData))

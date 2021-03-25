@@ -6,7 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.storage;
 
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -91,8 +91,8 @@ public class Queries {
 
     private Queries(final String protocolQualifiedName,
                     final String actorQualifiedName) {
-        this(ClassFormatter.packageOf(protocolQualifiedName), ClassFormatter.simpleNameOf(protocolQualifiedName),
-                ClassFormatter.packageOf(actorQualifiedName), ClassFormatter.simpleNameOf(actorQualifiedName));
+        this(CodeElementFormatter.packageOf(protocolQualifiedName), CodeElementFormatter.simpleNameOf(protocolQualifiedName),
+                CodeElementFormatter.packageOf(actorQualifiedName), CodeElementFormatter.simpleNameOf(actorQualifiedName));
     }
 
     private Queries(final String protocolPackageName,
@@ -101,7 +101,7 @@ public class Queries {
                     final String actorName) {
         this.actorName = actorName;
         this.protocolName = protocolName;
-        this.attributeName = ClassFormatter.simpleNameToAttribute(protocolName);
+        this.attributeName = CodeElementFormatter.simpleNameToAttribute(protocolName);
 
         if(!isEmpty()) {
             this.qualifiedNames.addAll(

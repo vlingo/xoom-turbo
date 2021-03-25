@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.exchange;
 
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -99,7 +99,7 @@ public class ExchangeReceiver {
     }
 
     public String getModelVariable() {
-        return ClassFormatter.simpleNameToAttribute(modelProtocol);
+        return CodeElementFormatter.simpleNameToAttribute(modelProtocol);
     }
 
     public List<String> getValueObjectInitializers() {

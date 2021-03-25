@@ -11,6 +11,8 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.projections.ProjectionSourceTypesDetail;
+import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.List;
@@ -27,21 +29,29 @@ public class AggregateMethodTemplateData extends TemplateData {
     private final TemplateParameters parameters;
 
     public static List<TemplateData> from(final CodeGenerationParameter aggregate,
-                                          final StorageType storageType) {
+                                          final StorageType storageType,
+                                          final ProjectionType projectionType) {
         return aggregate.retrieveAllRelated(AGGREGATE_METHOD)
-                .map(method -> new AggregateMethodTemplateData(method, storageType))
+                .map(method -> new AggregateMethodTemplateData(method, storageType, projectionType))
                 .collect(toList());
     }
 
     private AggregateMethodTemplateData(final CodeGenerationParameter method,
-                                        final StorageType storageType) {
+                                        final StorageType storageType,
+                                        final ProjectionType projectionType) {
         this.parameters =
                 TemplateParameters.with(METHOD_NAME, method.value).and(STORAGE_TYPE, storageType)
                         .and(DOMAIN_EVENT_NAME, method.retrieveRelatedValue(DOMAIN_EVENT))
                         .and(METHOD_INVOCATION_PARAMETERS, AGGREGATE_METHOD_INVOCATION.format(method))
                         .and(METHOD_PARAMETERS, SIGNATURE_DECLARATION.format(method))
                         .and(SOURCED_EVENTS, SourcedEvent.from(method.parent()))
+                        .and(OPERATION_BASED, projectionType.isOperationBased())
+                        .and(PROJECTION_SOURCE_TYPES_NAME, resolveProjectionSourceTypesName(projectionType))
                         .and(STATE_NAME, TemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(AGGREGATE).value));
+    }
+
+    private String resolveProjectionSourceTypesName(final ProjectionType projectionType) {
+        return ProjectionSourceTypesDetail.resolveClassName(projectionType);
     }
 
     @Override

@@ -10,10 +10,10 @@ package io.vlingo.xoom.annotation.persistence;
 import io.vlingo.xoom.annotation.TypeRetriever;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import java.util.Collections;
 import java.util.List;
@@ -69,7 +69,7 @@ public class PersistenceParameterResolver {
             return ProjectionType.NONE.name();
         }
 
-        return ProjectionType.CUSTOM.name();
+        return projections.type().name();
     }
 
     private List<CodeGenerationParameter> resolveProjectables() {
@@ -81,11 +81,15 @@ public class PersistenceParameterResolver {
             return Collections.emptyList();
         }
 
-        return Stream.of(projections.value()).map(this::resolveCauseTypes)
+        final ProjectionType projectionType =
+                projections.type();
+
+        return Stream.of(projections.value())
+                .map(projection -> resolveCauseTypes(projection, projectionType))
                 .collect(Collectors.toList());
     }
 
-    private CodeGenerationParameter resolveCauseTypes(final Projection projection) {
+    private CodeGenerationParameter resolveCauseTypes(final Projection projection, final ProjectionType projectionType) {
         final String projectionActorQualifiedName =
                 typeRetriever.from(projection, Projection::actor)
                         .getQualifiedName().toString();
@@ -94,7 +98,13 @@ public class PersistenceParameterResolver {
                 CodeGenerationParameter.of(PROJECTION_ACTOR, projectionActorQualifiedName);
 
         typeRetriever.typesFrom(projection, Projection::becauseOf)
-                .forEach(source -> projectionActor.relate(SOURCE, source.getQualifiedName().toString()));
+                .forEach(source -> {
+                    final Name sourceName =
+                            projectionType.isEventBased() ? source.getQualifiedName()
+                                    : source.getSimpleName();
+
+                    projectionActor.relate(SOURCE, sourceName.toString());
+                });
 
         return projectionActor;
     }

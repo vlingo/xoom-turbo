@@ -9,7 +9,7 @@ package io.vlingo.xoom.codegen.content;
 
 import java.beans.Introspector;
 
-public class ClassFormatter {
+public class CodeElementFormatter {
 
     public static String qualifiedNameOf(final String packageName,
                                          final String className) {
@@ -34,5 +34,9 @@ public class ClassFormatter {
 
     public static String importAllFrom(final String packageName) {
         return packageName + ".*";
+    }
+
+    public static String staticallyImportAllFrom(final String projectionSourceTypesQualifiedName) {
+        return "static " + importAllFrom(projectionSourceTypesQualifiedName);
     }
 }

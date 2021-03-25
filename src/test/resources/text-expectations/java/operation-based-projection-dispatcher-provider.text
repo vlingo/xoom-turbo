@@ -11,9 +11,7 @@ import io.vlingo.lattice.model.projection.ProjectionDispatcher.ProjectToDescript
 import io.vlingo.lattice.model.projection.TextProjectionDispatcherActor;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
 
-import io.vlingo.xoomapp.model.book.BookPurchased;
-import io.vlingo.xoomapp.model.author.AuthorRated;
-import io.vlingo.xoomapp.model.book.BookSoldOut;
+import static io.vlingo.infrastructure.Operations.*;
 
 @SuppressWarnings("rawtypes")
 public class ProjectionDispatcherProvider {
@@ -31,8 +29,8 @@ public class ProjectionDispatcherProvider {
 
     final List<ProjectToDescription> descriptions =
             Arrays.asList(
-                    ProjectToDescription.with(BookProjectionActor.class, BookSoldOut.class.getName(), BookPurchased.class.getName()),
-                    ProjectToDescription.with(AuthorProjectionActor.class, AuthorRated.class.getName())
+                    ProjectToDescription.with(BookProjectionActor.class, BookCataloged.name()),
+                    ProjectToDescription.with(AuthorProjectionActor.class, AuthorRanked.name(), AuthorRegistered.name())
                     );
 
     final Protocols dispatcherProtocols =

@@ -19,7 +19,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.content.ClassFormatter.simpleNameToAttribute;
+import static io.vlingo.xoom.codegen.content.CodeElementFormatter.simpleNameToAttribute;
 import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE_METHOD;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;

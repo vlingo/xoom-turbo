@@ -8,17 +8,17 @@
 package io.vlingo.xoom.codegen.template.projections;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
 
 public class ProjectionTemplateDataFactory {
 
@@ -34,34 +34,32 @@ public class ProjectionTemplateDataFactory {
     }
 
     private TemplateData handleInternalGeneration(final CodeGenerationContext context) {
-        return ProjectionDispatcherProviderTemplateData.from(context.parametersOf(PROJECTION_ACTOR), context.contents());
+        final List<Content> contents = context.contents();
+        final Stream<CodeGenerationParameter> projectionActors = context.parametersOf(PROJECTION_ACTOR);
+        final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
+        return ProjectionDispatcherProviderTemplateData.fromProjectionAnnotation(projectionType, projectionActors, contents);
     }
 
     private List<TemplateData> handleExternalGeneration(final CodeGenerationContext context) {
+        final List<Content> contents = context.contents();
+
         final String basePackage = context.parameterOf(PACKAGE);
+
+        final Boolean useAnnotations =
+                context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
 
         final ProjectionType projectionType =
                 context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
 
-        final StorageType storageType =
-                context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
+        final List<CodeGenerationParameter> valueObjects =
+                context.parametersOf(VALUE_OBJECT).collect(Collectors.toList());
 
-        final Set<String> aggregateProtocols =
-                ContentQuery.findClassNames(AGGREGATE_PROTOCOL, context.contents());
+        final Stream<CodeGenerationParameter> aggregates = context.parametersOf(AGGREGATE);
 
         final List<TemplateData> templatesData = new ArrayList<>();
-        templatesData.add(ProjectionSourceTypesTemplateData.from(basePackage, projectionType, context.contents()));
-
-        if(!context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf)) {
-            templatesData.add(ProjectionDispatcherProviderTemplateData.from(basePackage,
-                    projectionType, context.contents()));
-        }
-
-        aggregateProtocols.forEach(protocolName -> {
-            templatesData.add(ProjectionTemplateData.from(basePackage, protocolName,
-                            context.contents(), projectionType, storageType, templatesData));
-        });
-
+        templatesData.add(ProjectionSourceTypesTemplateData.from(basePackage, projectionType, contents));
+        templatesData.add(ProjectionDispatcherProviderTemplateData.from(basePackage, projectionType, useAnnotations, contents));
+        templatesData.addAll(ProjectionTemplateData.from(basePackage, aggregates, valueObjects, projectionType, contents));
         return templatesData;
     }
 

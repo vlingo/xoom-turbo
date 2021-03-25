@@ -17,6 +17,7 @@ import io.vlingo.xoom.codegen.template.model.aggregate.AggregateProtocolTemplate
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateStateTemplateData;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateTemplateData;
 import io.vlingo.xoom.codegen.template.model.domainevent.DomainEventTemplateData;
+import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
@@ -32,21 +33,24 @@ public class ModelTemplateDataFactory {
         final List<Content> contents = context.contents();
         final String basePackage = context.parameterOf(PACKAGE);
         final Language language = context.parameterOf(LANGUAGE, Language::valueOf);
-        final StorageType storageType = StorageType.of(context.parameterOf(STORAGE_TYPE));
+        final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::of);
+        final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
         return context.parametersOf(AGGREGATE).flatMap(aggregate -> {
             final String packageName = AggregateDetail.resolvePackage(basePackage, aggregate.value);
-            return loadTemplates(packageName, language, aggregate, storageType, contents);
+            return loadTemplates(basePackage, packageName, language, aggregate, storageType, projectionType, contents);
         }).collect(Collectors.toList());
     }
 
-    private static Stream<TemplateData> loadTemplates(final String packageName,
+    private static Stream<TemplateData> loadTemplates(final String basePackage,
+                                                      final String packageName,
                                                       final Language language,
                                                       final CodeGenerationParameter aggregateParameter,
                                                       final StorageType storageType,
+                                                      final ProjectionType projectionType,
                                                       final List<Content> contents) {
         final List<TemplateData> templatesData = new ArrayList<>();
         templatesData.add(new AggregateProtocolTemplateData(packageName, aggregateParameter, contents));
-        templatesData.add(new AggregateTemplateData(packageName, aggregateParameter, storageType, contents));
+        templatesData.add(new AggregateTemplateData(basePackage, packageName, aggregateParameter, storageType, projectionType, contents));
         templatesData.add(new AggregateStateTemplateData(packageName, language, aggregateParameter, storageType, contents));
         templatesData.addAll(DomainEventTemplateData.from(packageName, language, aggregateParameter, contents));
         return templatesData.stream();

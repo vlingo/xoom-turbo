@@ -14,7 +14,7 @@ import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.codegen.template.model.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
 
-import static io.vlingo.xoom.codegen.content.ClassFormatter.simpleNameToAttribute;
+import static io.vlingo.xoom.codegen.content.CodeElementFormatter.simpleNameToAttribute;
 import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;

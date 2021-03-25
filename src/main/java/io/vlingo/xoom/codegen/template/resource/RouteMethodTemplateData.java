@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.resource;
 
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -120,10 +120,10 @@ public class RouteMethodTemplateData extends TemplateData {
     private String resolveModelAttributeName(final CodeGenerationParameter mainParameter,
                                              final Label protocolLabel) {
         if (mainParameter.isLabeled(Label.AGGREGATE)) {
-            return ClassFormatter.simpleNameToAttribute(mainParameter.value);
+            return CodeElementFormatter.simpleNameToAttribute(mainParameter.value);
         }
         final String qualifiedName = mainParameter.retrieveRelatedValue(protocolLabel);
-        return ClassFormatter.qualifiedNameToAttribute(qualifiedName);
+        return CodeElementFormatter.qualifiedNameToAttribute(qualifiedName);
     }
 
     private List<String> resolveValueObjectInitializers(final Language language,

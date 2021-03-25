@@ -101,7 +101,7 @@ public class TextBasedContent extends Content {
 
     @Override
     public String retrieveQualifiedName() {
-        return ClassFormatter.qualifiedNameOf(retrievePackage(), retrieveName());
+        return CodeElementFormatter.qualifiedNameOf(retrievePackage(), retrieveName());
     }
 
     @Override

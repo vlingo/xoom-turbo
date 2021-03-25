@@ -1,7 +1,7 @@
 package ${packageName};
 
 public enum ${projectionSourceTypesName} {
-<#list sourceNames as source>
+<#list sources as source>
   ${source},
 </#list>
 }

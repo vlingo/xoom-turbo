@@ -5,6 +5,7 @@ import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 <#if useProjections>
 import io.vlingo.xoom.annotation.persistence.Projections;
 import io.vlingo.xoom.annotation.persistence.Projection;
+import io.vlingo.xoom.annotation.persistence.ProjectionType;
 </#if>
 <#if requireAdapters>
 import io.vlingo.xoom.annotation.persistence.Adapters;
@@ -22,7 +23,7 @@ import ${import.qualifiedClassName};
 
 @Persistence(basePackage = "${basePackage}", storageType = StorageType.${storageType}, cqrs = ${useCQRS?c})
 <#if useProjections>
-@Projections({
+@Projections(value = {
 <#list projections as projection>
   <#if projection.last>
   @Projection(actor = ${projection.actor}.class, becauseOf = {${projection.causes}})
@@ -30,7 +31,7 @@ import ${import.qualifiedClassName};
   @Projection(actor = ${projection.actor}.class, becauseOf = {${projection.causes}}),
   </#if>
 </#list>
-})
+}, type = ProjectionType.${projectionType})
 </#if>
 <#if requireAdapters>
 @Adapters({

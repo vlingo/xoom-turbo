@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template;
 
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.parameter.ImportParameter;
 
 import java.util.HashMap;
@@ -61,7 +61,7 @@ public class TemplateParameters {
             return false;
         }
 
-        final String classPackage = ClassFormatter.packageOf(qualifiedClassName);
+        final String classPackage = CodeElementFormatter.packageOf(qualifiedClassName);
 
         if(find(PACKAGE_NAME).equals(classPackage)) {
             return false;

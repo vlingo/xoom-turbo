@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.bootstrap;
 
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 
@@ -42,7 +42,7 @@ public class RestResource {
                          final int resourceIndex,
                          final int numberOfResources) {
         this.className = restResourceName;
-        this.objectName = ClassFormatter.simpleNameToAttribute(restResourceName);
+        this.objectName = CodeElementFormatter.simpleNameToAttribute(restResourceName);
         this.last = resourceIndex == numberOfResources - 1;
     }
 

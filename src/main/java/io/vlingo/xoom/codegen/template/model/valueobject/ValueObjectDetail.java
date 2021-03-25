@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.codegen.template.model.valueobject;
 
-import io.vlingo.xoom.codegen.content.ClassFormatter;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -37,8 +37,8 @@ public class ValueObjectDetail {
                     .findAny();
 
     if(anyQualifiedName.isPresent()) {
-      final String packageName = ClassFormatter.packageOf(anyQualifiedName.get());
-      return Stream.of(ClassFormatter.importAllFrom(packageName)).collect(Collectors.toSet());
+      final String packageName = CodeElementFormatter.packageOf(anyQualifiedName.get());
+      return Stream.of(CodeElementFormatter.importAllFrom(packageName)).collect(Collectors.toSet());
     }
 
     return Collections.emptySet();
