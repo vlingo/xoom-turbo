@@ -1,6 +1,6 @@
 # vlingo-xoom
 
-[![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-xoom.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-xoom) [![Build](https://github.com/vlingo/vlingo-xoom/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-xoom/actions?query=workflow%3ABuild) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-xoom/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-xoom/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/xoom)
+[![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-xoom.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-xoom) [![Build](https://github.com/vlingo/vlingo-xoom/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-xoom/actions?query=workflow%3ABuild) [![Download](https://img.shields.io/maven-central/v/io.vlingo/vlingo-xoom?label=maven)](https://search.maven.org/artifact/io.vlingo/vlingo-xoom) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/xoom)
 
 The VLINGO XOOM platform SDK for DOMA and DDD accelerates building highly scalable and high-performance Reactive microservices and applications.
 
