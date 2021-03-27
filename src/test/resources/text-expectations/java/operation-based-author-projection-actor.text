@@ -34,7 +34,7 @@ public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>
   }
 
   @Override
-  protected AuthorData merge(AuthorData previousData, int previousVersion, AuthorData currentData, int currentVersion) {
+  protected AuthorData merge(final AuthorData previousData, final int previousVersion, final AuthorData currentData, final int currentVersion) {
     if (previousVersion == currentVersion) return currentData;
 
     AuthorData merged = previousData;

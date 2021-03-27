@@ -1,6 +1,6 @@
 package ${packageName};
 
-public class ${valueObjectName} {
+public final class ${valueObjectName} {
 
   <#list members as member>
   ${member}

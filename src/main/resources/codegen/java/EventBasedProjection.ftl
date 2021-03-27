@@ -33,7 +33,7 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   }
 
   @Override
-  protected ${dataName} merge(${dataName} previousData, int previousVersion, ${dataName} currentData, int currentVersion) {
+  protected ${dataName} merge(final ${dataName} previousData, final int previousVersion, final ${dataName} currentData, final int currentVersion) {
 
     if (previousVersion == currentVersion) return currentData;
 

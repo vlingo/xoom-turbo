@@ -33,7 +33,7 @@ public class BookProjectionActor extends StateStoreProjectionActor<BookData> {
   }
 
   @Override
-  protected BookData merge(BookData previousData, int previousVersion, BookData currentData, int currentVersion) {
+  protected BookData merge(final BookData previousData, final int previousVersion, final BookData currentData, final int currentVersion) {
 
     if (previousVersion == currentVersion) return currentData;
 

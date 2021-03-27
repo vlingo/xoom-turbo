@@ -1,6 +1,6 @@
 package io.vlingo.xoomapp.model;
 
-public class Rank {
+public final class Rank {
 
   public final int points;
   public final String classification;

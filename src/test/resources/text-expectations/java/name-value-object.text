@@ -1,6 +1,6 @@
 package io.vlingo.xoomapp.model;
 
-public class Name {
+public final class Name {
 
   public final String firstName;
   public final String lastName;
