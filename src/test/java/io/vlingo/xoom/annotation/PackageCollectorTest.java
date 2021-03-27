@@ -7,18 +7,22 @@
 
 package io.vlingo.xoom.annotation;
 
-import io.vlingo.xoom.annotation.PackageCollector;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Set;
 
 public class PackageCollectorTest {
 
   @Test
   public void testThatPackagesAreCollected() {
+    final Path projectPath =
+            Paths.get(System.getProperty("user.dir"));
+
     final Set<String> packages =
-            PackageCollector.from("io.vlingo.xoom.annotation").collectAll();
+            PackageCollector.from(projectPath, "io.vlingo.xoom.annotation").collectAll();
 
     Assert.assertEquals(5, packages.size());
     Assert.assertTrue(packages.contains("io.vlingo.xoom.annotation"));

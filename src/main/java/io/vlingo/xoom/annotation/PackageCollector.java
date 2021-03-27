@@ -22,16 +22,18 @@ import static org.apache.commons.io.filefilter.TrueFileFilter.INSTANCE;
 
 public class PackageCollector {
 
+    private final Path projectPath;
     private final String basePackage;
 
     private static final String[] SOURCE_FOLDER_PATH = new String[]{"src", "main", "java"};
 
-    public static PackageCollector from(final String basePackage) {
-        return new PackageCollector(basePackage);
+    public static PackageCollector from(final Path projectPath, final String basePackage) {
+        return new PackageCollector(projectPath, basePackage);
     }
 
-    private PackageCollector(final String basePackage) {
+    private PackageCollector(final Path projectPath, final String basePackage) {
         this.basePackage = basePackage;
+        this.projectPath = projectPath;
     }
 
     public Set<String> collectAll() {
@@ -49,8 +51,7 @@ public class PackageCollector {
     }
 
     private Path resolveSourceFolderPath() {
-        final String projectPath = System.getProperty("user.dir");
-        return Paths.get(projectPath, SOURCE_FOLDER_PATH);
+        return Paths.get(projectPath.toString(), SOURCE_FOLDER_PATH);
     }
 
 }

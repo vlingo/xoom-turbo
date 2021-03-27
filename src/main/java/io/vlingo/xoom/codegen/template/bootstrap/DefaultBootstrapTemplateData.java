@@ -9,24 +9,33 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.Set;
 
+import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
 import static io.vlingo.xoom.codegen.parameter.Label.USE_ANNOTATIONS;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCES;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
 public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
     @Override
     protected void enrichParameters(final CodeGenerationContext context) {
+        final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
+        final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
+
         final Set<String> qualifiedNames =
                 ContentQuery.findFullyQualifiedClassNames(context.contents(),
-                        REST_RESOURCE, AUTO_DISPATCH_RESOURCE_HANDLER);
+                        STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER, REST_RESOURCE,
+                        AUTO_DISPATCH_RESOURCE_HANDLER, EXCHANGE_BOOTSTRAP);
 
         parameters().and(REST_RESOURCES, RestResource.from(context.contents()))
-                .addImports(qualifiedNames);
+                .and(EXCHANGE_BOOTSTRAP_NAME, EXCHANGE_BOOTSTRAP.resolveClassname())
+                .and(HAS_EXCHANGE, ContentQuery.exists(EXCHANGE_BOOTSTRAP, context.contents()))
+                .addImports(qualifiedNames).addImports(storageType.resolveTypeRegistryQualifiedNames(useCQRS));
     }
 
     @Override

@@ -7,23 +7,18 @@
 package io.vlingo.xoom.codegen.template.bootstrap;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.exchange.ExchangeRole;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 
-import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE;
 import static io.vlingo.xoom.codegen.parameter.Label.APPLICATION_NAME;
 import static io.vlingo.xoom.codegen.parameter.Label.PROJECTION_TYPE;
 import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
@@ -66,24 +61,17 @@ public abstract class BootstrapTemplateData extends TemplateData {
     private TemplateParameters loadParameters(final CodeGenerationContext context) {
         final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
         final String packageName = resolvePackage(context.parameterOf(PACKAGE));
-        final Boolean useAnnotations = context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
         final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
-        final Boolean hasProducerExchange =
-                context.parametersOf(AGGREGATE).flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
-                        .anyMatch(exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer());
-
-        final Set<ImportParameter> imports =
-                loadImports(storageType, context.contents(), useCQRS, useAnnotations);
+        final Boolean hasExchange = ContentQuery.exists(EXCHANGE_BOOTSTRAP, context.contents());
 
         final List<TypeRegistry> typeRegistries =
                 TypeRegistry.from(storageType, useCQRS);
 
         final List<StoreProvider> storeProviders =
-                StoreProvider.from(storageType, useCQRS, projectionType.isProjectionEnabled(),
-                        context.isInternalGeneration(), hasProducerExchange);
+                StoreProvider.from(storageType, useCQRS, projectionType.isProjectionEnabled(), hasExchange);
 
-        return this.parameters.and(IMPORTS, imports)
+        return this.parameters
                 .and(PACKAGE_NAME, packageName)
                 .and(PROVIDERS, storeProviders)
                 .and(TYPE_REGISTRIES, typeRegistries)
@@ -97,25 +85,6 @@ public abstract class BootstrapTemplateData extends TemplateData {
     protected abstract void enrichParameters(final CodeGenerationContext context);
 
     protected abstract boolean support(final CodeGenerationContext context);
-
-    @SuppressWarnings("unchecked")
-    private Set<ImportParameter> loadImports(final StorageType storageType,
-                                             final List<Content> contents,
-                                             final Boolean useCQRS,
-                                             final Boolean useAnnotations) {
-        if(useAnnotations) {
-            return ImportParameter.of(ContentQuery.findFullyQualifiedClassNames(contents, EXCHANGE_BOOTSTRAP));
-        }
-
-        final Set<String> otherFullyQualifiedNames =
-                ContentQuery.findFullyQualifiedClassNames(contents,
-                        STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER, EXCHANGE_BOOTSTRAP);
-
-        final Set<String> typeRegistriesFullyQualifiedNames =
-                storageType.resolveTypeRegistryQualifiedNames(useCQRS);
-
-        return ImportParameter.of(otherFullyQualifiedNames, typeRegistriesFullyQualifiedNames);
-    }
 
     protected String resolvePackage(final String basePackage) {
         return String.format(PACKAGE_PATTERN, basePackage, INFRA_PACKAGE_NAME).toLowerCase();

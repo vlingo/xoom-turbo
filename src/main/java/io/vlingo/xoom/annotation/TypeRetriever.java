@@ -45,6 +45,13 @@ public class TypeRetriever {
 
     @SuppressWarnings("rawtypes")
     private boolean isSubclass(final Element typeElement, final Class superclass) {
+        if(superclass.isInterface()) {
+            return ((TypeElement) typeElement).getInterfaces().stream()
+                    .anyMatch(interfaceMirror -> {
+                        return interfaceMirror.toString().equals(superclass.getCanonicalName());
+                    });
+        }
+
         final TypeMirror type =
                 elements.getTypeElement(superclass.getCanonicalName())
                         .asType();

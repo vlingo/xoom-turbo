@@ -8,6 +8,7 @@
 package io.vlingo.xoom.annotation.initializer.contentloader;
 
 import io.vlingo.lattice.model.sourcing.EventSourced;
+import io.vlingo.xoom.annotation.Context;
 import io.vlingo.xoom.annotation.PackageCollector;
 import io.vlingo.xoom.annotation.persistence.Persistence;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -16,6 +17,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,8 +37,11 @@ public class AggregateContentLoader extends TypeBasedContentLoader {
             return Collections.emptyList();
         }
 
+        final Path baseDirectory =
+                Context.locateBaseDirectory(environment.getFiler());
+
         final String[] allPackages =
-                PackageCollector.from(persistence.basePackage())
+                PackageCollector.from(baseDirectory, persistence.basePackage())
                         .collectAll().toArray(new String[]{});
 
         return typeRetriever.subclassesOf(EventSourced.class, allPackages)

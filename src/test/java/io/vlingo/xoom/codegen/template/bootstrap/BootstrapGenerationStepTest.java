@@ -11,15 +11,19 @@ import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
@@ -39,7 +43,7 @@ public class BootstrapGenerationStepTest {
 
         final Content bootstrap = context.findContent(BOOTSTRAP, "Bootstrap");
 
-        Assert.assertEquals(6, context.contents().size());
+        Assert.assertEquals(7, context.contents().size());
         Assert.assertTrue(bootstrap.contains(TextExpectation.onJava().read("default-bootstrap")));
     }
 
@@ -55,8 +59,10 @@ public class BootstrapGenerationStepTest {
 
         final Content bootstrap = context.findContent(BOOTSTRAP, "Bootstrap");
 
-        Assert.assertEquals(6, context.contents().size());
+        Assert.assertEquals(7, context.contents().size());
+
         Assert.assertTrue(bootstrap.contains(TextExpectation.onJava().read("annotated-bootstrap")));
+
     }
 
 
@@ -74,7 +80,10 @@ public class BootstrapGenerationStepTest {
 
         final Content xoomInitializer = context.findContent(XOOM_INITIALIZER, "XoomInitializer");
 
-        Assert.assertEquals(6, context.contents().size());
+        Assert.assertEquals(7, context.contents().size());
+
+        Files.write(new File("Here-man.txt").toPath(),  ((TextBasedContent)xoomInitializer).text.getBytes());
+        System.out.println(StringUtils.difference(TextExpectation.onJava().read("xoom-initializer"), ((TextBasedContent)xoomInitializer).text));
         Assert.assertTrue(xoomInitializer.contains(TextExpectation.onJava().read("xoom-initializer")));
     }
 
@@ -90,6 +99,7 @@ public class BootstrapGenerationStepTest {
         context.addContent(REST_RESOURCE, new OutputFile(RESOURCE_PACKAGE_PATH, "BookResource.java"), BOOK_RESOURCE_CONTENT);
         context.addContent(STORE_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "CommandModelStateStoreProvider.java"), COMMAND_MODEL_STORE_PROVIDER_CONTENT);
         context.addContent(STORE_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT);
+        context.addContent(EXCHANGE_BOOTSTRAP, new OutputFile(EXCHANGE_PACKAGE_PATH, "ExchangeBootstrap.java"), EXCHANGE_BOOTSTRAP_CONTENT);
         context.addContent(PROJECTION_DISPATCHER_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT);
     }
 
@@ -108,6 +118,9 @@ public class BootstrapGenerationStepTest {
     private static final String PERSISTENCE_PACKAGE_PATH =
             Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "persistence").toString();
 
+    private static final String EXCHANGE_PACKAGE_PATH =
+            Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "exchange").toString();
+
     private static final String AUTHOR_RESOURCE_CONTENT =
             "package io.vlingo.xoomapp.resource; \\n" +
                     "public class AuthorResource { \\n" +
@@ -117,6 +130,12 @@ public class BootstrapGenerationStepTest {
     private static final String BOOK_RESOURCE_CONTENT =
             "package io.vlingo.xoomapp.resource; \\n" +
                     "public class BookResource { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String EXCHANGE_BOOTSTRAP_CONTENT =
+            "package io.vlingo.xoomapp.infrastructure.exchange; \\n" +
+                    "public class ExchangeBootstrap implements ExchangeInitializer { \\n" +
                     "... \\n" +
                     "}";
 

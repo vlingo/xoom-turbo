@@ -18,7 +18,8 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
+import static io.vlingo.xoom.codegen.template.TemplateStandard.STORE_PROVIDER;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -30,41 +31,37 @@ public class StoreProvider {
     public static List<StoreProvider> from(final StorageType storageType,
                                            final Boolean useCQRS,
                                            final Boolean useProjections,
-                                           final Boolean internalGeneration,
-                                           final Boolean hasProducerExchange) {
+                                           final Boolean hasExchange) {
         if(!storageType.isEnabled()) {
             return Collections.emptyList();
         }
 
         return Model.applicableTo(useCQRS)
-                .map(model -> new StoreProvider(storageType, model, useProjections, internalGeneration, hasProducerExchange))
+                .map(model -> new StoreProvider(storageType, model, useProjections, hasExchange))
                 .collect(toList());
     }
 
     private StoreProvider(final StorageType storageType,
                           final Model model,
                           final Boolean useProjections,
-                          final Boolean internalGeneration,
-                          final Boolean hasProducerExchange) {
+                          final Boolean hasExchange) {
         final TemplateParameters parameters =
                 TemplateParameters.with(STORAGE_TYPE, storageType)
                         .and(MODEL, model);
 
         this.className = STORE_PROVIDER.resolveClassname(parameters);
-        this.arguments = resolveArguments(model, storageType, useProjections,
-                        internalGeneration, hasProducerExchange);
+        this.arguments = resolveArguments(model, storageType, useProjections, hasExchange);
     }
 
     private String resolveArguments(final Model model,
                                     final StorageType storageType,
                                     final Boolean useProjections,
-                                    final Boolean internalGeneration,
-                                    final Boolean hasProducerExchange) {
+                                    final Boolean hasExchange) {
         final String typeRegistryObjectName =
                 storageType.resolveTypeRegistryObjectName(model);
 
         final String exchangeDispatcherAccess =
-                resolveExchangeDispatcherAccess(internalGeneration, hasProducerExchange);
+                hasExchange ? "exchangeInitializer.dispatcher()" : "";
 
         final String projectionDispatcher =
                 PROJECTION_DISPATCHER_PROVIDER.resolveClassname() + ".using(grid.world().stage()).storeDispatcher";
@@ -80,17 +77,6 @@ public class StoreProvider {
         }
 
         return arguments.stream().filter(arg -> !arg.isEmpty()).collect(joining(", "));
-    }
-
-    private String resolveExchangeDispatcherAccess(final Boolean internalGeneration,
-                                                   final Boolean hasProducerExchange) {
-        if(internalGeneration) {
-            return "initializer.exchangeDispatcher(grid)";
-        }
-        if(hasProducerExchange) {
-            return EXCHANGE_BOOTSTRAP.resolveClassname() + ".init(grid).dispatcher()";
-        }
-        return "";
     }
 
     public String getClassName() {

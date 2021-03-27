@@ -1,8 +1,10 @@
 package ${packageName};
 
+<#if imports?has_content>
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
+</#if>
 
 import io.vlingo.actors.Grid;
 import io.vlingo.xoom.XoomInitializationAware;
@@ -18,10 +20,4 @@ public class Bootstrap implements XoomInitializationAware {
   public void onInit(final Grid grid) {
   }
 
-<#if hasProducerExchange>
-  @Override
-  public io.vlingo.symbio.store.dispatch.Dispatcher exchangeDispatcher(final Grid grid) {
-     return ExchangeBootstrap.init(grid).dispatcher();
-  }
-</#if>
 }

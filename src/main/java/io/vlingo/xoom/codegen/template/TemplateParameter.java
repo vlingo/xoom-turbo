@@ -113,6 +113,8 @@ public enum TemplateParameter {
     SCHEMA_GROUP_NAME("schemaGroupName"),
     EXCHANGES("exchanges"),
     PRODUCER_EXCHANGES("producerExchanges"),
+    EXCHANGE_BOOTSTRAP_NAME("exchangeBootstrapName"),
+    HAS_EXCHANGE("hasExchange"),
     HAS_PRODUCER_EXCHANGE("hasProducerExchange"),
     HAS_CONSUMER_EXCHANGE("hasConsumerExchange"),
     DEFAULT_SCHEMA_VERSION("defaultSchemaVersion"),

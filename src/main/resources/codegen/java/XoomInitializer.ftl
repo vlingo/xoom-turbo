@@ -45,6 +45,11 @@ public class XoomInitializer implements XoomInitializationAware {
 
     final Configuration serverConfiguration = initializer.configureServer(grid, args);
 
+    <#if exchangeBootstrapName?has_content>
+    final io.vlingo.xoom.exchange.ExchangeInitializer exchangeInitializer = new ${exchangeBootstrapName}();
+    exchangeInitializer.init(grid);
+
+    </#if>
     <#list registries as registry>
     final ${registry.className} ${registry.objectName} = new ${registry.className}(grid.world());
     </#list>

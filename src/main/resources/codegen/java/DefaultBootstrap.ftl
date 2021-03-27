@@ -6,12 +6,13 @@ import ${import.qualifiedClassName};
 
 import io.vlingo.xoom.Boot;
 import io.vlingo.actors.Grid;
-import io.vlingo.cluster.model.Properties;
-import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.http.resource.Configuration.Sizing;
 import io.vlingo.http.resource.Configuration.Timing;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
+<#if hasExchange>
+import io.vlingo.xoom.exchange.ExchangeInitializer;
+</#if>
 
 public class Bootstrap {
 
@@ -22,6 +23,11 @@ public class Bootstrap {
   public Bootstrap(final String nodeName) throws Exception {
     grid = Boot.start("${appName}", nodeName);
 
+<#if hasExchange>
+    final ExchangeInitializer exchangeInitializer = new ${exchangeBootstrapName}();
+    exchangeInitializer.init(grid);
+
+</#if>
 <#list registries as registry>
     final ${registry.className} ${registry.objectName} = new ${registry.className}(grid.world());
 </#list>

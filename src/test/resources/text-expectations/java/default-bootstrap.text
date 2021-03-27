@@ -1,5 +1,6 @@
 package io.vlingo.xoomapp.infrastructure;
 
+import io.vlingo.xoomapp.infrastructure.exchange.ExchangeBootstrap;
 import io.vlingo.xoomapp.resource.BookResource;
 import io.vlingo.xoomapp.resource.AuthorResource;
 import io.vlingo.xoomapp.infrastructure.persistence.ProjectionDispatcherProvider;
@@ -9,12 +10,11 @@ import io.vlingo.lattice.model.stateful.StatefulTypeRegistry;
 
 import io.vlingo.xoom.Boot;
 import io.vlingo.actors.Grid;
-import io.vlingo.cluster.model.Properties;
-import io.vlingo.common.identity.IdentityGeneratorType;
 import io.vlingo.http.resource.Configuration.Sizing;
 import io.vlingo.http.resource.Configuration.Timing;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
+import io.vlingo.xoom.exchange.ExchangeInitializer;
 
 public class Bootstrap {
 
@@ -25,9 +25,12 @@ public class Bootstrap {
   public Bootstrap(final String nodeName) throws Exception {
     grid = Boot.start("xoom-app", nodeName);
 
+    final ExchangeInitializer exchangeInitializer = new ExchangeBootstrap();
+    exchangeInitializer.init(grid);
+
     final StatefulTypeRegistry statefulTypeRegistry = new StatefulTypeRegistry(grid.world());
     QueryModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry);
-    CommandModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry, ProjectionDispatcherProvider.using(grid.world().stage()).storeDispatcher);
+    CommandModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry, ProjectionDispatcherProvider.using(grid.world().stage()).storeDispatcher, exchangeInitializer.dispatcher());
 
     final AuthorResource authorResource = new AuthorResource(grid);
     final BookResource bookResource = new BookResource(grid);

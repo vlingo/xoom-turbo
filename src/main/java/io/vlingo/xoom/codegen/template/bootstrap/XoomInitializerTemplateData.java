@@ -9,10 +9,13 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateParameter;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.List;
+import java.util.Optional;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
@@ -22,22 +25,45 @@ public class XoomInitializerTemplateData extends BootstrapTemplateData {
     @Override
     protected void enrichParameters(final CodeGenerationContext context) {
         final List<Content> contents = context.contents();
-        final String appName = context.parameterOf(APPLICATION_NAME);
+        final String appName = context.parameterOf(Label.APPLICATION_NAME);
         final String xoomInitializerClass = context.parameterOf(XOOM_INITIALIZER_NAME);
         final Boolean blockingMessaging = context.parameterOf(BLOCKING_MESSAGING, Boolean::valueOf);
         final Boolean customInitialization = !xoomInitializerClass.equals(XOOM_INITIALIZER.resolveClassname());
 
-        loadImports(contents);
+        loadImports(context, contents);
 
         parameters().and(TemplateParameter.BLOCKING_MESSAGING, blockingMessaging)
                 .and(TemplateParameter.XOOM_INITIALIZER_CLASS, xoomInitializerClass)
                 .and(TemplateParameter.CUSTOM_INITIALIZATION, customInitialization)
                 .and(TemplateParameter.REST_RESOURCES, RestResource.from(contents))
-                .and(TemplateParameter.APPLICATION_NAME, appName);
+                .and(TemplateParameter.APPLICATION_NAME, appName)
+                .and(TemplateParameter.EXCHANGE_BOOTSTRAP_NAME, resolveExchangeBootstrapName(context));
     }
 
-    private void loadImports(final List<Content> contents) {
-        parameters().addImports(ContentQuery.findFullyQualifiedClassNames(contents, REST_RESOURCE, AUTO_DISPATCH_RESOURCE_HANDLER));
+    private void loadImports(final CodeGenerationContext context, final List<Content> contents) {
+        final Boolean useCQRS =
+                context.parameterOf(CQRS, Boolean::valueOf);
+
+        final StorageType storageType =
+                context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
+
+        final TemplateStandard[] dependencies =
+                new TemplateStandard[]{STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER,
+                        REST_RESOURCE, AUTO_DISPATCH_RESOURCE_HANDLER, EXCHANGE_BOOTSTRAP};
+
+        parameters().addImports(ContentQuery.findFullyQualifiedClassNames(contents, dependencies))
+                .addImports(storageType.resolveTypeRegistryQualifiedNames(useCQRS));
+    }
+
+    private String resolveExchangeBootstrapName(final CodeGenerationContext context) {
+        final Optional<String> exchangeBootstrapQualifiedName =
+                ContentQuery.findFullyQualifiedClassNames(EXCHANGE_BOOTSTRAP, context.contents()).stream().findFirst();
+
+        if(!exchangeBootstrapQualifiedName.isPresent()) {
+            return null;
+        }
+
+        return exchangeBootstrapQualifiedName.get();
     }
 
     @Override

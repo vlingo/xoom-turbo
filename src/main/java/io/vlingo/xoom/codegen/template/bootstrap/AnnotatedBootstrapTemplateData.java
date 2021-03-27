@@ -6,13 +6,10 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.codegen.template.bootstrap;
 
-
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.template.exchange.ExchangeRole;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.HAS_PRODUCER_EXCHANGE;
+import static io.vlingo.xoom.codegen.parameter.Label.USE_ANNOTATIONS;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.REST_RESOURCE_PACKAGE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
 
@@ -26,11 +23,7 @@ public class AnnotatedBootstrapTemplateData extends BootstrapTemplateData {
             parameters().addImport(RESOURCES_ANNOTATION_QUALIFIED_NAME);
         }
 
-        parameters().and(REST_RESOURCE_PACKAGE,
-                ContentQuery.findPackage(REST_RESOURCE, context.contents()))
-                .and(HAS_PRODUCER_EXCHANGE, context.parametersOf(AGGREGATE)
-                        .flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
-                        .anyMatch(exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer()));
+        parameters().and(REST_RESOURCE_PACKAGE, ContentQuery.findPackage(REST_RESOURCE, context.contents()));
     }
 
     @Override

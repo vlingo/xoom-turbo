@@ -68,7 +68,8 @@ public class CodeGenerationContextLoader {
                 new DataObjectContentLoader(persistenceSetupClass, environment),
                 new QueriesContentLoader(persistenceSetupClass, environment),
                 new AggregateContentLoader(persistenceSetupClass, environment),
-                new RestResourceContentLoader(bootstrapClass, environment));
+                new RestResourceContentLoader(bootstrapClass, environment),
+                new ExchangeBootstrapLoader(persistenceSetupClass, environment));
     }
 
 }

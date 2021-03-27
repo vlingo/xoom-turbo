@@ -12,8 +12,6 @@ import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.StaticFilesConfiguration;
 import io.vlingo.http.resource.feed.FeedConfiguration;
 import io.vlingo.http.resource.sse.SseConfiguration;
-import io.vlingo.symbio.store.dispatch.Dispatcher;
-import io.vlingo.symbio.store.dispatch.NoOpDispatcher;
 
 public interface XoomInitializationAware {
 
@@ -41,11 +39,6 @@ public interface XoomInitializationAware {
      */
     default StaticFilesConfiguration staticFilesConfiguration() {
       return StaticFilesConfiguration.define();
-    }
-
-    @SuppressWarnings("rawtypes")
-    default Dispatcher exchangeDispatcher(final Grid grid) {
-        return new NoOpDispatcher();
     }
 
     default Configuration configureServer(final Grid grid, final String[] args) {
