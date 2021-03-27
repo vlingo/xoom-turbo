@@ -57,7 +57,8 @@ public class DomainEventSpecificationTemplateData extends TemplateData {
         final CodeGenerationParameter aggregate = publishedLanguage.parent(AGGREGATE);
         final CodeGenerationParameter event = AggregateDetail.eventWithName(aggregate, publishedLanguage.value);
         final Stream<CodeGenerationParameter> stateFields = event.retrieveAllRelated(STATE_FIELD);
-        return stateFields.map(field -> resolveFieldType(schemaGroup, field)).collect(toList());
+        return stateFields.map(field -> AggregateDetail.stateFieldWithName(aggregate, field.value))
+                .map(field -> resolveFieldType(schemaGroup, field)).collect(toList());
     }
 
     private String resolveFieldType(final String schemaGroup,

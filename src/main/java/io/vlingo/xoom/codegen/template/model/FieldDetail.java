@@ -41,6 +41,10 @@ public class FieldDetail {
         final String fieldType =
                 field.retrieveRelatedValue(Label.FIELD_TYPE, String::toLowerCase);
 
+        if(fieldType == null || fieldType.isEmpty()) {
+            throw new IllegalArgumentException("Unable to find field type");
+        }
+
         return CodeGenerationSetup.SCALAR_TYPES.contains(fieldType);
     }
 

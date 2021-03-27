@@ -8,7 +8,9 @@ package io.vlingo.xoom.codegen.template.model.formatting;
 
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.model.FieldDetail;
+import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,17 +40,22 @@ public class Member extends Formatters.Fields<List<String>> {
     }
 
     @Override
-    public List<String> format(final CodeGenerationParameter aggregate,
+    public List<String> format(final CodeGenerationParameter parent,
                                final Stream<CodeGenerationParameter> fields) {
         return fields.map(field -> {
-            final String fieldType = resolveFieldType(aggregate, field);
+            if(!field.hasAny(Label.FIELD_TYPE)) {
+                return AggregateDetail.stateFieldWithName(field.parent(Label.AGGREGATE), field.value);
+            }
+            return field;
+        }).map(field -> {
+            final String fieldType = resolveFieldType(field);
             return declarationResolver.apply(fieldType, field.value);
         }).collect(Collectors.toList());
     }
 
-    private String resolveFieldType(final CodeGenerationParameter aggregate,
-                                    final CodeGenerationParameter field) {
-        final String fieldType = FieldDetail.typeOf(aggregate, field.value);
+    private String resolveFieldType(final CodeGenerationParameter field) {
+        final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
+
         if(FieldDetail.isScalar(field)) {
             return fieldType;
         }
