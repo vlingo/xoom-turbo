@@ -45,11 +45,11 @@ public class Boot {
         final Configuration configuration = Configuration.define();
         final Grid grid = Grid.start(worldName, configuration, clusterProperties, resolvedNodeName);
 
-        if(isRunningOnSingleNode()) {
-            grid.quorumAchieved();
-        }
-
         return grid;
+    }
+
+    public static int serverPort() {
+        return clusterProperties.getInteger(resolvedNodeName, "server.port", defaultPort);
     }
 
     private static String resolveNodeName(final String nodeName) {
@@ -57,14 +57,6 @@ public class Boot {
             return clusterProperties.seedNodes().get(0);
         }
         return nodeName;
-    }
-
-    public static boolean isRunningOnSingleNode() {
-        return clusterProperties.seedNodes().size() == 1;
-    }
-
-    public static int serverPort() {
-        return clusterProperties.getInteger(resolvedNodeName, "server.port", defaultPort);
     }
 
 }
