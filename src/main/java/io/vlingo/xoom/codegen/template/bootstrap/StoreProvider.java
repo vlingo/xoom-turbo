@@ -8,6 +8,7 @@
 package io.vlingo.xoom.codegen.template.bootstrap;
 
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.storage.Model;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
@@ -26,6 +27,7 @@ import static java.util.stream.Collectors.toList;
 public class StoreProvider {
 
     private final String className;
+    private final String objectName;
     private final String arguments;
 
     public static List<StoreProvider> from(final StorageType storageType,
@@ -50,6 +52,7 @@ public class StoreProvider {
                         .and(MODEL, model);
 
         this.className = STORE_PROVIDER.resolveClassname(parameters);
+        this.objectName = CodeElementFormatter.simpleNameToAttribute(this.className);
         this.arguments = resolveArguments(model, storageType, useProjections, hasExchange);
     }
 
@@ -81,6 +84,10 @@ public class StoreProvider {
 
     public String getClassName() {
         return className;
+    }
+
+    public String getObjectName() {
+        return objectName;
     }
 
     public String getArguments() {

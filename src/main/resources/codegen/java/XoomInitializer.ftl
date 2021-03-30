@@ -54,7 +54,7 @@ public class XoomInitializer implements XoomInitializationAware {
     final ${registry.className} ${registry.objectName} = new ${registry.className}(grid.world());
     </#list>
     <#list providers as provider>
-    ${provider.className}.using(${provider.arguments});
+    final ${provider.className} ${provider.objectName} = ${provider.className}.using(${provider.arguments});
     </#list>
 
     <#list restResources as restResource>

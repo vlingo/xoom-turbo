@@ -59,6 +59,7 @@ public class XoomInitializer : XoomInitializationAware {
     </#list>
     <#list providers as provider>
     ${provider.className}.using(${provider.arguments})
+    val ${provider.objectName}: ${provider.className} = ${provider.className}.using(${provider.arguments});
     </#list>
 
     <#list restResources as restResource>

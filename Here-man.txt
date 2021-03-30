@@ -45,8 +45,8 @@ public class XoomInitializer implements XoomInitializationAware {
     exchangeInitializer.init(grid);
 
     final StatefulTypeRegistry statefulTypeRegistry = new StatefulTypeRegistry(grid.world());
-    QueryModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry);
-    CommandModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry, exchangeInitializer.dispatcher());
+    final QueryModelStateStoreProvider queryModelStateStoreProvider = QueryModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry);
+    final CommandModelStateStoreProvider commandModelStateStoreProvider = CommandModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry, exchangeInitializer.dispatcher());
 
     final AuthorResource authorResource = new AuthorResource(grid);
     final BookResource bookResource = new BookResource(grid);
