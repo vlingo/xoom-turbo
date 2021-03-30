@@ -27,7 +27,7 @@ public class RestResource {
     private final String arguments;
     private final boolean last;
 
-    public static List<RestResource> from(final List<Content> contents) {
+    public static List<RestResource> from(boolean useCQRS, final List<Content> contents) {
         final Set<String> classNames =
                 ContentQuery.findClassNames(contents, REST_RESOURCE,
                         AUTO_DISPATCH_RESOURCE_HANDLER);

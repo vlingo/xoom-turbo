@@ -29,13 +29,14 @@ public class XoomInitializerTemplateData extends BootstrapTemplateData {
         final String xoomInitializerClass = context.parameterOf(XOOM_INITIALIZER_NAME);
         final Boolean blockingMessaging = context.parameterOf(BLOCKING_MESSAGING, Boolean::valueOf);
         final Boolean customInitialization = !xoomInitializerClass.equals(XOOM_INITIALIZER.resolveClassname());
+        final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
 
         loadImports(context, contents);
 
         parameters().and(TemplateParameter.BLOCKING_MESSAGING, blockingMessaging)
                 .and(TemplateParameter.XOOM_INITIALIZER_CLASS, xoomInitializerClass)
                 .and(TemplateParameter.CUSTOM_INITIALIZATION, customInitialization)
-                .and(TemplateParameter.REST_RESOURCES, RestResource.from(contents))
+                .and(TemplateParameter.REST_RESOURCES, RestResource.from(useCQRS, contents))
                 .and(TemplateParameter.APPLICATION_NAME, appName)
                 .and(TemplateParameter.EXCHANGE_BOOTSTRAP_NAME, resolveExchangeBootstrapName(context));
     }
