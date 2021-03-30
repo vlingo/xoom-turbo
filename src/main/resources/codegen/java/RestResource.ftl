@@ -42,21 +42,7 @@ public class ${resourceName} extends DynamicResourceHandler {
   private final ${queries.protocolName} $queries;
   </#if>
 
-  public ${resourceName}(final Grid grid) {
-      super(grid.world().stage());
-      <#if useAutoDispatch>
-      this.$stage = grid;
-      this.$logger = super.logger();
-      <#else>
-      this.grid = grid;
-      </#if>
-      <#if queries?has_content && !queries.empty>
-      this.$queries = ${storeProviderName}.instance().${queries.attributeName};
-      </#if>
-  }
-  <#if queries?has_content && !queries.empty>
-
-  public ${resourceName}(final Grid grid, final ${queries.protocolName} ${queries.attributeName}) {
+  public ${resourceName}(final Grid grid<#if queries?has_content && !queries.empty>, final ${queries.protocolName} ${queries.attributeName}</#if>) {
     super(grid.world().stage());
     <#if useAutoDispatch>
     this.$stage = grid;
@@ -68,7 +54,6 @@ public class ${resourceName} extends DynamicResourceHandler {
     this.$queries = ${queries.attributeName};
     </#if>
   }
-  </#if>
 
   <#list routeMethods as routeMethod>
   ${routeMethod}

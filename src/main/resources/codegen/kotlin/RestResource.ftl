@@ -38,27 +38,15 @@ public class ${resourceName} : DynamicResourceHandler {
   val $queries: ${queries.protocolName}
   </#if>
 
-  public constructor(stage: Stage) : super(stage){
-      <#if useAutoDispatch>
-      this.$stage = super.stage()
-      this.$logger = super.logger()
-      </#if>
-      <#if queries?has_content && !queries.empty>
-      this.$queries = ${storeProviderName}.instance().${queries.attributeName}
-      </#if>
+  public constructor(stage: Stage<#if queries?has_content && !queries.empty>, ${queries.attributeName}: ${queries.protocolName}</#if>) : super(stage){
+    <#if useAutoDispatch>
+    this.$stage = super.stage()
+    this.$logger = super.logger()
+    </#if>
+    <#if queries?has_content && !queries.empty>
+    this.$queries = ${queries.attributeName}
+    </#if>
   }
-  <#if queries?has_content && !queries.empty>
-
-  public constructor(stage: Stage, ${queries.attributeName}: ${queries.protocolName}) : super(stage){
-      <#if useAutoDispatch>
-          this.$stage = super.stage()
-          this.$logger = super.logger()
-      </#if>
-      <#if queries?has_content && !queries.empty>
-          this.$queries = ${queries.attributeName}
-      </#if>
-  }
-  </#if>
 
   <#list routeMethods as routeMethod>
   ${routeMethod}
