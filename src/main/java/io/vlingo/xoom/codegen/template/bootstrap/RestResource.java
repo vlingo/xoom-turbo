@@ -24,6 +24,7 @@ public class RestResource {
 
     private final String className;
     private final String objectName;
+    private final String arguments;
     private final boolean last;
 
     public static List<RestResource> from(final List<Content> contents) {
@@ -43,6 +44,7 @@ public class RestResource {
                          final int numberOfResources) {
         this.className = restResourceName;
         this.objectName = CodeElementFormatter.simpleNameToAttribute(restResourceName);
+        this.arguments = "grid";
         this.last = resourceIndex == numberOfResources - 1;
     }
 
@@ -52,6 +54,10 @@ public class RestResource {
 
     public String getObjectName() {
         return objectName;
+    }
+
+    public String getArguments() {
+        return arguments;
     }
 
     public boolean isLast() {

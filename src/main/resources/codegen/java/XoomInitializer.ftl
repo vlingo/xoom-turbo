@@ -58,7 +58,7 @@ public class XoomInitializer implements XoomInitializationAware {
     </#list>
 
     <#list restResources as restResource>
-    final ${restResource.className} ${restResource.objectName} = new ${restResource.className}(grid);
+    final ${restResource.className} ${restResource.objectName} = new ${restResource.className}(${restResource.arguments});
     </#list>
 
     final Collection<Resource<?>> sseResources = Loader.resourcesFrom(initializer.sseConfiguration()).values();
