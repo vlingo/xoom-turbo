@@ -58,7 +58,6 @@ public class XoomInitializer : XoomInitializationAware {
     val ${registry.objectName}: ${registry.className} = ${registry.className}(world)
     </#list>
     <#list providers as provider>
-    ${provider.className}.using(${provider.arguments})
     val ${provider.objectName}: ${provider.className} = ${provider.className}.using(${provider.arguments});
     </#list>
 
