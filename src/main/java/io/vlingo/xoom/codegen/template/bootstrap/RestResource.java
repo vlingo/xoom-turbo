@@ -10,14 +10,22 @@ package io.vlingo.xoom.codegen.template.bootstrap;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.storage.Model;
+import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.template.TemplateParameter.MODEL;
+import static io.vlingo.xoom.codegen.template.TemplateParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.REST_RESOURCE;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class RestResource {
@@ -34,18 +42,35 @@ public class RestResource {
 
         final Iterator<String> iterator = classNames.iterator();
 
-        return IntStream.range(0, classNames.size()).mapToObj(index ->
-                new RestResource(iterator.next(), index,
-                        classNames.size())).collect(toList());
+        return IntStream
+                .range(0, classNames.size())
+                .mapToObj(index -> new RestResource(iterator.next(), useCQRS, index, classNames.size()))
+                .collect(toList());
     }
 
     private RestResource(final String restResourceName,
+                         final Boolean useCQRS,
                          final int resourceIndex,
                          final int numberOfResources) {
         this.className = restResourceName;
         this.objectName = CodeElementFormatter.simpleNameToAttribute(restResourceName);
-        this.arguments = "grid";
+        this.arguments = resolveArguments(restResourceName, useCQRS);
         this.last = resourceIndex == numberOfResources - 1;
+    }
+
+    private String resolveArguments(String restResourceName, Boolean useCQRS) {
+        final List<String> arguments = Stream.of("grid").collect(toList());
+
+        if (useCQRS) {
+            final String storeProviderClass = TemplateStandard.STORE_PROVIDER.resolveClassname(TemplateParameters.with(STORAGE_TYPE, StorageType.STATE_STORE).and(MODEL, Model.QUERY));
+            final String storeProviderName = CodeElementFormatter.simpleNameToAttribute(storeProviderClass);
+            final String queriesClassName = TemplateStandard.QUERIES.resolveClassname(restResourceName.replace("Resource", ""));
+            final String queriesAttributeName = CodeElementFormatter.simpleNameToAttribute(queriesClassName);
+            arguments.add(String.format("%s.%s", storeProviderName, queriesAttributeName));
+        }
+
+        return arguments.stream().collect(joining(", "));
+
     }
 
     public String getClassName() {

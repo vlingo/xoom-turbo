@@ -48,8 +48,8 @@ public class XoomInitializer implements XoomInitializationAware {
     final QueryModelStateStoreProvider queryModelStateStoreProvider = QueryModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry);
     final CommandModelStateStoreProvider commandModelStateStoreProvider = CommandModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry, exchangeInitializer.dispatcher());
 
-    final AuthorResource authorResource = new AuthorResource(grid);
-    final BookResource bookResource = new BookResource(grid);
+    final AuthorResource authorResource = new AuthorResource(grid, queryModelStateStoreProvider.authorQueries);
+    final BookResource bookResource = new BookResource(grid, queryModelStateStoreProvider.bookQueries);
 
     final Collection<Resource<?>> sseResources = Loader.resourcesFrom(initializer.sseConfiguration()).values();
     final Collection<Resource<?>> feedResources = Loader.resourcesFrom(initializer.feedConfiguration()).values();
