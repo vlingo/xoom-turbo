@@ -34,6 +34,12 @@ public class AuthorResource extends DynamicResourceHandler {
       this.$queries = QueryModelStateStoreProvider.instance().authorQueries;
   }
 
+  public AuthorResource(final Grid grid, final AuthorQueries authorQueries) {
+    super(grid.world().stage());
+    this.grid = grid;
+    this.$queries = authorQueries;
+  }
+
   public Completes<Response> withName(final AuthorData data) {
     final Name name = Name.from(data.name.firstName, data.name.lastName);
     return Author.withName(grid, name)
