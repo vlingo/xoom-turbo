@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
   <artifactId>vlingo-xoom</artifactId>
-  <version>1.5.3-SNAPSHOT</version>
+  <version>1.6.1-SNAPSHOT</version>
   <description>The vlingo/xoom provides a JVM microframework for the vlingo/PLATFORM that helps in building high-performance reactive microservices.</description>
   <name>vlingo-xoom</name>
   <url>https://github.com/vlingo/vlingo-xoom</url>
@@ -40,37 +40,37 @@
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-http</artifactId>
-      <version>1.5.3-SNAPSHOT</version>
+      <version>1.6.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-actors</artifactId>
-      <version>1.5.3-SNAPSHOT</version>
+      <version>1.6.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-symbio</artifactId>
-      <version>1.5.3-SNAPSHOT</version>
+      <version>1.6.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-symbio-jdbc</artifactId>
-      <version>1.5.3-SNAPSHOT</version>
+      <version>1.6.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-lattice</artifactId>
-      <version>1.5.3-SNAPSHOT</version>
+      <version>1.6.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-lattice-exchange-rabbitmq</artifactId>
-      <version>1.5.3-SNAPSHOT</version>
+      <version>1.6.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -114,7 +114,7 @@
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-build-plugins</artifactId>
-      <version>1.5.3-SNAPSHOT</version>
+      <version>1.6.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -309,6 +309,17 @@
           <url>https://maven.pkg.github.com/vlingo/vlingo-platform</url>
         </repository>
       </distributionManagement>
+    </profile>
+    <profile>
+      <!-- We only need GitHub packages during releases as syncing to central is too slow. -->
+      <id>github-releases</id>
+      <repositories>
+        <repository>
+          <id>github</id>
+          <name>GitHub Packages</name>
+          <url>https://maven.pkg.github.com/vlingo/vlingo-platform</url>
+        </repository>
+      </repositories>
     </profile>
   </profiles>
 </project>
