@@ -76,8 +76,7 @@ public enum Label {
     ROLE("role"),
     LANGUAGE("language"),
     VALUE_OBJECT("valueObject"),
-    VALUE_OBJECT_FIELD("valueObjectField"),
-    SHARED("shared");
+    VALUE_OBJECT_FIELD("valueObjectField");
 
     @SuppressWarnings("unused")
     private final String key;
