@@ -60,9 +60,7 @@ public class BootstrapGenerationStepTest {
         final Content bootstrap = context.findContent(BOOTSTRAP, "Bootstrap");
 
         Assert.assertEquals(7, context.contents().size());
-
         Assert.assertTrue(bootstrap.contains(TextExpectation.onJava().read("annotated-bootstrap")));
-
     }
 
 
@@ -81,9 +79,6 @@ public class BootstrapGenerationStepTest {
         final Content xoomInitializer = context.findContent(XOOM_INITIALIZER, "XoomInitializer");
 
         Assert.assertEquals(7, context.contents().size());
-
-        Files.write(new File("Here-man.txt").toPath(),  ((TextBasedContent)xoomInitializer).text.getBytes());
-        System.out.println(StringUtils.difference(TextExpectation.onJava().read("xoom-initializer"), ((TextBasedContent)xoomInitializer).text));
         Assert.assertTrue(xoomInitializer.contains(TextExpectation.onJava().read("xoom-initializer")));
     }
 
