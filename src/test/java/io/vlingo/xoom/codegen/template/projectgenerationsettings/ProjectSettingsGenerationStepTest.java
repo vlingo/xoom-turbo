@@ -38,7 +38,6 @@ public class ProjectSettingsGenerationStepTest {
     new ProjectSettingsGenerationStep().process(context);
 
     final Content projectSettings = context.findContent(TemplateStandard.PROJECT_SETTINGS, "xoom-app-generation-settings");
-
     Assert.assertTrue(projectSettings.contains(TextExpectation.onJava().read("project-settings")));
   }
 
