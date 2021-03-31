@@ -11,21 +11,21 @@ import io.vlingo.xoom.OperatingSystem;
 import io.vlingo.xoom.TextExpectation;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.TextBasedContent;
-import io.vlingo.xoom.codegen.template.OutputFile;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.*;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
-import org.apache.commons.lang3.StringUtils;
+import io.vlingo.xoom.codegen.template.storage.Queries;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static io.vlingo.xoom.codegen.language.Language.JAVA;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.*;
 
@@ -63,7 +63,6 @@ public class BootstrapGenerationStepTest {
         Assert.assertTrue(bootstrap.contains(TextExpectation.onJava().read("annotated-bootstrap")));
     }
 
-
     @Test
     public void testThatXoomInitializerIsGenerated() throws IOException {
         final CodeGenerationContext context =
@@ -74,11 +73,13 @@ public class BootstrapGenerationStepTest {
         loadParameters(context, false);
         loadContents(context);
 
+        context.registerTemplateProcessing(JAVA, loadAutoDispatchResourceHanlderTemplateData(), ORDER_RESOURCE_HANDLER_CONTENT);
+
         new BootstrapGenerationStep().process(context);
 
         final Content xoomInitializer = context.findContent(XOOM_INITIALIZER, "XoomInitializer");
 
-        Assert.assertEquals(7, context.contents().size());
+        Assert.assertEquals(8, context.contents().size());
         Assert.assertTrue(xoomInitializer.contains(TextExpectation.onJava().read("xoom-initializer")));
     }
 
@@ -96,6 +97,32 @@ public class BootstrapGenerationStepTest {
         context.addContent(STORE_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT);
         context.addContent(EXCHANGE_BOOTSTRAP, new OutputFile(EXCHANGE_PACKAGE_PATH, "ExchangeBootstrap.java"), EXCHANGE_BOOTSTRAP_CONTENT);
         context.addContent(PROJECTION_DISPATCHER_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT);
+    }
+
+    private TemplateData loadAutoDispatchResourceHanlderTemplateData() {
+        final CodeGenerationParameter autoDispatchParameter =
+                CodeGenerationParameter.of(AUTO_DISPATCH_NAME, "OrderResourceHandler")
+                        .relate(QUERIES_PROTOCOL, "io.vlingo.xoomapp.infrastructure.persistence.OrderQueries")
+                        .relate(Label.QUERIES_ACTOR, "io.vlingo.xoomapp.infrastructure.persistence.OrderQueriesActor");
+
+        return new TemplateData() {
+            @Override
+            public TemplateParameters parameters() {
+                return TemplateParameters.with(TemplateParameter.REST_RESOURCE_NAME, "OrderResourceHandler")
+                        .and(TemplateParameter.PACKAGE_NAME, "io.vlingo.xoomapp.resource")
+                        .and(TemplateParameter.QUERIES, Queries.from(autoDispatchParameter));
+            }
+
+            @Override
+            public TemplateStandard standard() {
+                return AUTO_DISPATCH_RESOURCE_HANDLER;
+            }
+
+            @Override
+            public String filename() {
+                return standard().resolveFilename("OrderResource", parameters());
+            }
+        };
     }
 
     private static final String HOME_DIRECTORY = OperatingSystem.detect().isWindows() ? "D:\\projects" : "/home";
@@ -125,6 +152,12 @@ public class BootstrapGenerationStepTest {
     private static final String BOOK_RESOURCE_CONTENT =
             "package io.vlingo.xoomapp.resource; \\n" +
                     "public class BookResource { \\n" +
+                    "... \\n" +
+                    "}";
+
+    private static final String ORDER_RESOURCE_HANDLER_CONTENT =
+            "package io.vlingo.xoomapp.resource; \\n" +
+                    "public class OrderResourceHandler { \\n" +
                     "... \\n" +
                     "}";
 

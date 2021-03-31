@@ -9,6 +9,7 @@ import io.vlingo.xoom.XoomInitializationAware;
 import io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;
 
 import io.vlingo.xoomapp.infrastructure.exchange.ExchangeBootstrap;
+import io.vlingo.xoomapp.resource.OrderResourceHandler;
 import io.vlingo.xoomapp.resource.BookResource;
 import io.vlingo.xoomapp.resource.AuthorResource;
 import io.vlingo.xoomapp.infrastructure.persistence.ProjectionDispatcherProvider;
@@ -48,15 +49,17 @@ public class XoomInitializer implements XoomInitializationAware {
     final QueryModelStateStoreProvider queryModelStateStoreProvider = QueryModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry);
     final CommandModelStateStoreProvider commandModelStateStoreProvider = CommandModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry, exchangeInitializer.dispatcher());
 
-    final AuthorResource authorResource = new AuthorResource(grid, queryModelStateStoreProvider.authorQueries);
-    final BookResource bookResource = new BookResource(grid, queryModelStateStoreProvider.bookQueries);
+    final OrderResourceHandler orderResourceHandler = new OrderResourceHandler(grid, queryModelStateStoreProvider.orderQueries);
+    final BookResource bookResource = new BookResource(grid);
+    final AuthorResource authorResource = new AuthorResource(grid);
 
     final Collection<Resource<?>> sseResources = Loader.resourcesFrom(initializer.sseConfiguration()).values();
     final Collection<Resource<?>> feedResources = Loader.resourcesFrom(initializer.feedConfiguration()).values();
     final Collection<Resource<?>> staticResources = Loader.resourcesFrom(initializer.staticFilesConfiguration()).values();
     final Collection<Resource<?>> restResources = Arrays.asList(
-              authorResource.routes(),
-              bookResource.routes()
+              orderResourceHandler.routes(),
+              bookResource.routes(),
+              authorResource.routes()
     );
 
     final Resource[] resources =
