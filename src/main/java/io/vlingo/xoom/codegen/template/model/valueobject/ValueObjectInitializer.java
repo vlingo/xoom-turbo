@@ -8,7 +8,7 @@ package io.vlingo.xoom.codegen.template.model.valueobject;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.formatting.Formatters;
 
 import java.util.ArrayList;
 import java.util.List;

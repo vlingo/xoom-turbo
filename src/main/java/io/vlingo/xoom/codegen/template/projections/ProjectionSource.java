@@ -12,8 +12,8 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.codegen.template.model.domainevent.DomainEventDetail;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters.Variables.Style;
+import io.vlingo.xoom.codegen.formatting.Formatters;
+import io.vlingo.xoom.codegen.formatting.Formatters.Variables.Style;
 import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.ArrayList;

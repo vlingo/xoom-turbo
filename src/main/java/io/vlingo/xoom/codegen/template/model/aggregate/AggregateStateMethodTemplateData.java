@@ -12,7 +12,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.formatting.Formatters;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ import static io.vlingo.xoom.codegen.parameter.Label.AGGREGATE_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.METHOD_PARAMETER;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.SELF_ALTERNATE_REFERENCE;
+import static io.vlingo.xoom.codegen.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.formatting.Formatters.Fields.Style.SELF_ALTERNATE_REFERENCE;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateStateMethodTemplateData extends TemplateData {

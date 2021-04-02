@@ -12,8 +12,8 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style;
+import io.vlingo.xoom.codegen.formatting.Formatters;
+import io.vlingo.xoom.codegen.formatting.Formatters.Fields.Style;
 
 import java.util.List;
 import java.util.function.Function;

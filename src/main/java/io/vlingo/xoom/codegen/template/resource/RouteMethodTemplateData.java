@@ -16,7 +16,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.formatting.Formatters;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.parameter.Label.INTERNAL_ROUTE_HANDLER;
 import static io.vlingo.xoom.codegen.parameter.Label.MODEL_PROTOCOL;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
+import static io.vlingo.xoom.codegen.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 
 public class RouteMethodTemplateData extends TemplateData {
 

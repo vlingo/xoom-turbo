@@ -15,7 +15,7 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.formatting.Formatters;
 import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.List;
@@ -27,8 +27,8 @@ import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.MEMBER_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.STATE_BASED_ASSIGNMENT;
+import static io.vlingo.xoom.codegen.formatting.Formatters.Fields.Style.MEMBER_DECLARATION;
+import static io.vlingo.xoom.codegen.formatting.Formatters.Fields.Style.STATE_BASED_ASSIGNMENT;
 import static java.util.stream.Collectors.toSet;
 
 public class DomainEventTemplateData extends TemplateData {

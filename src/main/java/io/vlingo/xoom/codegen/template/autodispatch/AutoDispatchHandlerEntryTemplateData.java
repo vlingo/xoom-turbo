@@ -15,8 +15,8 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.codegen.template.model.formatting.AggregateMethodInvocation;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.formatting.AggregateMethodInvocation;
+import io.vlingo.xoom.codegen.formatting.Formatters;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +26,7 @@ import static io.vlingo.xoom.codegen.parameter.Label.READ_ONLY;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
+import static io.vlingo.xoom.codegen.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 
 public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 

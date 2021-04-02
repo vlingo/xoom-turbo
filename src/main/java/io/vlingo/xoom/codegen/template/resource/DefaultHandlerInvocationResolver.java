@@ -11,8 +11,8 @@ import io.vlingo.http.Method;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.model.MethodScope;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.codegen.template.model.formatting.AggregateMethodInvocation;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.formatting.AggregateMethodInvocation;
+import io.vlingo.xoom.codegen.formatting.Formatters;
 
 import static io.vlingo.xoom.codegen.content.CodeElementFormatter.simpleNameToAttribute;
 import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;

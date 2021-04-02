@@ -13,7 +13,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.FieldDetail;
-import io.vlingo.xoom.codegen.template.model.formatting.Formatters;
+import io.vlingo.xoom.codegen.formatting.Formatters;
 import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
@@ -25,8 +25,8 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.parameter.Label.STATE_FIELD;
 import static io.vlingo.xoom.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.codegen.template.model.formatting.Formatters.Fields.Style.*;
+import static io.vlingo.xoom.codegen.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
+import static io.vlingo.xoom.codegen.formatting.Formatters.Fields.Style.*;
 
 public class AggregateStateTemplateData extends TemplateData {
 
