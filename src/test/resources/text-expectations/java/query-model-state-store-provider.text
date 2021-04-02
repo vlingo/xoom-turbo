@@ -3,13 +3,11 @@ package io.vlingo.infrastructure.persistence;
 import java.util.Arrays;
 import java.util.List;
 
-import io.vlingo.xoomapp.model.author.AuthorEntity;
 import io.vlingo.xoomapp.infrastructure.AuthorData;
 import io.vlingo.xoomapp.infrastructure.BookData;
 import io.vlingo.infrastructure.persistence.AuthorQueriesActor;
 import io.vlingo.infrastructure.persistence.BookQueries;
 import io.vlingo.infrastructure.persistence.AuthorQueries;
-import io.vlingo.xoomapp.model.book.BookEntity;
 import io.vlingo.infrastructure.persistence.BookQueriesActor;
 
 import io.vlingo.actors.Definition;
