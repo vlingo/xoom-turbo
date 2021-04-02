@@ -33,7 +33,7 @@ public class StorageTemplateDataFactoryTest {
     @Test
     public void testStorageTemplateDataOnSourcedSingleModel() {
         final List<TemplateData> allTemplatesData =
-                StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
+                StorageTemplateDataFactory.build("io.vlingo.xoomapp", "xoomapp", contents(),
                         JOURNAL, databaseTypes(), EVENT_BASED, false, false, false);
 
         //General Assert
@@ -85,7 +85,7 @@ public class StorageTemplateDataFactoryTest {
     @Test
     public void testStorageTemplateDataOnStatefulSingleModel() {
         final List<TemplateData> allTemplatesData =
-                StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
+                StorageTemplateDataFactory.build("io.vlingo.xoomapp", "xoomapp", contents(),
                         StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, false, false);
 
         //General Assert
@@ -132,7 +132,7 @@ public class StorageTemplateDataFactoryTest {
     @Test
     public void testStorageTemplateDataOnStatefulCQRSModel() {
         final List<TemplateData> allTemplatesData =
-                StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
+                StorageTemplateDataFactory.build("io.vlingo.xoomapp", "xoomapp", contents(),
                         StorageType.STATE_STORE, databaseTypesForCQRS(), ProjectionType.NONE, false, false, true);
 
         //General Assert

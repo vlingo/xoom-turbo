@@ -21,15 +21,15 @@ public class DatabasePropertiesTemplateData extends TemplateData {
 
     private final TemplateParameters templateParameters;
 
-    public DatabasePropertiesTemplateData(final Map<Model, DatabaseType> databases) {
-        this.templateParameters =
-                loadParameters(databases);
+    public DatabasePropertiesTemplateData(final String appName,
+                                          final Map<Model, DatabaseType> databases) {
+        this.templateParameters = loadParameters(appName, databases);
     }
 
-    private TemplateParameters loadParameters(final Map<Model, DatabaseType> databases) {
+    private TemplateParameters loadParameters(final String appName,
+                                              final Map<Model, DatabaseType> databases) {
         final TemplateParameters parameters =
-                TemplateParameters.with(RESOURCE_FILE, true)
-                        .and(SOURCE_CODE, false);
+                TemplateParameters.with(RESOURCE_FILE, true).and(SOURCE_CODE, false);
 
         databases.entrySet().forEach(entry -> {
             final TemplateParameter parameter =
@@ -37,7 +37,7 @@ public class DatabasePropertiesTemplateData extends TemplateData {
                             TemplateParameter.QUERY_DATABASE_PARAMETER :
                             TemplateParameter.DEFAULT_DATABASE_PARAMETER;
 
-            parameters.and(parameter, new Database(entry.getValue()));
+            parameters.and(parameter, new Database(appName, entry.getKey(), entry.getValue()));
         });
 
         return parameters;

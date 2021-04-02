@@ -31,7 +31,7 @@ public class PersistenceSetupTemplateDataTest {
     @Test
     public void testWithAdaptersAndProjections() {
         final List<TemplateData> allTemplatesData =
-                StorageTemplateDataFactory.build("io.vlingo.xoomapp", contents(),
+                StorageTemplateDataFactory.build("io.vlingo.xoomapp", "xoomapp", contents(),
                         StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, true, true);
 
         //General Assert

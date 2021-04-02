@@ -11,32 +11,32 @@ import java.util.stream.Stream;
 
 public enum Model {
 
-    DOMAIN("DomainModel"),
-    COMMAND("CommandModel"),
-    QUERY("QueryModel");
+  DOMAIN("DomainModel"),
+  COMMAND("CommandModel"),
+  QUERY("QueryModel");
 
-    public final String title;
+  public final String title;
 
-    Model(String title) {
-        this.title = title;
+  Model(String title) {
+    this.title = title;
+  }
+
+  public static Stream<Model> applicableTo(final Boolean useCQRS) {
+    if (useCQRS) {
+      return Stream.of(QUERY, COMMAND);
     }
+    return Stream.of(DOMAIN);
+  }
 
-    public static Stream<Model> applicableTo(final Boolean useCQRS) {
-        if(useCQRS) {
-            return Stream.of(QUERY, COMMAND);
-        }
-        return Stream.of(DOMAIN);
-    }
+  public boolean isCommandModel() {
+    return equals(COMMAND);
+  }
 
-    public boolean isCommandModel() {
-        return equals(COMMAND);
-    }
+  public boolean isQueryModel() {
+    return equals(QUERY);
+  }
 
-    public boolean isQueryModel() {
-        return equals(QUERY);
-    }
-
-    public boolean isDomainModel() {
-        return equals(DOMAIN);
-    }
+  public boolean isDomainModel() {
+    return equals(DOMAIN);
+  }
 }

@@ -29,7 +29,7 @@ public class ProjectSettingsGenerationStepTest {
                     "\"projectDirectory\":\"/projects/\", \"useAnnotations\":false, \"useAutoDispatch\":false }";
 
     final CodeGenerationParameters parameters =
-            CodeGenerationParameters.from(Label.ARTIFACT_ID, "xoom-app")
+            CodeGenerationParameters.from(Label.APPLICATION_NAME, "xoom-app")
                     .add(Label.PROJECT_SETTINGS_PAYLOAD, uglyProjectSettingsPayload);
 
     final CodeGenerationContext context =

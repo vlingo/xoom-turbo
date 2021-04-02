@@ -23,12 +23,13 @@ public class StorageGenerationStep extends TemplateProcessingStep {
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
         final String basePackage = context.parameterOf(PACKAGE);
+        final String appName = context.parameterOf(APPLICATION_NAME);
         final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::of);
         final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
         final Boolean useAnnotations = context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
         final Boolean useCQRS  = context.parameterOf(CQRS, Boolean::valueOf);
         final List<TemplateData> templatesData =
-                StorageTemplateDataFactory.build(basePackage, context.contents(), storageType,
+                StorageTemplateDataFactory.build(basePackage, appName, context.contents(), storageType,
                         context.databases(), projectionType, context.isInternalGeneration(),
                         useAnnotations, useCQRS);
 

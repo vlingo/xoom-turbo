@@ -17,58 +17,58 @@ import java.util.Map;
 
 public class StorageTemplateDataFactory {
 
-    private final static String PACKAGE_PATTERN = "%s.%s.%s";
-    private final static String PARENT_PACKAGE_NAME = "infrastructure";
-    private final static String PERSISTENCE_PACKAGE_NAME = "persistence";
+  private final static String PACKAGE_PATTERN = "%s.%s.%s";
+  private final static String PARENT_PACKAGE_NAME = "infrastructure";
+  private final static String PERSISTENCE_PACKAGE_NAME = "persistence";
 
-    public static List<TemplateData> build(final String basePackage,
-                                           final List<Content> contents,
-                                           final StorageType storageType,
-                                           final Map<Model, DatabaseType> databases,
-                                           final ProjectionType projectionType,
-                                           final Boolean internalGeneration,
-                                           final Boolean useAnnotations,
-                                           final Boolean useCQRS) {
-        final String persistencePackage = resolvePackage(basePackage);
+  public static List<TemplateData> build(final String basePackage,
+                                         final String appName,
+                                         final List<Content> contents,
+                                         final StorageType storageType,
+                                         final Map<Model, DatabaseType> databases,
+                                         final ProjectionType projectionType,
+                                         final Boolean internalGeneration,
+                                         final Boolean useAnnotations,
+                                         final Boolean useCQRS) {
+    final String persistencePackage = resolvePackage(basePackage);
 
-        final List<TemplateData> templatesData = new ArrayList<>();
+    final List<TemplateData> templatesData = new ArrayList<>();
 
-        templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
+    templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
 
-        if(!internalGeneration) {
-            templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, useCQRS, contents));
-            templatesData.add(new DatabasePropertiesTemplateData(databases));
-        }
-
-        templatesData.addAll(buildStoreProvidersTemplateData(basePackage, persistencePackage,
-                useCQRS, useAnnotations, storageType, projectionType, templatesData,
-                contents));
-
-        if(useAnnotations) {
-            templatesData.add(PersistenceSetupTemplateData.from(basePackage, persistencePackage,
-                    useCQRS, storageType, projectionType, templatesData, contents));
-        }
-
-        return templatesData;
+    if(!internalGeneration) {
+      templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, useCQRS, contents));
+      templatesData.add(new DatabasePropertiesTemplateData(appName, databases));
     }
 
-    private static List<TemplateData> buildStoreProvidersTemplateData(final String basePackage,
-                                                                      final String persistencePackage,
-                                                                      final Boolean useCQRS,
-                                                                      final Boolean useAnnotations,
-                                                                      final StorageType storageType,
-                                                                      final ProjectionType projectionType,
-                                                                      final List<TemplateData> templatesData,
-                                                                      final List<Content> contents) {
-        return StorageProviderTemplateData.from(persistencePackage, storageType, projectionType,
-                templatesData, contents, Model.applicableTo(useCQRS), useAnnotations);
+    templatesData.addAll(buildStoreProvidersTemplateData(persistencePackage,
+            useCQRS, useAnnotations, storageType, projectionType, templatesData,
+            contents));
+
+    if(useAnnotations) {
+      templatesData.add(PersistenceSetupTemplateData.from(basePackage, persistencePackage,
+              useCQRS, storageType, projectionType, templatesData, contents));
     }
 
-    private static String resolvePackage(final String basePackage) {
-        if(basePackage.endsWith(".infrastructure")) {
-            return basePackage + "." + PERSISTENCE_PACKAGE_NAME;
-        }
-        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME).toLowerCase();
+    return templatesData;
+  }
+
+  private static List<TemplateData> buildStoreProvidersTemplateData(final String persistencePackage,
+                                                                    final Boolean useCQRS,
+                                                                    final Boolean useAnnotations,
+                                                                    final StorageType storageType,
+                                                                    final ProjectionType projectionType,
+                                                                    final List<TemplateData> templatesData,
+                                                                    final List<Content> contents) {
+    return StorageProviderTemplateData.from(persistencePackage, storageType, projectionType,
+            templatesData, contents, Model.applicableTo(useCQRS), useAnnotations);
+  }
+
+  private static String resolvePackage(final String basePackage) {
+    if(basePackage.endsWith(".infrastructure")) {
+      return basePackage + "." + PERSISTENCE_PACKAGE_NAME;
     }
+    return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME).toLowerCase();
+  }
 
 }
