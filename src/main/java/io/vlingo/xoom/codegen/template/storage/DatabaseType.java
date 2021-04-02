@@ -10,7 +10,7 @@ package io.vlingo.xoom.codegen.template.storage;
 public enum DatabaseType {
 
   IN_MEMORY("in_memory"),
-  POSTGRES("postgres", "org.postgresql.Driver", "jdbc:postgresql://localhost/", "postgres", "postgres", "main"),
+  POSTGRES("postgres", "org.postgresql.Driver", "jdbc:postgresql://localhost/", "postgres", "", "main"),
   HSQLDB("hsqldb", "org.hsqldb.jdbc.JDBCDriver", "jdbc:hsqldb:mem:", "sa", "", "main"),
   MYSQL("mysql", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost/", "root", "", "main"),
   YUGA_BYTE("yugabyte", "org.postgresql.Driver", "jdbc:postgresql://localhost/", "cassandra", "cassandra", "main");
