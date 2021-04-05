@@ -75,7 +75,8 @@ public class RouteDetail {
         }
 
         if(routeSignature.retrieveRelatedValue(Label.ROUTE_METHOD, Method::from).isGET()) {
-            return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, "");
+            final String methodParameter = routeSignature.retrieveRelatedValue(METHOD_PARAMETER);
+            return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, methodParameter);
         }
 
         return resolveMethodSignatureWithParams(routeSignature);
@@ -110,6 +111,15 @@ public class RouteDetail {
     public static CodeGenerationParameter defaultQueryRouteParameter(final CodeGenerationParameter aggregate) {
         return CodeGenerationParameter.of(ROUTE_SIGNATURE, buildQueryAllMethodName(aggregate.value))
                 .relate(ROUTE_METHOD, GET).relate(READ_ONLY, "true");
+    }
+
+    public static CodeGenerationParameter fetchSingleQueryRouteParameter(final CodeGenerationParameter aggregate) {
+        return CodeGenerationParameter.of(ROUTE_SIGNATURE, Introspector.decapitalize(aggregate.value) + "Of")
+                .relate(ROUTE_METHOD, GET)
+                .relate(ROUTE_PATH, "/{id}")
+                .relate(READ_ONLY, "true")
+                .relate(METHOD_PARAMETER, "final String id")
+                ;
     }
 
     private static String buildQueryAllMethodName(final String aggregateProtocol) {

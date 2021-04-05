@@ -14,22 +14,25 @@ import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.codegen.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.codegen.formatting.Formatters;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static io.vlingo.xoom.codegen.content.CodeElementFormatter.simpleNameToAttribute;
-import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
-import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 
     private final static String COMMAND_PATTERN = "%s.%s(%s)";
-    private final static String QUERY_PATTERN = HandlerInvocationResolver.QUERIES_PARAMETER + ".%s()";
+    private final static String QUERY_PATTERN = HandlerInvocationResolver.QUERIES_PARAMETER + ".%s(%s)";
     private final static String ADAPTER_PATTERN = "%s.from(state)";
 
     @Override
     public String resolveRouteHandlerInvocation(final CodeGenerationParameter aggregateParameter,
                                                 final CodeGenerationParameter routeParameter) {
         if(routeParameter.retrieveRelatedValue(ROUTE_METHOD, Method::from).isGET()) {
-            return resolveQueryMethodInvocation(routeParameter.value);
+            final String methodParameter = routeParameter.retrieveRelatedValue(METHOD_PARAMETER);
+            return resolveQueryMethodInvocation(routeParameter.value, methodParameter);
         }
         return resolveCommandMethodInvocation(aggregateParameter, routeParameter);
     }
@@ -51,8 +54,13 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
         return String.format(COMMAND_PATTERN, invoker, method.value, methodInvocationParameters);
     }
 
-    private String resolveQueryMethodInvocation(final String methodName) {
-        return String.format(QUERY_PATTERN, methodName);
+    private String resolveQueryMethodInvocation(final String methodName, final String methodParameter) {
+        final String arguments = Stream.of(methodParameter.split(","))
+                .map(param -> Stream.of(param.split(" "))
+                        .reduce((a, b) -> b)
+                        .orElse(null))
+                .collect(Collectors.joining(", "));
+        return String.format(QUERY_PATTERN, methodName, arguments);
     }
 
 }
