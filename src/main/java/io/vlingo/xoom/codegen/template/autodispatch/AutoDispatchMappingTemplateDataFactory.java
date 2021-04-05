@@ -25,7 +25,6 @@ import static java.util.stream.Collectors.toList;
 public class AutoDispatchMappingTemplateDataFactory {
 
     public static List<TemplateData> build(final CodeGenerationParameters parameters,
-                                           final List<TemplateData> queriesData,
                                            final List<Content> contents) {
         final String basePackage =
                 parameters.retrieveValue(Label.PACKAGE);
@@ -43,7 +42,7 @@ public class AutoDispatchMappingTemplateDataFactory {
                 Stream.of(new AutoDispatchMappingTemplateData(basePackage,
                                 aggregate, useCQRS, contents),
                         new AutoDispatchHandlersMappingTemplateData(basePackage, language,
-                                aggregate, queriesData, valueObjects, contents, useCQRS));
+                                aggregate, valueObjects, contents, useCQRS));
 
         return parameters.retrieveAll(AGGREGATE).flatMap(mapper).collect(toList());
     }

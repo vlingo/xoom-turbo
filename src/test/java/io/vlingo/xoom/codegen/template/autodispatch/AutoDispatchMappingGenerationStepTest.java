@@ -16,17 +16,14 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.OutputFile;
-import io.vlingo.xoom.codegen.template.storage.QueriesTemplateDataFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.codegen.template.TemplateParameter.PACKAGE_NAME;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.VALUE_OBJECT;
@@ -47,17 +44,12 @@ public class AutoDispatchMappingGenerationStepTest {
         final CodeGenerationContext context =
                 CodeGenerationContext.with(parameters).contents(contents());
 
-        QueriesTemplateDataFactory.from(persistencePackage, true, Arrays.asList(contents())).forEach(data -> {
-                    final String packageName = data.parameters().find(PACKAGE_NAME);
-                    context.registerTemplateProcessing(Language.JAVA, data, "package " + packageName + ";");
-                });
-
         new AutoDispatchMappingGenerationStep().process(context);
 
         final Content authorMappingContent = context.findContent(AUTO_DISPATCH_MAPPING, "AuthorResource");
         final Content authorHandlersMappingContent = context.findContent(AUTO_DISPATCH_HANDLERS_MAPPING, "AuthorResourceHandlers");
 
-        Assert.assertEquals(20, context.contents().size());
+        Assert.assertEquals(16, context.contents().size());
         Assert.assertTrue(authorMappingContent.contains(TextExpectation.onJava().read("author-dispatch-mapping")));
         Assert.assertTrue(authorHandlersMappingContent.contains(TextExpectation.onJava().read("author-dispatch-handlers-mapping")));
     }
