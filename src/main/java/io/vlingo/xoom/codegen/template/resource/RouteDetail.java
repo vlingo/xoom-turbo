@@ -8,9 +8,12 @@
 package io.vlingo.xoom.codegen.template.resource;
 
 import io.vlingo.http.Method;
+import io.vlingo.xoom.codegen.formatting.Formatters;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.codegen.template.storage.QueriesDetail;
 
 import java.beans.Introspector;
 import java.util.Arrays;
@@ -75,8 +78,10 @@ public class RouteDetail {
         }
 
         if(routeSignature.retrieveRelatedValue(Label.ROUTE_METHOD, Method::from).isGET()) {
-            final String methodParameter = routeSignature.retrieveRelatedValue(METHOD_PARAMETER);
-            return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, methodParameter);
+            final String arguments =
+                    Formatters.Arguments.SIGNATURE_DECLARATION.format(routeSignature);
+
+            return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, arguments);
         }
 
         return resolveMethodSignatureWithParams(routeSignature);
@@ -108,23 +113,19 @@ public class RouteDetail {
         return signature.contains("(") && signature.contains(")");
     }
 
-    public static CodeGenerationParameter defaultQueryRouteParameter(final CodeGenerationParameter aggregate) {
-        return CodeGenerationParameter.of(ROUTE_SIGNATURE, buildQueryAllMethodName(aggregate.value))
-                .relate(ROUTE_METHOD, GET).relate(READ_ONLY, "true");
-    }
+    public static CodeGenerationParameter[] defaultQueryRoutes(final CodeGenerationParameter aggregate) {
+        final CodeGenerationParameter queryAll =
+                CodeGenerationParameter.of(ROUTE_SIGNATURE, QueriesDetail.resolveQueryAllMethodName(aggregate.value))
+                        .relate(ROUTE_METHOD, GET).relate(READ_ONLY, "true");
 
-    public static CodeGenerationParameter fetchSingleQueryRouteParameter(final CodeGenerationParameter aggregate) {
-        return CodeGenerationParameter.of(ROUTE_SIGNATURE, Introspector.decapitalize(aggregate.value) + "Of")
-                .relate(ROUTE_METHOD, GET)
-                .relate(ROUTE_PATH, "/{id}")
-                .relate(READ_ONLY, "true")
-                .relate(METHOD_PARAMETER, "final String id")
-                ;
-    }
+        final CodeGenerationParameter queryById =
+                CodeGenerationParameter.of(ROUTE_SIGNATURE, QueriesDetail.resolveQueryByIdMethodName(aggregate.value))
+                        .relate(ROUTE_METHOD, GET)
+                        .relate(ROUTE_PATH, "/{id}")
+                        .relate(READ_ONLY, "true")
+                        .relate(METHOD_PARAMETER, "id");
 
-    private static String buildQueryAllMethodName(final String aggregateProtocol) {
-        final String formatted = Introspector.decapitalize(aggregateProtocol);
-        return formatted.endsWith("s") ? formatted : formatted + "s";
+        return new CodeGenerationParameter[]{queryAll, queryById};
     }
 
     public static boolean hasBody(final CodeGenerationParameter route) {

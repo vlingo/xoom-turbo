@@ -28,13 +28,12 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
     private final static String ADAPTER_PATTERN = "%s.from(state)";
 
     @Override
-    public String resolveRouteHandlerInvocation(final CodeGenerationParameter aggregateParameter,
-                                                final CodeGenerationParameter routeParameter) {
-        if(routeParameter.retrieveRelatedValue(ROUTE_METHOD, Method::from).isGET()) {
-            final String methodParameter = routeParameter.retrieveRelatedValue(METHOD_PARAMETER);
-            return resolveQueryMethodInvocation(routeParameter.value, methodParameter);
+    public String resolveRouteHandlerInvocation(final CodeGenerationParameter aggregate,
+                                                final CodeGenerationParameter route) {
+        if(route.retrieveRelatedValue(ROUTE_METHOD, Method::from).isGET()) {
+            return resolveQueryMethodInvocation(route);
         }
-        return resolveCommandMethodInvocation(aggregateParameter, routeParameter);
+        return resolveCommandMethodInvocation(aggregate, route);
     }
 
     @Override
@@ -54,13 +53,11 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
         return String.format(COMMAND_PATTERN, invoker, method.value, methodInvocationParameters);
     }
 
-    private String resolveQueryMethodInvocation(final String methodName, final String methodParameter) {
-        final String arguments = Stream.of(methodParameter.split(","))
-                .map(param -> Stream.of(param.split(" "))
-                        .reduce((a, b) -> b)
-                        .orElse(null))
-                .collect(Collectors.joining(", "));
-        return String.format(QUERY_PATTERN, methodName, arguments);
+    private String resolveQueryMethodInvocation(final CodeGenerationParameter route) {
+        final String arguments =
+                Formatters.Arguments.QUERIES_METHOD_INVOCATION.format(route);
+
+        return String.format(QUERY_PATTERN, route.value, arguments);
     }
 
 }

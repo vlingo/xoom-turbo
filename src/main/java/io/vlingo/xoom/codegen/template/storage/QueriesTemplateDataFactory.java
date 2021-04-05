@@ -13,7 +13,6 @@ import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 
-import java.beans.Introspector;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -49,12 +48,6 @@ public class QueriesTemplateDataFactory {
     private static TemplateParameters createParameters(final String persistencePackage,
                                                        final String aggregateProtocol,
                                                        final List<Content> contents) {
-        final String queryByIdMethodName =
-                buildQueryByIdMethodName(aggregateProtocol);
-
-        final String queryAllMethodName =
-                buildQueryAllMethodName(aggregateProtocol);
-
         final String dataObjectName =
                 DATA_OBJECT.resolveClassname(aggregateProtocol);
 
@@ -63,18 +56,9 @@ public class QueriesTemplateDataFactory {
 
         return TemplateParameters.with(PACKAGE_NAME, persistencePackage)
                 .and(STATE_DATA_OBJECT_NAME, dataObjectName)
-                .and(QUERY_ID_METHOD_NAME, queryByIdMethodName)
-                .and(QUERY_ALL_METHOD_NAME, queryAllMethodName)
+                .and(QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregateProtocol))
+                .and(QUERY_ALL_METHOD_NAME, QueriesDetail.resolveQueryAllMethodName(aggregateProtocol))
                 .and(IMPORTS, ImportParameter.of(dataObjectQualifiedName));
-    }
-
-    private static String buildQueryByIdMethodName(final String aggregateProtocol) {
-        return Introspector.decapitalize(aggregateProtocol) + "Of";
-    }
-
-    private static String buildQueryAllMethodName(final String aggregateProtocol) {
-        final String formatted = Introspector.decapitalize(aggregateProtocol);
-        return formatted.endsWith("s") ? formatted : formatted + "s";
     }
 
 }

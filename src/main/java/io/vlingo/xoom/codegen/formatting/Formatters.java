@@ -25,6 +25,7 @@ public class Formatters {
   public interface Arguments {
 
       Arguments AGGREGATE_METHOD_INVOCATION = new AggregateMethodInvocation("stage");
+      Arguments QUERIES_METHOD_INVOCATION = new QueriesMethodInvocation();
       Arguments VALUE_OBJECT_CONSTRUCTOR_INVOCATION = new ValueObjectConstructorInvocation();
       Arguments DATA_OBJECT_CONSTRUCTOR = new DataObjectConstructor();
       Arguments DATA_OBJECT_CONSTRUCTOR_INVOCATION = new DataObjectConstructorInvocation();
