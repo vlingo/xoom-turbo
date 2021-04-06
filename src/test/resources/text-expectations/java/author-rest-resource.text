@@ -63,7 +63,7 @@ public class AuthorResource extends DynamicResourceHandler {
   public Completes<Response> authorOf(final String id) {
     return $queries.authorOf(id)
             .andThenTo(data -> Completes.withSuccess(Response.of(Ok, serialized(data))))
-            .otherwise(arg -> Response.of(NotFound, location()))
+            .otherwise(arg -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
