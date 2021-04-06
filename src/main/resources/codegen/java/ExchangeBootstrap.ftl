@@ -21,7 +21,7 @@ import ${import.qualifiedClassName};
 public class ${exchangeBootstrapName} implements ExchangeInitializer {
 
   <#if producerExchanges?has_content>
-  private Dispatcher dispatcher;
+  private Dispatcher<?> dispatcher;
   </#if>
 
   @Override
@@ -65,7 +65,7 @@ public class ${exchangeBootstrapName} implements ExchangeInitializer {
 
   <#if producerExchanges?has_content>
   @Override
-  public Dispatcher dispatcher() {
+  public Dispatcher<?> dispatcher() {
     return dispatcher;
   }
   </#if>

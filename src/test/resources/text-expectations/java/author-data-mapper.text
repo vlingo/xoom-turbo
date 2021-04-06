@@ -1,0 +1,22 @@
+package io.vlingo.xoomapp.infrastructure.exchange;
+
+import io.vlingo.lattice.exchange.ExchangeMapper;
+import io.vlingo.common.serialization.JsonSerialization;
+
+import io.vlingo.xoomapp.infrastructure.AuthorData;
+
+/**
+ * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangemapper">ExchangeMapper</a>
+ */
+public class AuthorDataMapper implements ExchangeMapper<AuthorData,String> {
+
+  @Override
+  public String localToExternal(final AuthorData local) {
+    return JsonSerialization.serialized(local);
+  }
+
+  @Override
+  public AuthorData externalToLocal(final String external) {
+    return JsonSerialization.deserialized(external, AuthorData.class);
+  }
+}

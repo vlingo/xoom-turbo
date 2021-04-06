@@ -1,0 +1,103 @@
+package io.vlingo.xoomapp.infrastructure.exchange;
+
+import io.vlingo.actors.Grid;
+import io.vlingo.xoom.actors.Settings;
+import io.vlingo.lattice.exchange.Exchange;
+import io.vlingo.xoom.exchange.ExchangeSettings;
+import io.vlingo.xoom.exchange.ExchangeInitializer;
+import io.vlingo.lattice.exchange.rabbitmq.ExchangeFactory;
+import io.vlingo.lattice.exchange.ConnectionSettings;
+import io.vlingo.lattice.exchange.rabbitmq.Message;
+import io.vlingo.lattice.exchange.rabbitmq.MessageSender;
+import io.vlingo.lattice.exchange.Covey;
+import io.vlingo.symbio.store.dispatch.Dispatcher;
+
+import io.vlingo.xoomapp.infrastructure.AuthorData;
+import io.vlingo.lattice.model.IdentifiedDomainEvent;
+
+public class ExchangeBootstrap implements ExchangeInitializer {
+
+  private Dispatcher<?> dispatcher;
+
+  @Override
+  public void init(final Grid stage) {
+    ExchangeSettings.load(Settings.properties());
+
+    final ConnectionSettings otherappExchangeSettings =
+                ExchangeSettings.of("otherapp-exchange").mapToConnection();
+
+    final Exchange otherappExchange =
+                ExchangeFactory.fanOutInstance(otherappExchangeSettings, "otherapp-exchange", true);
+
+    otherappExchange.register(Covey.of(
+        new MessageSender(otherappExchange.connection()),
+        new AuthorExchangeReceivers.OtherAggregateDefined(stage),
+        new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.otherapp:OtherAggregateDefined:0.0.1"),
+        AuthorData.class,
+        String.class,
+        Message.class));
+
+    otherappExchange.register(Covey.of(
+        new MessageSender(otherappExchange.connection()),
+        new AuthorExchangeReceivers.OtherAggregateUpdated(stage),
+        new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.otherapp:OtherAggregateUpdated:0.0.2"),
+        AuthorData.class,
+        String.class,
+        Message.class));
+
+    otherappExchange.register(Covey.of(
+        new MessageSender(otherappExchange.connection()),
+        new AuthorExchangeReceivers.OtherAggregateRemoved(stage),
+        new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.otherapp:OtherAggregateRemoved:0.0.3"),
+        AuthorData.class,
+        String.class,
+        Message.class));
+
+    final ConnectionSettings authorExchangeSettings =
+                ExchangeSettings.of("author-exchange").mapToConnection();
+
+    final Exchange authorExchange =
+                ExchangeFactory.fanOutInstance(authorExchangeSettings, "author-exchange", true);
+
+    authorExchange.register(Covey.of(
+        new MessageSender(authorExchange.connection()),
+        received -> {},
+        new AuthorProducerAdapter(),
+        IdentifiedDomainEvent.class,
+        IdentifiedDomainEvent.class,
+        Message.class));
+
+    final ConnectionSettings bookExchangeSettings =
+                ExchangeSettings.of("book-exchange").mapToConnection();
+
+    final Exchange bookExchange =
+                ExchangeFactory.fanOutInstance(bookExchangeSettings, "book-exchange", true);
+
+    bookExchange.register(Covey.of(
+        new MessageSender(bookExchange.connection()),
+        received -> {},
+        new BookProducerAdapter(),
+        IdentifiedDomainEvent.class,
+        IdentifiedDomainEvent.class,
+        Message.class));
+
+
+    this.dispatcher = new ExchangeDispatcher(authorExchange, bookExchange);
+
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        otherappExchange.close();
+        authorExchange.close();
+        bookExchange.close();
+
+        System.out.println("\n");
+        System.out.println("==================");
+        System.out.println("Stopping exchange.");
+        System.out.println("==================");
+    }));
+  }
+
+  @Override
+  public Dispatcher<?> dispatcher() {
+    return dispatcher;
+  }
+}

@@ -37,9 +37,37 @@ public class ExchangeGenerationStepTest {
 
         Assert.assertEquals(19, context.contents().size());
 
+        final Content exchangeBootstrap =
+                context.findContent(TemplateStandard.EXCHANGE_BOOTSTRAP, "ExchangeBootstrap");
+
         final Content authorExchangeReceivers =
                 context.findContent(TemplateStandard.EXCHANGE_RECEIVER_HOLDER, "AuthorExchangeReceivers");
 
+        final Content authorConsumerAdapter =
+                context.findContent(TemplateStandard.EXCHANGE_ADAPTER, "AuthorConsumerAdapter");
+
+        final Content authorProducerAdapter =
+                context.findContent(TemplateStandard.EXCHANGE_ADAPTER, "AuthorProducerAdapter");
+
+        final Content authorDataMapper =
+                context.findContent(TemplateStandard.EXCHANGE_MAPPER, "AuthorDataMapper");
+
+        final Content bookProducerAdapter =
+                context.findContent(TemplateStandard.EXCHANGE_ADAPTER, "BookProducerAdapter");
+
+        final Content domainEventMapper =
+                context.findContent(TemplateStandard.EXCHANGE_MAPPER, "DomainEventMapper");
+
+        final Content exchangeDispatcher =
+                context.findContent(TemplateStandard.EXCHANGE_DISPATCHER, "ExchangeDispatcher");
+
+        exchangeBootstrap.contains(TextExpectation.onJava().read("exchange-bootstrap"));
         authorExchangeReceivers.contains(TextExpectation.onJava().read("author-exchange-receivers"));
+        authorConsumerAdapter.contains(TextExpectation.onJava().read("author-consumer-adapter"));
+        authorProducerAdapter.contains(TextExpectation.onJava().read("author-producer-adapter"));
+        authorDataMapper.contains(TextExpectation.onJava().read("author-data-mapper"));
+        bookProducerAdapter.contains(TextExpectation.onJava().read("book-producer-adapter"));
+        domainEventMapper.contains(TextExpectation.onJava().read("domain-event-mapper"));
+        exchangeDispatcher.contains(TextExpectation.onJava().read("exchange-dispatcher"));
     }
 }
