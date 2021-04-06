@@ -75,10 +75,6 @@ public class AuthorResource extends DynamicResourceHandler {
      );
   }
 
-  private String location() {
-    return location("");
-  }
-
   private String location(final String id) {
     return "/authors/" + id;
   }

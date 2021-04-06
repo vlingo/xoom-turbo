@@ -86,10 +86,6 @@ public class ${resourceName} extends DynamicResourceHandler {
   </#if>
   }
 
-  private String location() {
-    return location("");
-  }
-
   private String location(final String id) {
     return "${uriRoot?replace("/$", "")}/" + id;
   }
