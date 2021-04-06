@@ -38,7 +38,7 @@ public class AuthorResource extends DynamicResourceHandler {
     final Name name = Name.from(data.name.firstName, data.name.lastName);
     return Author.withName(grid, name)
       .andThenTo(state -> Completes.withSuccess(Response.of(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(state.id))), serialized(AuthorData.from(state))))
-      .otherwise(arg -> Response.of(NotFound, location()))
+      .otherwise(arg -> Response.of(NotFound))
       .recoverFrom(e -> Response.of(InternalServerError, e.getMessage())));
   }
 
@@ -49,14 +49,14 @@ public class AuthorResource extends DynamicResourceHandler {
     return resolve(id)
             .andThenTo(author -> author.changeRank(rank))
             .andThenTo(state -> Completes.withSuccess(Response.of(Ok, serialized(AuthorData.from(state)))))
-            .otherwise(noGreeting -> Response.of(NotFound, location(id)))
+            .otherwise(noGreeting -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
   public Completes<Response> authors() {
     return $queries.authors()
             .andThenTo(data -> Completes.withSuccess(Response.of(Ok, serialized(data))))
-            .otherwise(arg -> Response.of(NotFound, location()))
+            .otherwise(arg -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
