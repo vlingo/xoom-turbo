@@ -32,7 +32,7 @@ public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
                         STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER, REST_RESOURCE,
                         AUTO_DISPATCH_RESOURCE_HANDLER, EXCHANGE_BOOTSTRAP);
 
-        parameters().and(REST_RESOURCES, RestResource.from(context.contents()))
+        parameters().and(REST_RESOURCES, RestResource.from(context))
                 .and(EXCHANGE_BOOTSTRAP_NAME, EXCHANGE_BOOTSTRAP.resolveClassname())
                 .and(HAS_EXCHANGE, ContentQuery.exists(EXCHANGE_BOOTSTRAP, context.contents()))
                 .addImports(qualifiedNames).addImports(storageType.resolveTypeRegistryQualifiedNames(useCQRS));

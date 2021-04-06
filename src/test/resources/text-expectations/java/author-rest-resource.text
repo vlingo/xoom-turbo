@@ -29,10 +29,10 @@ public class AuthorResource extends DynamicResourceHandler {
   private final Grid grid;
   private final AuthorQueries $queries;
 
-  public AuthorResource(final Grid grid) {
-      super(grid.world().stage());
-      this.grid = grid;
-      this.$queries = QueryModelStateStoreProvider.instance().authorQueries;
+  public AuthorResource(final Grid grid, final AuthorQueries authorQueries) {
+    super(grid.world().stage());
+    this.grid = grid;
+    this.$queries = authorQueries;
   }
 
   public Completes<Response> withName(final AuthorData data) {

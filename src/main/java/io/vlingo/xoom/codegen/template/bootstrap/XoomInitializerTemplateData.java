@@ -32,11 +32,11 @@ public class XoomInitializerTemplateData extends BootstrapTemplateData {
 
         loadImports(context, contents);
 
-        parameters().and(TemplateParameter.BLOCKING_MESSAGING, blockingMessaging)
+        parameters().and(TemplateParameter.APPLICATION_NAME, appName)
+                .and(TemplateParameter.BLOCKING_MESSAGING, blockingMessaging)
                 .and(TemplateParameter.XOOM_INITIALIZER_CLASS, xoomInitializerClass)
                 .and(TemplateParameter.CUSTOM_INITIALIZATION, customInitialization)
-                .and(TemplateParameter.REST_RESOURCES, RestResource.from(contents))
-                .and(TemplateParameter.APPLICATION_NAME, appName)
+                .and(TemplateParameter.REST_RESOURCES, RestResource.from(context))
                 .and(TemplateParameter.EXCHANGE_BOOTSTRAP_NAME, resolveExchangeBootstrapName(context));
     }
 
