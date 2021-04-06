@@ -39,8 +39,10 @@ public class SignatureDeclaration implements Formatters.Arguments {
         switch (parameter.label) {
             case AGGREGATE:
                 return collectStateFields(parameter);
+            case ROUTE_SIGNATURE:
+                return formatRouteMethodParameters(parameter);
             case AGGREGATE_METHOD:
-                return formatMethodParameters(parameter);
+                return formatAggregateMethodParameters(parameter);
             case VALUE_OBJECT:
                 return formatValueObjectFields(parameter);
             default:
@@ -52,7 +54,11 @@ public class SignatureDeclaration implements Formatters.Arguments {
         return applyAggregateBasedFormatting(aggregate, STATE_FIELD);
     }
 
-    private List<String> formatMethodParameters(final CodeGenerationParameter aggregateMethod) {
+    private List<String> formatRouteMethodParameters(final CodeGenerationParameter route) {
+        return applyAggregateBasedFormatting(route, METHOD_PARAMETER);
+    }
+
+    private List<String> formatAggregateMethodParameters(final CodeGenerationParameter aggregateMethod) {
         return applyAggregateBasedFormatting(aggregateMethod, METHOD_PARAMETER);
     }
 

@@ -18,7 +18,8 @@ public class AuthorResourceHandlers {
   public static final int WITH_NAME = 0;
   public static final int CHANGE_RANK = 1;
   public static final int AUTHORS = 2;
-  public static final int ADAPT_STATE = 3;
+  public static final int AUTHOR_OF = 3;
+  public static final int ADAPT_STATE = 4;
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Stage, AuthorData>> WITH_NAME_HANDLER =
           HandlerEntry.of(WITH_NAME, ($stage, data) -> {
@@ -37,5 +38,8 @@ public class AuthorResourceHandlers {
 
   public static final HandlerEntry<Two<Completes<Collection<AuthorData>>, AuthorQueries>> QUERY_ALL_HANDLER =
           HandlerEntry.of(AUTHORS, AuthorQueries::authors);
+
+  public static final HandlerEntry<Three<Completes<AuthorData>, AuthorQueries, String>> QUERY_BY_ID_HANDLER =
+          HandlerEntry.of(AUTHOR_OF, ($queries, id) -> $queries.authorOf(id));
 
 }

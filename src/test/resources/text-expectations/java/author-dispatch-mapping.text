@@ -28,4 +28,7 @@ public interface AuthorResource {
   @Route(method = GET, handler = AuthorResourceHandlers.AUTHORS)
   Completes<Response> authors();
 
+  @Route(method = GET, path = "/{id}", handler = AuthorResourceHandlers.AUTHOR_OF)
+  Completes<Response> authorOf(final String id);
+
 }

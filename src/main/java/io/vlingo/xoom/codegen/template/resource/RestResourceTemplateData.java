@@ -63,8 +63,7 @@ public class RestResourceTemplateData extends TemplateData {
                 params -> requireModelTypes(aggregateParameter) ? aggregateName : "";
 
         if(useCQRS) {
-            aggregateParameter.relate(RouteDetail.defaultQueryRouteParameter(aggregateParameter));
-            aggregateParameter.relate(RouteDetail.fetchSingleQueryRouteParameter(aggregateParameter));
+            aggregateParameter.relate(RouteDetail.defaultQueryRoutes(aggregateParameter));
         }
 
         return TemplateParameters.with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
