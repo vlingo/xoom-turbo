@@ -4,7 +4,7 @@
 @Route(method = ${routeMethod}, handler = ${autoDispatchHandlersMappingName}.${routeMappingValue})
 </#if>
 <#if retrievalRoute>
-  Completes<Response> ${methodName}();
+  Completes<Response> ${methodName}(${methodParameters});
 <#else>
   @ResponseAdapter(handler = ${autoDispatchHandlersMappingName}.ADAPT_STATE)
   <#if requireEntityLoading>

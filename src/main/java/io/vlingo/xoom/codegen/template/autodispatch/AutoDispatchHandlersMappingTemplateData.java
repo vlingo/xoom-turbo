@@ -16,10 +16,9 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.codegen.template.resource.RouteDetail;
+import io.vlingo.xoom.codegen.template.storage.QueriesDetail;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -43,7 +42,6 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
     protected AutoDispatchHandlersMappingTemplateData(final String basePackage,
                                                       final Language language,
                                                       final CodeGenerationParameter aggregate,
-                                                      final List<TemplateData> queriesTemplateData,
                                                       final List<CodeGenerationParameter> valueObjects,
                                                       final List<Content> contents,
                                                       final Boolean useCQRS) {
@@ -54,8 +52,10 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregateName))
                         .and(STATE_DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregateName))
                         .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateName)).and(USE_CQRS, useCQRS)
-                        .and(QUERY_ALL_METHOD_NAME, findQueryMethodName(queriesTemplateData))
+                        .and(QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregateName))
+                        .and(QUERY_ALL_METHOD_NAME, QueriesDetail.resolveQueryAllMethodName(aggregateName))
                         .andResolve(QUERY_ALL_INDEX_NAME, params -> format(params.find(QUERY_ALL_METHOD_NAME)))
+                        .andResolve(QUERY_BY_ID_INDEX_NAME, params -> format(params.find(QUERY_BY_ID_METHOD_NAME)))
                         .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, standard().resolveClassname(aggregateName))
                         .and(HANDLER_INDEXES, resolveHandlerIndexes(aggregate, useCQRS))
                         .and(HANDLER_ENTRIES, new ArrayList<String>())
@@ -79,24 +79,6 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
             final String mappingValue = format(signature);
             return String.format(HANDLER_INDEX_PATTERN, mappingValue, index);
         }).collect(Collectors.toList());
-    }
-
-    private String findQueryMethodName(final List<TemplateData> queriesTemplateData) {
-        if(queriesTemplateData.isEmpty()) {
-            return "";
-        }
-
-        final String expectedQueriesName =
-                QUERIES.resolveClassname(aggregateName);
-
-        final Predicate<TemplateParameters> filter =
-                parameters -> parameters.hasValue(QUERIES_NAME, expectedQueriesName);
-
-        final Function<TemplateParameters, String> queryMethodNameMapper =
-                parameters -> parameters.find(QUERY_ALL_METHOD_NAME);
-
-        return queriesTemplateData.stream().map(TemplateData::parameters).filter(filter)
-                .map(queryMethodNameMapper).findFirst().get();
     }
 
     private Set<String> resolveImports(final CodeGenerationParameter aggregate,

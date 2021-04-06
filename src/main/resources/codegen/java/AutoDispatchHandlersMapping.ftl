@@ -28,6 +28,9 @@ public class ${autoDispatchHandlersMappingName} {
   <#if useCQRS>
   public static final HandlerEntry<Two<Completes<Collection<${dataName}>>, ${queriesName}>> QUERY_ALL_HANDLER =
           HandlerEntry.of(${queryAllIndexName}, ${queriesName}::${queryAllMethodName});
+
+  public static final HandlerEntry<Three<Completes<${dataName}>, ${queriesName}, String>> QUERY_BY_ID_HANDLER =
+          HandlerEntry.of(${queryByIdIndexName}, ($queries, id) -> $queries.${queryByIdMethodName}(id));
   </#if>
 
 }

@@ -7,6 +7,7 @@
 package io.vlingo.xoom.codegen.template.autodispatch;
 
 import io.vlingo.http.Method;
+import io.vlingo.xoom.codegen.formatting.Formatters;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.TemplateData;
@@ -41,6 +42,7 @@ public class AutoDispatchRouteTemplateData extends TemplateData {
                         .and(STATE_DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
                         .and(ROUTE_MAPPING_VALUE, AutoDispatchMappingValueFormatter.format(route.value))
                         .and(REQUIRE_ENTITY_LOADING, route.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf))
+                        .and(METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(route))
                         .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, AUTO_DISPATCH_HANDLERS_MAPPING.resolveClassname(aggregate.value))
                         .and(METHOD_NAME, route.value);
     }
