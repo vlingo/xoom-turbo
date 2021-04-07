@@ -14,15 +14,12 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import java.util.List;
 
 import static io.vlingo.xoom.codegen.parameter.Label.USE_AUTO_DISPATCH;
-import static io.vlingo.xoom.codegen.template.TemplateStandard.QUERIES_ACTOR;
 
 public class AutoDispatchMappingGenerationStep extends TemplateProcessingStep {
 
     @Override
     protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final List<TemplateData> queriesTemplateData = context.templateParametersOf(QUERIES_ACTOR);
-        return AutoDispatchMappingTemplateDataFactory.build(context.parameters(),
-                queriesTemplateData, context.contents());
+        return AutoDispatchMappingTemplateDataFactory.build(context.parameters(), context.contents());
     }
 
     @Override

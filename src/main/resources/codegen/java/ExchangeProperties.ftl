@@ -5,7 +5,7 @@ exchange.names=${inlineExchangeNames}
 exchange.${exchangeName}.hostname=localhost
 exchange.${exchangeName}.username=guest
 exchange.${exchangeName}.password=guest
-exchange.${exchangeName}.port=5762
+exchange.${exchangeName}.port=5672
 exchange.${exchangeName}.virtual.host=/
 
 </#list>

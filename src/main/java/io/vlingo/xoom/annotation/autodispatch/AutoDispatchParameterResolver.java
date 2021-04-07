@@ -161,19 +161,28 @@ public class AutoDispatchParameterResolver {
 
     private void resolveVariablesAnnotation(final ExecutableElement method,
                                             final CodeGenerationParameter routeParameter) {
-        method.getParameters().forEach(methodVariable -> {
-            resolveIdAnnotation(methodVariable, routeParameter);
-            resolveBodyAnnotation(methodVariable, routeParameter);
+        method.getParameters().forEach(methodArguments -> {
+            resolveIdAnnotation(methodArguments, routeParameter);
+            resolveBodyAnnotation(methodArguments, routeParameter);
+            resolveOtherParameters(methodArguments, routeParameter);
         });
     }
 
-    private void resolveIdAnnotation(final VariableElement methodVariable,
+    private void resolveOtherParameters(final VariableElement methodArgument,
+                                        final CodeGenerationParameter routeParameter) {
+        if(methodArgument.getAnnotation(Id.class) == null &&
+                methodArgument.getAnnotation(Body.class) == null) {
+            routeParameter.relate(METHOD_PARAMETER, methodArgument.getSimpleName());
+        }
+    }
+
+    private void resolveIdAnnotation(final VariableElement methodArgument,
                                      final CodeGenerationParameter routeParameter) {
-        final Id idAnnotation = methodVariable.getAnnotation(Id.class);
+        final Id idAnnotation = methodArgument.getAnnotation(Id.class);
 
         if(idAnnotation != null) {
-            routeParameter.relate(ID, methodVariable.getSimpleName())
-                    .relate(ID_TYPE, retriedIdTypeQualifiedName(methodVariable.asType()));
+            routeParameter.relate(ID, methodArgument.getSimpleName())
+                    .relate(ID_TYPE, retriedIdTypeQualifiedName(methodArgument.asType()));
         }
     }
 
@@ -188,16 +197,18 @@ public class AutoDispatchParameterResolver {
         return idTypeElement.getQualifiedName().toString();
     }
 
-    private void resolveBodyAnnotation(final VariableElement methodVariable,
+
+
+    private void resolveBodyAnnotation(final VariableElement methodArgument,
                                        final CodeGenerationParameter routeParameter) {
-        final Body bodyAnnotation = methodVariable.getAnnotation(Body.class);
+        final Body bodyAnnotation = methodArgument.getAnnotation(Body.class);
 
         if(bodyAnnotation != null) {
             final TypeElement bodyType =
                     (TypeElement) environment.getTypeUtils()
-                            .asElement(methodVariable.asType());
+                            .asElement(methodArgument.asType());
 
-            routeParameter.relate(BODY, methodVariable.getSimpleName())
+            routeParameter.relate(BODY, methodArgument.getSimpleName())
                     .relate(BODY_TYPE, bodyType.getQualifiedName());
         }
     }

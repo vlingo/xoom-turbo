@@ -4,6 +4,7 @@ import io.vlingo.actors.Definition;
 import io.vlingo.actors.Address;
 import io.vlingo.actors.Grid;
 import io.vlingo.common.Completes;
+import io.vlingo.http.ContentType;
 import io.vlingo.http.Response;
 import io.vlingo.http.ResponseHeader;
 import io.vlingo.http.resource.Resource;
@@ -36,8 +37,8 @@ public class AuthorResource extends DynamicResourceHandler {
   public Completes<Response> withName(final AuthorData data) {
     final Name name = Name.from(data.name.firstName, data.name.lastName);
     return Author.withName(grid, name)
-      .andThenTo(state -> Completes.withSuccess(Response.of(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(state.id))), serialized(AuthorData.from(state))))
-      .otherwise(arg -> Response.of(NotFound, location()))
+      .andThenTo(state -> Completes.withSuccess(entityResponseOf(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(state.id))), serialized(AuthorData.from(state))))
+      .otherwise(arg -> Response.of(NotFound))
       .recoverFrom(e -> Response.of(InternalServerError, e.getMessage())));
   }
 
@@ -47,15 +48,22 @@ public class AuthorResource extends DynamicResourceHandler {
     final Rank rank = Rank.from(data.rank.points, classification);
     return resolve(id)
             .andThenTo(author -> author.changeRank(rank))
-            .andThenTo(state -> Completes.withSuccess(Response.of(Ok, serialized(AuthorData.from(state)))))
-            .otherwise(noGreeting -> Response.of(NotFound, location(id)))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
   public Completes<Response> authors() {
     return $queries.authors()
-            .andThenTo(data -> Completes.withSuccess(Response.of(Ok, serialized(data))))
-            .otherwise(arg -> Response.of(NotFound, location()))
+            .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
+            .otherwise(arg -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> authorOf(final String id) {
+    return $queries.authorOf(id)
+            .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
+            .otherwise(arg -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
@@ -70,12 +78,16 @@ public class AuthorResource extends DynamicResourceHandler {
             .body(AuthorData.class)
             .handle(this::changeRank),
         io.vlingo.http.resource.ResourceBuilder.get("/authors")
-            .handle(this::authors)
+            .handle(this::authors),
+        io.vlingo.http.resource.ResourceBuilder.get("/authors/{id}")
+            .param(String.class)
+            .handle(this::authorOf)
      );
   }
 
-  private String location() {
-    return location("");
+  @Override
+  protected ContentType contentType() {
+    return ContentType.of("application/json", "charset=UTF-8");
   }
 
   private String location(final String id) {

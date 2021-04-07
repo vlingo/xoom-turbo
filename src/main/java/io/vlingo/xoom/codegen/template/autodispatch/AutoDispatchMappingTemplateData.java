@@ -55,7 +55,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
     @SuppressWarnings("unchecked")
     private void loadDependencies(final CodeGenerationParameter aggregate, final boolean useCQRS) {
         if(useCQRS) {
-            aggregate.relate(RouteDetail.defaultQueryRouteParameter(aggregate));
+            aggregate.relate(RouteDetail.defaultQueryRoutes(aggregate));
         }
         this.dependOn(AutoDispatchRouteTemplateData.from(aggregate.retrieveAllRelated(ROUTE_SIGNATURE)));
     }

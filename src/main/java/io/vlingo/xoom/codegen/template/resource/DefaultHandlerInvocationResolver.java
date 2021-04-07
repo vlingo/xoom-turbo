@@ -14,24 +14,26 @@ import io.vlingo.xoom.codegen.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.codegen.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.codegen.formatting.Formatters;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static io.vlingo.xoom.codegen.content.CodeElementFormatter.simpleNameToAttribute;
-import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
-import static io.vlingo.xoom.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 
     private final static String COMMAND_PATTERN = "%s.%s(%s)";
-    private final static String QUERY_PATTERN = HandlerInvocationResolver.QUERIES_PARAMETER + ".%s()";
+    private final static String QUERY_PATTERN = HandlerInvocationResolver.QUERIES_PARAMETER + ".%s(%s)";
     private final static String ADAPTER_PATTERN = "%s.from(state)";
 
     @Override
-    public String resolveRouteHandlerInvocation(final CodeGenerationParameter aggregateParameter,
-                                                final CodeGenerationParameter routeParameter) {
-        if(routeParameter.retrieveRelatedValue(ROUTE_METHOD, Method::from).isGET()) {
-            return resolveQueryMethodInvocation(routeParameter.value);
+    public String resolveRouteHandlerInvocation(final CodeGenerationParameter aggregate,
+                                                final CodeGenerationParameter route) {
+        if(route.retrieveRelatedValue(ROUTE_METHOD, Method::from).isGET()) {
+            return resolveQueryMethodInvocation(route);
         }
-        return resolveCommandMethodInvocation(aggregateParameter, routeParameter);
+        return resolveCommandMethodInvocation(aggregate, route);
     }
 
     @Override
@@ -51,8 +53,11 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
         return String.format(COMMAND_PATTERN, invoker, method.value, methodInvocationParameters);
     }
 
-    private String resolveQueryMethodInvocation(final String methodName) {
-        return String.format(QUERY_PATTERN, methodName);
+    private String resolveQueryMethodInvocation(final CodeGenerationParameter route) {
+        final String arguments =
+                Formatters.Arguments.QUERIES_METHOD_INVOCATION.format(route);
+
+        return String.format(QUERY_PATTERN, route.value, arguments);
     }
 
 }

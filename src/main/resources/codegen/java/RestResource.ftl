@@ -10,6 +10,7 @@ import io.vlingo.xoom.annotation.autodispatch.Handler;
 </#if>
 import io.vlingo.actors.Grid;
 import io.vlingo.common.Completes;
+import io.vlingo.http.ContentType;
 import io.vlingo.http.Response;
 import io.vlingo.http.ResponseHeader;
 import io.vlingo.http.resource.Resource;
@@ -85,8 +86,9 @@ public class ${resourceName} extends DynamicResourceHandler {
   </#if>
   }
 
-  private String location() {
-    return location("");
+  @Override
+  protected ContentType contentType() {
+    return ContentType.of("application/json", "charset=UTF-8");
   }
 
   private String location(final String id) {
