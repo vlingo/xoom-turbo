@@ -10,7 +10,6 @@ package io.vlingo.xoom.codegen.template.storage;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -66,33 +65,41 @@ public class StorageProviderTemplateData extends TemplateData {
         final List<Adapter> adapters = Adapter.from(templatesData);
         final List<Queries> queries = Queries.from(model, contents, templatesData);
         final Stream<String> persistentTypes = storageType.findPersistentQualifiedTypes(model, contents).stream();
-        final Set<ImportParameter> importParameters = resolveImports(model, storageType, contents);
+        final Set<String> imports = resolveImports(model, storageType, contents, queries);
 
         return TemplateParameters.with(STORAGE_TYPE, storageType).and(PROJECTION_TYPE, projectionType)
-                .and(MODEL, model).and(IMPORTS, importParameters).and(PACKAGE_NAME, packageName)
+                .and(MODEL, model).and(PACKAGE_NAME, packageName)
                 .and(REQUIRE_ADAPTERS, storageType.requireAdapters(model))
                 .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
                 .and(ADAPTERS, adapters).and(QUERIES, queries)
                 .and(AGGREGATES, ContentQuery.findClassNames(AGGREGATE, contents))
                 .and(PERSISTENT_TYPES, persistentTypes.map(CodeElementFormatter::simpleNameOf).collect(toSet()))
                 .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
-                .and(USE_ANNOTATIONS, useAnnotation);
+                .and(USE_ANNOTATIONS, useAnnotation)
+                .addImports(imports);
     }
 
     @SuppressWarnings("unchecked")
-    private Set<ImportParameter> resolveImports(final Model model,
+    private Set<String> resolveImports(final Model model,
                                                 final StorageType storageType,
-                                                final List<Content> contents) {
+                                                final List<Content> contents,
+                                                final List<Queries> queries) {
         final Set<String> sourceClassQualifiedNames =
                 storageType.resolveAdaptersQualifiedName(model, contents);
 
         final Set<String> persistentTypes =
                 storageType.findPersistentQualifiedTypes(model, contents);
 
+        final Set<String> queriesQualifiedNames = queries.stream()
+                .flatMap(param -> param.getQualifiedNames().stream())
+                .collect(toSet());
+
         final Set<String> aggregateActorQualifiedNames = storageType.isSourced() ?
                 ContentQuery.findFullyQualifiedClassNames(AGGREGATE, contents) : new HashSet<>();
 
-        return ImportParameter.of(sourceClassQualifiedNames, aggregateActorQualifiedNames, persistentTypes);
+        return Stream.of(sourceClassQualifiedNames, queriesQualifiedNames,
+                aggregateActorQualifiedNames, persistentTypes).flatMap(s -> s.stream())
+                .collect(Collectors.toSet());
     }
 
     private static boolean supportModel(final Model model, final boolean useAnnotation) {

@@ -18,12 +18,6 @@ public class Boot {
     private static Properties clusterProperties;
     private static final int defaultPort = 18080;
 
-    /**
-     * Answers a new {@code World} with the given {@code name} and that is configured with
-     * the contents of the {@code vlingo-xoom.properties} file.
-     * @param worldName the {@code String} name to assign to the new {@code World} instance
-     * @return {@code World}
-     */
     public static Grid start(final String worldName) throws Exception {
         return start(worldName, null);
     }

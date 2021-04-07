@@ -3,7 +3,6 @@ package io.vlingo.xoomapp.infrastructure.resource;
 import io.vlingo.actors.Definition;
 import io.vlingo.actors.Address;
 import io.vlingo.actors.Grid;
-import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
 import io.vlingo.http.ResponseHeader;

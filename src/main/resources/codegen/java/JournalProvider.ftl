@@ -22,6 +22,7 @@ import io.vlingo.xoom.storage.Model;
 import io.vlingo.xoom.storage.StoreActorBuilder;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
+@SuppressWarnings("ALL")
 public class ${storeProviderName}  {
   private static ${storeProviderName} instance;
 
@@ -35,7 +36,6 @@ public class ${storeProviderName}  {
     return using(stage, registry, new NoOpDispatcher());
  }
 
-  @SuppressWarnings({ "unchecked", "unused" })
   public static ${storeProviderName} using(final Stage stage, final SourcedTypeRegistry registry, final Dispatcher ...dispatchers) {
     if (instance != null) {
       return instance;

@@ -1,7 +1,6 @@
 package io.vlingo.infrastructure.persistence;
 
 import io.vlingo.xoomapp.infrastructure.*;
-import io.vlingo.infrastructure.Events;
 import io.vlingo.xoomapp.model.book.*;
 
 import io.vlingo.lattice.model.projection.Projectable;

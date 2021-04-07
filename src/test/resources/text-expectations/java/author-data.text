@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import io.vlingo.xoomapp.model.author.AuthorState;
 
+@SuppressWarnings("ALL")
 public class AuthorData {
   public final String id;
   public final NameData name;

@@ -13,7 +13,7 @@ import io.vlingo.symbio.store.dispatch.Dispatcher;
 
 import static io.vlingo.infrastructure.Operations.*;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("ALL")
 public class ProjectionDispatcherProvider {
   private static ProjectionDispatcherProvider instance;
 

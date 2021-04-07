@@ -17,7 +17,7 @@ import ${import.qualifiedClassName};
 </#list>
 </#if>
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("ALL")
 public class ProjectionDispatcherProvider {
   private static ProjectionDispatcherProvider instance;
 

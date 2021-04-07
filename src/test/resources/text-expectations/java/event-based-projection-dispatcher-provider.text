@@ -15,7 +15,7 @@ import io.vlingo.xoomapp.model.book.BookCataloged;
 import io.vlingo.xoomapp.model.author.AuthorRanked;
 import io.vlingo.xoomapp.model.author.AuthorRegistered;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("ALL")
 public class ProjectionDispatcherProvider {
   private static ProjectionDispatcherProvider instance;
 

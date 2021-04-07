@@ -9,6 +9,7 @@ import io.vlingo.lattice.model.IdentifiedDomainEvent;
 /**
  * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangemapper">ExchangeMapper</a>
  */
+@SuppressWarnings("ALL")
 public class ${exchangeMapperName} implements ExchangeMapper<IdentifiedDomainEvent, Message> {
 
   @Override
@@ -18,7 +19,6 @@ public class ${exchangeMapperName} implements ExchangeMapper<IdentifiedDomainEve
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public IdentifiedDomainEvent externalToLocal(final Message message) {
     try {
       final String eventFullyQualifiedName = message.messageParameters.typeName();

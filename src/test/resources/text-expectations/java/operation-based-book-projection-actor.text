@@ -1,6 +1,5 @@
 package io.vlingo.infrastructure.persistence;
 
-import io.vlingo.infrastructure.Operations;
 import io.vlingo.xoomapp.infrastructure.*;
 import io.vlingo.xoomapp.model.book.*;
 

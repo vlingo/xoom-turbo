@@ -14,6 +14,7 @@ import ${import.qualifiedClassName};
 /**
  * See <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#querying-a-statestore">Querying a StateStore</a>
  */
+@SuppressWarnings("ALL")
 public class ${queriesActorName} extends StateStoreQueryActor implements ${queriesName} {
 
   public ${queriesActorName}(StateStore store) {
