@@ -29,8 +29,7 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   protected ${dataName} currentDataFor(Projectable projectable) {
     becauseOf = projectable.becauseOf()[0];
     final ${stateName} state = projectable.object();
-    final ${dataName} current = ${dataName}.from(state);
-    return current;
+    return ${dataName}.from(state);
   }
 
   @Override

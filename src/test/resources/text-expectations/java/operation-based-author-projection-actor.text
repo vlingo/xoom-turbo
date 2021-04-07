@@ -28,8 +28,7 @@ public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>
   protected AuthorData currentDataFor(Projectable projectable) {
     becauseOf = projectable.becauseOf()[0];
     final AuthorState state = projectable.object();
-    final AuthorData current = AuthorData.from(state);
-    return current;
+    return AuthorData.from(state);
   }
 
   @Override

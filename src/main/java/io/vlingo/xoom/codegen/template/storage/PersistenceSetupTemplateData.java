@@ -8,7 +8,6 @@ package io.vlingo.xoom.codegen.template.storage;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -58,7 +57,6 @@ public class PersistenceSetupTemplateData extends TemplateData {
                                               final List<TemplateData> templatesData,
                                               final List<Content> contents)  {
         return TemplateParameters.with(BASE_PACKAGE, basePackage)
-                .and(IMPORTS, resolveImports(contents))
                 .and(PACKAGE_NAME, persistencePackage)
                 .and(STORAGE_TYPE, storageType.name())
                 .and(DATA_OBJECTS, resolveDataObjectNames(contents))
@@ -68,12 +66,16 @@ public class PersistenceSetupTemplateData extends TemplateData {
                 .and(PROJECTIONS, Projection.from(contents))
                 .and(QUERIES, Queries.from(useCQRS, contents, templatesData))
                 .and(USE_CQRS, useCQRS).and(USE_ANNOTATIONS, true)
+                .addImports(resolveImports(useCQRS, contents))
                 .andResolve(REQUIRE_ADAPTERS, params -> !params.<List>find(ADAPTERS).isEmpty());
     }
 
     @SuppressWarnings("unchecked")
-    private Set<ImportParameter> resolveImports(final List<Content> contents) {
-        return ImportParameter.of(ContentQuery.findFullyQualifiedClassNames(contents, AGGREGATE_STATE, DATA_OBJECT, DOMAIN_EVENT));
+    private Set<String> resolveImports(final boolean useCQRS, final List<Content> contents) {
+        if(useCQRS) {
+            return ContentQuery.findFullyQualifiedClassNames(contents, AGGREGATE_STATE, DATA_OBJECT, DOMAIN_EVENT);
+        }
+        return ContentQuery.findFullyQualifiedClassNames(contents, AGGREGATE_STATE, DATA_OBJECT);
     }
 
     private String resolveDataObjectNames(final List<Content> contents) {
