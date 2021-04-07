@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Stream;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 <#if imports?has_content>

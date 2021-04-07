@@ -9,7 +9,6 @@ import io.vlingo.actors.Logger;
 import io.vlingo.xoom.annotation.autodispatch.Handler;
 </#if>
 import io.vlingo.actors.Grid;
-import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
 import io.vlingo.http.ResponseHeader;

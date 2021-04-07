@@ -54,11 +54,15 @@ public class Bootstrap {
     }));
   }
 
-  public void stopServer() throws Exception {
+  public void stopServer() {
     if (instance == null) {
       throw new IllegalStateException("xoom-app server not running");
     }
     instance.server.stop();
+  }
+
+  public Grid grid() {
+    return grid;
   }
 
   public static void main(final String[] args) throws Exception {

@@ -76,12 +76,10 @@ public class ProjectionTemplateData extends TemplateData {
                 .and(PROJECTION_TYPE, projectionType).and(PROJECTION_SOURCES, projectionSources)
                 .andResolve(PROJECTION_SOURCE_TYPES_NAME, param -> PROJECTION_SOURCE_TYPES.resolveClassname(param))
                 .andResolve(STORE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param))
-                .addImports(resolveImports(basePackage, dataObjectName, projectionType, contents));
+                .addImports(resolveImports(dataObjectName, contents));
     }
 
-    private Set<String> resolveImports(final String basePackage,
-                                       final String dataObjectName,
-                                       final ProjectionType projectionType,
+    private Set<String> resolveImports(final String dataObjectName,
                                        final List<Content> contents) {
         final String aggregatePackage =
                 ContentQuery.findPackage(AGGREGATE_PROTOCOL, protocolName, contents);
@@ -89,12 +87,8 @@ public class ProjectionTemplateData extends TemplateData {
         final String dataObjectPackage =
                 ContentQuery.findPackage(DATA_OBJECT, dataObjectName, contents);
 
-        final String projectionSourceTypesQualifiedName =
-                ProjectionSourceTypesDetail.resolveQualifiedName(basePackage, projectionType);
-
         return Stream.of(CodeElementFormatter.importAllFrom(aggregatePackage),
-                CodeElementFormatter.importAllFrom(dataObjectPackage),
-                projectionSourceTypesQualifiedName).collect(Collectors.toSet());
+                CodeElementFormatter.importAllFrom(dataObjectPackage)).collect(Collectors.toSet());
     }
 
     private String retrieveProjectionSourceTypesQualifiedName(final List<TemplateData> templatesData) {

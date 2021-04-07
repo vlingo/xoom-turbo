@@ -66,7 +66,7 @@ public class StorageProviderTemplateData extends TemplateData {
         final List<Adapter> adapters = Adapter.from(templatesData);
         final List<Queries> queries = Queries.from(model, contents, templatesData);
         final Stream<String> persistentTypes = storageType.findPersistentQualifiedTypes(model, contents).stream();
-        final Set<ImportParameter> importParameters = resolveImports(model, storageType, contents, queries);
+        final Set<ImportParameter> importParameters = resolveImports(model, storageType, contents);
 
         return TemplateParameters.with(STORAGE_TYPE, storageType).and(PROJECTION_TYPE, projectionType)
                 .and(MODEL, model).and(IMPORTS, importParameters).and(PACKAGE_NAME, packageName)
@@ -82,23 +82,17 @@ public class StorageProviderTemplateData extends TemplateData {
     @SuppressWarnings("unchecked")
     private Set<ImportParameter> resolveImports(final Model model,
                                                 final StorageType storageType,
-                                                final List<Content> contents,
-                                                final List<Queries> queries) {
+                                                final List<Content> contents) {
         final Set<String> sourceClassQualifiedNames =
                 storageType.resolveAdaptersQualifiedName(model, contents);
 
         final Set<String> persistentTypes =
                 storageType.findPersistentQualifiedTypes(model, contents);
 
-        final Set<String> queriesQualifiedNames = queries.stream()
-                        .flatMap(param -> param.getQualifiedNames().stream())
-                        .collect(toSet());
-
         final Set<String> aggregateActorQualifiedNames = storageType.isSourced() ?
                 ContentQuery.findFullyQualifiedClassNames(AGGREGATE, contents) : new HashSet<>();
 
-        return ImportParameter.of(sourceClassQualifiedNames, queriesQualifiedNames,
-                aggregateActorQualifiedNames, persistentTypes);
+        return ImportParameter.of(sourceClassQualifiedNames, aggregateActorQualifiedNames, persistentTypes);
     }
 
     private static boolean supportModel(final Model model, final boolean useAnnotation) {

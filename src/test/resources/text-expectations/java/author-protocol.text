@@ -1,7 +1,6 @@
 package io.vlingo.xoomapp.model.author;
 
 import io.vlingo.actors.Definition;
-import io.vlingo.actors.Address;
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
 import io.vlingo.xoomapp.model.*;

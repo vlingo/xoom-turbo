@@ -1,14 +1,11 @@
 package ${packageName};
 
 import java.util.Arrays;
-import java.util.List;
 
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
 
-import io.vlingo.actors.Definition;
-import io.vlingo.actors.Protocols;
 import io.vlingo.actors.Stage;
 <#if persistentTypes?has_content>
 import io.vlingo.symbio.store.state.StateTypeStateStoreMap;
@@ -21,15 +18,13 @@ import io.vlingo.symbio.StateAdapterProvider;
 import io.vlingo.symbio.EntryAdapterProvider;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
 import io.vlingo.symbio.store.dispatch.NoOpDispatcher;
-import io.vlingo.symbio.store.dispatch.DispatcherControl;
-import io.vlingo.symbio.store.dispatch.Dispatchable;
 import io.vlingo.symbio.store.state.StateStore;
 import io.vlingo.xoom.actors.Settings;
 import io.vlingo.xoom.storage.Model;
 import io.vlingo.xoom.storage.StoreActorBuilder;
 import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
 
-
+@SuppressWarnings("unused")
 public class ${storeProviderName} {
   private static ${storeProviderName} instance;
 
@@ -79,7 +74,6 @@ public class ${storeProviderName} {
     return instance;
   }
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
   private ${storeProviderName}(final Stage stage, final StateStore store) {
     this.store = store;
     <#list queries as query>

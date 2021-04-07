@@ -18,6 +18,7 @@ public class DomainEventMapper implements ExchangeMapper<IdentifiedDomainEvent, 
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public IdentifiedDomainEvent externalToLocal(final Message message) {
     try {
       final String eventFullyQualifiedName = message.messageParameters.typeName();

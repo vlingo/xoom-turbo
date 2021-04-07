@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.codegen.template.model;
 
-import io.vlingo.actors.Address;
 import io.vlingo.actors.Definition;
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
@@ -20,7 +19,7 @@ import static io.vlingo.xoom.codegen.parameter.Label.FACTORY_METHOD;
 public enum MethodScope {
 
     INSTANCE(Completes.class),
-    STATIC(Completes.class, Address.class, Definition.class, Stage.class);
+    STATIC(Completes.class, Definition.class, Stage.class);
 
     public final Class<?>[] requiredClasses;
 
