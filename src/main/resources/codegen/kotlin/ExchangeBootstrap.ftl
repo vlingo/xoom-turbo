@@ -1,15 +1,15 @@
 package ${packageName}
 
-import io.vlingo.actors.Stage
-import io.vlingo.xoom.actors.Settings
-import io.vlingo.lattice.exchange.Exchange
-import io.vlingo.xoom.exchange.ExchangeSettings
-import io.vlingo.lattice.exchange.rabbitmq.ExchangeFactory
-import io.vlingo.lattice.exchange.ConnectionSettings
-import io.vlingo.lattice.exchange.rabbitmq.Message
-import io.vlingo.lattice.exchange.rabbitmq.MessageSender
-import io.vlingo.lattice.exchange.Covey
-import io.vlingo.symbio.store.dispatch.Dispatcher
+import io.vlingo.xoom.actors.Stage
+import io.vlingo.xoom.turbo.actors.Settings
+import io.vlingo.xoom.lattice.exchange.Exchange
+import io.vlingo.xoom.turbo.exchange.ExchangeSettings
+import io.vlingo.xoom.lattice.exchange.rabbitmq.ExchangeFactory
+import io.vlingo.xoom.lattice.exchange.ConnectionSettings
+import io.vlingo.xoom.lattice.exchange.rabbitmq.Message
+import io.vlingo.xoom.lattice.exchange.rabbitmq.MessageSender
+import io.vlingo.xoom.lattice.exchange.Covey
+import io.vlingo.xoom.symbio.store.dispatch.Dispatcher
 
 <#list imports as import>
 import ${import.qualifiedClassName}

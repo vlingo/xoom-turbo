@@ -1,14 +1,14 @@
 package io.vlingo.xoomapp.infrastructure.resource;
 
-import io.vlingo.actors.Definition;
-import io.vlingo.actors.Address;
-import io.vlingo.actors.Grid;
-import io.vlingo.common.Completes;
-import io.vlingo.http.ContentType;
-import io.vlingo.http.Response;
-import io.vlingo.http.ResponseHeader;
-import io.vlingo.http.resource.Resource;
-import io.vlingo.http.resource.DynamicResourceHandler;
+import io.vlingo.xoom.actors.Definition;
+import io.vlingo.xoom.actors.Address;
+import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.http.ContentType;
+import io.vlingo.xoom.http.Response;
+import io.vlingo.xoom.http.ResponseHeader;
+import io.vlingo.xoom.http.resource.Resource;
+import io.vlingo.xoom.http.resource.DynamicResourceHandler;
 import io.vlingo.xoomapp.model.author.AuthorEntity;
 import io.vlingo.xoomapp.infrastructure.AuthorData;
 import io.vlingo.xoomapp.model.author.Author;
@@ -16,13 +16,13 @@ import io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries;
 import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;
 import io.vlingo.xoomapp.model.*;
 
-import static io.vlingo.common.serialization.JsonSerialization.serialized;
-import static io.vlingo.http.Response.Status.*;
-import static io.vlingo.http.ResponseHeader.Location;
-import static io.vlingo.http.resource.ResourceBuilder.resource;
+import static io.vlingo.xoom.common.serialization.JsonSerialization.serialized;
+import static io.vlingo.xoom.http.Response.Status.*;
+import static io.vlingo.xoom.http.ResponseHeader.Location;
+import static io.vlingo.xoom.http.resource.ResourceBuilder.resource;
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-xoom/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
+ * See <a href="https://docs.vlingo.io/xoom-turbo/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
  */
 public class AuthorResource extends DynamicResourceHandler {
   private final Grid grid;
@@ -70,16 +70,16 @@ public class AuthorResource extends DynamicResourceHandler {
   @Override
   public Resource<?> routes() {
      return resource("AuthorResource",
-        io.vlingo.http.resource.ResourceBuilder.post("/authors/")
+        io.vlingo.xoom.http.resource.ResourceBuilder.post("/authors/")
             .body(AuthorData.class)
             .handle(this::withName),
-        io.vlingo.http.resource.ResourceBuilder.patch("/authors/{id}/rank")
+        io.vlingo.xoom.http.resource.ResourceBuilder.patch("/authors/{id}/rank")
             .param(String.class)
             .body(AuthorData.class)
             .handle(this::changeRank),
-        io.vlingo.http.resource.ResourceBuilder.get("/authors")
+        io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors")
             .handle(this::authors),
-        io.vlingo.http.resource.ResourceBuilder.get("/authors/{id}")
+        io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors/{id}")
             .param(String.class)
             .handle(this::authorOf)
      );

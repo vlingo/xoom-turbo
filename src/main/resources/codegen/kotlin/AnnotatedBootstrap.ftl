@@ -4,12 +4,12 @@ package ${packageName}
 import ${import.qualifiedClassName}
 </#list>
 
-import io.vlingo.actors.Stage
-import io.vlingo.xoom.XoomInitializationAware
-import io.vlingo.xoom.annotation.initializer.AddressFactory
-import io.vlingo.xoom.annotation.initializer.Xoom
+import io.vlingo.xoom.actors.Stage
+import io.vlingo.xoom.turbo.XoomInitializationAware
+import io.vlingo.xoom.turbo.annotation.initializer.AddressFactory
+import io.vlingo.xoom.turbo.annotation.initializer.Xoom
 
-import io.vlingo.xoom.annotation.initializer.AddressFactory.Type.UUID
+import io.vlingo.xoom.turbo.annotation.initializer.AddressFactory.Type.UUID
 
 @Xoom(name = "${appName}", addressFactory = @AddressFactory(type = UUID))
 <#if restResourcePackage?has_content>
@@ -21,7 +21,7 @@ public class Bootstrap : XoomInitializationAware {
   }
 
 <#if hasProducerExchange>
-  public override io.vlingo.symbio.store.dispatch.Dispatcher exchangeDispatcher(stage: Stage) {
+  public override io.vlingo.xoom.symbio.store.dispatch.Dispatcher exchangeDispatcher(stage: Stage) {
      return ExchangeBootstrap.init(stage).dispatcher()
   }
 </#if>

@@ -1,14 +1,14 @@
 package io.vlingo.xoomapp.infrastructure.exchange;
 
-import io.vlingo.lattice.exchange.ExchangeAdapter;
-import io.vlingo.lattice.exchange.MessageParameters;
-import io.vlingo.lattice.exchange.MessageParameters.DeliveryMode;
-import io.vlingo.lattice.exchange.rabbitmq.Message;
+import io.vlingo.xoom.lattice.exchange.ExchangeAdapter;
+import io.vlingo.xoom.lattice.exchange.MessageParameters;
+import io.vlingo.xoom.lattice.exchange.MessageParameters.DeliveryMode;
+import io.vlingo.xoom.lattice.exchange.rabbitmq.Message;
 
 import io.vlingo.xoomapp.infrastructure.AuthorData;
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangeadapter">ExchangeAdapter</a>
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangeadapter">ExchangeAdapter</a>
  */
 public class AuthorConsumerAdapter implements ExchangeAdapter<AuthorData, String, Message> {
 

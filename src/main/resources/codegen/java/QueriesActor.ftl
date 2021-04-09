@@ -3,16 +3,16 @@ package ${packageName};
 import java.util.ArrayList;
 import java.util.Collection;
 
-import io.vlingo.common.Completes;
-import io.vlingo.lattice.query.StateStoreQueryActor;
-import io.vlingo.symbio.store.state.StateStore;
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.lattice.query.StateStoreQueryActor;
+import io.vlingo.xoom.symbio.store.state.StateStore;
 
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#querying-a-statestore">Querying a StateStore</a>
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#querying-a-statestore">Querying a StateStore</a>
  */
 @SuppressWarnings("ALL")
 public class ${queriesActorName} extends StateStoreQueryActor implements ${queriesName} {

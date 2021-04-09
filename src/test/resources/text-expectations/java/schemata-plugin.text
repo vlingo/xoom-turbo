@@ -1,7 +1,7 @@
 
       <plugin>
-        <groupId>io.vlingo</groupId>
-        <artifactId>vlingo-build-plugins</artifactId>
+        <groupId>io.vlingo.xoom</groupId>
+        <artifactId>xoom-build-plugins</artifactId>
         <version>1.5.1-SNAPSHOT</version>
         <executions>
           <execution>
@@ -65,13 +65,13 @@
               </schemataService>
               <schemata>
                 <schema>
-                  <ref>vlingo:xoom:io.vlingo.otherapp:OtherAggregateDefined:0.0.1</ref>
+                  <ref>vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateDefined:0.0.1</ref>
                 </schema>
                 <schema>
-                  <ref>vlingo:xoom:io.vlingo.otherapp:OtherAggregateUpdated:0.0.2</ref>
+                  <ref>vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateUpdated:0.0.2</ref>
                 </schema>
                 <schema>
-                  <ref>vlingo:xoom:io.vlingo.otherapp:OtherAggregateRemoved:0.0.3</ref>
+                  <ref>vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateRemoved:0.0.3</ref>
                 </schema>
               </schemata>
             </configuration>

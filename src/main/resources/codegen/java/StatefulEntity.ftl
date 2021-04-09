@@ -6,10 +6,10 @@ import ${import.qualifiedClassName};
 </#list>
 </#if>
 
-import io.vlingo.lattice.model.stateful.StatefulEntity;
+import io.vlingo.xoom.lattice.model.stateful.StatefulEntity;
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#stateful">StatefulEntity</a>
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#stateful">StatefulEntity</a>
  */
 public final class ${entityName} extends StatefulEntity<${stateName}> implements ${aggregateProtocolName} {
   private ${stateName} state;

@@ -4,14 +4,14 @@ package ${packageName};
 import ${import.qualifiedClassName};
 </#list>
 
-import io.vlingo.common.serialization.JsonSerialization;
-import io.vlingo.symbio.Metadata;
-import io.vlingo.symbio.State.TextState;
-import io.vlingo.symbio.StateAdapter;
+import io.vlingo.xoom.common.serialization.JsonSerialization;
+import io.vlingo.xoom.symbio.Metadata;
+import io.vlingo.xoom.symbio.State.TextState;
+import io.vlingo.xoom.symbio.StateAdapter;
 
 /**
  * See
- * <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#stateadapter-and-stateadapterprovider">
+ * <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#stateadapter-and-stateadapterprovider">
  *   StateAdapter and StateAdapterProvider
  * </a>
  */

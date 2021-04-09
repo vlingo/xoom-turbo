@@ -1,14 +1,14 @@
 package ${packageName}
 
-import io.vlingo.common.serialization.JsonSerialization
-import io.vlingo.lattice.exchange.Exchange
-import io.vlingo.symbio.Entry
-import io.vlingo.symbio.State
-import io.vlingo.symbio.store.Result
-import io.vlingo.symbio.store.dispatch.ConfirmDispatchedResultInterest
-import io.vlingo.symbio.store.dispatch.Dispatchable
-import io.vlingo.symbio.store.dispatch.Dispatcher
-import io.vlingo.symbio.store.dispatch.DispatcherControl
+import io.vlingo.xoom.common.serialization.JsonSerialization
+import io.vlingo.xoom.lattice.exchange.Exchange
+import io.vlingo.xoom.symbio.Entry
+import io.vlingo.xoom.symbio.State
+import io.vlingo.xoom.symbio.store.Result
+import io.vlingo.xoom.symbio.store.dispatch.ConfirmDispatchedResultInterest
+import io.vlingo.xoom.symbio.store.dispatch.Dispatchable
+import io.vlingo.xoom.symbio.store.dispatch.Dispatcher
+import io.vlingo.xoom.symbio.store.dispatch.DispatcherControl
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -22,7 +22,7 @@ import ${import.qualifiedClassName}
 
 /**
  * See
- * <a href="https://docs.vlingo.io/vlingo-lattice/projections#dispatcher-and-projectiondispatcher">
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#dispatcher-and-projectiondispatcher">
  *   Dispatcher and ProjectionDispatcher
  * </a>
  */

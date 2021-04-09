@@ -2,14 +2,14 @@ package io.vlingo.infrastructure.persistence;
 
 import io.vlingo.xoomapp.model.book.BookRented;
 
-import io.vlingo.common.serialization.JsonSerialization;
-import io.vlingo.symbio.BaseEntry.TextEntry;
-import io.vlingo.symbio.EntryAdapter;
-import io.vlingo.symbio.Metadata;
+import io.vlingo.xoom.common.serialization.JsonSerialization;
+import io.vlingo.xoom.symbio.BaseEntry.TextEntry;
+import io.vlingo.xoom.symbio.EntryAdapter;
+import io.vlingo.xoom.symbio.Metadata;
 
 /**
  * See
- * <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#entryadapter-and-entryadapterprovider">
+ * <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#entryadapter-and-entryadapterprovider">
  *   EntryAdapter and EntryAdapterProvider
  * </a>
  */

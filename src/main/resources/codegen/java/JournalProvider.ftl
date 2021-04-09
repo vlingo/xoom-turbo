@@ -7,20 +7,20 @@ import java.util.List;
 import ${import.qualifiedClassName};
 </#list>
 
-import io.vlingo.actors.Definition;
-import io.vlingo.actors.Stage;
-import io.vlingo.lattice.model.sourcing.SourcedTypeRegistry;
-import io.vlingo.lattice.model.sourcing.SourcedTypeRegistry.Info;
-import io.vlingo.symbio.EntryAdapterProvider;
-import io.vlingo.symbio.store.dispatch.Dispatcher;
-import io.vlingo.symbio.store.dispatch.NoOpDispatcher;
-import io.vlingo.symbio.store.dispatch.DispatcherControl;
-import io.vlingo.symbio.store.dispatch.Dispatchable;
-import io.vlingo.symbio.store.journal.Journal;
-import io.vlingo.xoom.actors.Settings;
-import io.vlingo.xoom.storage.Model;
-import io.vlingo.xoom.storage.StoreActorBuilder;
-import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
+import io.vlingo.xoom.actors.Definition;
+import io.vlingo.xoom.actors.Stage;
+import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry;
+import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry.Info;
+import io.vlingo.xoom.symbio.EntryAdapterProvider;
+import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
+import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
+import io.vlingo.xoom.symbio.store.dispatch.DispatcherControl;
+import io.vlingo.xoom.symbio.store.dispatch.Dispatchable;
+import io.vlingo.xoom.symbio.store.journal.Journal;
+import io.vlingo.xoom.turbo.actors.Settings;
+import io.vlingo.xoom.turbo.storage.Model;
+import io.vlingo.xoom.turbo.storage.StoreActorBuilder;
+import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
 
 @SuppressWarnings("ALL")
 public class ${storeProviderName}  {

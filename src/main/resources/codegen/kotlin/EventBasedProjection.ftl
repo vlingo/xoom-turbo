@@ -4,13 +4,13 @@ package ${packageName}
 import ${import.qualifiedClassName}
 </#list>
 
-import io.vlingo.lattice.model.projection.Projectable
-import io.vlingo.lattice.model.projection.StateStoreProjectionActor
-import io.vlingo.symbio.Source
+import io.vlingo.xoom.lattice.model.projection.Projectable
+import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor
+import io.vlingo.xoom.symbio.Source
 
 /**
  * See
- * <a href="https://docs.vlingo.io/vlingo-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
  *   StateStoreProjectionActor
  * </a>
  */

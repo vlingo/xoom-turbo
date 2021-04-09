@@ -1,12 +1,12 @@
 package ${packageName}
 
 import java.util.UUID
-import io.vlingo.common.version.SemanticVersion
-import io.vlingo.lattice.model.IdentifiedDomainEvent
+import io.vlingo.xoom.common.version.SemanticVersion
+import io.vlingo.xoom.lattice.model.IdentifiedDomainEvent
 
 /**
  * See
- * <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#commands-domain-events-and-identified-domain-events">
+ * <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#commands-domain-events-and-identified-domain-events">
  *   Commands, Domain Events, and Identified Domain Events
  * </a>
  */

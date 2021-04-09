@@ -1,13 +1,13 @@
 package ${packageName};
 
-import io.vlingo.xoom.Boot;
-import io.vlingo.actors.Grid;
-import io.vlingo.actors.Stage;
-import io.vlingo.http.resource.*;
-import io.vlingo.cluster.model.Properties;
-import io.vlingo.xoom.XoomInitializationAware;
+import io.vlingo.xoom.turbo.Boot;
+import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.actors.Stage;
+import io.vlingo.xoom.http.resource.*;
+import io.vlingo.xoom.cluster.model.Properties;
+import io.vlingo.xoom.turbo.XoomInitializationAware;
 <#if blockingMessaging>
-import io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;
+import io.vlingo.xoom.turbo.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;
 </#if>
 
 <#list imports as import>
@@ -46,7 +46,7 @@ public class XoomInitializer implements XoomInitializationAware {
     final Configuration serverConfiguration = initializer.configureServer(grid, args);
 
     <#if exchangeBootstrapName?has_content>
-    final io.vlingo.xoom.exchange.ExchangeInitializer exchangeInitializer = new ${exchangeBootstrapName}();
+    final io.vlingo.xoom.turbo.exchange.ExchangeInitializer exchangeInitializer = new ${exchangeBootstrapName}();
     exchangeInitializer.init(grid);
 
     </#if>

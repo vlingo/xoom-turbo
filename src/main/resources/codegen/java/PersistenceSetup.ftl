@@ -1,21 +1,21 @@
 package ${packageName};
 
-import io.vlingo.xoom.annotation.persistence.Persistence;
-import io.vlingo.xoom.annotation.persistence.Persistence.StorageType;
+import io.vlingo.xoom.turbo.annotation.persistence.Persistence;
+import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
 <#if useProjections>
-import io.vlingo.xoom.annotation.persistence.Projections;
-import io.vlingo.xoom.annotation.persistence.Projection;
-import io.vlingo.xoom.annotation.persistence.ProjectionType;
+import io.vlingo.xoom.turbo.annotation.persistence.Projections;
+import io.vlingo.xoom.turbo.annotation.persistence.Projection;
+import io.vlingo.xoom.turbo.annotation.persistence.ProjectionType;
 </#if>
 <#if requireAdapters>
-import io.vlingo.xoom.annotation.persistence.Adapters;
+import io.vlingo.xoom.turbo.annotation.persistence.Adapters;
 </#if>
 <#if queries?size gt 0>
-import io.vlingo.xoom.annotation.persistence.EnableQueries;
-import io.vlingo.xoom.annotation.persistence.QueriesEntry;
+import io.vlingo.xoom.turbo.annotation.persistence.EnableQueries;
+import io.vlingo.xoom.turbo.annotation.persistence.QueriesEntry;
 </#if>
 <#if dataObjects?has_content>
-import io.vlingo.xoom.annotation.persistence.DataObjects;
+import io.vlingo.xoom.turbo.annotation.persistence.DataObjects;
 </#if>
 <#list imports as import>
 import ${import.qualifiedClassName};

@@ -1,10 +1,10 @@
 package ${packageName}
 
-import io.vlingo.actors.Stage
-import io.vlingo.common.Completes
-import io.vlingo.xoom.annotation.autodispatch.Handler.Three
-import io.vlingo.xoom.annotation.autodispatch.Handler.Two
-import io.vlingo.xoom.annotation.autodispatch.HandlerEntry
+import io.vlingo.xoom.actors.Stage
+import io.vlingo.xoom.common.Completes
+import io.vlingo.xoom.turbo.annotation.autodispatch.Handler.Three
+import io.vlingo.xoom.turbo.annotation.autodispatch.Handler.Two
+import io.vlingo.xoom.turbo.annotation.autodispatch.HandlerEntry
 
 <#list imports as import>
 import ${import.qualifiedClassName}

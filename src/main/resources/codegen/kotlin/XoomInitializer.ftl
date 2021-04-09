@@ -1,12 +1,12 @@
 package ${packageName}
 
-import io.vlingo.actors.Stage
-import io.vlingo.actors.World
-import io.vlingo.http.resource.*
-import io.vlingo.xoom.XoomInitializationAware
+import io.vlingo.xoom.actors.Stage
+import io.vlingo.xoom.actors.World
+import io.vlingo.xoom.http.resource.*
+import io.vlingo.xoom.turbo.XoomInitializationAware
 import java.util.Arrays
 <#if blockingMessaging>
-import io.vlingo.xoom.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin
+import io.vlingo.xoom.turbo.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin
 </#if>
 
 <#list imports as import>

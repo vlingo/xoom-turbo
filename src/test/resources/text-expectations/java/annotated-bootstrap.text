@@ -1,10 +1,10 @@
 package io.vlingo.xoomapp.infrastructure;
 
-import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
+import io.vlingo.xoom.turbo.annotation.initializer.ResourceHandlers;
 
-import io.vlingo.actors.Grid;
-import io.vlingo.xoom.XoomInitializationAware;
-import io.vlingo.xoom.annotation.initializer.Xoom;
+import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.turbo.XoomInitializationAware;
+import io.vlingo.xoom.turbo.annotation.initializer.Xoom;
 
 @Xoom(name = "xoom-app")
 @ResourceHandlers(packages = "io.vlingo.xoomapp.resource")

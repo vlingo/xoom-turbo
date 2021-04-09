@@ -1,14 +1,14 @@
 package ${packageName};
 
-import io.vlingo.lattice.exchange.ExchangeMapper;
-import io.vlingo.common.serialization.JsonSerialization;
+import io.vlingo.xoom.lattice.exchange.ExchangeMapper;
+import io.vlingo.xoom.common.serialization.JsonSerialization;
 
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangemapper">ExchangeMapper</a>
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangemapper">ExchangeMapper</a>
  */
 public class ${exchangeMapperName} implements ExchangeMapper<${localTypeName},String> {
 

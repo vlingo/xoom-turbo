@@ -1,20 +1,20 @@
 package io.vlingo.xoomapp.infrastructure;
 
 import io.vlingo.xoomapp.infrastructure.exchange.ExchangeBootstrap;
+import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
 import io.vlingo.xoomapp.resource.BookResource;
 import io.vlingo.xoomapp.resource.AuthorResource;
 import io.vlingo.xoomapp.infrastructure.persistence.ProjectionDispatcherProvider;
 import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;
 import io.vlingo.xoomapp.infrastructure.persistence.CommandModelStateStoreProvider;
-import io.vlingo.lattice.model.stateful.StatefulTypeRegistry;
 
-import io.vlingo.xoom.Boot;
-import io.vlingo.actors.Grid;
-import io.vlingo.http.resource.Configuration.Sizing;
-import io.vlingo.http.resource.Configuration.Timing;
-import io.vlingo.http.resource.Resources;
-import io.vlingo.http.resource.Server;
-import io.vlingo.xoom.exchange.ExchangeInitializer;
+import io.vlingo.xoom.turbo.Boot;
+import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.http.resource.Configuration.Sizing;
+import io.vlingo.xoom.http.resource.Configuration.Timing;
+import io.vlingo.xoom.http.resource.Resources;
+import io.vlingo.xoom.http.resource.Server;
+import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
 
 @SuppressWarnings("ALL")
 public class Bootstrap {

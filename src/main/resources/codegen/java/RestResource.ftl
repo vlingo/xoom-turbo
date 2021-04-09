@@ -1,31 +1,31 @@
 package ${packageName};
 
 <#if modelProtocol?has_content>
-import io.vlingo.actors.Definition;
-import io.vlingo.actors.Address;
+import io.vlingo.xoom.actors.Definition;
+import io.vlingo.xoom.actors.Address;
 </#if>
 <#if useAutoDispatch>
-import io.vlingo.actors.Logger;
-import io.vlingo.xoom.annotation.autodispatch.Handler;
+import io.vlingo.xoom.actors.Logger;
+import io.vlingo.xoom.turbo.annotation.autodispatch.Handler;
 </#if>
-import io.vlingo.actors.Grid;
-import io.vlingo.common.Completes;
-import io.vlingo.http.ContentType;
-import io.vlingo.http.Response;
-import io.vlingo.http.ResponseHeader;
-import io.vlingo.http.resource.Resource;
-import io.vlingo.http.resource.DynamicResourceHandler;
+import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.http.ContentType;
+import io.vlingo.xoom.http.Response;
+import io.vlingo.xoom.http.ResponseHeader;
+import io.vlingo.xoom.http.resource.Resource;
+import io.vlingo.xoom.http.resource.DynamicResourceHandler;
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
 
-import static io.vlingo.common.serialization.JsonSerialization.serialized;
-import static io.vlingo.http.Response.Status.*;
-import static io.vlingo.http.ResponseHeader.Location;
-import static io.vlingo.http.resource.ResourceBuilder.resource;
+import static io.vlingo.xoom.common.serialization.JsonSerialization.serialized;
+import static io.vlingo.xoom.http.Response.Status.*;
+import static io.vlingo.xoom.http.ResponseHeader.Location;
+import static io.vlingo.xoom.http.resource.ResourceBuilder.resource;
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-xoom/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
+ * See <a href="https://docs.vlingo.io/xoom-turbo/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
  */
 <#if useAutoDispatch>
 public class ${resourceName} extends DynamicResourceHandler implements ${autoDispatchMappingName} {

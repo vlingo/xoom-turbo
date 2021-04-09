@@ -1,29 +1,29 @@
 package ${packageName}
 
 <#if modelProtocol?has_content>
-import io.vlingo.actors.Definition
+import io.vlingo.xoom.actors.Definition
 </#if>
-import io.vlingo.actors.Stage
-import io.vlingo.http.resource.Resource
-import io.vlingo.http.resource.DynamicResourceHandler
-import io.vlingo.http.resource.ResourceBuilder.resource
+import io.vlingo.xoom.actors.Stage
+import io.vlingo.xoom.http.resource.Resource
+import io.vlingo.xoom.http.resource.DynamicResourceHandler
+import io.vlingo.xoom.http.resource.ResourceBuilder.resource
 
 <#list imports as import>
 import ${import.qualifiedClassName}
 </#list>
 
-import io.vlingo.http.Response
-import io.vlingo.common.Completes
-import io.vlingo.common.serialization.JsonSerialization.serialized
-import io.vlingo.http.Response.Status.*
-import io.vlingo.http.ResponseHeader.*
+import io.vlingo.xoom.http.Response
+import io.vlingo.xoom.common.Completes
+import io.vlingo.xoom.common.serialization.JsonSerialization.serialized
+import io.vlingo.xoom.http.Response.Status.*
+import io.vlingo.xoom.http.ResponseHeader.*
 <#if useAutoDispatch>
-import io.vlingo.actors.Logger
-import io.vlingo.xoom.annotation.autodispatch.Handler
+import io.vlingo.xoom.actors.Logger
+import io.vlingo.xoom.turbo.annotation.autodispatch.Handler
 </#if>
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-xoom/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
+ * See <a href="https://docs.vlingo.io/xoom-turbo/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
  */
 <#if useAutoDispatch>
 public class ${resourceName} : DynamicResourceHandler, ${autoDispatchMappingName} {

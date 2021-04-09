@@ -1,14 +1,14 @@
 package ${packageName}
 
-import io.vlingo.common.Completes
-import io.vlingo.xoom.annotation.autodispatch.*
-import io.vlingo.http.Response
+import io.vlingo.xoom.common.Completes
+import io.vlingo.xoom.turbo.annotation.autodispatch.*
+import io.vlingo.xoom.http.Response
 
 <#list imports as import>
 import ${import.qualifiedClassName}
 </#list>
 
-import io.vlingo.http.Method.*
+import io.vlingo.xoom.http.Method.*
 
 @AutoDispatch(path="${uriRoot}", handlers=${autoDispatchHandlersMappingName}::class.java)
 <#if useCQRS>

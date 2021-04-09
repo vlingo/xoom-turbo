@@ -1,8 +1,8 @@
 package ${packageName};
 
-import io.vlingo.actors.Grid;
-import io.vlingo.actors.Definition;
-import io.vlingo.lattice.exchange.ExchangeReceiver;
+import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.actors.Definition;
+import io.vlingo.xoom.lattice.exchange.ExchangeReceiver;
 
 <#list imports as import>
 import ${import.qualifiedClassName};
@@ -12,7 +12,7 @@ public class ${exchangeReceiverHolderName} {
 
 <#list exchangeReceivers as receiver>
   /**
-   * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
+   * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
    */
   static class ${receiver.schemaTypeName} implements ExchangeReceiver<${receiver.localTypeName}> {
 

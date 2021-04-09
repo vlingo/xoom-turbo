@@ -7,27 +7,27 @@ import java.util.List
 import ${import.qualifiedClassName}
 </#list>
 
-import io.vlingo.actors.Definition
-import io.vlingo.actors.Protocols
-import io.vlingo.actors.Stage
+import io.vlingo.xoom.actors.Definition
+import io.vlingo.xoom.actors.Protocols
+import io.vlingo.xoom.actors.Stage
 <#if persistentTypes?has_content>
-import io.vlingo.symbio.store.state.StateTypeStateStoreMap
+import io.vlingo.xoom.symbio.store.state.StateTypeStateStoreMap
 </#if>
-import io.vlingo.lattice.model.stateful.StatefulTypeRegistry
+import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry
 <#if requireAdapters>
-import io.vlingo.lattice.model.stateful.StatefulTypeRegistry.Info
-import io.vlingo.symbio.StateAdapterProvider
+import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry.Info
+import io.vlingo.xoom.symbio.StateAdapterProvider
 </#if>
-import io.vlingo.symbio.EntryAdapterProvider
-import io.vlingo.symbio.store.dispatch.Dispatcher
-import io.vlingo.symbio.store.dispatch.NoOpDispatcher
-import io.vlingo.symbio.store.dispatch.DispatcherControl
-import io.vlingo.symbio.store.dispatch.Dispatchable
-import io.vlingo.symbio.store.state.StateStore
-import io.vlingo.xoom.actors.Settings
-import io.vlingo.xoom.storage.Model
-import io.vlingo.xoom.storage.StoreActorBuilder
-import io.vlingo.xoom.annotation.persistence.Persistence.StorageType
+import io.vlingo.xoom.symbio.EntryAdapterProvider
+import io.vlingo.xoom.symbio.store.dispatch.Dispatcher
+import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher
+import io.vlingo.xoom.symbio.store.dispatch.DispatcherControl
+import io.vlingo.xoom.symbio.store.dispatch.Dispatchable
+import io.vlingo.xoom.symbio.store.state.StateStore
+import io.vlingo.xoom.turbo.actors.Settings
+import io.vlingo.xoom.turbo.storage.Model
+import io.vlingo.xoom.turbo.storage.StoreActorBuilder
+import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType
 
 
 public class ${storeProviderName} {

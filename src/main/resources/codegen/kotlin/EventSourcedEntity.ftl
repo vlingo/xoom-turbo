@@ -4,10 +4,10 @@ package ${packageName}
 import ${import.qualifiedClassName}
 </#list>
 
-import io.vlingo.lattice.model.sourcing.EventSourced
+import io.vlingo.xoom.lattice.model.sourcing.EventSourced
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-lattice/entity-cqrs#sourced">EventSourced</a>
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#sourced">EventSourced</a>
  */
 public class ${entityName} extends EventSourced implements ${aggregateProtocolName} {
   state: ${stateName}
@@ -42,7 +42,7 @@ public class ${entityName} extends EventSourced implements ${aggregateProtocolNa
   @Override
   protected <AccountState> fun restoreSnapshot(snapshot: ${stateName}, currentVersion: Int) {
     // OVERRIDE FOR SNAPSHOT SUPPORT
-    // See: https://docs.vlingo.io/vlingo-lattice/entity-cqrs#eventsourced
+    // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
   }
 
   /*
@@ -54,7 +54,7 @@ public class ${entityName} extends EventSourced implements ${aggregateProtocolNa
   @Override
   protected fun snapshot(): ${stateName} {
     // OVERRIDE FOR SNAPSHOT SUPPORT
-    // See: https://docs.vlingo.io/vlingo-lattice/entity-cqrs#eventsourced
+    // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
     return null
   }
 }

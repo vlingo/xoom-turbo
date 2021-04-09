@@ -6,14 +6,14 @@ package ${packageName}
 import ${import.qualifiedClassName}
 </#list>
 
-import io.vlingo.actors.GridAddressFactory
-import io.vlingo.actors.Stage
-import io.vlingo.actors.World
-import io.vlingo.common.identity.IdentityGeneratorType
-import io.vlingo.http.resource.Configuration.Sizing
-import io.vlingo.http.resource.Configuration.Timing
-import io.vlingo.http.resource.Resources
-import io.vlingo.http.resource.Server
+import io.vlingo.xoom.actors.GridAddressFactory
+import io.vlingo.xoom.actors.Stage
+import io.vlingo.xoom.actors.World
+import io.vlingo.xoom.common.identity.IdentityGeneratorType
+import io.vlingo.xoom.http.resource.Configuration.Sizing
+import io.vlingo.xoom.http.resource.Configuration.Timing
+import io.vlingo.xoom.http.resource.Resources
+import io.vlingo.xoom.http.resource.Server
 
 public class Bootstrap {
   companion object {

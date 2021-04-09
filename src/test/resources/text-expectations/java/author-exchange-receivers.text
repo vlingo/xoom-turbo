@@ -1,8 +1,8 @@
 package io.vlingo.xoomapp.infrastructure.exchange;
 
-import io.vlingo.actors.Definition;
-import io.vlingo.actors.Stage;
-import io.vlingo.lattice.exchange.ExchangeReceiver;
+import io.vlingo.xoom.actors.Definition;
+import io.vlingo.xoom.actors.Stage;
+import io.vlingo.xoom.lattice.exchange.ExchangeReceiver;
 
 import io.vlingo.xoomapp.model.author.AuthorEntity;
 import io.vlingo.xoomapp.model.Rank;
@@ -13,7 +13,7 @@ import io.vlingo.xoomapp.model.author.Name;
 public class AuthorExchangeReceivers {
 
   /**
-   * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
+   * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
    */
   static class OtherAggregateDefined implements ExchangeReceiver<AuthorData> {
 
@@ -31,7 +31,7 @@ public class AuthorExchangeReceivers {
   }
 
   /**
-   * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
+   * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
    */
   static class OtherAggregateUpdated implements ExchangeReceiver<AuthorData> {
 
@@ -50,7 +50,7 @@ public class AuthorExchangeReceivers {
   }
 
   /**
-   * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
+   * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
    */
   static class OtherAggregateRemoved implements ExchangeReceiver<AuthorData> {
 

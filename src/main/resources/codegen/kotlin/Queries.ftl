@@ -1,7 +1,7 @@
 package ${packageName}
 
 import java.util.Collection
-import io.vlingo.common.Completes
+import io.vlingo.xoom.common.Completes
 
 <#list imports as import>
 import ${import.qualifiedClassName}

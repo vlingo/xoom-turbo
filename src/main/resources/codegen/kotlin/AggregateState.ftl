@@ -3,10 +3,10 @@ package ${packageName}
 <#if eventSourced>
 public class ${stateName} {
 <#else>
-import io.vlingo.symbio.store.`object`.StateObject
+import io.vlingo.xoom.symbio.store.`object`.StateObject
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-symbio/object-storage">Object Storage</a>
+ * See <a href="https://docs.vlingo.io/xoom-symbio/object-storage">Object Storage</a>
  */
 public class ${stateName} : StateObject {
 </#if>

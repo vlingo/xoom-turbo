@@ -1,13 +1,13 @@
 package ${packageName}
 
-import io.vlingo.common.serialization.JsonSerialization
-import io.vlingo.lattice.exchange.ExchangeMapper
-import io.vlingo.lattice.exchange.MessageParameters
-import io.vlingo.lattice.exchange.rabbitmq.Message
-import io.vlingo.lattice.model.IdentifiedDomainEvent
+import io.vlingo.xoom.common.serialization.JsonSerialization
+import io.vlingo.xoom.lattice.exchange.ExchangeMapper
+import io.vlingo.xoom.lattice.exchange.MessageParameters
+import io.vlingo.xoom.lattice.exchange.rabbitmq.Message
+import io.vlingo.xoom.lattice.model.IdentifiedDomainEvent
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangemapper">ExchangeMapper</a>
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangemapper">ExchangeMapper</a>
  */
 public class ${exchangeMapperName} : ExchangeMapper<IdentifiedDomainEvent, Message> {
 

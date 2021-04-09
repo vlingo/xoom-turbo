@@ -3,13 +3,13 @@ package ${packageName}
 import java.util.Arrays
 import java.util.List
 
-import io.vlingo.actors.Definition
-import io.vlingo.actors.Protocols
-import io.vlingo.actors.Stage
-import io.vlingo.lattice.model.projection.ProjectionDispatcher
-import io.vlingo.lattice.model.projection.ProjectionDispatcher.ProjectToDescription
-import io.vlingo.lattice.model.projection.TextProjectionDispatcherActor
-import io.vlingo.symbio.store.dispatch.Dispatcher
+import io.vlingo.xoom.actors.Definition
+import io.vlingo.xoom.actors.Protocols
+import io.vlingo.xoom.actors.Stage
+import io.vlingo.xoom.lattice.model.projection.ProjectionDispatcher
+import io.vlingo.xoom.lattice.model.projection.ProjectionDispatcher.ProjectToDescription
+import io.vlingo.xoom.lattice.model.projection.TextProjectionDispatcherActor
+import io.vlingo.xoom.symbio.store.dispatch.Dispatcher
 
 <#if imports?has_content>
 <#list imports as import>

@@ -1,7 +1,7 @@
 
       <plugin>
-        <groupId>io.vlingo</groupId>
-        <artifactId>vlingo-build-plugins</artifactId>
+        <groupId>io.vlingo.xoom</groupId>
+        <artifactId>xoom-build-plugins</artifactId>
         <version>1.4.4-SNAPSHOT</version>
         <executions>
           <#if hasProducerExchange>

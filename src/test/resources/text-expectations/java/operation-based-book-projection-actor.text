@@ -3,13 +3,13 @@ package io.vlingo.infrastructure.persistence;
 import io.vlingo.xoomapp.infrastructure.*;
 import io.vlingo.xoomapp.model.book.*;
 
-import io.vlingo.lattice.model.projection.Projectable;
-import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
-import io.vlingo.symbio.store.state.StateStore;
+import io.vlingo.xoom.lattice.model.projection.Projectable;
+import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
+import io.vlingo.xoom.symbio.store.state.StateStore;
 
 /**
  * See
- * <a href="https://docs.vlingo.io/vlingo-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
  *   Implementing With the StateStoreProjectionActor
  * </a>
  */

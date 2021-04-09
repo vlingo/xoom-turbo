@@ -1,15 +1,15 @@
 package ${packageName};
 
-import io.vlingo.common.version.SemanticVersion;
-import io.vlingo.lattice.exchange.ExchangeAdapter;
-import io.vlingo.lattice.exchange.rabbitmq.Message;
+import io.vlingo.xoom.common.version.SemanticVersion;
+import io.vlingo.xoom.lattice.exchange.ExchangeAdapter;
+import io.vlingo.xoom.lattice.exchange.rabbitmq.Message;
 
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
 
 /**
- * See <a href="https://docs.vlingo.io/vlingo-lattice/exchange#exchangeadapter">ExchangeAdapter</a>
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangeadapter">ExchangeAdapter</a>
  */
 public class ${exchangeAdapterName} implements ExchangeAdapter<IdentifiedDomainEvent, IdentifiedDomainEvent, Message> {
 
