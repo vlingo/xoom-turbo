@@ -2,7 +2,7 @@
       <plugin>
         <groupId>io.vlingo.xoom</groupId>
         <artifactId>xoom-build-plugins</artifactId>
-        <version>${vlingo.xoom.version}</version>
+        <version>${r"${vlingo.xoom.version}"}</version>
         <executions>
           <#if hasProducerExchange>
 <execution>
