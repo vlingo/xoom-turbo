@@ -13,29 +13,32 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import java.util.function.Consumer;
 
 public enum Language {
-  C_SHARP("cs", new String[]{}),
-  F_SHARP("fs", new String[]{}),
-  JAVA("java", new String[]{"src", "main", "java"}),
-  KOTLIN("kt", new String[]{"src", "main", "kotlin"},
+  C_SHARP("cs", new String[]{}, new String[]{}),
+  F_SHARP("fs", new String[]{}, new String[]{}),
+  JAVA("java", new String[]{"src", "main", "java"}, new String[]{"src", "test", "java"}),
+  KOTLIN("kt", new String[]{"src", "main", "kotlin"}, new String[]{"src", "test", "kotlin"},
           KotlinSyntaxConverter::convertFieldTypes, KotlinSyntaxConverter::convertImports);
-
 
   private final String extension;
   public final String[] sourceFolder;
+  public final String[] testSourceFolder;
   public final Consumer<CodeGenerationParameters> preParametersProcessingResolver;
   public final Consumer<TemplateParameters> postParametersProcessingResolver;
 
   Language(final String extension,
-           final String[] sourceFolder) {
-    this(extension, sourceFolder, params -> {}, params -> {});
+           final String[] sourceFolder,
+           final String[] testSourceFolder) {
+    this(extension, sourceFolder, testSourceFolder, params -> {}, params -> {});
   }
 
   Language(final String extension,
            final String[] sourceFolder,
+           final String[] testSourceFolder,
            final Consumer<CodeGenerationParameters> preParametersProcessingResolver,
            final Consumer<TemplateParameters> postParametersProcessingResolver) {
     this.extension = extension;
     this.sourceFolder = sourceFolder;
+    this.testSourceFolder = testSourceFolder;
     this.preParametersProcessingResolver = preParametersProcessingResolver;
     this.postParametersProcessingResolver = postParametersProcessingResolver;
   }

@@ -30,6 +30,7 @@ public enum TemplateParameter {
     ADAPTERS("adapters"),
     STORE_PROVIDER_NAME("storeProviderName"),
     STATE_NAME("stateName"),
+    DATA_OBJECT_NAME("dataObjectName"),
     VALUE_OBJECT_NAME("valueObjectName"),
     DATA_VALUE_OBJECT_NAME("dataValueObjectName"),
     INDEX_NAME("indexName"),
@@ -45,7 +46,7 @@ public enum TemplateParameter {
     REQUIRE_ADAPTERS("requireAdapters"),
     RESOURCE_FILE("resourceFile"),
     SCHEMATA_FILE("schemataFile"),
-    SOURCE_CODE("sourceCode"),
+    PRODUCTION_CODE("sourceCode"),
     PROJECTIONS("projections"),
     PROJECTION_NAME("projectionName"),
     PROJECTION_TYPE("projectionType"),
@@ -130,7 +131,10 @@ public enum TemplateParameter {
     PRODUCER_UNIT("producerUnit"),
     PRODUCER_SCHEMAS("producerSchemas"),
     CONSUMER_SCHEMAS("consumerSchemas"),
-    STATIC_FACTORY_METHODS("staticFactoryMethods");
+    STATIC_FACTORY_METHODS("staticFactoryMethods"),
+    QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),
+    TEST_CASES("testCases"),
+    UNIT_TEST("unitTest");
 
     public final String key;
 

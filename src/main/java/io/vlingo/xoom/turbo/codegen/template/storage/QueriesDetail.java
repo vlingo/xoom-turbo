@@ -19,4 +19,5 @@ public class QueriesDetail {
     final String formatted = Introspector.decapitalize(aggregateProtocol);
     return formatted.endsWith("s") ? formatted : formatted + "s";
   }
+
 }

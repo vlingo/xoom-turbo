@@ -14,8 +14,8 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.Map;
 
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PRODUCTION_CODE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.RESOURCE_FILE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.SOURCE_CODE;
 
 public class DatabasePropertiesTemplateData extends TemplateData {
 
@@ -29,7 +29,7 @@ public class DatabasePropertiesTemplateData extends TemplateData {
     private TemplateParameters loadParameters(final String appName,
                                               final Map<Model, DatabaseType> databases) {
         final TemplateParameters parameters =
-                TemplateParameters.with(RESOURCE_FILE, true).and(SOURCE_CODE, false);
+                TemplateParameters.with(RESOURCE_FILE, true).and(PRODUCTION_CODE, false);
 
         databases.entrySet().forEach(entry -> {
             final TemplateParameter parameter =

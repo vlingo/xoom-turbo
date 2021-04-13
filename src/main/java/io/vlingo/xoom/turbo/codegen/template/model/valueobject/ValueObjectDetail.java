@@ -114,4 +114,10 @@ public class ValueObjectDetail {
     return !FieldDetail.isScalar(field);
   }
 
+  public static CodeGenerationParameter valueObjectFieldWithName(final CodeGenerationParameter parent,
+                                                                 final String fieldName) {
+    return parent.retrieveAllRelated(VALUE_OBJECT_FIELD)
+            .filter(field -> field.value.equals(fieldName))
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find "+ fieldName));
+  }
 }

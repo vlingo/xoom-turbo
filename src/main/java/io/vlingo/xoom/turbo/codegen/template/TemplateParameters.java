@@ -24,7 +24,7 @@ public class TemplateParameters {
     private final Map<String, Object> parameters = new HashMap<>();
 
     private TemplateParameters() {
-        parameters.put(SOURCE_CODE.key, true);
+        parameters.put(PRODUCTION_CODE.key, true);
     }
 
     public static TemplateParameters empty() {

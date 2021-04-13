@@ -21,7 +21,7 @@ public interface RelativeSourcePathResolver {
   static String[] resolveWith(final CodeGenerationContext context, final TemplateData templateData) {
     final RelativeSourcePathResolver resolver =
             Stream.of(new ResourceFile(), new SchemataSpecification(), new PomFile(),
-                    new ProjectGenerationSettingsPayload(), new SourceCode())
+                    new ProjectGenerationSettingsPayload(), new SourceCode(), new UnitTest())
                     .filter(candidate -> candidate.shouldResolve(templateData))
                     .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to resolve relative source path"));
 
@@ -95,8 +95,23 @@ public interface RelativeSourcePathResolver {
 
     @Override
     public boolean shouldResolve(final TemplateData templateData) {
-      return templateData.parameters().find(SOURCE_CODE, false);
+      return templateData.parameters().find(PRODUCTION_CODE, false);
     }
+
   }
 
+  class UnitTest implements RelativeSourcePathResolver {
+
+    @Override
+    public String[] resolve(final CodeGenerationContext context, final TemplateData templateData) {
+      final Language language = context.language();
+      final String packageName = templateData.parameters().find(PACKAGE_NAME);
+      return ArrayUtils.addAll(language.testSourceFolder, packageName.split("\\."));
+    }
+
+    @Override
+    public boolean shouldResolve(final TemplateData templateData) {
+      return templateData.parameters().find(UNIT_TEST, false);
+    }
+  }
 }

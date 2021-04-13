@@ -57,7 +57,8 @@ public enum Template {
     EXCHANGE_DISPATCHER("ExchangeDispatcher"),
     SCHEMATA_SPECIFICATION("SchemataSpecification"),
     SCHEMATA_PLUGIN("SchemataPlugin"),
-    VALUE_OBJECT("ValueObject");
+    VALUE_OBJECT("ValueObject"),
+    QUERIES_UNIT_TEST("QueriesUnitTest");
 
     public final String filename;
 

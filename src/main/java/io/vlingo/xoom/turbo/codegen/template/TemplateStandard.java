@@ -148,7 +148,10 @@ public enum TemplateStandard {
     }),
 
     EXCHANGE_DISPATCHER(parameters -> Template.EXCHANGE_DISPATCHER.filename,
-            (name, parameters) -> "ExchangeDispatcher");
+            (name, parameters) -> "ExchangeDispatcher"),
+
+    QUERIES_UNIT_TEST(parameters -> Template.QUERIES_UNIT_TEST.filename,
+            (name, parameters) -> name + "Test");
 
     private final Function<TemplateParameters, String> templateFileRetriever;
     private final BiFunction<String, TemplateParameters, String> nameResolver;

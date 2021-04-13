@@ -16,45 +16,69 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 
 public class FieldDetail {
 
-    private static String UNKNOWN_FIELD_MESSAGE = "%s is not a field in %s state";
+  private static String UNKNOWN_FIELD_MESSAGE = "%s is not a field in %s state";
 
-    @SuppressWarnings("static-access")
-    public static String typeOf(final CodeGenerationParameter parent, final String fieldName) {
-        return parent.retrieveAllRelated(resolveFieldTypeLabel(parent))
-                .filter(stateField -> stateField.value.equals(fieldName))
-                .map(stateField -> stateField.retrieveRelatedValue(FIELD_TYPE)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, parent.value)));
+  @SuppressWarnings("static-access")
+  public static String typeOf(final CodeGenerationParameter parent, final String fieldName) {
+    return parent.retrieveAllRelated(resolveFieldTypeLabel(parent))
+            .filter(stateField -> stateField.value.equals(fieldName))
+            .map(stateField -> stateField.retrieveRelatedValue(FIELD_TYPE)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, parent.value)));
+  }
+
+  public static String resolveDefaultValue(final CodeGenerationParameter parent, final String stateFieldName) {
+    final String type = typeOf(parent, stateFieldName);
+    if(isBoolean(type)) {
+      return "false";
     }
-
-    public static String resolveDefaultValue(final CodeGenerationParameter parent, final String stateFieldName) {
-        final String type = typeOf(parent, stateFieldName);
-        if(type.equalsIgnoreCase(Boolean.class.getSimpleName())) {
-            return "false";
-        }
-        if(SCALAR_NUMERIC_TYPES.contains(typeOf(parent, stateFieldName).toLowerCase())) {
-            return "0";
-        }
-        return "null";
+    if(isNumeric(type)) {
+      return "0";
     }
+    return "null";
+  }
 
-    public static boolean isScalar(final CodeGenerationParameter field) {
-        final String fieldType =
-                field.retrieveRelatedValue(Label.FIELD_TYPE, String::toLowerCase);
+  public static boolean isScalar(final CodeGenerationParameter field) {
+    return isScalar(field.retrieveRelatedValue(Label.FIELD_TYPE));
+  }
 
-        if(fieldType == null || fieldType.isEmpty()) {
-            throw new IllegalArgumentException("Unable to find field type");
-        }
-
-        return CodeGenerationSetup.SCALAR_TYPES.contains(fieldType);
+  public static boolean isScalar(final String fieldType) {
+    if(fieldType == null || fieldType.isEmpty()) {
+      throw new IllegalArgumentException("Unable to find field type");
     }
+    return CodeGenerationSetup.SCALAR_TYPES.contains(fieldType.toLowerCase());
+  }
 
-    private static Label resolveFieldTypeLabel(final CodeGenerationParameter parent) {
-        if(parent.isLabeled(AGGREGATE)) {
-            return STATE_FIELD;
-        }
-        if(parent.isLabeled(VALUE_OBJECT)) {
-            return VALUE_OBJECT_FIELD;
-        }
-        throw new IllegalArgumentException("Unable to resolve field type of " + parent.label);
+  public static boolean hasStringType(final CodeGenerationParameter field) {
+    return isString(field.retrieveRelatedValue(FIELD_TYPE));
+  }
+
+  public static boolean hasNumericType(final CodeGenerationParameter field) {
+    return isNumeric(field.retrieveRelatedValue(FIELD_TYPE));
+  }
+
+  public static boolean hasBooleanType(final CodeGenerationParameter field) {
+    return isBoolean(field.retrieveRelatedValue(FIELD_TYPE));
+  }
+
+  public static boolean isNumeric(final String fieldType) {
+    return SCALAR_NUMERIC_TYPES.contains(fieldType.toLowerCase());
+  }
+
+  public static boolean isBoolean(final String fieldType) {
+    return fieldType.equalsIgnoreCase(Boolean.class.getSimpleName());
+  }
+
+  public static boolean isString(final String fieldType) {
+    return fieldType.equalsIgnoreCase(String.class.getSimpleName());
+  }
+
+  private static Label resolveFieldTypeLabel(final CodeGenerationParameter parent) {
+    if(parent.isLabeled(AGGREGATE)) {
+      return STATE_FIELD;
     }
+    if(parent.isLabeled(VALUE_OBJECT)) {
+      return VALUE_OBJECT_FIELD;
+    }
+    throw new IllegalArgumentException("Unable to resolve field type of " + parent.label);
+  }
 }
