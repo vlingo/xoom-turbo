@@ -34,7 +34,7 @@ public class Settings {
                     Settings.class.getResourceAsStream(PROPERTIES_FILENAME);
 
             if(stream == null) {
-                System.out.println("Unable to read properties. VLINGO/XOOM will set the default mailbox and logger");
+                System.out.println("Unable to read properties. VLINGO XOOM Turbo will set the default mailbox and logger");
                 PROPERTIES.putAll(DEFAULT_DATABASE_PROPERTIES);
             } else {
                 PROPERTIES.load(stream);
