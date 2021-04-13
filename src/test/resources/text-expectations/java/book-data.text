@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import io.vlingo.xoomapp.model.book.BookState;
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("all")
 public class BookData {
   public final String id;
   public final String title;

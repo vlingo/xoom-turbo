@@ -22,7 +22,7 @@ import io.vlingo.xoom.turbo.storage.Model;
 import io.vlingo.xoom.turbo.storage.StoreActorBuilder;
 import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("all")
 public class ${storeProviderName}  {
   private static ${storeProviderName} instance;
 

@@ -44,6 +44,7 @@ public final class ${entityName} extends EventSourced implements ${aggregateProt
    * @param currentVersion the int value of my current version; may be helpful in determining if snapshot is needed
    */
   @Override
+  @SuppressWarnings("hiding")
   protected <${stateName}> void restoreSnapshot(final ${stateName} snapshot, final int currentVersion) {
     // OVERRIDE FOR SNAPSHOT SUPPORT
     // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
@@ -56,6 +57,7 @@ public final class ${entityName} extends EventSourced implements ${aggregateProt
    * @return ${stateName}
    */
   @Override
+  @SuppressWarnings("unchecked")
   protected ${stateName} snapshot() {
     // OVERRIDE FOR SNAPSHOT SUPPORT
     // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
