@@ -2,7 +2,7 @@
       <plugin>
         <groupId>io.vlingo.xoom</groupId>
         <artifactId>xoom-build-plugins</artifactId>
-        <version>1.5.1-SNAPSHOT</version>
+        <version>${vlingo.xoom.version}</version>
         <executions>
           <execution>
             <goals>
