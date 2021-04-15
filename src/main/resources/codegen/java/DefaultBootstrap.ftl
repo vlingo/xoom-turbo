@@ -14,7 +14,7 @@ import io.vlingo.xoom.http.resource.Server;
 import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
 </#if>
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("all")
 public class Bootstrap {
 
   private final Grid grid;

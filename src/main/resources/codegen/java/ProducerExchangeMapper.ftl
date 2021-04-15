@@ -9,7 +9,7 @@ import io.vlingo.xoom.lattice.model.IdentifiedDomainEvent;
 /**
  * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangemapper">ExchangeMapper</a>
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings("all")
 public class ${exchangeMapperName} implements ExchangeMapper<IdentifiedDomainEvent, Message> {
 
   @Override

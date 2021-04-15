@@ -48,6 +48,7 @@ public final class AuthorEntity extends EventSourced implements Author {
    * @param currentVersion the int value of my current version; may be helpful in determining if snapshot is needed
    */
   @Override
+  @SuppressWarnings("hiding")
   protected <AuthorState> void restoreSnapshot(final AuthorState snapshot, final int currentVersion) {
     // OVERRIDE FOR SNAPSHOT SUPPORT
     // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
@@ -60,6 +61,7 @@ public final class AuthorEntity extends EventSourced implements Author {
    * @return AuthorState
    */
   @Override
+  @SuppressWarnings("unchecked")
   protected AuthorState snapshot() {
     // OVERRIDE FOR SNAPSHOT SUPPORT
     // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced

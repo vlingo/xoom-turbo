@@ -13,7 +13,7 @@ import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 
 import static io.vlingo.infrastructure.Operations.*;
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("all")
 public class ProjectionDispatcherProvider {
   private static ProjectionDispatcherProvider instance;
 

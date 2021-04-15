@@ -8,7 +8,7 @@ import ${import.qualifiedClassName};
 </#list>
 </#if>
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("all")
 public class ${dataName} {
   <#list members as member>
   ${member}

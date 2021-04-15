@@ -14,7 +14,7 @@ import ${import.qualifiedClassName};
 /**
  * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#querying-a-statestore">Querying a StateStore</a>
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings("all")
 public class ${queriesActorName} extends StateStoreQueryActor implements ${queriesName} {
 
   public ${queriesActorName}(StateStore store) {

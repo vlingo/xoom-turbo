@@ -21,6 +21,7 @@ import io.vlingo.xoom.turbo.annotation.persistence.DataObjects;
 import ${import.qualifiedClassName};
 </#list>
 
+@SuppressWarnings("unused")
 @Persistence(basePackage = "${basePackage}", storageType = StorageType.${storageType}, cqrs = ${useCQRS?c})
 <#if useProjections>
 @Projections(value = {

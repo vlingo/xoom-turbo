@@ -3,7 +3,7 @@
   <groupId>io.vlingo.xoom</groupId>
   <artifactId>xoom-turbo</artifactId>
   <version>1.6.1-SNAPSHOT</version>
-  <description>The vlingo/xoom provides a JVM microframework for the vlingo/PLATFORM that helps in building high-performance reactive microservices.</description>
+  <description>The VLINGO XOOM Xoom provides a JVM microframework for the VLINGO XOOM Platform that helps in building high-performance reactive microservices.</description>
   <name>xoom-turbo</name>
   <url>https://github.com/vlingo/xoom-turbo</url>
   <licenses>
@@ -15,7 +15,7 @@
   <developers>
     <developer>
       <id>vlingo</id>
-      <name>vlingo/PLATFORM Team</name>
+      <name>VLINGO XOOM Team</name>
       <email>info@vlingo.io</email>
       <organization>vlingo</organization>
       <organizationUrl>https://vlingo.io/contributors/</organizationUrl>

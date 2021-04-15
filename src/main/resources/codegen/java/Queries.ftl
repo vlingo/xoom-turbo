@@ -7,7 +7,7 @@ import io.vlingo.xoom.common.Completes;
 import ${import.qualifiedClassName};
 </#list>
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("all")
 public interface ${queriesName} {
   Completes<${dataName}> ${queryByIdMethodName}(String id);
   Completes<Collection<${dataName}>> ${queryAllMethodName}();
