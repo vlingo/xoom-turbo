@@ -17,10 +17,6 @@ import java.util.Map;
 
 public class StorageTemplateDataFactory {
 
-  private final static String PACKAGE_PATTERN = "%s.%s.%s";
-  private final static String PARENT_PACKAGE_NAME = "infrastructure";
-  private final static String PERSISTENCE_PACKAGE_NAME = "persistence";
-
   public static List<TemplateData> build(final String basePackage,
                                          final String appName,
                                          final List<Content> contents,
@@ -30,7 +26,7 @@ public class StorageTemplateDataFactory {
                                          final Boolean internalGeneration,
                                          final Boolean useAnnotations,
                                          final Boolean useCQRS) {
-    final String persistencePackage = resolvePackage(basePackage);
+    final String persistencePackage = PersistenceDetail.resolvePackage(basePackage);
 
     final List<TemplateData> templatesData = new ArrayList<>();
 
@@ -62,13 +58,6 @@ public class StorageTemplateDataFactory {
                                                                     final List<Content> contents) {
     return StorageProviderTemplateData.from(persistencePackage, storageType, projectionType,
             templatesData, contents, Model.applicableTo(useCQRS), useAnnotations);
-  }
-
-  private static String resolvePackage(final String basePackage) {
-    if(basePackage.endsWith(".infrastructure")) {
-      return basePackage + "." + PERSISTENCE_PACKAGE_NAME;
-    }
-    return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME).toLowerCase();
   }
 
 }

@@ -22,9 +22,9 @@ public enum StorageType {
             "io.vlingo.xoom.lattice.model.sourcing",
             DOMAIN_EVENT),
 
-    OBJECT_STORE("OBJECT_STORE", "ObjectStore", "ObjectTypeRegistry",
-            "io.vlingo.xoom.lattice.model.object",
-            AGGREGATE_STATE),
+//    OBJECT_STORE("OBJECT_STORE", "ObjectStore", "ObjectTypeRegistry",
+//            "io.vlingo.xoom.lattice.model.object",
+//            AGGREGATE_STATE),
 
     STATE_STORE("STATE_STORE", "StateStore", "StatefulTypeRegistry",
             "io.vlingo.xoom.lattice.model.stateful",

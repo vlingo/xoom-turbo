@@ -32,7 +32,7 @@ public class CodeGenerationSetup {
     public static final Map<StorageType, String> AGGREGATE_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
-                        put(StorageType.OBJECT_STORE, OBJECT_ENTITY.filename);
+                        //put(StorageType.OBJECT_STORE, OBJECT_ENTITY.filename);
                         put(StorageType.STATE_STORE, STATEFUL_ENTITY.filename);
                         put(StorageType.JOURNAL, EVENT_SOURCE_ENTITY.filename);
                     }}
@@ -42,7 +42,7 @@ public class CodeGenerationSetup {
     public static final Map<StorageType, String> AGGREGATE_METHOD_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
-                        put(StorageType.OBJECT_STORE, "");
+                        //put(StorageType.OBJECT_STORE, "");
                         put(StorageType.STATE_STORE, STATEFUL_ENTITY_METHOD.filename);
                         put(StorageType.JOURNAL, EVENT_SOURCE_ENTITY_METHOD.filename);
                     }}
@@ -52,7 +52,7 @@ public class CodeGenerationSetup {
     public static final Map<StorageType, String> ADAPTER_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
-                        put(StorageType.OBJECT_STORE, "");
+                        //put(StorageType.OBJECT_STORE, "");
                         put(StorageType.STATE_STORE, STATE_ADAPTER.filename);
                         put(StorageType.JOURNAL, ENTRY_ADAPTER.filename);
                     }}
@@ -71,7 +71,7 @@ public class CodeGenerationSetup {
     private static final Map<StorageType, String> COMMAND_MODEL_STORE_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
-                        put(StorageType.OBJECT_STORE, OBJECT_STORE_PROVIDER.filename);
+                        //put(StorageType.OBJECT_STORE, OBJECT_STORE_PROVIDER.filename);
                         put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
                         put(StorageType.JOURNAL, JOURNAL_PROVIDER.filename);
                     }}
@@ -81,7 +81,7 @@ public class CodeGenerationSetup {
     private static final Map<StorageType, String> QUERY_MODEL_STORE_TEMPLATES =
             Collections.unmodifiableMap(
                     new HashMap<StorageType, String>(){{
-                        put(StorageType.OBJECT_STORE, STATE_STORE_PROVIDER.filename);
+                        //put(StorageType.OBJECT_STORE, STATE_STORE_PROVIDER.filename);
                         put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
                         put(StorageType.JOURNAL, STATE_STORE_PROVIDER.filename);
                     }}

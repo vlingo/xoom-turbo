@@ -7,7 +7,8 @@
 package io.vlingo.xoom.turbo.codegen.template.unittest.queries;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.unittest.queries.TestDataValueGenerator.TestDataValues;
+import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator;
+import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.TestDataValues;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +37,8 @@ public class TestCase {
             TestDataValueGenerator.with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
 
     this.methodName = testMethodName;
-    this.dataDeclarations.addAll(StaticDataDeclarationFormatter.format(testMethodName, aggregate, valueObjects, testDataValues));
-    this.preliminaryStatements.addAll(PreliminaryTestStatement.with(testMethodName));
+    this.dataDeclarations.addAll(StaticDataDeclaration.generate(testMethodName, aggregate, valueObjects, testDataValues));
+    this.preliminaryStatements.addAll(PreliminaryStatement.with(testMethodName));
     this.statements.addAll(TestStatement.with(testMethodName, aggregate, valueObjects, testDataValues));
   }
 

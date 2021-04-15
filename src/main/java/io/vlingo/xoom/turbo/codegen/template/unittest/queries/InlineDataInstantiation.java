@@ -11,7 +11,7 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
-import io.vlingo.xoom.turbo.codegen.template.unittest.queries.TestDataValueGenerator.TestDataValues;
+import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.TestDataValues;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
 
-public class InlineDataInstantiationFormatter {
+public class InlineDataInstantiation {
 
   private final int dataIndex;
   private final String ordinalIndex;
@@ -29,19 +29,19 @@ public class InlineDataInstantiationFormatter {
   private final StringBuilder valuesAssignmentExpression;
   private final TestDataValues testDataValues;
 
-  public static InlineDataInstantiationFormatter with(final int dataIndex,
-                                                      final TemplateStandard standard,
-                                                      final CodeGenerationParameter aggregate,
-                                                      final List<CodeGenerationParameter> valueObjects,
-                                                      final TestDataValues testDataValues) {
-    return new InlineDataInstantiationFormatter(dataIndex, standard, aggregate, valueObjects, testDataValues);
+  public static InlineDataInstantiation with(final int dataIndex,
+                                             final TemplateStandard standard,
+                                             final CodeGenerationParameter aggregate,
+                                             final List<CodeGenerationParameter> valueObjects,
+                                             final TestDataValues testDataValues) {
+    return new InlineDataInstantiation(dataIndex, standard, aggregate, valueObjects, testDataValues);
   }
 
-  private InlineDataInstantiationFormatter(final int dataIndex,
-                                           final TemplateStandard standard,
-                                           final CodeGenerationParameter aggregate,
-                                           final List<CodeGenerationParameter> valueObjects,
-                                           final TestDataValues testDataValues) {
+  private InlineDataInstantiation(final int dataIndex,
+                                  final TemplateStandard standard,
+                                  final CodeGenerationParameter aggregate,
+                                  final List<CodeGenerationParameter> valueObjects,
+                                  final TestDataValues testDataValues) {
     this.dataIndex = dataIndex;
     this.standard = standard;
     this.aggregate = aggregate;
@@ -51,7 +51,7 @@ public class InlineDataInstantiationFormatter {
     this.testDataValues = testDataValues;
   }
 
-  public String format() {
+  public String generate() {
     generateFieldsAssignment();
     return String.format("%s.from(%s)", standard.resolveClassname(aggregate.value), valuesAssignmentExpression.toString()).replaceAll(", \\)", ")");
   }

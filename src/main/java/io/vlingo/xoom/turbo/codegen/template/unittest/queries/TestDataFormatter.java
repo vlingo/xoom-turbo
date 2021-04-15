@@ -7,14 +7,14 @@
 
 package io.vlingo.xoom.turbo.codegen.template.unittest.queries;
 
-import com.google.common.base.CaseFormat;
+import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.formatting.NumberFormat;
 
 public class TestDataFormatter {
 
   public static String formatStaticVariableName(final int dataIndex, final String methodName) {
     final String dataOrdinalIndex = NumberFormat.toOrdinal(dataIndex);
-    final String formattedMethodName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, methodName);
+    final String formattedMethodName = CodeElementFormatter.staticConstant(methodName);
     return String.format("%s_%s_TEST_DATA", dataOrdinalIndex, formattedMethodName).toUpperCase();
   }
 

@@ -7,6 +7,8 @@
 package io.vlingo.xoom.turbo.codegen.template.autodispatch;
 
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.turbo.codegen.formatting.AggregateMethodInvocation;
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.Label;
@@ -15,18 +17,16 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.turbo.codegen.formatting.AggregateMethodInvocation;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.READ_ONLY;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 
 public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
@@ -56,7 +56,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
                         .and(STATE_DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
                         .and(AGGREGATE_PROTOCOL_VARIABLE, CodeElementFormatter.simpleNameToAttribute(aggregate.value))
                         .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
-                        .and(INDEX_NAME, AutoDispatchMappingValueFormatter.format(route.value))
+                        .and(INDEX_NAME, CodeElementFormatter.staticConstant(route.value))
                         .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method))
                         .and(VALUE_OBJECT_INITIALIZERS, valueObjectInitializers);
     }

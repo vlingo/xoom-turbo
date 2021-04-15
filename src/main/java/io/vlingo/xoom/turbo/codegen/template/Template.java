@@ -58,7 +58,11 @@ public enum Template {
     SCHEMATA_SPECIFICATION("SchemataSpecification"),
     SCHEMATA_PLUGIN("SchemataPlugin"),
     VALUE_OBJECT("ValueObject"),
-    QUERIES_UNIT_TEST("QueriesUnitTest");
+    QUERIES_UNIT_TEST("QueriesUnitTest"),
+    OPERATION_BASED_MOCK_DISPATCHER("OperationBasedMockDispatcher"),
+    EVENT_BASED_MOCK_DISPATCHER("EventBasedMockDispatcher"),
+    EVENT_SOURCED_ENTITY_UNIT_TEST("EventSourcedEntityUnitTest"),
+    STATEFUL_ENTITY_UNIT_TEST("StatefulEntityUnitTest");
 
     public final String filename;
 

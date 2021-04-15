@@ -12,31 +12,31 @@ import java.util.function.BiFunction;
 
 import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
 
-class TestResultAssignmentFormatter {
+class TestResultAssignment {
 
-  private static final TestResultAssignmentFormatter QUERY_BY_ID_TEST_CASE_EXECUTION =
-          new TestResultAssignmentFormatter(TestResultAssignmentFormatter::resolveQueryByIdResultAssignment);
+  private static final TestResultAssignment QUERY_BY_ID_TEST_CASE_EXECUTION =
+          new TestResultAssignment(TestResultAssignment::resolveQueryByIdResultAssignment);
 
-  private static final TestResultAssignmentFormatter QUERY_ALL_TEST_CASE_EXECUTION =
-          new TestResultAssignmentFormatter(TestResultAssignmentFormatter::resolveQueryAllResultAssignment,
-                  TestResultAssignmentFormatter::resolveQueryAllFilteredResultAssignment);
+  private static final TestResultAssignment QUERY_ALL_TEST_CASE_EXECUTION =
+          new TestResultAssignment(TestResultAssignment::resolveQueryAllResultAssignment,
+                  TestResultAssignment::resolveQueryAllFilteredResultAssignment);
 
   private final BiFunction<Integer, String, String> mainResultFormatting;
   private final BiFunction<Integer, String, String> filteredResultFormatting;
 
-  public static TestResultAssignmentFormatter forMethod(final String testCaseMethod) {
+  public static TestResultAssignment forMethod(final String testCaseMethod) {
     if(TestCaseName.ofMethod(testCaseMethod).equals(TestCaseName.QUERY_BY_ID)) {
       return QUERY_BY_ID_TEST_CASE_EXECUTION;
     }
     return QUERY_ALL_TEST_CASE_EXECUTION;
   }
 
-  private TestResultAssignmentFormatter(final BiFunction<Integer, String, String> resultAssignmentPattern) {
+  private TestResultAssignment(final BiFunction<Integer, String, String> resultAssignmentPattern) {
     this(resultAssignmentPattern, (d, a) -> "");
   }
 
-  private TestResultAssignmentFormatter(final BiFunction<Integer, String, String> resultAssignmentResolver,
-                                        final BiFunction<Integer, String, String> filteredResultAssignmentPattern) {
+  private TestResultAssignment(final BiFunction<Integer, String, String> resultAssignmentResolver,
+                               final BiFunction<Integer, String, String> filteredResultAssignmentPattern) {
     this.mainResultFormatting = resultAssignmentResolver;
     this.filteredResultFormatting = filteredResultAssignmentPattern;
   }

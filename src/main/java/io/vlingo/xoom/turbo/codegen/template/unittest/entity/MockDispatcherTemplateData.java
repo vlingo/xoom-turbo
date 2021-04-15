@@ -1,0 +1,38 @@
+// Copyright © 2012-2021 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+package io.vlingo.xoom.turbo.codegen.template.unittest.entity;
+
+import io.vlingo.xoom.turbo.codegen.template.TemplateData;
+import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
+import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
+
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+
+public class MockDispatcherTemplateData extends TemplateData {
+
+  private final TemplateParameters parameters;
+
+  public MockDispatcherTemplateData(final String basePackage,
+                                    final ProjectionType projectionType) {
+    this.parameters =
+            TemplateParameters.with(PROJECTION_TYPE, projectionType)
+                    .and(PACKAGE_NAME, MockDispatcherDetail.resolvePackage(basePackage))
+                    .and(DISPATCHER_NAME, TemplateStandard.MOCK_DISPATCHER.resolveClassname())
+                    .and(PRODUCTION_CODE, false).and(UNIT_TEST, true);
+  }
+
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
+
+  @Override
+  public TemplateStandard standard() {
+    return TemplateStandard.MOCK_DISPATCHER;
+  }
+}

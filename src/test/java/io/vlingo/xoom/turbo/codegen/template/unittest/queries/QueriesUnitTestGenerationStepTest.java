@@ -136,7 +136,6 @@ public class QueriesUnitTestGenerationStepTest {
                     .relate(Label.FIELD_TYPE, "String"));
   }
 
-
   private Content[] contents() {
     return new Content[] {
             Content.with(QUERIES, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),

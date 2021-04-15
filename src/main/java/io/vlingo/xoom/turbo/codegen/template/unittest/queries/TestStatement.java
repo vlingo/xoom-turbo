@@ -7,7 +7,7 @@
 package io.vlingo.xoom.turbo.codegen.template.unittest.queries;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.unittest.queries.TestDataValueGenerator.TestDataValues;
+import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.TestDataValues;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +46,8 @@ public class TestStatement {
   private List<String> generateExecutions(final int dataIndex,
                                           final String testMethodName,
                                           final CodeGenerationParameter aggregate) {
-    final TestResultAssignmentFormatter formatter =
-            TestResultAssignmentFormatter.forMethod(testMethodName);
+    final TestResultAssignment formatter =
+            TestResultAssignment.forMethod(testMethodName);
 
     return Stream.of(formatter.formatMainResult(dataIndex, aggregate.value),
             formatter.formatFilteredResult(dataIndex, aggregate.value))
@@ -58,7 +58,7 @@ public class TestStatement {
                                           final CodeGenerationParameter aggregate,
                                           final List<CodeGenerationParameter> valueObjects,
                                           final TestDataValues testDataValues) {
-    return AssertionsFormatter.from(dataIndex, aggregate, valueObjects, testDataValues);
+    return Assertions.from(dataIndex, aggregate, valueObjects, testDataValues);
   }
 
   public List<String> getAssertions() {

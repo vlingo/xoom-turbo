@@ -22,6 +22,7 @@ public enum TemplateParameter {
     HANDLER_INDEXES("handlerIndexes"),
     HANDLER_ENTRIES("handlerEntries"),
     ENTITY_NAME("entityName"),
+    ENTITY_CREATION_METHOD("entityCreationMethodName"),
     DATA_OBJECTS("dataObjects"),
     STATE_DATA_OBJECT_NAME("dataName"),
     DATA_OBJECT_QUALIFIED_NAME("dataQualifiedName"),
@@ -134,7 +135,10 @@ public enum TemplateParameter {
     STATIC_FACTORY_METHODS("staticFactoryMethods"),
     QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),
     TEST_CASES("testCases"),
-    UNIT_TEST("unitTest");
+    UNIT_TEST("unitTest"),
+    ENTITY_UNIT_TEST_NAME("entityUnitTestName"),
+    DISPATCHER_NAME("dispatcherName"),
+    AUXILIARY_ENTITY_CREATION("auxiliaryEntityCreation");
 
     public final String key;
 

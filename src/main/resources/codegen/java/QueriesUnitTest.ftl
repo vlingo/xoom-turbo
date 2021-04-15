@@ -65,10 +65,10 @@ public class ${queriesUnitTestName} {
   }
 
   private static final StateStore.WriteResultInterest NOOP_WRITER = new StateStore.WriteResultInterest() {
-      @Override
-      public <S, C> void writeResultedIn(Outcome<StorageException, Result> outcome, String s, S s1, int i, List<Source<C>> list, Object o) {
+    @Override
+    public <S, C> void writeResultedIn(Outcome<StorageException, Result> outcome, String s, S s1, int i, List<Source<C>> list, Object o) {
 
-      }
+    }
   };
 
 }

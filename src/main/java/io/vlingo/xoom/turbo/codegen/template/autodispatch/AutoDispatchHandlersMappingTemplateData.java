@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.turbo.codegen.template.autodispatch;
 
+import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
 import io.vlingo.xoom.turbo.codegen.language.Language;
@@ -23,11 +24,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.staticConstant;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_SIGNATURE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
-import static io.vlingo.xoom.turbo.codegen.template.autodispatch.AutoDispatchMappingValueFormatter.format;
 
 public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
@@ -54,8 +55,8 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                         .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateName)).and(USE_CQRS, useCQRS)
                         .and(QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregateName))
                         .and(QUERY_ALL_METHOD_NAME, QueriesDetail.resolveQueryAllMethodName(aggregateName))
-                        .andResolve(QUERY_ALL_INDEX_NAME, params -> format(params.find(QUERY_ALL_METHOD_NAME)))
-                        .andResolve(QUERY_BY_ID_INDEX_NAME, params -> format(params.find(QUERY_BY_ID_METHOD_NAME)))
+                        .andResolve(QUERY_ALL_INDEX_NAME, params -> staticConstant(params.find(QUERY_ALL_METHOD_NAME)))
+                        .andResolve(QUERY_BY_ID_INDEX_NAME, params -> staticConstant(params.find(QUERY_BY_ID_METHOD_NAME)))
                         .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, standard().resolveClassname(aggregateName))
                         .and(HANDLER_INDEXES, resolveHandlerIndexes(aggregate, useCQRS))
                         .and(HANDLER_ENTRIES, new ArrayList<String>())
@@ -76,7 +77,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
         return IntStream.range(0, handlers.size()).mapToObj(index -> {
             final String signature = handlers.get(index).value;
-            final String mappingValue = format(signature);
+            final String mappingValue = CodeElementFormatter.staticConstant(signature);
             return String.format(HANDLER_INDEX_PATTERN, mappingValue, index);
         }).collect(Collectors.toList());
     }

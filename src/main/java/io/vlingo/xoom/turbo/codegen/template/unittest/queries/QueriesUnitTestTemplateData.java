@@ -14,7 +14,6 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
-import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.template.storage.QueriesDetail;
 
 import java.util.List;
@@ -58,18 +57,13 @@ public class QueriesUnitTestTemplateData extends TemplateData {
                     .and(QUERIES_NAME, queriesProtocolName).and(DATA_OBJECT_NAME, dataObjectName)
                     .and(QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregate.value))
                     .and(TEST_CASES, TestCase.from(aggregate, valueObjects))
-                    .addImport(resolveImport(dataObjectName, aggregate, contents))
+                    .addImport(resolveImport(dataObjectName, contents))
                     .and(PRODUCTION_CODE, false)
                     .and(UNIT_TEST, true);
   }
 
   private String resolveImport(final String dataObjectName,
-                               final CodeGenerationParameter aggregate,
                                final List<Content> contents) {
-    if(!ValueObjectDetail.useValueObject(aggregate)) {
-      return "";
-    }
-
     final String dataObjectPackage =
             ContentQuery.findPackage(DATA_OBJECT, dataObjectName, contents);
 

@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.turbo.codegen.template.unittest.queries;
+package io.vlingo.xoom.turbo.codegen.template.unittest;
 
 import io.vlingo.xoom.turbo.codegen.formatting.NumberFormat;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
@@ -34,6 +34,11 @@ public class TestDataValueGenerator {
   private final List<CodeGenerationParameter> valueObjects = new ArrayList<>();
   private boolean currentBooleanValue;
   private int currentNumericValue;
+
+  public static TestDataValueGenerator with(final CodeGenerationParameter aggregate,
+                                            final List<CodeGenerationParameter> valueObjects) {
+    return with(1, "", aggregate, valueObjects);
+  }
 
   public static TestDataValueGenerator with(final int dataSetSize,
                                             final String valuePrefix,
@@ -101,23 +106,35 @@ public class TestDataValueGenerator {
 
   private void generateScalarFieldAssignment(final int dataIndex, final String path, final CodeGenerationParameter field) {
     final String currentPath = resolvePath(path, field);
+    final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
     if (field.value.equalsIgnoreCase("id")) {
-      generatedValues.add(dataIndex, currentPath, quoteValue(dataIndex));
+      generatedValues.add(dataIndex, fieldType, currentPath, quoteValue(dataIndex));
     } else if (FieldDetail.hasNumericType(field)) {
-      generatedValues.add(dataIndex, currentPath, currentNumericValue);
+      generatedValues.add(dataIndex, fieldType, currentPath, currentNumericValue);
       alternateNumericValue();
     } else if (FieldDetail.hasBooleanType(field)) {
-      generatedValues.add(dataIndex, currentPath, currentBooleanValue);
+      generatedValues.add(dataIndex, fieldType, currentPath, currentBooleanValue);
       alternateBooleanValue();
     } else if (FieldDetail.hasStringType(field)) {
       final String alias = valuePrefix.toLowerCase();
       final String ordinalIndex = NumberFormat.toOrdinal(dataIndex);
       final String hyphenatedPath = currentPath.replaceAll("\\.", "-");
-      final String value = String.format("%s-%s-%s", ordinalIndex, alias, hyphenatedPath);
-      generatedValues.add(dataIndex, currentPath, quoteValue(value));
+      final String value = formatStringValue(ordinalIndex, alias, hyphenatedPath);
+      generatedValues.add(dataIndex, fieldType, currentPath, quoteValue(value));
     } else {
       throw new IllegalArgumentException(field.value + " " + field.retrieveRelatedValue(FIELD_TYPE) + " is not Scalar");
     }
+  }
+
+  private String formatStringValue(final String ordinalIndex, final String alias, final String hyphenatedPath) {
+    final StringBuilder value = new StringBuilder(hyphenatedPath);
+    if(!alias.isEmpty()) {
+      value.insert(0, alias.concat("-"));
+    }
+    if(dataSetSize > 1) {
+      value.insert(0, ordinalIndex.concat("-"));
+    }
+    return value.toString();
   }
 
   private String quoteValue(final Object value) {
@@ -145,28 +162,30 @@ public class TestDataValueGenerator {
 
     private final Map<Integer, List<TestDataValue>> generatedValues = new HashMap<>();
 
-    private class TestDataValue {
-      public final String fieldPath;
-      public final String value;
-
-      private TestDataValue(final String fieldPath, final String value) {
-        this.fieldPath = fieldPath;
-        this.value = value;
-      }
-
-      public boolean hasPath(final String fieldPath) {
-        return this.fieldPath.equals(fieldPath);
-      }
+    public TestDataValues updateAllValues() {
+      final TestDataValues updated = new TestDataValues();
+      generatedValues.forEach((index, values) -> {
+        values.forEach(value -> {
+          updated.add(index, value.updateValue());
+        });
+      });
+      return updated;
     }
 
-    public void add(final int dataIndex, final String path, final Object value) {
-      final TestDataValue newValue = new TestDataValue(path, value.toString());
+    public void add(final int dataIndex, final String type, final String path, final Object value) {
+      add(dataIndex, new TestDataValue(type, path, value.toString()));
+    }
+
+    private void add(final int dataIndex, final TestDataValue newValue) {
       generatedValues.computeIfAbsent(dataIndex, v -> new ArrayList<>()).add(newValue);
     }
 
-    public String retrieve(final int dataIndex, final String path) {
-      return generatedValues.get(dataIndex).stream().filter(value -> value.hasPath(path))
-              .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find value for " + path)).value;
+    public String retrieve(final String path) {
+      return retrieve(1, path);
+    }
+
+    public String retrieve(final String variableName, final String path) {
+      return retrieve(1, variableName, path);
     }
 
     public String retrieve(final int dataIndex, final String variableName, final String path) {
@@ -174,6 +193,42 @@ public class TestDataValueGenerator {
               path.substring(variableName.length() + 1, path.length());
 
       return retrieve(dataIndex, reducedPath);
+    }
+
+    public String retrieve(final int dataIndex, final String path) {
+      return generatedValues.get(dataIndex).stream().filter(value -> value.hasPath(path))
+              .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find value for " + path)).value;
+    }
+
+    private class TestDataValue {
+      public final String fieldPath;
+      public final String value;
+      public final String type;
+
+      private TestDataValue(final String type, final String fieldPath, final String value) {
+        this.fieldPath = fieldPath;
+        this.value = value;
+        this.type = type;
+      }
+
+      public boolean hasPath(final String fieldPath) {
+        return this.fieldPath.equals(fieldPath);
+      }
+
+      public TestDataValue updateValue() {
+        final String value = resolveUpdatedValue();
+        return new TestDataValue(type, fieldPath, value);
+      }
+
+      private String resolveUpdatedValue() {
+        if(FieldDetail.isNumeric(type)) {
+          return String.valueOf(Integer.valueOf(value) + 1);
+        }
+        if(FieldDetail.isBoolean(type)) {
+          return String.valueOf(!Boolean.valueOf(value));
+        }
+        return value.replaceFirst("\"", "\"updated-");
+      }
     }
   }
 }

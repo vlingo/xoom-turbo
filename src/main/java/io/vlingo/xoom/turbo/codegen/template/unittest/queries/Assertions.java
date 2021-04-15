@@ -9,13 +9,13 @@ package io.vlingo.xoom.turbo.codegen.template.unittest.queries;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.turbo.codegen.template.unittest.queries.TestDataValueGenerator.TestDataValues;
+import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.TestDataValues;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class AssertionsFormatter {
+public class Assertions {
 
   public static List<String> from(final int dataIndex,
                                   final CodeGenerationParameter aggregate,
