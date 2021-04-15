@@ -13,7 +13,7 @@ Docs: https://docs.vlingo.io/xoom-turbo
     <dependency>
       <groupId>io.vlingo.xoom</groupId>
       <artifactId>xoom-turbo</artifactId>
-      <version>1.6.0</version>
+      <version>1.7.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -21,7 +21,7 @@ Docs: https://docs.vlingo.io/xoom-turbo
 
 ```gradle
 dependencies {
-    compile 'io.vlingo.xoom:xoom-turbo:1.6.0'
+    compile 'io.vlingo.xoom:xoom-turbo:1.7.0'
 }
 ```
 
