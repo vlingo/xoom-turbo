@@ -6,12 +6,12 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo;
 
-import io.vlingo.xoom.actors.Grid;
 import io.vlingo.xoom.cluster.model.Properties;
 import io.vlingo.xoom.http.resource.Configuration;
 import io.vlingo.xoom.http.resource.StaticFilesConfiguration;
 import io.vlingo.xoom.http.resource.feed.FeedConfiguration;
 import io.vlingo.xoom.http.resource.sse.SseConfiguration;
+import io.vlingo.xoom.lattice.grid.Grid;
 
 public interface XoomInitializationAware {
 
@@ -65,6 +65,4 @@ public interface XoomInitializationAware {
     default Properties clusterProperties() {
         return null;
     }
-
-
 }

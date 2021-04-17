@@ -7,6 +7,40 @@
 
 package io.vlingo.xoom.turbo.codegen.template.storage;
 
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.ADAPTERS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.AGGREGATES;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.IMPORTS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.MODEL;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.SOURCE_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORE_PROVIDER_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.ADAPTER;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.EVENT_BASED;
+import static io.vlingo.xoom.turbo.codegen.template.storage.Model.COMMAND;
+import static io.vlingo.xoom.turbo.codegen.template.storage.Model.DOMAIN;
+import static io.vlingo.xoom.turbo.codegen.template.storage.Model.QUERY;
+import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.JOURNAL;
+
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.parameter.ImportParameter;
@@ -14,19 +48,6 @@ import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
-import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.EVENT_BASED;
-import static io.vlingo.xoom.turbo.codegen.template.storage.Model.*;
-import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.JOURNAL;
 
 public class StorageTemplateDataFactoryTest {
 
@@ -199,14 +220,20 @@ public class StorageTemplateDataFactoryTest {
     }
 
     private static Map<Model, DatabaseType> databaseTypesForCQRS() {
-        return new HashMap<Model, DatabaseType>() {{
+        return new HashMap<Model, DatabaseType>() {
+          private static final long serialVersionUID = 1L;
+
+        {
            put(COMMAND, DatabaseType.HSQLDB);
            put(QUERY, DatabaseType.IN_MEMORY);
         }};
     }
 
     private static Map<Model, DatabaseType> databaseTypes() {
-        return new HashMap<Model, DatabaseType>() {{
+        return new HashMap<Model, DatabaseType>() {
+          private static final long serialVersionUID = 1L;
+
+        {
             put(DOMAIN, DatabaseType.POSTGRES);
         }};
     }

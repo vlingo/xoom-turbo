@@ -8,13 +8,13 @@ import io.vlingo.xoom.actors.Address;
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.turbo.annotation.autodispatch.Handler;
 </#if>
-import io.vlingo.xoom.actors.Grid;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.http.ContentType;
 import io.vlingo.xoom.http.Response;
 import io.vlingo.xoom.http.ResponseHeader;
 import io.vlingo.xoom.http.resource.Resource;
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
+import io.vlingo.xoom.lattice.grid.Grid;
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>

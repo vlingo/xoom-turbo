@@ -6,6 +6,12 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.unittest.queries;
 
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
+
+import java.util.List;
+import java.util.function.Consumer;
+
 import io.vlingo.xoom.turbo.codegen.formatting.NumberFormat;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.Label;
@@ -13,15 +19,10 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.TestDataValues;
 
-import java.util.List;
-import java.util.function.Consumer;
-
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
-
 public class InlineDataInstantiation {
 
   private final int dataIndex;
+  @SuppressWarnings("unused")
   private final String ordinalIndex;
   private final TemplateStandard standard;
   private final CodeGenerationParameter aggregate;
@@ -83,5 +84,4 @@ public class InlineDataInstantiation {
     valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).forEach(valueObjectFieldAssignment);
     valuesAssignmentExpression.append("), ");
   }
-
 }

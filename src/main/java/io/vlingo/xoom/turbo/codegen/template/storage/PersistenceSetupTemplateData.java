@@ -6,20 +6,33 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.storage;
 
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.ADAPTERS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.BASE_PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.DATA_OBJECTS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTIONS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_TYPE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERIES;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.REQUIRE_ADAPTERS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_ANNOTATIONS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_CQRS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_PROJECTIONS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PERSISTENCE_SETUP;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERIES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class PersistenceSetupTemplateData extends TemplateData {
 
@@ -70,7 +83,6 @@ public class PersistenceSetupTemplateData extends TemplateData {
                 .andResolve(REQUIRE_ADAPTERS, params -> !params.<List>find(ADAPTERS).isEmpty());
     }
 
-    @SuppressWarnings("unchecked")
     private Set<String> resolveImports(final boolean useCQRS, final List<Content> contents) {
         if(useCQRS) {
             return ContentQuery.findFullyQualifiedClassNames(contents, AGGREGATE_STATE, DATA_OBJECT, DOMAIN_EVENT);

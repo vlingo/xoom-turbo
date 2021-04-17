@@ -6,13 +6,13 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.annotation.initializer;
 
-import org.junit.After;
-import org.junit.Test;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.net.URL;
 
-import static org.junit.Assert.fail;
+import org.junit.After;
+import org.junit.Test;
 
 public class XoomInitializerTest {
 
@@ -31,5 +31,4 @@ public class XoomInitializerTest {
     public void tearDown() throws Exception {
         XoomInitializer.instance().stopServer();
     }
-
 }

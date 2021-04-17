@@ -7,27 +7,38 @@
 
 package io.vlingo.xoom.turbo.codegen.template.bootstrap;
 
-import io.vlingo.xoom.turbo.OperatingSystem;
-import io.vlingo.xoom.turbo.TextExpectation;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.content.TextBasedContent;
-import io.vlingo.xoom.turbo.codegen.template.OutputFile;
-import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
-import org.apache.commons.lang3.StringUtils;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.APPLICATION_NAME;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.BLOCKING_MESSAGING;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.CQRS;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.PROJECTION_TYPE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.STORAGE_TYPE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.TARGET_FOLDER;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.USE_ANNOTATIONS;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.XOOM_INITIALIZER_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.BOOTSTRAP;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.EXCHANGE_BOOTSTRAP;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.REST_RESOURCE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.XOOM_INITIALIZER;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import javax.annotation.processing.Filer;
+import javax.lang.model.element.Element;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import javax.annotation.processing.Filer;
-import javax.lang.model.element.Element;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import io.vlingo.xoom.turbo.OperatingSystem;
+import io.vlingo.xoom.turbo.TextExpectation;
+import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
+import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.template.OutputFile;
+import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
 
 public class BootstrapGenerationStepTest {
 

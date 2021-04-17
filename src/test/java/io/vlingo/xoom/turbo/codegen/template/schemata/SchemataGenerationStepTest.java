@@ -7,18 +7,19 @@
 
 package io.vlingo.xoom.turbo.codegen.template.schemata;
 
+import static java.util.stream.Collectors.toList;
+
+import java.io.IOException;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.exchange.CodeGenerationParametersBuilder;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.io.IOException;
-
-import static java.util.stream.Collectors.toList;
 
 public class SchemataGenerationStepTest {
 
@@ -56,6 +57,7 @@ public class SchemataGenerationStepTest {
         final Content classifierSpecification =
                 context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "Classifier");
 
+        @SuppressWarnings("unused")
         final Content plugin =
                 context.findContent(TemplateStandard.SCHEMATA_PLUGIN, "pom");
 

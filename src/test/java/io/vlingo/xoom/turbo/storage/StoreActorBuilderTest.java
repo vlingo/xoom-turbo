@@ -7,18 +7,19 @@
 
 package io.vlingo.xoom.turbo.storage;
 
-import io.vlingo.xoom.actors.World;
-import io.vlingo.xoom.symbio.store.journal.Journal;
-import io.vlingo.xoom.symbio.store.state.StateStore;
+import static io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType.JOURNAL;
+import static io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType.STATE_STORE;
+
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Properties;
-
-import static io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType.JOURNAL;
-import static io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType.STATE_STORE;
+import io.vlingo.xoom.actors.World;
+import io.vlingo.xoom.symbio.store.journal.Journal;
+import io.vlingo.xoom.symbio.store.state.StateStore;
 
 public class StoreActorBuilderTest {
 
@@ -26,7 +27,7 @@ public class StoreActorBuilderTest {
 
     @Test
     public void testThatMySqlJournalActorIsBuilt() {
-        final Journal journal =
+        final Journal<?> journal =
                 StoreActorBuilder.from(world.stage(), Model.COMMAND,
                         new MockDispatcher<>(), JOURNAL, defaultDatabaseProperties(Model.COMMAND), false);
 
@@ -35,7 +36,7 @@ public class StoreActorBuilderTest {
 
     @Test
     public void testThatInMemoryJournalActorIsBuilt() {
-        final Journal journal =
+        final Journal<?> journal =
                 StoreActorBuilder.from(world.stage(), Model.COMMAND,
                         new MockDispatcher<>(), JOURNAL, inMemoryDatabaseProperties(), false);
 

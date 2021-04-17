@@ -18,6 +18,7 @@ public class Settings {
     private static final Properties PROPERTIES = new Properties();
     private static final String PROPERTIES_FILENAME = "/xoom-turbo.properties";
     private static final Map<Object, Object> DEFAULT_DATABASE_PROPERTIES = new HashMap<Object, Object>() {
+      private static final long serialVersionUID = 1L;
       {
         put("database", "IN_MEMORY");
         put("query.database", "IN_MEMORY");
@@ -47,5 +48,4 @@ public class Settings {
     public static Properties properties() {
         return PROPERTIES;
     }
-
 }

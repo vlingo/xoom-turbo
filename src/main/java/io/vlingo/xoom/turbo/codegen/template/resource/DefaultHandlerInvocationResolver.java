@@ -7,19 +7,17 @@
 
 package io.vlingo.xoom.turbo.codegen.template.resource;
 
+import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+
 import io.vlingo.xoom.http.Method;
+import io.vlingo.xoom.turbo.codegen.formatting.AggregateMethodInvocation;
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.turbo.codegen.formatting.AggregateMethodInvocation;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 

@@ -7,23 +7,33 @@
 
 package io.vlingo.xoom.turbo.codegen.template.resource;
 
-import io.vlingo.xoom.http.Method;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.turbo.codegen.template.storage.QueriesDetail;
+import static io.vlingo.xoom.http.Method.GET;
+import static io.vlingo.xoom.http.Method.PATCH;
+import static io.vlingo.xoom.http.Method.POST;
+import static io.vlingo.xoom.http.Method.PUT;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.BODY;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.BODY_TYPE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.METHOD_PARAMETER;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.READ_ONLY;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.REQUIRE_ENTITY_LOADING;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_PATH;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_SIGNATURE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
 
-import java.beans.Introspector;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.http.Method.*;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import io.vlingo.xoom.http.Method;
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
+import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.parameter.Label;
+import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.turbo.codegen.template.storage.QueriesDetail;
 
 public class RouteDetail {
 

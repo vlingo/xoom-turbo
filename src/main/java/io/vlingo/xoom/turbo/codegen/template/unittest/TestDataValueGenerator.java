@@ -7,11 +7,9 @@
 
 package io.vlingo.xoom.turbo.codegen.template.unittest;
 
-import io.vlingo.xoom.turbo.codegen.formatting.NumberFormat;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
-import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
+import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,14 +18,17 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
-import static java.util.stream.Collectors.toList;
+import io.vlingo.xoom.turbo.codegen.formatting.NumberFormat;
+import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.parameter.Label;
+import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
+import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 
 public class TestDataValueGenerator {
 
   private final int dataSetSize;
   private final String valuePrefix;
+  @SuppressWarnings("unused")
   private final String aggregateName;
   private final TestDataValues generatedValues = new TestDataValues();
   private final List<CodeGenerationParameter> stateFields = new ArrayList<>();

@@ -7,6 +7,27 @@
 
 package io.vlingo.xoom.turbo.codegen.template.bootstrap;
 
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.APPLICATION_NAME;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.BLOCKING_MESSAGING;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.CQRS;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.STORAGE_TYPE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.IMPORTS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_PROJECTIONS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.REST_RESOURCE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.STATE_STORE;
+
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.parameter.ImportParameter;
@@ -15,28 +36,16 @@ import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.APPLICATION_NAME;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.BLOCKING_MESSAGING;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.STORAGE_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
-import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.STATE_STORE;
 
 public class AnnotatedBootstrapTemplateDataTest {
 
     @Test
     public void testBootstrapTemplateDataGenerationWithCQRSAndProjections() {
         final Map<Label, String> codeGenerationParameters =
-                new HashMap<Label, String>() {{
+                new HashMap<Label, String>() {
+                  private static final long serialVersionUID = 1L;
+
+                {
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(APPLICATION_NAME, "xoom-app");
                     put(STORAGE_TYPE, STATE_STORE.name());
@@ -68,7 +77,10 @@ public class AnnotatedBootstrapTemplateDataTest {
     @Test
     public void testBootstrapTemplateDataGenerationWithoutCQRSAndProjections() {
         final Map<Label, String> codeGenerationParameters =
-                new HashMap<Label, String>() {{
+                new HashMap<Label, String>() {
+                  private static final long serialVersionUID = 1L;
+
+                {
                     put(PACKAGE, "io.vlingo.xoomapp");
                     put(APPLICATION_NAME, "xoom-app");
                     put(STORAGE_TYPE, STATE_STORE.name());

@@ -7,16 +7,15 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer.resources;
 
+import static io.vlingo.xoom.http.Response.Status.Ok;
+import static io.vlingo.xoom.http.resource.ResourceBuilder.get;
+import static io.vlingo.xoom.http.resource.ResourceBuilder.resource;
+
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.http.Response;
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
 import io.vlingo.xoom.http.resource.Resource;
-import io.vlingo.xoom.http.resource.ResourceHandler;
-
-import static io.vlingo.xoom.http.Response.Status.Ok;
-import static io.vlingo.xoom.http.resource.ResourceBuilder.get;
-import static io.vlingo.xoom.http.resource.ResourceBuilder.resource;
 
 public class FirstResource extends DynamicResourceHandler {
 
@@ -33,5 +32,4 @@ public class FirstResource extends DynamicResourceHandler {
         return resource("FirstResource",
                 get("/first-resource").handle(this::retrieveResource));
     }
-
 }

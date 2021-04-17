@@ -1,10 +1,10 @@
 package ${packageName};
 
-import io.vlingo.xoom.turbo.Boot;
-import io.vlingo.xoom.actors.Grid;
 import io.vlingo.xoom.actors.Stage;
-import io.vlingo.xoom.http.resource.*;
 import io.vlingo.xoom.cluster.model.Properties;
+import io.vlingo.xoom.http.resource.*;
+import io.vlingo.xoom.lattice.grid.Grid;
+import io.vlingo.xoom.turbo.Boot;
 import io.vlingo.xoom.turbo.XoomInitializationAware;
 <#if blockingMessaging>
 import io.vlingo.xoom.turbo.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;

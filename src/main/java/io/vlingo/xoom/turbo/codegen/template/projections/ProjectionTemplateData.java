@@ -6,6 +6,31 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.projections;
 
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.MODEL;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_SOURCES;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_SOURCE_TYPES_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_SOURCE_TYPES_QUALIFIED_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_TYPE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STATE_DATA_OBJECT_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STATE_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORE_PROVIDER_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION_SOURCE_TYPES;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.storage.Model.QUERY;
+import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.STATE_STORE;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
@@ -14,16 +39,6 @@ import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
-import static io.vlingo.xoom.turbo.codegen.template.storage.Model.QUERY;
-import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.STATE_STORE;
 
 public class ProjectionTemplateData extends TemplateData {
 
@@ -91,6 +106,7 @@ public class ProjectionTemplateData extends TemplateData {
                 CodeElementFormatter.importAllFrom(dataObjectPackage)).collect(Collectors.toSet());
     }
 
+    @SuppressWarnings("unused")
     private String retrieveProjectionSourceTypesQualifiedName(final List<TemplateData> templatesData) {
         return templatesData.stream().filter(data -> data.hasStandard(PROJECTION_SOURCE_TYPES))
                 .map(data -> data.parameters().<String>find(PROJECTION_SOURCE_TYPES_QUALIFIED_NAME))
@@ -115,5 +131,4 @@ public class ProjectionTemplateData extends TemplateData {
     public String filename() {
         return standard().resolveFilename(protocolName, parameters);
     }
-
 }

@@ -16,5 +16,4 @@ public class OtherDummyProjectionActor extends StateStoreProjectionActor<OtherDu
     public OtherDummyProjectionActor() {
         super(QueryModelStateStoreProvider.instance().store);
     }
-
 }

@@ -7,6 +7,19 @@
 
 package io.vlingo.xoom.turbo.codegen.template.unittest.entity;
 
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.ENTITY_UNIT_TEST;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.MOCK_DISPATCHER;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.VALUE_OBJECT;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
@@ -19,15 +32,6 @@ import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.turbo.codegen.template.storage.StorageType;
 import io.vlingo.xoom.turbo.codegen.template.unittest.queries.QueriesUnitTestGenerationStep;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.nio.file.Paths;
-
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class EntityUnitTestGenerationStepTest {
 
@@ -271,6 +275,7 @@ public class EntityUnitTestGenerationStepTest {
           Paths.get(PROJECT_PATH, "src", "main", "java",
                   "io", "vlingo", "xoomapp", "infrastructure").toString();
 
+  @SuppressWarnings("unused")
   private static final String PERSISTENCE_PACKAGE_PATH =
           Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "persistence").toString();
 
@@ -286,18 +291,21 @@ public class EntityUnitTestGenerationStepTest {
                   "... \\n" +
                   "}";
 
+  @SuppressWarnings("unused")
   private static final String AUTHOR_REGISTERED_ADAPTER_CONTENT_TEXT =
           "package io.vlingo.xoomapp.infrastructure; \\n" +
                   "public class AuthorRegisteredAdapter { \\n" +
                   "... \\n" +
                   "}";
 
+  @SuppressWarnings("unused")
   private static final String AUTHOR_RANKED_ADAPTER_CONTENT_TEXT =
           "package io.vlingo.xoomapp.infrastructure; \\n" +
                   "public class AuthorRankedAdapter { \\n" +
                   "... \\n" +
                   "}";
 
+  @SuppressWarnings("unused")
   private static final String BOOK_CATALOGED_ADAPTER_CONTENT_TEXT =
           "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
                   "public interface AuthorQueries { \\n" +

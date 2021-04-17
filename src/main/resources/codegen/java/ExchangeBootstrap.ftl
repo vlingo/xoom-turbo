@@ -1,6 +1,5 @@
 package ${packageName};
 
-import io.vlingo.xoom.actors.Grid;
 import io.vlingo.xoom.turbo.actors.Settings;
 import io.vlingo.xoom.lattice.exchange.Exchange;
 import io.vlingo.xoom.turbo.exchange.ExchangeSettings;
@@ -10,6 +9,7 @@ import io.vlingo.xoom.lattice.exchange.ConnectionSettings;
 import io.vlingo.xoom.lattice.exchange.rabbitmq.Message;
 import io.vlingo.xoom.lattice.exchange.rabbitmq.MessageSender;
 import io.vlingo.xoom.lattice.exchange.Covey;
+import io.vlingo.xoom.lattice.grid.Grid;
 <#if producerExchanges?has_content>
 import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 </#if>

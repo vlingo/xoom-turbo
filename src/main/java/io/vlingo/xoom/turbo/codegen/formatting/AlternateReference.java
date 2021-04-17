@@ -6,20 +6,21 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.formatting;
 
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.STATE_FIELD;
+import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.STATE_FIELD;
-import static java.util.stream.Collectors.toList;
+import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
 
 public class AlternateReference extends Formatters.Fields<String> {
 
+    @SuppressWarnings("unused")
     private final String carrier;
     private final Function<CodeGenerationParameter, String> absenceHandler;
 

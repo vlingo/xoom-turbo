@@ -7,6 +7,31 @@
 
 package io.vlingo.xoom.turbo.codegen.template.autodispatch;
 
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.CQRS;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.LANGUAGE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.REQUIRE_ENTITY_LOADING;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_PATH;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_SIGNATURE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.URI_ROOT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AUTO_DISPATCH_MAPPING;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACTOR;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.VALUE_OBJECT;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
@@ -16,24 +41,13 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.nio.file.Paths;
-
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACTOR;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.VALUE_OBJECT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class AutoDispatchMappingGenerationStepTest {
 
     @Test
     public void testThatAutoDispatchMappingsAreGenerated() throws IOException {
         final String basePackage = "io.vlingo.xoomapp";
+        @SuppressWarnings("unused")
         final String persistencePackage = basePackage + ".infrastructure.persistence";
 
         final CodeGenerationParameters parameters =

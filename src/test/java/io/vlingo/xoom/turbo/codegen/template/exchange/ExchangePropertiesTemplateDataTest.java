@@ -7,17 +7,19 @@
 
 package io.vlingo.xoom.turbo.codegen.template.exchange;
 
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
+import io.vlingo.xoom.turbo.codegen.template.TemplateData;
+import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
+import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 
 public class ExchangePropertiesTemplateDataTest {
 
     @Test
+    @SuppressWarnings("rawtypes")
     public void testThatTemplateParametersAreMapped() {
         final TemplateData data =
                 ExchangePropertiesTemplateData.from(CodeGenerationParametersBuilder.threeExchanges());
@@ -30,5 +32,4 @@ public class ExchangePropertiesTemplateDataTest {
         Assert.assertTrue(parameters.<List>find(TemplateParameter.EXCHANGE_NAMES).contains("book-exchange"));
         Assert.assertEquals("otherapp-exchange;author-exchange;book-exchange", parameters.find(TemplateParameter.INLINE_EXCHANGE_NAMES));
     }
-
 }

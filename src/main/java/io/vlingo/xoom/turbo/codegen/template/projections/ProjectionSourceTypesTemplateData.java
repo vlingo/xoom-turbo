@@ -6,6 +6,16 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.projections;
 
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_SOURCES;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_SOURCE_TYPES_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_SOURCE_TYPES_QUALIFIED_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_TYPE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION_SOURCE_TYPES;
+
+import java.util.List;
+
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
@@ -13,14 +23,9 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
-import java.util.List;
-
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION_SOURCE_TYPES;
-
 public class ProjectionSourceTypesTemplateData extends TemplateData {
 
+    @SuppressWarnings("unused")
     private final static String PACKAGE_PATTERN = "%s.%s";
 
 
@@ -72,5 +77,4 @@ public class ProjectionSourceTypesTemplateData extends TemplateData {
     public String filename() {
         return PROJECTION_SOURCE_TYPES.resolveFilename(parameters);
     }
-
 }

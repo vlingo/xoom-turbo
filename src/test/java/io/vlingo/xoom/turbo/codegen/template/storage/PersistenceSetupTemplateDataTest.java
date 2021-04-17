@@ -7,24 +7,49 @@
 
 package io.vlingo.xoom.turbo.codegen.template.storage;
 
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.ADAPTERS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.BASE_PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.DATA_OBJECTS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.IMPORTS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTIONS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERIES_ACTOR_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERIES_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERY_ALL_METHOD_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERY_BY_ID_METHOD_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.REQUIRE_ADAPTERS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STATE_DATA_OBJECT_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_ANNOTATIONS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_CQRS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_PROJECTIONS;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PERSISTENCE_SETUP;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACTOR;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.EVENT_BASED;
+import static io.vlingo.xoom.turbo.codegen.template.storage.Model.COMMAND;
+import static io.vlingo.xoom.turbo.codegen.template.storage.Model.QUERY;
+
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.nio.file.Paths;
-import java.util.*;
-
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
-import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.EVENT_BASED;
-import static io.vlingo.xoom.turbo.codegen.template.storage.Model.COMMAND;
-import static io.vlingo.xoom.turbo.codegen.template.storage.Model.QUERY;
 
 public class PersistenceSetupTemplateDataTest {
 
@@ -122,7 +147,10 @@ public class PersistenceSetupTemplateDataTest {
     }
 
     private static final Map<Model, DatabaseType> databaseTypes() {
-        return new HashMap<Model, DatabaseType>() {{
+        return new HashMap<Model, DatabaseType>() {
+          private static final long serialVersionUID = 1L;
+
+        {
             put(COMMAND, DatabaseType.HSQLDB);
             put(QUERY, DatabaseType.IN_MEMORY);
         }};

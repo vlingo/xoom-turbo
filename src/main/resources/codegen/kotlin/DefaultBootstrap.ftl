@@ -6,7 +6,6 @@ package ${packageName}
 import ${import.qualifiedClassName}
 </#list>
 
-import io.vlingo.xoom.actors.GridAddressFactory
 import io.vlingo.xoom.actors.Stage
 import io.vlingo.xoom.actors.World
 import io.vlingo.xoom.common.identity.IdentityGeneratorType
@@ -14,6 +13,7 @@ import io.vlingo.xoom.http.resource.Configuration.Sizing
 import io.vlingo.xoom.http.resource.Configuration.Timing
 import io.vlingo.xoom.http.resource.Resources
 import io.vlingo.xoom.http.resource.Server
+import io.vlingo.xoom.lattice.grid.GridAddressFactory
 
 public class Bootstrap {
   companion object {

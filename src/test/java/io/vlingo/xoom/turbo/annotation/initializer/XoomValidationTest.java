@@ -7,22 +7,24 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer;
 
-import io.vlingo.xoom.turbo.annotation.AnnotatedElements;
-import io.vlingo.xoom.turbo.annotation.ProcessingAnnotationException;
-import io.vlingo.xoom.turbo.annotation.Validation;
-import org.junit.Test;
-import org.mockito.Mockito;
+import static java.util.stream.Collectors.toSet;
+import static org.mockito.Mockito.when;
+
+import java.lang.annotation.Annotation;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
-import java.lang.annotation.Annotation;
-import java.util.Set;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toSet;
-import static org.mockito.Mockito.when;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import io.vlingo.xoom.turbo.annotation.AnnotatedElements;
+import io.vlingo.xoom.turbo.annotation.ProcessingAnnotationException;
+import io.vlingo.xoom.turbo.annotation.Validation;
 
 public class XoomValidationTest {
 
@@ -80,6 +82,7 @@ public class XoomValidationTest {
         Validation.classVisibilityValidation().validate(Mockito.mock(ProcessingEnvironment.class), Xoom.class, annotatedElements);
     }
 
+    @SuppressWarnings("unused")
     private Xoom createXoomAnnotation(final String name,
                                       final boolean blocking) {
       return new Xoom() {
@@ -101,5 +104,4 @@ public class XoomValidationTest {
 
         };
     }
-
 }

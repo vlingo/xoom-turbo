@@ -5,11 +5,11 @@ import ${import.qualifiedClassName};
 </#list>
 
 import io.vlingo.xoom.turbo.Boot;
-import io.vlingo.xoom.actors.Grid;
 import io.vlingo.xoom.http.resource.Configuration.Sizing;
 import io.vlingo.xoom.http.resource.Configuration.Timing;
 import io.vlingo.xoom.http.resource.Resources;
 import io.vlingo.xoom.http.resource.Server;
+import io.vlingo.xoom.lattice.grid.Grid;
 <#if hasExchange>
 import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
 </#if>
