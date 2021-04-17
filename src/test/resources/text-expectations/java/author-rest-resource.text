@@ -2,7 +2,7 @@ package io.vlingo.xoomapp.infrastructure.resource;
 
 import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoom.actors.Address;
-import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.http.ContentType;
 import io.vlingo.xoom.http.Response;

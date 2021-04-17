@@ -5,7 +5,7 @@ import ${import.qualifiedClassName};
 </#list>
 
 import io.vlingo.xoom.turbo.Boot;
-import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.http.resource.Configuration.Sizing;
 import io.vlingo.xoom.http.resource.Configuration.Timing;
 import io.vlingo.xoom.http.resource.Resources;

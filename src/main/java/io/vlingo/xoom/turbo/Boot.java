@@ -8,7 +8,7 @@
 package io.vlingo.xoom.turbo;
 
 import io.vlingo.xoom.actors.Configuration;
-import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.cluster.model.Properties;
 import io.vlingo.xoom.lattice.grid.GridClusterProperties;
 

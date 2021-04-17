@@ -1,6 +1,6 @@
 package ${packageName};
 
-import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoom.lattice.exchange.ExchangeReceiver;
 

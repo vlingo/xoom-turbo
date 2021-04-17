@@ -6,7 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo;
 
-import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.cluster.model.Properties;
 import io.vlingo.xoom.http.resource.Configuration;
 import io.vlingo.xoom.http.resource.StaticFilesConfiguration;

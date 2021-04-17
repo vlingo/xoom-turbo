@@ -8,7 +8,7 @@ import io.vlingo.xoom.actors.Address;
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.turbo.annotation.autodispatch.Handler;
 </#if>
-import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.http.ContentType;
 import io.vlingo.xoom.http.Response;

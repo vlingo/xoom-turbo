@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer;
 
-import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.turbo.XoomInitializationAware;
 
 /**

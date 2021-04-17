@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.turbo.exchange;
 
-import io.vlingo.xoom.actors.Grid;
+import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
 
