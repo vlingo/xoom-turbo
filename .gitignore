@@ -7,7 +7,7 @@ target/
 .DS_Store
 *.log
 build/
-
+.factorypath
 
 # Intellij
 .idea/
