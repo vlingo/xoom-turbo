@@ -18,8 +18,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface Model {
 
-    Class<?> protocol();
-    Class<? extends EntityActor> actor();
-    Class<?> data();
+  Class<?> protocol();
+
+  Class<? extends EntityActor> actor();
+
+  Class<?> data();
 
 }

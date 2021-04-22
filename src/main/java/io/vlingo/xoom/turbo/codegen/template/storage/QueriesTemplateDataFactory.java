@@ -24,41 +24,41 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT
 
 public class QueriesTemplateDataFactory {
 
-    public static List<TemplateData> from(final String persistencePackage,
-                                          final Boolean useCQRS,
-                                          final List<Content> contents) {
-        if(!useCQRS) {
-            return Collections.emptyList();
-        }
-        return ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents)
-                .stream().map(protocol -> createTemplates(protocol, persistencePackage, contents))
-                .flatMap(templateData ->  templateData.stream()).collect(Collectors.toList());
+  public static List<TemplateData> from(final String persistencePackage,
+                                        final Boolean useCQRS,
+                                        final List<Content> contents) {
+    if (!useCQRS) {
+      return Collections.emptyList();
     }
+    return ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents)
+            .stream().map(protocol -> createTemplates(protocol, persistencePackage, contents))
+            .flatMap(templateData -> templateData.stream()).collect(Collectors.toList());
+  }
 
-    private static List<TemplateData> createTemplates(final String protocol,
-                                                      final String persistencePackage,
-                                                      final List<Content> contents) {
-        final TemplateParameters parameters =
-                createParameters(persistencePackage, protocol, contents);
+  private static List<TemplateData> createTemplates(final String protocol,
+                                                    final String persistencePackage,
+                                                    final List<Content> contents) {
+    final TemplateParameters parameters =
+            createParameters(persistencePackage, protocol, contents);
 
-        return Arrays.asList(new QueriesTemplateData(protocol, parameters),
-                new QueriesActorTemplateData(protocol, parameters));
-    }
+    return Arrays.asList(new QueriesTemplateData(protocol, parameters),
+            new QueriesActorTemplateData(protocol, parameters));
+  }
 
-    private static TemplateParameters createParameters(final String persistencePackage,
-                                                       final String aggregateProtocol,
-                                                       final List<Content> contents) {
-        final String dataObjectName =
-                DATA_OBJECT.resolveClassname(aggregateProtocol);
+  private static TemplateParameters createParameters(final String persistencePackage,
+                                                     final String aggregateProtocol,
+                                                     final List<Content> contents) {
+    final String dataObjectName =
+            DATA_OBJECT.resolveClassname(aggregateProtocol);
 
-        final String dataObjectQualifiedName =
-                ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents);
+    final String dataObjectQualifiedName =
+            ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents);
 
-        return TemplateParameters.with(PACKAGE_NAME, persistencePackage)
-                .and(STATE_DATA_OBJECT_NAME, dataObjectName)
-                .and(QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregateProtocol))
-                .and(QUERY_ALL_METHOD_NAME, QueriesDetail.resolveQueryAllMethodName(aggregateProtocol))
-                .and(IMPORTS, ImportParameter.of(dataObjectQualifiedName));
-    }
+    return TemplateParameters.with(PACKAGE_NAME, persistencePackage)
+            .and(STATE_DATA_OBJECT_NAME, dataObjectName)
+            .and(QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregateProtocol))
+            .and(QUERY_ALL_METHOD_NAME, QueriesDetail.resolveQueryAllMethodName(aggregateProtocol))
+            .and(IMPORTS, ImportParameter.of(dataObjectQualifiedName));
+  }
 
 }

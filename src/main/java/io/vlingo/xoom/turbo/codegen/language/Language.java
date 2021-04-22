@@ -28,7 +28,9 @@ public enum Language {
   Language(final String extension,
            final String[] sourceFolder,
            final String[] testSourceFolder) {
-    this(extension, sourceFolder, testSourceFolder, params -> {}, params -> {});
+    this(extension, sourceFolder, testSourceFolder, params -> {
+    }, params -> {
+    });
   }
 
   Language(final String extension,
@@ -48,7 +50,7 @@ public enum Language {
   }
 
   public String formatFilename(final String fileName) {
-    if(fileName.contains(".")) {
+    if (fileName.contains(".")) {
       return fileName;
     }
     return fileName + "." + extension;

@@ -6,31 +6,6 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.projections;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.MODEL;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_SOURCES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_SOURCE_TYPES_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_SOURCE_TYPES_QUALIFIED_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_TYPE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STATE_DATA_OBJECT_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STATE_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORE_PROVIDER_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION_SOURCE_TYPES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
-import static io.vlingo.xoom.turbo.codegen.template.storage.Model.QUERY;
-import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.STATE_STORE;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
@@ -40,95 +15,105 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.template.storage.Model.QUERY;
+import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.STATE_STORE;
+
 public class ProjectionTemplateData extends TemplateData {
 
-    private static final String PACKAGE_PATTERN = "%s.%s.%s";
-    private static final String PARENT_PACKAGE_NAME = "infrastructure";
-    private static final String PERSISTENCE_PACKAGE_NAME = "persistence";
+  private static final String PACKAGE_PATTERN = "%s.%s.%s";
+  private static final String PARENT_PACKAGE_NAME = "infrastructure";
+  private static final String PERSISTENCE_PACKAGE_NAME = "persistence";
 
-    private final String protocolName;
-    private final TemplateParameters parameters;
+  private final String protocolName;
+  private final TemplateParameters parameters;
 
-    public static List<TemplateData> from(final String basePackage,
-                                          final Stream<CodeGenerationParameter> aggregates,
-                                          final List<CodeGenerationParameter> valueObjects,
-                                          final ProjectionType projectionType,
-                                          final List<Content> contents) {
-        return aggregates.map(aggregate -> {
-            return new ProjectionTemplateData(basePackage, aggregate, valueObjects, projectionType, contents);
-        }).collect(Collectors.toList());
-    }
+  public static List<TemplateData> from(final String basePackage,
+                                        final Stream<CodeGenerationParameter> aggregates,
+                                        final List<CodeGenerationParameter> valueObjects,
+                                        final ProjectionType projectionType,
+                                        final List<Content> contents) {
+    return aggregates.map(aggregate -> {
+      return new ProjectionTemplateData(basePackage, aggregate, valueObjects, projectionType, contents);
+    }).collect(Collectors.toList());
+  }
 
-    private ProjectionTemplateData(final String basePackage,
-                                   final CodeGenerationParameter aggregate,
-                                   final List<CodeGenerationParameter> valueObjects,
-                                   final ProjectionType projectionType,
-                                   final List<Content> contents) {
-        this.protocolName = aggregate.value;
-        this.parameters = loadParameters(basePackage, aggregate,
-                        valueObjects, projectionType, contents);
+  private ProjectionTemplateData(final String basePackage,
+                                 final CodeGenerationParameter aggregate,
+                                 final List<CodeGenerationParameter> valueObjects,
+                                 final ProjectionType projectionType,
+                                 final List<Content> contents) {
+    this.protocolName = aggregate.value;
+    this.parameters = loadParameters(basePackage, aggregate,
+            valueObjects, projectionType, contents);
 
-    }
+  }
 
-    private TemplateParameters loadParameters(final String basePackage,
-                                              final CodeGenerationParameter aggregate,
-                                              final List<CodeGenerationParameter> valueObjects,
-                                              final ProjectionType projectionType,
-                                              final List<Content> contents) {
-        final String projectionName = PROJECTION.resolveClassname(protocolName);
-        final String dataObjectName = DATA_OBJECT.resolveClassname(protocolName);
+  private TemplateParameters loadParameters(final String basePackage,
+                                            final CodeGenerationParameter aggregate,
+                                            final List<CodeGenerationParameter> valueObjects,
+                                            final ProjectionType projectionType,
+                                            final List<Content> contents) {
+    final String projectionName = PROJECTION.resolveClassname(protocolName);
+    final String dataObjectName = DATA_OBJECT.resolveClassname(protocolName);
 
-        final List<CodeGenerationParameter> events =
-                aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).collect(Collectors.toList());
+    final List<CodeGenerationParameter> events =
+            aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).collect(Collectors.toList());
 
-        final List<ProjectionSource> projectionSources =
-                ProjectionSource.from(projectionType, aggregate, events, valueObjects);
+    final List<ProjectionSource> projectionSources =
+            ProjectionSource.from(projectionType, aggregate, events, valueObjects);
 
-        return TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage)).and(MODEL, QUERY)
-                .and(PROJECTION_NAME, projectionName).and(PROJECTION_TYPE, projectionType)
-                .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
-                .and(STORAGE_TYPE, STATE_STORE).and(STATE_DATA_OBJECT_NAME, dataObjectName)
-                .and(PROJECTION_TYPE, projectionType).and(PROJECTION_SOURCES, projectionSources)
-                .andResolve(PROJECTION_SOURCE_TYPES_NAME, param -> PROJECTION_SOURCE_TYPES.resolveClassname(param))
-                .andResolve(STORE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param))
-                .addImports(resolveImports(dataObjectName, contents));
-    }
+    return TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage)).and(MODEL, QUERY)
+            .and(PROJECTION_NAME, projectionName).and(PROJECTION_TYPE, projectionType)
+            .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(protocolName))
+            .and(STORAGE_TYPE, STATE_STORE).and(STATE_DATA_OBJECT_NAME, dataObjectName)
+            .and(PROJECTION_TYPE, projectionType).and(PROJECTION_SOURCES, projectionSources)
+            .andResolve(PROJECTION_SOURCE_TYPES_NAME, param -> PROJECTION_SOURCE_TYPES.resolveClassname(param))
+            .andResolve(STORE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param))
+            .addImports(resolveImports(dataObjectName, contents));
+  }
 
-    private Set<String> resolveImports(final String dataObjectName,
-                                       final List<Content> contents) {
-        final String aggregatePackage =
-                ContentQuery.findPackage(AGGREGATE_PROTOCOL, protocolName, contents);
+  private Set<String> resolveImports(final String dataObjectName,
+                                     final List<Content> contents) {
+    final String aggregatePackage =
+            ContentQuery.findPackage(AGGREGATE_PROTOCOL, protocolName, contents);
 
-        final String dataObjectPackage =
-                ContentQuery.findPackage(DATA_OBJECT, dataObjectName, contents);
+    final String dataObjectPackage =
+            ContentQuery.findPackage(DATA_OBJECT, dataObjectName, contents);
 
-        return Stream.of(CodeElementFormatter.importAllFrom(aggregatePackage),
-                CodeElementFormatter.importAllFrom(dataObjectPackage)).collect(Collectors.toSet());
-    }
+    return Stream.of(CodeElementFormatter.importAllFrom(aggregatePackage),
+            CodeElementFormatter.importAllFrom(dataObjectPackage)).collect(Collectors.toSet());
+  }
 
-    @SuppressWarnings("unused")
-    private String retrieveProjectionSourceTypesQualifiedName(final List<TemplateData> templatesData) {
-        return templatesData.stream().filter(data -> data.hasStandard(PROJECTION_SOURCE_TYPES))
-                .map(data -> data.parameters().<String>find(PROJECTION_SOURCE_TYPES_QUALIFIED_NAME))
-                .findFirst().get();
-    }
+  @SuppressWarnings("unused")
+  private String retrieveProjectionSourceTypesQualifiedName(final List<TemplateData> templatesData) {
+    return templatesData.stream().filter(data -> data.hasStandard(PROJECTION_SOURCE_TYPES))
+            .map(data -> data.parameters().<String>find(PROJECTION_SOURCE_TYPES_QUALIFIED_NAME))
+            .findFirst().get();
+  }
 
-    private String resolvePackage(final String basePackage) {
-        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME).toLowerCase();
-    }
+  private String resolvePackage(final String basePackage) {
+    return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME).toLowerCase();
+  }
 
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
 
-    @Override
-    public TemplateStandard standard() {
-        return PROJECTION;
-    }
+  @Override
+  public TemplateStandard standard() {
+    return PROJECTION;
+  }
 
-    @Override
-    public String filename() {
-        return standard().resolveFilename(protocolName, parameters);
-    }
+  @Override
+  public String filename() {
+    return standard().resolveFilename(protocolName, parameters);
+  }
 }

@@ -23,35 +23,35 @@ import java.util.stream.Stream;
 
 public class XoomInitializerGenerator {
 
-    private static XoomInitializerGenerator instance;
+  private static XoomInitializerGenerator instance;
 
-    private XoomInitializerGenerator() {
+  private XoomInitializerGenerator() {
+  }
+
+  public static XoomInitializerGenerator instance() {
+    if (instance == null) {
+      instance = new XoomInitializerGenerator();
     }
+    return instance;
+  }
 
-    public static XoomInitializerGenerator instance() {
-        if(instance == null) {
-            instance = new XoomInitializerGenerator();
-        }
-        return instance;
+  public void generateFrom(final ProcessingEnvironment environment,
+                           final AnnotatedElements annotatedElements) {
+    try {
+      final String basePackage =
+              XoomInitializerPackage.from(environment, annotatedElements);
+
+      final CodeGenerationContext context =
+              CodeGenerationContextLoader.from(environment.getFiler(), basePackage,
+                      annotatedElements, environment);
+
+      Stream.of(new ProjectionGenerationStep(), new StorageGenerationStep(),
+              new AutoDispatchResourceHandlerGenerationStep(),
+              new BootstrapGenerationStep(), new ContentCreationStep())
+              .filter(step -> step.shouldProcess(context)).forEach(step -> step.process(context));
+    } catch (final CodeGenerationException exception) {
+      throw new ProcessingAnnotationException(exception);
     }
-
-    public void generateFrom(final ProcessingEnvironment environment,
-                             final AnnotatedElements annotatedElements) {
-        try {
-            final String basePackage =
-                    XoomInitializerPackage.from(environment, annotatedElements);
-
-            final CodeGenerationContext context =
-                    CodeGenerationContextLoader.from(environment.getFiler(), basePackage,
-                            annotatedElements, environment);
-
-            Stream.of(new ProjectionGenerationStep(), new StorageGenerationStep(),
-                    new AutoDispatchResourceHandlerGenerationStep(),
-                    new BootstrapGenerationStep(), new ContentCreationStep())
-                    .filter(step -> step.shouldProcess(context)).forEach(step -> step.process(context));
-        } catch (final CodeGenerationException exception) {
-            throw new ProcessingAnnotationException(exception);
-        }
-    }
+  }
 
 }

@@ -6,9 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.model.valueobject;
 
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 
 import java.util.ArrayList;
 import java.util.List;

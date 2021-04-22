@@ -21,30 +21,30 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 public abstract class AnnotationProcessor extends AbstractProcessor {
 
-    protected ProcessingEnvironment environment;
+  protected ProcessingEnvironment environment;
 
-    @Override
-    public synchronized void init(final ProcessingEnvironment environment) {
-        super.init(environment);
-        this.environment = environment;
+  @Override
+  public synchronized void init(final ProcessingEnvironment environment) {
+    super.init(environment);
+    this.environment = environment;
+  }
+
+  @Override
+  public boolean process(final Set<? extends TypeElement> set,
+                         final RoundEnvironment roundEnvironment) {
+    final AnnotatedElements annotatedElements =
+            AnnotatedElements.from(roundEnvironment, supportedAnnotationClasses());
+
+    if (annotatedElements.exists()) {
+      try {
+        generate(annotatedElements);
+      } catch (final ProcessingAnnotationException exception) {
+        printError(environment.getMessager(), exception);
+      }
     }
 
-    @Override
-    public boolean process(final Set<? extends TypeElement> set,
-                           final RoundEnvironment roundEnvironment) {
-        final AnnotatedElements annotatedElements =
-                AnnotatedElements.from(roundEnvironment, supportedAnnotationClasses());
-
-        if(annotatedElements.exists()) {
-            try {
-                generate(annotatedElements);
-            } catch (final ProcessingAnnotationException exception) {
-                printError(environment.getMessager(), exception);
-            }
-        }
-
-        return true;
-    }
+    return true;
+  }
 
 //    @SuppressWarnings({ "rawtypes", "unchecked" })
 //    private Map<Class, Set<Element>> filterAnnotatedElements(final RoundEnvironment environment) {
@@ -57,28 +57,28 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
 //                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 //    }
 
-    protected abstract void generate(final AnnotatedElements annotatedElements);
+  protected abstract void generate(final AnnotatedElements annotatedElements);
 
-    @SuppressWarnings("rawtypes")
-    public abstract Stream<Class> supportedAnnotationClasses();
+  @SuppressWarnings("rawtypes")
+  public abstract Stream<Class> supportedAnnotationClasses();
 
-    private void printError(final Messager messager,
-                            final ProcessingAnnotationException exception) {
-        if(exception.element == null) {
-            messager.printMessage(ERROR, exception.getMessage());
-        } else {
-            messager.printMessage(ERROR, exception.getMessage(), exception.element);
-        }
+  private void printError(final Messager messager,
+                          final ProcessingAnnotationException exception) {
+    if (exception.element == null) {
+      messager.printMessage(ERROR, exception.getMessage());
+    } else {
+      messager.printMessage(ERROR, exception.getMessage(), exception.element);
     }
+  }
 
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return supportedAnnotationClasses().map(Class::getCanonicalName).collect(Collectors.toSet());
-    }
+  @Override
+  public Set<String> getSupportedAnnotationTypes() {
+    return supportedAnnotationClasses().map(Class::getCanonicalName).collect(Collectors.toSet());
+  }
 
-    @Override
-    public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.latestSupported();
-    }
+  @Override
+  public SourceVersion getSupportedSourceVersion() {
+    return SourceVersion.latestSupported();
+  }
 
 }

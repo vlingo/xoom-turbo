@@ -47,7 +47,7 @@ public enum TemplateStandard {
           (name, parameters) -> name + "QueriesActor"),
 
   DATA_OBJECT(parameters -> parameters.has(STATE_DATA_OBJECT_NAME) ?
-          Template.STATE_DATA_OBJECT.filename : VALUE_DATA_OBJECT.filename ,
+          Template.STATE_DATA_OBJECT.filename : VALUE_DATA_OBJECT.filename,
           (name, parameters) -> name + "Data"),
 
   REST_RESOURCE(parameters -> Template.REST_RESOURCE.filename,
@@ -57,11 +57,11 @@ public enum TemplateStandard {
     final String httpMethod =
             parameters.find(TemplateParameter.ROUTE_METHOD);
 
-    if(Method.from(httpMethod).isGET()) {
+    if (Method.from(httpMethod).isGET()) {
       return Template.REST_RESOURCE_RETRIEVE_METHOD.filename;
     }
 
-    if(parameters.find(REQUIRE_ENTITY_LOADING, false)) {
+    if (parameters.find(REQUIRE_ENTITY_LOADING, false)) {
       return Template.REST_RESOURCE_UPDATE_METHOD.filename;
     }
 
@@ -141,7 +141,7 @@ public enum TemplateStandard {
           (name, parameters) -> {
             final StorageType storageType = parameters.find(STORAGE_TYPE);
             final Model model = parameters.find(MODEL);
-            if(model.isQueryModel()) {
+            if (model.isQueryModel()) {
               return STATE_STORE.resolveProviderNameFrom(model);
             }
             return storageType.resolveProviderNameFrom(model);
@@ -155,7 +155,7 @@ public enum TemplateStandard {
 
   ENTITY_UNIT_TEST(parameters -> {
     final StorageType storageType = parameters.find(STORAGE_TYPE);
-    if(storageType.isSourced()) {
+    if (storageType.isSourced()) {
       return Template.EVENT_SOURCED_ENTITY_UNIT_TEST.filename;
     }
     return Template.STATEFUL_ENTITY_UNIT_TEST.filename;
@@ -163,7 +163,7 @@ public enum TemplateStandard {
 
   MOCK_DISPATCHER(parameters -> {
     final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
-    if(projectionType.isOperationBased()) {
+    if (projectionType.isOperationBased()) {
       return Template.OPERATION_BASED_MOCK_DISPATCHER.filename;
     }
     return Template.EVENT_BASED_MOCK_DISPATCHER.filename;

@@ -17,14 +17,14 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.USE_AUTO_DISPATCH;
 
 public class AutoDispatchResourceHandlerGenerationStep extends TemplateProcessingStep {
 
-    @Override
-    protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        return AutoDispatchResourceHandlerTemplateData.from(context);
-    }
+  @Override
+  protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
+    return AutoDispatchResourceHandlerTemplateData.from(context);
+  }
 
-    @Override
-    public boolean shouldProcess(final CodeGenerationContext context) {
-        return context.hasParameter(USE_AUTO_DISPATCH) && context.parameterOf(USE_AUTO_DISPATCH, Boolean::valueOf);
-    }
+  @Override
+  public boolean shouldProcess(final CodeGenerationContext context) {
+    return context.hasParameter(USE_AUTO_DISPATCH) && context.parameterOf(USE_AUTO_DISPATCH, Boolean::valueOf);
+  }
 
 }

@@ -30,61 +30,61 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.EXCHANGE_BO
 
 public class ExchangeBootstrapTemplateData extends TemplateData {
 
-    private final TemplateParameters parameters;
+  private final TemplateParameters parameters;
 
-    public static TemplateData from(final String exchangePackage,
-                                    final Stream<CodeGenerationParameter> aggregates,
-                                    final List<Content> contents) {
-        final List<CodeGenerationParameter> exchanges =
-                 aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
-                        .collect(Collectors.toList());
+  public static TemplateData from(final String exchangePackage,
+                                  final Stream<CodeGenerationParameter> aggregates,
+                                  final List<Content> contents) {
+    final List<CodeGenerationParameter> exchanges =
+            aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
+                    .collect(Collectors.toList());
 
-        return new ExchangeBootstrapTemplateData(exchangePackage, exchanges, contents);
-    }
+    return new ExchangeBootstrapTemplateData(exchangePackage, exchanges, contents);
+  }
 
-    public ExchangeBootstrapTemplateData(final String exchangePackage,
-                                         final List<CodeGenerationParameter> exchanges,
-                                         final List<Content> contents) {
-        parameters =
+  public ExchangeBootstrapTemplateData(final String exchangePackage,
+                                       final List<CodeGenerationParameter> exchanges,
+                                       final List<Content> contents) {
+    parameters =
             TemplateParameters.with(PACKAGE_NAME, exchangePackage).and(EXCHANGES, Exchange.from(exchanges))
                     .and(EXCHANGE_BOOTSTRAP_NAME, EXCHANGE_BOOTSTRAP.resolveClassname())
                     .and(PRODUCER_EXCHANGES, joinProducerExchangeNames(exchanges))
                     .addImports(resolveImports(exchanges, contents));
+  }
+
+  private String joinProducerExchangeNames(final List<CodeGenerationParameter> exchanges) {
+    final Predicate<CodeGenerationParameter> onlyProducers =
+            exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
+
+    return exchanges.stream().filter(onlyProducers).map(Formatter::formatExchangeVariableName)
+            .distinct().collect(Collectors.joining(", "));
+  }
+
+  private Set<String> resolveImports(final List<CodeGenerationParameter> exchanges,
+                                     final List<Content> contents) {
+    final Set<String> imports = exchanges.stream()
+            .filter(exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer())
+            .map(exchange -> DATA_OBJECT.resolveClassname(exchange.parent(Label.AGGREGATE).value))
+            .map(dataObjectName -> ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents))
+            .collect(Collectors.toSet());
+
+    final Predicate<CodeGenerationParameter> hasProducerExchanges =
+            exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
+
+    if (exchanges.stream().anyMatch(hasProducerExchanges)) {
+      imports.add(IdentifiedDomainEvent.class.getCanonicalName());
     }
 
-    private String joinProducerExchangeNames(final List<CodeGenerationParameter> exchanges) {
-        final Predicate<CodeGenerationParameter> onlyProducers =
-                exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
+    return imports;
+  }
 
-        return exchanges.stream().filter(onlyProducers).map(Formatter::formatExchangeVariableName)
-                .distinct().collect(Collectors.joining(", "));
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
 
-    private Set<String> resolveImports(final List<CodeGenerationParameter> exchanges,
-                                       final List<Content> contents) {
-        final Set<String> imports = exchanges.stream()
-                .filter(exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer())
-                .map(exchange -> DATA_OBJECT.resolveClassname(exchange.parent(Label.AGGREGATE).value))
-                .map(dataObjectName -> ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents))
-                .collect(Collectors.toSet());
-
-        final Predicate<CodeGenerationParameter> hasProducerExchanges =
-                exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
-
-        if(exchanges.stream().anyMatch(hasProducerExchanges)) {
-            imports.add(IdentifiedDomainEvent.class.getCanonicalName());
-        }
-
-        return imports;
-    }
-
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
-
-    @Override
-    public TemplateStandard standard() {
-        return EXCHANGE_BOOTSTRAP;
-    }
+  @Override
+  public TemplateStandard standard() {
+    return EXCHANGE_BOOTSTRAP;
+  }
 }

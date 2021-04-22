@@ -22,57 +22,57 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.ADAPTER;
 
 public class AdapterTemplateData extends TemplateData {
 
-    private final String sourceClassName;
-    private final TemplateStandard sourceClassStandard;
-    private final TemplateParameters parameters;
+  private final String sourceClassName;
+  private final TemplateStandard sourceClassStandard;
+  private final TemplateParameters parameters;
 
-    public static List<TemplateData> from(final String persistencePackage,
-                                          final StorageType storageType,
-                                          final List<Content> contents) {
-        return ContentQuery.findClassNames(storageType.adapterSourceClassStandard, contents)
-                    .stream().map(sourceClassName ->
-                        new AdapterTemplateData(sourceClassName,
-                                storageType.adapterSourceClassStandard,
-                                persistencePackage, storageType, contents)
-                    ).collect(Collectors.toList());
-    }
+  public static List<TemplateData> from(final String persistencePackage,
+                                        final StorageType storageType,
+                                        final List<Content> contents) {
+    return ContentQuery.findClassNames(storageType.adapterSourceClassStandard, contents)
+            .stream().map(sourceClassName ->
+                    new AdapterTemplateData(sourceClassName,
+                            storageType.adapterSourceClassStandard,
+                            persistencePackage, storageType, contents)
+            ).collect(Collectors.toList());
+  }
 
-    public AdapterTemplateData(final String sourceClassName,
-                               final TemplateStandard sourceClassStandard,
-                               final String persistencePackage,
-                               final StorageType storageType,
-                               final List<Content> contents) {
-        this.sourceClassName = sourceClassName;
-        this.sourceClassStandard = sourceClassStandard;
-        this.parameters = loadParameters(persistencePackage, storageType, contents);
-    }
+  public AdapterTemplateData(final String sourceClassName,
+                             final TemplateStandard sourceClassStandard,
+                             final String persistencePackage,
+                             final StorageType storageType,
+                             final List<Content> contents) {
+    this.sourceClassName = sourceClassName;
+    this.sourceClassStandard = sourceClassStandard;
+    this.parameters = loadParameters(persistencePackage, storageType, contents);
+  }
 
-    private TemplateParameters loadParameters(final String packageName,
-                                              final StorageType storageType,
-                                              final List<Content> contents) {
-        final String sourceQualifiedClassName =
-                ContentQuery.findFullyQualifiedClassName(sourceClassStandard, sourceClassName, contents);
+  private TemplateParameters loadParameters(final String packageName,
+                                            final StorageType storageType,
+                                            final List<Content> contents) {
+    final String sourceQualifiedClassName =
+            ContentQuery.findFullyQualifiedClassName(sourceClassStandard, sourceClassName, contents);
 
-        return TemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(IMPORTS, ImportParameter.of(sourceQualifiedClassName))
-                .and(SOURCE_NAME, sourceClassName)
-                .and(ADAPTER_NAME, ADAPTER.resolveClassname(sourceClassName))
-                .and(STORAGE_TYPE, storageType);
-    }
+    return TemplateParameters.with(PACKAGE_NAME, packageName)
+            .and(IMPORTS, ImportParameter.of(sourceQualifiedClassName))
+            .and(SOURCE_NAME, sourceClassName)
+            .and(ADAPTER_NAME, ADAPTER.resolveClassname(sourceClassName))
+            .and(STORAGE_TYPE, storageType);
+  }
 
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
 
-    @Override
-    public String filename() {
-        return standard().resolveFilename(sourceClassName, parameters);
-    }
+  @Override
+  public String filename() {
+    return standard().resolveFilename(sourceClassName, parameters);
+  }
 
-    @Override
-    public TemplateStandard standard() {
-        return ADAPTER;
-    }
+  @Override
+  public TemplateStandard standard() {
+    return ADAPTER;
+  }
 
 }

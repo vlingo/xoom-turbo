@@ -22,36 +22,36 @@ import static org.apache.commons.io.filefilter.TrueFileFilter.INSTANCE;
 
 public class PackageCollector {
 
-    private final Path projectPath;
-    private final String basePackage;
+  private final Path projectPath;
+  private final String basePackage;
 
-    private static final String[] SOURCE_FOLDER_PATH = new String[]{"src", "main", "java"};
+  private static final String[] SOURCE_FOLDER_PATH = new String[]{"src", "main", "java"};
 
-    public static PackageCollector from(final Path projectPath, final String basePackage) {
-        return new PackageCollector(projectPath, basePackage);
-    }
+  public static PackageCollector from(final Path projectPath, final String basePackage) {
+    return new PackageCollector(projectPath, basePackage);
+  }
 
-    private PackageCollector(final Path projectPath, final String basePackage) {
-        this.basePackage = basePackage;
-        this.projectPath = projectPath;
-    }
+  private PackageCollector(final Path projectPath, final String basePackage) {
+    this.basePackage = basePackage;
+    this.projectPath = projectPath;
+  }
 
-    public Set<String> collectAll() {
-        final File basePackageDirectory = resolvePackagePath(this.basePackage).toFile();
-        final int sourceFolderPathLength = resolveSourceFolderPath().toString().length() + 1;
-        final Function<String, String> packageFormatter = path -> path.replaceAll("(\\\\|/)", ".");
-        final Function<String, String> rootPathRemover = path -> path.substring(sourceFolderPathLength);
-        return FileUtils.listFilesAndDirs(basePackageDirectory, new NotFileFilter(INSTANCE), DIRECTORY).stream()
-                .map(File::getAbsolutePath).map(rootPathRemover).map(packageFormatter).collect(toSet());
-    }
+  public Set<String> collectAll() {
+    final File basePackageDirectory = resolvePackagePath(this.basePackage).toFile();
+    final int sourceFolderPathLength = resolveSourceFolderPath().toString().length() + 1;
+    final Function<String, String> packageFormatter = path -> path.replaceAll("(\\\\|/)", ".");
+    final Function<String, String> rootPathRemover = path -> path.substring(sourceFolderPathLength);
+    return FileUtils.listFilesAndDirs(basePackageDirectory, new NotFileFilter(INSTANCE), DIRECTORY).stream()
+            .map(File::getAbsolutePath).map(rootPathRemover).map(packageFormatter).collect(toSet());
+  }
 
-    private Path resolvePackagePath(final String packageName) {
-        final String sourceFolderPath = resolveSourceFolderPath().toString();
-        return Paths.get(sourceFolderPath, packageName.split("\\."));
-    }
+  private Path resolvePackagePath(final String packageName) {
+    final String sourceFolderPath = resolveSourceFolderPath().toString();
+    return Paths.get(sourceFolderPath, packageName.split("\\."));
+  }
 
-    private Path resolveSourceFolderPath() {
-        return Paths.get(projectPath.toString(), SOURCE_FOLDER_PATH);
-    }
+  private Path resolveSourceFolderPath() {
+    return Paths.get(projectPath.toString(), SOURCE_FOLDER_PATH);
+  }
 
 }

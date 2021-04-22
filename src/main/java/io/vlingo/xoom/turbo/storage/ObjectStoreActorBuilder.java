@@ -16,16 +16,16 @@ import java.util.List;
 
 public class ObjectStoreActorBuilder implements StoreActorBuilder {
 
-    @Override
-    @SuppressWarnings("rawtypes")
-    public <T> T build(final Stage stage, final List<Dispatcher> dispatchers, final Configuration configuration) {
-        //TODO: Implement Object Store Actor Builder
-        throw new UnsupportedOperationException("Object Store is not supported");
-    }
+  @Override
+  @SuppressWarnings("rawtypes")
+  public <T> T build(final Stage stage, final List<Dispatcher> dispatchers, final Configuration configuration) {
+    //TODO: Implement Object Store Actor Builder
+    throw new UnsupportedOperationException("Object Store is not supported");
+  }
 
-    @Override
-    public boolean support(final StorageType storageType, final DatabaseType databaseType) {
-        return storageType.isObjectStore();
-    }
+  @Override
+  public boolean support(final StorageType storageType, final DatabaseType databaseType) {
+    return storageType.isObjectStore();
+  }
 
 }

@@ -18,8 +18,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface Route {
 
-    Method method();
-    String path() default "";
-    int handler() default -1;
+  Method method();
+
+  String path() default "";
+
+  int handler() default -1;
 
 }

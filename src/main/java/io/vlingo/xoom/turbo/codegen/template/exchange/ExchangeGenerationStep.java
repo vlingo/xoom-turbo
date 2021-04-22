@@ -20,31 +20,31 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 
 public class ExchangeGenerationStep extends TemplateProcessingStep {
 
-    @Override
-    protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final Language language =
-                context.parameterOf(LANGUAGE, Language::valueOf);
+  @Override
+  protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
+    final Language language =
+            context.parameterOf(LANGUAGE, Language::valueOf);
 
-        final List<CodeGenerationParameter> valueObjects =
-                context.parametersOf(VALUE_OBJECT).collect(Collectors.toList());
+    final List<CodeGenerationParameter> valueObjects =
+            context.parametersOf(VALUE_OBJECT).collect(Collectors.toList());
 
-        final List<CodeGenerationParameter> aggregates =
-                context.parametersOf(AGGREGATE).filter(aggregate -> aggregate.hasAny(EXCHANGE))
-                .collect(Collectors.toList());
+    final List<CodeGenerationParameter> aggregates =
+            context.parametersOf(AGGREGATE).filter(aggregate -> aggregate.hasAny(EXCHANGE))
+                    .collect(Collectors.toList());
 
-        return ExchangeTemplateDataFactory.build(language, resolvePackage(context), aggregates, valueObjects, context.contents());
+    return ExchangeTemplateDataFactory.build(language, resolvePackage(context), aggregates, valueObjects, context.contents());
+  }
+
+  private String resolvePackage(final CodeGenerationContext context) {
+    return String.format("%s.%s.%s", context.parameterOf(PACKAGE), "infrastructure", "exchange");
+  }
+
+  @Override
+  public boolean shouldProcess(final CodeGenerationContext context) {
+    if (!context.hasParameter(AGGREGATE)) {
+      return false;
     }
-
-    private String resolvePackage(final CodeGenerationContext context) {
-        return String.format("%s.%s.%s", context.parameterOf(PACKAGE), "infrastructure", "exchange");
-    }
-
-    @Override
-    public boolean shouldProcess(final CodeGenerationContext context) {
-        if(!context.hasParameter(AGGREGATE)) {
-            return false;
-        }
-        return context.parametersOf(AGGREGATE).anyMatch(aggregate -> aggregate.hasAny(EXCHANGE));
-    }
+    return context.parametersOf(AGGREGATE).anyMatch(aggregate -> aggregate.hasAny(EXCHANGE));
+  }
 
 }

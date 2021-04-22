@@ -20,69 +20,69 @@ import java.util.function.Function;
 
 public enum Database {
 
-    IN_MEMORY(parameters -> null),
+  IN_MEMORY(parameters -> null),
 
-    POSTGRES(parameters ->
-    {
-        try {
-            return PostgresConfigurationProvider.configuration(DataFormat.Text,
-                    parameters.url, parameters.name, parameters.username,
-                    parameters.password, parameters.originator, parameters.autoCreate);
-        } catch (final Exception e) {
-            throw new StorageException(Result.Error, e.getMessage());
-        }
-    }),
+  POSTGRES(parameters ->
+  {
+    try {
+      return PostgresConfigurationProvider.configuration(DataFormat.Text,
+              parameters.url, parameters.name, parameters.username,
+              parameters.password, parameters.originator, parameters.autoCreate);
+    } catch (final Exception e) {
+      throw new StorageException(Result.Error, e.getMessage());
+    }
+  }),
 
-    HSQLDB(parameters ->
-    {
-        try {
-            return HSQLDBConfigurationProvider.configuration(DataFormat.Text,
-                    parameters.url, parameters.name, parameters.username,
-                    parameters.password, parameters.originator, true);
-        } catch (final Exception e) {
-            throw new StorageException(Result.Error, e.getMessage());
-        }
-    }),
+  HSQLDB(parameters ->
+  {
+    try {
+      return HSQLDBConfigurationProvider.configuration(DataFormat.Text,
+              parameters.url, parameters.name, parameters.username,
+              parameters.password, parameters.originator, true);
+    } catch (final Exception e) {
+      throw new StorageException(Result.Error, e.getMessage());
+    }
+  }),
 
-    MYSQL(parameters ->
-    {
-        try {
-            return MySQLConfigurationProvider.configuration(DataFormat.Text,
-                    parameters.url, parameters.name, parameters.username,
-                    parameters.password, parameters.originator, true);
-        } catch (final Exception e) {
-            throw new StorageException(Result.Error, e.getMessage());
-        }
-    }),
+  MYSQL(parameters ->
+  {
+    try {
+      return MySQLConfigurationProvider.configuration(DataFormat.Text,
+              parameters.url, parameters.name, parameters.username,
+              parameters.password, parameters.originator, true);
+    } catch (final Exception e) {
+      throw new StorageException(Result.Error, e.getMessage());
+    }
+  }),
 
-    YUGA_BYTE(parameters ->
-    {
-        try {
-            return YugaByteConfigurationProvider.configuration(DataFormat.Text,
-                    parameters.url, parameters.name, parameters.username,
-                    parameters.password, parameters.originator, true);
-        } catch (final Exception e) {
-            throw new StorageException(Result.Error, e.getMessage());
-        }
-    });
+  YUGA_BYTE(parameters ->
+  {
+    try {
+      return YugaByteConfigurationProvider.configuration(DataFormat.Text,
+              parameters.url, parameters.name, parameters.username,
+              parameters.password, parameters.originator, true);
+    } catch (final Exception e) {
+      throw new StorageException(Result.Error, e.getMessage());
+    }
+  });
 
-    public final Function<DatabaseParameters, Configuration> mapper;
+  public final Function<DatabaseParameters, Configuration> mapper;
 
-    Database(final Function<DatabaseParameters, Configuration> mapper) {
-        this.mapper = mapper;
+  Database(final Function<DatabaseParameters, Configuration> mapper) {
+    this.mapper = mapper;
+  }
+
+  public static Database from(final String name) {
+    if (name == null) {
+      return null;
     }
 
-    public static Database from(final String name) {
-        if(name == null) {
-            return null;
-        }
+    final Database database = valueOf(name.trim().toUpperCase());
 
-        final Database database = valueOf(name.trim().toUpperCase());
-
-        if(database == null) {
-            throw new IllegalArgumentException("The informed database is not supported");
-        }
-
-        return database;
+    if (database == null) {
+      throw new IllegalArgumentException("The informed database is not supported");
     }
+
+    return database;
+  }
 }

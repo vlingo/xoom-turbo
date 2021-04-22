@@ -17,51 +17,51 @@ import io.vlingo.xoom.turbo.codegen.template.storage.StorageType;
 
 import java.util.List;
 
+import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Arguments.AGGREGATE_METHOD_INVOCATION;
+import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Arguments.AGGREGATE_METHOD_INVOCATION;
-import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodTemplateData extends TemplateData {
 
-    private final TemplateParameters parameters;
+  private final TemplateParameters parameters;
 
-    public static List<TemplateData> from(final CodeGenerationParameter aggregate,
-                                          final StorageType storageType,
-                                          final ProjectionType projectionType) {
-        return aggregate.retrieveAllRelated(AGGREGATE_METHOD)
-                .map(method -> new AggregateMethodTemplateData(method, storageType, projectionType))
-                .collect(toList());
-    }
-
-    private AggregateMethodTemplateData(final CodeGenerationParameter method,
+  public static List<TemplateData> from(final CodeGenerationParameter aggregate,
                                         final StorageType storageType,
                                         final ProjectionType projectionType) {
-        this.parameters =
-                TemplateParameters.with(METHOD_NAME, method.value).and(STORAGE_TYPE, storageType)
-                        .and(DOMAIN_EVENT_NAME, method.retrieveRelatedValue(DOMAIN_EVENT))
-                        .and(METHOD_INVOCATION_PARAMETERS, AGGREGATE_METHOD_INVOCATION.format(method))
-                        .and(METHOD_PARAMETERS, SIGNATURE_DECLARATION.format(method))
-                        .and(SOURCED_EVENTS, SourcedEvent.from(method.parent()))
-                        .and(OPERATION_BASED, projectionType.isOperationBased())
-                        .and(PROJECTION_SOURCE_TYPES_NAME, resolveProjectionSourceTypesName(projectionType))
-                        .and(STATE_NAME, TemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(AGGREGATE).value));
-    }
+    return aggregate.retrieveAllRelated(AGGREGATE_METHOD)
+            .map(method -> new AggregateMethodTemplateData(method, storageType, projectionType))
+            .collect(toList());
+  }
 
-    private String resolveProjectionSourceTypesName(final ProjectionType projectionType) {
-        return ProjectionSourceTypesDetail.resolveClassName(projectionType);
-    }
+  private AggregateMethodTemplateData(final CodeGenerationParameter method,
+                                      final StorageType storageType,
+                                      final ProjectionType projectionType) {
+    this.parameters =
+            TemplateParameters.with(METHOD_NAME, method.value).and(STORAGE_TYPE, storageType)
+                    .and(DOMAIN_EVENT_NAME, method.retrieveRelatedValue(DOMAIN_EVENT))
+                    .and(METHOD_INVOCATION_PARAMETERS, AGGREGATE_METHOD_INVOCATION.format(method))
+                    .and(METHOD_PARAMETERS, SIGNATURE_DECLARATION.format(method))
+                    .and(SOURCED_EVENTS, SourcedEvent.from(method.parent()))
+                    .and(OPERATION_BASED, projectionType.isOperationBased())
+                    .and(PROJECTION_SOURCE_TYPES_NAME, resolveProjectionSourceTypesName(projectionType))
+                    .and(STATE_NAME, TemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(AGGREGATE).value));
+  }
 
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
+  private String resolveProjectionSourceTypesName(final ProjectionType projectionType) {
+    return ProjectionSourceTypesDetail.resolveClassName(projectionType);
+  }
 
-    @Override
-    public TemplateStandard standard() {
-        return TemplateStandard.AGGREGATE_METHOD;
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
+
+  @Override
+  public TemplateStandard standard() {
+    return TemplateStandard.AGGREGATE_METHOD;
+  }
 
 }

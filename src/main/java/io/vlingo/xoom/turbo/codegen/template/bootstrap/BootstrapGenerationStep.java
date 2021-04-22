@@ -16,9 +16,9 @@ import java.util.List;
 
 public class BootstrapGenerationStep extends TemplateProcessingStep {
 
-    @Override
-    protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        return Arrays.asList(BootstrapTemplateData.from(context));
-    }
+  @Override
+  protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
+    return Arrays.asList(BootstrapTemplateData.from(context));
+  }
 
 }

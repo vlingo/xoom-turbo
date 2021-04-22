@@ -19,34 +19,34 @@ import java.util.stream.Collectors;
 
 public class HandlerResolver {
 
-    private static final String HANDLER_ENTRY_CLASSNAME = HandlerEntry.class.getCanonicalName();
+  private static final String HANDLER_ENTRY_CLASSNAME = HandlerEntry.class.getCanonicalName();
 
-    private final TypeReader handlersConfigReader;
-    private final List<HandlerInvocation> handlerInvocations = new ArrayList<>();
+  private final TypeReader handlersConfigReader;
+  private final List<HandlerInvocation> handlerInvocations = new ArrayList<>();
 
-    public static HandlerResolver with(final TypeElement handlersConfig,
-                                       final ProcessingEnvironment environment) {
-        return new HandlerResolver(handlersConfig, environment);
-    }
+  public static HandlerResolver with(final TypeElement handlersConfig,
+                                     final ProcessingEnvironment environment) {
+    return new HandlerResolver(handlersConfig, environment);
+  }
 
-    private HandlerResolver(final TypeElement handlersConfig,
-                            final ProcessingEnvironment environment) {
-        this.handlersConfigReader = TypeReader.from(environment, handlersConfig);
-        this.handlerInvocations.addAll(resolveInvocations());
-    }
+  private HandlerResolver(final TypeElement handlersConfig,
+                          final ProcessingEnvironment environment) {
+    this.handlersConfigReader = TypeReader.from(environment, handlersConfig);
+    this.handlerInvocations.addAll(resolveInvocations());
+  }
 
-    public HandlerInvocation find(final int index) {
-        return handlerInvocations.stream().filter(invocation -> invocation.index == index).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Handler Invocation with index " + index + " not found"));
-    }
+  public HandlerInvocation find(final int index) {
+    return handlerInvocations.stream().filter(invocation -> invocation.index == index).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Handler Invocation with index " + index + " not found"));
+  }
 
-    private List<HandlerInvocation> resolveInvocations() {
-        final Predicate<Element> onlyHandlerEntries =
-                element -> element.asType().toString().startsWith(HANDLER_ENTRY_CLASSNAME);
+  private List<HandlerInvocation> resolveInvocations() {
+    final Predicate<Element> onlyHandlerEntries =
+            element -> element.asType().toString().startsWith(HANDLER_ENTRY_CLASSNAME);
 
-        return handlersConfigReader.findMembers().stream().filter(onlyHandlerEntries)
-                .map(handlerEntry -> new HandlerInvocation(handlersConfigReader, handlerEntry))
-                .collect(Collectors.toList());
-    }
+    return handlersConfigReader.findMembers().stream().filter(onlyHandlerEntries)
+            .map(handlerEntry -> new HandlerInvocation(handlersConfigReader, handlerEntry))
+            .collect(Collectors.toList());
+  }
 
 }

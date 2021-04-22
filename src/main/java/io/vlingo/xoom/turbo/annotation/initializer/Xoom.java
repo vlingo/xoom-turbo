@@ -16,7 +16,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface Xoom {
 
-    String name();
-    boolean blocking() default false;
+  String name();
+
+  boolean blocking() default false;
 
 }

@@ -31,8 +31,8 @@ public class SourcedStateMethodInvocation implements Formatters.Arguments {
   private String resolveFieldAccess(final CodeGenerationParameter aggregate,
                                     final CodeGenerationParameter domainEvent,
                                     final CodeGenerationParameter methodParameter) {
-    if(DomainEventDetail.hasField(domainEvent, methodParameter.value)) {
-      return  "event." + methodParameter.value;
+    if (DomainEventDetail.hasField(domainEvent, methodParameter.value)) {
+      return "event." + methodParameter.value;
     }
     return FieldDetail.resolveDefaultValue(aggregate, methodParameter.value);
   }

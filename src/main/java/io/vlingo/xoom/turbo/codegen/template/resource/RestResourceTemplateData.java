@@ -33,109 +33,109 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class RestResourceTemplateData extends TemplateData {
 
-    private final String packageName;
-    private final String aggregateName;
-    private final TemplateParameters parameters;
+  private final String packageName;
+  private final String aggregateName;
+  private final TemplateParameters parameters;
 
-    @SuppressWarnings("unchecked")
-    public RestResourceTemplateData(final String basePackage,
-                                    final Language language,
-                                    final CodeGenerationParameter aggregateParameter,
-                                    final List<CodeGenerationParameter> valueObjects,
-                                    final List<Content> contents,
-                                    final Boolean useCQRS) {
-        this.aggregateName = aggregateParameter.value;
-        this.packageName = resolvePackage(basePackage);
-        this.parameters = loadParameters(aggregateParameter, contents, useCQRS);
-        this.dependOn(RouteMethodTemplateData.from(language, aggregateParameter, valueObjects, parameters));
+  @SuppressWarnings("unchecked")
+  public RestResourceTemplateData(final String basePackage,
+                                  final Language language,
+                                  final CodeGenerationParameter aggregateParameter,
+                                  final List<CodeGenerationParameter> valueObjects,
+                                  final List<Content> contents,
+                                  final Boolean useCQRS) {
+    this.aggregateName = aggregateParameter.value;
+    this.packageName = resolvePackage(basePackage);
+    this.parameters = loadParameters(aggregateParameter, contents, useCQRS);
+    this.dependOn(RouteMethodTemplateData.from(language, aggregateParameter, valueObjects, parameters));
+  }
+
+  private TemplateParameters loadParameters(final CodeGenerationParameter aggregateParameter,
+                                            final List<Content> contents,
+                                            final Boolean useCQRS) {
+    final String uriRoot =
+            aggregateParameter.retrieveRelatedValue(Label.URI_ROOT);
+
+    final Queries queries =
+            Queries.from(aggregateParameter, contents, useCQRS);
+
+    final Function<TemplateParameters, Object> modelProtocolResolver =
+            params -> requireModelTypes(aggregateParameter) ? aggregateName : "";
+
+    if (useCQRS) {
+      aggregateParameter.relate(RouteDetail.defaultQueryRoutes(aggregateParameter));
     }
 
-    private TemplateParameters loadParameters(final CodeGenerationParameter aggregateParameter,
-                                              final List<Content> contents,
-                                              final Boolean useCQRS) {
-        final String uriRoot =
-                aggregateParameter.retrieveRelatedValue(Label.URI_ROOT);
+    return TemplateParameters.with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
+            .and(QUERIES, queries).and(PACKAGE_NAME, packageName).and(USE_CQRS, useCQRS)
+            .and(ROUTE_DECLARATIONS, RouteDeclaration.from(aggregateParameter))
+            .addImports(resolveImports(aggregateParameter, contents, useCQRS))
+            .and(MODEL_ACTOR, AGGREGATE.resolveClassname(aggregateName))
+            .and(STORE_PROVIDER_NAME, resolveQueryStoreProviderName())
+            .and(URI_ROOT, PathFormatter.formatRootPath(uriRoot))
+            .andResolve(MODEL_PROTOCOL, modelProtocolResolver)
+            .and(ROUTE_METHODS, new ArrayList<String>())
+            .and(USE_AUTO_DISPATCH, false);
+  }
 
-        final Queries queries =
-                Queries.from(aggregateParameter, contents, useCQRS);
-
-        final Function<TemplateParameters, Object> modelProtocolResolver =
-                params -> requireModelTypes(aggregateParameter) ? aggregateName : "";
-
-        if(useCQRS) {
-            aggregateParameter.relate(RouteDetail.defaultQueryRoutes(aggregateParameter));
-        }
-
-        return TemplateParameters.with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
-                .and(QUERIES, queries).and(PACKAGE_NAME, packageName).and(USE_CQRS, useCQRS)
-                .and(ROUTE_DECLARATIONS, RouteDeclaration.from(aggregateParameter))
-                .addImports(resolveImports(aggregateParameter, contents, useCQRS))
-                .and(MODEL_ACTOR, AGGREGATE.resolveClassname(aggregateName))
-                .and(STORE_PROVIDER_NAME, resolveQueryStoreProviderName())
-                .and(URI_ROOT, PathFormatter.formatRootPath(uriRoot))
-                .andResolve(MODEL_PROTOCOL, modelProtocolResolver)
-                .and(ROUTE_METHODS, new ArrayList<String>())
-                .and(USE_AUTO_DISPATCH, false);
+  private Set<String> resolveImports(final CodeGenerationParameter aggregate,
+                                     final List<Content> contents,
+                                     final Boolean useCQRS) {
+    final Set<String> imports = new HashSet<>();
+    final Stream<CodeGenerationParameter> involvedStateFields = RouteDetail.findInvolvedStateFieldTypes(aggregate);
+    if (RouteDetail.requireEntityLoad(aggregate)) {
+      final String aggregateEntityName = AGGREGATE.resolveClassname(aggregateName);
+      imports.add(findFullyQualifiedClassName(AGGREGATE, aggregateEntityName, contents));
+      imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
+      imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
     }
-
-    private Set<String> resolveImports(final CodeGenerationParameter aggregate,
-                                       final List<Content> contents,
-                                       final Boolean useCQRS) {
-        final Set<String> imports = new HashSet<>();
-        final Stream<CodeGenerationParameter> involvedStateFields = RouteDetail.findInvolvedStateFieldTypes(aggregate);
-        if(RouteDetail.requireEntityLoad(aggregate)) {
-            final String aggregateEntityName = AGGREGATE.resolveClassname(aggregateName);
-            imports.add(findFullyQualifiedClassName(AGGREGATE, aggregateEntityName, contents));
-            imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
-            imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
-        }
-        if(RouteDetail.requireModelFactory(aggregate)) {
-            imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
-            imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
-        }
-        if(useCQRS) {
-            final String queriesName = TemplateStandard.QUERIES.resolveClassname(aggregateName);
-            imports.add(findFullyQualifiedClassName(STORE_PROVIDER, resolveQueryStoreProviderName(), contents));
-            imports.add(findFullyQualifiedClassName(TemplateStandard.QUERIES, queriesName, contents));
-        }
-        imports.addAll(ValueObjectDetail.resolveImports(contents, involvedStateFields));
-        return imports;
+    if (RouteDetail.requireModelFactory(aggregate)) {
+      imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
+      imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
     }
-
-    private String resolveQueryStoreProviderName() {
-        final TemplateParameters queryStoreProviderParameters =
-                TemplateParameters.with(STORAGE_TYPE, StorageType.STATE_STORE)
-                        .and(MODEL, Model.QUERY);
-
-        return STORE_PROVIDER.resolveClassname(queryStoreProviderParameters);
+    if (useCQRS) {
+      final String queriesName = TemplateStandard.QUERIES.resolveClassname(aggregateName);
+      imports.add(findFullyQualifiedClassName(STORE_PROVIDER, resolveQueryStoreProviderName(), contents));
+      imports.add(findFullyQualifiedClassName(TemplateStandard.QUERIES, queriesName, contents));
     }
+    imports.addAll(ValueObjectDetail.resolveImports(contents, involvedStateFields));
+    return imports;
+  }
 
-    private String resolvePackage(final String basePackage) {
-        return String.format("%s.%s.%s", basePackage, "infrastructure", "resource");
-    }
+  private String resolveQueryStoreProviderName() {
+    final TemplateParameters queryStoreProviderParameters =
+            TemplateParameters.with(STORAGE_TYPE, StorageType.STATE_STORE)
+                    .and(MODEL, Model.QUERY);
 
-    private boolean requireModelTypes(final CodeGenerationParameter aggregateParameter) {
-        return RouteDetail.requireEntityLoad(aggregateParameter);
-    }
+    return STORE_PROVIDER.resolveClassname(queryStoreProviderParameters);
+  }
 
-    @Override
-    public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {
-        this.parameters.<List<String>>find(ROUTE_METHODS).add(outcome);
-    }
+  private String resolvePackage(final String basePackage) {
+    return String.format("%s.%s.%s", basePackage, "infrastructure", "resource");
+  }
 
-    @Override
-    public TemplateStandard standard() {
-        return REST_RESOURCE;
-    }
+  private boolean requireModelTypes(final CodeGenerationParameter aggregateParameter) {
+    return RouteDetail.requireEntityLoad(aggregateParameter);
+  }
 
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
+  @Override
+  public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {
+    this.parameters.<List<String>>find(ROUTE_METHODS).add(outcome);
+  }
 
-    @Override
-    public String filename() {
-        return standard().resolveFilename(aggregateName, parameters);
-    }
+  @Override
+  public TemplateStandard standard() {
+    return REST_RESOURCE;
+  }
+
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
+
+  @Override
+  public String filename() {
+    return standard().resolveFilename(aggregateName, parameters);
+  }
 
 }

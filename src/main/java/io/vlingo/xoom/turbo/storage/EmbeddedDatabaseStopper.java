@@ -9,7 +9,7 @@ package io.vlingo.xoom.turbo.storage;
 
 public class EmbeddedDatabaseStopper {
 
-    public static void main(String [] args) {
-        EmbeddedDatabase.stop();
-    }
+  public static void main(String[] args) {
+    EmbeddedDatabase.stop();
+  }
 }

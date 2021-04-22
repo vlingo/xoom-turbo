@@ -24,89 +24,89 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 
 public class PersistenceParameterResolver {
 
-    private final TypeRetriever typeRetriever;
-    private final TypeElement persistenceSetupClass;
+  private final TypeRetriever typeRetriever;
+  private final TypeElement persistenceSetupClass;
 
-    public PersistenceParameterResolver(final TypeElement persistenceSetupClass,
-                                        final ProcessingEnvironment environment) {
-        this.persistenceSetupClass = persistenceSetupClass;
-        this.typeRetriever = TypeRetriever.with(environment);
+  public PersistenceParameterResolver(final TypeElement persistenceSetupClass,
+                                      final ProcessingEnvironment environment) {
+    this.persistenceSetupClass = persistenceSetupClass;
+    this.typeRetriever = TypeRetriever.with(environment);
+  }
+
+  public static PersistenceParameterResolver from(final TypeElement persistenceSetupClass,
+                                                  final ProcessingEnvironment environment) {
+    return new PersistenceParameterResolver(persistenceSetupClass, environment);
+  }
+
+  public CodeGenerationParameters resolve() {
+    return CodeGenerationParameters.from(STORAGE_TYPE, resolveStorageType())
+            .add(CQRS, resolveCQRS()).add(PROJECTION_TYPE, resolveProjections())
+            .addAll(resolveProjectables());
+  }
+
+  private String resolveStorageType() {
+    if (persistenceSetupClass == null) {
+      return StorageType.NONE.name();
+    }
+    return persistenceSetupClass.getAnnotation(Persistence.class)
+            .storageType().name();
+  }
+
+  private String resolveCQRS() {
+    if (persistenceSetupClass == null) {
+      return String.valueOf(false);
+    }
+    return String.valueOf(persistenceSetupClass
+            .getAnnotation(Persistence.class).cqrs());
+  }
+
+  private String resolveProjections() {
+    final Projections projections =
+            persistenceSetupClass == null ? null :
+                    persistenceSetupClass.getAnnotation(Projections.class);
+
+    if (projections == null) {
+      return ProjectionType.NONE.name();
     }
 
-    public static PersistenceParameterResolver from(final TypeElement persistenceSetupClass,
-                                                    final ProcessingEnvironment environment) {
-        return new PersistenceParameterResolver(persistenceSetupClass, environment);
+    return projections.type().name();
+  }
+
+  private List<CodeGenerationParameter> resolveProjectables() {
+    final Projections projections =
+            persistenceSetupClass == null ? null :
+                    persistenceSetupClass.getAnnotation(Projections.class);
+
+    if (projections == null) {
+      return Collections.emptyList();
     }
 
-    public CodeGenerationParameters resolve() {
-        return CodeGenerationParameters.from(STORAGE_TYPE, resolveStorageType())
-                .add(CQRS, resolveCQRS()).add(PROJECTION_TYPE, resolveProjections())
-                .addAll(resolveProjectables());
-    }
+    final ProjectionType projectionType =
+            projections.type();
 
-    private String resolveStorageType() {
-        if(persistenceSetupClass == null) {
-            return StorageType.NONE.name();
-        }
-        return persistenceSetupClass.getAnnotation(Persistence.class)
-                .storageType().name();
-    }
+    return Stream.of(projections.value())
+            .map(projection -> resolveCauseTypes(projection, projectionType))
+            .collect(Collectors.toList());
+  }
 
-    private String resolveCQRS() {
-        if(persistenceSetupClass == null) {
-            return String.valueOf(false);
-        }
-        return String.valueOf(persistenceSetupClass
-                .getAnnotation(Persistence.class).cqrs());
-    }
+  private CodeGenerationParameter resolveCauseTypes(final Projection projection, final ProjectionType projectionType) {
+    final String projectionActorQualifiedName =
+            typeRetriever.from(projection, Projection::actor)
+                    .getQualifiedName().toString();
 
-    private String resolveProjections() {
-        final Projections projections =
-                persistenceSetupClass == null ? null :
-                        persistenceSetupClass.getAnnotation(Projections.class);
+    final CodeGenerationParameter projectionActor =
+            CodeGenerationParameter.of(PROJECTION_ACTOR, projectionActorQualifiedName);
 
-        if(projections == null) {
-            return ProjectionType.NONE.name();
-        }
+    typeRetriever.typesFrom(projection, Projection::becauseOf)
+            .forEach(source -> {
+              final Name sourceName =
+                      projectionType.isEventBased() ? source.getQualifiedName()
+                              : source.getSimpleName();
 
-        return projections.type().name();
-    }
+              projectionActor.relate(SOURCE, sourceName.toString());
+            });
 
-    private List<CodeGenerationParameter> resolveProjectables() {
-        final Projections projections =
-                persistenceSetupClass == null ? null :
-                        persistenceSetupClass.getAnnotation(Projections.class);
-
-        if(projections == null) {
-            return Collections.emptyList();
-        }
-
-        final ProjectionType projectionType =
-                projections.type();
-
-        return Stream.of(projections.value())
-                .map(projection -> resolveCauseTypes(projection, projectionType))
-                .collect(Collectors.toList());
-    }
-
-    private CodeGenerationParameter resolveCauseTypes(final Projection projection, final ProjectionType projectionType) {
-        final String projectionActorQualifiedName =
-                typeRetriever.from(projection, Projection::actor)
-                        .getQualifiedName().toString();
-
-        final CodeGenerationParameter projectionActor =
-                CodeGenerationParameter.of(PROJECTION_ACTOR, projectionActorQualifiedName);
-
-        typeRetriever.typesFrom(projection, Projection::becauseOf)
-                .forEach(source -> {
-                    final Name sourceName =
-                            projectionType.isEventBased() ? source.getQualifiedName()
-                                    : source.getSimpleName();
-
-                    projectionActor.relate(SOURCE, sourceName.toString());
-                });
-
-        return projectionActor;
-    }
+    return projectionActor;
+  }
 
 }

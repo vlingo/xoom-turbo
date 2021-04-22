@@ -24,44 +24,44 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_P
 
 public class AggregateProtocolTemplateData extends TemplateData {
 
-    private final String protocolName;
-    private final TemplateParameters parameters;
+  private final String protocolName;
+  private final TemplateParameters parameters;
 
-    @SuppressWarnings("unchecked")
-    public AggregateProtocolTemplateData(final String packageName,
-                                         final CodeGenerationParameter aggregate,
-                                         final List<Content> contents) {
-        this.protocolName = aggregate.value;
-        this.parameters = TemplateParameters.with(PACKAGE_NAME, packageName)
-                .addImports(resolveImports(aggregate, contents))
-                .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
-                .and(METHODS, new ArrayList<String>());
+  @SuppressWarnings("unchecked")
+  public AggregateProtocolTemplateData(final String packageName,
+                                       final CodeGenerationParameter aggregate,
+                                       final List<Content> contents) {
+    this.protocolName = aggregate.value;
+    this.parameters = TemplateParameters.with(PACKAGE_NAME, packageName)
+            .addImports(resolveImports(aggregate, contents))
+            .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
+            .and(METHODS, new ArrayList<String>());
 
-        this.dependOn(AggregateProtocolMethodTemplateData.from(parameters, aggregate));
-    }
+    this.dependOn(AggregateProtocolMethodTemplateData.from(parameters, aggregate));
+  }
 
-    @Override
-    public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {
-        this.parameters.<List<String>>find(METHODS).add(outcome);
-    }
+  @Override
+  public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {
+    this.parameters.<List<String>>find(METHODS).add(outcome);
+  }
 
-    private Set<String> resolveImports(final CodeGenerationParameter aggregate, final List<Content> contents) {
-        return ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(STATE_FIELD));
-    }
+  private Set<String> resolveImports(final CodeGenerationParameter aggregate, final List<Content> contents) {
+    return ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(STATE_FIELD));
+  }
 
-    @Override
-    public String filename() {
-        return standard().resolveFilename(protocolName, parameters);
-    }
+  @Override
+  public String filename() {
+    return standard().resolveFilename(protocolName, parameters);
+  }
 
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
 
-    @Override
-    public TemplateStandard standard() {
-        return AGGREGATE_PROTOCOL;
-    }
+  @Override
+  public TemplateStandard standard() {
+    return AGGREGATE_PROTOCOL;
+  }
 
 }

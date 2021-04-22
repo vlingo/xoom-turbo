@@ -23,106 +23,106 @@ import java.util.stream.Stream;
 
 public class TypeRetriever {
 
-    @SuppressWarnings("unused")
-    private static TypeRetriever instance;
-    private final Elements elements;
-    private final ProcessingEnvironment environment;
+  @SuppressWarnings("unused")
+  private static TypeRetriever instance;
+  private final Elements elements;
+  private final ProcessingEnvironment environment;
 
-    private TypeRetriever(final ProcessingEnvironment environment){
-        this.environment = environment;
-        this.elements = environment.getElementUtils();
+  private TypeRetriever(final ProcessingEnvironment environment) {
+    this.environment = environment;
+    this.elements = environment.getElementUtils();
+  }
+
+  @SuppressWarnings("rawtypes")
+  public Stream<TypeMirror> subclassesOf(final Class superclass,
+                                         final String[] packages) {
+    return Stream.of(packages).filter(this::isValidPackage)
+            .map(packageName -> elements.getPackageElement(packageName))
+            .flatMap(packageElement -> packageElement.getEnclosedElements().stream())
+            .filter(element -> isSubclass(element, superclass))
+            .map(element -> element.asType());
+  }
+
+  @SuppressWarnings("rawtypes")
+  private boolean isSubclass(final Element typeElement, final Class superclass) {
+    if (superclass.isInterface()) {
+      return ((TypeElement) typeElement).getInterfaces().stream()
+              .anyMatch(interfaceMirror -> {
+                return interfaceMirror.toString().equals(superclass.getCanonicalName());
+              });
     }
 
-    @SuppressWarnings("rawtypes")
-    public Stream<TypeMirror> subclassesOf(final Class superclass,
-                                           final String[] packages) {
-        return Stream.of(packages).filter(this::isValidPackage)
-                .map(packageName -> elements.getPackageElement(packageName))
-                .flatMap(packageElement -> packageElement.getEnclosedElements().stream())
-                .filter(element -> isSubclass(element, superclass))
-                .map(element -> element.asType());
+    final TypeMirror type =
+            elements.getTypeElement(superclass.getCanonicalName())
+                    .asType();
+
+    return ((TypeElement) typeElement).getSuperclass()
+            .equals(type);
+  }
+
+  public <T> TypeElement from(final T annotation, final Function<T, Class<?>> retriever) {
+    try {
+      final Class<?> clazz =
+              retriever.apply(annotation);
+
+      return environment.getElementUtils()
+              .getTypeElement(clazz.getCanonicalName());
+    } catch (final MirroredTypeException exception) {
+      return (TypeElement) environment.getTypeUtils()
+              .asElement(exception.getTypeMirror());
     }
+  }
 
-    @SuppressWarnings("rawtypes")
-    private boolean isSubclass(final Element typeElement, final Class superclass) {
-        if(superclass.isInterface()) {
-            return ((TypeElement) typeElement).getInterfaces().stream()
-                    .anyMatch(interfaceMirror -> {
-                        return interfaceMirror.toString().equals(superclass.getCanonicalName());
-                    });
-        }
+  public <T> List<TypeElement> typesFrom(final T annotation, final Function<T, Class<?>[]> retriever) {
+    try {
+      final Class<?>[] classes =
+              retriever.apply(annotation);
 
-        final TypeMirror type =
-                elements.getTypeElement(superclass.getCanonicalName())
-                        .asType();
-
-        return ((TypeElement) typeElement).getSuperclass()
-                .equals(type);
+      return Stream.of(classes).map(clazz -> environment.getElementUtils()
+              .getTypeElement(clazz.getCanonicalName())).collect(Collectors.toList());
+    } catch (final MirroredTypesException exception) {
+      return exception.getTypeMirrors().stream()
+              .map(typeMirror -> (TypeElement) environment.getTypeUtils()
+                      .asElement(typeMirror)).collect(Collectors.toList());
     }
+  }
 
-    public <T> TypeElement from(final T annotation, final Function<T, Class<?>> retriever) {
-        try {
-            final Class<?> clazz =
-                    retriever.apply(annotation);
+  public static TypeRetriever with(final ProcessingEnvironment environment) {
+    return new TypeRetriever(environment);
+  }
 
-            return environment.getElementUtils()
-                    .getTypeElement(clazz.getCanonicalName());
-        } catch (final MirroredTypeException exception) {
-            return (TypeElement) environment.getTypeUtils()
-                    .asElement(exception.getTypeMirror());
-        }
+  public boolean isAnInterface(final Annotation annotation, final Function<Object, Class<?>> retriever) {
+    return getTypeElement(annotation, retriever).getKind().isInterface();
+  }
+
+  public String getClassName(final Annotation annotation, final Function<Object, Class<?>> retriever) {
+    return getTypeElement(annotation, retriever).getQualifiedName().toString();
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<ExecutableElement> getMethods(final Annotation annotation, final Function<Object, Class<?>> retriever) {
+    return (List<ExecutableElement>) getTypeElement(annotation, retriever).getEnclosedElements();
+  }
+
+  public TypeElement getGenericType(final Annotation annotation, final Function<Object, Class<?>> retriever) {
+    final DeclaredType declaredType = (DeclaredType) getTypeElement(annotation, retriever).getSuperclass();
+    if (declaredType.getTypeArguments().isEmpty()) {
+      return null;
     }
+    return (TypeElement) ((DeclaredType) declaredType.getTypeArguments().get(0)).asElement();
+  }
 
-    public <T>  List<TypeElement> typesFrom(final T annotation, final Function<T, Class<?>[]> retriever) {
-        try {
-            final Class<?>[] classes =
-                    retriever.apply(annotation);
+  @SuppressWarnings("unchecked")
+  public List<Element> getElements(final Annotation annotation, final Function<Object, Class<?>> retriever) {
+    return (List<Element>) getTypeElement(annotation, retriever).getEnclosedElements();
+  }
 
-            return Stream.of(classes).map(clazz -> environment.getElementUtils()
-                    .getTypeElement(clazz.getCanonicalName())).collect(Collectors.toList());
-        } catch (final MirroredTypesException exception) {
-            return exception.getTypeMirrors().stream()
-                    .map(typeMirror -> (TypeElement) environment.getTypeUtils()
-                            .asElement(typeMirror)).collect(Collectors.toList());
-        }
-    }
+  public TypeElement getTypeElement(final Annotation annotation,
+                                    final Function<Object, Class<?>> retriever) {
+    return from(annotation, retriever);
+  }
 
-    public static TypeRetriever with(final ProcessingEnvironment environment) {
-        return new TypeRetriever(environment);
-    }
-
-    public boolean isAnInterface(final Annotation annotation, final Function<Object, Class<?>> retriever) {
-        return getTypeElement(annotation, retriever).getKind().isInterface();
-    }
-
-    public String getClassName(final Annotation annotation, final Function<Object, Class<?>> retriever) {
-        return getTypeElement(annotation, retriever).getQualifiedName().toString();
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<ExecutableElement> getMethods(final Annotation annotation, final Function<Object, Class<?>> retriever) {
-        return (List<ExecutableElement>)getTypeElement(annotation, retriever).getEnclosedElements();
-    }
-
-    public TypeElement getGenericType(final Annotation annotation, final Function<Object, Class<?>> retriever) {
-        final DeclaredType declaredType = (DeclaredType)getTypeElement(annotation, retriever).getSuperclass();
-        if(declaredType.getTypeArguments().isEmpty()) {
-            return null;
-        }
-        return (TypeElement)((DeclaredType)declaredType.getTypeArguments().get(0)).asElement();
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<Element> getElements(final Annotation annotation, final Function<Object, Class<?>> retriever) {
-        return (List<Element>)getTypeElement(annotation, retriever).getEnclosedElements();
-    }
-
-    public TypeElement getTypeElement(final Annotation annotation,
-                                       final Function<Object, Class<?>> retriever) {
-        return from(annotation, retriever);
-    }
-
-    public boolean isValidPackage(final String packageName) {
-        return elements.getPackageElement(packageName) != null;
-    }
+  public boolean isValidPackage(final String packageName) {
+    return elements.getPackageElement(packageName) != null;
+  }
 }

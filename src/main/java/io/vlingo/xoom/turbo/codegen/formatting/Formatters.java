@@ -24,19 +24,19 @@ public class Formatters {
 
   public interface Arguments {
 
-      Arguments AGGREGATE_METHOD_INVOCATION = new AggregateMethodInvocation("stage");
-      Arguments QUERIES_METHOD_INVOCATION = new QueriesMethodInvocation();
-      Arguments VALUE_OBJECT_CONSTRUCTOR_INVOCATION = new ValueObjectConstructorInvocation();
-      Arguments DATA_OBJECT_CONSTRUCTOR = new DataObjectConstructor();
-      Arguments DATA_OBJECT_CONSTRUCTOR_INVOCATION = new DataObjectConstructorInvocation();
-      Arguments SOURCED_STATED_METHOD_INVOCATION = new SourcedStateMethodInvocation();
-      Arguments SIGNATURE_DECLARATION = new SignatureDeclaration();
+    Arguments AGGREGATE_METHOD_INVOCATION = new AggregateMethodInvocation("stage");
+    Arguments QUERIES_METHOD_INVOCATION = new QueriesMethodInvocation();
+    Arguments VALUE_OBJECT_CONSTRUCTOR_INVOCATION = new ValueObjectConstructorInvocation();
+    Arguments DATA_OBJECT_CONSTRUCTOR = new DataObjectConstructor();
+    Arguments DATA_OBJECT_CONSTRUCTOR_INVOCATION = new DataObjectConstructorInvocation();
+    Arguments SOURCED_STATED_METHOD_INVOCATION = new SourcedStateMethodInvocation();
+    Arguments SIGNATURE_DECLARATION = new SignatureDeclaration();
 
-      default String format(final CodeGenerationParameter parameter) {
-          return format(parameter, MethodScope.INSTANCE);
-      }
+    default String format(final CodeGenerationParameter parameter) {
+      return format(parameter, MethodScope.INSTANCE);
+    }
 
-      String format(final CodeGenerationParameter parameter, final MethodScope scope);
+    String format(final CodeGenerationParameter parameter, final MethodScope scope);
   }
 
   public abstract static class Variables<T> {
@@ -44,9 +44,9 @@ public class Formatters {
     public static <T> T format(final Variables.Style style,
                                final Language language,
                                final CodeGenerationParameter parent) {
-      if(parent.isLabeled(AGGREGATE)) {
+      if (parent.isLabeled(AGGREGATE)) {
         return format(style, language, parent, parent.retrieveAllRelated(STATE_FIELD));
-      } else if(parent.isLabeled(VALUE_OBJECT)) {
+      } else if (parent.isLabeled(VALUE_OBJECT)) {
         return format(style, language, parent, parent.retrieveAllRelated(VALUE_OBJECT_FIELD));
       }
       throw new UnsupportedOperationException("Unable to format fields from " + parent.label);
@@ -81,9 +81,9 @@ public class Formatters {
     public static <T> T format(final Style style,
                                final Language language,
                                final CodeGenerationParameter parent) {
-      if(parent.isLabeled(AGGREGATE)) {
+      if (parent.isLabeled(AGGREGATE)) {
         return format(style, language, parent, parent.retrieveAllRelated(STATE_FIELD));
-      } else if(parent.isLabeled(VALUE_OBJECT)) {
+      } else if (parent.isLabeled(VALUE_OBJECT)) {
         return format(style, language, parent, parent.retrieveAllRelated(VALUE_OBJECT_FIELD));
       }
       throw new UnsupportedOperationException("Unable to format fields from " + parent.label);
@@ -107,14 +107,14 @@ public class Formatters {
 
     @SuppressWarnings("serial")
     private static Map<Style, Function<Language, Fields<?>>> INSTANTIATORS = Collections.unmodifiableMap(
-      new HashMap<Style, Function<Language, Fields<?>>>() {{
-        put(Style.ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment());
-        put(Style.MEMBER_DECLARATION, lang -> new Member(lang));
-        put(Style.DATA_OBJECT_MEMBER_DECLARATION, lang -> new Member(lang, "Data"));
-        put(Style.STATE_BASED_ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment("state"));
-        put(Style.DATA_VALUE_OBJECT_ASSIGNMENT, lang -> new DataObjectConstructorAssignment());
-        put(Style.SELF_ALTERNATE_REFERENCE, lang -> AlternateReference.handlingSelfReferencedFields());
-        put(Style.ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE, lang -> AlternateReference.handlingDefaultFieldsValue());
-      }});
+            new HashMap<Style, Function<Language, Fields<?>>>() {{
+              put(Style.ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment());
+              put(Style.MEMBER_DECLARATION, lang -> new Member(lang));
+              put(Style.DATA_OBJECT_MEMBER_DECLARATION, lang -> new Member(lang, "Data"));
+              put(Style.STATE_BASED_ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment("state"));
+              put(Style.DATA_VALUE_OBJECT_ASSIGNMENT, lang -> new DataObjectConstructorAssignment());
+              put(Style.SELF_ALTERNATE_REFERENCE, lang -> AlternateReference.handlingSelfReferencedFields());
+              put(Style.ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE, lang -> AlternateReference.handlingDefaultFieldsValue());
+            }});
   }
 }

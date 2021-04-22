@@ -20,21 +20,21 @@ import java.util.stream.Stream;
 @AutoService(Processor.class)
 public class XoomProcessor extends AnnotationProcessor {
 
-    @Override
-    protected void generate(final AnnotatedElements annotatedElements) {
-        if(annotatedElements.elementsWith(Xoom.class).isEmpty()) {
-            return;
-        }
-        XoomValidator.instance().validate(environment, annotatedElements);
-        PersistenceValidator.instance().validate(environment, annotatedElements);
-        AutoDispatchValidator.instance().validate(environment, annotatedElements);
-        XoomInitializerGenerator.instance().generateFrom(environment, annotatedElements);
+  @Override
+  protected void generate(final AnnotatedElements annotatedElements) {
+    if (annotatedElements.elementsWith(Xoom.class).isEmpty()) {
+      return;
     }
+    XoomValidator.instance().validate(environment, annotatedElements);
+    PersistenceValidator.instance().validate(environment, annotatedElements);
+    AutoDispatchValidator.instance().validate(environment, annotatedElements);
+    XoomInitializerGenerator.instance().generateFrom(environment, annotatedElements);
+  }
 
-    @Override
-    @SuppressWarnings("rawtypes")
-    public Stream<Class> supportedAnnotationClasses() {
-        return Stream.of(Xoom.class, Persistence.class, Model.class, Queries.class ,AutoDispatch.class, Route.class);
-    }
+  @Override
+  @SuppressWarnings("rawtypes")
+  public Stream<Class> supportedAnnotationClasses() {
+    return Stream.of(Xoom.class, Persistence.class, Model.class, Queries.class, AutoDispatch.class, Route.class);
+  }
 
 }

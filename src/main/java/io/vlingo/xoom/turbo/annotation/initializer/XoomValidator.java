@@ -15,20 +15,21 @@ import static io.vlingo.xoom.turbo.annotation.Validation.*;
 
 public class XoomValidator {
 
-    private static XoomValidator instance;
+  private static XoomValidator instance;
 
-    private XoomValidator() {}
+  private XoomValidator() {
+  }
 
-    public static XoomValidator instance() {
-        if(instance == null) {
-            instance = new XoomValidator();
-        }
-        return instance;
+  public static XoomValidator instance() {
+    if (instance == null) {
+      instance = new XoomValidator();
     }
+    return instance;
+  }
 
-    public void validate(final ProcessingEnvironment environment, final AnnotatedElements annotatedElements) {
-        Arrays.asList(singularityValidation(), targetValidation(), classVisibilityValidation())
-                .forEach(validator -> validator.validate(environment, Xoom.class, annotatedElements));
-    }
+  public void validate(final ProcessingEnvironment environment, final AnnotatedElements annotatedElements) {
+    Arrays.asList(singularityValidation(), targetValidation(), classVisibilityValidation())
+            .forEach(validator -> validator.validate(environment, Xoom.class, annotatedElements));
+  }
 
 }

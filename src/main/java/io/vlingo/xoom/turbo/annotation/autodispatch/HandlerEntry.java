@@ -9,19 +9,19 @@ package io.vlingo.xoom.turbo.annotation.autodispatch;
 
 public class HandlerEntry<T extends Handler> {
 
-    public final int index;
-    public final T handler;
+  public final int index;
+  public final T handler;
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static <T extends Handler> HandlerEntry<T> of(final int index,
-                                                         final T handler){
-        return new HandlerEntry(index, handler);
-    }
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static <T extends Handler> HandlerEntry<T> of(final int index,
+                                                       final T handler) {
+    return new HandlerEntry(index, handler);
+  }
 
-    private HandlerEntry(final int index,
-                         final T handler) {
-        this.index = index;
-        this.handler = handler;
-    }
+  private HandlerEntry(final int index,
+                       final T handler) {
+    this.index = index;
+    this.handler = handler;
+  }
 
 }

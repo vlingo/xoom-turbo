@@ -23,111 +23,111 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACT
 
 public class Queries {
 
-    private static final String QUALIFIED_NAME_PATTERN = "%s.%s";
+  private static final String QUALIFIED_NAME_PATTERN = "%s.%s";
 
-    private final String protocolName;
-    private final String actorName;
-    private final String attributeName;
-    private final Set<String> qualifiedNames = new HashSet<>();
+  private final String protocolName;
+  private final String actorName;
+  private final String attributeName;
+  private final Set<String> qualifiedNames = new HashSet<>();
 
-    public static List<Queries> from(final Boolean useCQRS,
-                                     final List<Content> contents,
-                                     final List<TemplateData> templatesData) {
-        if(!useCQRS) {
-            return Collections.emptyList();
-        }
-
-        return from(Model.QUERY, contents, templatesData);
+  public static List<Queries> from(final Boolean useCQRS,
+                                   final List<Content> contents,
+                                   final List<TemplateData> templatesData) {
+    if (!useCQRS) {
+      return Collections.emptyList();
     }
 
-    public static List<Queries> from(final Model model,
-                                     final List<Content> contents,
-                                     final List<TemplateData> templatesData) {
-        if(!model.isQueryModel()) {
-            return Collections.emptyList();
-        }
+    return from(Model.QUERY, contents, templatesData);
+  }
 
-        if(ContentQuery.exists(QUERIES_ACTOR, contents)) {
-            return ContentQuery.filterByStandard(QUERIES_ACTOR, contents)
-                    .filter(Content::isProtocolBased)
-                    .map(content -> new Queries(content.retrieveProtocolQualifiedName(),
-                            content.retrieveQualifiedName()))
-                    .collect(Collectors.toList());
-        }
-
-        return templatesData.stream().filter(data -> data.hasStandard(QUERIES_ACTOR))
-                .map(data -> new Queries(data.parameters())).collect(Collectors.toList());
+  public static List<Queries> from(final Model model,
+                                   final List<Content> contents,
+                                   final List<TemplateData> templatesData) {
+    if (!model.isQueryModel()) {
+      return Collections.emptyList();
     }
 
-    public static Queries from(final CodeGenerationParameter autoDispatchParameter) {
-        if(!autoDispatchParameter.hasAny(Label.QUERIES_PROTOCOL)) {
-            return Queries.empty();
-        }
-        return new Queries(autoDispatchParameter.retrieveRelatedValue(Label.QUERIES_PROTOCOL),
-                autoDispatchParameter.retrieveRelatedValue(Label.QUERIES_ACTOR));
+    if (ContentQuery.exists(QUERIES_ACTOR, contents)) {
+      return ContentQuery.filterByStandard(QUERIES_ACTOR, contents)
+              .filter(Content::isProtocolBased)
+              .map(content -> new Queries(content.retrieveProtocolQualifiedName(),
+                      content.retrieveQualifiedName()))
+              .collect(Collectors.toList());
     }
 
-    public static Queries from(final CodeGenerationParameter aggregateParameter,
-                               final List<Content> contents,
-                               final Boolean useCQRS) {
-        if(!useCQRS) {
-            return Queries.empty();
-        }
+    return templatesData.stream().filter(data -> data.hasStandard(QUERIES_ACTOR))
+            .map(data -> new Queries(data.parameters())).collect(Collectors.toList());
+  }
 
-        final String queriesProtocol = QUERIES.resolveClassname(aggregateParameter.value);
-        final String queriesActor = QUERIES_ACTOR.resolveClassname(aggregateParameter.value);
-        return new Queries(ContentQuery.findFullyQualifiedClassName(QUERIES, queriesProtocol, contents),
-                ContentQuery.findFullyQualifiedClassName(QUERIES_ACTOR, queriesActor, contents));
+  public static Queries from(final CodeGenerationParameter autoDispatchParameter) {
+    if (!autoDispatchParameter.hasAny(Label.QUERIES_PROTOCOL)) {
+      return Queries.empty();
+    }
+    return new Queries(autoDispatchParameter.retrieveRelatedValue(Label.QUERIES_PROTOCOL),
+            autoDispatchParameter.retrieveRelatedValue(Label.QUERIES_ACTOR));
+  }
+
+  public static Queries from(final CodeGenerationParameter aggregateParameter,
+                             final List<Content> contents,
+                             final Boolean useCQRS) {
+    if (!useCQRS) {
+      return Queries.empty();
     }
 
-    private static Queries empty() {
-        return new Queries("", "", "", "");
-    }
+    final String queriesProtocol = QUERIES.resolveClassname(aggregateParameter.value);
+    final String queriesActor = QUERIES_ACTOR.resolveClassname(aggregateParameter.value);
+    return new Queries(ContentQuery.findFullyQualifiedClassName(QUERIES, queriesProtocol, contents),
+            ContentQuery.findFullyQualifiedClassName(QUERIES_ACTOR, queriesActor, contents));
+  }
 
-    private Queries(final TemplateParameters parameters) {
-        this(parameters.find(PACKAGE_NAME), parameters.find(QUERIES_NAME),
-                parameters.find(PACKAGE_NAME), parameters.find(QUERIES_ACTOR_NAME));
-    }
+  private static Queries empty() {
+    return new Queries("", "", "", "");
+  }
 
-    private Queries(final String protocolQualifiedName,
-                    final String actorQualifiedName) {
-        this(CodeElementFormatter.packageOf(protocolQualifiedName), CodeElementFormatter.simpleNameOf(protocolQualifiedName),
-                CodeElementFormatter.packageOf(actorQualifiedName), CodeElementFormatter.simpleNameOf(actorQualifiedName));
-    }
+  private Queries(final TemplateParameters parameters) {
+    this(parameters.find(PACKAGE_NAME), parameters.find(QUERIES_NAME),
+            parameters.find(PACKAGE_NAME), parameters.find(QUERIES_ACTOR_NAME));
+  }
 
-    private Queries(final String protocolPackageName,
-                    final String protocolName,
-                    final String actorPackageName,
-                    final String actorName) {
-        this.actorName = actorName;
-        this.protocolName = protocolName;
-        this.attributeName = CodeElementFormatter.simpleNameToAttribute(protocolName);
+  private Queries(final String protocolQualifiedName,
+                  final String actorQualifiedName) {
+    this(CodeElementFormatter.packageOf(protocolQualifiedName), CodeElementFormatter.simpleNameOf(protocolQualifiedName),
+            CodeElementFormatter.packageOf(actorQualifiedName), CodeElementFormatter.simpleNameOf(actorQualifiedName));
+  }
 
-        if(!isEmpty()) {
-            this.qualifiedNames.addAll(
-                    Arrays.asList(String.format(QUALIFIED_NAME_PATTERN, protocolPackageName, protocolName),
-                            String.format(QUALIFIED_NAME_PATTERN, actorPackageName, actorName)));
-        }
-    }
+  private Queries(final String protocolPackageName,
+                  final String protocolName,
+                  final String actorPackageName,
+                  final String actorName) {
+    this.actorName = actorName;
+    this.protocolName = protocolName;
+    this.attributeName = CodeElementFormatter.simpleNameToAttribute(protocolName);
 
-    public String getProtocolName() {
-        return protocolName;
+    if (!isEmpty()) {
+      this.qualifiedNames.addAll(
+              Arrays.asList(String.format(QUALIFIED_NAME_PATTERN, protocolPackageName, protocolName),
+                      String.format(QUALIFIED_NAME_PATTERN, actorPackageName, actorName)));
     }
+  }
 
-    public String getActorName() {
-        return actorName;
-    }
+  public String getProtocolName() {
+    return protocolName;
+  }
 
-    public String getAttributeName() {
-        return attributeName;
-    }
+  public String getActorName() {
+    return actorName;
+  }
 
-    public Set<String> getQualifiedNames() {
-        return qualifiedNames;
-    }
+  public String getAttributeName() {
+    return attributeName;
+  }
 
-    public boolean isEmpty() {
-        return protocolName.isEmpty() && actorName.isEmpty() && attributeName.isEmpty();
-    }
+  public Set<String> getQualifiedNames() {
+    return qualifiedNames;
+  }
+
+  public boolean isEmpty() {
+    return protocolName.isEmpty() && actorName.isEmpty() && attributeName.isEmpty();
+  }
 
 }

@@ -18,14 +18,14 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
 
 public class ModelGenerationStep extends TemplateProcessingStep {
 
-    @Override
-    protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        return ModelTemplateDataFactory.from(context);
-    }
+  @Override
+  protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
+    return ModelTemplateDataFactory.from(context);
+  }
 
-    @Override
-    public boolean shouldProcess(final CodeGenerationContext context) {
-        return context.hasParameter(AGGREGATE);
-    }
+  @Override
+  public boolean shouldProcess(final CodeGenerationContext context) {
+    return context.hasParameter(AGGREGATE);
+  }
 
 }

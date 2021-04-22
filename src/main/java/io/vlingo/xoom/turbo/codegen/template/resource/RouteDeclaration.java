@@ -23,78 +23,78 @@ import static java.util.stream.Collectors.toList;
 
 public class RouteDeclaration {
 
-    private final boolean last;
-    private final String path;
-    private final String bodyType;
-    private final String handlerName;
-    private final String builderMethod;
-    private final String signature;
-    private final List<String> parameterTypes = new ArrayList<>();
+  private final boolean last;
+  private final String path;
+  private final String bodyType;
+  private final String handlerName;
+  private final String builderMethod;
+  private final String signature;
+  private final List<String> parameterTypes = new ArrayList<>();
 
-    public static List<RouteDeclaration> from(final CodeGenerationParameter mainParameter) {
-        final List<CodeGenerationParameter> routeSignatures =
-                mainParameter.retrieveAllRelated(Label.ROUTE_SIGNATURE).collect(toList());
+  public static List<RouteDeclaration> from(final CodeGenerationParameter mainParameter) {
+    final List<CodeGenerationParameter> routeSignatures =
+            mainParameter.retrieveAllRelated(Label.ROUTE_SIGNATURE).collect(toList());
 
-        return IntStream.range(0, routeSignatures.size()).mapToObj(index ->
-                new RouteDeclaration(index, routeSignatures.size(), routeSignatures.get(index)))
-                .collect(Collectors.toList());
+    return IntStream.range(0, routeSignatures.size()).mapToObj(index ->
+            new RouteDeclaration(index, routeSignatures.size(), routeSignatures.get(index)))
+            .collect(Collectors.toList());
+  }
+
+  private RouteDeclaration(final int routeIndex,
+                           final int numberOfRoutes,
+                           final CodeGenerationParameter routeSignatureParameter) {
+    this.signature = RouteDetail.resolveMethodSignature(routeSignatureParameter);
+    this.handlerName = resolveHandlerName();
+    this.path = PathFormatter.formatAbsoluteRoutePath(routeSignatureParameter);
+    this.bodyType = RouteDetail.resolveBodyType(routeSignatureParameter);
+    this.builderMethod = routeSignatureParameter.retrieveRelatedValue(ROUTE_METHOD);
+    this.parameterTypes.addAll(resolveParameterTypes(routeSignatureParameter));
+    this.last = routeIndex == numberOfRoutes - 1;
+  }
+
+  private String resolveHandlerName() {
+    return signature.substring(0, signature.indexOf("(")).trim();
+  }
+
+  private List<String> resolveParameterTypes(final CodeGenerationParameter routeSignatureParameter) {
+    final String bodyParameterName = RouteDetail.resolveBodyName(routeSignatureParameter);
+
+    final String parameters =
+            signature.substring(signature.indexOf("(") + 1, signature.lastIndexOf(")"));
+
+    if (parameters.trim().isEmpty()) {
+      return Collections.emptyList();
     }
 
-    private RouteDeclaration(final int routeIndex,
-                             final int numberOfRoutes,
-                             final CodeGenerationParameter routeSignatureParameter) {
-        this.signature = RouteDetail.resolveMethodSignature(routeSignatureParameter);
-        this.handlerName = resolveHandlerName();
-        this.path = PathFormatter.formatAbsoluteRoutePath(routeSignatureParameter);
-        this.bodyType = RouteDetail.resolveBodyType(routeSignatureParameter);
-        this.builderMethod = routeSignatureParameter.retrieveRelatedValue(ROUTE_METHOD);
-        this.parameterTypes.addAll(resolveParameterTypes(routeSignatureParameter));
-        this.last = routeIndex == numberOfRoutes - 1;
-    }
+    return Stream.of(parameters.split(","))
+            .map(parameter -> parameter.replaceAll("final", "").trim())
+            .filter(parameter -> !parameter.endsWith(" " + bodyParameterName))
+            .map(parameter -> parameter.substring(0, parameter.indexOf(" ")))
+            .collect(Collectors.toList());
+  }
 
-    private String resolveHandlerName() {
-        return signature.substring(0, signature.indexOf("(")).trim();
-    }
+  public String getPath() {
+    return path;
+  }
 
-    private List<String> resolveParameterTypes(final CodeGenerationParameter routeSignatureParameter) {
-        final String bodyParameterName = RouteDetail.resolveBodyName(routeSignatureParameter);
+  public String getBodyType() {
+    return bodyType;
+  }
 
-        final String parameters =
-                signature.substring(signature.indexOf("(") + 1, signature.lastIndexOf(")"));
+  public String getHandlerName() {
+    return handlerName;
+  }
 
-        if (parameters.trim().isEmpty()) {
-            return Collections.emptyList();
-        }
+  public String getBuilderMethod() {
+    return ResourceBuilder.class.getCanonicalName() + "." + builderMethod.toLowerCase();
+  }
 
-        return Stream.of(parameters.split(","))
-                .map(parameter -> parameter.replaceAll("final", "").trim())
-                .filter(parameter -> !parameter.endsWith(" " + bodyParameterName))
-                .map(parameter -> parameter.substring(0, parameter.indexOf(" ")))
-                .collect(Collectors.toList());
-    }
+  public List<String> getParameterTypes() {
+    return parameterTypes;
+  }
 
-    public String getPath() {
-        return path;
-    }
-
-    public String getBodyType() {
-        return bodyType;
-    }
-
-    public String getHandlerName() {
-        return handlerName;
-    }
-
-    public String getBuilderMethod() {
-        return ResourceBuilder.class.getCanonicalName()  + "." + builderMethod.toLowerCase();
-    }
-
-    public List<String> getParameterTypes() {
-        return parameterTypes;
-    }
-
-    public boolean isLast() {
-        return last;
-    }
+  public boolean isLast() {
+    return last;
+  }
 
 }

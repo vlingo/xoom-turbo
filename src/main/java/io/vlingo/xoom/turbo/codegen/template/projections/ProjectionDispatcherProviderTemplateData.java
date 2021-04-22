@@ -25,89 +25,89 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
-    private static final String PACKAGE_PATTERN = "%s.%s.%s";
-    private static final String PARENT_PACKAGE_NAME = "infrastructure";
-    private static final String PERSISTENCE_PACKAGE_NAME = "persistence";
+  private static final String PACKAGE_PATTERN = "%s.%s.%s";
+  private static final String PARENT_PACKAGE_NAME = "infrastructure";
+  private static final String PERSISTENCE_PACKAGE_NAME = "persistence";
 
-    private final TemplateParameters templateParameters;
-    private final boolean placeholder;
+  private final TemplateParameters templateParameters;
+  private final boolean placeholder;
 
-    public static ProjectionDispatcherProviderTemplateData from(final String basePackage,
-                                                                final ProjectionType projectionType,
-                                                                final Boolean useAnnotations,
-                                                                final List<Content> contents) {
-        return new ProjectionDispatcherProviderTemplateData(basePackage, projectionType, useAnnotations, contents);
+  public static ProjectionDispatcherProviderTemplateData from(final String basePackage,
+                                                              final ProjectionType projectionType,
+                                                              final Boolean useAnnotations,
+                                                              final List<Content> contents) {
+    return new ProjectionDispatcherProviderTemplateData(basePackage, projectionType, useAnnotations, contents);
+  }
+
+  public static ProjectionDispatcherProviderTemplateData fromProjectionAnnotation(final ProjectionType projectionType,
+                                                                                  final Stream<CodeGenerationParameter> projectionActors,
+                                                                                  final List<Content> contents) {
+    return new ProjectionDispatcherProviderTemplateData(projectionType, projectionActors, contents);
+  }
+
+  private ProjectionDispatcherProviderTemplateData(final ProjectionType projectionType,
+                                                   final Stream<CodeGenerationParameter> projectionActors,
+                                                   final List<Content> contents) {
+    final String packageName = ContentQuery.findPackage(PROJECTION, contents);
+
+    final List<ProjectToDescription> projectToDescriptionEntries =
+            ProjectToDescription.fromProjectionAnnotation(projectionType, projectionActors.collect(Collectors.toList()));
+
+    this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
+            .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionEntries);
+
+    this.placeholder = false;
+  }
+
+  private ProjectionDispatcherProviderTemplateData(final String basePackage,
+                                                   final ProjectionType projectionType,
+                                                   final boolean placeholder,
+                                                   final List<Content> contents) {
+    final String packageName = resolvePackage(basePackage);
+
+    final List<ProjectToDescription> projectToDescriptionEntries =
+            ProjectToDescription.from(projectionType, contents);
+
+    this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
+            .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionEntries)
+            .addImports(resolveImports(basePackage, projectionType, contents));
+
+    this.placeholder = placeholder;
+  }
+
+  private String resolvePackage(final String basePackage) {
+    return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME).toLowerCase();
+  }
+
+  private Set<String> resolveImports(final String basePackage,
+                                     final ProjectionType projectionType,
+                                     final List<Content> contents) {
+    if (projectionType.isOperationBased()) {
+      final String projectionSourceTypesQualifiedName =
+              ProjectionSourceTypesDetail.resolveQualifiedName(basePackage, projectionType);
+
+      final String allSourceTypes =
+              CodeElementFormatter.staticallyImportAllFrom(projectionSourceTypesQualifiedName);
+
+      return Stream.of(allSourceTypes).collect(Collectors.toSet());
     }
 
-    public static ProjectionDispatcherProviderTemplateData fromProjectionAnnotation(final ProjectionType projectionType,
-                                                                                    final Stream<CodeGenerationParameter> projectionActors,
-                                                                                    final List<Content> contents) {
-        return new ProjectionDispatcherProviderTemplateData(projectionType, projectionActors, contents);
-    }
+    return ContentQuery.findFullyQualifiedClassNames(DOMAIN_EVENT, contents);
+  }
 
-    private ProjectionDispatcherProviderTemplateData(final ProjectionType projectionType,
-                                                     final Stream<CodeGenerationParameter> projectionActors,
-                                                     final List<Content> contents) {
-        final String packageName = ContentQuery.findPackage(PROJECTION, contents);
+  @Override
+  public TemplateParameters parameters() {
+    return templateParameters;
+  }
 
-        final List<ProjectToDescription> projectToDescriptionEntries =
-                ProjectToDescription.fromProjectionAnnotation(projectionType, projectionActors.collect(Collectors.toList()));
+  @Override
+  public TemplateStandard standard() {
+    return PROJECTION_DISPATCHER_PROVIDER;
+  }
 
-        this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionEntries);
-
-        this.placeholder = false;
-    }
-
-    private ProjectionDispatcherProviderTemplateData(final String basePackage,
-                                                     final ProjectionType projectionType,
-                                                     final boolean placeholder,
-                                                     final List<Content> contents) {
-        final String packageName = resolvePackage(basePackage);
-
-        final List<ProjectToDescription> projectToDescriptionEntries =
-                ProjectToDescription.from(projectionType, contents);
-
-        this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionEntries)
-                .addImports(resolveImports(basePackage, projectionType, contents));
-
-        this.placeholder = placeholder;
-    }
-
-    private String resolvePackage(final String basePackage) {
-        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME).toLowerCase();
-    }
-
-    private Set<String> resolveImports(final String basePackage,
-                                       final ProjectionType projectionType,
-                                       final List<Content> contents) {
-        if(projectionType.isOperationBased()) {
-            final String projectionSourceTypesQualifiedName =
-                    ProjectionSourceTypesDetail.resolveQualifiedName(basePackage, projectionType);
-
-            final String allSourceTypes =
-                    CodeElementFormatter.staticallyImportAllFrom(projectionSourceTypesQualifiedName);
-
-            return Stream.of(allSourceTypes).collect(Collectors.toSet());
-        }
-
-        return ContentQuery.findFullyQualifiedClassNames(DOMAIN_EVENT, contents);
-    }
-
-    @Override
-    public TemplateParameters parameters() {
-        return templateParameters;
-    }
-
-    @Override
-    public TemplateStandard standard() {
-        return PROJECTION_DISPATCHER_PROVIDER;
-    }
-
-    @Override
-    public boolean isPlaceholder() {
-        return placeholder;
-    }
+  @Override
+  public boolean isPlaceholder() {
+    return placeholder;
+  }
 
 }

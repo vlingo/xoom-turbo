@@ -22,29 +22,29 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVEN
 
 public class AdapterEntriesContentLoader extends TypeBasedContentLoader {
 
-    protected AdapterEntriesContentLoader(final Element annotatedClass,
-                                          final ProcessingEnvironment environment) {
-        super(annotatedClass, environment);
+  protected AdapterEntriesContentLoader(final Element annotatedClass,
+                                        final ProcessingEnvironment environment) {
+    super(annotatedClass, environment);
+  }
+
+  @Override
+  protected List<TypeElement> retrieveContentSource() {
+    final Adapters adapters = annotatedClass.getAnnotation(Adapters.class);
+
+    if (adapters == null) {
+      return Collections.emptyList();
     }
 
-    @Override
-    protected List<TypeElement> retrieveContentSource() {
-        final Adapters adapters = annotatedClass.getAnnotation(Adapters.class);
+    return typeRetriever.typesFrom(adapters, Adapters::value);
+  }
 
-        if(adapters == null) {
-            return Collections.emptyList();
-        }
-
-        return typeRetriever.typesFrom(adapters, Adapters::value);
+  @Override
+  protected TemplateStandard standard() {
+    final Persistence persistence = annotatedClass.getAnnotation(Persistence.class);
+    if (persistence.storageType().isJournal()) {
+      return DOMAIN_EVENT;
     }
-
-    @Override
-    protected TemplateStandard standard() {
-        final Persistence persistence = annotatedClass.getAnnotation(Persistence.class);
-        if(persistence.storageType().isJournal()) {
-            return DOMAIN_EVENT;
-        }
-        return AGGREGATE_STATE;
-    }
+    return AGGREGATE_STATE;
+  }
 
 }

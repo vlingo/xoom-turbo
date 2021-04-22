@@ -17,52 +17,52 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.OFFSET;
 
 public class OutputFile {
 
-    private final String absolutePath;
-    private final String filename;
-    private final String offset;
-    private final boolean placeholder;
+  private final String absolutePath;
+  private final String filename;
+  private final String offset;
+  private final boolean placeholder;
 
-    public OutputFile(final CodeGenerationContext context,
-                      final TemplateData templateData,
-                      final Language language) {
-        this(context.isInternalGeneration() ? "" : FileLocationResolver.from(context, templateData),
-                language.formatFilename(templateData.filename()), templateData.parameters().find(OFFSET),
-                templateData.isPlaceholder());
-    }
+  public OutputFile(final CodeGenerationContext context,
+                    final TemplateData templateData,
+                    final Language language) {
+    this(context.isInternalGeneration() ? "" : FileLocationResolver.from(context, templateData),
+            language.formatFilename(templateData.filename()), templateData.parameters().find(OFFSET),
+            templateData.isPlaceholder());
+  }
 
-    public OutputFile(final String absolutePath,
-                      final String filename) {
-        this(absolutePath, filename, "", false);
-    }
+  public OutputFile(final String absolutePath,
+                    final String filename) {
+    this(absolutePath, filename, "", false);
+  }
 
-    private OutputFile(final String absolutePath,
-                       final String filename,
-                       final String offset,
-                       final boolean placeholder) {
-        this.absolutePath = absolutePath;
-        this.filename = filename;
-        this.offset = offset;
-        this.placeholder = placeholder;
-    }
+  private OutputFile(final String absolutePath,
+                     final String filename,
+                     final String offset,
+                     final boolean placeholder) {
+    this.absolutePath = absolutePath;
+    this.filename = filename;
+    this.offset = offset;
+    this.placeholder = placeholder;
+  }
 
-    public boolean isPlaceholder() {
-        return placeholder;
-    }
+  public boolean isPlaceholder() {
+    return placeholder;
+  }
 
-    public String filename() {
-        return filename;
-    }
+  public String filename() {
+    return filename;
+  }
 
-    public String filePath() {
-        return Paths.get(absolutePath, filename).toString();
-    }
+  public String filePath() {
+    return Paths.get(absolutePath, filename).toString();
+  }
 
-    public File toFile() {
-        return new File(filePath());
-    }
+  public File toFile() {
+    return new File(filePath());
+  }
 
-    public String offset() {
-        return offset;
-    }
+  public String offset() {
+    return offset;
+  }
 
 }

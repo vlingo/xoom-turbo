@@ -27,21 +27,21 @@ public class AggregateDetail {
 
   public static CodeGenerationParameter stateFieldWithName(final CodeGenerationParameter aggregate, final String fieldName) {
     return aggregate.retrieveAllRelated(Label.STATE_FIELD).filter(field -> field.value.equals(fieldName))
-            .findFirst().orElseThrow(() -> new IllegalArgumentException("Field " + fieldName + " not found" ));
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("Field " + fieldName + " not found"));
   }
 
   public static CodeGenerationParameter methodWithName(final CodeGenerationParameter aggregate, final String methodName) {
-    return findMethod(aggregate, methodName).orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " not found" ));
+    return findMethod(aggregate, methodName).orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " not found"));
   }
 
   public static CodeGenerationParameter eventWithName(final CodeGenerationParameter aggregate, final String eventName) {
     return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).filter(event -> event.value.equals(eventName))
-            .findFirst().orElseThrow(() -> new IllegalArgumentException("Event " + eventName + " not found" ));
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("Event " + eventName + " not found"));
   }
 
   public static String stateFieldType(final CodeGenerationParameter aggregate,
-                                                       final String fieldPath,
-                                                       final List<CodeGenerationParameter> valueObjects) {
+                                      final String fieldPath,
+                                      final List<CodeGenerationParameter> valueObjects) {
     return stateFieldAtPath(0, aggregate, fieldPath.split("."), valueObjects);
   }
 
@@ -56,7 +56,7 @@ public class AggregateDetail {
 
     final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
 
-    if(pathIndex == fieldPathParts.length - 1) {
+    if (pathIndex == fieldPathParts.length - 1) {
       return fieldType;
     }
 
@@ -92,9 +92,9 @@ public class AggregateDetail {
     final String currentRelativePath =
             relativePath.isEmpty() ? field.value : relativePath + "." + field.value;
 
-    if(FieldDetail.isScalar(field)) {
+    if (FieldDetail.isScalar(field)) {
       paths.add(currentRelativePath);
-    } else if(ValueObjectDetail.isValueObject(field)) {
+    } else if (ValueObjectDetail.isValueObject(field)) {
       final String valueObjectType =
               field.retrieveRelatedValue(FIELD_TYPE);
 

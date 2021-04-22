@@ -16,5 +16,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface DataObjects {
 
-    Class<?>[] value();
+  Class<?>[] value();
 }

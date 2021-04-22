@@ -8,10 +8,10 @@
 package io.vlingo.xoom.turbo.annotation.initializer;
 
 public class XoomInitializationException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public XoomInitializationException(final Exception exception) {
-        super(exception.getMessage(), exception);
-    }
+  public XoomInitializationException(final Exception exception) {
+    super(exception.getMessage(), exception);
+  }
 
 }

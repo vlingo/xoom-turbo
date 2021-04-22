@@ -22,7 +22,7 @@ public class ValueObjectDependencyOrder {
   private final List<CodeGenerationParameter> valueObjects = new ArrayList<>();
   private final List<CodeGenerationParameter> sortedValueObjects = new ArrayList<>();
 
-  protected static Stream<CodeGenerationParameter> sort(final CodeGenerationParameter ...valueObjects) {
+  protected static Stream<CodeGenerationParameter> sort(final CodeGenerationParameter... valueObjects) {
     return sort(Stream.of(valueObjects));
   }
 
@@ -41,9 +41,9 @@ public class ValueObjectDependencyOrder {
   }
 
   private void handleDependency(final CodeGenerationParameter valueObject) {
-    if(!isSorted(valueObject)) {
+    if (!isSorted(valueObject)) {
       final List<CodeGenerationParameter> dependencies = findDependencies(valueObject);
-      if(!dependencies.isEmpty()) {
+      if (!dependencies.isEmpty()) {
         dependencies.forEach(this::handleDependency);
       }
       sortedValueObjects.add(valueObject);

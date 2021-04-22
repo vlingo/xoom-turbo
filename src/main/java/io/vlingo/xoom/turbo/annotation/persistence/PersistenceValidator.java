@@ -15,20 +15,21 @@ import static io.vlingo.xoom.turbo.annotation.Validation.*;
 
 public class PersistenceValidator {
 
-    private static PersistenceValidator instance;
+  private static PersistenceValidator instance;
 
-    private PersistenceValidator() {}
+  private PersistenceValidator() {
+  }
 
-    public static PersistenceValidator instance() {
-        if(instance == null) {
-            instance = new PersistenceValidator();
-        }
-        return instance;
+  public static PersistenceValidator instance() {
+    if (instance == null) {
+      instance = new PersistenceValidator();
     }
+    return instance;
+  }
 
-    public void validate(final ProcessingEnvironment processingEnvironment, final AnnotatedElements annotatedElements) {
-        Arrays.asList(singularityValidation(), targetValidation(), classVisibilityValidation())
-                .forEach(validator -> validator.validate(processingEnvironment, Persistence.class, annotatedElements));
-    }
+  public void validate(final ProcessingEnvironment processingEnvironment, final AnnotatedElements annotatedElements) {
+    Arrays.asList(singularityValidation(), targetValidation(), classVisibilityValidation())
+            .forEach(validator -> validator.validate(processingEnvironment, Persistence.class, annotatedElements));
+  }
 
 }

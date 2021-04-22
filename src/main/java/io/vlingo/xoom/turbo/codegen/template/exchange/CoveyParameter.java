@@ -25,101 +25,101 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class CoveyParameter {
 
-    private final String localClass;
-    private final String externalClass;
-    private final String adapterInstantiation;
-    private final String receiverInstantiation;
+  private final String localClass;
+  private final String externalClass;
+  private final String adapterInstantiation;
+  private final String receiverInstantiation;
 
-    public static Set<CoveyParameter> from(final List<CodeGenerationParameter> exchanges) {
-        final Predicate<CodeGenerationParameter> onlyConsumers =
-                exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer();
+  public static Set<CoveyParameter> from(final List<CodeGenerationParameter> exchanges) {
+    final Predicate<CodeGenerationParameter> onlyConsumers =
+            exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isConsumer();
 
-        final Predicate<CodeGenerationParameter> onlyProducers =
-                exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
+    final Predicate<CodeGenerationParameter> onlyProducers =
+            exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
 
-        final Set<CoveyParameter> consumerCoveys =
-                exchanges.stream().filter(onlyConsumers)
-                        .flatMap(exchange -> exchange.retrieveAllRelated(RECEIVER))
-                        .map(receiver -> receiver.retrieveOneRelated(SCHEMA))
-                        .map(schema -> new CoveyParameter(schema.parent(EXCHANGE), schema))
-                        .collect(Collectors.toSet());
+    final Set<CoveyParameter> consumerCoveys =
+            exchanges.stream().filter(onlyConsumers)
+                    .flatMap(exchange -> exchange.retrieveAllRelated(RECEIVER))
+                    .map(receiver -> receiver.retrieveOneRelated(SCHEMA))
+                    .map(schema -> new CoveyParameter(schema.parent(EXCHANGE), schema))
+                    .collect(Collectors.toSet());
 
-        final Set<CoveyParameter> producerCoveys =
-                exchanges.stream().filter(onlyProducers).map(CoveyParameter::new).collect(Collectors.toSet());
+    final Set<CoveyParameter> producerCoveys =
+            exchanges.stream().filter(onlyProducers).map(CoveyParameter::new).collect(Collectors.toSet());
 
-        return Stream.of(consumerCoveys, producerCoveys).flatMap(Set::stream).collect(Collectors.toSet());
-    }
+    return Stream.of(consumerCoveys, producerCoveys).flatMap(Set::stream).collect(Collectors.toSet());
+  }
 
-    private CoveyParameter(final CodeGenerationParameter consumerExchange,
-                           final CodeGenerationParameter schema) {
-        this.externalClass = String.class.getSimpleName();
-        this.localClass = DATA_OBJECT.resolveClassname(consumerExchange.parent().value);
-        this.adapterInstantiation = resolveConsumerAdapterInstantiation(consumerExchange, schema);
-        this.receiverInstantiation = String.format("new %s(stage)", resolveReceiverName(consumerExchange, schema));
-    }
+  private CoveyParameter(final CodeGenerationParameter consumerExchange,
+                         final CodeGenerationParameter schema) {
+    this.externalClass = String.class.getSimpleName();
+    this.localClass = DATA_OBJECT.resolveClassname(consumerExchange.parent().value);
+    this.adapterInstantiation = resolveConsumerAdapterInstantiation(consumerExchange, schema);
+    this.receiverInstantiation = String.format("new %s(stage)", resolveReceiverName(consumerExchange, schema));
+  }
 
-    private CoveyParameter(final CodeGenerationParameter producerExchange) {
-        this.localClass = IdentifiedDomainEvent.class.getSimpleName();
-        this.externalClass = IdentifiedDomainEvent.class.getSimpleName();
-        this.adapterInstantiation = String.format("new %s()", resolveAdapterName(producerExchange));
-        this.receiverInstantiation = "received -> {}";
-    }
+  private CoveyParameter(final CodeGenerationParameter producerExchange) {
+    this.localClass = IdentifiedDomainEvent.class.getSimpleName();
+    this.externalClass = IdentifiedDomainEvent.class.getSimpleName();
+    this.adapterInstantiation = String.format("new %s()", resolveAdapterName(producerExchange));
+    this.receiverInstantiation = "received -> {}";
+  }
 
-    private String resolveConsumerAdapterInstantiation(final CodeGenerationParameter consumerExchange,
-                                                       final CodeGenerationParameter schema) {
-        return String.format("new %s(\"%s\")", resolveAdapterName(consumerExchange), schema.value);
-    }
+  private String resolveConsumerAdapterInstantiation(final CodeGenerationParameter consumerExchange,
+                                                     final CodeGenerationParameter schema) {
+    return String.format("new %s(\"%s\")", resolveAdapterName(consumerExchange), schema.value);
+  }
 
-    private String resolveReceiverName(final CodeGenerationParameter consumerExchange,
-                                       final CodeGenerationParameter schema) {
-        final String schemaTypeName = Formatter.formatSchemaTypeName(schema);
+  private String resolveReceiverName(final CodeGenerationParameter consumerExchange,
+                                     final CodeGenerationParameter schema) {
+    final String schemaTypeName = Formatter.formatSchemaTypeName(schema);
 
-        final TemplateParameters aggregateProtocolName =
-                TemplateParameters.with(AGGREGATE_PROTOCOL_NAME, consumerExchange.parent().value);
+    final TemplateParameters aggregateProtocolName =
+            TemplateParameters.with(AGGREGATE_PROTOCOL_NAME, consumerExchange.parent().value);
 
-        final String holderName =
-                EXCHANGE_RECEIVER_HOLDER.resolveClassname(aggregateProtocolName);
+    final String holderName =
+            EXCHANGE_RECEIVER_HOLDER.resolveClassname(aggregateProtocolName);
 
-        return String.format("%s.%s", holderName, schemaTypeName);
-    }
+    return String.format("%s.%s", holderName, schemaTypeName);
+  }
 
-    private String resolveAdapterName(final CodeGenerationParameter exchange) {
-        final TemplateParameters parameters =
-                TemplateParameters.with(AGGREGATE_PROTOCOL_NAME, exchange.parent().value)
-                        .and(EXCHANGE_ROLE, exchange.retrieveRelatedValue(ROLE, ExchangeRole::of));
+  private String resolveAdapterName(final CodeGenerationParameter exchange) {
+    final TemplateParameters parameters =
+            TemplateParameters.with(AGGREGATE_PROTOCOL_NAME, exchange.parent().value)
+                    .and(EXCHANGE_ROLE, exchange.retrieveRelatedValue(ROLE, ExchangeRole::of));
 
-        return EXCHANGE_ADAPTER.resolveClassname(parameters);
-    }
+    return EXCHANGE_ADAPTER.resolveClassname(parameters);
+  }
 
-    public String getLocalClass() {
-        return localClass;
-    }
+  public String getLocalClass() {
+    return localClass;
+  }
 
-    public String getAdapterInstantiation() {
-        return adapterInstantiation;
-    }
+  public String getAdapterInstantiation() {
+    return adapterInstantiation;
+  }
 
-    public String getExternalClass() {
-        return externalClass;
-    }
+  public String getExternalClass() {
+    return externalClass;
+  }
 
-    public String getReceiverInstantiation() {
-        return receiverInstantiation;
-    }
+  public String getReceiverInstantiation() {
+    return receiverInstantiation;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CoveyParameter that = (CoveyParameter) o;
-        return Objects.equals(localClass, that.localClass) &&
-                Objects.equals(adapterInstantiation, that.adapterInstantiation) &&
-                Objects.equals(externalClass, that.externalClass) &&
-                Objects.equals(receiverInstantiation, that.receiverInstantiation);
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CoveyParameter that = (CoveyParameter) o;
+    return Objects.equals(localClass, that.localClass) &&
+            Objects.equals(adapterInstantiation, that.adapterInstantiation) &&
+            Objects.equals(externalClass, that.externalClass) &&
+            Objects.equals(receiverInstantiation, that.receiverInstantiation);
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(localClass, adapterInstantiation, externalClass, receiverInstantiation);
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(localClass, adapterInstantiation, externalClass, receiverInstantiation);
+  }
 }

@@ -15,51 +15,51 @@ import java.util.stream.Stream;
 
 public class ApplicationProperty {
 
-    private static final String XOOM_PREFIX = "VLINGO_XOOM";
-    private static final String COMBINATION_PATTERN = "%s.%s";
+  private static final String XOOM_PREFIX = "VLINGO_XOOM";
+  private static final String COMBINATION_PATTERN = "%s.%s";
 
-    public static String readValue(final String key, final Properties properties) {
-        final String propertiesValue = retrieveFromProperties(key, properties);
-        return propertiesValue != null ? propertiesValue : retrieveFromEnvironment(key);
+  public static String readValue(final String key, final Properties properties) {
+    final String propertiesValue = retrieveFromProperties(key, properties);
+    return propertiesValue != null ? propertiesValue : retrieveFromEnvironment(key);
+  }
+
+  public static List<String> readMultipleValues(final String key, final String separator, final Properties properties) {
+    final String value = readValue(key, properties);
+
+    if (value == null) {
+      return Collections.emptyList();
     }
 
-    public static List<String> readMultipleValues(final String key, final String separator, final Properties properties) {
-        final String value = readValue(key, properties);
+    return value == null ? Collections.emptyList() : Stream.of(value.split(separator)).collect(Collectors.toList());
+  }
 
-        if(value == null) {
-            return Collections.emptyList();
-        }
+  private static String retrieveFromProperties(final String key, final Properties properties) {
+    if (!properties.containsKey(key)) {
+      return null;
+    }
+    final String value = properties.get(key).toString().trim();
+    return value.isEmpty() ? null : value;
+  }
 
-        return value == null ? Collections.emptyList() : Stream.of(value.split(separator)).collect(Collectors.toList());
+  private static String retrieveFromEnvironment(final String key) {
+    final String envKey =
+            resolveEnvironmentVariable(key);
+
+    if (!System.getenv().containsKey(envKey)) {
+      return null;
     }
 
-    private static String retrieveFromProperties(final String key, final Properties properties) {
-        if(!properties.containsKey(key)) {
-            return null;
-        }
-        final String value = properties.get(key).toString().trim();
-        return value.isEmpty() ? null : value;
+    final String value = System.getenv(envKey);
+
+    if (value == null || value.trim().isEmpty()) {
+      return null;
     }
 
-    private static String retrieveFromEnvironment(final String key) {
-        final String envKey =
-                resolveEnvironmentVariable(key);
+    return value.trim();
+  }
 
-        if(!System.getenv().containsKey(envKey)) {
-            return null;
-        }
-
-        final String value = System.getenv(envKey);
-
-        if(value == null || value.trim().isEmpty()) {
-            return null;
-        }
-
-        return value.trim();
-    }
-
-    private static String resolveEnvironmentVariable(final String key) {
-        return String.format(COMBINATION_PATTERN, XOOM_PREFIX, key).replace("\\.", "_");
-    }
+  private static String resolveEnvironmentVariable(final String key) {
+    return String.format(COMBINATION_PATTERN, XOOM_PREFIX, key).replace("\\.", "_");
+  }
 
 }

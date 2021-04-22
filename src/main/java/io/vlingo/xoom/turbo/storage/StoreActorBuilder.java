@@ -19,45 +19,45 @@ import java.util.function.Predicate;
 
 public interface StoreActorBuilder {
 
-    List<StoreActorBuilder> BUILDERS =
-            Arrays.asList(new InMemoryStateStoreActorBuilder(), new DefaultStateStoreActorBuilder(),
-                    new InMemoryJournalActorBuilder(), new DefaultJournalActorBuilder(),
-                    new ObjectStoreActorBuilder());
+  List<StoreActorBuilder> BUILDERS =
+          Arrays.asList(new InMemoryStateStoreActorBuilder(), new DefaultStateStoreActorBuilder(),
+                  new InMemoryJournalActorBuilder(), new DefaultJournalActorBuilder(),
+                  new ObjectStoreActorBuilder());
 
-    @SuppressWarnings("rawtypes")
-    static <T> T from(final Stage stage,
-                      final Model model,
-                      final Dispatcher dispatcher,
-                      final StorageType storageType,
-                      final Properties properties,
-                      final boolean autoDatabaseCreation) {
-        return from(stage, model, Arrays.asList(dispatcher), storageType, properties, autoDatabaseCreation);
-    }
+  @SuppressWarnings("rawtypes")
+  static <T> T from(final Stage stage,
+                    final Model model,
+                    final Dispatcher dispatcher,
+                    final StorageType storageType,
+                    final Properties properties,
+                    final boolean autoDatabaseCreation) {
+    return from(stage, model, Arrays.asList(dispatcher), storageType, properties, autoDatabaseCreation);
+  }
 
-    @SuppressWarnings("rawtypes")
-    static <T> T from(final Stage stage,
-                      final Model model,
-                      final List<Dispatcher> dispatcher,
-                      final StorageType storageType,
-                      final Properties properties,
-                      final boolean autoDatabaseCreation) {
-        final Configuration configuration =
-                new DatabaseParameters(model, properties, autoDatabaseCreation)
-                        .mapToConfiguration();
+  @SuppressWarnings("rawtypes")
+  static <T> T from(final Stage stage,
+                    final Model model,
+                    final List<Dispatcher> dispatcher,
+                    final StorageType storageType,
+                    final Properties properties,
+                    final boolean autoDatabaseCreation) {
+    final Configuration configuration =
+            new DatabaseParameters(model, properties, autoDatabaseCreation)
+                    .mapToConfiguration();
 
-        final DatabaseType databaseType =
-                DatabaseType.retrieveFromConfiguration(configuration);
+    final DatabaseType databaseType =
+            DatabaseType.retrieveFromConfiguration(configuration);
 
-        final Predicate<StoreActorBuilder> filter =
-                resolver -> resolver.support(storageType, databaseType);
+    final Predicate<StoreActorBuilder> filter =
+            resolver -> resolver.support(storageType, databaseType);
 
-        return BUILDERS.stream().filter(filter).findFirst().get()
-                .build(stage, dispatcher, configuration);
-    }
+    return BUILDERS.stream().filter(filter).findFirst().get()
+            .build(stage, dispatcher, configuration);
+  }
 
-    @SuppressWarnings("rawtypes")
-    <T> T build(final Stage stage, final List<Dispatcher> dispatchers, final Configuration configuration);
+  @SuppressWarnings("rawtypes")
+  <T> T build(final Stage stage, final List<Dispatcher> dispatchers, final Configuration configuration);
 
-    boolean support(final StorageType storageType, final DatabaseType databaseType);
+  boolean support(final StorageType storageType, final DatabaseType databaseType);
 
 }

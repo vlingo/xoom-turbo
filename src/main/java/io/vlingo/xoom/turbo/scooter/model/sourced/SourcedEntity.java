@@ -18,8 +18,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
-public abstract class SourcedEntity<T> extends Entity<Object,T> {
-  private static final Map<Class<SourcedEntity<Source<?>>>,Map<Class<Source<?>>, BiConsumer<SourcedEntity<?>, Source<?>>>> registeredConsumers =
+public abstract class SourcedEntity<T> extends Entity<Object, T> {
+  private static final Map<Class<SourcedEntity<Source<?>>>, Map<Class<Source<?>>, BiConsumer<SourcedEntity<?>, Source<?>>>> registeredConsumers =
           new ConcurrentHashMap<>();
 
   private final int currentVersion;
@@ -27,11 +27,12 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
   /**
    * Register the means to apply {@code sourceType} instances for state transition
    * of {@code sourcedType} by means of a given {@code consumer}.
+   *
    * @param sourcedType the concrete {@code Class<SOURCED>} type to which sourceType instances are applied
-   * @param sourceType the concrete {@code Class<SOURCE>} type to apply
-   * @param consumer the {@code BiConsumer<SOURCED, SOURCE>} used to perform the application of sourceType
-   * @param <SOURCED> the type {@code <? extends Sourced<?>>} of the sourced entity to apply to
-   * @param <SOURCE> the type {@code <? extends Source<?>>} of the source to be applied
+   * @param sourceType  the concrete {@code Class<SOURCE>} type to apply
+   * @param consumer    the {@code BiConsumer<SOURCED, SOURCE>} used to perform the application of sourceType
+   * @param <SOURCED>   the type {@code <? extends Sourced<?>>} of the sourced entity to apply to
+   * @param <SOURCE>    the type {@code <? extends Source<?>>} of the source to be applied
    */
   @SuppressWarnings("unchecked")
   public static <SOURCED extends SourcedEntity<?>, SOURCE extends Source<?>> void registerConsumer(
@@ -57,6 +58,7 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
 
   /**
    * Answer my type name.
+   *
    * @return String
    */
   public String type() {
@@ -72,7 +74,8 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
 
   /**
    * Construct my default state.
-   * @param stream the {@code List<Source<T>>} with which to initialize my state
+   *
+   * @param stream         the {@code List<Source<T>>} with which to initialize my state
    * @param currentVersion the int to set as my currentVersion
    */
   protected SourcedEntity(final List<Source<T>> stream, final int currentVersion) {
@@ -84,6 +87,7 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
   /**
    * Apply all of the given {@code sources} to myself, which includes appending
    * them to my journal and reflecting the representative changes to my state.
+   *
    * @param sources the {@code List<Source<T>>} to apply
    */
   final protected void apply(final List<Source<T>> sources) {
@@ -92,7 +96,8 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
 
   /**
    * Apply all of the given {@code sources} to myself along with {@code metadata}.
-   * @param sources the {@code List<Source<T>>} to apply
+   *
+   * @param sources  the {@code List<Source<T>>} to apply
    * @param metadata the Metadata to apply along with source
    */
   final protected void apply(final List<Source<T>> sources, final Metadata metadata) {
@@ -101,6 +106,7 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
 
   /**
    * Apply the given {@code source} to myself.
+   *
    * @param source the {@code Source<T>} to apply
    */
   final protected void apply(final Source<T> source) {
@@ -109,7 +115,8 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
 
   /**
    * Apply the given {@code source} to myself with {@code metadata}.
-   * @param source the {@code Source<T>} to apply
+   *
+   * @param source   the {@code Source<T>} to apply
    * @param metadata the Metadata to apply along with source
    */
   final protected void apply(final Source<T> source, final Metadata metadata) {
@@ -118,6 +125,7 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
 
   /**
    * Answer a {@code List<Source<T>>} from the varargs {@code sources}.
+   *
    * @param sources the varargs {@code Source<T>} of sources to answer as a {@code List<Source<T>>}
    * @return {@code List<Source<T>>}
    */
@@ -129,6 +137,7 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
   /**
    * Answer my {@code Metadata}.
    * Must override if {@code Metadata} is to be supported.
+   *
    * @return Metadata
    */
   protected Metadata metadata() {
@@ -139,6 +148,7 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
    * Answer a valid {@code SNAPSHOT} state instance if a snapshot should
    * be taken and persisted along with applied {@code Source<T>} instance(s).
    * Must override if snapshots are to be supported.
+   *
    * @param <SNAPSHOT> the type of the snapshot
    * @return {@code SNAPSHOT}
    */
@@ -148,6 +158,7 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
 
   /**
    * Answer my stream name. Must override.
+   *
    * @return String
    */
   protected abstract String streamName();
@@ -156,7 +167,8 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
    * Answer a representation of a number of segments as a
    * composite stream name. The implementor of {@code streamName()}
    * would use this method if the its stream name is built from segments.
-   * @param separator the String separator the insert between segments
+   *
+   * @param separator          the String separator the insert between segments
    * @param streamNameSegments the varargs String of one or more segments
    * @return String
    */
@@ -169,7 +181,7 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
     return builder.toString();
   }
 
-  private void applyWithTransition(final Applied<Object,T> applied) {
+  private void applyWithTransition(final Applied<Object, T> applied) {
     applied(applied);
 
     transitionWith(applied.sources());
@@ -205,6 +217,7 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
 
   /**
    * Answer {@code source} wrapped in a {@code List<Source<T>>}.
+   *
    * @param source the {@code Source<T>} to wrap
    * @return {@code List<Source<T>>}
    */
@@ -214,6 +227,7 @@ public abstract class SourcedEntity<T> extends Entity<Object,T> {
 
   /**
    * Answer {@code sources} wrapped in a {@code List<Source<T>>}.
+   *
    * @param sources the {@code Source<T>[]} to wrap
    * @return {@code List<Source<T>>}
    */

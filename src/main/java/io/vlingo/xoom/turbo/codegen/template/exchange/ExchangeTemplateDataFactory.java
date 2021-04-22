@@ -22,32 +22,32 @@ import static java.util.stream.Collectors.toList;
 
 public class ExchangeTemplateDataFactory {
 
-    public static List<TemplateData> build(final Language language,
-                                           final String exchangePackage,
-                                           final List<CodeGenerationParameter> aggregates,
-                                           final List<CodeGenerationParameter> valueObjects,
-                                           final List<Content> contents) {
-        final Supplier<Stream<CodeGenerationParameter>> filteredAggregates = () ->
-                aggregates.stream().filter(aggregate -> aggregate.hasAny(EXCHANGE));
+  public static List<TemplateData> build(final Language language,
+                                         final String exchangePackage,
+                                         final List<CodeGenerationParameter> aggregates,
+                                         final List<CodeGenerationParameter> valueObjects,
+                                         final List<Content> contents) {
+    final Supplier<Stream<CodeGenerationParameter>> filteredAggregates = () ->
+            aggregates.stream().filter(aggregate -> aggregate.hasAny(EXCHANGE));
 
-        final List<TemplateData> mappers =
-                ExchangeMapperTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
+    final List<TemplateData> mappers =
+            ExchangeMapperTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
 
-        final List<TemplateData> holders =
-                ExchangeReceiverHolderTemplateData.from(language, exchangePackage, filteredAggregates.get(), valueObjects, contents);
+    final List<TemplateData> holders =
+            ExchangeReceiverHolderTemplateData.from(language, exchangePackage, filteredAggregates.get(), valueObjects, contents);
 
-        final List<TemplateData> adapters =
-                ExchangeAdapterTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
+    final List<TemplateData> adapters =
+            ExchangeAdapterTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
 
-        final List<TemplateData> properties =
-                Arrays.asList(ExchangePropertiesTemplateData.from(filteredAggregates.get()));
+    final List<TemplateData> properties =
+            Arrays.asList(ExchangePropertiesTemplateData.from(filteredAggregates.get()));
 
-        final List<TemplateData> dispatcher =
-                Arrays.asList(ExchangeDispatcherTemplateData.from(exchangePackage, filteredAggregates.get(), contents));
+    final List<TemplateData> dispatcher =
+            Arrays.asList(ExchangeDispatcherTemplateData.from(exchangePackage, filteredAggregates.get(), contents));
 
-        final List<TemplateData> bootstrap =
-                Arrays.asList(ExchangeBootstrapTemplateData.from(exchangePackage, filteredAggregates.get(), contents));
+    final List<TemplateData> bootstrap =
+            Arrays.asList(ExchangeBootstrapTemplateData.from(exchangePackage, filteredAggregates.get(), contents));
 
-        return Stream.of(mappers, holders, adapters, properties, dispatcher, bootstrap).flatMap(List::stream).collect(toList());
-    }
+    return Stream.of(mappers, holders, adapters, properties, dispatcher, bootstrap).flatMap(List::stream).collect(toList());
+  }
 }

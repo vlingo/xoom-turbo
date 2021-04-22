@@ -23,6 +23,7 @@ public class TestStatement {
   private final List<String> assertions = new ArrayList<>();
 
   private final List<String> resultAssignment = new ArrayList<>();
+
   public static List<TestStatement> with(final String testMethodName,
                                          final CodeGenerationParameter aggregate,
                                          final List<CodeGenerationParameter> valueObjects,

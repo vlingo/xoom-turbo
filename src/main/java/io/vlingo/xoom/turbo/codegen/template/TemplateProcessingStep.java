@@ -17,21 +17,21 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.LANGUAGE;
 
 public abstract class TemplateProcessingStep implements CodeGenerationStep {
 
-    @Override
-    public void process(final CodeGenerationContext context) {
-        final Language language = resolveLanguage(context);
-        language.resolvePreParametersProcessing(context.parameters());
-        buildTemplatesData(context).forEach(templateData -> {
-            language.resolvePostParametersProcessing(templateData.parameters());
-            final String code = TemplateProcessor.instance().process(language, templateData);
-            context.registerTemplateProcessing(language, templateData, code);
-        });
-    }
+  @Override
+  public void process(final CodeGenerationContext context) {
+    final Language language = resolveLanguage(context);
+    language.resolvePreParametersProcessing(context.parameters());
+    buildTemplatesData(context).forEach(templateData -> {
+      language.resolvePostParametersProcessing(templateData.parameters());
+      final String code = TemplateProcessor.instance().process(language, templateData);
+      context.registerTemplateProcessing(language, templateData, code);
+    });
+  }
 
-    protected abstract List<TemplateData> buildTemplatesData(final CodeGenerationContext context);
+  protected abstract List<TemplateData> buildTemplatesData(final CodeGenerationContext context);
 
-    protected Language resolveLanguage(final CodeGenerationContext context) {
-        return context.hasParameter(LANGUAGE) ? context.parameterOf(LANGUAGE, Language::valueOf) : Language.findDefault();
-    }
+  protected Language resolveLanguage(final CodeGenerationContext context) {
+    return context.hasParameter(LANGUAGE) ? context.parameterOf(LANGUAGE, Language::valueOf) : Language.findDefault();
+  }
 
 }

@@ -16,6 +16,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface Adapters {
 
-    Class<?>[] value();
+  Class<?>[] value();
 
 }

@@ -24,11 +24,13 @@ import java.util.concurrent.atomic.AtomicReference;
  * blocks and thus must be used only by {@code xoom-scooter} services.
  */
 public abstract class JournalRepository {
-  protected JournalRepository() { }
+  protected JournalRepository() {
+  }
 
   /**
    * Answer an {@code JournalRepository.AppendInterest} for each new
    * {@code append()} and {@code appendAll()}.
+   *
    * @return AppendInterest
    */
   protected AppendInterest appendInterest() {
@@ -38,6 +40,7 @@ public abstract class JournalRepository {
   /**
    * Await on the append to be completed. The {@code interest} must be
    * requested upon each new {@code append()} and {@code appendAll()}.
+   *
    * @param interest the AppendInterest on which the await is based.
    */
   protected void await(final AppendInterest interest) {
@@ -89,16 +92,16 @@ public abstract class JournalRepository {
 
     private <S, ST> void appendConsidering(final Outcome<StorageException, Result> outcome) {
       outcome
-      .andThen(result -> {
-        if (result.isSuccess()) {
-          appended();
-        }
-        return result;
-      })
-      .otherwise(ex -> {
-        exception.set(ex);
-        return outcome.getOrNull();
-      });
+              .andThen(result -> {
+                if (result.isSuccess()) {
+                  appended();
+                }
+                return result;
+              })
+              .otherwise(ex -> {
+                exception.set(ex);
+                return outcome.getOrNull();
+              });
     }
 
     private void throwIfException() {

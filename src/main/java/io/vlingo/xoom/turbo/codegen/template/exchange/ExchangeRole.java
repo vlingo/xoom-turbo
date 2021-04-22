@@ -11,22 +11,22 @@ import freemarker.template.utility.StringUtil;
 
 public enum ExchangeRole {
 
-    CONSUMER,
-    PRODUCER;
+  CONSUMER,
+  PRODUCER;
 
-    public static ExchangeRole of(final String roleName) {
-        return valueOf(roleName.toUpperCase());
-    }
+  public static ExchangeRole of(final String roleName) {
+    return valueOf(roleName.toUpperCase());
+  }
 
-    public boolean isConsumer() {
-        return equals(CONSUMER);
-    }
+  public boolean isConsumer() {
+    return equals(CONSUMER);
+  }
 
-    public boolean isProducer() {
-        return equals(PRODUCER);
-    }
+  public boolean isProducer() {
+    return equals(PRODUCER);
+  }
 
-    public String formatName() {
-        return StringUtil.capitalize(name().toLowerCase());
-    }
+  public String formatName() {
+    return StringUtil.capitalize(name().toLowerCase());
+  }
 }

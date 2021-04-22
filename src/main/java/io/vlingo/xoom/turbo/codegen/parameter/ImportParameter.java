@@ -15,43 +15,43 @@ import java.util.stream.Stream;
 
 public class ImportParameter {
 
-    private final String qualifiedClassName;
+  private final String qualifiedClassName;
 
-    public ImportParameter(final String qualifiedClassName) {
-        this.qualifiedClassName = qualifiedClassName;
-    }
+  public ImportParameter(final String qualifiedClassName) {
+    this.qualifiedClassName = qualifiedClassName;
+  }
 
-    public static Set<ImportParameter> of(final String ...qualifiedClassNames) {
-        return of(Stream.of(qualifiedClassNames));
-    }
+  public static Set<ImportParameter> of(final String... qualifiedClassNames) {
+    return of(Stream.of(qualifiedClassNames));
+  }
 
-    @SuppressWarnings("unchecked")
-    public static Set<ImportParameter> of(final Set<String> ...qualifiedNames) {
-        return of(Stream.of(qualifiedNames).flatMap(Collection::stream));
-    }
+  @SuppressWarnings("unchecked")
+  public static Set<ImportParameter> of(final Set<String>... qualifiedNames) {
+    return of(Stream.of(qualifiedNames).flatMap(Collection::stream));
+  }
 
-    public static Set<ImportParameter> of(final Stream<String> stateQualifiedNames) {
-        return stateQualifiedNames.map(ImportParameter::new).collect(Collectors.toSet());
-    }
+  public static Set<ImportParameter> of(final Stream<String> stateQualifiedNames) {
+    return stateQualifiedNames.map(ImportParameter::new).collect(Collectors.toSet());
+  }
 
-    public String getQualifiedClassName() {
-        return qualifiedClassName;
-    }
+  public String getQualifiedClassName() {
+    return qualifiedClassName;
+  }
 
-    public boolean matchClass(final String qualifiedClassName) {
-        return this.qualifiedClassName.equals(qualifiedClassName);
-    }
+  public boolean matchClass(final String qualifiedClassName) {
+    return this.qualifiedClassName.equals(qualifiedClassName);
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ImportParameter that = (ImportParameter) o;
-        return qualifiedClassName.equals(that.getQualifiedClassName());
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ImportParameter that = (ImportParameter) o;
+    return qualifiedClassName.equals(that.getQualifiedClassName());
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(qualifiedClassName);
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(qualifiedClassName);
+  }
 }

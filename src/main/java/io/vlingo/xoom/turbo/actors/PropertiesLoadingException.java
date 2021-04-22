@@ -8,14 +8,14 @@
 package io.vlingo.xoom.turbo.actors;
 
 public class PropertiesLoadingException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public PropertiesLoadingException(final String message) {
-        super(message);
-    }
+  public PropertiesLoadingException(final String message) {
+    super(message);
+  }
 
-    public PropertiesLoadingException(final String message, final Exception cause) {
-        super(message, cause);
-    }
+  public PropertiesLoadingException(final String message, final Exception cause) {
+    super(message, cause);
+  }
 
 }

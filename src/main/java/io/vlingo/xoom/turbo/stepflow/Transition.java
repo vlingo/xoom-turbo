@@ -16,11 +16,11 @@ import io.vlingo.xoom.actors.Logger;
 @SuppressWarnings("rawtypes")
 public interface Transition {
 
-    String getSourceName();
+  String getSourceName();
 
-    String getTargetName();
+  String getTargetName();
 
-    public static <T1 extends State, R1 extends State> void logResult(T1 s, R1 t) {
-        Logger.basicLogger().info(s.getVersion() + ": [" + s.getName() + "] to [" + t.getName() + "]");
-    }
+  static <T1 extends State, R1 extends State> void logResult(T1 s, R1 t) {
+    Logger.basicLogger().info(s.getVersion() + ": [" + s.getName() + "] to [" + t.getName() + "]");
+  }
 }

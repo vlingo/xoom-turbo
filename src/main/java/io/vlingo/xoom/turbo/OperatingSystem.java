@@ -12,27 +12,27 @@ import java.util.stream.Stream;
 
 public enum OperatingSystem {
 
-    WINDOWS(osName -> osName.contains("Windows")),
-    OTHER(osName -> !osName.contains("Windows"));
+  WINDOWS(osName -> osName.contains("Windows")),
+  OTHER(osName -> !osName.contains("Windows"));
 
-    private final Predicate<String> evaluator;
+  private final Predicate<String> evaluator;
 
-    OperatingSystem(Predicate<String> evaluator) {
-        this.evaluator = evaluator;
-    }
+  OperatingSystem(Predicate<String> evaluator) {
+    this.evaluator = evaluator;
+  }
 
-    public static OperatingSystem detect() {
-        final String osName = System.getProperty("os.name");
-        final Predicate<OperatingSystem> matcher = os -> os.matchName(osName);
-        return Stream.of(values()).filter(matcher).findFirst().get();
-    }
+  public static OperatingSystem detect() {
+    final String osName = System.getProperty("os.name");
+    final Predicate<OperatingSystem> matcher = os -> os.matchName(osName);
+    return Stream.of(values()).filter(matcher).findFirst().get();
+  }
 
-    private boolean matchName(final String operatingSystemName) {
-        return evaluator.test(operatingSystemName);
-    }
+  private boolean matchName(final String operatingSystemName) {
+    return evaluator.test(operatingSystemName);
+  }
 
-    public boolean isWindows() {
-        return equals(WINDOWS);
-    }
+  public boolean isWindows() {
+    return equals(WINDOWS);
+  }
 
 }

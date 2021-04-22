@@ -19,8 +19,8 @@ public class ExchangeDetail {
   public static Stream<CodeGenerationParameter> findInvolvedStateFieldsOnReceivers(final CodeGenerationParameter exchange) {
     final CodeGenerationParameter aggregate = exchange.parent();
     return exchange.retrieveAllRelated(Label.RECEIVER).flatMap(receiver -> {
-              final String methodName = receiver.retrieveRelatedValue(MODEL_METHOD);
-              return AggregateDetail.findInvolvedStateFields(aggregate, methodName);
-            });
+      final String methodName = receiver.retrieveRelatedValue(MODEL_METHOD);
+      return AggregateDetail.findInvolvedStateFields(aggregate, methodName);
+    });
   }
 }

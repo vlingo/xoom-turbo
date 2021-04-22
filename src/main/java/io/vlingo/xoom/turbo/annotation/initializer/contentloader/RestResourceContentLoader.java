@@ -22,54 +22,51 @@ import java.util.stream.Collectors;
 
 public class RestResourceContentLoader extends TypeBasedContentLoader {
 
-    protected RestResourceContentLoader(final Element annotatedClass,
-                                        final ProcessingEnvironment environment) {
-        super(annotatedClass, environment);
+  protected RestResourceContentLoader(final Element annotatedClass,
+                                      final ProcessingEnvironment environment) {
+    super(annotatedClass, environment);
+  }
+
+  @Override
+  protected List<TypeElement> retrieveContentSource() {
+
+    final ResourceHandlers resourceHandlers =
+            annotatedClass.getAnnotation(ResourceHandlers.class);
+
+    if (shouldIgnore(resourceHandlers)) {
+      return Collections.emptyList();
     }
 
-    @Override
-    protected List<TypeElement> retrieveContentSource() {
-
-        final ResourceHandlers resourceHandlers =
-                annotatedClass.getAnnotation(ResourceHandlers.class);
-
-        if(shouldIgnore(resourceHandlers)) {
-            return Collections.emptyList();
-        }
-
-        if(isPackageBased(resourceHandlers)) {
-            return typeRetriever.subclassesOf(DynamicResourceHandler.class, resourceHandlers.packages())
-                    .map(this::toType).collect(Collectors.toList());
-        }
-
-        return typeRetriever.typesFrom(resourceHandlers, ResourceHandlers::value);
+    if (isPackageBased(resourceHandlers)) {
+      return typeRetriever.subclassesOf(DynamicResourceHandler.class, resourceHandlers.packages())
+              .map(this::toType).collect(Collectors.toList());
     }
 
-    @Override
-    protected TemplateStandard standard() {
-        return TemplateStandard.REST_RESOURCE;
-    }
+    return typeRetriever.typesFrom(resourceHandlers, ResourceHandlers::value);
+  }
 
-    private TypeElement toType(final TypeMirror typeMirror) {
-        return (TypeElement) environment.getTypeUtils().asElement(typeMirror);
-    }
+  @Override
+  protected TemplateStandard standard() {
+    return TemplateStandard.REST_RESOURCE;
+  }
 
-    private boolean isPackageBased(final ResourceHandlers resourceHandlersAnnotation) {
-        final String[] packages = resourceHandlersAnnotation.packages();
-        if(packages.length == 1 && packages[0].isEmpty()) {
-            return false;
-        }
-        return true;
-    }
+  private TypeElement toType(final TypeMirror typeMirror) {
+    return (TypeElement) environment.getTypeUtils().asElement(typeMirror);
+  }
 
-    private boolean shouldIgnore(final ResourceHandlers resourceHandlersAnnotation) {
-        try {
-            return resourceHandlersAnnotation == null ||
-                    (resourceHandlersAnnotation.value().length == 0 &&
-                            !isPackageBased(resourceHandlersAnnotation));
-        } catch (final MirroredTypesException exception) {
-            return false;
-        }
+  private boolean isPackageBased(final ResourceHandlers resourceHandlersAnnotation) {
+    final String[] packages = resourceHandlersAnnotation.packages();
+    return packages.length != 1 || !packages[0].isEmpty();
+  }
+
+  private boolean shouldIgnore(final ResourceHandlers resourceHandlersAnnotation) {
+    try {
+      return resourceHandlersAnnotation == null ||
+              (resourceHandlersAnnotation.value().length == 0 &&
+                      !isPackageBased(resourceHandlersAnnotation));
+    } catch (final MirroredTypesException exception) {
+      return false;
     }
+  }
 
 }

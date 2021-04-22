@@ -36,7 +36,7 @@ public class ValueObjectDetail {
                     .map(valueObjectName -> resolveImport(valueObjectName, contents))
                     .findAny();
 
-    if(anyQualifiedName.isPresent()) {
+    if (anyQualifiedName.isPresent()) {
       final String packageName = CodeElementFormatter.packageOf(anyQualifiedName.get());
       return Stream.of(CodeElementFormatter.importAllFrom(packageName)).collect(Collectors.toSet());
     }
@@ -45,7 +45,7 @@ public class ValueObjectDetail {
   }
 
   public static String resolveImport(final String valueObjectName,
-                                      final List<Content> contents) {
+                                     final List<Content> contents) {
     return ContentQuery.findFullyQualifiedClassName(VALUE_OBJECT, valueObjectName, contents);
   }
 
@@ -79,8 +79,8 @@ public class ValueObjectDetail {
 
   public static CodeGenerationParameter valueObjectOf(final String valueObjectType,
                                                       final Stream<CodeGenerationParameter> valueObjects) {
-      return valueObjects.filter(valueObject -> valueObject.value.equals(valueObjectType)).findFirst()
-              .orElseThrow(() -> new IllegalArgumentException("Unable to find " + valueObjectType));
+    return valueObjects.filter(valueObject -> valueObject.value.equals(valueObjectType)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Unable to find " + valueObjectType));
   }
 
   public static Stream<CodeGenerationParameter> collectRelatedValueObjects(final CodeGenerationParameter valueObject,
@@ -93,7 +93,7 @@ public class ValueObjectDetail {
   private static void collectRelatedValueObjects(final CodeGenerationParameter valueObject,
                                                  final List<CodeGenerationParameter> valueObjects,
                                                  final List<CodeGenerationParameter> related) {
-    if(related.stream().noneMatch(vo -> vo.value.equals(valueObject.value))) {
+    if (related.stream().noneMatch(vo -> vo.value.equals(valueObject.value))) {
       related.add(valueObject);
     }
     findRelatedValueObjects(valueObject, valueObjects).forEach(vo -> collectRelatedValueObjects(vo, valueObjects, related));
@@ -118,6 +118,6 @@ public class ValueObjectDetail {
                                                                  final String fieldName) {
     return parent.retrieveAllRelated(VALUE_OBJECT_FIELD)
             .filter(field -> field.value.equals(fieldName))
-            .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find "+ fieldName));
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find " + fieldName));
   }
 }

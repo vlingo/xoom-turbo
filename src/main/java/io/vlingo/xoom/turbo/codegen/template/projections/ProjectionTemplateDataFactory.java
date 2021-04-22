@@ -22,45 +22,45 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 
 public class ProjectionTemplateDataFactory {
 
-    private static ProjectionTemplateDataFactory instance;
+  private static ProjectionTemplateDataFactory instance;
 
-    public static List<TemplateData> build(final CodeGenerationContext context) {
-        if(instance == null) {
-            instance = new ProjectionTemplateDataFactory();
-        }
-        return context.isInternalGeneration() ?
-                Arrays.asList(instance.handleInternalGeneration(context)) :
-                instance.handleExternalGeneration(context);
+  public static List<TemplateData> build(final CodeGenerationContext context) {
+    if (instance == null) {
+      instance = new ProjectionTemplateDataFactory();
     }
+    return context.isInternalGeneration() ?
+            Arrays.asList(instance.handleInternalGeneration(context)) :
+            instance.handleExternalGeneration(context);
+  }
 
-    private TemplateData handleInternalGeneration(final CodeGenerationContext context) {
-        final List<Content> contents = context.contents();
-        final Stream<CodeGenerationParameter> projectionActors = context.parametersOf(PROJECTION_ACTOR);
-        final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
-        return ProjectionDispatcherProviderTemplateData.fromProjectionAnnotation(projectionType, projectionActors, contents);
-    }
+  private TemplateData handleInternalGeneration(final CodeGenerationContext context) {
+    final List<Content> contents = context.contents();
+    final Stream<CodeGenerationParameter> projectionActors = context.parametersOf(PROJECTION_ACTOR);
+    final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
+    return ProjectionDispatcherProviderTemplateData.fromProjectionAnnotation(projectionType, projectionActors, contents);
+  }
 
-    private List<TemplateData> handleExternalGeneration(final CodeGenerationContext context) {
-        final List<Content> contents = context.contents();
+  private List<TemplateData> handleExternalGeneration(final CodeGenerationContext context) {
+    final List<Content> contents = context.contents();
 
-        final String basePackage = context.parameterOf(PACKAGE);
+    final String basePackage = context.parameterOf(PACKAGE);
 
-        final Boolean useAnnotations =
-                context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
+    final Boolean useAnnotations =
+            context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
 
-        final ProjectionType projectionType =
-                context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
+    final ProjectionType projectionType =
+            context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
 
-        final List<CodeGenerationParameter> valueObjects =
-                context.parametersOf(VALUE_OBJECT).collect(Collectors.toList());
+    final List<CodeGenerationParameter> valueObjects =
+            context.parametersOf(VALUE_OBJECT).collect(Collectors.toList());
 
-        final Stream<CodeGenerationParameter> aggregates = context.parametersOf(AGGREGATE);
+    final Stream<CodeGenerationParameter> aggregates = context.parametersOf(AGGREGATE);
 
-        final List<TemplateData> templatesData = new ArrayList<>();
-        templatesData.add(ProjectionSourceTypesTemplateData.from(basePackage, projectionType, contents));
-        templatesData.add(ProjectionDispatcherProviderTemplateData.from(basePackage, projectionType, useAnnotations, contents));
-        templatesData.addAll(ProjectionTemplateData.from(basePackage, aggregates, valueObjects, projectionType, contents));
-        return templatesData;
-    }
+    final List<TemplateData> templatesData = new ArrayList<>();
+    templatesData.add(ProjectionSourceTypesTemplateData.from(basePackage, projectionType, contents));
+    templatesData.add(ProjectionDispatcherProviderTemplateData.from(basePackage, projectionType, useAnnotations, contents));
+    templatesData.addAll(ProjectionTemplateData.from(basePackage, aggregates, valueObjects, projectionType, contents));
+    return templatesData;
+  }
 
 }

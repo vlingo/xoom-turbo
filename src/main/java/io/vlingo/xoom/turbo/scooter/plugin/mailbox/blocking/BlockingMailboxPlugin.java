@@ -23,7 +23,8 @@ public class BlockingMailboxPlugin extends AbstractPlugin implements Plugin, Mai
   }
 
   @Override
-  public void close() { }
+  public void close() {
+  }
 
   @Override
   public PluginConfiguration configuration() {
@@ -66,13 +67,16 @@ public class BlockingMailboxPlugin extends AbstractPlugin implements Plugin, Mai
   }
 
   public static class BlockingMailboxPluginConfiguration implements PluginConfiguration {
-    public BlockingMailboxPluginConfiguration() { }
+    public BlockingMailboxPluginConfiguration() {
+    }
 
     @Override
-    public void build(final Configuration configuration) { }
+    public void build(final Configuration configuration) {
+    }
 
     @Override
-    public void buildWith(final Configuration configuration, final PluginProperties properties) { }
+    public void buildWith(final Configuration configuration, final PluginProperties properties) {
+    }
 
     @Override
     public String name() {

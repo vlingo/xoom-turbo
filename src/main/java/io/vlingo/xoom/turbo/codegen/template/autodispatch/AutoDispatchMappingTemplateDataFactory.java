@@ -24,26 +24,26 @@ import static java.util.stream.Collectors.toList;
 
 public class AutoDispatchMappingTemplateDataFactory {
 
-    public static List<TemplateData> build(final CodeGenerationParameters parameters,
-                                           final List<Content> contents) {
-        final String basePackage =
-                parameters.retrieveValue(Label.PACKAGE);
+  public static List<TemplateData> build(final CodeGenerationParameters parameters,
+                                         final List<Content> contents) {
+    final String basePackage =
+            parameters.retrieveValue(Label.PACKAGE);
 
-        final boolean useCQRS =
-                parameters.retrieveValue(Label.CQRS, Boolean::valueOf);
+    final boolean useCQRS =
+            parameters.retrieveValue(Label.CQRS, Boolean::valueOf);
 
-        final Language language =
-                parameters.retrieveValue(Label.LANGUAGE, Language::valueOf);
+    final Language language =
+            parameters.retrieveValue(Label.LANGUAGE, Language::valueOf);
 
-        final List<CodeGenerationParameter> valueObjects =
-                parameters.retrieveAll(VALUE_OBJECT).collect(toList());
+    final List<CodeGenerationParameter> valueObjects =
+            parameters.retrieveAll(VALUE_OBJECT).collect(toList());
 
-        final Function<CodeGenerationParameter, Stream<TemplateData>> mapper = aggregate ->
-                Stream.of(new AutoDispatchMappingTemplateData(basePackage,
-                                aggregate, useCQRS, contents),
-                        new AutoDispatchHandlersMappingTemplateData(basePackage, language,
-                                aggregate, valueObjects, contents, useCQRS));
+    final Function<CodeGenerationParameter, Stream<TemplateData>> mapper = aggregate ->
+            Stream.of(new AutoDispatchMappingTemplateData(basePackage,
+                            aggregate, useCQRS, contents),
+                    new AutoDispatchHandlersMappingTemplateData(basePackage, language,
+                            aggregate, valueObjects, contents, useCQRS));
 
-        return parameters.retrieveAll(AGGREGATE).flatMap(mapper).collect(toList());
-    }
+    return parameters.retrieveAll(AGGREGATE).flatMap(mapper).collect(toList());
+  }
 }

@@ -13,19 +13,19 @@ import io.vlingo.xoom.turbo.codegen.template.autodispatch.AutoDispatchHandlerInv
 
 public interface HandlerInvocationResolver {
 
-    String QUERIES_PARAMETER = "$queries";
+  String QUERIES_PARAMETER = "$queries";
 
-    static HandlerInvocationResolver with(final CodeGenerationParameter parentParameter) {
-        if(parentParameter.isLabeled(Label.AUTO_DISPATCH_NAME)) {
-            return new AutoDispatchHandlerInvocationResolver();
-        }
-        return new DefaultHandlerInvocationResolver();
+  static HandlerInvocationResolver with(final CodeGenerationParameter parentParameter) {
+    if (parentParameter.isLabeled(Label.AUTO_DISPATCH_NAME)) {
+      return new AutoDispatchHandlerInvocationResolver();
     }
+    return new DefaultHandlerInvocationResolver();
+  }
 
-    String resolveRouteHandlerInvocation(final CodeGenerationParameter parentParameter,
+  String resolveRouteHandlerInvocation(final CodeGenerationParameter parentParameter,
+                                       final CodeGenerationParameter routeSignatureParameter);
+
+  String resolveAdapterHandlerInvocation(final CodeGenerationParameter parentParameter,
                                          final CodeGenerationParameter routeSignatureParameter);
-
-    String resolveAdapterHandlerInvocation(final CodeGenerationParameter parentParameter,
-                                           final CodeGenerationParameter routeSignatureParameter);
 
 }

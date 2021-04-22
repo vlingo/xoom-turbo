@@ -20,52 +20,52 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class Projection {
 
-    private final String actor;
-    private final String causes;
-    private final Boolean last;
+  private final String actor;
+  private final String causes;
+  private final Boolean last;
 
-    public static List<Projection> from(final List<Content> contents) {
-        final List<Content> protocols =
-                ContentQuery.filterByStandard(AGGREGATE_PROTOCOL, contents)
-                .collect(Collectors.toList());
+  public static List<Projection> from(final List<Content> contents) {
+    final List<Content> protocols =
+            ContentQuery.filterByStandard(AGGREGATE_PROTOCOL, contents)
+                    .collect(Collectors.toList());
 
-        final IntFunction<Projection> mapper =
-                index -> new Projection(index, protocols.get(index),
-                        contents, protocols.size());
+    final IntFunction<Projection> mapper =
+            index -> new Projection(index, protocols.get(index),
+                    contents, protocols.size());
 
-        return IntStream.range(0, protocols.size()).mapToObj(mapper).collect(Collectors.toList());
-    }
+    return IntStream.range(0, protocols.size()).mapToObj(mapper).collect(Collectors.toList());
+  }
 
-    private Projection(final int index,
-                       final Content protocol,
-                       final List<Content> contents,
-                       final int numberOfProjections) {
-        this.causes = joinEvents(protocol, contents);
-        this.last = index == numberOfProjections - 1;
-        this.actor = PROJECTION.resolveClassname(protocol.retrieveName());
-    }
+  private Projection(final int index,
+                     final Content protocol,
+                     final List<Content> contents,
+                     final int numberOfProjections) {
+    this.causes = joinEvents(protocol, contents);
+    this.last = index == numberOfProjections - 1;
+    this.actor = PROJECTION.resolveClassname(protocol.retrieveName());
+  }
 
-    private String joinEvents(final Content protocol,
-                              final List<Content> contents) {
-        final Set<String> eventNames =
-                ContentQuery.findClassNames(DOMAIN_EVENT,
-                        protocol.retrievePackage(), contents);
+  private String joinEvents(final Content protocol,
+                            final List<Content> contents) {
+    final Set<String> eventNames =
+            ContentQuery.findClassNames(DOMAIN_EVENT,
+                    protocol.retrievePackage(), contents);
 
-        return eventNames.stream()
-                .map(name -> name + ".class")
-                .collect(Collectors.joining(", "));
-    }
+    return eventNames.stream()
+            .map(name -> name + ".class")
+            .collect(Collectors.joining(", "));
+  }
 
-    public String getActor() {
-        return actor;
-    }
+  public String getActor() {
+    return actor;
+  }
 
-    public String getCauses() {
-        return causes;
-    }
+  public String getCauses() {
+    return causes;
+  }
 
-    public boolean isLast() {
-        return last;
-    }
+  public boolean isLast() {
+    return last;
+  }
 
 }

@@ -22,52 +22,52 @@ import java.util.stream.Stream;
 
 public enum DatabaseType {
 
-    IN_MEMORY("InMemory"),
-    POSTGRES("Postgres",  (configuration, logger) -> new PostgresStorageDelegate(configuration, logger)),
-    HSQLDB("HSQLDB",  (configuration, logger) -> new HSQLDBStorageDelegate(configuration, logger)),
-    MYSQL("MySQL", (configuration, logger) -> new MySQLStorageDelegate(configuration, logger)),
-    YUGA_BYTE("YugaByte" , (configuration, logger) -> new YugaByteStorageDelegate(configuration, logger));
+  IN_MEMORY("InMemory"),
+  POSTGRES("Postgres", (configuration, logger) -> new PostgresStorageDelegate(configuration, logger)),
+  HSQLDB("HSQLDB", (configuration, logger) -> new HSQLDBStorageDelegate(configuration, logger)),
+  MYSQL("MySQL", (configuration, logger) -> new MySQLStorageDelegate(configuration, logger)),
+  YUGA_BYTE("YugaByte", (configuration, logger) -> new YugaByteStorageDelegate(configuration, logger));
 
-    private final String name;
-    private final BiFunction<Configuration, Logger, StorageDelegate> stateStoreDelegateInstantiator;
+  private final String name;
+  private final BiFunction<Configuration, Logger, StorageDelegate> stateStoreDelegateInstantiator;
 
-    DatabaseType(final String name) {
-        this(name, null);
+  DatabaseType(final String name) {
+    this(name, null);
+  }
+
+  DatabaseType(final String name, final BiFunction<Configuration, Logger, StorageDelegate> instantiator) {
+    this.name = name;
+    this.stateStoreDelegateInstantiator = instantiator;
+  }
+
+  public static DatabaseType retrieveFromConfiguration(final Configuration configuration) {
+    if (configuration == null) {
+      return IN_MEMORY;
     }
 
-    DatabaseType(final String name, final BiFunction<Configuration, Logger, StorageDelegate> instantiator) {
-        this.name = name;
-        this.stateStoreDelegateInstantiator = instantiator;
+    final String name =
+            configuration.databaseType.name();
+
+    return Stream.of(values()).filter(type -> type.hasName(name))
+            .findFirst().orElseThrow(() -> new IllegalArgumentException(name + " is not supported"));
+  }
+
+  public StorageDelegate buildStorageDelegate(final Stage stage,
+                                              final StorageType storageType,
+                                              final Configuration configuration) {
+    if (storageType.isStateStore()) {
+      if (stateStoreDelegateInstantiator != null) {
+        return stateStoreDelegateInstantiator.apply(configuration, stage.world().defaultLogger());
+      }
     }
+    throw new UnsupportedOperationException(this + " does not support StorageDelegate for " + storageType);
+  }
 
-    public static DatabaseType retrieveFromConfiguration(final Configuration configuration) {
-        if(configuration == null) {
-            return IN_MEMORY;
-        }
+  public boolean isInMemory() {
+    return equals(IN_MEMORY);
+  }
 
-        final String name =
-                configuration.databaseType.name();
-
-        return Stream.of(values()).filter(type -> type.hasName(name))
-                .findFirst().orElseThrow(() -> new IllegalArgumentException(name + " is not supported"));
-    }
-
-    public StorageDelegate buildStorageDelegate(final Stage stage,
-                                                final StorageType storageType,
-                                                final Configuration configuration) {
-        if(storageType.isStateStore()) {
-            if (stateStoreDelegateInstantiator != null) {
-                return stateStoreDelegateInstantiator.apply(configuration, stage.world().defaultLogger());
-            }
-        }
-        throw new UnsupportedOperationException(this + " does not support StorageDelegate for " + storageType);
-    }
-
-    public boolean isInMemory() {
-        return equals(IN_MEMORY);
-    }
-
-    public boolean hasName(final String name) {
-        return this.name.equals(name);
-    }
+  public boolean hasName(final String name) {
+    return this.name.equals(name);
+  }
 }

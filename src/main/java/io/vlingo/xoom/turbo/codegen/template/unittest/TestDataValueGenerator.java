@@ -7,9 +7,11 @@
 
 package io.vlingo.xoom.turbo.codegen.template.unittest;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
-import static java.util.stream.Collectors.toList;
+import io.vlingo.xoom.turbo.codegen.formatting.NumberFormat;
+import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.parameter.Label;
+import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
+import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,11 +20,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import io.vlingo.xoom.turbo.codegen.formatting.NumberFormat;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
-import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
+import static java.util.stream.Collectors.toList;
 
 public class TestDataValueGenerator {
 
@@ -79,7 +79,7 @@ public class TestDataValueGenerator {
 
   private void generateValues(final int dataIndex) {
     resetCurrentValues();
-    stateFields.forEach(field -> this.generateValue(dataIndex, new String(), field));
+    stateFields.forEach(field -> this.generateValue(dataIndex, "", field));
   }
 
   private void generateValue(final int dataIndex, final String path, final CodeGenerationParameter field) {
@@ -129,10 +129,10 @@ public class TestDataValueGenerator {
 
   private String formatStringValue(final String ordinalIndex, final String alias, final String hyphenatedPath) {
     final StringBuilder value = new StringBuilder(hyphenatedPath);
-    if(!alias.isEmpty()) {
+    if (!alias.isEmpty()) {
       value.insert(0, alias.concat("-"));
     }
-    if(dataSetSize > 1) {
+    if (dataSetSize > 1) {
       value.insert(0, ordinalIndex.concat("-"));
     }
     return value.toString();
@@ -191,7 +191,7 @@ public class TestDataValueGenerator {
 
     public String retrieve(final int dataIndex, final String variableName, final String path) {
       final String reducedPath =
-              path.substring(variableName.length() + 1, path.length());
+              path.substring(variableName.length() + 1);
 
       return retrieve(dataIndex, reducedPath);
     }
@@ -222,10 +222,10 @@ public class TestDataValueGenerator {
       }
 
       private String resolveUpdatedValue() {
-        if(FieldDetail.isNumeric(type)) {
+        if (FieldDetail.isNumeric(type)) {
           return String.valueOf(Integer.valueOf(value) + 1);
         }
-        if(FieldDetail.isBoolean(type)) {
+        if (FieldDetail.isBoolean(type)) {
           return String.valueOf(!Boolean.valueOf(value));
         }
         return value.replaceFirst("\"", "\"updated-");

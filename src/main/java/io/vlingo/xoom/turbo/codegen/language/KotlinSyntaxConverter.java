@@ -28,15 +28,15 @@ public class KotlinSyntaxConverter {
 
   protected static final String handleImportEntry(final String importEntry) {
     String resolvedImport = importEntry;
-    for(final String reservedWord : CodeGenerationSetup.KOTLIN_RESERVED_WORDS) {
+    for (final String reservedWord : CodeGenerationSetup.KOTLIN_RESERVED_WORDS) {
       resolvedImport = handleReservedWord(reservedWord, resolvedImport);
     }
     return resolvedImport;
   }
 
-  private static final String handleReservedWord(final String reservedWord, final String importEntry){
+  private static final String handleReservedWord(final String reservedWord, final String importEntry) {
     final String resolvedImport =
-            !importEntry.startsWith(reservedWord + ".") ? importEntry:
+            !importEntry.startsWith(reservedWord + ".") ? importEntry :
                     importEntry.replaceFirst(reservedWord + "\\.", "`" + reservedWord + "`.");
     return resolvedImport.replaceAll("\\." + reservedWord + "\\.", ".`" + reservedWord + "`.");
   }

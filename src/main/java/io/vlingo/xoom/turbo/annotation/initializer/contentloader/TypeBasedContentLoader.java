@@ -17,16 +17,16 @@ import java.util.List;
 
 public abstract class TypeBasedContentLoader extends ContentLoader<List<TypeElement>> {
 
-    protected TypeBasedContentLoader(final Element annotatedClass,
-                                     final ProcessingEnvironment environment) {
-        super(annotatedClass, environment);
-    }
+  protected TypeBasedContentLoader(final Element annotatedClass,
+                                   final ProcessingEnvironment environment) {
+    super(annotatedClass, environment);
+  }
 
-    public void load(final CodeGenerationContext context) {
-        this.retrieveContentSource()
-                .forEach(typeElement -> context.addContent(standard(), typeElement));
-    }
+  public void load(final CodeGenerationContext context) {
+    this.retrieveContentSource()
+            .forEach(typeElement -> context.addContent(standard(), typeElement));
+  }
 
-    protected abstract TemplateStandard standard();
+  protected abstract TemplateStandard standard();
 
 }

@@ -15,29 +15,29 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACT
 
 public class QueriesActorTemplateData extends TemplateData {
 
-    private final String aggregateProtocol;
-    private final TemplateParameters parameters;
+  private final String aggregateProtocol;
+  private final TemplateParameters parameters;
 
-    protected QueriesActorTemplateData(final String aggregateProtocol,
-                                       final TemplateParameters parameters) {
-        this.aggregateProtocol = aggregateProtocol;
-        this.parameters =
-                parameters.and(QUERIES_ACTOR_NAME, QUERIES_ACTOR.resolveClassname(aggregateProtocol));
-    }
+  protected QueriesActorTemplateData(final String aggregateProtocol,
+                                     final TemplateParameters parameters) {
+    this.aggregateProtocol = aggregateProtocol;
+    this.parameters =
+            parameters.and(QUERIES_ACTOR_NAME, QUERIES_ACTOR.resolveClassname(aggregateProtocol));
+  }
 
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
 
-    @Override
-    public TemplateStandard standard() {
-        return QUERIES_ACTOR;
-    }
+  @Override
+  public TemplateStandard standard() {
+    return QUERIES_ACTOR;
+  }
 
-    @Override
-    public String filename() {
-        return standard().resolveFilename(aggregateProtocol, parameters);
-    }
+  @Override
+  public String filename() {
+    return standard().resolveFilename(aggregateProtocol, parameters);
+  }
 
 }

@@ -18,7 +18,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface QueriesEntry {
 
-    Class<?> protocol();
-    Class<? extends Actor> actor();
+  Class<?> protocol();
+
+  Class<? extends Actor> actor();
 
 }

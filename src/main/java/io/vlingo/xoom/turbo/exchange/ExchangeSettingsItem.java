@@ -9,15 +9,15 @@ package io.vlingo.xoom.turbo.exchange;
 
 public class ExchangeSettingsItem {
 
-    public final String key;
-    public final String value;
+  public final String key;
+  public final String value;
 
-    public ExchangeSettingsItem(final String key, final String value) {
-        this.key = key;
-        this.value = value;
-    }
+  public ExchangeSettingsItem(final String key, final String value) {
+    this.key = key;
+    this.value = value;
+  }
 
-    public boolean hasKey(final String key) {
-        return this.key.equals(key);
-    }
+  public boolean hasKey(final String key) {
+    return this.key.equals(key);
+  }
 }

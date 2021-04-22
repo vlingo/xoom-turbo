@@ -9,6 +9,7 @@ package io.vlingo.xoom.turbo.annotation.autodispatch;
 
 public @interface AutoDispatch {
 
-   String path();
-   Class<?> handlers();
+  String path();
+
+  Class<?> handlers();
 }

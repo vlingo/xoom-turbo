@@ -17,27 +17,27 @@ import static java.util.stream.Collectors.toList;
 
 public class SourcedEvent {
 
-    private final String entityName;
-    private final String domainEventName;
+  private final String entityName;
+  private final String domainEventName;
 
-    public static List<SourcedEvent> from(final CodeGenerationParameter aggregate) {
-        return aggregate.retrieveAllRelated(DOMAIN_EVENT)
-                .map(event -> new SourcedEvent(aggregate, event))
-                .collect(toList());
-    }
+  public static List<SourcedEvent> from(final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(DOMAIN_EVENT)
+            .map(event -> new SourcedEvent(aggregate, event))
+            .collect(toList());
+  }
 
-    private SourcedEvent(final CodeGenerationParameter aggregate,
-                         final CodeGenerationParameter event) {
-        this.domainEventName = event.value;
-        this.entityName = AGGREGATE.resolveClassname(aggregate.value);
-    }
+  private SourcedEvent(final CodeGenerationParameter aggregate,
+                       final CodeGenerationParameter event) {
+    this.domainEventName = event.value;
+    this.entityName = AGGREGATE.resolveClassname(aggregate.value);
+  }
 
-    public String getEntityName() {
-        return entityName;
-    }
+  public String getEntityName() {
+    return entityName;
+  }
 
-    public String getDomainEventName() {
-        return domainEventName;
-    }
+  public String getDomainEventName() {
+    return domainEventName;
+  }
 
 }

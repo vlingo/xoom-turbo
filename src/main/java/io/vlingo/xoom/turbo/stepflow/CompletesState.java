@@ -18,5 +18,5 @@ import io.vlingo.xoom.common.Completes;
 @FunctionalInterface
 @SuppressWarnings("rawtypes")
 public interface CompletesState<T extends State, R extends State> {
-    void apply(StateTransition<T, ?, ?> transition, R state);
+  void apply(StateTransition<T, ?, ?> transition, R state);
 }

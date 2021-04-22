@@ -98,7 +98,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
   }
 
   private String resolveBaseEntryImport(final ProjectionType projectionType) {
-    if(projectionType.isOperationBased()) {
+    if (projectionType.isOperationBased()) {
       return "";
     }
     return BaseEntry.class.getCanonicalName();
@@ -111,7 +111,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
   }
 
   private String resolveValueObjectImports(final CodeGenerationParameter aggregate, final List<Content> contents) {
-    if(!ValueObjectDetail.useValueObject(aggregate)) {
+    if (!ValueObjectDetail.useValueObject(aggregate)) {
       return "";
     }
     return CodeElementFormatter.importAllFrom(ContentQuery.findPackage(VALUE_OBJECT, contents));
@@ -127,7 +127,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
       case STATE_STORE:
         final String stateName = AGGREGATE_STATE.resolveClassname(aggregate.value);
         final String adapterName = ADAPTER.resolveClassname(stateName);
-        return Stream.of(qualifiedNameOf(persistencePackage,adapterName)).collect(toSet());
+        return Stream.of(qualifiedNameOf(persistencePackage, adapterName)).collect(toSet());
       case JOURNAL:
         return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT)
                 .map(event -> ADAPTER.resolveClassname(event.value))
@@ -140,8 +140,8 @@ public class EntityUnitTestTemplateData extends TemplateData {
 
   private Optional<String> resolveDefaultFactoryMethodName(final CodeGenerationParameter aggregate) {
     return aggregate.retrieveAllRelated(AGGREGATE_METHOD)
-                    .filter(method -> method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf))
-                    .map(method -> method.value).findFirst();
+            .filter(method -> method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf))
+            .map(method -> method.value).findFirst();
   }
 
   @Override

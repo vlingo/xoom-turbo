@@ -28,10 +28,10 @@ public class DataObjectConstructorAssignment extends Formatters.Fields<List<Stri
   }
 
   private Label resolveFieldLabel(final CodeGenerationParameter carrier) {
-    if(carrier.isLabeled(AGGREGATE)) {
+    if (carrier.isLabeled(AGGREGATE)) {
       return STATE_FIELD;
     }
-    if(carrier.isLabeled(VALUE_OBJECT)) {
+    if (carrier.isLabeled(VALUE_OBJECT)) {
       return VALUE_OBJECT_FIELD;
     }
     throw new UnsupportedOperationException("Unable to format fields assignment from " + carrier.label);

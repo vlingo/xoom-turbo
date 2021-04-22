@@ -14,28 +14,28 @@ import java.util.stream.Collectors;
 
 public class TypeRegistry {
 
-    private final String className;
-    private final String objectName;
+  private final String className;
+  private final String objectName;
 
-    public static List<TypeRegistry> from(final StorageType storageType, final Boolean useCQRS) {
-        return storageType.findRelatedStorageTypes(useCQRS)
-                .map(relatedStorageType ->
-                        new TypeRegistry(relatedStorageType.typeRegistryClassName,
-                                relatedStorageType.typeRegistryObjectName())
-                ).collect(Collectors.toList());
-    }
+  public static List<TypeRegistry> from(final StorageType storageType, final Boolean useCQRS) {
+    return storageType.findRelatedStorageTypes(useCQRS)
+            .map(relatedStorageType ->
+                    new TypeRegistry(relatedStorageType.typeRegistryClassName,
+                            relatedStorageType.typeRegistryObjectName())
+            ).collect(Collectors.toList());
+  }
 
-    private TypeRegistry(String className, String objectName) {
-        this.className = className;
-        this.objectName = objectName;
-    }
+  private TypeRegistry(String className, String objectName) {
+    this.className = className;
+    this.objectName = objectName;
+  }
 
-    public String getClassName() {
-        return className;
-    }
+  public String getClassName() {
+    return className;
+  }
 
-    public String getObjectName() {
-        return objectName;
-    }
+  public String getObjectName() {
+    return objectName;
+  }
 
 }

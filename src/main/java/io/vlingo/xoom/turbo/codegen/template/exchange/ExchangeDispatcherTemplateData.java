@@ -28,48 +28,48 @@ import static java.util.stream.Collectors.toList;
 
 public class ExchangeDispatcherTemplateData extends TemplateData {
 
-    private final TemplateParameters parameters;
+  private final TemplateParameters parameters;
 
-    public static TemplateData from(final String exchangePackage,
-                                    final Stream<CodeGenerationParameter> aggregates,
-                                    final List<Content> contents) {
-        final List<CodeGenerationParameter> producerExchanges =
-                aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
-                        .filter(aggregate -> aggregate.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer())
-                        .collect(toList());
+  public static TemplateData from(final String exchangePackage,
+                                  final Stream<CodeGenerationParameter> aggregates,
+                                  final List<Content> contents) {
+    final List<CodeGenerationParameter> producerExchanges =
+            aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
+                    .filter(aggregate -> aggregate.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer())
+                    .collect(toList());
 
-        return new ExchangeDispatcherTemplateData(exchangePackage, producerExchanges, contents);
-    }
+    return new ExchangeDispatcherTemplateData(exchangePackage, producerExchanges, contents);
+  }
 
-    private ExchangeDispatcherTemplateData(final String exchangePackage,
-                                           final List<CodeGenerationParameter> producerExchanges,
-                                           final List<Content> contents) {
-        this.parameters =
-                TemplateParameters.with(PACKAGE_NAME, exchangePackage)
-                        .and(PRODUCER_EXCHANGES, ProducerExchange.from(producerExchanges))
-                        .addImports(resolveImports(producerExchanges, contents));
-    }
+  private ExchangeDispatcherTemplateData(final String exchangePackage,
+                                         final List<CodeGenerationParameter> producerExchanges,
+                                         final List<Content> contents) {
+    this.parameters =
+            TemplateParameters.with(PACKAGE_NAME, exchangePackage)
+                    .and(PRODUCER_EXCHANGES, ProducerExchange.from(producerExchanges))
+                    .addImports(resolveImports(producerExchanges, contents));
+  }
 
-    private Set<String> resolveImports(final List<CodeGenerationParameter> producerExchanges,
-                                       final List<Content> contents) {
-        return producerExchanges.stream().flatMap(exchange -> exchange.retrieveAllRelated(Label.DOMAIN_EVENT))
-                .map(event -> ContentQuery.findFullyQualifiedClassName(DOMAIN_EVENT, event.value, contents))
-                .collect(Collectors.toSet());
-    }
+  private Set<String> resolveImports(final List<CodeGenerationParameter> producerExchanges,
+                                     final List<Content> contents) {
+    return producerExchanges.stream().flatMap(exchange -> exchange.retrieveAllRelated(Label.DOMAIN_EVENT))
+            .map(event -> ContentQuery.findFullyQualifiedClassName(DOMAIN_EVENT, event.value, contents))
+            .collect(Collectors.toSet());
+  }
 
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
 
-    @Override
-    public TemplateStandard standard() {
-        return TemplateStandard.EXCHANGE_DISPATCHER;
-    }
+  @Override
+  public TemplateStandard standard() {
+    return TemplateStandard.EXCHANGE_DISPATCHER;
+  }
 
-    @Override
-    @SuppressWarnings("rawtypes")
-    public boolean isPlaceholder() {
-        return parameters.<List>find(PRODUCER_EXCHANGES).isEmpty();
-    }
+  @Override
+  @SuppressWarnings("rawtypes")
+  public boolean isPlaceholder() {
+    return parameters.<List>find(PRODUCER_EXCHANGES).isEmpty();
+  }
 }

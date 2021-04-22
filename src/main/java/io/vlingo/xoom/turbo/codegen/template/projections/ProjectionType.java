@@ -9,27 +9,27 @@ package io.vlingo.xoom.turbo.codegen.template.projections;
 
 public enum ProjectionType {
 
-    NONE("None"),
-    CUSTOM("Custom"),
-    EVENT_BASED("Event"),
-    OPERATION_BASED("Operation");
+  NONE("None"),
+  CUSTOM("Custom"),
+  EVENT_BASED("Event"),
+  OPERATION_BASED("Operation");
 
-    public final String sourceName;
+  public final String sourceName;
 
-    ProjectionType(final String sourceName) {
-        this.sourceName = sourceName;
-    }
+  ProjectionType(final String sourceName) {
+    this.sourceName = sourceName;
+  }
 
-    public boolean isEventBased() {
-        return equals(EVENT_BASED);
-    }
+  public boolean isEventBased() {
+    return equals(EVENT_BASED);
+  }
 
-    public boolean isOperationBased() {
-        return equals(OPERATION_BASED);
-    }
+  public boolean isOperationBased() {
+    return equals(OPERATION_BASED);
+  }
 
-    public boolean isProjectionEnabled() {
-        return !equals(NONE);
-    }
+  public boolean isProjectionEnabled() {
+    return !equals(NONE);
+  }
 
 }

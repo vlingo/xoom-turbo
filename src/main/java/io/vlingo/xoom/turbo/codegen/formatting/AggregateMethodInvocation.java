@@ -23,40 +23,40 @@ import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodInvocation implements Formatters.Arguments {
 
-    private final String carrier;
-    private final String stageVariableName;
-    private static final String FIELD_ACCESS_PATTERN = "%s.%s";
+  private final String carrier;
+  private final String stageVariableName;
+  private static final String FIELD_ACCESS_PATTERN = "%s.%s";
 
-    public AggregateMethodInvocation(final String stageVariableName) {
-        this(stageVariableName, "");
+  public AggregateMethodInvocation(final String stageVariableName) {
+    this(stageVariableName, "");
+  }
+
+  public AggregateMethodInvocation(final String stageVariableName, final String carrier) {
+    this.carrier = carrier;
+    this.stageVariableName = stageVariableName;
+  }
+
+  @Override
+  public String format(final CodeGenerationParameter method, final MethodScope scope) {
+    final List<String> args = scope.isStatic() ?
+            Arrays.asList(stageVariableName) : Arrays.asList();
+
+    return Stream.of(args, formatMethodParameters(method))
+            .flatMap(Collection::stream).collect(Collectors.joining(", "));
+  }
+
+  private List<String> formatMethodParameters(final CodeGenerationParameter method) {
+    return method.retrieveAllRelated(METHOD_PARAMETER).map(this::resolveFieldAccess).collect(toList());
+  }
+
+  private String resolveFieldAccess(final CodeGenerationParameter parameter) {
+    final CodeGenerationParameter stateField =
+            AggregateDetail.stateFieldWithName(parameter.parent(AGGREGATE), parameter.value);
+
+    if (carrier.isEmpty() || ValueObjectDetail.isValueObject(stateField)) {
+      return parameter.value;
     }
-
-    public AggregateMethodInvocation(final String stageVariableName, final String carrier) {
-        this.carrier = carrier;
-        this.stageVariableName = stageVariableName;
-    }
-
-    @Override
-    public String format(final CodeGenerationParameter method, final MethodScope scope) {
-        final List<String> args = scope.isStatic() ?
-                Arrays.asList(stageVariableName) : Arrays.asList();
-
-        return Stream.of(args, formatMethodParameters(method))
-                .flatMap(Collection::stream).collect(Collectors.joining(", "));
-    }
-
-    private List<String> formatMethodParameters(final CodeGenerationParameter method) {
-        return method.retrieveAllRelated(METHOD_PARAMETER).map(this::resolveFieldAccess).collect(toList());
-    }
-
-    private String resolveFieldAccess(final CodeGenerationParameter parameter) {
-        final CodeGenerationParameter stateField =
-                AggregateDetail.stateFieldWithName(parameter.parent(AGGREGATE), parameter.value);
-
-        if(carrier.isEmpty() || ValueObjectDetail.isValueObject(stateField))  {
-            return parameter.value;
-        }
-        return String.format(FIELD_ACCESS_PATTERN, carrier, parameter.value);
-    }
+    return String.format(FIELD_ACCESS_PATTERN, carrier, parameter.value);
+  }
 
 }

@@ -18,38 +18,39 @@ import static io.vlingo.xoom.turbo.annotation.autodispatch.AutoDispatchValidatio
 
 public class AutoDispatchValidator {
 
-    private static AutoDispatchValidator instance;
+  private static AutoDispatchValidator instance;
 
-    private AutoDispatchValidator() {}
+  private AutoDispatchValidator() {
+  }
 
-    public static AutoDispatchValidator instance() {
-        if(instance == null) {
-            instance = new AutoDispatchValidator();
-        }
-        return instance;
+  public static AutoDispatchValidator instance() {
+    if (instance == null) {
+      instance = new AutoDispatchValidator();
     }
+    return instance;
+  }
 
-    public void validate(final ProcessingEnvironment processingEnvironment, final AnnotatedElements annotatedElements) {
-        Arrays.asList(isInterface(), classVisibilityValidation(), isQueriesProtocolAnInterface(),
-                queryWithoutModelValidator(), bodyForRouteValidator(), hasAutoDispatchAnnotation())
-                .forEach(validator ->
-                        validator.validate(processingEnvironment, Queries.class, annotatedElements));
+  public void validate(final ProcessingEnvironment processingEnvironment, final AnnotatedElements annotatedElements) {
+    Arrays.asList(isInterface(), classVisibilityValidation(), isQueriesProtocolAnInterface(),
+            queryWithoutModelValidator(), bodyForRouteValidator(), hasAutoDispatchAnnotation())
+            .forEach(validator ->
+                    validator.validate(processingEnvironment, Queries.class, annotatedElements));
 
-        Arrays.asList(isInterface(), classVisibilityValidation(), isProtocolModelAnInterface(),
-                modelWithoutQueryValidator(), routeWithoutResponseValidator(), handlerWithoutValidMethodValidator(),
-                hasAutoDispatchAnnotation(), entityActorValidation())
-                .forEach(validator ->
-                        validator.validate(processingEnvironment, Model.class, annotatedElements));
+    Arrays.asList(isInterface(), classVisibilityValidation(), isProtocolModelAnInterface(),
+            modelWithoutQueryValidator(), routeWithoutResponseValidator(), handlerWithoutValidMethodValidator(),
+            hasAutoDispatchAnnotation(), entityActorValidation())
+            .forEach(validator ->
+                    validator.validate(processingEnvironment, Model.class, annotatedElements));
 
-        Arrays.asList(routeHasQueryOrModel())
-                .forEach(validator ->
-                        validator.validate(processingEnvironment, Route.class, annotatedElements));
+    Arrays.asList(routeHasQueryOrModel())
+            .forEach(validator ->
+                    validator.validate(processingEnvironment, Route.class, annotatedElements));
 
-        Arrays.asList(handlerTypeValidation())
-                .forEach(validator ->
-                        validator.validate(processingEnvironment, AutoDispatch.class, annotatedElements));
+    Arrays.asList(handlerTypeValidation())
+            .forEach(validator ->
+                    validator.validate(processingEnvironment, AutoDispatch.class, annotatedElements));
 
-    }
+  }
 
 }
 

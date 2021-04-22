@@ -26,57 +26,57 @@ import static java.util.stream.Collectors.toList;
 
 public class DomainEventSpecificationTemplateData extends TemplateData {
 
-    private final TemplateParameters parameters;
+  private final TemplateParameters parameters;
 
-    public static List<TemplateData> from(final List<CodeGenerationParameter> exchanges) {
-        final Predicate<CodeGenerationParameter> onlyProducers =
-                exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
+  public static List<TemplateData> from(final List<CodeGenerationParameter> exchanges) {
+    final Predicate<CodeGenerationParameter> onlyProducers =
+            exchange -> exchange.retrieveRelatedValue(ROLE, ExchangeRole::of).isProducer();
 
-        final CodeGenerationParameter producerExchange =
-                exchanges.stream().filter(onlyProducers).findAny().get();
+    final CodeGenerationParameter producerExchange =
+            exchanges.stream().filter(onlyProducers).findAny().get();
 
-        final String schemaGroup = producerExchange.retrieveRelatedValue(SCHEMA_GROUP);
+    final String schemaGroup = producerExchange.retrieveRelatedValue(SCHEMA_GROUP);
 
-        return exchanges.stream().filter(exchange -> exchange.hasAny(DOMAIN_EVENT))
-                .flatMap(exchange -> exchange.retrieveAllRelated(DOMAIN_EVENT))
-                .map(e -> new DomainEventSpecificationTemplateData(EVENT_SCHEMA_CATEGORY, schemaGroup, e))
-                .collect(toList());
+    return exchanges.stream().filter(exchange -> exchange.hasAny(DOMAIN_EVENT))
+            .flatMap(exchange -> exchange.retrieveAllRelated(DOMAIN_EVENT))
+            .map(e -> new DomainEventSpecificationTemplateData(EVENT_SCHEMA_CATEGORY, schemaGroup, e))
+            .collect(toList());
+  }
+
+  private DomainEventSpecificationTemplateData(final String schemaCategory,
+                                               final String schemaGroup,
+                                               final CodeGenerationParameter publishedLanguage) {
+    this.parameters =
+            TemplateParameters.with(SCHEMA_CATEGORY, schemaCategory)
+                    .and(SCHEMATA_SPECIFICATION_NAME, publishedLanguage.value)
+                    .and(FIELD_DECLARATIONS, generateFieldDeclarations(schemaGroup, publishedLanguage))
+                    .and(SCHEMATA_FILE, true);
+  }
+
+  private List<String> generateFieldDeclarations(final String schemaGroup, final CodeGenerationParameter publishedLanguage) {
+    final CodeGenerationParameter aggregate = publishedLanguage.parent(AGGREGATE);
+    final CodeGenerationParameter event = AggregateDetail.eventWithName(aggregate, publishedLanguage.value);
+    final Stream<CodeGenerationParameter> stateFields = event.retrieveAllRelated(STATE_FIELD);
+    return stateFields.map(field -> AggregateDetail.stateFieldWithName(aggregate, field.value))
+            .map(field -> resolveFieldType(schemaGroup, field)).collect(toList());
+  }
+
+  private String resolveFieldType(final String schemaGroup,
+                                  final CodeGenerationParameter field) {
+    final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
+    if (ValueObjectDetail.isValueObject(field)) {
+      return String.format("%s:%s:%s", schemaGroup, fieldType, DEFAULT_SCHEMA_VERSION) + " " + field.value;
     }
+    return fieldType.toLowerCase() + " " + field.value;
+  }
 
-    private DomainEventSpecificationTemplateData(final String schemaCategory,
-                                                 final String schemaGroup,
-                                                 final CodeGenerationParameter publishedLanguage) {
-        this.parameters =
-                TemplateParameters.with(SCHEMA_CATEGORY, schemaCategory)
-                        .and(SCHEMATA_SPECIFICATION_NAME, publishedLanguage.value)
-                        .and(FIELD_DECLARATIONS, generateFieldDeclarations(schemaGroup, publishedLanguage))
-                        .and(SCHEMATA_FILE, true);
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
 
-    private List<String> generateFieldDeclarations(final String schemaGroup, final CodeGenerationParameter publishedLanguage) {
-        final CodeGenerationParameter aggregate = publishedLanguage.parent(AGGREGATE);
-        final CodeGenerationParameter event = AggregateDetail.eventWithName(aggregate, publishedLanguage.value);
-        final Stream<CodeGenerationParameter> stateFields = event.retrieveAllRelated(STATE_FIELD);
-        return stateFields.map(field -> AggregateDetail.stateFieldWithName(aggregate, field.value))
-                .map(field -> resolveFieldType(schemaGroup, field)).collect(toList());
-    }
-
-    private String resolveFieldType(final String schemaGroup,
-                                    final CodeGenerationParameter field) {
-        final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
-        if(ValueObjectDetail.isValueObject(field)) {
-            return String.format("%s:%s:%s", schemaGroup, fieldType, DEFAULT_SCHEMA_VERSION) + " " + field.value;
-        }
-        return fieldType.toLowerCase() + " " + field.value;
-    }
-
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
-
-    @Override
-    public TemplateStandard standard() {
-        return TemplateStandard.SCHEMATA_SPECIFICATION;
-    }
+  @Override
+  public TemplateStandard standard() {
+    return TemplateStandard.SCHEMATA_SPECIFICATION;
+  }
 }

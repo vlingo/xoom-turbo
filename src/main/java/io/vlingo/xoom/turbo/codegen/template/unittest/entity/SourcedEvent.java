@@ -23,7 +23,7 @@ public class SourcedEvent {
 
   public static List<SourcedEvent> from(final StorageType storageType,
                                         final CodeGenerationParameter aggregate) {
-    if(!storageType.isSourced()) {
+    if (!storageType.isSourced()) {
       return Collections.emptyList();
     }
     return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT)

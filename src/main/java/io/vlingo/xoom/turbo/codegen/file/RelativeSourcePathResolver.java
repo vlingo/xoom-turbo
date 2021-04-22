@@ -49,7 +49,7 @@ public interface RelativeSourcePathResolver {
 
     @Override
     public String[] resolve(final CodeGenerationContext context, final TemplateData templateData) {
-      return new String[]{"src", "main", "vlingo","schemata"};
+      return new String[]{"src", "main", "vlingo", "schemata"};
     }
 
     @Override

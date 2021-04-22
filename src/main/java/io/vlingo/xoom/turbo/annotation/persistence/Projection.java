@@ -18,8 +18,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface Projection {
 
-    @SuppressWarnings("rawtypes")
-    Class<? extends StateStoreProjectionActor> actor();
-    Class<?>[] becauseOf();
+  @SuppressWarnings("rawtypes")
+  Class<? extends StateStoreProjectionActor> actor();
+
+  Class<?>[] becauseOf();
 
 }

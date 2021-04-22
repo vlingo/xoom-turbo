@@ -23,53 +23,53 @@ import java.util.*;
 
 public class CodeGenerationContextLoader {
 
-    private final Filer filer;
-    private final String basePackage;
-    private final ProcessingEnvironment environment;
-    private final TypeElement bootstrapClass;
-    private final TypeElement persistenceSetupClass;
-    private final Set<TypeElement> autoDispatchResourceClasses = new HashSet<>();
+  private final Filer filer;
+  private final String basePackage;
+  private final ProcessingEnvironment environment;
+  private final TypeElement bootstrapClass;
+  private final TypeElement persistenceSetupClass;
+  private final Set<TypeElement> autoDispatchResourceClasses = new HashSet<>();
 
-    public static CodeGenerationContext from(final Filer filer,
-                                             final String basePackage,
-                                             final AnnotatedElements elements,
-                                             final ProcessingEnvironment environment) {
-        return new CodeGenerationContextLoader(filer, basePackage,
-                elements, environment).load();
-    }
+  public static CodeGenerationContext from(final Filer filer,
+                                           final String basePackage,
+                                           final AnnotatedElements elements,
+                                           final ProcessingEnvironment environment) {
+    return new CodeGenerationContextLoader(filer, basePackage,
+            elements, environment).load();
+  }
 
-    public CodeGenerationContextLoader(final Filer filer,
-                                       final String basePackage,
-                                       final AnnotatedElements elements,
-                                       final ProcessingEnvironment environment) {
-        this.filer = filer;
-        this.environment = environment;
-        this.basePackage = basePackage;
-        this.bootstrapClass = elements.elementWith(Xoom.class);
-        this.persistenceSetupClass = elements.elementWith(Persistence.class);
-        this.autoDispatchResourceClasses.addAll(elements.elementsWith(AutoDispatch.class));
-    }
+  public CodeGenerationContextLoader(final Filer filer,
+                                     final String basePackage,
+                                     final AnnotatedElements elements,
+                                     final ProcessingEnvironment environment) {
+    this.filer = filer;
+    this.environment = environment;
+    this.basePackage = basePackage;
+    this.bootstrapClass = elements.elementWith(Xoom.class);
+    this.persistenceSetupClass = elements.elementWith(Persistence.class);
+    this.autoDispatchResourceClasses.addAll(elements.elementsWith(AutoDispatch.class));
+  }
 
-    public CodeGenerationContext load() {
-        return CodeGenerationContext.using(filer, bootstrapClass)
-                .on(XoomInitializerParameterResolver.from(basePackage, bootstrapClass, environment).resolve())
-                .on(AutoDispatchParameterResolver.from(autoDispatchResourceClasses, environment).resolve())
-                .on(PersistenceParameterResolver.from(persistenceSetupClass, environment).resolve())
-                .contents(resolveContentLoaders());
-    }
+  public CodeGenerationContext load() {
+    return CodeGenerationContext.using(filer, bootstrapClass)
+            .on(XoomInitializerParameterResolver.from(basePackage, bootstrapClass, environment).resolve())
+            .on(AutoDispatchParameterResolver.from(autoDispatchResourceClasses, environment).resolve())
+            .on(PersistenceParameterResolver.from(persistenceSetupClass, environment).resolve())
+            .contents(resolveContentLoaders());
+  }
 
-    @SuppressWarnings("rawtypes")
-    private List<ContentLoader> resolveContentLoaders() {
-        if(bootstrapClass == null) {
-            return Collections.emptyList();
-        }
-        return Arrays.asList(new ProjectionActorContentLoader(persistenceSetupClass, environment),
-                new AdapterEntriesContentLoader(persistenceSetupClass, environment),
-                new DataObjectContentLoader(persistenceSetupClass, environment),
-                new QueriesContentLoader(persistenceSetupClass, environment),
-                new AggregateContentLoader(persistenceSetupClass, environment),
-                new RestResourceContentLoader(bootstrapClass, environment),
-                new ExchangeBootstrapLoader(persistenceSetupClass, environment));
+  @SuppressWarnings("rawtypes")
+  private List<ContentLoader> resolveContentLoaders() {
+    if (bootstrapClass == null) {
+      return Collections.emptyList();
     }
+    return Arrays.asList(new ProjectionActorContentLoader(persistenceSetupClass, environment),
+            new AdapterEntriesContentLoader(persistenceSetupClass, environment),
+            new DataObjectContentLoader(persistenceSetupClass, environment),
+            new QueriesContentLoader(persistenceSetupClass, environment),
+            new AggregateContentLoader(persistenceSetupClass, environment),
+            new RestResourceContentLoader(bootstrapClass, environment),
+            new ExchangeBootstrapLoader(persistenceSetupClass, environment));
+  }
 
 }

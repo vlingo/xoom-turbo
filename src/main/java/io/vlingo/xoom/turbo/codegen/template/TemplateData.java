@@ -17,40 +17,40 @@ import static java.util.stream.Collectors.toList;
 
 public abstract class TemplateData {
 
-    private final List<TemplateData> dependencies = new ArrayList<>();
+  private final List<TemplateData> dependencies = new ArrayList<>();
 
-    public abstract TemplateParameters parameters();
+  public abstract TemplateParameters parameters();
 
-    public abstract TemplateStandard standard();
+  public abstract TemplateStandard standard();
 
-    @SuppressWarnings("unchecked")
-    protected void dependOn(final TemplateData templateData) {
-        this.dependOn(Arrays.asList(templateData));
-    }
+  @SuppressWarnings("unchecked")
+  protected void dependOn(final TemplateData templateData) {
+    this.dependOn(Arrays.asList(templateData));
+  }
 
-    @SuppressWarnings("unchecked")
-    protected void dependOn(final List<TemplateData> ...templatesData) {
-        this.dependencies.addAll(Stream.of(templatesData).flatMap(List::stream).collect(toList()));
-    }
+  @SuppressWarnings("unchecked")
+  protected void dependOn(final List<TemplateData>... templatesData) {
+    this.dependencies.addAll(Stream.of(templatesData).flatMap(List::stream).collect(toList()));
+  }
 
-    public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {
-        throw new UnsupportedOperationException("Unable to handle dependency outcome");
-    }
+  public void handleDependencyOutcome(final TemplateStandard standard, final String outcome) {
+    throw new UnsupportedOperationException("Unable to handle dependency outcome");
+  }
 
-    public String filename() {
-        return standard().resolveFilename(parameters());
-    }
+  public String filename() {
+    return standard().resolveFilename(parameters());
+  }
 
-    public boolean hasStandard(final TemplateStandard standard) {
-        return standard().equals(standard);
-    }
+  public boolean hasStandard(final TemplateStandard standard) {
+    return standard().equals(standard);
+  }
 
-    public List<TemplateData> dependencies() {
-        return Collections.unmodifiableList(dependencies);
-    }
+  public List<TemplateData> dependencies() {
+    return Collections.unmodifiableList(dependencies);
+  }
 
-    public boolean isPlaceholder() {
-        return false;
-    }
+  public boolean isPlaceholder() {
+    return false;
+  }
 
 }

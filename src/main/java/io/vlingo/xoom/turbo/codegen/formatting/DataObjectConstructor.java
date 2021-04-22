@@ -26,10 +26,10 @@ public class DataObjectConstructor implements Formatters.Arguments {
   }
 
   private Label resolveFieldLabel(final CodeGenerationParameter parent) {
-    if(parent.isLabeled(AGGREGATE)) {
+    if (parent.isLabeled(AGGREGATE)) {
       return STATE_FIELD;
     }
-    if(parent.isLabeled(VALUE_OBJECT)) {
+    if (parent.isLabeled(VALUE_OBJECT)) {
       return VALUE_OBJECT_FIELD;
     }
     throw new IllegalArgumentException("Unable to format static method parameters from " + parent.label);
@@ -37,7 +37,7 @@ public class DataObjectConstructor implements Formatters.Arguments {
 
   private String resolveFieldType(final CodeGenerationParameter field) {
     final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
-    if(ValueObjectDetail.isValueObject(field)) {
+    if (ValueObjectDetail.isValueObject(field)) {
       return TemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
     }
     return fieldType;

@@ -8,106 +8,107 @@
 package io.vlingo.xoom.turbo.codegen.template.exchange;
 
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.turbo.codegen.formatting.AggregateMethodInvocation;
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
-import io.vlingo.xoom.turbo.codegen.formatting.AggregateMethodInvocation;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 
 public class ExchangeReceiver {
 
-    private final String schemaTypeName;
-    private final String localTypeName;
-    private final String modelProtocol;
-    private final String modelMethod;
-    private final String modelMethodParameters;
-    private final List<String> valueObjectInitializers;
+  private final String schemaTypeName;
+  private final String localTypeName;
+  private final String modelProtocol;
+  private final String modelMethod;
+  private final String modelMethodParameters;
+  private final List<String> valueObjectInitializers;
 
-    private final boolean modelFactoryMethod;
-    public static List<ExchangeReceiver> from(final Language language,
-                                              final CodeGenerationParameter exchange,
-                                              final List<CodeGenerationParameter> valueObjects) {
-        return exchange.retrieveAllRelated(Label.RECEIVER)
-                .map(receiver -> new ExchangeReceiver(language, exchange, receiver, valueObjects))
-                .collect(Collectors.toList());
-    }
+  private final boolean modelFactoryMethod;
 
-    private ExchangeReceiver(final Language language,
-                             final CodeGenerationParameter exchange,
-                             final CodeGenerationParameter receiver,
-                             final List<CodeGenerationParameter> valueObjects) {
-        final CodeGenerationParameter aggregateMethod =
-                AggregateDetail.methodWithName(exchange.parent(), receiver.retrieveRelatedValue(MODEL_METHOD));
+  public static List<ExchangeReceiver> from(final Language language,
+                                            final CodeGenerationParameter exchange,
+                                            final List<CodeGenerationParameter> valueObjects) {
+    return exchange.retrieveAllRelated(Label.RECEIVER)
+            .map(receiver -> new ExchangeReceiver(language, exchange, receiver, valueObjects))
+            .collect(Collectors.toList());
+  }
 
-        this.modelMethod = aggregateMethod.value;
-        this.modelProtocol = exchange.parent(AGGREGATE).value;
-        this.localTypeName = DATA_OBJECT.resolveClassname(exchange.parent().value);
-        this.modelMethodParameters = resolveModelMethodParameters(aggregateMethod);
-        this.schemaTypeName = Formatter.formatSchemaTypeName(receiver.retrieveOneRelated(SCHEMA));
-        this.modelFactoryMethod = aggregateMethod.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf);
-        this.valueObjectInitializers = resolveValueObjectInitializers(language, receiver, valueObjects);
-    }
+  private ExchangeReceiver(final Language language,
+                           final CodeGenerationParameter exchange,
+                           final CodeGenerationParameter receiver,
+                           final List<CodeGenerationParameter> valueObjects) {
+    final CodeGenerationParameter aggregateMethod =
+            AggregateDetail.methodWithName(exchange.parent(), receiver.retrieveRelatedValue(MODEL_METHOD));
 
-    private String resolveModelMethodParameters(final CodeGenerationParameter method) {
-        final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
-        final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
-        return new AggregateMethodInvocation("stage", "data").format(method, methodScope);
-    }
+    this.modelMethod = aggregateMethod.value;
+    this.modelProtocol = exchange.parent(AGGREGATE).value;
+    this.localTypeName = DATA_OBJECT.resolveClassname(exchange.parent().value);
+    this.modelMethodParameters = resolveModelMethodParameters(aggregateMethod);
+    this.schemaTypeName = Formatter.formatSchemaTypeName(receiver.retrieveOneRelated(SCHEMA));
+    this.modelFactoryMethod = aggregateMethod.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf);
+    this.valueObjectInitializers = resolveValueObjectInitializers(language, receiver, valueObjects);
+  }
 
-    private List<String> resolveValueObjectInitializers(final Language language,
-                                                        final CodeGenerationParameter receiver,
-                                                        final List<CodeGenerationParameter> valueObjects) {
-        final CodeGenerationParameter aggregate = receiver.parent(AGGREGATE);
-        final CodeGenerationParameter method =
-                AggregateDetail.methodWithName(aggregate, receiver.retrieveRelatedValue(MODEL_METHOD));
+  private String resolveModelMethodParameters(final CodeGenerationParameter method) {
+    final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
+    final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
+    return new AggregateMethodInvocation("stage", "data").format(method, methodScope);
+  }
 
-        return Formatters.Variables.format(VALUE_OBJECT_INITIALIZER, language, method, valueObjects.stream());
-    }
+  private List<String> resolveValueObjectInitializers(final Language language,
+                                                      final CodeGenerationParameter receiver,
+                                                      final List<CodeGenerationParameter> valueObjects) {
+    final CodeGenerationParameter aggregate = receiver.parent(AGGREGATE);
+    final CodeGenerationParameter method =
+            AggregateDetail.methodWithName(aggregate, receiver.retrieveRelatedValue(MODEL_METHOD));
 
-    public String getSchemaTypeName() {
-        return schemaTypeName;
-    }
+    return Formatters.Variables.format(VALUE_OBJECT_INITIALIZER, language, method, valueObjects.stream());
+  }
 
-    public String getLocalTypeName() {
-        return localTypeName;
-    }
+  public String getSchemaTypeName() {
+    return schemaTypeName;
+  }
 
-    public String getModelProtocol() {
-        return modelProtocol;
-    }
+  public String getLocalTypeName() {
+    return localTypeName;
+  }
 
-    public String getModelActor() {
-        return TemplateStandard.AGGREGATE.resolveClassname(modelProtocol);
-    }
+  public String getModelProtocol() {
+    return modelProtocol;
+  }
 
-    public String getModelMethod() {
-        return modelMethod;
-    }
+  public String getModelActor() {
+    return TemplateStandard.AGGREGATE.resolveClassname(modelProtocol);
+  }
 
-    public String getModelMethodParameters() {
-        return modelMethodParameters;
-    }
+  public String getModelMethod() {
+    return modelMethod;
+  }
 
-    public String getModelVariable() {
-        return CodeElementFormatter.simpleNameToAttribute(modelProtocol);
-    }
+  public String getModelMethodParameters() {
+    return modelMethodParameters;
+  }
 
-    public List<String> getValueObjectInitializers() {
-        return valueObjectInitializers;
-    }
+  public String getModelVariable() {
+    return CodeElementFormatter.simpleNameToAttribute(modelProtocol);
+  }
 
-    public boolean isModelFactoryMethod() {
-        return modelFactoryMethod;
-    }
+  public List<String> getValueObjectInitializers() {
+    return valueObjectInitializers;
+  }
+
+  public boolean isModelFactoryMethod() {
+    return modelFactoryMethod;
+  }
 
 }

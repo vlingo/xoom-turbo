@@ -22,34 +22,34 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 
 public class ExchangePropertiesTemplateData extends TemplateData {
 
-    private final TemplateParameters parameters;
+  private final TemplateParameters parameters;
 
-    public static TemplateData from(final Stream<CodeGenerationParameter> aggregates) {
-        final List<CodeGenerationParameter> exchanges =
-                aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
-                        .collect(Collectors.toList());
+  public static TemplateData from(final Stream<CodeGenerationParameter> aggregates) {
+    final List<CodeGenerationParameter> exchanges =
+            aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(EXCHANGE))
+                    .collect(Collectors.toList());
 
-        final Supplier<Stream<String>> exchangeNames = () ->
-                exchanges.stream().map(exchange -> exchange.value).distinct();
+    final Supplier<Stream<String>> exchangeNames = () ->
+            exchanges.stream().map(exchange -> exchange.value).distinct();
 
-        return new ExchangePropertiesTemplateData(exchangeNames);
-    }
+    return new ExchangePropertiesTemplateData(exchangeNames);
+  }
 
-    private ExchangePropertiesTemplateData(final Supplier<Stream<String>> exchangeNames) {
-        this.parameters =
-                TemplateParameters.with(EXCHANGE_NAMES, exchangeNames.get().collect(Collectors.toList()))
-                        .and(INLINE_EXCHANGE_NAMES, exchangeNames.get().collect(Collectors.joining(";")))
-                        .and(RESOURCE_FILE, true);
-    }
+  private ExchangePropertiesTemplateData(final Supplier<Stream<String>> exchangeNames) {
+    this.parameters =
+            TemplateParameters.with(EXCHANGE_NAMES, exchangeNames.get().collect(Collectors.toList()))
+                    .and(INLINE_EXCHANGE_NAMES, exchangeNames.get().collect(Collectors.joining(";")))
+                    .and(RESOURCE_FILE, true);
+  }
 
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
 
-    @Override
-    public TemplateStandard standard() {
-        return TemplateStandard.EXCHANGE_PROPERTIES;
-    }
+  @Override
+  public TemplateStandard standard() {
+    return TemplateStandard.EXCHANGE_PROPERTIES;
+  }
 
 }

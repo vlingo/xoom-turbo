@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.turbo.scooter.model;
 
-public abstract class Repository<S,C> {
+public abstract class Repository<S, C> {
 
   public abstract void fromId(final String id);
 
-  public abstract void save(final Entity<S,C> entity);
+  public abstract void save(final Entity<S, C> entity);
 }

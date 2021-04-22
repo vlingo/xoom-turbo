@@ -12,28 +12,28 @@ import com.wix.mysql.distribution.Version;
 
 public class EmbeddedDatabase {
 
-    private static EmbeddedMysql mysql;
-    private static final EmbeddedMysql.Builder mySQLBuilder =
-            EmbeddedMysql.anEmbeddedMysql(MysqldConfig.aMysqldConfig(Version.v5_7_latest)
-                    .withPort(2215).withUser("xoom_test", "vlingo123").build())
-                    .addSchema("STORAGE_TEST");
+  private static EmbeddedMysql mysql;
+  private static final EmbeddedMysql.Builder mySQLBuilder =
+          EmbeddedMysql.anEmbeddedMysql(MysqldConfig.aMysqldConfig(Version.v5_7_latest)
+                  .withPort(2215).withUser("xoom_test", "vlingo123").build())
+                  .addSchema("STORAGE_TEST");
 
 
-    public static void main(final String [] args) {
-        start(DatabaseType.MYSQL);
+  public static void main(final String[] args) {
+    start(DatabaseType.MYSQL);
+  }
+
+  public static void start(final DatabaseType databaseType) {
+    if (!databaseType.equals(DatabaseType.MYSQL)) {
+      throw new IllegalArgumentException("Only MySQL embedded database is supported");
     }
+    mysql = mySQLBuilder.start();
+  }
 
-    public static void start(final DatabaseType databaseType) {
-        if(!databaseType.equals(DatabaseType.MYSQL)) {
-            throw new IllegalArgumentException("Only MySQL embedded database is supported");
-        }
-        mysql = mySQLBuilder.start();
+  public static void stop() {
+    if (mysql != null) {
+      mysql.stop();
     }
-
-    public static void stop() {
-        if(mysql != null) {
-            mysql.stop();
-        }
-    }
+  }
 }
 

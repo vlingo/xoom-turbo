@@ -10,21 +10,21 @@ package io.vlingo.xoom.turbo.annotation;
 import javax.lang.model.element.Element;
 
 public class ProcessingAnnotationException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public final Element element;
+  public final Element element;
 
-    public ProcessingAnnotationException(final String message) {
-        this(null, message);
-    }
+  public ProcessingAnnotationException(final String message) {
+    this(null, message);
+  }
 
-    public ProcessingAnnotationException(final Element element, final String message) {
-        super(message);
-        this.element = element;
-    }
+  public ProcessingAnnotationException(final Element element, final String message) {
+    super(message);
+    this.element = element;
+  }
 
-    public ProcessingAnnotationException(final Exception exception) {
-        this(null, exception.getMessage());
-    }
+  public ProcessingAnnotationException(final Exception exception) {
+    this(null, exception.getMessage());
+  }
 
 }

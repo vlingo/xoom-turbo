@@ -15,20 +15,20 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.REST_RESOUR
 
 public class AnnotatedBootstrapTemplateData extends BootstrapTemplateData {
 
-    private static final String RESOURCES_ANNOTATION_QUALIFIED_NAME = "io.vlingo.xoom.turbo.annotation.initializer.ResourceHandlers";
+  private static final String RESOURCES_ANNOTATION_QUALIFIED_NAME = "io.vlingo.xoom.turbo.annotation.initializer.ResourceHandlers";
 
-    @Override
-    protected void enrichParameters(final CodeGenerationContext context) {
-        if(ContentQuery.exists(REST_RESOURCE, context.contents())) {
-            parameters().addImport(RESOURCES_ANNOTATION_QUALIFIED_NAME);
-        }
-
-        parameters().and(REST_RESOURCE_PACKAGE, ContentQuery.findPackage(REST_RESOURCE, context.contents()));
+  @Override
+  protected void enrichParameters(final CodeGenerationContext context) {
+    if (ContentQuery.exists(REST_RESOURCE, context.contents())) {
+      parameters().addImport(RESOURCES_ANNOTATION_QUALIFIED_NAME);
     }
 
-    @Override
-    protected boolean support(CodeGenerationContext context) {
-        return context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
-    }
+    parameters().and(REST_RESOURCE_PACKAGE, ContentQuery.findPackage(REST_RESOURCE, context.contents()));
+  }
+
+  @Override
+  protected boolean support(CodeGenerationContext context) {
+    return context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
+  }
 
 }

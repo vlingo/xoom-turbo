@@ -8,27 +8,27 @@ package io.vlingo.xoom.turbo.storage;
 
 public enum Model {
 
-    DOMAIN("Domain"),
-    COMMAND("Command"),
-    QUERY("Query");
+  DOMAIN("Domain"),
+  COMMAND("Command"),
+  QUERY("Query");
 
-    private final String label;
+  private final String label;
 
-    Model(final String label) {
-        this.label = label;
-    }
+  Model(final String label) {
+    this.label = label;
+  }
 
-    public boolean isQueryModel() {
-        return equals(QUERY);
-    }
+  public boolean isQueryModel() {
+    return equals(QUERY);
+  }
 
-    public boolean isDomainModel() {
-        return equals(DOMAIN);
-    }
+  public boolean isDomainModel() {
+    return equals(DOMAIN);
+  }
 
-    @Override
-    public String toString() {
-        return label;
-    }
+  @Override
+  public String toString() {
+    return label;
+  }
 
 }

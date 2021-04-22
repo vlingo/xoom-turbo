@@ -81,43 +81,43 @@ import java.util.List;
 @SuppressWarnings("rawtypes")
 public interface StepFlow extends Stoppable {
 
-    Completes<Boolean> shutDown();
+  Completes<Boolean> shutDown();
 
-    Completes<Boolean> startUp();
+  Completes<Boolean> startUp();
 
-    Completes<Kernel> getKernel();
+  Completes<Kernel> getKernel();
 
-    Completes<String> getName();
+  Completes<String> getName();
 
-    Completes<StateTransition> applyEvent(Event event);
+  Completes<StateTransition> applyEvent(Event event);
 
-    static <A extends Actor> StepFlow startWith(Stage stage, Class<A> clazz, String actorName) {
-        return startWith(stage, clazz, actorName, Definition.NoParameters);
-    }
+  static <A extends Actor> StepFlow startWith(Stage stage, Class<A> clazz, String actorName) {
+    return startWith(stage, clazz, actorName, Definition.NoParameters);
+  }
 
-    static <A extends Actor, P extends StepFlow> P startWith(Stage stage, Class<A> clazz, Class<P> protocol,
-                                                             String actorName, List<Object> params) {
-        P processor = stage.actorFor(protocol, Definition.has(
-                clazz,
-                params,
-                "queueMailbox", actorName),
-                stage.world().addressFactory().withHighId(),
-                stage.world().defaultLogger());
+  static <A extends Actor, P extends StepFlow> P startWith(Stage stage, Class<A> clazz, Class<P> protocol,
+                                                           String actorName, List<Object> params) {
+    P processor = stage.actorFor(protocol, Definition.has(
+            clazz,
+            params,
+            "queueMailbox", actorName),
+            stage.world().addressFactory().withHighId(),
+            stage.world().defaultLogger());
 
-        processor.startUp();
-        return processor;
-    }
+    processor.startUp();
+    return processor;
+  }
 
-    public static <A extends Actor, P> StepFlow startWith(Stage stage, Class<A> clazz, String actorName,
-                                                          List<Object> params) {
-        StepFlow processor = stage.actorFor(StepFlow.class, Definition.has(
-                clazz,
-                params,
-                "queueMailbox", actorName),
-                stage.world().addressFactory().withHighId(),
-                stage.world().defaultLogger());
+  static <A extends Actor, P> StepFlow startWith(Stage stage, Class<A> clazz, String actorName,
+                                                 List<Object> params) {
+    StepFlow processor = stage.actorFor(StepFlow.class, Definition.has(
+            clazz,
+            params,
+            "queueMailbox", actorName),
+            stage.world().addressFactory().withHighId(),
+            stage.world().defaultLogger());
 
-        processor.startUp();
-        return processor;
-    }
+    processor.startUp();
+    return processor;
+  }
 }

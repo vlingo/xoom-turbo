@@ -37,20 +37,20 @@ import java.util.Map;
  * incremented.
  * </p>
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({"rawtypes", "unchecked"})
 public interface Kernel {
 
-    Completes<String> getName();
+  Completes<String> getName();
 
-    void setName(String name);
+  void setName(String name);
 
-    void registerStates(State<? extends State>... states);
+  void registerStates(State<? extends State>... states);
 
-    Completes<List<State<? extends State>>> getStates();
+  Completes<List<State<? extends State>>> getStates();
 
-    Completes<List<StateTransition>> getStateTransitions();
+  Completes<List<StateTransition>> getStateTransitions();
 
-    Completes<Map<String, TransitionHandler>> getTransitionMap();
+  Completes<Map<String, TransitionHandler>> getTransitionMap();
 
-    <T extends Event> Completes<StateTransition> applyEvent(T event);
+  <T extends Event> Completes<StateTransition> applyEvent(T event);
 }

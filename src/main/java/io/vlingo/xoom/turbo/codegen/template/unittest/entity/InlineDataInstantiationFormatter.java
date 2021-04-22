@@ -41,7 +41,7 @@ public class InlineDataInstantiationFormatter {
   }
 
   public String format() {
-    if(FieldDetail.isScalar(stateField)) {
+    if (FieldDetail.isScalar(stateField)) {
       return formatScalarTypedField();
     }
     return formatComplexTypedField();
@@ -65,7 +65,7 @@ public class InlineDataInstantiationFormatter {
 
   private void generateValueObjectFieldAssignment(final String path, final CodeGenerationParameter field) {
     final String currentFieldPath = path + "." + field.value;
-    if(ValueObjectDetail.isValueObject(field)) {
+    if (ValueObjectDetail.isValueObject(field)) {
       generateComplexTypeAssignment(currentFieldPath, field);
     } else {
       generateScalarTypeAssignment(currentFieldPath);

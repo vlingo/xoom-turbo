@@ -7,14 +7,14 @@
 package io.vlingo.xoom.turbo.codegen;
 
 public class CodeGenerationException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public CodeGenerationException(final Exception exception) {
-        super(exception);
-    }
+  public CodeGenerationException(final Exception exception) {
+    super(exception);
+  }
 
-    public CodeGenerationException(final String message) {
-        super(message);
-    }
+  public CodeGenerationException(final String message) {
+    super(message);
+  }
 
 }

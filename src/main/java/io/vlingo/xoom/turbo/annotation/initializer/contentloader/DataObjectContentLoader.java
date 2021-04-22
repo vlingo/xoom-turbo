@@ -17,24 +17,24 @@ import java.util.List;
 
 public class DataObjectContentLoader extends TypeBasedContentLoader {
 
-    protected DataObjectContentLoader(final Element annotatedClass,
-                                      final ProcessingEnvironment environment) {
-        super(annotatedClass, environment);
+  protected DataObjectContentLoader(final Element annotatedClass,
+                                    final ProcessingEnvironment environment) {
+    super(annotatedClass, environment);
+  }
+
+  @Override
+  protected List<TypeElement> retrieveContentSource() {
+    final DataObjects dataObjects = annotatedClass.getAnnotation(DataObjects.class);
+
+    if (dataObjects == null) {
+      return Collections.emptyList();
     }
 
-    @Override
-    protected List<TypeElement> retrieveContentSource() {
-        final DataObjects dataObjects = annotatedClass.getAnnotation(DataObjects.class);
+    return typeRetriever.typesFrom(dataObjects, DataObjects::value);
+  }
 
-        if(dataObjects == null) {
-            return Collections.emptyList();
-        }
-
-        return typeRetriever.typesFrom(dataObjects, DataObjects::value);
-    }
-
-    @Override
-    protected TemplateStandard standard() {
-        return TemplateStandard.DATA_OBJECT;
-    }
+  @Override
+  protected TemplateStandard standard() {
+    return TemplateStandard.DATA_OBJECT;
+  }
 }

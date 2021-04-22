@@ -19,37 +19,37 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.RESOURCE_F
 
 public class DatabasePropertiesTemplateData extends TemplateData {
 
-    private final TemplateParameters templateParameters;
+  private final TemplateParameters templateParameters;
 
-    public DatabasePropertiesTemplateData(final String appName,
-                                          final Map<Model, DatabaseType> databases) {
-        this.templateParameters = loadParameters(appName, databases);
-    }
+  public DatabasePropertiesTemplateData(final String appName,
+                                        final Map<Model, DatabaseType> databases) {
+    this.templateParameters = loadParameters(appName, databases);
+  }
 
-    private TemplateParameters loadParameters(final String appName,
-                                              final Map<Model, DatabaseType> databases) {
-        final TemplateParameters parameters =
-                TemplateParameters.with(RESOURCE_FILE, true).and(PRODUCTION_CODE, false);
+  private TemplateParameters loadParameters(final String appName,
+                                            final Map<Model, DatabaseType> databases) {
+    final TemplateParameters parameters =
+            TemplateParameters.with(RESOURCE_FILE, true).and(PRODUCTION_CODE, false);
 
-        databases.entrySet().forEach(entry -> {
-            final TemplateParameter parameter =
-                    entry.getKey().isQueryModel() ?
-                            TemplateParameter.QUERY_DATABASE_PARAMETER :
-                            TemplateParameter.DEFAULT_DATABASE_PARAMETER;
+    databases.entrySet().forEach(entry -> {
+      final TemplateParameter parameter =
+              entry.getKey().isQueryModel() ?
+                      TemplateParameter.QUERY_DATABASE_PARAMETER :
+                      TemplateParameter.DEFAULT_DATABASE_PARAMETER;
 
-            parameters.and(parameter, new Database(appName, entry.getKey(), entry.getValue()));
-        });
+      parameters.and(parameter, new Database(appName, entry.getKey(), entry.getValue()));
+    });
 
-        return parameters;
-    }
+    return parameters;
+  }
 
-    @Override
-    public TemplateParameters parameters() {
-        return templateParameters;
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return templateParameters;
+  }
 
-    @Override
-    public TemplateStandard standard() {
-        return TemplateStandard.DATABASE_PROPERTIES;
-    }
+  @Override
+  public TemplateStandard standard() {
+    return TemplateStandard.DATABASE_PROPERTIES;
+  }
 }

@@ -51,20 +51,20 @@ public class DataObjectStaticFactoryMethodAssignment extends Formatters.Variable
   }
 
   private String resolveCarrierName(final CodeGenerationParameter carrier) {
-    if(carrier.isLabeled(Label.AGGREGATE)) {
+    if (carrier.isLabeled(Label.AGGREGATE)) {
       return Introspector.decapitalize(TemplateStandard.AGGREGATE_STATE.resolveClassname(carrier.value));
     }
-    if(carrier.isLabeled(Label.VALUE_OBJECT)) {
+    if (carrier.isLabeled(Label.VALUE_OBJECT)) {
       return Introspector.decapitalize(carrier.value);
     }
     throw new IllegalArgumentException("Unable to resolve carrier name from " + carrier.label);
   }
 
   private Label resolveFieldLabel(final CodeGenerationParameter carrier) {
-    if(carrier.isLabeled(AGGREGATE)) {
+    if (carrier.isLabeled(AGGREGATE)) {
       return STATE_FIELD;
     }
-    if(carrier.isLabeled(VALUE_OBJECT)) {
+    if (carrier.isLabeled(VALUE_OBJECT)) {
       return VALUE_OBJECT_FIELD;
     }
     throw new UnsupportedOperationException("Unable to format fields assignment from " + carrier.label);

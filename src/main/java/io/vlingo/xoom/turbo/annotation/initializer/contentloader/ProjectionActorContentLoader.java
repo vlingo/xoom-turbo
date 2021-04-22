@@ -23,27 +23,27 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION;
 
 public class ProjectionActorContentLoader extends TypeBasedContentLoader {
 
-    protected ProjectionActorContentLoader(final Element annotatedClass,
-                                           final ProcessingEnvironment environment) {
-        super(annotatedClass, environment);
+  protected ProjectionActorContentLoader(final Element annotatedClass,
+                                         final ProcessingEnvironment environment) {
+    super(annotatedClass, environment);
+  }
+
+  @Override
+  protected List<TypeElement> retrieveContentSource() {
+    final Projections projections = annotatedClass.getAnnotation(Projections.class);
+
+    if (projections == null) {
+      return Collections.emptyList();
     }
 
-    @Override
-    protected List<TypeElement> retrieveContentSource() {
-        final Projections projections = annotatedClass.getAnnotation(Projections.class);
+    return Stream.of(projections.value())
+            .map(projection -> typeRetriever.from(projection, Projection::actor))
+            .collect(Collectors.toList());
+  }
 
-        if(projections == null) {
-            return Collections.emptyList();
-        }
-
-        return Stream.of(projections.value())
-                .map(projection -> typeRetriever.from(projection, Projection::actor))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    protected TemplateStandard standard() {
-        return PROJECTION;
-    }
+  @Override
+  protected TemplateStandard standard() {
+    return PROJECTION;
+  }
 
 }

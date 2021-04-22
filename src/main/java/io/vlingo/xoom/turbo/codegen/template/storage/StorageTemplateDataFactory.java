@@ -32,7 +32,7 @@ public class StorageTemplateDataFactory {
 
     templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
 
-    if(!internalGeneration) {
+    if (!internalGeneration) {
       templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, useCQRS, contents));
       templatesData.add(new DatabasePropertiesTemplateData(appName, databases));
     }
@@ -41,7 +41,7 @@ public class StorageTemplateDataFactory {
             useCQRS, useAnnotations, storageType, projectionType, templatesData,
             contents));
 
-    if(useAnnotations) {
+    if (useAnnotations) {
       templatesData.add(PersistenceSetupTemplateData.from(basePackage, persistencePackage,
               useCQRS, storageType, projectionType, templatesData, contents));
     }

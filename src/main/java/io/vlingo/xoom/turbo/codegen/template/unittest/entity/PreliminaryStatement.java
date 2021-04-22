@@ -19,7 +19,7 @@ public class PreliminaryStatement {
 
   public static final List<String> resolve(final CodeGenerationParameter method,
                                            final Optional<String> defaultFactoryMethodName) {
-    if(AuxiliaryEntityCreation.isRequiredFor(method, defaultFactoryMethodName)) {
+    if (AuxiliaryEntityCreation.isRequiredFor(method, defaultFactoryMethodName)) {
       final String entityCreationMethodInvocation = AuxiliaryEntityCreation.METHOD_NAME + "();";
       return Arrays.asList(entityCreationMethodInvocation, DISPATCHER_AFTER_COMPLETION);
     }

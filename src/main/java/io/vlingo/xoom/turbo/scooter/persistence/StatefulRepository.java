@@ -20,13 +20,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class StatefulRepository {
-  protected StatefulRepository() { }
+  protected StatefulRepository() {
+  }
 
   /**
    * Answer the T afer awaiting the read to be completed. The {@code interest}
    * must be requested upon each new {@code read()}.
+   *
    * @param interest the ReadInterest on which the await is based
-   * @param <T> the type of object to answer
+   * @param <T>      the type of object to answer
    * @return T
    */
   @SuppressWarnings("unchecked")
@@ -41,6 +43,7 @@ public abstract class StatefulRepository {
   /**
    * Await on the write to be completed. The {@code interest} must be
    * requested upon each new {@code write()}.
+   *
    * @param interest the WriteInterest on which the await is based
    */
   protected void await(final WriteInterest interest) {
@@ -51,6 +54,7 @@ public abstract class StatefulRepository {
 
   /**
    * Answer a {@code StatefulRepository.ReadInterest} for each new {@code read()}.
+   *
    * @return ReadInterest
    */
   protected ReadInterest readInterest() {
@@ -59,6 +63,7 @@ public abstract class StatefulRepository {
 
   /**
    * Answer a {@code StatefulRepository.WriteInterest} for each new {@code write()}.
+   *
    * @return WriteInterest
    */
   protected WriteInterest writeInterest() {
@@ -89,13 +94,16 @@ public abstract class StatefulRepository {
 
     private <S> void readConsidering(final Outcome<StorageException, Result> outcome, final S state) {
       outcome
-      .andThen(result -> {
-        if (result.isSuccess()) {
-          read(state);
-        }
-        return result;
-      })
-      .otherwise(ex -> { exception.set(ex); return outcome.getOrNull(); });
+              .andThen(result -> {
+                if (result.isSuccess()) {
+                  read(state);
+                }
+                return result;
+              })
+              .otherwise(ex -> {
+                exception.set(ex);
+                return outcome.getOrNull();
+              });
     }
 
     private ReadInterest() {
@@ -130,13 +138,16 @@ public abstract class StatefulRepository {
 
     private <S> void writtenConsidering(final Outcome<StorageException, Result> outcome) {
       outcome
-      .andThen(result -> {
-        if (result.isSuccess()) {
-          written();
-        }
-        return result;
-      })
-      .otherwise(ex -> { exception.set(ex); return outcome.getOrNull(); });
+              .andThen(result -> {
+                if (result.isSuccess()) {
+                  written();
+                }
+                return result;
+              })
+              .otherwise(ex -> {
+                exception.set(ex);
+                return outcome.getOrNull();
+              });
     }
   }
 

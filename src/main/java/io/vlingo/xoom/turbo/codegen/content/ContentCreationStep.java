@@ -12,9 +12,9 @@ import io.vlingo.xoom.turbo.codegen.CodeGenerationStep;
 
 public class ContentCreationStep implements CodeGenerationStep {
 
-    @Override
-    public void process(final CodeGenerationContext context) {
-        context.contents().stream().filter(Content::canWrite).forEach(Content::create);
-    }
+  @Override
+  public void process(final CodeGenerationContext context) {
+    context.contents().stream().filter(Content::canWrite).forEach(Content::create);
+  }
 
 }

@@ -14,32 +14,32 @@ import static io.vlingo.xoom.turbo.codegen.CodeGenerationSetup.DEFAULT_SCHEMA_VE
 
 public class Schema {
 
-    public final String reference;
-    public final String file;
+  public final String reference;
+  public final String file;
 
-    public Schema(final CodeGenerationParameter schema) {
-        if(!schema.isLabeled(Label.SCHEMA)) {
-            throw new IllegalArgumentException("A schema parameter is expected.");
-        }
-        this.reference = schema.value;
-        this.file = null;
+  public Schema(final CodeGenerationParameter schema) {
+    if (!schema.isLabeled(Label.SCHEMA)) {
+      throw new IllegalArgumentException("A schema parameter is expected.");
     }
+    this.reference = schema.value;
+    this.file = null;
+  }
 
-    public Schema(final String schemaGroup,
-                  final CodeGenerationParameter publishedLanguage) {
-        if(! (publishedLanguage.isLabeled(Label.DOMAIN_EVENT) || publishedLanguage.isLabeled(Label.VALUE_OBJECT))) {
-            throw new IllegalArgumentException("A Domain Event or Value Object parameter is expected.");
-        }
-        this.reference = String.format("%s:%s:%s", schemaGroup, publishedLanguage.value, DEFAULT_SCHEMA_VERSION) ;
-        this.file = publishedLanguage.value + ".vss";
+  public Schema(final String schemaGroup,
+                final CodeGenerationParameter publishedLanguage) {
+    if (!(publishedLanguage.isLabeled(Label.DOMAIN_EVENT) || publishedLanguage.isLabeled(Label.VALUE_OBJECT))) {
+      throw new IllegalArgumentException("A Domain Event or Value Object parameter is expected.");
     }
+    this.reference = String.format("%s:%s:%s", schemaGroup, publishedLanguage.value, DEFAULT_SCHEMA_VERSION);
+    this.file = publishedLanguage.value + ".vss";
+  }
 
-    public String getReference() {
-        return reference;
-    }
+  public String getReference() {
+    return reference;
+  }
 
-    public String getFile() {
-        return file;
-    }
+  public String getFile() {
+    return file;
+  }
 
 }

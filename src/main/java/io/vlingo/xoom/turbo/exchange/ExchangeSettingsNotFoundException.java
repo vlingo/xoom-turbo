@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExchangeSettingsNotFoundException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public ExchangeSettingsNotFoundException(final List<String> parameters) {
-        super("The following exchange parameter(s) were not informed: " + parameters.stream().collect(Collectors.joining(", ")));
-    }
+  public ExchangeSettingsNotFoundException(final List<String> parameters) {
+    super("The following exchange parameter(s) were not informed: " + parameters.stream().collect(Collectors.joining(", ")));
+  }
 
 }

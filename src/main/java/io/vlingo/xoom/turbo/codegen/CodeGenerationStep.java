@@ -9,10 +9,10 @@ package io.vlingo.xoom.turbo.codegen;
 
 public interface CodeGenerationStep {
 
-    void process(final CodeGenerationContext context);
+  void process(final CodeGenerationContext context);
 
-    default boolean shouldProcess(final CodeGenerationContext context) {
-        return true;
-    }
+  default boolean shouldProcess(final CodeGenerationContext context) {
+    return true;
+  }
 
 }

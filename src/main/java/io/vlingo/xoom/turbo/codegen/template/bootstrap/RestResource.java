@@ -22,40 +22,40 @@ import static java.util.stream.Collectors.toList;
 
 public class RestResource {
 
-    private final String className;
-    private final String objectName;
-    private final boolean last;
+  private final String className;
+  private final String objectName;
+  private final boolean last;
 
-    public static List<RestResource> from(final List<Content> contents) {
-        final Set<String> classNames =
-                ContentQuery.findClassNames(contents, REST_RESOURCE,
-                        AUTO_DISPATCH_RESOURCE_HANDLER);
+  public static List<RestResource> from(final List<Content> contents) {
+    final Set<String> classNames =
+            ContentQuery.findClassNames(contents, REST_RESOURCE,
+                    AUTO_DISPATCH_RESOURCE_HANDLER);
 
-        final Iterator<String> iterator = classNames.iterator();
+    final Iterator<String> iterator = classNames.iterator();
 
-        return IntStream.range(0, classNames.size()).mapToObj(index ->
-                new RestResource(iterator.next(), index,
-                        classNames.size())).collect(toList());
-    }
+    return IntStream.range(0, classNames.size()).mapToObj(index ->
+            new RestResource(iterator.next(), index,
+                    classNames.size())).collect(toList());
+  }
 
-    private RestResource(final String restResourceName,
-                         final int resourceIndex,
-                         final int numberOfResources) {
-        this.className = restResourceName;
-        this.objectName = CodeElementFormatter.simpleNameToAttribute(restResourceName);
-        this.last = resourceIndex == numberOfResources - 1;
-    }
+  private RestResource(final String restResourceName,
+                       final int resourceIndex,
+                       final int numberOfResources) {
+    this.className = restResourceName;
+    this.objectName = CodeElementFormatter.simpleNameToAttribute(restResourceName);
+    this.last = resourceIndex == numberOfResources - 1;
+  }
 
-    public String getClassName() {
-        return className;
-    }
+  public String getClassName() {
+    return className;
+  }
 
-    public String getObjectName() {
-        return objectName;
-    }
+  public String getObjectName() {
+    return objectName;
+  }
 
-    public boolean isLast() {
-        return last;
-    }
+  public boolean isLast() {
+    return last;
+  }
 
 }

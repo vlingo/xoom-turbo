@@ -28,41 +28,41 @@ import java.util.List;
 
 public class DefaultJournalActorBuilder implements StoreActorBuilder {
 
-    @Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public <T> T build(final Stage stage,
-                       final List<Dispatcher> dispatchers,
-                       final Configuration configuration) {
-        try {
-            final JDBCDispatcherControlDelegate dispatcherControlDelegate =
-                    new JDBCDispatcherControlDelegate(Configuration.cloneOf(configuration), stage.world().defaultLogger());
+  @Override
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public <T> T build(final Stage stage,
+                     final List<Dispatcher> dispatchers,
+                     final Configuration configuration) {
+    try {
+      final JDBCDispatcherControlDelegate dispatcherControlDelegate =
+              new JDBCDispatcherControlDelegate(Configuration.cloneOf(configuration), stage.world().defaultLogger());
 
-            final Stage local = stage.world().stage();
+      final Stage local = stage.world().stage();
 
-            final DispatcherControl dispatcherControl = local.actorFor(DispatcherControl.class,
-                    Definition.has(DispatcherControlActor.class,
-                            new DispatcherControl.DispatcherControlInstantiator(
-                                    dispatchers,
-                                    dispatcherControlDelegate,
-                                    Journal.DefaultCheckConfirmationExpirationInterval,
-                                    Journal.DefaultConfirmationExpiration)));
+      final DispatcherControl dispatcherControl = local.actorFor(DispatcherControl.class,
+              Definition.has(DispatcherControlActor.class,
+                      new DispatcherControl.DispatcherControlInstantiator(
+                              dispatchers,
+                              dispatcherControlDelegate,
+                              Journal.DefaultCheckConfirmationExpirationInterval,
+                              Journal.DefaultConfirmationExpiration)));
 
-            final JDBCJournalWriter journalWriter =
-                    new JDBCJournalInstantWriter(configuration, typed(dispatchers), dispatcherControl);
+      final JDBCJournalWriter journalWriter =
+              new JDBCJournalInstantWriter(configuration, typed(dispatchers), dispatcherControl);
 
-            return (T) local.world().actorFor(Journal.class, JDBCJournalActor.class, configuration, journalWriter);
-        } catch (final Exception e) {
-            throw new StorageException(Result.Error, e.getMessage());
-        }
+      return (T) local.world().actorFor(Journal.class, JDBCJournalActor.class, configuration, journalWriter);
+    } catch (final Exception e) {
+      throw new StorageException(Result.Error, e.getMessage());
     }
+  }
 
-    @SuppressWarnings("unchecked")
-    private List<Dispatcher<Dispatchable<Entry<String>, State.TextState>>> typed(final List<?> dispatchers) {
-        return (List<Dispatcher<Dispatchable<Entry<String>, State.TextState>>>) dispatchers;
-    }
+  @SuppressWarnings("unchecked")
+  private List<Dispatcher<Dispatchable<Entry<String>, State.TextState>>> typed(final List<?> dispatchers) {
+    return (List<Dispatcher<Dispatchable<Entry<String>, State.TextState>>>) dispatchers;
+  }
 
-    @Override
-    public boolean support(final StorageType storageType, final DatabaseType databaseType) {
-        return storageType.isJournal() && !databaseType.isInMemory();
-    }
+  @Override
+  public boolean support(final StorageType storageType, final DatabaseType databaseType) {
+    return storageType.isJournal() && !databaseType.isInMemory();
+  }
 }

@@ -14,23 +14,23 @@ import javax.lang.model.element.Element;
 
 public abstract class ContentLoader<T> {
 
-    protected final Element annotatedClass;
-    protected final TypeRetriever typeRetriever;
-    protected final ProcessingEnvironment environment;
+  protected final Element annotatedClass;
+  protected final TypeRetriever typeRetriever;
+  protected final ProcessingEnvironment environment;
 
-    protected ContentLoader(final Element annotatedClass,
-                            final ProcessingEnvironment environment){
-        this.environment = environment;
-        this.annotatedClass = annotatedClass;
-        this.typeRetriever = TypeRetriever.with(environment);
-    }
+  protected ContentLoader(final Element annotatedClass,
+                          final ProcessingEnvironment environment) {
+    this.environment = environment;
+    this.annotatedClass = annotatedClass;
+    this.typeRetriever = TypeRetriever.with(environment);
+  }
 
-    public abstract void load(final CodeGenerationContext context);
+  public abstract void load(final CodeGenerationContext context);
 
-    public boolean shouldLoad() {
-        return annotatedClass != null;
-    }
+  public boolean shouldLoad() {
+    return annotatedClass != null;
+  }
 
-    protected abstract T retrieveContentSource();
+  protected abstract T retrieveContentSource();
 
 }

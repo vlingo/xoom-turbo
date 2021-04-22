@@ -7,12 +7,12 @@
 
 package io.vlingo.xoom.turbo.codegen.template.dataobject;
 
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables;
 
 import java.beans.Introspector;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class StaticFactoryMethod {
 
   private String resolveMethodParameters(final CodeGenerationParameter parent,
                                          final Arguments staticFactoryMethodArguments) {
-    if(staticFactoryMethodArguments.isSingleArg()) {
+    if (staticFactoryMethodArguments.isSingleArg()) {
       final String carrier = resolveCarrierName(parent);
       return String.format("final %s %s", carrier, Introspector.decapitalize(carrier));
     }
@@ -55,7 +55,7 @@ public class StaticFactoryMethod {
 
   private String resolveConstructorInvocation(final CodeGenerationParameter parent,
                                               final Arguments staticFactoryMethodArguments) {
-    if(staticFactoryMethodArguments.isSingleArg()) {
+    if (staticFactoryMethodArguments.isSingleArg()) {
       return String.format("from(%s)", Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR_INVOCATION.format(parent, STATIC));
     }
     return String.format("new %s(%s)", dataObjectName, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR_INVOCATION.format(parent, INSTANCE));
@@ -63,17 +63,17 @@ public class StaticFactoryMethod {
 
   private List<String> resolveValueObjectInitializers(final CodeGenerationParameter parent,
                                                       final Arguments staticFactoryMethodArguments) {
-    if(staticFactoryMethodArguments.isAllArgs()) {
+    if (staticFactoryMethodArguments.isAllArgs()) {
       return Collections.emptyList();
     }
     return Variables.format(Variables.Style.DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, Language.findDefault(), parent);
   }
 
   private String resolveCarrierName(final CodeGenerationParameter parent) {
-    if(parent.isLabeled(Label.AGGREGATE)) {
+    if (parent.isLabeled(Label.AGGREGATE)) {
       return TemplateStandard.AGGREGATE_STATE.resolveClassname(parent.value);
     }
-    if(parent.isLabeled(Label.VALUE_OBJECT)) {
+    if (parent.isLabeled(Label.VALUE_OBJECT)) {
       return parent.value;
     }
     throw new IllegalArgumentException("Unable to resolve carrier name from " + parent.label);

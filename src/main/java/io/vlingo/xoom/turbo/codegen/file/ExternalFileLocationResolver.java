@@ -16,16 +16,16 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.TARGET_FOLDER;
 
 public class ExternalFileLocationResolver implements FileLocationResolver {
 
-    @Override
-    public String resolve(final CodeGenerationContext context,
-                          final TemplateData templateData) {
-        final String targetFolder =
-                context.parameterOf(TARGET_FOLDER);
+  @Override
+  public String resolve(final CodeGenerationContext context,
+                        final TemplateData templateData) {
+    final String targetFolder =
+            context.parameterOf(TARGET_FOLDER);
 
-        final String[] relativeSourcePath =
-                RelativeSourcePathResolver.resolveWith(context, templateData);
+    final String[] relativeSourcePath =
+            RelativeSourcePathResolver.resolveWith(context, templateData);
 
-        return Paths.get(targetFolder, relativeSourcePath).toString();
-    }
+    return Paths.get(targetFolder, relativeSourcePath).toString();
+  }
 
 }

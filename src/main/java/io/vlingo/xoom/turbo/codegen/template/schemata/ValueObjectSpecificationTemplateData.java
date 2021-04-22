@@ -41,7 +41,7 @@ public class ValueObjectSpecificationTemplateData extends TemplateData {
             ValueObjectDetail.findPublishedValueObjects(exchanges, valueObjects);
 
     return ValueObjectDetail.orderByDependency(publishedValueObjects).map(vo -> {
-            return new ValueObjectSpecificationTemplateData(DATA_SCHEMA_CATEGORY, schemaGroup, vo);
+      return new ValueObjectSpecificationTemplateData(DATA_SCHEMA_CATEGORY, schemaGroup, vo);
     }).collect(toList());
   }
 
@@ -65,7 +65,7 @@ public class ValueObjectSpecificationTemplateData extends TemplateData {
   private String resolveFieldDeclaraction(final String schemaGroup,
                                           final CodeGenerationParameter field) {
     final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
-    if(ValueObjectDetail.isValueObject(field)) {
+    if (ValueObjectDetail.isValueObject(field)) {
       return String.format("%s:%s:%s", schemaGroup, fieldType, DEFAULT_SCHEMA_VERSION) + " " + field.value;
     }
     return fieldType.toLowerCase() + " " + field.value;

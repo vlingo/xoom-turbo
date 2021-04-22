@@ -13,42 +13,42 @@ import javax.lang.model.element.TypeElement;
 
 public class TypeBasedContent extends Content {
 
-    public final TypeElement contentType;
+  public final TypeElement contentType;
 
-    protected TypeBasedContent(final TemplateStandard standard,
-                               final TypeElement contentType) {
-        super(standard);
-        this.contentType = contentType;
-    }
+  protected TypeBasedContent(final TemplateStandard standard,
+                             final TypeElement contentType) {
+    super(standard);
+    this.contentType = contentType;
+  }
 
-    @Override
-    public void create() {
-        throw new UnsupportedOperationException("Type Based Content is read-only");
-    }
+  @Override
+  public void create() {
+    throw new UnsupportedOperationException("Type Based Content is read-only");
+  }
 
-    @Override
-    public String retrieveName() {
-        return contentType.getSimpleName().toString();
-    }
+  @Override
+  public String retrieveName() {
+    return contentType.getSimpleName().toString();
+  }
 
-    @Override
-    public String retrievePackage() {
-        return CodeElementFormatter.packageOf(retrieveQualifiedName());
-    }
+  @Override
+  public String retrievePackage() {
+    return CodeElementFormatter.packageOf(retrieveQualifiedName());
+  }
 
-    @Override
-    public String retrieveQualifiedName() {
-        return contentType.getQualifiedName().toString();
-    }
+  @Override
+  public String retrieveQualifiedName() {
+    return contentType.getQualifiedName().toString();
+  }
 
-    @Override
-    public boolean canWrite() {
-        return false;
-    }
+  @Override
+  public boolean canWrite() {
+    return false;
+  }
 
-    @Override
-    public boolean contains(final String term) {
-        throw new UnsupportedOperationException("Unable to search on TypeBasedContent");
-    }
+  @Override
+  public boolean contains(final String term) {
+    throw new UnsupportedOperationException("Unable to search on TypeBasedContent");
+  }
 
 }

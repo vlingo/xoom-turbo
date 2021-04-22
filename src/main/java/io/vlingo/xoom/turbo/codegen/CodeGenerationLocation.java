@@ -9,10 +9,10 @@ package io.vlingo.xoom.turbo.codegen;
 
 public enum CodeGenerationLocation {
 
-    INTERNAL,
-    EXTERNAL;
+  INTERNAL,
+  EXTERNAL;
 
-    public boolean isInternal() {
-        return equals(INTERNAL);
-    }
+  public boolean isInternal() {
+    return equals(INTERNAL);
+  }
 }

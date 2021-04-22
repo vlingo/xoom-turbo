@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface ResourceHandlers {
 
-    Class<? extends DynamicResourceHandler>[] value() default {};
+  Class<? extends DynamicResourceHandler>[] value() default {};
 
-    String[] packages() default {""};
+  String[] packages() default {""};
 }

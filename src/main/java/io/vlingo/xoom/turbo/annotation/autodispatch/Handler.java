@@ -9,24 +9,24 @@ package io.vlingo.xoom.turbo.annotation.autodispatch;
 
 public interface Handler {
 
-    @FunctionalInterface
-    interface Two<A, B> extends Handler {
-        A handle(B b);
-    }
+  @FunctionalInterface
+  interface Two<A, B> extends Handler {
+    A handle(B b);
+  }
 
-    @FunctionalInterface
-    interface Three<A, B, C> extends Handler {
-        A handle(B b, C c);
-    }
+  @FunctionalInterface
+  interface Three<A, B, C> extends Handler {
+    A handle(B b, C c);
+  }
 
-    @FunctionalInterface
-    interface Four<A, B, C, D> extends Handler {
-        A handle(B b, C c, D d);
-    }
+  @FunctionalInterface
+  interface Four<A, B, C, D> extends Handler {
+    A handle(B b, C c, D d);
+  }
 
-    @FunctionalInterface
-    interface Five<A, B, C, D, E> extends Handler {
-        A handle(B b, C c, D d, E e);
-    }
+  @FunctionalInterface
+  interface Five<A, B, C, D, E> extends Handler {
+    A handle(B b, C c, D d, E e);
+  }
 
 }

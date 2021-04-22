@@ -25,65 +25,65 @@ import static java.util.stream.Collectors.toList;
 
 public class StoreProvider {
 
-    private final String className;
-    private final String arguments;
+  private final String className;
+  private final String arguments;
 
-    public static List<StoreProvider> from(final StorageType storageType,
-                                           final Boolean useCQRS,
-                                           final Boolean useProjections,
-                                           final Boolean hasExchange) {
-        if(!storageType.isEnabled()) {
-            return Collections.emptyList();
-        }
-
-        return Model.applicableTo(useCQRS)
-                .map(model -> new StoreProvider(storageType, model, useProjections, hasExchange))
-                .collect(toList());
+  public static List<StoreProvider> from(final StorageType storageType,
+                                         final Boolean useCQRS,
+                                         final Boolean useProjections,
+                                         final Boolean hasExchange) {
+    if (!storageType.isEnabled()) {
+      return Collections.emptyList();
     }
 
-    private StoreProvider(final StorageType storageType,
-                          final Model model,
-                          final Boolean useProjections,
-                          final Boolean hasExchange) {
-        final TemplateParameters parameters =
-                TemplateParameters.with(STORAGE_TYPE, storageType)
-                        .and(MODEL, model);
+    return Model.applicableTo(useCQRS)
+            .map(model -> new StoreProvider(storageType, model, useProjections, hasExchange))
+            .collect(toList());
+  }
 
-        this.className = STORE_PROVIDER.resolveClassname(parameters);
-        this.arguments = resolveArguments(model, storageType, useProjections, hasExchange);
+  private StoreProvider(final StorageType storageType,
+                        final Model model,
+                        final Boolean useProjections,
+                        final Boolean hasExchange) {
+    final TemplateParameters parameters =
+            TemplateParameters.with(STORAGE_TYPE, storageType)
+                    .and(MODEL, model);
+
+    this.className = STORE_PROVIDER.resolveClassname(parameters);
+    this.arguments = resolveArguments(model, storageType, useProjections, hasExchange);
+  }
+
+  private String resolveArguments(final Model model,
+                                  final StorageType storageType,
+                                  final Boolean useProjections,
+                                  final Boolean hasExchange) {
+    final String typeRegistryObjectName =
+            storageType.resolveTypeRegistryObjectName(model);
+
+    final String exchangeDispatcherAccess =
+            hasExchange ? "exchangeInitializer.dispatcher()" : "";
+
+    final String projectionDispatcher =
+            PROJECTION_DISPATCHER_PROVIDER.resolveClassname() + ".using(grid.world().stage()).storeDispatcher";
+
+    final List<String> arguments =
+            Stream.of("grid.world().stage()", typeRegistryObjectName).collect(toList());
+
+    if (!model.isQueryModel()) {
+      if (useProjections) {
+        arguments.add(projectionDispatcher);
+      }
+      arguments.add(exchangeDispatcherAccess);
     }
 
-    private String resolveArguments(final Model model,
-                                    final StorageType storageType,
-                                    final Boolean useProjections,
-                                    final Boolean hasExchange) {
-        final String typeRegistryObjectName =
-                storageType.resolveTypeRegistryObjectName(model);
+    return arguments.stream().filter(arg -> !arg.isEmpty()).collect(joining(", "));
+  }
 
-        final String exchangeDispatcherAccess =
-                hasExchange ? "exchangeInitializer.dispatcher()" : "";
+  public String getClassName() {
+    return className;
+  }
 
-        final String projectionDispatcher =
-                PROJECTION_DISPATCHER_PROVIDER.resolveClassname() + ".using(grid.world().stage()).storeDispatcher";
-
-        final List<String> arguments =
-                Stream.of("grid.world().stage()", typeRegistryObjectName).collect(toList());
-
-        if(!model.isQueryModel()) {
-            if(useProjections) {
-                arguments.add(projectionDispatcher);
-            }
-            arguments.add(exchangeDispatcherAccess);
-        }
-
-        return arguments.stream().filter(arg -> !arg.isEmpty()).collect(joining(", "));
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public String getArguments() {
-        return arguments;
-    }
+  public String getArguments() {
+    return arguments;
+  }
 }

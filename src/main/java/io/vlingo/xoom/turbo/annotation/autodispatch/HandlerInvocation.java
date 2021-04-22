@@ -13,54 +13,54 @@ import javax.lang.model.element.VariableElement;
 
 public class HandlerInvocation {
 
-    private static final String DEFAULT_HANDLER_INVOCATION_PATTERN = "%s.handler.handle";
-    private static final String PARAMETRIZED_HANDLER_INVOCATION_PATTERN = DEFAULT_HANDLER_INVOCATION_PATTERN + "(%s)";
+  private static final String DEFAULT_HANDLER_INVOCATION_PATTERN = "%s.handler.handle";
+  private static final String PARAMETRIZED_HANDLER_INVOCATION_PATTERN = DEFAULT_HANDLER_INVOCATION_PATTERN + "(%s)";
 
-    public final int index;
-    public final String invocation;
-    private final TypeReader handlersConfigReader;
+  public final int index;
+  public final String invocation;
+  private final TypeReader handlersConfigReader;
 
-    public HandlerInvocation(final TypeReader handlersConfigReader,
-                             final VariableElement handlerEntry) {
-        this.handlersConfigReader = handlersConfigReader;
-        this.index = findIndex(handlerEntry);
-        this.invocation = resolveInvocation(handlerEntry);
+  public HandlerInvocation(final TypeReader handlersConfigReader,
+                           final VariableElement handlerEntry) {
+    this.handlersConfigReader = handlersConfigReader;
+    this.index = findIndex(handlerEntry);
+    this.invocation = resolveInvocation(handlerEntry);
+  }
+
+  private int findIndex(final VariableElement handlerEntry) {
+    final String handlerEntryValue =
+            handlersConfigReader.findMemberValue(handlerEntry);
+
+    final String handlerEntryIndex =
+            handlerEntryValue.substring(handlerEntryValue.indexOf("(") + 1,
+                    handlerEntryValue.indexOf(","));
+    try {
+      return Integer.parseInt(handlerEntryIndex);
+    } catch (final NumberFormatException exception) {
+      return Integer.parseInt(handlersConfigReader.findMemberValue(handlerEntryIndex));
+    }
+  }
+
+  private String resolveInvocation(final VariableElement handlerEntry) {
+    final String handlerEntryValue =
+            handlersConfigReader.findMemberValue(handlerEntry);
+
+    if (handlerEntryValue.contains("->")) {
+      final String handlerInvocationArguments = extractHandlerArguments(handlerEntryValue);
+      return String.format(PARAMETRIZED_HANDLER_INVOCATION_PATTERN,
+              handlerEntry.getSimpleName(), handlerInvocationArguments);
     }
 
-    private int findIndex(final VariableElement handlerEntry) {
-        final String handlerEntryValue =
-                handlersConfigReader.findMemberValue(handlerEntry);
+    return String.format(DEFAULT_HANDLER_INVOCATION_PATTERN, handlerEntry.getSimpleName());
+  }
 
-        final String handlerEntryIndex =
-                handlerEntryValue.substring(handlerEntryValue.indexOf("(") + 1,
-                        handlerEntryValue.indexOf(","));
-        try {
-            return Integer.parseInt(handlerEntryIndex);
-        } catch (final NumberFormatException exception) {
-            return Integer.parseInt(handlersConfigReader.findMemberValue(handlerEntryIndex));
-        }
-    }
+  private String extractHandlerArguments(final String handlerEntryValue) {
+    return handlerEntryValue.substring(handlerEntryValue.indexOf(",") + 1, handlerEntryValue.indexOf("->"))
+            .replaceAll("\\(", "").replaceAll("\\)", "").trim();
+  }
 
-    private String resolveInvocation(final VariableElement handlerEntry) {
-        final String handlerEntryValue =
-                handlersConfigReader.findMemberValue(handlerEntry);
-
-        if(handlerEntryValue.contains("->")) {
-            final String handlerInvocationArguments = extractHandlerArguments(handlerEntryValue);
-            return String.format(PARAMETRIZED_HANDLER_INVOCATION_PATTERN,
-                    handlerEntry.getSimpleName(), handlerInvocationArguments);
-        }
-
-        return String.format(DEFAULT_HANDLER_INVOCATION_PATTERN, handlerEntry.getSimpleName());
-    }
-
-    private String extractHandlerArguments(final String handlerEntryValue) {
-        return handlerEntryValue.substring(handlerEntryValue.indexOf(",") + 1, handlerEntryValue.indexOf("->"))
-                .replaceAll("\\(", "").replaceAll("\\)", "").trim();
-    }
-
-    public boolean hasCustomParamNames() {
-        return invocation.contains("(") && invocation.contains(")");
-    }
+  public boolean hasCustomParamNames() {
+    return invocation.contains("(") && invocation.contains(")");
+  }
 
 }

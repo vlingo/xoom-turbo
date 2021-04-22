@@ -18,29 +18,29 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
 
 public enum MethodScope {
 
-    INSTANCE(Completes.class),
-    STATIC(Completes.class, Definition.class, Stage.class);
+  INSTANCE(Completes.class),
+  STATIC(Completes.class, Definition.class, Stage.class);
 
-    public final Class<?>[] requiredClasses;
+  public final Class<?>[] requiredClasses;
 
-    MethodScope(final Class<?> ...requiredClasses) {
-        this.requiredClasses = requiredClasses;
+  MethodScope(final Class<?>... requiredClasses) {
+    this.requiredClasses = requiredClasses;
+  }
+
+  public boolean isStatic() {
+    return equals(STATIC);
+  }
+
+  public boolean isInstance() {
+    return equals(INSTANCE);
+  }
+
+  public static Stream<MethodScope> infer(final CodeGenerationParameter method) {
+    if (method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf)) {
+      return Stream.of(values());
     }
-
-    public boolean isStatic() {
-        return equals(STATIC);
-    }
-
-    public boolean isInstance() {
-        return equals(INSTANCE);
-    }
-
-    public static Stream<MethodScope> infer(final CodeGenerationParameter method) {
-        if(method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf)) {
-            return Stream.of(values());
-        }
-        return Stream.of(INSTANCE);
-    }
+    return Stream.of(INSTANCE);
+  }
 
 
 }

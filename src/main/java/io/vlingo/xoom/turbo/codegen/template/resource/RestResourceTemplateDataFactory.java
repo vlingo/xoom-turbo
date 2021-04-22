@@ -23,19 +23,19 @@ import static java.util.stream.Collectors.toList;
 
 public class RestResourceTemplateDataFactory {
 
-    public static List<TemplateData> build(final CodeGenerationParameters parameters,
-                                           final List<Content> contents) {
-        final String basePackage = parameters.retrieveValue(PACKAGE);
-        final Boolean useCQRS = parameters.retrieveValue(CQRS, Boolean::valueOf);
-        final Language language = parameters.retrieveValue(Label.LANGUAGE, Language::valueOf);
-        final List<CodeGenerationParameter> valueObjects = parameters.retrieveAll(VALUE_OBJECT).collect(toList());
+  public static List<TemplateData> build(final CodeGenerationParameters parameters,
+                                         final List<Content> contents) {
+    final String basePackage = parameters.retrieveValue(PACKAGE);
+    final Boolean useCQRS = parameters.retrieveValue(CQRS, Boolean::valueOf);
+    final Language language = parameters.retrieveValue(Label.LANGUAGE, Language::valueOf);
+    final List<CodeGenerationParameter> valueObjects = parameters.retrieveAll(VALUE_OBJECT).collect(toList());
 
-        final Function<CodeGenerationParameter, TemplateData> mapper =
-                aggregateParameter -> new RestResourceTemplateData(basePackage, language, aggregateParameter, valueObjects, contents, useCQRS);
+    final Function<CodeGenerationParameter, TemplateData> mapper =
+            aggregateParameter -> new RestResourceTemplateData(basePackage, language, aggregateParameter, valueObjects, contents, useCQRS);
 
-        return parameters.retrieveAll(AGGREGATE)
-                .filter(aggregateParameter -> aggregateParameter.hasAny(ROUTE_SIGNATURE))
-                .map(mapper).collect(Collectors.toList());
-    }
+    return parameters.retrieveAll(AGGREGATE)
+            .filter(aggregateParameter -> aggregateParameter.hasAny(ROUTE_SIGNATURE))
+            .map(mapper).collect(Collectors.toList());
+  }
 
 }

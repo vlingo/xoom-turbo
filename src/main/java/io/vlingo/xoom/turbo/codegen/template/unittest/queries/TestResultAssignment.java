@@ -25,7 +25,7 @@ class TestResultAssignment {
   private final BiFunction<Integer, String, String> filteredResultFormatting;
 
   public static TestResultAssignment forMethod(final String testCaseMethod) {
-    if(TestCaseName.ofMethod(testCaseMethod).equals(TestCaseName.QUERY_BY_ID)) {
+    if (TestCaseName.ofMethod(testCaseMethod).equals(TestCaseName.QUERY_BY_ID)) {
       return QUERY_BY_ID_TEST_CASE_EXECUTION;
     }
     return QUERY_ALL_TEST_CASE_EXECUTION;
@@ -64,7 +64,7 @@ class TestResultAssignment {
   }
 
   private static String resolveQueryAllResultAssignment(final int dataIndex, final String aggregateName) {
-    if(dataIndex > 1) {
+    if (dataIndex > 1) {
       return "";
     }
 

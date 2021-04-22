@@ -9,16 +9,16 @@ package io.vlingo.xoom.turbo.annotation.persistence;
 
 public enum ProjectionType {
 
-    NONE,
-    EVENT_BASED,
-    OPERATION_BASED;
+  NONE,
+  EVENT_BASED,
+  OPERATION_BASED;
 
-    public boolean isEventBased() {
-        return equals(EVENT_BASED);
-    }
+  public boolean isEventBased() {
+    return equals(EVENT_BASED);
+  }
 
-    public boolean isOperationBased() {
-        return equals(OPERATION_BASED);
-    }
+  public boolean isOperationBased() {
+    return equals(OPERATION_BASED);
+  }
 
 }

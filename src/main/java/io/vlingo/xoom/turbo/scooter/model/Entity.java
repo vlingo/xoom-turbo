@@ -9,23 +9,26 @@ package io.vlingo.xoom.turbo.scooter.model;
 
 /**
  * Base of all entities.
+ *
  * @param <S> the State type
  * @param <C> the Source type
  */
-public abstract class Entity<S,C> {
-  private Applied<S,C> applied;
+public abstract class Entity<S, C> {
+  private Applied<S, C> applied;
 
   /**
    * Answer my {@code applied}.
+   *
    * @return {@code Applied<S,C>}
    */
-  public Applied<S,C> applied() {
+  public Applied<S, C> applied() {
     return applied;
   }
 
   /**
    * Answer my {@code currentVersion}, which, if zero, indicates that the
    * receiver is being initially constructed or reconstituted.
+   *
    * @return int
    */
   public int currentVersion() {
@@ -34,6 +37,7 @@ public abstract class Entity<S,C> {
 
   /**
    * Answer my {@code nextVersion}, which is {@code currentVersion() + 1}.
+   *
    * @return int
    */
   public int nextVersion() {
@@ -43,13 +47,15 @@ public abstract class Entity<S,C> {
   /**
    * Answer my unique identity, which much be provided by
    * my concrete extender by overriding.
+   *
    * @return String
    */
   public abstract String id();
 
-  protected Entity() { }
+  protected Entity() {
+  }
 
-  protected void applied(final Applied<S,C> applied) {
+  protected void applied(final Applied<S, C> applied) {
     if (this.applied == null) {
       this.applied = applied;
     } else if (applied.state != null) {

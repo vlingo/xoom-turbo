@@ -9,24 +9,26 @@ package io.vlingo.xoom.turbo.annotation.persistence;
 
 public @interface Persistence {
 
-    String basePackage();
-    StorageType storageType();
-    boolean cqrs() default false;
+  String basePackage();
 
-    enum StorageType {
-        NONE, STATE_STORE, OBJECT_STORE, JOURNAL;
+  StorageType storageType();
 
-        public boolean isStateStore() {
-            return equals(STATE_STORE);
-        }
+  boolean cqrs() default false;
 
-        public boolean isJournal() {
-            return equals(JOURNAL);
-        }
+  enum StorageType {
+    NONE, STATE_STORE, OBJECT_STORE, JOURNAL;
 
-        public boolean isObjectStore() {
-            return equals(OBJECT_STORE);
-        }
+    public boolean isStateStore() {
+      return equals(STATE_STORE);
     }
+
+    public boolean isJournal() {
+      return equals(JOURNAL);
+    }
+
+    public boolean isObjectStore() {
+      return equals(OBJECT_STORE);
+    }
+  }
 
 }

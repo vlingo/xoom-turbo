@@ -6,18 +6,18 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.unittest.queries;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
-
-import java.util.List;
-import java.util.function.Consumer;
-
 import io.vlingo.xoom.turbo.codegen.formatting.NumberFormat;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.TestDataValues;
+
+import java.util.List;
+import java.util.function.Consumer;
+
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
 
 public class InlineDataInstantiation {
 
@@ -58,12 +58,12 @@ public class InlineDataInstantiation {
   }
 
   private void generateFieldsAssignment() {
-    aggregate.retrieveAllRelated(Label.STATE_FIELD).forEach(field -> this.generateFieldAssignment(new String(), field));
+    aggregate.retrieveAllRelated(Label.STATE_FIELD).forEach(field -> this.generateFieldAssignment("", field));
   }
 
   private void generateFieldAssignment(final String fieldPath, final CodeGenerationParameter field) {
     final String currentFieldPath = fieldPath.isEmpty() ? field.value : fieldPath + "." + field.value;
-    if(ValueObjectDetail.isValueObject(field)) {
+    if (ValueObjectDetail.isValueObject(field)) {
       generateValueObjectAssignment(currentFieldPath, field);
     } else {
       valuesAssignmentExpression.append(testDataValues.retrieve(dataIndex, currentFieldPath)).append(", ");

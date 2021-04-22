@@ -19,56 +19,56 @@ import static java.util.stream.Collectors.toSet;
 
 public class ContentQuery {
 
-    public static boolean exists(final TemplateStandard standard, final List<Content> contents) {
-        return filterByStandard(standard, contents).findAny().isPresent();
-    }
+  public static boolean exists(final TemplateStandard standard, final List<Content> contents) {
+    return filterByStandard(standard, contents).findAny().isPresent();
+  }
 
-    public static Set<String> findClassNames(final TemplateStandard standard, final List<Content> contents) {
-        return filterByStandard(standard, contents)
-                .map(Content::retrieveName)
-                .collect(Collectors.toSet());
-    }
+  public static Set<String> findClassNames(final TemplateStandard standard, final List<Content> contents) {
+    return filterByStandard(standard, contents)
+            .map(Content::retrieveName)
+            .collect(Collectors.toSet());
+  }
 
-    public static Set<String> findClassNames(final List<Content> contents, final TemplateStandard ...standards) {
-        return Stream.of(standards).flatMap(standard -> findClassNames(standard, contents)
-                .stream()).collect(Collectors.toSet());
-    }
+  public static Set<String> findClassNames(final List<Content> contents, final TemplateStandard... standards) {
+    return Stream.of(standards).flatMap(standard -> findClassNames(standard, contents)
+            .stream()).collect(Collectors.toSet());
+  }
 
-    public static Set<String> findClassNames(final TemplateStandard standard, final String packageName, final List<Content> contents) {
-        return filterByStandard(standard, contents)
-                .filter(content -> content.retrievePackage().equals(packageName))
-                .map(content -> content.retrieveName())
-                .collect(Collectors.toSet());
-    }
+  public static Set<String> findClassNames(final TemplateStandard standard, final String packageName, final List<Content> contents) {
+    return filterByStandard(standard, contents)
+            .filter(content -> content.retrievePackage().equals(packageName))
+            .map(content -> content.retrieveName())
+            .collect(Collectors.toSet());
+  }
 
-    public static Set<String> findFullyQualifiedClassNames(final List<Content> contents, final TemplateStandard ...standards) {
-        return Arrays.asList(standards).stream()
-                .flatMap(standard -> findFullyQualifiedClassNames(standard, contents).stream())
-                .collect(Collectors.toSet());
-    }
+  public static Set<String> findFullyQualifiedClassNames(final List<Content> contents, final TemplateStandard... standards) {
+    return Arrays.asList(standards).stream()
+            .flatMap(standard -> findFullyQualifiedClassNames(standard, contents).stream())
+            .collect(Collectors.toSet());
+  }
 
-    public static String findFullyQualifiedClassName(final TemplateStandard standard, final String className, final List<Content> contents) {
-        return findFullyQualifiedClassNames(standard, contents).stream()
-                .filter(qualifiedClassName -> qualifiedClassName.endsWith("." + className))
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find class with name " + className));
-    }
+  public static String findFullyQualifiedClassName(final TemplateStandard standard, final String className, final List<Content> contents) {
+    return findFullyQualifiedClassNames(standard, contents).stream()
+            .filter(qualifiedClassName -> qualifiedClassName.endsWith("." + className))
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find class with name " + className));
+  }
 
-    public static Set<String> findFullyQualifiedClassNames(final TemplateStandard standard, final List<Content> contents) {
-        return filterByStandard(standard, contents).map(Content::retrieveQualifiedName).collect(toSet());
-    }
+  public static Set<String> findFullyQualifiedClassNames(final TemplateStandard standard, final List<Content> contents) {
+    return filterByStandard(standard, contents).map(Content::retrieveQualifiedName).collect(toSet());
+  }
 
-    public static String findPackage(final TemplateStandard standard, final List<Content> contents) {
-        return filterByStandard(standard, contents).map(Content::retrievePackage).findAny().orElse("");
-    }
+  public static String findPackage(final TemplateStandard standard, final List<Content> contents) {
+    return filterByStandard(standard, contents).map(Content::retrievePackage).findAny().orElse("");
+  }
 
-    public static String findPackage(final TemplateStandard standard, final String className, final List<Content> contents) {
-        return filterByStandard(standard, contents)
-                .filter(content -> content.retrieveName().equals(className))
-                .map(Content::retrievePackage).findAny().orElse("");
-    }
+  public static String findPackage(final TemplateStandard standard, final String className, final List<Content> contents) {
+    return filterByStandard(standard, contents)
+            .filter(content -> content.retrieveName().equals(className))
+            .map(Content::retrievePackage).findAny().orElse("");
+  }
 
-    public static Stream<Content> filterByStandard(final TemplateStandard standard, final List<Content> contents) {
-        return contents.stream().filter(content -> content.has(standard));
-    }
+  public static Stream<Content> filterByStandard(final TemplateStandard standard, final List<Content> contents) {
+    return contents.stream().filter(content -> content.has(standard));
+  }
 
 }

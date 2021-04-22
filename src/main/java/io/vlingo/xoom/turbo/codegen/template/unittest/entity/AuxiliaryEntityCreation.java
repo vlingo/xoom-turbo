@@ -33,7 +33,7 @@ public class AuxiliaryEntityCreation {
                                              final List<CodeGenerationParameter> valueObjects,
                                              final Optional<String> defaultFactoryMethod,
                                              final TestDataValues testDataValues) {
-    if(!defaultFactoryMethod.isPresent()) {
+    if (!defaultFactoryMethod.isPresent()) {
       return new AuxiliaryEntityCreation();
     }
     return new AuxiliaryEntityCreation(defaultFactoryMethod.get(), aggregate, valueObjects, testDataValues);

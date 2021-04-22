@@ -16,7 +16,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface Projections {
 
-    Projection[] value();
-    ProjectionType type() default ProjectionType.EVENT_BASED;
+  Projection[] value();
+
+  ProjectionType type() default ProjectionType.EVENT_BASED;
 
 }

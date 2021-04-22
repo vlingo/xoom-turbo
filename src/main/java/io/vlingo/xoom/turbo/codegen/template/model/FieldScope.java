@@ -9,6 +9,6 @@ package io.vlingo.xoom.turbo.codegen.template.model;
 
 public enum FieldScope {
 
-    CONSTRUCTOR,
-    MEMBER
+  CONSTRUCTOR,
+  MEMBER
 }

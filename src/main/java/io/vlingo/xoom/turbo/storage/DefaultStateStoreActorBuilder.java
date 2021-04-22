@@ -32,39 +32,39 @@ import static io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageTyp
 
 public class DefaultStateStoreActorBuilder implements StoreActorBuilder {
 
-    @Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public <T> T build(final Stage stage,
-                        final List<Dispatcher> dispatchers,
-                        final Configuration configuration) {
-        final StorageDelegate delegate =
-                DatabaseType.retrieveFromConfiguration(configuration)
-                        .buildStorageDelegate(stage, STATE_STORE, configuration);
+  @Override
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public <T> T build(final Stage stage,
+                     final List<Dispatcher> dispatchers,
+                     final Configuration configuration) {
+    final StorageDelegate delegate =
+            DatabaseType.retrieveFromConfiguration(configuration)
+                    .buildStorageDelegate(stage, STATE_STORE, configuration);
 
-        final Stage local = stage.world().stage();
+    final Stage local = stage.world().stage();
 
-        final DispatcherControl dispatcherControl =
-                local.actorFor(DispatcherControl.class,
-                        Definition.has(DispatcherControlActor.class,
-                        new DispatcherControl.DispatcherControlInstantiator(dispatchers,
-                                (DispatcherControlDelegate) delegate, DefaultCheckConfirmationExpirationInterval,
-                                DefaultConfirmationExpiration)));
+    final DispatcherControl dispatcherControl =
+            local.actorFor(DispatcherControl.class,
+                    Definition.has(DispatcherControlActor.class,
+                            new DispatcherControl.DispatcherControlInstantiator(dispatchers,
+                                    (DispatcherControlDelegate) delegate, DefaultCheckConfirmationExpirationInterval,
+                                    DefaultConfirmationExpiration)));
 
-        final JDBCEntriesWriter entriesWriter =
-                new JDBCEntriesInstantWriter((JDBCStorageDelegate) delegate,
-                       typed(dispatchers), dispatcherControl);
+    final JDBCEntriesWriter entriesWriter =
+            new JDBCEntriesInstantWriter((JDBCStorageDelegate) delegate,
+                    typed(dispatchers), dispatcherControl);
 
-        return (T) local.actorFor(StateStore.class, JDBCStateStoreActor.class, delegate, entriesWriter);
-    }
+    return (T) local.actorFor(StateStore.class, JDBCStateStoreActor.class, delegate, entriesWriter);
+  }
 
-    @SuppressWarnings("unchecked")
-    private List<Dispatcher<Dispatchable<? extends Entry<?>,? extends State<?>>>> typed(List<?> dispatchers) {
-        return (List<Dispatcher<Dispatchable<? extends Entry<?>, ? extends State<?>>>>) dispatchers;
-    }
+  @SuppressWarnings("unchecked")
+  private List<Dispatcher<Dispatchable<? extends Entry<?>, ? extends State<?>>>> typed(List<?> dispatchers) {
+    return (List<Dispatcher<Dispatchable<? extends Entry<?>, ? extends State<?>>>>) dispatchers;
+  }
 
-    @Override
-    public boolean support(final StorageType storageType, final DatabaseType databaseType) {
-        return storageType.isStateStore() && !databaseType.isInMemory();
-    }
+  @Override
+  public boolean support(final StorageType storageType, final DatabaseType databaseType) {
+    return storageType.isStateStore() && !databaseType.isInMemory();
+  }
 
 }

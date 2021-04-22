@@ -7,11 +7,6 @@
 
 package io.vlingo.xoom.turbo.codegen.template.resource;
 
-import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_METHOD;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
-
 import io.vlingo.xoom.http.Method;
 import io.vlingo.xoom.turbo.codegen.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
@@ -19,43 +14,48 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
 
+import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 
-    private final static String COMMAND_PATTERN = "%s.%s(%s)";
-    private final static String QUERY_PATTERN = HandlerInvocationResolver.QUERIES_PARAMETER + ".%s(%s)";
-    private final static String ADAPTER_PATTERN = "%s.from(state)";
+  private final static String COMMAND_PATTERN = "%s.%s(%s)";
+  private final static String QUERY_PATTERN = HandlerInvocationResolver.QUERIES_PARAMETER + ".%s(%s)";
+  private final static String ADAPTER_PATTERN = "%s.from(state)";
 
-    @Override
-    public String resolveRouteHandlerInvocation(final CodeGenerationParameter aggregate,
-                                                final CodeGenerationParameter route) {
-        if(route.retrieveRelatedValue(ROUTE_METHOD, Method::from).isGET()) {
-            return resolveQueryMethodInvocation(route);
-        }
-        return resolveCommandMethodInvocation(aggregate, route);
+  @Override
+  public String resolveRouteHandlerInvocation(final CodeGenerationParameter aggregate,
+                                              final CodeGenerationParameter route) {
+    if (route.retrieveRelatedValue(ROUTE_METHOD, Method::from).isGET()) {
+      return resolveQueryMethodInvocation(route);
     }
+    return resolveCommandMethodInvocation(aggregate, route);
+  }
 
-    @Override
-    public String resolveAdapterHandlerInvocation(final CodeGenerationParameter aggregateParameter,
-                                                  final CodeGenerationParameter routeSignatureParameter) {
-        return String.format(ADAPTER_PATTERN, DATA_OBJECT.resolveClassname(aggregateParameter.value));
-    }
+  @Override
+  public String resolveAdapterHandlerInvocation(final CodeGenerationParameter aggregateParameter,
+                                                final CodeGenerationParameter routeSignatureParameter) {
+    return String.format(ADAPTER_PATTERN, DATA_OBJECT.resolveClassname(aggregateParameter.value));
+  }
 
-    private String resolveCommandMethodInvocation(final CodeGenerationParameter aggregateParameter,
-                                                  final CodeGenerationParameter routeParameter) {
-        final Formatters.Arguments argumentsFormat = new AggregateMethodInvocation("grid", "data");
-        final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregateParameter, routeParameter.value);
-        final Boolean factoryMethod = method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf);
-        final MethodScope scope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
-        final String methodInvocationParameters = argumentsFormat.format(method, scope);
-        final String invoker = factoryMethod ? aggregateParameter.value : simpleNameToAttribute(aggregateParameter.value);
-        return String.format(COMMAND_PATTERN, invoker, method.value, methodInvocationParameters);
-    }
+  private String resolveCommandMethodInvocation(final CodeGenerationParameter aggregateParameter,
+                                                final CodeGenerationParameter routeParameter) {
+    final Formatters.Arguments argumentsFormat = new AggregateMethodInvocation("grid", "data");
+    final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregateParameter, routeParameter.value);
+    final Boolean factoryMethod = method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf);
+    final MethodScope scope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
+    final String methodInvocationParameters = argumentsFormat.format(method, scope);
+    final String invoker = factoryMethod ? aggregateParameter.value : simpleNameToAttribute(aggregateParameter.value);
+    return String.format(COMMAND_PATTERN, invoker, method.value, methodInvocationParameters);
+  }
 
-    private String resolveQueryMethodInvocation(final CodeGenerationParameter route) {
-        final String arguments =
-                Formatters.Arguments.QUERIES_METHOD_INVOCATION.format(route);
+  private String resolveQueryMethodInvocation(final CodeGenerationParameter route) {
+    final String arguments =
+            Formatters.Arguments.QUERIES_METHOD_INVOCATION.format(route);
 
-        return String.format(QUERY_PATTERN, route.value, arguments);
-    }
+    return String.format(QUERY_PATTERN, route.value, arguments);
+  }
 
 }

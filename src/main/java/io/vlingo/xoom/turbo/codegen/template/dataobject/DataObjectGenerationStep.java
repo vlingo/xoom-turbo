@@ -19,22 +19,22 @@ import java.util.stream.Stream;
 
 public class DataObjectGenerationStep extends TemplateProcessingStep {
 
-    @Override
-    protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        final List<TemplateData> stateDataObjectTemplateData =
-                StateDataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
-                        context.parameterOf(Label.LANGUAGE, Language::valueOf),
-                        context.parametersOf(Label.AGGREGATE),
-                        context.contents());
+  @Override
+  protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
+    final List<TemplateData> stateDataObjectTemplateData =
+            StateDataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
+                    context.parameterOf(Label.LANGUAGE, Language::valueOf),
+                    context.parametersOf(Label.AGGREGATE),
+                    context.contents());
 
-        final List<TemplateData> valueDataObjectTemplateData =
-                ValueDataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
-                        context.parameterOf(Label.LANGUAGE, Language::valueOf),
-                        context.parametersOf(Label.VALUE_OBJECT),
-                        context.contents());
+    final List<TemplateData> valueDataObjectTemplateData =
+            ValueDataObjectTemplateData.from(context.parameterOf(Label.PACKAGE),
+                    context.parameterOf(Label.LANGUAGE, Language::valueOf),
+                    context.parametersOf(Label.VALUE_OBJECT),
+                    context.contents());
 
-        return Stream.of(stateDataObjectTemplateData, valueDataObjectTemplateData)
-                .flatMap(List::stream).collect(Collectors.toList());
-    }
+    return Stream.of(stateDataObjectTemplateData, valueDataObjectTemplateData)
+            .flatMap(List::stream).collect(Collectors.toList());
+  }
 
 }

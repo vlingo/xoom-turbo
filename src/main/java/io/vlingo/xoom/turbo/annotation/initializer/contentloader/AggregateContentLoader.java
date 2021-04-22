@@ -24,37 +24,37 @@ import java.util.stream.Collectors;
 
 public class AggregateContentLoader extends TypeBasedContentLoader {
 
-    protected AggregateContentLoader(final Element annotatedClass,
-                                     final ProcessingEnvironment environment) {
-        super(annotatedClass, environment);
+  protected AggregateContentLoader(final Element annotatedClass,
+                                   final ProcessingEnvironment environment) {
+    super(annotatedClass, environment);
+  }
+
+  @Override
+  protected List<TypeElement> retrieveContentSource() {
+    final Persistence persistence = annotatedClass.getAnnotation(Persistence.class);
+
+    if (!persistence.storageType().isJournal()) {
+      return Collections.emptyList();
     }
 
-    @Override
-    protected List<TypeElement> retrieveContentSource() {
-        final Persistence persistence = annotatedClass.getAnnotation(Persistence.class);
+    final Path baseDirectory =
+            Context.locateBaseDirectory(environment.getFiler());
 
-        if(!persistence.storageType().isJournal()) {
-            return Collections.emptyList();
-        }
+    final String[] allPackages =
+            PackageCollector.from(baseDirectory, persistence.basePackage())
+                    .collectAll().toArray(new String[]{});
 
-        final Path baseDirectory =
-                Context.locateBaseDirectory(environment.getFiler());
+    return typeRetriever.subclassesOf(EventSourced.class, allPackages)
+            .map(this::toType).collect(Collectors.toList());
+  }
 
-        final String[] allPackages =
-                PackageCollector.from(baseDirectory, persistence.basePackage())
-                        .collectAll().toArray(new String[]{});
+  private TypeElement toType(final TypeMirror typeMirror) {
+    return (TypeElement) environment.getTypeUtils().asElement(typeMirror);
+  }
 
-        return typeRetriever.subclassesOf(EventSourced.class, allPackages)
-                .map(this::toType).collect(Collectors.toList());
-    }
-
-    private TypeElement toType(final TypeMirror typeMirror) {
-        return (TypeElement) environment.getTypeUtils().asElement(typeMirror);
-    }
-
-    @Override
-    protected TemplateStandard standard() {
-        return TemplateStandard.AGGREGATE;
-    }
+  @Override
+  protected TemplateStandard standard() {
+    return TemplateStandard.AGGREGATE;
+  }
 
 }

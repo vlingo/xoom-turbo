@@ -27,8 +27,8 @@ public class ProjectSettingsTemplateData extends TemplateData {
   }
 
   private String formatJson(final String generationSettingsPayload) {
-      final JsonElement parsed = new JsonParser().parse(generationSettingsPayload);
-      return new GsonBuilder().setPrettyPrinting().create().toJson(parsed);
+    final JsonElement parsed = new JsonParser().parse(generationSettingsPayload);
+    return new GsonBuilder().setPrettyPrinting().create().toJson(parsed);
   }
 
   @Override

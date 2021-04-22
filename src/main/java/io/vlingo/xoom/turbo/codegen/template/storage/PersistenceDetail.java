@@ -14,7 +14,7 @@ public class PersistenceDetail {
   private final static String PERSISTENCE_PACKAGE_NAME = "persistence";
 
   public static String resolvePackage(final String basePackage) {
-    if(basePackage.endsWith(".infrastructure")) {
+    if (basePackage.endsWith(".infrastructure")) {
       return basePackage + "." + PERSISTENCE_PACKAGE_NAME;
     }
     return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME).toLowerCase();

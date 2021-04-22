@@ -11,25 +11,25 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 public class Formatter {
 
-    public static String formatExchangeVariableName(final CodeGenerationParameter exchange) {
-        return formatExchangeVariableName(exchange.value);
-    }
+  public static String formatExchangeVariableName(final CodeGenerationParameter exchange) {
+    return formatExchangeVariableName(exchange.value);
+  }
 
-    public static String formatExchangeVariableName(final String exchangeName) {
-        boolean shouldUpper = false;
-        final StringBuilder formatted = new StringBuilder();
-        for(char character : exchangeName.toLowerCase().toCharArray()) {
-            if(!Character.isJavaIdentifierPart(character)) {
-                shouldUpper = true;
-                continue;
-            }
-            formatted.append(shouldUpper ? String.valueOf(character).toUpperCase() : character);
-            shouldUpper = false;
-        }
-        return formatted.toString();
+  public static String formatExchangeVariableName(final String exchangeName) {
+    boolean shouldUpper = false;
+    final StringBuilder formatted = new StringBuilder();
+    for (char character : exchangeName.toLowerCase().toCharArray()) {
+      if (!Character.isJavaIdentifierPart(character)) {
+        shouldUpper = true;
+        continue;
+      }
+      formatted.append(shouldUpper ? String.valueOf(character).toUpperCase() : character);
+      shouldUpper = false;
     }
+    return formatted.toString();
+  }
 
-    public static String formatSchemaTypeName(final CodeGenerationParameter schema) {
-        return schema.value.split(":")[3];
-    }
+  public static String formatSchemaTypeName(final CodeGenerationParameter schema) {
+    return schema.value.split(":")[3];
+  }
 }

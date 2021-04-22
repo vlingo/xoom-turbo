@@ -16,28 +16,28 @@ import java.util.stream.Collectors;
 
 public class ProducerExchange {
 
-    private final String name;
-    private final Set<String> events;
+  private final String name;
+  private final Set<String> events;
 
-    public static List<ProducerExchange> from(final List<CodeGenerationParameter> exchanges) {
-        return exchanges.stream().map(exchange -> exchange.value).distinct()
-                .map(name -> new ProducerExchange(name, exchanges))
-                .collect(Collectors.toList());
-    }
+  public static List<ProducerExchange> from(final List<CodeGenerationParameter> exchanges) {
+    return exchanges.stream().map(exchange -> exchange.value).distinct()
+            .map(name -> new ProducerExchange(name, exchanges))
+            .collect(Collectors.toList());
+  }
 
-    private ProducerExchange(final String exchangeName,
-                             final List<CodeGenerationParameter> allExchangeParameters) {
-        this.name = exchangeName;
-        this.events = allExchangeParameters.stream().filter(exchange -> exchange.value.equals(exchangeName))
-                        .flatMap(exchange -> exchange.retrieveAllRelated(Label.DOMAIN_EVENT))
-                        .map(event -> event.value).collect(Collectors.toSet());
-    }
+  private ProducerExchange(final String exchangeName,
+                           final List<CodeGenerationParameter> allExchangeParameters) {
+    this.name = exchangeName;
+    this.events = allExchangeParameters.stream().filter(exchange -> exchange.value.equals(exchangeName))
+            .flatMap(exchange -> exchange.retrieveAllRelated(Label.DOMAIN_EVENT))
+            .map(event -> event.value).collect(Collectors.toSet());
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Set<String> getEvents() {
-        return events;
-    }
+  public Set<String> getEvents() {
+    return events;
+  }
 }

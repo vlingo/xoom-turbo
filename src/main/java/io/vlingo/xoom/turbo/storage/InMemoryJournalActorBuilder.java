@@ -18,22 +18,22 @@ import java.util.List;
 
 public class InMemoryJournalActorBuilder implements StoreActorBuilder {
 
-    @Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public <T> T build(final Stage stage,
-                        final List<Dispatcher> dispatchers,
-                        final Configuration configuration) {
-        return (T) Journal.using(stage.world().stage(), InMemoryJournalActor.class, dispatchers);
-    }
+  @Override
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public <T> T build(final Stage stage,
+                     final List<Dispatcher> dispatchers,
+                     final Configuration configuration) {
+    return (T) Journal.using(stage.world().stage(), InMemoryJournalActor.class, dispatchers);
+  }
 
 //    @SuppressWarnings("unchecked")
 //    private Dispatcher<Dispatchable<Entry<?>,?>> typed(Dispatcher dispatcher) {
 //        return dispatcher;
 //    }
 
-    @Override
-    public boolean support(final StorageType storageType, final DatabaseType databaseType) {
-        return storageType.isJournal() && databaseType.isInMemory();
-    }
+  @Override
+  public boolean support(final StorageType storageType, final DatabaseType databaseType) {
+    return storageType.isJournal() && databaseType.isInMemory();
+  }
 
 }

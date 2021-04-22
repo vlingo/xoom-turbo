@@ -15,23 +15,23 @@ import static freemarker.template.Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENT
 
 public class TemplateProcessorConfiguration {
 
-    public final Configuration configuration;
+  public final Configuration configuration;
 
-    private static TemplateProcessorConfiguration instance;
+  private static TemplateProcessorConfiguration instance;
 
-    public static TemplateProcessorConfiguration instance() {
-        if(instance == null) {
-            instance = new TemplateProcessorConfiguration();
-        }
-        return instance;
+  public static TemplateProcessorConfiguration instance() {
+    if (instance == null) {
+      instance = new TemplateProcessorConfiguration();
     }
+    return instance;
+  }
 
-    private TemplateProcessorConfiguration() {
-        this.configuration = new Configuration(DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
-        configuration.setClassForTemplateLoading(TemplateProcessor.class, "/");
-        configuration.setDefaultEncoding("UTF-8");
-        configuration.setLocale(Locale.US);
-        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-    }
+  private TemplateProcessorConfiguration() {
+    this.configuration = new Configuration(DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
+    configuration.setClassForTemplateLoading(TemplateProcessor.class, "/");
+    configuration.setDefaultEncoding("UTF-8");
+    configuration.setLocale(Locale.US);
+    configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+  }
 
 }

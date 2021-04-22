@@ -53,7 +53,7 @@ public class Assertions {
     final int expectedNumberOfEntries = AuxiliaryEntityCreation.isRequiredFor(method, defaultFactoryMethod) ? 2 : 1;
     final int entryIndex = expectedNumberOfEntries - 1;
 
-    if(projectionType.isOperationBased()) {
+    if (projectionType.isOperationBased()) {
       return Arrays.asList(
               String.format("assertEquals(%s, (int) dispatcherAccess.readFrom(\"storeCount\"));", expectedNumberOfEntries),
               String.format("assertEquals(%s.class.getName(), dispatcherAccess.readFrom(\"storedAt\", %s));", stateName, entryIndex)

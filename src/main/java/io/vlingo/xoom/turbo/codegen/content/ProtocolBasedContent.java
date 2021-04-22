@@ -13,23 +13,23 @@ import javax.lang.model.element.TypeElement;
 
 public class ProtocolBasedContent extends TypeBasedContent {
 
-    public final TypeElement contentProtocolType;
+  public final TypeElement contentProtocolType;
 
-    protected ProtocolBasedContent(final TemplateStandard standard,
-                                   final TypeElement contentProtocolType,
-                                   final TypeElement contentType) {
-        super(standard, contentType);
-        this.contentProtocolType = contentProtocolType;
-    }
+  protected ProtocolBasedContent(final TemplateStandard standard,
+                                 final TypeElement contentProtocolType,
+                                 final TypeElement contentType) {
+    super(standard, contentType);
+    this.contentProtocolType = contentProtocolType;
+  }
 
-    @Override
-    public String retrieveProtocolQualifiedName() {
-        return contentProtocolType.getQualifiedName().toString();
-    }
+  @Override
+  public String retrieveProtocolQualifiedName() {
+    return contentProtocolType.getQualifiedName().toString();
+  }
 
-    @Override
-    public boolean isProtocolBased() {
-        return true;
-    }
+  @Override
+  public boolean isProtocolBased() {
+    return true;
+  }
 
 }

@@ -11,8 +11,8 @@ import static io.vlingo.xoom.turbo.storage.DatabaseType.MYSQL;
 
 public class EmbeddedDatabaseInitializer {
 
-    public static void main(final String [] args) {
-        EmbeddedDatabase.start(MYSQL);
-    }
+  public static void main(final String[] args) {
+    EmbeddedDatabase.start(MYSQL);
+  }
 
 }

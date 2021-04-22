@@ -25,33 +25,33 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACT
 
 public class QueriesContentLoader extends ContentLoader<Map<TypeElement, TypeElement>> {
 
-    protected QueriesContentLoader(final Element annotatedClass, final ProcessingEnvironment environment) {
-        super(annotatedClass, environment);
+  protected QueriesContentLoader(final Element annotatedClass, final ProcessingEnvironment environment) {
+    super(annotatedClass, environment);
+  }
+
+  @Override
+  public void load(final CodeGenerationContext context) {
+    this.retrieveContentSource().entrySet()
+            .forEach(entry -> context.addContent(QUERIES_ACTOR, entry.getKey(), entry.getValue()));
+  }
+
+  @Override
+  protected Map<TypeElement, TypeElement> retrieveContentSource() {
+    final EnableQueries queries = annotatedClass.getAnnotation(EnableQueries.class);
+
+    if (queries == null) {
+      return Collections.emptyMap();
     }
 
-    @Override
-    public void load(final CodeGenerationContext context) {
-        this.retrieveContentSource().entrySet()
-                .forEach(entry -> context.addContent(QUERIES_ACTOR, entry.getKey(), entry.getValue()));
-    }
+    return Stream.of(queries.value()).map(queriesEntry -> {
+      final TypeElement protocolType =
+              typeRetriever.from(queriesEntry, QueriesEntry::protocol);
 
-    @Override
-    protected Map<TypeElement, TypeElement> retrieveContentSource() {
-        final EnableQueries queries = annotatedClass.getAnnotation(EnableQueries.class);
+      final TypeElement actorType =
+              typeRetriever.from(queriesEntry, QueriesEntry::actor);
 
-        if(queries == null) {
-            return Collections.emptyMap();
-        }
-
-        return Stream.of(queries.value()).map(queriesEntry -> {
-                    final TypeElement protocolType =
-                            typeRetriever.from(queriesEntry, QueriesEntry::protocol);
-
-                    final TypeElement actorType =
-                            typeRetriever.from(queriesEntry, QueriesEntry::actor);
-
-                    return new SimpleEntry<>(protocolType, actorType);
-                }).collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-    }
+      return new SimpleEntry<>(protocolType, actorType);
+    }).collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+  }
 
 }

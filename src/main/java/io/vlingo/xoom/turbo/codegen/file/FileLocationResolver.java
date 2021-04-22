@@ -15,19 +15,19 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.GENERATION_LOCATION;
 
 public interface FileLocationResolver {
 
-    static String from(final CodeGenerationContext context,
-                       final TemplateData templateData) {
+  static String from(final CodeGenerationContext context,
+                     final TemplateData templateData) {
 
-        final CodeGenerationLocation location =
-                context.parameterOf(GENERATION_LOCATION,
-                        value -> CodeGenerationLocation.valueOf(value));
+    final CodeGenerationLocation location =
+            context.parameterOf(GENERATION_LOCATION,
+                    value -> CodeGenerationLocation.valueOf(value));
 
-        if(location.isInternal()) {
-            throw new UnsupportedOperationException("Unable to resolve internal file location");
-        }
-
-        return new ExternalFileLocationResolver().resolve(context, templateData);
+    if (location.isInternal()) {
+      throw new UnsupportedOperationException("Unable to resolve internal file location");
     }
 
-    String resolve(final CodeGenerationContext context, final TemplateData templateData);
+    return new ExternalFileLocationResolver().resolve(context, templateData);
+  }
+
+  String resolve(final CodeGenerationContext context, final TemplateData templateData);
 }

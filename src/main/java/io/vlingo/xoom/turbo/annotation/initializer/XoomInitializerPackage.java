@@ -12,9 +12,9 @@ import javax.annotation.processing.ProcessingEnvironment;
 
 public class XoomInitializerPackage {
 
-    public static String from(final ProcessingEnvironment environment,
-                              final AnnotatedElements elements) {
-        return environment.getElementUtils().getPackageOf(elements.elementWith(Xoom.class)).toString();
-    }
+  public static String from(final ProcessingEnvironment environment,
+                            final AnnotatedElements elements) {
+    return environment.getElementUtils().getPackageOf(elements.elementWith(Xoom.class)).toString();
+  }
 
 }

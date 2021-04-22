@@ -15,37 +15,38 @@ import java.util.Properties;
 
 public class Settings {
 
-    private static final Properties PROPERTIES = new Properties();
-    private static final String PROPERTIES_FILENAME = "/xoom-turbo.properties";
-    private static final Map<Object, Object> DEFAULT_DATABASE_PROPERTIES = new HashMap<Object, Object>() {
-      private static final long serialVersionUID = 1L;
-      {
-        put("database", "IN_MEMORY");
-        put("query.database", "IN_MEMORY");
+  private static final Properties PROPERTIES = new Properties();
+  private static final String PROPERTIES_FILENAME = "/xoom-turbo.properties";
+  private static final Map<Object, Object> DEFAULT_DATABASE_PROPERTIES = new HashMap<Object, Object>() {
+    private static final long serialVersionUID = 1L;
+
+    {
+      put("database", "IN_MEMORY");
+      put("query.database", "IN_MEMORY");
+    }
+  };
+
+  static {
+    loadProperties();
+  }
+
+  private static void loadProperties() {
+    try {
+      final InputStream stream =
+              Settings.class.getResourceAsStream(PROPERTIES_FILENAME);
+
+      if (stream == null) {
+        System.out.println("Unable to read properties. VLINGO XOOM Turbo will set the default mailbox and logger");
+        PROPERTIES.putAll(DEFAULT_DATABASE_PROPERTIES);
+      } else {
+        PROPERTIES.load(stream);
       }
-    };
-
-    static {
-        loadProperties();
+    } catch (final IOException e) {
+      throw new PropertiesLoadingException(e.getMessage(), e);
     }
+  }
 
-    private static void loadProperties() {
-        try {
-            final InputStream stream =
-                    Settings.class.getResourceAsStream(PROPERTIES_FILENAME);
-
-            if(stream == null) {
-                System.out.println("Unable to read properties. VLINGO XOOM Turbo will set the default mailbox and logger");
-                PROPERTIES.putAll(DEFAULT_DATABASE_PROPERTIES);
-            } else {
-                PROPERTIES.load(stream);
-            }
-        } catch (final IOException e) {
-            throw new PropertiesLoadingException(e.getMessage(), e);
-        }
-    }
-
-    public static Properties properties() {
-        return PROPERTIES;
-    }
+  public static Properties properties() {
+    return PROPERTIES;
+  }
 }

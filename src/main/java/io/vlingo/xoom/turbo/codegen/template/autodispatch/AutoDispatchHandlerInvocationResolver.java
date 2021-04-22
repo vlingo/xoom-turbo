@@ -16,48 +16,48 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 
 public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationResolver {
 
-    private static final String DEFAULT_ADAPTER_PARAMETER = "state";
-    private static final String HANDLER_INVOCATION_PATTERN = "%s.%s";
-    private static final String DEFAULT_FACTORY_METHOD_PARAMETER = "$stage";
-    private static final String HANDLER_INVOCATION_WITH_DEFAULT_PARAMS_PATTERN = "%s.%s(%s)";
+  private static final String DEFAULT_ADAPTER_PARAMETER = "state";
+  private static final String HANDLER_INVOCATION_PATTERN = "%s.%s";
+  private static final String DEFAULT_FACTORY_METHOD_PARAMETER = "$stage";
+  private static final String HANDLER_INVOCATION_WITH_DEFAULT_PARAMS_PATTERN = "%s.%s(%s)";
 
-    public String resolveRouteHandlerInvocation(final CodeGenerationParameter parentParameter,
+  public String resolveRouteHandlerInvocation(final CodeGenerationParameter parentParameter,
+                                              final CodeGenerationParameter routeSignatureParameter) {
+    final Method httpMethod =
+            routeSignatureParameter.retrieveRelatedValue(ROUTE_METHOD, Method::from);
+
+    final String defaultParameter = httpMethod.isGET() ? QUERIES_PARAMETER : DEFAULT_FACTORY_METHOD_PARAMETER;
+
+    return resolve(ROUTE_HANDLER_INVOCATION, USE_CUSTOM_ROUTE_HANDLER_PARAM, defaultParameter, parentParameter, routeSignatureParameter);
+  }
+
+  public String resolveAdapterHandlerInvocation(final CodeGenerationParameter parentParameter,
                                                 final CodeGenerationParameter routeSignatureParameter) {
-        final Method httpMethod =
-                routeSignatureParameter.retrieveRelatedValue(ROUTE_METHOD, Method::from);
+    return resolve(ADAPTER_HANDLER_INVOCATION, USE_CUSTOM_ADAPTER_HANDLER_PARAM, DEFAULT_ADAPTER_PARAMETER, parentParameter, routeSignatureParameter);
+  }
 
-        final String defaultParameter = httpMethod.isGET() ? QUERIES_PARAMETER : DEFAULT_FACTORY_METHOD_PARAMETER;
-
-        return resolve(ROUTE_HANDLER_INVOCATION, USE_CUSTOM_ROUTE_HANDLER_PARAM, defaultParameter, parentParameter, routeSignatureParameter);
+  private String resolve(final Label invocationLabel,
+                         final Label customParamsLabel,
+                         final String defaultParameter,
+                         final CodeGenerationParameter parentParameter,
+                         final CodeGenerationParameter routeSignatureParameter) {
+    if (!routeSignatureParameter.hasAny(customParamsLabel)) {
+      return "";
     }
 
-    public String resolveAdapterHandlerInvocation(final CodeGenerationParameter parentParameter,
-                                                     final CodeGenerationParameter routeSignatureParameter) {
-        return resolve(ADAPTER_HANDLER_INVOCATION, USE_CUSTOM_ADAPTER_HANDLER_PARAM, DEFAULT_ADAPTER_PARAMETER, parentParameter, routeSignatureParameter);
+    final String handlersConfigQualifiedName =
+            parentParameter.retrieveRelatedValue(Label.HANDLERS_CONFIG_NAME);
+
+    final String handlersConfigClassName =
+            CodeElementFormatter.simpleNameOf(handlersConfigQualifiedName);
+
+    final String invocation = routeSignatureParameter.retrieveRelatedValue(invocationLabel);
+
+    if (routeSignatureParameter.retrieveRelatedValue(customParamsLabel, Boolean::valueOf)) {
+      return String.format(HANDLER_INVOCATION_PATTERN, handlersConfigClassName, invocation);
     }
 
-    private String resolve(final Label invocationLabel,
-                           final Label customParamsLabel,
-                           final String defaultParameter,
-                           final CodeGenerationParameter parentParameter,
-                           final CodeGenerationParameter routeSignatureParameter) {
-        if(!routeSignatureParameter.hasAny(customParamsLabel)){
-            return "";
-        }
-
-        final String handlersConfigQualifiedName =
-                parentParameter.retrieveRelatedValue(Label.HANDLERS_CONFIG_NAME);
-
-        final String handlersConfigClassName =
-                CodeElementFormatter.simpleNameOf(handlersConfigQualifiedName);
-
-        final String invocation = routeSignatureParameter.retrieveRelatedValue(invocationLabel);
-
-        if(routeSignatureParameter.retrieveRelatedValue(customParamsLabel, Boolean::valueOf)) {
-            return String.format(HANDLER_INVOCATION_PATTERN, handlersConfigClassName, invocation);
-        }
-
-        return String.format(HANDLER_INVOCATION_WITH_DEFAULT_PARAMS_PATTERN, handlersConfigClassName, invocation, defaultParameter);
-    }
+    return String.format(HANDLER_INVOCATION_WITH_DEFAULT_PARAMS_PATTERN, handlersConfigClassName, invocation, defaultParameter);
+  }
 
 }

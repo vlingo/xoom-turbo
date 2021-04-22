@@ -17,33 +17,33 @@ import java.nio.file.Path;
 
 public class ClassFile {
 
-    private final File file;
+  private final File file;
 
-    public static final ClassFile from(final Filer filer,
-                                       final TypeElement typeElement) {
-        return new ClassFile(filer, typeElement);
-    }
+  public static final ClassFile from(final Filer filer,
+                                     final TypeElement typeElement) {
+    return new ClassFile(filer, typeElement);
+  }
 
-    private ClassFile(final Filer filer,
-                      final TypeElement typeElement) {
-        final String className =
-                typeElement.getSimpleName() + ".java";
+  private ClassFile(final Filer filer,
+                    final TypeElement typeElement) {
+    final String className =
+            typeElement.getSimpleName() + ".java";
 
-        final String packageName =
-                typeElement.getEnclosingElement().toString();
+    final String packageName =
+            typeElement.getEnclosingElement().toString();
 
-        this.file = findFile(filer, packageName, className);
-    }
+    this.file = findFile(filer, packageName, className);
+  }
 
-    private File findFile(final Filer filer,
-                          final String packageName,
-                          final String className) {
-        final Path sourceFolder = Context.locateSourceFolder(filer);
-        final String packagePath = packageName.replaceAll("\\.", "/");
-        return sourceFolder.resolve(packagePath).resolve(className).toFile();
-    }
+  private File findFile(final Filer filer,
+                        final String packageName,
+                        final String className) {
+    final Path sourceFolder = Context.locateSourceFolder(filer);
+    final String packagePath = packageName.replaceAll("\\.", "/");
+    return sourceFolder.resolve(packagePath).resolve(className).toFile();
+  }
 
-    public InputStream openInputStream() throws IOException {
-        return new FileInputStream(file);
-    }
+  public InputStream openInputStream() throws IOException {
+    return new FileInputStream(file);
+  }
 }

@@ -25,7 +25,7 @@ import java.util.List;
  * @param <S> the type of state
  * @param <C> the type of Source
  */
-public class Applied<S,C> {
+public class Applied<S, C> {
   public final Metadata metadata;
   public final S state;
   public final int stateVersion;
@@ -34,10 +34,11 @@ public class Applied<S,C> {
 
   /**
    * Construct my state.
-   * @param state the S state of the entity
+   *
+   * @param state        the S state of the entity
    * @param stateVersion the int version of the entity state
-   * @param sources the {@code List<Source<C>>} of DomainEvent or Command instances
-   * @param metadata the Metadata associated with this state and stateVersion
+   * @param sources      the {@code List<Source<C>>} of DomainEvent or Command instances
+   * @param metadata     the Metadata associated with this state and stateVersion
    */
   public Applied(final S state, final int stateVersion, final List<Source<C>> sources, final Metadata metadata) {
     this.sources = sources;
@@ -70,29 +71,29 @@ public class Applied<S,C> {
     this(null, 0, Collections.emptyList(), Metadata.nullMetadata());
   }
 
-  public Applied<S,C> alongWith(final List<Source<C>> sources) {
+  public Applied<S, C> alongWith(final List<Source<C>> sources) {
     return alongWith(state, sources, metadata);
   }
 
-  public Applied<S,C> alongWith(final int stateVersion, final List<Source<C>> sources) {
+  public Applied<S, C> alongWith(final int stateVersion, final List<Source<C>> sources) {
     return alongWith(state, stateVersion, sources, metadata);
   }
 
-  public Applied<S,C> alongWith(final S state, final int stateVersion, final List<Source<C>> sources) {
+  public Applied<S, C> alongWith(final S state, final int stateVersion, final List<Source<C>> sources) {
     return alongWith(state, stateVersion, sources, metadata);
   }
 
-  public Applied<S,C> alongWith(final S state, final List<Source<C>> sources) {
+  public Applied<S, C> alongWith(final S state, final List<Source<C>> sources) {
     return alongWith(state, sources, metadata);
   }
 
-  public Applied<S,C> alongWith(final S state, final List<Source<C>> sources, final Metadata metadata) {
+  public Applied<S, C> alongWith(final S state, final List<Source<C>> sources, final Metadata metadata) {
     final List<Source<C>> all = new ArrayList<>(this.sources);
     all.addAll(sources);
     return new Applied<>(state, stateVersion, all, metadata);
   }
 
-  public Applied<S,C> alongWith(final S state, final int stateVersion, final List<Source<C>> sources, final Metadata metadata) {
+  public Applied<S, C> alongWith(final S state, final int stateVersion, final List<Source<C>> sources, final Metadata metadata) {
     final List<Source<C>> all = new ArrayList<>(this.sources);
     all.addAll(sources);
     return new Applied<>(state, stateVersion, all, metadata);

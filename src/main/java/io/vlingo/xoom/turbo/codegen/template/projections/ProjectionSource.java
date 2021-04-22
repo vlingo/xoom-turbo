@@ -7,13 +7,13 @@
 
 package io.vlingo.xoom.turbo.codegen.template.projections;
 
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables.Style;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.turbo.codegen.template.model.domainevent.DomainEventDetail;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables.Style;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.ArrayList;
@@ -61,13 +61,13 @@ public class ProjectionSource {
                                                   final List<CodeGenerationParameter> events) {
     final CodeGenerationParameter aggregate = event.parent(AGGREGATE);
     return aggregate.retrieveAllRelated(STATE_FIELD).map(field -> {
-      if(DomainEventDetail.hasField(event.value, field.value, events)) {
-        if(ValueObjectDetail.isValueObject(field)) {
+      if (DomainEventDetail.hasField(event.value, field.value, events)) {
+        if (ValueObjectDetail.isValueObject(field)) {
           return field.value;
         }
         return "typedEvent." + field.value;
       }
-      if(DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate)) {
+      if (DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate)) {
         return FieldDetail.resolveDefaultValue(aggregate, field.value);
       }
       return "previousData." + field.value;
@@ -78,7 +78,7 @@ public class ProjectionSource {
                                                       final List<CodeGenerationParameter> events) {
     final CodeGenerationParameter aggregate = event.parent(AGGREGATE);
     return aggregate.retrieveAllRelated(STATE_FIELD).map(field -> {
-      if(DomainEventDetail.hasField(event.value, field.value, events) ||
+      if (DomainEventDetail.hasField(event.value, field.value, events) ||
               DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate)) {
         return "currentData." + field.value;
       }
@@ -90,7 +90,7 @@ public class ProjectionSource {
                                                      final CodeGenerationParameter event,
                                                      final List<CodeGenerationParameter> events,
                                                      final List<CodeGenerationParameter> valueObjects) {
-    if(projectionType.isOperationBased()) {
+    if (projectionType.isOperationBased()) {
       return Collections.emptyList();
     }
 

@@ -28,10 +28,10 @@ public class FieldDetail {
 
   public static String resolveDefaultValue(final CodeGenerationParameter parent, final String stateFieldName) {
     final String type = typeOf(parent, stateFieldName);
-    if(isBoolean(type)) {
+    if (isBoolean(type)) {
       return "false";
     }
-    if(isNumeric(type)) {
+    if (isNumeric(type)) {
       return "0";
     }
     return "null";
@@ -42,7 +42,7 @@ public class FieldDetail {
   }
 
   public static boolean isScalar(final String fieldType) {
-    if(fieldType == null || fieldType.isEmpty()) {
+    if (fieldType == null || fieldType.isEmpty()) {
       throw new IllegalArgumentException("Unable to find field type");
     }
     return CodeGenerationSetup.SCALAR_TYPES.contains(fieldType.toLowerCase());
@@ -73,10 +73,10 @@ public class FieldDetail {
   }
 
   private static Label resolveFieldTypeLabel(final CodeGenerationParameter parent) {
-    if(parent.isLabeled(AGGREGATE)) {
+    if (parent.isLabeled(AGGREGATE)) {
       return STATE_FIELD;
     }
-    if(parent.isLabeled(VALUE_OBJECT)) {
+    if (parent.isLabeled(VALUE_OBJECT)) {
       return VALUE_OBJECT_FIELD;
     }
     throw new IllegalArgumentException("Unable to resolve field type of " + parent.label);

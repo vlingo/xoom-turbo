@@ -29,10 +29,10 @@ public class DataObjectConstructorInvocation implements Formatters.Arguments {
   }
 
   private Label resolveFieldLabel(final CodeGenerationParameter parent) {
-    if(parent.isLabeled(AGGREGATE)) {
+    if (parent.isLabeled(AGGREGATE)) {
       return STATE_FIELD;
     }
-    if(parent.isLabeled(VALUE_OBJECT)) {
+    if (parent.isLabeled(VALUE_OBJECT)) {
       return VALUE_OBJECT_FIELD;
     }
     throw new IllegalArgumentException("Unable to format static method parameters from " + parent.label);
@@ -41,17 +41,17 @@ public class DataObjectConstructorInvocation implements Formatters.Arguments {
   private String resolveParameterName(final String carrierName,
                                       final CodeGenerationParameter field,
                                       final MethodScope scope) {
-    if(scope.isInstance() || ValueObjectDetail.isValueObject(field)) {
+    if (scope.isInstance() || ValueObjectDetail.isValueObject(field)) {
       return field.value;
     }
     return carrierName + "." + field.value;
   }
 
   private String resolveCarrierName(final CodeGenerationParameter carrier) {
-    if(carrier.isLabeled(Label.AGGREGATE)) {
+    if (carrier.isLabeled(Label.AGGREGATE)) {
       return Introspector.decapitalize(TemplateStandard.AGGREGATE_STATE.resolveClassname(carrier.value));
     }
-    if(carrier.isLabeled(Label.VALUE_OBJECT)) {
+    if (carrier.isLabeled(Label.VALUE_OBJECT)) {
       return Introspector.decapitalize(carrier.value);
     }
     throw new IllegalArgumentException("Unable to resolve carrier name from " + carrier.label);

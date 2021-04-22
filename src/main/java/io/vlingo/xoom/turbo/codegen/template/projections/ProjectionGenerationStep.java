@@ -20,20 +20,20 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION;
 
 public class ProjectionGenerationStep extends TemplateProcessingStep {
 
-    @Override
-    protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-        return ProjectionTemplateDataFactory.build(context);
-    }
+  @Override
+  protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
+    return ProjectionTemplateDataFactory.build(context);
+  }
 
-    @Override
-    public boolean shouldProcess(final CodeGenerationContext context) {
-        if (context.isInternalGeneration()) {
-            return ContentQuery.exists(PROJECTION, context.contents());
-        } else if (ContentQuery.exists(AGGREGATE_PROTOCOL, context.contents())) {
-            return context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf)
-                    .isProjectionEnabled();
-        }
-        return false;
+  @Override
+  public boolean shouldProcess(final CodeGenerationContext context) {
+    if (context.isInternalGeneration()) {
+      return ContentQuery.exists(PROJECTION, context.contents());
+    } else if (ContentQuery.exists(AGGREGATE_PROTOCOL, context.contents())) {
+      return context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf)
+              .isProjectionEnabled();
     }
+    return false;
+  }
 
 }

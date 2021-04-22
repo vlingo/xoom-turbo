@@ -22,26 +22,26 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
-    @Override
-    protected void enrichParameters(final CodeGenerationContext context) {
-        final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
-        final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
+  @Override
+  protected void enrichParameters(final CodeGenerationContext context) {
+    final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
+    final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
 
-        final Set<String> qualifiedNames =
-                ContentQuery.findFullyQualifiedClassNames(context.contents(),
-                        STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER, REST_RESOURCE,
-                        AUTO_DISPATCH_RESOURCE_HANDLER, EXCHANGE_BOOTSTRAP);
+    final Set<String> qualifiedNames =
+            ContentQuery.findFullyQualifiedClassNames(context.contents(),
+                    STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER, REST_RESOURCE,
+                    AUTO_DISPATCH_RESOURCE_HANDLER, EXCHANGE_BOOTSTRAP);
 
-        parameters().and(REST_RESOURCES, RestResource.from(context.contents()))
-                .and(EXCHANGE_BOOTSTRAP_NAME, EXCHANGE_BOOTSTRAP.resolveClassname())
-                .and(HAS_EXCHANGE, ContentQuery.exists(EXCHANGE_BOOTSTRAP, context.contents()))
-                .addImports(qualifiedNames).addImports(storageType.resolveTypeRegistryQualifiedNames(useCQRS));
-    }
+    parameters().and(REST_RESOURCES, RestResource.from(context.contents()))
+            .and(EXCHANGE_BOOTSTRAP_NAME, EXCHANGE_BOOTSTRAP.resolveClassname())
+            .and(HAS_EXCHANGE, ContentQuery.exists(EXCHANGE_BOOTSTRAP, context.contents()))
+            .addImports(qualifiedNames).addImports(storageType.resolveTypeRegistryQualifiedNames(useCQRS));
+  }
 
-    @Override
-    protected boolean support(final CodeGenerationContext context) {
-        return !context.isInternalGeneration() &&
-                !context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
-    }
+  @Override
+  protected boolean support(final CodeGenerationContext context) {
+    return !context.isInternalGeneration() &&
+            !context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
+  }
 
 }

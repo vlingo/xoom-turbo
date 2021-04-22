@@ -19,60 +19,60 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.XOOM_INITIA
 
 public class XoomInitializerParameterResolver {
 
-    private final String basePackage;
-    private final ProcessingEnvironment environment;
-    private final TypeElement bootstrapClass;
+  private final String basePackage;
+  private final ProcessingEnvironment environment;
+  private final TypeElement bootstrapClass;
 
-    public static XoomInitializerParameterResolver from(final String basePackage,
-                                                        final TypeElement bootstrapClass,
-                                                        final ProcessingEnvironment environment) {
-        return new XoomInitializerParameterResolver(basePackage, bootstrapClass, environment);
+  public static XoomInitializerParameterResolver from(final String basePackage,
+                                                      final TypeElement bootstrapClass,
+                                                      final ProcessingEnvironment environment) {
+    return new XoomInitializerParameterResolver(basePackage, bootstrapClass, environment);
+  }
+
+  private XoomInitializerParameterResolver(final String basePackage,
+                                           final TypeElement bootstrapClass,
+                                           final ProcessingEnvironment environment) {
+    this.basePackage = basePackage;
+    this.bootstrapClass = bootstrapClass;
+    this.environment = environment;
+  }
+
+  public CodeGenerationParameters resolve() {
+    return CodeGenerationParameters.from(PACKAGE, resolveBasePackage())
+            .add(APPLICATION_NAME, resolveApplicationName())
+            .add(USE_ANNOTATIONS, Boolean.FALSE.toString())
+            .add(BLOCKING_MESSAGING, resolveBlockingMessaging())
+            .add(XOOM_INITIALIZER_NAME, resolveInitializerClass());
+  }
+
+  private String resolveApplicationName() {
+    return bootstrapClass.getAnnotation(Xoom.class).name();
+  }
+
+  private String resolveBasePackage() {
+    return basePackage;
+  }
+
+  private String resolveInitializerClass() {
+    if (hasInitializerSubClass()) {
+      return bootstrapClass.getSimpleName().toString();
     }
+    return XOOM_INITIALIZER.resolveClassname();
+  }
 
-    private XoomInitializerParameterResolver(final String basePackage,
-                                             final TypeElement bootstrapClass,
-                                             final ProcessingEnvironment environment) {
-        this.basePackage = basePackage;
-        this.bootstrapClass = bootstrapClass;
-        this.environment = environment;
-    }
+  private boolean hasInitializerSubClass() {
+    final String initializerInterfaceName =
+            XoomInitializationAware.class.getCanonicalName();
 
-    public CodeGenerationParameters resolve() {
-        return CodeGenerationParameters.from(PACKAGE, resolveBasePackage())
-                .add(APPLICATION_NAME, resolveApplicationName())
-                .add(USE_ANNOTATIONS, Boolean.FALSE.toString())
-                .add(BLOCKING_MESSAGING, resolveBlockingMessaging())
-                .add(XOOM_INITIALIZER_NAME, resolveInitializerClass());
-    }
+    final TypeMirror xoomInitializerAwareInterface =
+            environment.getElementUtils()
+                    .getTypeElement(initializerInterfaceName).asType();
 
-    private String resolveApplicationName() {
-        return bootstrapClass.getAnnotation(Xoom.class).name();
-    }
+    return bootstrapClass.getInterfaces().contains(xoomInitializerAwareInterface);
+  }
 
-    private String resolveBasePackage() {
-        return basePackage;
-    }
-
-    private String resolveInitializerClass() {
-        if(hasInitializerSubClass()) {
-            return bootstrapClass.getSimpleName().toString();
-        }
-        return XOOM_INITIALIZER.resolveClassname();
-    }
-
-    private boolean hasInitializerSubClass() {
-        final String initializerInterfaceName =
-                XoomInitializationAware.class.getCanonicalName();
-
-        final TypeMirror xoomInitializerAwareInterface =
-                environment.getElementUtils()
-                        .getTypeElement(initializerInterfaceName).asType();
-
-        return bootstrapClass.getInterfaces().contains(xoomInitializerAwareInterface);
-    }
-
-    private String resolveBlockingMessaging() {
-        return String.valueOf(bootstrapClass.getAnnotation(Xoom.class).blocking());
-    }
+  private String resolveBlockingMessaging() {
+    return String.valueOf(bootstrapClass.getAnnotation(Xoom.class).blocking());
+  }
 
 }

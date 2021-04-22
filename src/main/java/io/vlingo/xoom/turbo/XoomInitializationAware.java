@@ -15,54 +15,57 @@ import io.vlingo.xoom.lattice.grid.Grid;
 
 public interface XoomInitializationAware {
 
-    void onInit(final Grid grid);
+  void onInit(final Grid grid);
 
-    /**
-     * Answer an unconfigured {@code FeedConfiguration}.
-     * @return FeedConfiguration
-     */
-    default FeedConfiguration feedConfiguration() {
-      return FeedConfiguration.define();
-    }
+  /**
+   * Answer an unconfigured {@code FeedConfiguration}.
+   *
+   * @return FeedConfiguration
+   */
+  default FeedConfiguration feedConfiguration() {
+    return FeedConfiguration.define();
+  }
 
-    /**
-     * Answer an unconfigured {@code SseConfiguration}.
-     * @return SseConfiguration
-     */
-    default SseConfiguration sseConfiguration() {
-      return SseConfiguration.define();
-    }
+  /**
+   * Answer an unconfigured {@code SseConfiguration}.
+   *
+   * @return SseConfiguration
+   */
+  default SseConfiguration sseConfiguration() {
+    return SseConfiguration.define();
+  }
 
-    /**
-     * Answer an unconfigured {@code StaticFilesConfiguration}.
-     * @return StaticFilesConfiguration
-     */
-    default StaticFilesConfiguration staticFilesConfiguration() {
-      return StaticFilesConfiguration.define();
-    }
+  /**
+   * Answer an unconfigured {@code StaticFilesConfiguration}.
+   *
+   * @return StaticFilesConfiguration
+   */
+  default StaticFilesConfiguration staticFilesConfiguration() {
+    return StaticFilesConfiguration.define();
+  }
 
-    default Configuration configureServer(final Grid grid, final String[] args) {
-        final int port = resolveServerPort(grid);
-        return Configuration.define().withPort(port);
-    }
+  default Configuration configureServer(final Grid grid, final String[] args) {
+    final int port = resolveServerPort(grid);
+    return Configuration.define().withPort(port);
+  }
 
-    default int resolveServerPort(final Grid grid) {
-        final int port = Boot.serverPort();
-        grid.world().defaultLogger().info("Server running on " + port);
-        return port;
-    }
+  default int resolveServerPort(final Grid grid) {
+    final int port = Boot.serverPort();
+    grid.world().defaultLogger().info("Server running on " + port);
+    return port;
+  }
 
-    default String parseNodeName(final String[] args) {
-        if (args.length == 0) {
-            return null;
-        } else if (args.length > 1) {
-            System.out.println("Too many arguments; provide node name only.");
-            System.exit(1);
-        }
-        return args[0];
+  default String parseNodeName(final String[] args) {
+    if (args.length == 0) {
+      return null;
+    } else if (args.length > 1) {
+      System.out.println("Too many arguments; provide node name only.");
+      System.exit(1);
     }
+    return args[0];
+  }
 
-    default Properties clusterProperties() {
-        return null;
-    }
+  default Properties clusterProperties() {
+    return null;
+  }
 }

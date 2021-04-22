@@ -7,13 +7,13 @@
 
 package io.vlingo.xoom.turbo.codegen.template.model.valueobject;
 
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
+import io.vlingo.xoom.turbo.codegen.formatting.Formatters.Fields.Style;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters.Fields.Style;
 
 import java.util.List;
 import java.util.function.Function;

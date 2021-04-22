@@ -30,50 +30,50 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT
 
 public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
-    private final TemplateParameters parameters;
+  private final TemplateParameters parameters;
 
-    public static List<TemplateData> from(final Language language,
-                                          final CodeGenerationParameter aggregate,
-                                          final List<CodeGenerationParameter> valueObjects) {
-        return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE).filter(route -> !route.hasAny(READ_ONLY))
-                .map(route -> new AutoDispatchHandlerEntryTemplateData(language, route, valueObjects))
-                .collect(Collectors.toList());
-    }
+  public static List<TemplateData> from(final Language language,
+                                        final CodeGenerationParameter aggregate,
+                                        final List<CodeGenerationParameter> valueObjects) {
+    return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE).filter(route -> !route.hasAny(READ_ONLY))
+            .map(route -> new AutoDispatchHandlerEntryTemplateData(language, route, valueObjects))
+            .collect(Collectors.toList());
+  }
 
-    private AutoDispatchHandlerEntryTemplateData(final Language language,
-                                                 final CodeGenerationParameter route,
-                                                 final List<CodeGenerationParameter> valueObjects) {
-        final CodeGenerationParameter aggregate = route.parent(AGGREGATE);
-        final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregate, route.value);
-        final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
-        final List<String> valueObjectInitializers =
-                Formatters.Variables.format(VALUE_OBJECT_INITIALIZER, language, method, valueObjects.stream());
+  private AutoDispatchHandlerEntryTemplateData(final Language language,
+                                               final CodeGenerationParameter route,
+                                               final List<CodeGenerationParameter> valueObjects) {
+    final CodeGenerationParameter aggregate = route.parent(AGGREGATE);
+    final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregate, route.value);
+    final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
+    final List<String> valueObjectInitializers =
+            Formatters.Variables.format(VALUE_OBJECT_INITIALIZER, language, method, valueObjects.stream());
 
-        this.parameters =
-                TemplateParameters.with(METHOD_NAME, route.value)
-                        .and(FACTORY_METHOD, factoryMethod)
-                        .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
-                        .and(STATE_DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
-                        .and(AGGREGATE_PROTOCOL_VARIABLE, CodeElementFormatter.simpleNameToAttribute(aggregate.value))
-                        .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
-                        .and(INDEX_NAME, CodeElementFormatter.staticConstant(route.value))
-                        .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method))
-                        .and(VALUE_OBJECT_INITIALIZERS, valueObjectInitializers);
-    }
+    this.parameters =
+            TemplateParameters.with(METHOD_NAME, route.value)
+                    .and(FACTORY_METHOD, factoryMethod)
+                    .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
+                    .and(STATE_DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
+                    .and(AGGREGATE_PROTOCOL_VARIABLE, CodeElementFormatter.simpleNameToAttribute(aggregate.value))
+                    .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
+                    .and(INDEX_NAME, CodeElementFormatter.staticConstant(route.value))
+                    .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method))
+                    .and(VALUE_OBJECT_INITIALIZERS, valueObjectInitializers);
+  }
 
-    private String resolveMethodInvocationParameters(final CodeGenerationParameter method) {
-        final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
-        final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
-        return new AggregateMethodInvocation("$stage", "data").format(method, methodScope);
-    }
+  private String resolveMethodInvocationParameters(final CodeGenerationParameter method) {
+    final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
+    final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
+    return new AggregateMethodInvocation("$stage", "data").format(method, methodScope);
+  }
 
-    @Override
-    public TemplateParameters parameters() {
-        return parameters;
-    }
+  @Override
+  public TemplateParameters parameters() {
+    return parameters;
+  }
 
-    @Override
-    public TemplateStandard standard() {
-        return TemplateStandard.AUTO_DISPATCH_HANDLER_ENTRY;
-    }
+  @Override
+  public TemplateStandard standard() {
+    return TemplateStandard.AUTO_DISPATCH_HANDLER_ENTRY;
+  }
 }

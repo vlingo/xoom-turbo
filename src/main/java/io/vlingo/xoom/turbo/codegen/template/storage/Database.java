@@ -26,7 +26,7 @@ public class Database {
   }
 
   public String getName() {
-    if(model.isCommandModel() || model.isQueryModel()) {
+    if (model.isCommandModel() || model.isQueryModel()) {
       return appName + "-" + model.name().toLowerCase();
     }
     return appName;

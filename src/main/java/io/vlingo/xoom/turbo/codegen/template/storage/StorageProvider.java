@@ -19,32 +19,32 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 
 public class StorageProvider {
 
-    private final String name;
-    private final boolean useProjections;
+  private final String name;
+  private final boolean useProjections;
 
-    private StorageProvider(final TemplateParameters parameters) {
-        final Model model =
-                parameters.find(MODEL);
+  private StorageProvider(final TemplateParameters parameters) {
+    final Model model =
+            parameters.find(MODEL);
 
-        final ProjectionType projectionType =
-                parameters.find(PROJECTION_TYPE);
+    final ProjectionType projectionType =
+            parameters.find(PROJECTION_TYPE);
 
-        this.name = parameters.find(STORE_PROVIDER_NAME);
-        this.useProjections = projectionType.isProjectionEnabled() && model.isCommandModel();
-    }
+    this.name = parameters.find(STORE_PROVIDER_NAME);
+    this.useProjections = projectionType.isProjectionEnabled() && model.isCommandModel();
+  }
 
-    public static List<StorageProvider> from(final List<TemplateData> templateData) {
-        return templateData.stream()
-                .map(data -> new StorageProvider(data.parameters()))
-                .collect(Collectors.toList());
-    }
+  public static List<StorageProvider> from(final List<TemplateData> templateData) {
+    return templateData.stream()
+            .map(data -> new StorageProvider(data.parameters()))
+            .collect(Collectors.toList());
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public boolean getUseProjections() {
-        return useProjections;
-    }
+  public boolean getUseProjections() {
+    return useProjections;
+  }
 
 }

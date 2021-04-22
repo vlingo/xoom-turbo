@@ -53,7 +53,7 @@ public enum DatabaseType {
   }
 
   public static DatabaseType getOrDefault(final String name, final DatabaseType defaultDatabase) {
-    if(name == null || name.trim().isEmpty()) {
+    if (name == null || name.trim().isEmpty()) {
       return defaultDatabase;
     }
     return valueOf(name);
