@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {createPortal} from 'react-dom';
 
 const FormModal = ({title, show, close, children, submit}) => {

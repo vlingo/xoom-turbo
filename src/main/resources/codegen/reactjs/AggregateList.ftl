@@ -1,22 +1,42 @@
+<#ftl strip_whitespace=true/>
 import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
-import FormModal from "../FormModal";
 import {Link} from "react-router-dom";
-import useFormHandler from "../../utils/FormHandler";
 import LoadingOrFailed from "../LoadingOrFailed";
+import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(creatorMethod.name)} from "./${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(creatorMethod.name)}";
+<#macro printTableHeaderCell name type>
+    <#if valueTypes[type]??>
+        <#list valueTypes[type] as subType>
+            <@printTableHeaderCell "${name} ${subType.name}" subType.type/>
+        </#list>
+    <#else>
+            <th>${fns.capitalizeMultiWord(name)}</th>
+    </#if>
+</#macro>
+<#macro printTableCell name type>
+    <#if valueTypes[type]??>
+        <#list valueTypes[type] as subType>
+            <@printTableCell "${name}?.${subType.name}" subType.type/>
+        </#list>
+    <#else>
+          <td>{item?.${name}}</td>
+    </#if>
+</#macro>
+<#macro printJSON fields level=0>
+  <@compress single_line=true>
+    {<#list fields as field>
+        ${field.name}: <#if valueTypes[field.type]??><@printJSON valueTypes[field.type] /><#else>''</#if><#if field?has_next>,</#if>
+    </#list>}
+  </@compress>
+</#macro>
 
-const EMPTY_FORM = {
-  <#list aggregate.stateFields as field>
-    ${field.name}: ''<#if field?has_next>,</#if>
-  </#list>
-};
+const EMPTY_FORM = <@printJSON aggregate.stateFields />;
 
 const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
 
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState([]);
-  const [form, onFormValueChange, resetForm] = useFormHandler(EMPTY_FORM);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [currentModal, setCurrentModal] = useState(null);
 
   const loadItems = useCallback(() => {
     axios.get('${aggregate.api.rootPath}')
@@ -33,29 +53,15 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
       });
   }, []);
 
-  const onFormSubmit = useCallback((e) => {
-    console.log('form submitted', form);
+  const onModalActionComplete = useCallback((data) => {
+    loadItems();
+    setCurrentModal(null);
+  }, [loadItems]);
 
-    axios.${creatorRoute.httpMethod?lower_case}('${aggregate.api.rootPath}', form)
-    .then(res => res.data)
-    .then(data => {
-      console.log('${aggregate.aggregateName} axios success', data);
-      loadItems();
-      setModalOpen(false);
-      resetForm();
-    })
-    .catch(e => {
-      console.error('${aggregate.aggregateName} axios failed', e);
-    });
-  }, [form, resetForm, loadItems]);
-
-  const openModal = useCallback(() => {
-    setModalOpen(true);
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setModalOpen(false);
-  }, []);
+  const ${creatorMethod.name} = useCallback((e) => {
+    console.log('showing ${creatorMethod.name} modal');
+    setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(creatorMethod.name)} defaultForm={EMPTY_FORM} complete={onModalActionComplete}/>);
+  }, [onModalActionComplete]);
 
   useEffect(() => {
     setLoading(true);
@@ -68,7 +74,7 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
         <h1 className="h2">${fns.makePlural(aggregate.aggregateName)}</h1>
         <div className="btn-toolbar mb-2 mb-md-0">
           <div className="btn-group me-2">
-            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={openModal}>${fns.capitalize(creatorMethod.name)}</button>
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={${creatorMethod.name}}>${fns.capitalize(creatorMethod.name)}</button>
           </div>
         </div>
       </div>
@@ -79,21 +85,18 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
         <thead>
           <tr>
           <#list aggregate.stateFields as field>
-            <th>${fns.capitalize(field.name)}</th>
+            <@printTableHeaderCell "${field.name}" "${field.type}" />
           </#list>
           </tr>
         </thead>
         <tbody>
         {items.map(item => (
         <tr key={item.id}>
+          <td> <Link to={"${aggregate.api.rootPath}/"+item.id}>{item.id} </Link> </td>
           <#list aggregate.stateFields as field>
-              <#if field_index == 0>
-                <td>
-                  <Link to={"${aggregate.api.rootPath}/"+item.id}>{item.${field.name}}</Link>
-                </td>
-              <#else>
-                  <td>{item.${field.name}}</td>
-              </#if>
+            <#if field_index != 0>
+              <@printTableCell "${field.name}" "${field.type}" />
+            </#if>
           </#list>
         </tr>
         ))}
@@ -102,14 +105,8 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
         : <LoadingOrFailed loading={loading}/>
       }
       </div>
-      <FormModal title={'${fns.capitalize(creatorMethod.name)}'} show={modalOpen} close={closeModal} submit={onFormSubmit}>
-        <#list creatorMethod.parameters as p>
-          <div className='mb-3'>
-            <label htmlFor='${p}' className={'form-label text-capitalize'}>${fns.capitalize(p)}</label>
-            <input id='name' name={'${p}'} required={true} value={form.${p}} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
-          </div>
-        </#list>
-      </FormModal>
+
+      {currentModal}
     </>
   );
 };

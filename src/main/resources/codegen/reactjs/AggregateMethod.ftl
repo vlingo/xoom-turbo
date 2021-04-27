@@ -2,13 +2,25 @@ import FormModal from "../FormModal";
 import useFormHandler from "../../utils/FormHandler";
 import {useCallback} from "react";
 import axios from "axios";
+<#macro printFormElement name type>
+    <#if valueTypes[type]??>
+        <#list valueTypes[type] as subType>
+            <@printFormElement "${name}.${subType.name}" subType.type/>
+        </#list>
+    <#else>
+      <div className='mb-3'>
+        <label htmlFor='${name}' className={'form-label text-capitalize'}>${fns.capitalizeMultiWord(name?replace('.', ' '))}</label>
+        <input id='${name}' name={'${name}'} required={true} value={form.${name}} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+    </#if>
+</#macro>
 
 const ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} = ({defaultForm, complete}) => {
 
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    axios.${route.httpMethod?lower_case}('${aggregate.api.rootPath}/'+form.id+'${route.path}', form)
+    axios.${route.httpMethod?lower_case}('${aggregate.api.rootPath}/'+form.id+'/${route.path}', form)
     .then(res => res.data)
     .then(data => {
       complete(data);
@@ -25,12 +37,9 @@ const ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} =
 
   return (
     <>
-      <FormModal title={"${method.name}"} show={true} close={close} submit={submit}>
+      <FormModal title={"${fns.capitalize(method.name)}"} show={true} close={close} submit={submit}>
         <#list method.parameters as p>
-          <div className='mb-3'>
-            <label htmlFor='${p}' className={'form-label text-capitalize'}>${fns.capitalize(p)}</label>
-            <input id='${p}' name={'${p}'} required={true} value={form.${p}} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
-          </div>
+          <@printFormElement p fieldTypes[p] />
         </#list>
       </FormModal>
     </>
