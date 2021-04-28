@@ -66,7 +66,9 @@ const ${fns.capitalize(aggregate.aggregateName)} = () => {
         <div className="btn-toolbar mb-2 mb-md-0">
           <div className="btn-group me-2">
             <#list aggregate.methods as method>
-              <button type="button" className="btn btn-sm btn-outline-secondary" onClick={${method.name}}>${fns.capitalize(method.name)}</button>
+              <#if !method.useFactory >
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={${method.name}}>${fns.capitalize(method.name)}</button>
+              </#if>
             </#list>
           </div>
         </div>
