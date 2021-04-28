@@ -45,7 +45,7 @@ const ${fns.capitalize(aggregate.aggregateName)} = () => {
         ${p}: item.${p}<#if p?has_next>,</#if>
       </#list>
     };
-    setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(method.name)} defaultForm={form} complete={onModalActionComplete}/>);
+    setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(method.name)} id={id} defaultForm={form} complete={onModalActionComplete}/>);
   }, [item, onModalActionComplete]);
 
   </#list>
