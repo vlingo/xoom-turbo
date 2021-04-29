@@ -19,12 +19,18 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
 
   @Override
   public Completes<AuthorState> withName(final Name name) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#withName()}
+     */
     final AuthorState stateArg = state.withName(name);
     return apply(stateArg, Operations.AuthorRegistered.name(), () -> state);
   }
 
   @Override
   public Completes<AuthorState> changeRank(final Rank rank) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#changeRank()}
+     */
     final AuthorState stateArg = state.changeRank(rank);
     return apply(stateArg, Operations.AuthorRanked.name(), () -> state);
   }

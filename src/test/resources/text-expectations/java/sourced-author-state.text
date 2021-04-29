@@ -19,10 +19,12 @@ public final class AuthorState {
   }
 
   public AuthorState withName(final Name name) {
+    //TODO: Implement command logic.
     return new AuthorState(this.id, name, this.rank);
   }
 
   public AuthorState changeRank(final Rank rank) {
+    //TODO: Implement command logic.
     return new AuthorState(this.id, this.name, rank);
   }
 

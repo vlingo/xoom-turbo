@@ -23,12 +23,18 @@ public final class AuthorEntity extends EventSourced implements Author {
 
   @Override
   public Completes<AuthorState> withName(final Name name) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#withName()}
+     */
     final AuthorState stateArg = state.withName(name);
     return apply(new AuthorRegistered(stateArg), () -> state);
   }
 
   @Override
   public Completes<AuthorState> changeRank(final Rank rank) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#changeRank()}
+     */
     final AuthorState stateArg = state.changeRank(rank);
     return apply(new AuthorRanked(stateArg), () -> state);
   }
