@@ -39,6 +39,15 @@ public final class AuthorEntity extends EventSourced implements Author {
     return apply(new AuthorRanked(stateArg), () -> state);
   }
 
+  @Override
+  public Completes<AuthorState> hide() {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#hide()}
+     */
+    final AuthorState stateArg = state.hide();
+    return Completes.withSuccess(stateArg);
+  }
+
   private void applyAuthorRegistered(final AuthorRegistered event) {
     state = state.withName(event.name);
   }

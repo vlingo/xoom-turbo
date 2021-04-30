@@ -35,6 +35,15 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     return apply(stateArg, Operations.AuthorRanked.name(), () -> state);
   }
 
+  @Override
+  public Completes<AuthorState> hide() {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#hide()}
+     */
+    final AuthorState stateArg = state.hide();
+    return apply(stateArg, () -> state);
+  }
+
   /*
    * Received when my current state has been applied and restored.
    *

@@ -35,6 +35,9 @@ public class AggregateDetail {
   }
 
   public static CodeGenerationParameter eventWithName(final CodeGenerationParameter aggregate, final String eventName) {
+    if(eventName == null || eventName.isEmpty()) {
+      return CodeGenerationParameter.of(DOMAIN_EVENT, "");
+    }
     return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).filter(event -> event.value.equals(eventName))
             .findFirst().orElseThrow(() -> new IllegalArgumentException("Event " + eventName + " not found"));
   }

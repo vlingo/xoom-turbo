@@ -29,6 +29,7 @@ public final class ${entityName} extends EventSourced implements ${aggregateProt
   ${method}
   </#list>
   <#list eventHandlers as eventHandler>
+  <#if eventHandler.eventName?has_content>
   private void apply${eventHandler.eventName}(final ${eventHandler.eventName} event) {
     <#list eventHandler.missingFields as missingField>
     //TODO: Event is missing ${missingField.fieldName}; using ${missingField.defaultValue} instead
@@ -36,6 +37,7 @@ public final class ${entityName} extends EventSourced implements ${aggregateProt
     state = state.${eventHandler.methodName}(${eventHandler.methodInvocationParameters});
   }
 
+  </#if>
   </#list>
   /*
    * Restores my initial state by means of {@code state}.

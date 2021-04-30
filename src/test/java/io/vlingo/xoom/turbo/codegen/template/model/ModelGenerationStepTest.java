@@ -200,9 +200,12 @@ public class ModelGenerationStepTest {
                         .relate(Label.METHOD_PARAMETER, "rank")
                         .relate(authorRankedEvent);
 
+        final CodeGenerationParameter hideMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "hide");
+
         return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
                 .relate(idField).relate(nameField).relate(rankField)
-                .relate(factoryMethod).relate(rankMethod)
+                .relate(factoryMethod).relate(rankMethod).relate(hideMethod)
                 .relate(authorRegisteredEvent).relate(authorRankedEvent);
     }
 

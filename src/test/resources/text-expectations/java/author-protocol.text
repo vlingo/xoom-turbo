@@ -17,4 +17,6 @@ public interface Author {
 
   Completes<AuthorState> changeRank(final Rank rank);
 
+  Completes<AuthorState> hide();
+
 }
