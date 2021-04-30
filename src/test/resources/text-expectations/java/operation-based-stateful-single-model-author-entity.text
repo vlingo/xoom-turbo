@@ -16,6 +16,15 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     this.state = AuthorState.identifiedBy(id);
   }
 
+  /*
+   * Returns my current state.
+   *
+   * @return {@code Completes<AuthorState>}
+   */
+  public Completes<AuthorState> currentState() {
+    return Completes.withSuccess(state);
+  }
+
   @Override
   public Completes<AuthorState> withName(final Name name) {
     /**
@@ -61,14 +70,5 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
   @Override
   protected Class<AuthorState> stateType() {
     return AuthorState.class;
-  }
-
-  /*
-   * Returns my current state.
-   *
-   * @return {@code Completes<AuthorState>}
-   */
-  public Completes<AuthorState> currentState() {
-    return Completes.withSuccess(state);
   }
 }
