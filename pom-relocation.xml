@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
   <artifactId>vlingo-xoom</artifactId>
-  <version>1.7.5</version>
+  <version>1.7.6-SNAPSHOT</version>
   <description>The VLINGO XOOM Xoom provides a JVM microframework for the VLINGO XOOM Platform that helps in building high-performance reactive microservices.</description>
   <name>vlingo-xoom</name>
   <url>https://github.com/vlingo/xoom-turbo</url>
