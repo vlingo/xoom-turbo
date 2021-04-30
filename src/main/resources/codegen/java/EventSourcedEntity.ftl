@@ -24,6 +24,17 @@ public final class ${entityName} extends EventSourced implements ${aggregateProt
     </#list>
   }
   </#if>
+  <#if !useCQRS>
+
+  /*
+   * Returns my current state.
+   *
+   * @return {@code Completes<${stateName}>}
+   */
+  public Completes<${stateName}> currentState() {
+    return Completes.withSuccess(state);
+  }
+  </#if>
 
   <#list methods as method>
   ${method}

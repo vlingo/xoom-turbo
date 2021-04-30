@@ -21,6 +21,7 @@ import java.util.Set;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.STATE_FIELD;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
 public class AggregateProtocolTemplateData extends TemplateData {
 
@@ -30,12 +31,15 @@ public class AggregateProtocolTemplateData extends TemplateData {
   @SuppressWarnings("unchecked")
   public AggregateProtocolTemplateData(final String packageName,
                                        final CodeGenerationParameter aggregate,
-                                       final List<Content> contents) {
+                                       final List<Content> contents,
+                                       final Boolean useCQRS) {
     this.protocolName = aggregate.value;
     this.parameters = TemplateParameters.with(PACKAGE_NAME, packageName)
             .addImports(resolveImports(aggregate, contents))
             .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
-            .and(METHODS, new ArrayList<String>());
+            .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
+            .and(METHODS, new ArrayList<String>())
+            .and(USE_CQRS, useCQRS);
 
     this.dependOn(AggregateProtocolMethodTemplateData.from(parameters, aggregate));
   }

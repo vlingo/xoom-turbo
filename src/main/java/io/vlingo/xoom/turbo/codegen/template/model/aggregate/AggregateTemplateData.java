@@ -43,7 +43,8 @@ public class AggregateTemplateData extends TemplateData {
                                final CodeGenerationParameter aggregate,
                                final StorageType storageType,
                                final ProjectionType projectionType,
-                               final List<Content> contents) {
+                               final List<Content> contents,
+                               final Boolean useCQRS) {
     this.protocolName = aggregate.value;
     this.parameters = TemplateParameters.with(PACKAGE_NAME, packageName)
             .and(AGGREGATE_PROTOCOL_NAME, protocolName)
@@ -54,7 +55,8 @@ public class AggregateTemplateData extends TemplateData {
             .and(SOURCED_EVENTS, resolveEventNames(aggregate))
             .addImports(resolveImports(basePackage, aggregate, projectionType, contents))
             .and(METHODS, new ArrayList<String>())
-            .and(STORAGE_TYPE, storageType);
+            .and(STORAGE_TYPE, storageType)
+            .and(USE_CQRS, useCQRS);
 
     this.dependOn(AggregateMethodTemplateData.from(aggregate, storageType, projectionType));
   }

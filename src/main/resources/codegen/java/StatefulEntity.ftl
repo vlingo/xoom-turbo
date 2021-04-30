@@ -41,4 +41,15 @@ public final class ${entityName} extends StatefulEntity<${stateName}> implements
   protected Class<${stateName}> stateType() {
     return ${stateName}.class;
   }
+  <#if !useCQRS>
+
+  /*
+   * Returns my current state.
+   *
+   * @return {@code Completes<${stateName}>}
+   */
+  public Completes<${stateName}> currentState() {
+    return Completes.withSuccess(state);
+  }
+  </#if>
 }

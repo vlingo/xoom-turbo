@@ -24,7 +24,10 @@ public class ResultAssignmentStatement {
     final String entityMethodInvocation =
             resolveEntityMethodInvocation(aggregate, method);
 
-    return String.format("final %s state = %s", aggregateState, entityMethodInvocation);
+    if(method.hasAny(Label.METHOD_PARAMETER)) {
+      return String.format("final %s state = %s", aggregateState, entityMethodInvocation);
+    }
+    return String.format("%s", entityMethodInvocation);
   }
 
   public static String resolveEntityMethodInvocation(final CodeGenerationParameter aggregate,

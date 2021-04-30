@@ -5,7 +5,8 @@
         <version>${r"${vlingo.xoom.version}"}</version>
         <executions>
           <#if hasProducerExchange>
-<execution>
+
+          <execution>
             <goals>
               <goal>push-schemata</goal>
             </goals>
@@ -29,6 +30,7 @@
           </execution>
           </#if>
           <#if hasConsumerExchange>
+
           <execution>
             <id>pullSchemata</id>
             <goals>
@@ -49,6 +51,7 @@
               </schemata>
             </configuration>
           </execution>
+
           </#if>
         </executions>
       </plugin>

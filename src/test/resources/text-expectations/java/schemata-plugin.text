@@ -4,6 +4,7 @@
         <artifactId>xoom-build-plugins</artifactId>
         <version>${vlingo.xoom.version}</version>
         <executions>
+
           <execution>
             <goals>
               <goal>push-schemata</goal>
@@ -52,6 +53,7 @@
               </schemata>
             </configuration>
           </execution>
+
           <execution>
             <id>pullSchemata</id>
             <goals>
@@ -76,5 +78,6 @@
               </schemata>
             </configuration>
           </execution>
+
         </executions>
       </plugin>

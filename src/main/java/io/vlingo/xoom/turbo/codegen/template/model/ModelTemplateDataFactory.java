@@ -32,12 +32,13 @@ public class ModelTemplateDataFactory {
   public static List<TemplateData> from(final CodeGenerationContext context) {
     final List<Content> contents = context.contents();
     final String basePackage = context.parameterOf(PACKAGE);
+    final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
     final Language language = context.parameterOf(LANGUAGE, Language::valueOf);
     final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::of);
     final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
     return context.parametersOf(AGGREGATE).flatMap(aggregate -> {
       final String packageName = AggregateDetail.resolvePackage(basePackage, aggregate.value);
-      return loadTemplates(basePackage, packageName, language, aggregate, storageType, projectionType, contents);
+      return loadTemplates(basePackage, packageName, language, aggregate, storageType, projectionType, contents, useCQRS);
     }).collect(Collectors.toList());
   }
 
@@ -47,10 +48,11 @@ public class ModelTemplateDataFactory {
                                                     final CodeGenerationParameter aggregateParameter,
                                                     final StorageType storageType,
                                                     final ProjectionType projectionType,
-                                                    final List<Content> contents) {
+                                                    final List<Content> contents,
+                                                    final Boolean useCQRS) {
     final List<TemplateData> templatesData = new ArrayList<>();
-    templatesData.add(new AggregateProtocolTemplateData(packageName, aggregateParameter, contents));
-    templatesData.add(new AggregateTemplateData(basePackage, packageName, aggregateParameter, storageType, projectionType, contents));
+    templatesData.add(new AggregateProtocolTemplateData(packageName, aggregateParameter, contents, useCQRS));
+    templatesData.add(new AggregateTemplateData(basePackage, packageName, aggregateParameter, storageType, projectionType, contents, useCQRS));
     templatesData.add(new AggregateStateTemplateData(packageName, language, aggregateParameter, storageType, contents));
     templatesData.addAll(DomainEventTemplateData.from(packageName, language, aggregateParameter, contents));
     return templatesData.stream();

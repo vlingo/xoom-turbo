@@ -18,8 +18,7 @@ import java.nio.file.Paths;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
-import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.EVENT_BASED;
-import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.OPERATION_BASED;
+import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.*;
 import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.JOURNAL;
 import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.STATE_STORE;
 
@@ -32,6 +31,7 @@ public class ModelGenerationStepTest {
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, STATE_STORE),
                         CodeGenerationParameter.of(Label.PROJECTION_TYPE, EVENT_BASED),
                         CodeGenerationParameter.of(Label.LANGUAGE, Language.JAVA),
+                        CodeGenerationParameter.of(Label.CQRS, true),
                         authorAggregate(), nameValueObject(), rankValueObject());
 
         final CodeGenerationContext context =
@@ -64,6 +64,7 @@ public class ModelGenerationStepTest {
                         CodeGenerationParameter.of(Label.STORAGE_TYPE, STATE_STORE),
                         CodeGenerationParameter.of(Label.PROJECTION_TYPE, OPERATION_BASED),
                         CodeGenerationParameter.of(Label.LANGUAGE, Language.JAVA),
+                        CodeGenerationParameter.of(Label.CQRS, true),
                         authorAggregate(), nameValueObject(), rankValueObject());
 
         final CodeGenerationContext context =
@@ -90,12 +91,13 @@ public class ModelGenerationStepTest {
     }
 
     @Test
-    public void testThatSourcedModelIsGenerated() throws IOException {
+    public void testThatOperationBasedStatefulSingleModelIsGenerated() throws IOException {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
-                        CodeGenerationParameter.of(Label.STORAGE_TYPE, JOURNAL),
-                        CodeGenerationParameter.of(Label.PROJECTION_TYPE, EVENT_BASED),
+                        CodeGenerationParameter.of(Label.STORAGE_TYPE, STATE_STORE),
+                        CodeGenerationParameter.of(Label.PROJECTION_TYPE, NONE),
                         CodeGenerationParameter.of(Label.LANGUAGE, Language.JAVA),
+                        CodeGenerationParameter.of(Label.CQRS, false),
                         authorAggregate(), nameValueObject(), rankValueObject());
 
         final CodeGenerationContext context =
@@ -107,15 +109,81 @@ public class ModelGenerationStepTest {
 
         modelGenerationStep.process(context);
 
-        final Content author = context.findContent(AGGREGATE_PROTOCOL, "Author");
+        final Content authorProtocol = context.findContent(AGGREGATE_PROTOCOL, "Author");
         final Content authorEntity = context.findContent(AGGREGATE, "AuthorEntity");
         final Content authorState = context.findContent(AGGREGATE_STATE, "AuthorState");
         final Content authorRegistered = context.findContent(DOMAIN_EVENT, "AuthorRegistered");
         final Content authorRanked = context.findContent(DOMAIN_EVENT, "AuthorRanked");
 
         Assert.assertEquals(7, context.contents().size());
-        Assert.assertTrue(author.contains(TextExpectation.onJava().read("author-protocol")));
+        Assert.assertTrue(authorProtocol.contains(TextExpectation.onJava().read("author-protocol-for-single-model")));
+        Assert.assertTrue(authorEntity.contains(TextExpectation.onJava().read("operation-based-stateful-single-model-author-entity")));
+        Assert.assertTrue(authorState.contains(TextExpectation.onJava().read("stateful-author-state")));
+        Assert.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
+        Assert.assertTrue(authorRanked.contains(TextExpectation.onJava().read("author-ranked")));
+    }
+
+    @Test
+    public void testThatSourcedModelIsGenerated() throws IOException {
+        final CodeGenerationParameters parameters =
+                CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
+                        CodeGenerationParameter.of(Label.STORAGE_TYPE, JOURNAL),
+                        CodeGenerationParameter.of(Label.PROJECTION_TYPE, EVENT_BASED),
+                        CodeGenerationParameter.of(Label.LANGUAGE, Language.JAVA),
+                        CodeGenerationParameter.of(Label.CQRS, true),
+                        authorAggregate(), nameValueObject(), rankValueObject());
+
+        final CodeGenerationContext context =
+                CodeGenerationContext.with(parameters).contents(contents());
+
+        final ModelGenerationStep modelGenerationStep = new ModelGenerationStep();
+
+        Assert.assertTrue(modelGenerationStep.shouldProcess(context));
+
+        modelGenerationStep.process(context);
+
+        final Content authorProtocol = context.findContent(AGGREGATE_PROTOCOL, "Author");
+        final Content authorEntity = context.findContent(AGGREGATE, "AuthorEntity");
+        final Content authorState = context.findContent(AGGREGATE_STATE, "AuthorState");
+        final Content authorRegistered = context.findContent(DOMAIN_EVENT, "AuthorRegistered");
+        final Content authorRanked = context.findContent(DOMAIN_EVENT, "AuthorRanked");
+
+        Assert.assertEquals(7, context.contents().size());
+        Assert.assertTrue(authorProtocol.contains(TextExpectation.onJava().read("author-protocol")));
         Assert.assertTrue(authorEntity.contains(TextExpectation.onJava().read("sourced-author-entity")));
+        Assert.assertTrue(authorState.contains(TextExpectation.onJava().read("sourced-author-state")));
+        Assert.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
+        Assert.assertTrue(authorRanked.contains(TextExpectation.onJava().read("author-ranked")));
+    }
+
+    @Test
+    public void testThatSourcedSingleModelIsGenerated() throws IOException {
+        final CodeGenerationParameters parameters =
+                CodeGenerationParameters.from(CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp"),
+                        CodeGenerationParameter.of(Label.STORAGE_TYPE, JOURNAL),
+                        CodeGenerationParameter.of(Label.PROJECTION_TYPE, EVENT_BASED),
+                        CodeGenerationParameter.of(Label.LANGUAGE, Language.JAVA),
+                        CodeGenerationParameter.of(Label.CQRS, false),
+                        authorAggregate(), nameValueObject(), rankValueObject());
+
+        final CodeGenerationContext context =
+                CodeGenerationContext.with(parameters).contents(contents());
+
+        final ModelGenerationStep modelGenerationStep = new ModelGenerationStep();
+
+        Assert.assertTrue(modelGenerationStep.shouldProcess(context));
+
+        modelGenerationStep.process(context);
+
+        final Content authorProtocol = context.findContent(AGGREGATE_PROTOCOL, "Author");
+        final Content authorEntity = context.findContent(AGGREGATE, "AuthorEntity");
+        final Content authorState = context.findContent(AGGREGATE_STATE, "AuthorState");
+        final Content authorRegistered = context.findContent(DOMAIN_EVENT, "AuthorRegistered");
+        final Content authorRanked = context.findContent(DOMAIN_EVENT, "AuthorRanked");
+
+        Assert.assertEquals(7, context.contents().size());
+        Assert.assertTrue(authorProtocol.contains(TextExpectation.onJava().read("author-protocol-for-single-model")));
+        Assert.assertTrue(authorEntity.contains(TextExpectation.onJava().read("sourced-single-model-author-entity")));
         Assert.assertTrue(authorState.contains(TextExpectation.onJava().read("sourced-author-state")));
         Assert.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
         Assert.assertTrue(authorRanked.contains(TextExpectation.onJava().read("author-ranked")));

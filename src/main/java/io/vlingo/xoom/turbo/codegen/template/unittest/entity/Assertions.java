@@ -11,10 +11,7 @@ import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.TestDataValues;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,10 +57,14 @@ public class Assertions {
       );
     }
 
-    return Arrays.asList(
-            String.format("assertEquals(%s, (int) dispatcherAccess.readFrom(\"entriesCount\"));", expectedNumberOfEntries),
-            String.format("assertEquals(%s.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom(\"appendedAt\", %s)).typeName());", eventName, entryIndex)
-    );
+    if(eventName != null && !eventName.isEmpty()) {
+      return Arrays.asList(
+              String.format("assertEquals(%s, (int) dispatcherAccess.readFrom(\"entriesCount\"));", expectedNumberOfEntries),
+              String.format("assertEquals(%s.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom(\"appendedAt\", %s)).typeName());", eventName, entryIndex)
+      );
+    }
+
+    return Collections.emptyList();
   }
 
   private static List<String> resolveEntityFieldAssertions(final CodeGenerationParameter method,
