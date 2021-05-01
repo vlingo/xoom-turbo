@@ -7,11 +7,8 @@ import ${import.qualifiedClassName};
 </#if>
 
 public interface ${aggregateProtocolName} {
-
-  <#list methods as method>
-  ${method}
-  </#list>
   <#if !useCQRS>
+
   /*
    * Returns my current state.
    *
@@ -19,4 +16,8 @@ public interface ${aggregateProtocolName} {
    */
   Completes<${stateName}> currentState();
   </#if>
+
+  <#list methods as method>
+  ${method}
+  </#list>
 }

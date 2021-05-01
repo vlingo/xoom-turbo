@@ -7,6 +7,13 @@ import io.vlingo.xoomapp.model.*;
 
 public interface Author {
 
+  /*
+   * Returns my current state.
+   *
+   * @return {@code Completes<AuthorState>}
+   */
+  Completes<AuthorState> currentState();
+
   Completes<AuthorState> withName(final Name name);
 
   static Completes<AuthorState> withName(final Stage stage, final Name name) {
@@ -19,10 +26,4 @@ public interface Author {
 
   Completes<AuthorState> hide();
 
-  /*
-   * Returns my current state.
-   *
-   * @return {@code Completes<AuthorState>}
-   */
-  Completes<AuthorState> currentState();
 }
