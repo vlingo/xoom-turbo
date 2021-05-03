@@ -35,6 +35,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <graalvm.version>21.1.0</graalvm.version>
   </properties>
   <dependencies>
     <dependency>
@@ -121,6 +122,12 @@
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
       <version>62.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.graalvm.sdk</groupId>
+      <artifactId>graal-sdk</artifactId>
+      <version>${graalvm.version}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
@@ -235,6 +242,34 @@
   </repositories>
 
   <profiles>
+    <profile>
+      <id>native-image</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.graalvm.nativeimage</groupId>
+            <artifactId>native-image-maven-plugin</artifactId>
+            <version>${graalvm.version}</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>native-image</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <imageName>${project.name}</imageName>
+              <buildArgs>
+          --no-fallback --shared 
+          --initialize-at-run-time=io.netty
+          --allow-incomplete-classpath
+      </buildArgs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>sign-artifacts</id>
       <activation>
