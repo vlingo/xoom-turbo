@@ -18,8 +18,6 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
-import io.vlingo.xoom.turbo.codegen.template.resource.RouteDeclaration;
-import io.vlingo.xoom.turbo.codegen.template.resource.RouteMethodTemplateData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,7 +79,7 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                     .and(USE_CQRS, context.parameterOf(CQRS, Boolean::valueOf))
                     .addImports(resolveImports(context, autoDispatchParameter, queryStoreProviderName));
 
-    this.dependOn(RouteMethodTemplateData.from(autoDispatchParameter, parameters, context.contents()));
+    this.dependOn(RouteMethodTemplateData.from(autoDispatchParameter, parameters));
   }
 
   private Set<String> resolveImports(final CodeGenerationContext context,

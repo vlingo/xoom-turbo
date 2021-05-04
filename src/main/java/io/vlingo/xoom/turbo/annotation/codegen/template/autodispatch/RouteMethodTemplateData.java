@@ -7,15 +7,13 @@
 
 package io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch;
 
+import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
-import io.vlingo.xoom.turbo.codegen.template.resource.HandlerInvocationResolver;
-import io.vlingo.xoom.turbo.codegen.template.resource.RouteDetail;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +48,8 @@ public class RouteMethodTemplateData extends TemplateData {
   private RouteMethodTemplateData(final CodeGenerationParameter mainParameter,
                                   final CodeGenerationParameter routeSignatureParameter,
                                   final TemplateParameters parentParameters) {
-    final HandlerInvocationResolver invocationResolver = HandlerInvocationResolver.with(mainParameter);
+    final AutoDispatchHandlerInvocationResolver invocationResolver =
+            new AutoDispatchHandlerInvocationResolver();
 
     final String routeHandlerInvocation =
             invocationResolver.resolveRouteHandlerInvocation(mainParameter, routeSignatureParameter);
@@ -117,7 +116,7 @@ public class RouteMethodTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return DesignerTemplateStandard.ROUTE_METHOD;
+    return AnnotationBasedTemplateStandard.ROUTE_METHOD;
   }
 
 }
