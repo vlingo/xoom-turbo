@@ -9,20 +9,21 @@ package io.vlingo.xoom.turbo.codegen.template.exchange;
 import io.vlingo.xoom.lattice.model.IdentifiedDomainEvent;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROLE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.SCHEMA_GROUP;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.ROLE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.SCHEMA_GROUP;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class ExchangeAdapterTemplateData extends TemplateData {
 
@@ -45,8 +46,8 @@ public class ExchangeAdapterTemplateData extends TemplateData {
                     .and(SCHEMA_GROUP_NAME, exchange.retrieveRelatedValue(SCHEMA_GROUP))
                     .and(EXCHANGE_ROLE, exchange.retrieveRelatedValue(ROLE, ExchangeRole::of))
                     .and(LOCAL_TYPE_NAME, DATA_OBJECT.resolveClassname(exchange.parent().value))
-                    .andResolve(EXCHANGE_ADAPTER_NAME, params -> EXCHANGE_ADAPTER.resolveClassname(params))
-                    .andResolve(EXCHANGE_MAPPER_NAME, params -> EXCHANGE_MAPPER.resolveClassname(params))
+                    .andResolve(EXCHANGE_ADAPTER_NAME, EXCHANGE_ADAPTER::resolveClassname)
+                    .andResolve(EXCHANGE_MAPPER_NAME, EXCHANGE_MAPPER::resolveClassname)
                     .addImport(resolveImports(exchange, contents));
   }
 

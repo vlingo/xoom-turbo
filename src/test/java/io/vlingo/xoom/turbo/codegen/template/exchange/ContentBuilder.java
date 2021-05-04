@@ -12,7 +12,7 @@ import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 
 public class ContentBuilder {
 

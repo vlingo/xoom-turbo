@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.turbo.codegen.template.model.aggregate;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 
 import java.util.ArrayList;
 import java.util.List;

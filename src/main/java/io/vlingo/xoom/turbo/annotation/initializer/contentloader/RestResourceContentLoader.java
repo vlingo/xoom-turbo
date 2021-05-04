@@ -8,7 +8,9 @@
 package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
+import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.initializer.ResourceHandlers;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -47,7 +49,7 @@ public class RestResourceContentLoader extends TypeBasedContentLoader {
 
   @Override
   protected TemplateStandard standard() {
-    return TemplateStandard.REST_RESOURCE;
+    return AnnotationBasedTemplateStandard.REST_RESOURCE;
   }
 
   private TypeElement toType(final TypeMirror typeMirror) {

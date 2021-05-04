@@ -12,7 +12,7 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.TARGET_FOLDER;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.TARGET_FOLDER;
 
 public class ExternalFileLocationResolver implements FileLocationResolver {
 

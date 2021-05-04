@@ -8,10 +8,7 @@
 package io.vlingo.xoom.turbo.codegen.template.schemata;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.*;
 import io.vlingo.xoom.turbo.codegen.template.exchange.ExchangeRole;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 
@@ -19,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 import static io.vlingo.xoom.turbo.codegen.template.exchange.ExchangeRole.CONSUMER;
 import static io.vlingo.xoom.turbo.codegen.template.exchange.ExchangeRole.PRODUCER;
 
@@ -92,6 +89,6 @@ public class SchemataPluginTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.SCHEMATA_PLUGIN;
+    return DesignerTemplateStandard.SCHEMATA_PLUGIN;
   }
 }

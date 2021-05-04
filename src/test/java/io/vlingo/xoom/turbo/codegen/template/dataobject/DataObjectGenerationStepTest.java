@@ -8,21 +8,21 @@
 package io.vlingo.xoom.turbo.codegen.template.dataobject;
 
 import io.vlingo.xoom.turbo.TextExpectation;
+import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 
 public class DataObjectGenerationStepTest {
 
@@ -41,12 +41,12 @@ public class DataObjectGenerationStepTest {
 
     new DataObjectGenerationStep().process(context);
 
-    final Content authorData = context.findContent(TemplateStandard.DATA_OBJECT, "AuthorData");
-    final Content nameDataValueObject = context.findContent(TemplateStandard.DATA_OBJECT, "NameData");
-    final Content bookDataContent = context.findContent(TemplateStandard.DATA_OBJECT, "BookData");
-    final Content rankDataContent = context.findContent(TemplateStandard.DATA_OBJECT, "RankData");
-    final Content classificationDataContent = context.findContent(TemplateStandard.DATA_OBJECT, "ClassificationData");
-    final Content classifierDataContent = context.findContent(TemplateStandard.DATA_OBJECT, "ClassifierData");
+    final Content authorData = context.findContent(DesignerTemplateStandard.DATA_OBJECT, "AuthorData");
+    final Content nameDataValueObject = context.findContent(DesignerTemplateStandard.DATA_OBJECT, "NameData");
+    final Content bookDataContent = context.findContent(DesignerTemplateStandard.DATA_OBJECT, "BookData");
+    final Content rankDataContent = context.findContent(DesignerTemplateStandard.DATA_OBJECT, "RankData");
+    final Content classificationDataContent = context.findContent(DesignerTemplateStandard.DATA_OBJECT, "ClassificationData");
+    final Content classifierDataContent = context.findContent(DesignerTemplateStandard.DATA_OBJECT, "ClassifierData");
 
     Assert.assertEquals(14, context.contents().size());
     Assert.assertTrue(authorData.contains(TextExpectation.onJava().read("author-data")));

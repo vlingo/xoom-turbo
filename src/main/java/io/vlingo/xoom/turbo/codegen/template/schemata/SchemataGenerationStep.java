@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel.*;
 
 public class SchemataGenerationStep extends TemplateProcessingStep {
 

@@ -8,9 +8,10 @@
 package io.vlingo.xoom.turbo.codegen.template.resource;
 
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -27,9 +28,9 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.turbo.codegen.content.ContentQuery.findFullyQualifiedClassName;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERIES;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class RestResourceTemplateData extends TemplateData {
 
@@ -94,9 +95,9 @@ public class RestResourceTemplateData extends TemplateData {
       imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
     }
     if (useCQRS) {
-      final String queriesName = TemplateStandard.QUERIES.resolveClassname(aggregateName);
+      final String queriesName = DesignerTemplateStandard.QUERIES.resolveClassname(aggregateName);
       imports.add(findFullyQualifiedClassName(STORE_PROVIDER, resolveQueryStoreProviderName(), contents));
-      imports.add(findFullyQualifiedClassName(TemplateStandard.QUERIES, queriesName, contents));
+      imports.add(findFullyQualifiedClassName(DesignerTemplateStandard.QUERIES, queriesName, contents));
     }
     imports.addAll(ValueObjectDetail.resolveImports(contents, involvedStateFields));
     return imports;

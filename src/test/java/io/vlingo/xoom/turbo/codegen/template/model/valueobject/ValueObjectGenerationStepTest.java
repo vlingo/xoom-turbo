@@ -11,19 +11,19 @@ import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationStep;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.model.ValueObjectGenerationStep;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.VALUE_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.VALUE_OBJECT;
 import static io.vlingo.xoom.turbo.codegen.template.storage.StorageType.STATE_STORE;
 
 public class ValueObjectGenerationStepTest {

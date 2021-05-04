@@ -11,6 +11,7 @@ import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -21,10 +22,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.EXCHANGE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROLE;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.EXCHANGE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.ROLE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.EXCHANGE_RECEIVER_HOLDER;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class ExchangeReceiverHolderTemplateData extends TemplateData {
 
@@ -66,7 +69,7 @@ public class ExchangeReceiverHolderTemplateData extends TemplateData {
             Stream.of(DATA_OBJECT, AGGREGATE_PROTOCOL).collect(Collectors.toList());
 
     if (receiversParameters.stream().anyMatch(receiver -> !receiver.isModelFactoryMethod())) {
-      standards.add(TemplateStandard.AGGREGATE);
+      standards.add(DesignerTemplateStandard.AGGREGATE);
     }
 
     final Set<String> imports = standards.stream().map(standard -> {

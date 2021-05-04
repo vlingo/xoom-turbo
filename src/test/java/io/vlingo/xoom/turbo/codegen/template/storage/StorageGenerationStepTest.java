@@ -19,10 +19,10 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.NONE;
 import static io.vlingo.xoom.turbo.codegen.template.storage.DatabaseType.*;

@@ -8,11 +8,11 @@
 package io.vlingo.xoom.turbo.codegen.template.model;
 
 import io.vlingo.xoom.turbo.codegen.CodeGenerationSetup;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 
 import static io.vlingo.xoom.turbo.codegen.CodeGenerationSetup.SCALAR_NUMERIC_TYPES;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 
 public class FieldDetail {
 
@@ -38,7 +38,7 @@ public class FieldDetail {
   }
 
   public static boolean isScalar(final CodeGenerationParameter field) {
-    return isScalar(field.retrieveRelatedValue(Label.FIELD_TYPE));
+    return isScalar(field.retrieveRelatedValue(FIELD_TYPE));
   }
 
   public static boolean isScalar(final String fieldType) {

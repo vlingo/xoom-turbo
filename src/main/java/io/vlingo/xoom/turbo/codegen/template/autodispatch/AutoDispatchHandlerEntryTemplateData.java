@@ -7,26 +7,26 @@
 package io.vlingo.xoom.turbo.codegen.template.autodispatch;
 
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.*;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.turbo.codegen.designer.Label.ROUTE_SIGNATURE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.READ_ONLY;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.FACTORY_METHOD;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
@@ -35,7 +35,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
   public static List<TemplateData> from(final Language language,
                                         final CodeGenerationParameter aggregate,
                                         final List<CodeGenerationParameter> valueObjects) {
-    return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE).filter(route -> !route.hasAny(READ_ONLY))
+    return aggregate.retrieveAllRelated(ROUTE_SIGNATURE).filter(route -> !route.hasAny(READ_ONLY))
             .map(route -> new AutoDispatchHandlerEntryTemplateData(language, route, valueObjects))
             .collect(Collectors.toList());
   }
@@ -74,6 +74,6 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.AUTO_DISPATCH_HANDLER_ENTRY;
+    return DesignerTemplateStandard.AUTO_DISPATCH_HANDLER_ENTRY;
   }
 }

@@ -11,10 +11,10 @@ import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,12 +23,12 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACTOR;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.VALUE_OBJECT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.QUERIES_ACTOR;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.VALUE_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 
 public class RestResourceGenerationStepTest {
 

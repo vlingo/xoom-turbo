@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.AGGREGATE_METHOD;
 
 public class TestCase {
 

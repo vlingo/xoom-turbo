@@ -21,9 +21,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.STORE_PROVIDER;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
 import static java.util.stream.Collectors.toSet;
 
 public class StorageProviderTemplateData extends TemplateData {
@@ -74,7 +74,7 @@ public class StorageProviderTemplateData extends TemplateData {
             .and(ADAPTERS, adapters).and(QUERIES, queries)
             .and(AGGREGATES, ContentQuery.findClassNames(AGGREGATE, contents))
             .and(PERSISTENT_TYPES, persistentTypes.map(CodeElementFormatter::simpleNameOf).collect(toSet()))
-            .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
+            .andResolve(STORE_PROVIDER_NAME, STORE_PROVIDER::resolveClassname)
             .and(USE_ANNOTATIONS, useAnnotation)
             .addImports(imports);
   }

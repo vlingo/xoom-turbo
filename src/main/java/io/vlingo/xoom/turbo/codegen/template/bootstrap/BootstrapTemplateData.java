@@ -4,13 +4,15 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.turbo.codegen.template.bootstrap;
 
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.turbo.codegen.template.storage.StorageType;
@@ -19,13 +21,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.APPLICATION_NAME;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.PROJECTION_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.STORAGE_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.USE_ANNOTATIONS;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.PROJECTION_TYPE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.STORAGE_TYPE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.APPLICATION_NAME;
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_ANNOTATIONS;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public abstract class BootstrapTemplateData extends TemplateData {
 
@@ -34,8 +36,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
   private final static List<BootstrapTemplateData> TEMPLATES =
-          Arrays.asList(new XoomInitializerTemplateData(), new AnnotatedBootstrapTemplateData(),
-                  new DefaultBootstrapTemplateData());
+          Arrays.asList(new AnnotatedBootstrapTemplateData(), new DefaultBootstrapTemplateData());
 
   protected BootstrapTemplateData() {
     this.parameters = TemplateParameters.empty();
@@ -76,10 +77,9 @@ public abstract class BootstrapTemplateData extends TemplateData {
             .and(PROVIDERS, storeProviders)
             .and(TYPE_REGISTRIES, typeRegistries)
             .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
-            .and(TemplateParameter.APPLICATION_NAME, context.parameterOf(APPLICATION_NAME))
-            .and(TemplateParameter.USE_ANNOTATIONS, context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf))
-            .andResolve(PROJECTION_DISPATCHER_PROVIDER_NAME,
-                    param -> PROJECTION_DISPATCHER_PROVIDER.resolveClassname(param));
+            .and(APPLICATION_NAME, context.parameterOf(Label.APPLICATION_NAME))
+            .and(USE_ANNOTATIONS, context.parameterOf(Label.USE_ANNOTATIONS, Boolean::valueOf))
+            .andResolve(PROJECTION_DISPATCHER_PROVIDER_NAME, PROJECTION_DISPATCHER_PROVIDER::resolveClassname);
   }
 
   protected abstract void enrichParameters(final CodeGenerationContext context);

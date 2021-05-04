@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.REST_RESOURCE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.REST_RESOURCE;
 import static java.util.stream.Collectors.toList;
 
 public class RestResource {

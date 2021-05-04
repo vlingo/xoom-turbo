@@ -14,7 +14,7 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FACTORY_METHOD;
 
 public enum MethodScope {
 

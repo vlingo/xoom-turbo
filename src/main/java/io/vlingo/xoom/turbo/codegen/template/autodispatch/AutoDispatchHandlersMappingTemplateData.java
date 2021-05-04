@@ -10,8 +10,10 @@ package io.vlingo.xoom.turbo.codegen.template.autodispatch;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -25,16 +27,15 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.staticConstant;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_SIGNATURE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.QUERIES;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
   private final static String HANDLER_INDEX_PATTERN = "public static final int %s = %d;";
   private final static CodeGenerationParameter STATE_ADAPTER_HANDLER =
-          CodeGenerationParameter.of(ROUTE_SIGNATURE, "adaptState");
+          CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "adaptState");
 
   private final String aggregateName;
   private final TemplateParameters parameters;
@@ -72,7 +73,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
   private List<String> resolveHandlerIndexes(final CodeGenerationParameter aggregate, final Boolean useCQRS) {
     final List<CodeGenerationParameter> handlers =
-            Stream.of(aggregate.retrieveAllRelated(ROUTE_SIGNATURE), Stream.of(STATE_ADAPTER_HANDLER))
+            Stream.of(aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE), Stream.of(STATE_ADAPTER_HANDLER))
                     .flatMap(stream -> stream).collect(Collectors.toList());
 
     return IntStream.range(0, handlers.size()).mapToObj(index -> {
@@ -122,7 +123,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING;
+    return DesignerTemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING;
   }
 
   @Override

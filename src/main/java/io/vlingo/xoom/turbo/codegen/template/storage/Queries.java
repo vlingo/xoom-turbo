@@ -9,8 +9,8 @@ package io.vlingo.xoom.turbo.codegen.template.storage;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 
@@ -18,8 +18,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACTOR;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.QUERIES;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.QUERIES_ACTOR;
 
 public class Queries {
 

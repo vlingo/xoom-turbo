@@ -14,8 +14,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.STATE_FIELD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.STATE_FIELD;
 import static java.util.stream.Collectors.toList;
 
 public class AlternateReference extends Formatters.Fields<String> {

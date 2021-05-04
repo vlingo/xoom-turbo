@@ -11,8 +11,8 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.QUERIES;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERIES_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES;
 
 public class QueriesTemplateData extends TemplateData {
 

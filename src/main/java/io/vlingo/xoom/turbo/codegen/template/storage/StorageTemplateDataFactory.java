@@ -23,20 +23,13 @@ public class StorageTemplateDataFactory {
                                          final StorageType storageType,
                                          final Map<Model, DatabaseType> databases,
                                          final ProjectionType projectionType,
-                                         final Boolean internalGeneration,
                                          final Boolean useAnnotations,
                                          final Boolean useCQRS) {
     final String persistencePackage = PersistenceDetail.resolvePackage(basePackage);
-
     final List<TemplateData> templatesData = new ArrayList<>();
-
     templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
-
-    if (!internalGeneration) {
-      templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, useCQRS, contents));
-      templatesData.add(new DatabasePropertiesTemplateData(appName, databases));
-    }
-
+    templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, useCQRS, contents));
+    templatesData.add(new DatabasePropertiesTemplateData(appName, databases));
     templatesData.addAll(buildStoreProvidersTemplateData(persistencePackage,
             useCQRS, useAnnotations, storageType, projectionType, templatesData,
             contents));

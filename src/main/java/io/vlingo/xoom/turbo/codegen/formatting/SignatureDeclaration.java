@@ -6,8 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.formatting;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 
 public class SignatureDeclaration implements Formatters.Arguments {
 
@@ -37,7 +37,7 @@ public class SignatureDeclaration implements Formatters.Arguments {
   }
 
   private List<String> collectMethodParameters(final CodeGenerationParameter parameter) {
-    switch (parameter.label) {
+    switch (Label.valueOf(parameter.label.toString())) {
       case AGGREGATE:
         return collectStateFields(parameter);
       case ROUTE_SIGNATURE:

@@ -11,6 +11,7 @@ import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -20,8 +21,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class QueriesUnitTestTemplateData extends TemplateData {
 
@@ -32,7 +33,7 @@ public class QueriesUnitTestTemplateData extends TemplateData {
                                         final List<CodeGenerationParameter> aggregates,
                                         final List<CodeGenerationParameter> valueObjects) {
     final String packageName =
-            ContentQuery.findPackage(TemplateStandard.QUERIES, contents);
+            ContentQuery.findPackage(DesignerTemplateStandard.QUERIES, contents);
 
     final Function<CodeGenerationParameter, TemplateData> mapper =
             aggregate -> new QueriesUnitTestTemplateData(packageName, aggregate, contents, valueObjects);
@@ -45,7 +46,7 @@ public class QueriesUnitTestTemplateData extends TemplateData {
                                      final List<Content> contents,
                                      final List<CodeGenerationParameter> valueObjects) {
     this.queriesProtocolName =
-            TemplateStandard.QUERIES.resolveClassname(aggregate.value);
+            DesignerTemplateStandard.QUERIES.resolveClassname(aggregate.value);
 
     final String dataObjectName =
             DATA_OBJECT.resolveClassname(aggregate.value);

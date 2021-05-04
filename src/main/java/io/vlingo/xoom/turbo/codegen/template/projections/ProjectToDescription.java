@@ -10,21 +10,16 @@ package io.vlingo.xoom.turbo.codegen.template.projections;
 
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
-//TODO: It should be split into two classes for handling annotated projection and non-annotated projection
 public class ProjectToDescription {
 
   private static final String FIRST_BECAUSE_OF_PLACEHOLDER = "\"%s name here\"";
@@ -81,24 +76,6 @@ public class ProjectToDescription {
     return sourceNames.stream().map(s -> s + sourceNameInvocationExpression).collect(Collectors.joining(", "));
   }
 
-  public static List<ProjectToDescription> fromProjectionAnnotation(final ProjectionType projectionType,
-                                                                    final List<CodeGenerationParameter> projectionActors) {
-    return IntStream.range(0, projectionActors.size()).mapToObj(index -> {
-      final CodeGenerationParameter projectionActor = projectionActors.get(index);
-      final Set<String> eventNames = projectionActor.retrieveAllRelated(Label.SOURCE)
-              .map(source -> source.value).map(String::trim).collect(toSet());
-      return new ProjectToDescription(index, projectionActors.size(), projectionActor.value, projectionType, eventNames);
-    }).collect(toList());
-  }
-
-  private ProjectToDescription(final int index,
-                               final int numberOfProtocols,
-                               final String projectionClassName,
-                               final ProjectionType projectionType,
-                               final Set<String> eventNames) {
-    this(index, numberOfProtocols, projectionClassName, formatSourceNamesFromAnnotation(projectionType, eventNames));
-  }
-
   private ProjectToDescription(final int index,
                                final int numberOfProtocols,
                                final String projectionClassName,
@@ -106,15 +83,6 @@ public class ProjectToDescription {
     this.projectionClassName = projectionClassName;
     this.lastParameter = index == numberOfProtocols - 1;
     this.joinedTypes = joinedTypes;
-  }
-
-  private static String formatSourceNamesFromAnnotation(final ProjectionType projectionType, final Set<String> sourceNames) {
-    final Function<String, String> mapper =
-            projectionType.isEventBased() ?
-                    sourceName -> sourceName + DEFAULT_SOURCE_NAME_INVOCATION :
-                    sourceName -> String.format("\"%s\"", sourceName);
-
-    return sourceNames.stream().map(mapper).collect(Collectors.joining(", "));
   }
 
   public String getInitializationCommand() {

@@ -11,7 +11,7 @@ import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables.Style;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.turbo.codegen.template.model.domainevent.DomainEventDetail;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 
 public class ProjectionSource {
 
@@ -45,7 +45,7 @@ public class ProjectionSource {
                            final List<CodeGenerationParameter> valueObjects) {
     this.name = event.value;
     this.mergeParameters = resolveMergeParameters(projectionType, event, events);
-    this.dataObjectName = TemplateStandard.DATA_OBJECT.resolveClassname(event.parent(AGGREGATE).value);
+    this.dataObjectName = DesignerTemplateStandard.DATA_OBJECT.resolveClassname(event.parent(AGGREGATE).value);
     this.dataObjectInitializers.addAll(resolveDataObjectInitializers(projectionType, event, events, valueObjects));
   }
 

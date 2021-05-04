@@ -9,23 +9,21 @@ package io.vlingo.xoom.turbo.codegen.template.bootstrap;
 
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.template.storage.StorageType;
 
 import java.util.Set;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.STORAGE_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.USE_ANNOTATIONS;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.REST_RESOURCES;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.CQRS;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
   @Override
   protected void enrichParameters(final CodeGenerationContext context) {
     final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
-    final StorageType storageType = context.parameterOf(STORAGE_TYPE, StorageType::valueOf);
+    final StorageType storageType = context.parameterOf(Label.STORAGE_TYPE, StorageType::valueOf);
 
     final Set<String> qualifiedNames =
             ContentQuery.findFullyQualifiedClassNames(context.contents(),
@@ -40,8 +38,7 @@ public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
   @Override
   protected boolean support(final CodeGenerationContext context) {
-    return !context.isInternalGeneration() &&
-            !context.parameterOf(USE_ANNOTATIONS, Boolean::valueOf);
+    return !context.parameterOf(Label.USE_ANNOTATIONS, Boolean::valueOf);
   }
 
 }

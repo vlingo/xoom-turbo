@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.turbo.codegen.template.unittest.entity;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.storage.StorageType;
 
 import java.util.Collections;
@@ -33,7 +33,7 @@ public class SourcedEvent {
 
   private SourcedEvent(final String eventName) {
     this.name = eventName;
-    this.adapterName = TemplateStandard.ADAPTER.resolveClassname(eventName);
+    this.adapterName = DesignerTemplateStandard.ADAPTER.resolveClassname(eventName);
   }
 
   public String getName() {

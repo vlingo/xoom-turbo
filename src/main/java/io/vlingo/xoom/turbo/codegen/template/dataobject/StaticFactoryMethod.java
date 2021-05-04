@@ -7,12 +7,12 @@
 
 package io.vlingo.xoom.turbo.codegen.template.dataobject;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 
 import java.beans.Introspector;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class StaticFactoryMethod {
 
   private StaticFactoryMethod(final CodeGenerationParameter parent,
                               final Arguments staticFactoryMethodArguments) {
-    this.dataObjectName = TemplateStandard.DATA_OBJECT.resolveClassname(parent.value);
+    this.dataObjectName = DesignerTemplateStandard.DATA_OBJECT.resolveClassname(parent.value);
     this.parameters = resolveMethodParameters(parent, staticFactoryMethodArguments);
     this.constructorInvocation = resolveConstructorInvocation(parent, staticFactoryMethodArguments);
     this.valueObjectInitializers.addAll(resolveValueObjectInitializers(parent, staticFactoryMethodArguments));
@@ -71,7 +71,7 @@ public class StaticFactoryMethod {
 
   private String resolveCarrierName(final CodeGenerationParameter parent) {
     if (parent.isLabeled(Label.AGGREGATE)) {
-      return TemplateStandard.AGGREGATE_STATE.resolveClassname(parent.value);
+      return DesignerTemplateStandard.AGGREGATE_STATE.resolveClassname(parent.value);
     }
     if (parent.isLabeled(Label.VALUE_OBJECT)) {
       return parent.value;

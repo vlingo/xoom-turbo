@@ -7,15 +7,15 @@
 package io.vlingo.xoom.turbo.codegen.formatting;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.beans.Introspector;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 import static java.util.stream.Collectors.toList;
 
 public class DataObjectStaticFactoryMethodAssignment extends Formatters.Variables<List<String>> {
@@ -23,8 +23,7 @@ public class DataObjectStaticFactoryMethodAssignment extends Formatters.Variable
   @Override
   public List<String> format(final CodeGenerationParameter carrier,
                              final Stream<CodeGenerationParameter> fields) {
-    return carrier.retrieveAllRelated(resolveFieldLabel(carrier))
-            .filter(field -> ValueObjectDetail.isValueObject(field))
+    return carrier.retrieveAllRelated(resolveFieldLabel(carrier)).filter(ValueObjectDetail::isValueObject)
             .map(field -> formatAssignment(carrier, field)).collect(toList());
   }
 
@@ -47,20 +46,20 @@ public class DataObjectStaticFactoryMethodAssignment extends Formatters.Variable
   }
 
   private String resolveDataObjectName(final CodeGenerationParameter field) {
-    return TemplateStandard.DATA_OBJECT.resolveClassname(field.retrieveRelatedValue(FIELD_TYPE));
+    return DesignerTemplateStandard.DATA_OBJECT.resolveClassname(field.retrieveRelatedValue(FIELD_TYPE));
   }
 
   private String resolveCarrierName(final CodeGenerationParameter carrier) {
-    if (carrier.isLabeled(Label.AGGREGATE)) {
-      return Introspector.decapitalize(TemplateStandard.AGGREGATE_STATE.resolveClassname(carrier.value));
+    if (carrier.isLabeled(AGGREGATE)) {
+      return Introspector.decapitalize(DesignerTemplateStandard.AGGREGATE_STATE.resolveClassname(carrier.value));
     }
-    if (carrier.isLabeled(Label.VALUE_OBJECT)) {
+    if (carrier.isLabeled(VALUE_OBJECT)) {
       return Introspector.decapitalize(carrier.value);
     }
     throw new IllegalArgumentException("Unable to resolve carrier name from " + carrier.label);
   }
 
-  private Label resolveFieldLabel(final CodeGenerationParameter carrier) {
+  private ParameterLabel resolveFieldLabel(final CodeGenerationParameter carrier) {
     if (carrier.isLabeled(AGGREGATE)) {
       return STATE_FIELD;
     }

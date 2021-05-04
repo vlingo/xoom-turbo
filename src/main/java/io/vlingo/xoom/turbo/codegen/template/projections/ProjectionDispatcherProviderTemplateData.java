@@ -9,7 +9,6 @@ package io.vlingo.xoom.turbo.codegen.template.projections;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -19,9 +18,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_TO_DESCRIPTION;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
@@ -37,26 +37,6 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
                                                               final Boolean useAnnotations,
                                                               final List<Content> contents) {
     return new ProjectionDispatcherProviderTemplateData(basePackage, projectionType, useAnnotations, contents);
-  }
-
-  public static ProjectionDispatcherProviderTemplateData fromProjectionAnnotation(final ProjectionType projectionType,
-                                                                                  final Stream<CodeGenerationParameter> projectionActors,
-                                                                                  final List<Content> contents) {
-    return new ProjectionDispatcherProviderTemplateData(projectionType, projectionActors, contents);
-  }
-
-  private ProjectionDispatcherProviderTemplateData(final ProjectionType projectionType,
-                                                   final Stream<CodeGenerationParameter> projectionActors,
-                                                   final List<Content> contents) {
-    final String packageName = ContentQuery.findPackage(PROJECTION, contents);
-
-    final List<ProjectToDescription> projectToDescriptionEntries =
-            ProjectToDescription.fromProjectionAnnotation(projectionType, projectionActors.collect(Collectors.toList()));
-
-    this.templateParameters = TemplateParameters.with(PACKAGE_NAME, packageName)
-            .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionEntries);
-
-    this.placeholder = false;
   }
 
   private ProjectionDispatcherProviderTemplateData(final String basePackage,

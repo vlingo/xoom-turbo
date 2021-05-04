@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.turbo.codegen.content;
 
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.Arrays;

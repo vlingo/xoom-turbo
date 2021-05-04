@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.turbo.codegen.template.unittest;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.formatting.NumberFormat;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 
@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FIELD_TYPE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.VALUE_OBJECT_FIELD;
 import static java.util.stream.Collectors.toList;
 
 public class TestDataValueGenerator {

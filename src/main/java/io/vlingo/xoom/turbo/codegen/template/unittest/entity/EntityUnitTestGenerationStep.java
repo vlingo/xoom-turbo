@@ -8,8 +8,8 @@ package io.vlingo.xoom.turbo.codegen.template.unittest.entity;
 
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;

@@ -14,28 +14,28 @@ import java.util.stream.Stream;
 
 public class CodeGenerationParameter {
 
-  public final Label label;
+  public final ParameterLabel label;
   public final String value;
   private CodeGenerationParameter parent;
   private final CodeGenerationParameters relatedParameters;
 
-  public static CodeGenerationParameter of(final Label label) {
-    return of(label, label.name());
+  public static CodeGenerationParameter of(final ParameterLabel label) {
+    return of(label, label.toString());
   }
 
-  public static CodeGenerationParameter of(final Label label, final Object value) {
+  public static CodeGenerationParameter of(final ParameterLabel label, final Object value) {
     return of(label, value.toString());
   }
 
-  public static CodeGenerationParameter of(final Label label, final String value) {
+  public static CodeGenerationParameter of(final ParameterLabel label, final String value) {
     return new CodeGenerationParameter(label, value);
   }
 
-  private CodeGenerationParameter(final Label label, final String value) {
+  private CodeGenerationParameter(final ParameterLabel label, final String value) {
     this(label, value, null, CodeGenerationParameters.empty());
   }
 
-  private CodeGenerationParameter(final Label label,
+  private CodeGenerationParameter(final ParameterLabel label,
                                   final String value,
                                   final CodeGenerationParameter parent,
                                   final CodeGenerationParameters relatedParameters) {
@@ -45,11 +45,11 @@ public class CodeGenerationParameter {
     this.relatedParameters = relatedParameters;
   }
 
-  public CodeGenerationParameter relate(final Label label, final Object value) {
+  public CodeGenerationParameter relate(final ParameterLabel label, final Object value) {
     return relate(label, value.toString());
   }
 
-  public CodeGenerationParameter relate(final Label label, final String value) {
+  public CodeGenerationParameter relate(final ParameterLabel label, final String value) {
     return this.relate(CodeGenerationParameter.of(label, value));
   }
 
@@ -61,15 +61,15 @@ public class CodeGenerationParameter {
     return this;
   }
 
-  public CodeGenerationParameter retrieveOneRelated(final Label label) {
+  public CodeGenerationParameter retrieveOneRelated(final ParameterLabel label) {
     return this.relatedParameters.retrieveOne(label);
   }
 
-  public Stream<CodeGenerationParameter> retrieveAllRelated(final Label label) {
+  public Stream<CodeGenerationParameter> retrieveAllRelated(final ParameterLabel label) {
     return retrieveAllRelated(label, RetrievalLevel.SUPERFICIAL);
   }
 
-  public Stream<CodeGenerationParameter> retrieveAllRelated(final Label label, final RetrievalLevel levels) {
+  public Stream<CodeGenerationParameter> retrieveAllRelated(final ParameterLabel label, final RetrievalLevel levels) {
     return relatedParameters.retrieveAll(label, levels);
   }
 
@@ -81,7 +81,7 @@ public class CodeGenerationParameter {
     return parent;
   }
 
-  public CodeGenerationParameter parent(final Label label) {
+  public CodeGenerationParameter parent(final ParameterLabel label) {
     if (!hasParent()) {
       throw new UnsupportedOperationException("Orphan parameter");
     }
@@ -106,15 +106,15 @@ public class CodeGenerationParameter {
     this.parent = parent;
   }
 
-  public String retrieveRelatedValue(final Label label) {
+  public String retrieveRelatedValue(final ParameterLabel label) {
     return retrieveRelatedValue(label, value -> value);
   }
 
-  public <T> T retrieveRelatedValue(final Label label, final Function<String, T> mapper) {
+  public <T> T retrieveRelatedValue(final ParameterLabel label, final Function<String, T> mapper) {
     return mapper.apply(retrieveOneRelated(label).value);
   }
 
-  public boolean isLabeled(final Label label) {
+  public boolean isLabeled(final ParameterLabel label) {
     return this.label.equals(label);
   }
 
@@ -122,11 +122,11 @@ public class CodeGenerationParameter {
     return relatedParameters.list().stream();
   }
 
-  public boolean hasAny(final Label label) {
+  public boolean hasAny(final ParameterLabel label) {
     return isLabeled(label) || relatedParameters.list().stream().anyMatch(parameter -> parameter.isLabeled(label) && parameter.value != null && !parameter.value.isEmpty());
   }
 
-  public void convertValuesSyntax(final Label label, final Function<String, String> formatter) {
+  public void convertValuesSyntax(final ParameterLabel label, final Function<String, String> formatter) {
     relatedParameters.applySyntaxConverter(label, formatter);
   }
 

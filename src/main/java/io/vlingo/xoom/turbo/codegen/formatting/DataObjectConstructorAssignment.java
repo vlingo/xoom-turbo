@@ -6,13 +6,13 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.formatting;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 import static java.util.stream.Collectors.toList;
 
 public class DataObjectConstructorAssignment extends Formatters.Fields<List<String>> {

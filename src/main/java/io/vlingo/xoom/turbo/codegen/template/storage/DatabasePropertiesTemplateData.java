@@ -7,10 +7,7 @@
 
 package io.vlingo.xoom.turbo.codegen.template.storage;
 
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.*;
 
 import java.util.Map;
 
@@ -50,6 +47,6 @@ public class DatabasePropertiesTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.DATABASE_PROPERTIES;
+    return DesignerTemplateStandard.DATABASE_PROPERTIES;
   }
 }

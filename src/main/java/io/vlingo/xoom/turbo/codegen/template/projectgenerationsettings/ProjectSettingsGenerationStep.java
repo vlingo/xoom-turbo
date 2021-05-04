@@ -14,8 +14,8 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateProcessingStep;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.APPLICATION_NAME;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.PROJECT_SETTINGS_PAYLOAD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.APPLICATION_NAME;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.PROJECT_SETTINGS_PAYLOAD;
 
 public class ProjectSettingsGenerationStep extends TemplateProcessingStep {
 

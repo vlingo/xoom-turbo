@@ -8,21 +8,21 @@
 package io.vlingo.xoom.turbo.codegen.template.exchange;
 
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
 
 public class ExchangeReceiver {
 
@@ -88,7 +88,7 @@ public class ExchangeReceiver {
   }
 
   public String getModelActor() {
-    return TemplateStandard.AGGREGATE.resolveClassname(modelProtocol);
+    return DesignerTemplateStandard.AGGREGATE.resolveClassname(modelProtocol);
   }
 
   public String getModelMethod() {

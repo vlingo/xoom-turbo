@@ -8,9 +8,10 @@
 package io.vlingo.xoom.turbo.codegen.template.projections;
 
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 
 public class ProjectionSourceTypesDetail {
 
@@ -23,7 +24,7 @@ public class ProjectionSourceTypesDetail {
   public static String resolveClassName(final ProjectionType projectionType) {
     final TemplateParameters parameters =
             TemplateParameters.with(TemplateParameter.PROJECTION_TYPE, projectionType);
-    return TemplateStandard.PROJECTION_SOURCE_TYPES.resolveClassname(parameters);
+    return DesignerTemplateStandard.PROJECTION_SOURCE_TYPES.resolveClassname(parameters);
   }
 
   public static String resolveQualifiedName(final String basePackage, final ProjectionType projectionType) {

@@ -7,14 +7,14 @@
 package io.vlingo.xoom.turbo.codegen.template.unittest.entity;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.TestDataValues;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FACTORY_METHOD;
 
 public class StaticDataDeclaration {
 

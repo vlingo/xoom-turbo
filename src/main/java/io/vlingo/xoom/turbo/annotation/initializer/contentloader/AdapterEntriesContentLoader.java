@@ -17,8 +17,9 @@ import javax.lang.model.element.TypeElement;
 import java.util.Collections;
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.DOMAIN_EVENT;
+
 
 public class AdapterEntriesContentLoader extends TypeBasedContentLoader {
 

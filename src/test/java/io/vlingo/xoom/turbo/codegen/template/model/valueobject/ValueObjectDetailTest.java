@@ -6,8 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.model.valueobject;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import org.junit.Assert;
 import org.junit.Test;
 

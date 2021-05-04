@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.METHOD_PARAMETER;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.METHOD_PARAMETER;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodInvocation implements Formatters.Arguments {

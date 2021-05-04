@@ -11,10 +11,10 @@ import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,8 +22,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 
 public class QueriesUnitTestGenerationStepTest {
 

@@ -7,6 +7,7 @@
 package io.vlingo.xoom.turbo.codegen.template.schemata;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -20,7 +21,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.turbo.codegen.CodeGenerationSetup.DEFAULT_SCHEMA_VERSION;
 import static io.vlingo.xoom.turbo.codegen.CodeGenerationSetup.EVENT_SCHEMA_CATEGORY;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
 
@@ -77,6 +78,6 @@ public class DomainEventSpecificationTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.SCHEMATA_SPECIFICATION;
+    return DesignerTemplateStandard.SCHEMATA_SPECIFICATION;
   }
 }

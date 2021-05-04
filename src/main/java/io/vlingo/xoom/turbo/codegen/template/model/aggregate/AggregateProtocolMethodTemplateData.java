@@ -8,6 +8,7 @@
 package io.vlingo.xoom.turbo.codegen.template.model.aggregate;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -20,12 +21,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.AGGREGATE_METHOD;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Arguments.AGGREGATE_METHOD_INVOCATION;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateProtocolMethodTemplateData extends TemplateData {
@@ -77,7 +78,7 @@ public class AggregateProtocolMethodTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.AGGREGATE_PROTOCOL_METHOD;
+    return DesignerTemplateStandard.AGGREGATE_PROTOCOL_METHOD;
   }
 
 }

@@ -6,8 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.formatting;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
+import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
 import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 
 import java.util.stream.Collectors;

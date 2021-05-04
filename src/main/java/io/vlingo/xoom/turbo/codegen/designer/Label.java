@@ -5,9 +5,11 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.turbo.codegen.parameter;
+package io.vlingo.xoom.turbo.codegen.designer;
 
-public enum Label {
+import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
+
+public enum Label implements ParameterLabel {
 
   ID("id"),
   ID_TYPE("idType"),
@@ -84,5 +86,4 @@ public enum Label {
   Label(final String key) {
     this.key = key;
   }
-
 }

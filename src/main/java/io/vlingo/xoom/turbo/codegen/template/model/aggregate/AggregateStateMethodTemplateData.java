@@ -10,18 +10,19 @@ package io.vlingo.xoom.turbo.codegen.template.model.aggregate;
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.List;
 
+import static io.vlingo.xoom.turbo.codegen.designer.Label.AGGREGATE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.METHOD_PARAMETER;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Fields.Style.SELF_ALTERNATE_REFERENCE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.METHOD_PARAMETER;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateStateMethodTemplateData extends TemplateData {
@@ -50,7 +51,7 @@ public class AggregateStateMethodTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.AGGREGATE_STATE_METHOD;
+    return DesignerTemplateStandard.AGGREGATE_STATE_METHOD;
   }
 
   @Override

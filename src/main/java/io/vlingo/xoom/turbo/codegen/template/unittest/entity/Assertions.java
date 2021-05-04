@@ -16,9 +16,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.DOMAIN_EVENT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_STATE;
 
 public class Assertions {
 

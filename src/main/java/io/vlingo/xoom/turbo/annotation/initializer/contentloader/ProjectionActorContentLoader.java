@@ -9,6 +9,7 @@ package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.turbo.annotation.persistence.Projection;
 import io.vlingo.xoom.turbo.annotation.persistence.Projections;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.PROJECTION;
 
 public class ProjectionActorContentLoader extends TypeBasedContentLoader {
 

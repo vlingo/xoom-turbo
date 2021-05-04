@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.turbo.codegen.template.exchange;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 
 import java.util.List;
 import java.util.Set;

@@ -68,20 +68,18 @@ public class CodeGenerationSetup {
           );
 
   @SuppressWarnings("serial")
-  private static final Map<StorageType, String> COMMAND_MODEL_STORE_TEMPLATES =
+  public static final Map<StorageType, String> COMMAND_MODEL_STORE_TEMPLATES =
           Collections.unmodifiableMap(
                   new HashMap<StorageType, String>() {{
-                    //put(StorageType.OBJECT_STORE, OBJECT_STORE_PROVIDER.filename);
                     put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
                     put(StorageType.JOURNAL, JOURNAL_PROVIDER.filename);
                   }}
           );
 
   @SuppressWarnings("serial")
-  private static final Map<StorageType, String> QUERY_MODEL_STORE_TEMPLATES =
+  public static final Map<StorageType, String> QUERY_MODEL_STORE_TEMPLATES =
           Collections.unmodifiableMap(
                   new HashMap<StorageType, String>() {{
-                    //put(StorageType.OBJECT_STORE, STATE_STORE_PROVIDER.filename);
                     put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
                     put(StorageType.JOURNAL, STATE_STORE_PROVIDER.filename);
                   }}

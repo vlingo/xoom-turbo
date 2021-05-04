@@ -15,8 +15,8 @@ import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.Tes
 import java.util.List;
 import java.util.function.Consumer;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FIELD_TYPE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.VALUE_OBJECT_FIELD;
 
 public class InlineDataInstantiationFormatter {
 

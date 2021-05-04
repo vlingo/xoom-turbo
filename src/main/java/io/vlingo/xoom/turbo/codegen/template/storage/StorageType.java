@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 
 public enum StorageType {
 
@@ -21,10 +21,6 @@ public enum StorageType {
   JOURNAL("JOURNAL", "Journal", "SourcedTypeRegistry",
           "io.vlingo.xoom.lattice.model.sourcing",
           DOMAIN_EVENT),
-
-//    OBJECT_STORE("OBJECT_STORE", "ObjectStore", "ObjectTypeRegistry",
-//            "io.vlingo.xoom.lattice.model.object",
-//            AGGREGATE_STATE),
 
   STATE_STORE("STATE_STORE", "StateStore", "StatefulTypeRegistry",
           "io.vlingo.xoom.lattice.model.stateful",

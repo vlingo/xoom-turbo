@@ -7,9 +7,9 @@
 package io.vlingo.xoom.turbo.codegen.template.model;
 
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectTemplateData;
@@ -17,7 +17,7 @@ import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectTempla
 import java.util.List;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.VALUE_OBJECT;
 
 public class ValueObjectGenerationStep extends TemplateProcessingStep {
 
@@ -25,7 +25,7 @@ public class ValueObjectGenerationStep extends TemplateProcessingStep {
   protected List<TemplateData> buildTemplatesData(CodeGenerationContext context) {
     final String basePackage = context.parameterOf(Label.PACKAGE);
     final Language language = context.parameterOf(Label.LANGUAGE, Language::valueOf);
-    final Stream<CodeGenerationParameter> valueObjects = context.parametersOf(Label.VALUE_OBJECT);
+    final Stream<CodeGenerationParameter> valueObjects = context.parametersOf(VALUE_OBJECT);
     return ValueObjectTemplateData.from(basePackage, language, valueObjects);
   }
 

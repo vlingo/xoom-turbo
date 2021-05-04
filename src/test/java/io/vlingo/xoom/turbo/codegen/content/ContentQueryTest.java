@@ -14,8 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_STATE;
 
 public class ContentQueryTest {
 

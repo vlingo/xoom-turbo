@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
 import static java.util.stream.Collectors.toList;
 
 public class StateDataObjectTemplateData extends TemplateData {

@@ -11,9 +11,9 @@ import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import io.vlingo.xoom.turbo.codegen.template.storage.StorageType;
 import org.junit.Assert;
@@ -22,11 +22,12 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 
-public class ProjectionGenerationStepTest {
+
+public class ProjectionDispatcherProviderGenerationStepTest {
 
     private static final String HOME_DIRECTORY = OperatingSystem.detect().isWindows() ? "D:\\projects" : "/home";
     private static final String PROJECT_PATH = Paths.get(HOME_DIRECTORY, "xoom-app").toString();

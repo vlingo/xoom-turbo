@@ -9,8 +9,8 @@ package io.vlingo.xoom.turbo.codegen.template.autodispatch;
 
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -19,10 +19,9 @@ import io.vlingo.xoom.turbo.codegen.template.resource.RouteDetail;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_SIGNATURE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.QUERIES;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class AutoDispatchMappingTemplateData extends TemplateData {
 
@@ -57,7 +56,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
     if (useCQRS) {
       aggregate.relate(RouteDetail.defaultQueryRoutes(aggregate));
     }
-    this.dependOn(AutoDispatchRouteTemplateData.from(aggregate.retrieveAllRelated(ROUTE_SIGNATURE)));
+    this.dependOn(AutoDispatchRouteTemplateData.from(aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)));
   }
 
   @Override

@@ -18,8 +18,8 @@ import org.junit.Test;
 
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.STORE_PROVIDER;
 
 public class AutoDispatchResourceHandlerGenerationStepTest {
 

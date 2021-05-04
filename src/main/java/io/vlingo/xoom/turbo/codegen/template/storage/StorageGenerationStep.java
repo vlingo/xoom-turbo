@@ -12,11 +12,14 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.ADAPTER;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.ADAPTER;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.template.storage.DatabaseType.IN_MEMORY;
 
 public class StorageGenerationStep extends TemplateProcessingStep {
 
@@ -30,8 +33,7 @@ public class StorageGenerationStep extends TemplateProcessingStep {
     final Boolean useCQRS = context.parameterOf(CQRS, Boolean::valueOf);
     final List<TemplateData> templatesData =
             StorageTemplateDataFactory.build(basePackage, appName, context.contents(), storageType,
-                    context.databases(), projectionType, context.isInternalGeneration(),
-                    useAnnotations, useCQRS);
+                    databases(context), projectionType, useAnnotations, useCQRS);
 
     return filterConditionally(useAnnotations, templatesData);
   }
@@ -46,5 +48,17 @@ public class StorageGenerationStep extends TemplateProcessingStep {
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
     return context.parameterOf(STORAGE_TYPE, StorageType::of).isEnabled();
+  }
+
+  private Map<Model, DatabaseType> databases(final CodeGenerationContext context) {
+    if (context.parameterOf(CQRS, Boolean::valueOf)) {
+      return new HashMap<Model, DatabaseType>() {{
+        put(Model.COMMAND, context.parameterOf(COMMAND_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
+        put(Model.QUERY, context.parameterOf(QUERY_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
+      }};
+    }
+    return new HashMap<Model, DatabaseType>() {{
+      put(Model.DOMAIN, context.parameterOf(DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
+    }};
   }
 }

@@ -6,7 +6,10 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
+import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.persistence.DataObjects;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -35,6 +38,6 @@ public class DataObjectContentLoader extends TypeBasedContentLoader {
 
   @Override
   protected TemplateStandard standard() {
-    return TemplateStandard.DATA_OBJECT;
+    return AnnotationBasedTemplateStandard.DATA_OBJECT;
   }
 }

@@ -9,8 +9,8 @@ package io.vlingo.xoom.turbo.codegen.template.resource;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_PATH;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.URI_ROOT;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.ROUTE_PATH;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.URI_ROOT;
 
 public class PathFormatter {
 

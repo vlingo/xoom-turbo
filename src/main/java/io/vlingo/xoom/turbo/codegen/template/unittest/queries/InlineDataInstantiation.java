@@ -6,9 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.unittest.queries;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.formatting.NumberFormat;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.TestDataValues;
@@ -16,8 +16,8 @@ import io.vlingo.xoom.turbo.codegen.template.unittest.TestDataValueGenerator.Tes
 import java.util.List;
 import java.util.function.Consumer;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FIELD_TYPE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.VALUE_OBJECT_FIELD;
 
 public class InlineDataInstantiation {
 

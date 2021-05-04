@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.EXCHANGE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.EXCHANGE;
 import static java.util.stream.Collectors.toList;
 
 public class ExchangeTemplateDataFactory {

@@ -11,7 +11,7 @@ import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.VALUE_OBJECT_FIELD;
 
 public class ValueObjectConstructorInvocation implements Formatters.Arguments {
 

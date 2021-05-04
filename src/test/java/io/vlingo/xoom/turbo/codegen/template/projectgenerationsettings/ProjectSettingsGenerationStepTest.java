@@ -10,9 +10,9 @@ package io.vlingo.xoom.turbo.codegen.template.projectgenerationsettings;
 import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -37,7 +37,7 @@ public class ProjectSettingsGenerationStepTest {
 
     new ProjectSettingsGenerationStep().process(context);
 
-    final Content projectSettings = context.findContent(TemplateStandard.PROJECT_SETTINGS, "xoom-app-generation-settings");
+    final Content projectSettings = context.findContent(DesignerTemplateStandard.PROJECT_SETTINGS, "xoom-app-generation-settings");
 
     Assert.assertTrue(projectSettings.contains(TextExpectation.onJava().read("project-settings").replace("\r", "")));
   }

@@ -15,9 +15,9 @@ import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
 
 import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_METHOD;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
 
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 

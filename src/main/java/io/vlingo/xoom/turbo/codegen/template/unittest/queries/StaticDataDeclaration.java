@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
 
 public class StaticDataDeclaration {
 

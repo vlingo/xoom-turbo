@@ -18,8 +18,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.VALUE_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.VALUE_OBJECT;
 import static io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail.eventWithName;
 
 public class ValueObjectDetail {

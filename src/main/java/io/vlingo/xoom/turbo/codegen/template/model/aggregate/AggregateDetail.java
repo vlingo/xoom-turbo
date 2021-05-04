@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.turbo.codegen.template.model.aggregate;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 
 public class AggregateDetail {
 

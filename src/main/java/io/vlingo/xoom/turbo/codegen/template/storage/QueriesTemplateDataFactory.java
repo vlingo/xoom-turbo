@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
 
 public class QueriesTemplateDataFactory {
 

@@ -9,14 +9,11 @@ package io.vlingo.xoom.turbo.codegen.template.resource;
 
 import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.OutputFile;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
+import io.vlingo.xoom.turbo.codegen.template.*;
 import io.vlingo.xoom.turbo.codegen.template.storage.Queries;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,11 +22,10 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACTOR;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.QUERIES_ACTOR;
 
 public class RestResourceTemplateDataFactoryTest {
 
@@ -192,7 +188,7 @@ public class RestResourceTemplateDataFactoryTest {
     private List<Content> contents() {
         return Arrays.asList(
                 Content.with(AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
-                Content.with(AGGREGATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_AGGREGATE_CONTENT_TEXT),
+                Content.with(DesignerTemplateStandard.AGGREGATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_AGGREGATE_CONTENT_TEXT),
                 Content.with(AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
                 Content.with(DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
                 Content.with(QUERIES, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),

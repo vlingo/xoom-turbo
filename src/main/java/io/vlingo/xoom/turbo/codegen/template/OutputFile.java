@@ -25,7 +25,7 @@ public class OutputFile {
   public OutputFile(final CodeGenerationContext context,
                     final TemplateData templateData,
                     final Language language) {
-    this(context.isInternalGeneration() ? "" : FileLocationResolver.from(context, templateData),
+    this(FileLocationResolver.from(context, templateData),
             language.formatFilename(templateData.filename()), templateData.parameters().find(OFFSET),
             templateData.isPlaceholder());
   }

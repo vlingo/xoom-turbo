@@ -13,7 +13,8 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.USE_AUTO_DISPATCH;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.USE_AUTO_DISPATCH;
+
 
 public class RestResourceGenerationStep extends TemplateProcessingStep {
 

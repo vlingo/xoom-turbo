@@ -10,6 +10,7 @@ package io.vlingo.xoom.turbo.codegen.template.model.aggregate;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -25,12 +26,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.ID_TYPE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
 public class AggregateTemplateData extends TemplateData {
 
@@ -81,7 +82,7 @@ public class AggregateTemplateData extends TemplateData {
   }
 
   private List<String> resolveEventNames(final CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(DOMAIN_EVENT).map(event -> TemplateStandard.DOMAIN_EVENT.resolveClassname(event.value))
+    return aggregate.retrieveAllRelated(DOMAIN_EVENT).map(event -> DesignerTemplateStandard.DOMAIN_EVENT.resolveClassname(event.value))
             .collect(Collectors.toList());
   }
 

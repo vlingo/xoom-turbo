@@ -9,10 +9,7 @@ package io.vlingo.xoom.turbo.codegen.template.projectgenerationsettings;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.*;
 
 public class ProjectSettingsTemplateData extends TemplateData {
 
@@ -38,6 +35,6 @@ public class ProjectSettingsTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.PROJECT_SETTINGS;
+    return DesignerTemplateStandard.PROJECT_SETTINGS;
   }
 }

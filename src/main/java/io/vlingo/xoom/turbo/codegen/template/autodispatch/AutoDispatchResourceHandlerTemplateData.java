@@ -10,10 +10,11 @@ package io.vlingo.xoom.turbo.codegen.template.autodispatch;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.resource.RouteDeclaration;
 import io.vlingo.xoom.turbo.codegen.template.resource.RouteMethodTemplateData;
@@ -27,7 +28,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.HANDLERS_CONFIG_NAME;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.MODEL_ACTOR;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.MODEL_PROTOCOL;
@@ -36,7 +38,6 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TY
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.URI_ROOT;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_AUTO_DISPATCH;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 

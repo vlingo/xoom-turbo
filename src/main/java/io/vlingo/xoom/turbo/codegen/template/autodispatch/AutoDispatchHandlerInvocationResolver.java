@@ -8,11 +8,13 @@ package io.vlingo.xoom.turbo.codegen.template.autodispatch;
 
 import io.vlingo.xoom.http.Method;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
+import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
 import io.vlingo.xoom.turbo.codegen.template.resource.HandlerInvocationResolver;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel.*;
 
 public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationResolver {
 
@@ -36,8 +38,8 @@ public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationR
     return resolve(ADAPTER_HANDLER_INVOCATION, USE_CUSTOM_ADAPTER_HANDLER_PARAM, DEFAULT_ADAPTER_PARAMETER, parentParameter, routeSignatureParameter);
   }
 
-  private String resolve(final Label invocationLabel,
-                         final Label customParamsLabel,
+  private String resolve(final ParameterLabel invocationLabel,
+                         final ParameterLabel customParamsLabel,
                          final String defaultParameter,
                          final CodeGenerationParameter parentParameter,
                          final CodeGenerationParameter routeSignatureParameter) {

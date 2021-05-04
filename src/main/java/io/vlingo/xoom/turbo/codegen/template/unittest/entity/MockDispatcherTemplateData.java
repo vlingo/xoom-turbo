@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.unittest.entity;
 
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -22,7 +23,7 @@ public class MockDispatcherTemplateData extends TemplateData {
     this.parameters =
             TemplateParameters.with(PROJECTION_TYPE, projectionType)
                     .and(PACKAGE_NAME, MockDispatcherDetail.resolvePackage(basePackage))
-                    .and(DISPATCHER_NAME, TemplateStandard.MOCK_DISPATCHER.resolveClassname())
+                    .and(DISPATCHER_NAME, DesignerTemplateStandard.MOCK_DISPATCHER.resolveClassname())
                     .and(PRODUCTION_CODE, false).and(UNIT_TEST, true);
   }
 
@@ -33,6 +34,6 @@ public class MockDispatcherTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.MOCK_DISPATCHER;
+    return DesignerTemplateStandard.MOCK_DISPATCHER;
   }
 }

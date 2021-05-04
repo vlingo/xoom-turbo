@@ -22,14 +22,14 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STATE_DATA
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_ANNOTATIONS;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_CQRS;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_PROJECTIONS;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PERSISTENCE_SETUP;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACTOR;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.PERSISTENCE_SETUP;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.QUERIES;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.QUERIES_ACTOR;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.STORE_PROVIDER;
 import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.turbo.codegen.template.storage.Model.COMMAND;
 import static io.vlingo.xoom.turbo.codegen.template.storage.Model.QUERY;
@@ -57,7 +57,7 @@ public class PersistenceSetupTemplateDataTest {
     public void testWithAdaptersAndProjections() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", "xoomapp", contents(),
-                        StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, true, true);
+                        StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, true, true);
 
         //General Assert
         Assert.assertEquals(9, allTemplatesData.size());

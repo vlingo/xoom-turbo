@@ -8,8 +8,8 @@
 package io.vlingo.xoom.turbo.codegen.template.resource;
 
 import io.vlingo.xoom.http.resource.ResourceBuilder;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROUTE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.ROUTE_METHOD;
 import static java.util.stream.Collectors.toList;
 
 public class RouteDeclaration {

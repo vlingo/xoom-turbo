@@ -21,7 +21,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.QUERIES_ACTOR;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.QUERIES_ACTOR;
 
 public class QueriesContentLoader extends ContentLoader<Map<TypeElement, TypeElement>> {
 

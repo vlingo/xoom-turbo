@@ -8,12 +8,11 @@ package io.vlingo.xoom.turbo.codegen.template.autodispatch;
 
 import io.vlingo.xoom.http.Method;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.*;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.FieldDetail;
 import io.vlingo.xoom.turbo.codegen.template.resource.PathFormatter;
 
@@ -21,9 +20,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
 
 public class AutoDispatchRouteTemplateData extends TemplateData {
 
@@ -55,7 +54,7 @@ public class AutoDispatchRouteTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.AUTO_DISPATCH_ROUTE;
+    return DesignerTemplateStandard.AUTO_DISPATCH_ROUTE;
   }
 
   @Override

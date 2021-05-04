@@ -8,7 +8,7 @@ package io.vlingo.xoom.turbo.codegen.template.dataobject;
 
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.domainevent.DomainEventDetail;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 
@@ -18,7 +18,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 
 public class EventBasedDataObjectInitializer extends Formatters.Variables<List<String>> {
 
@@ -54,7 +54,7 @@ public class EventBasedDataObjectInitializer extends Formatters.Variables<List<S
             ValueObjectDetail.valueObjectOf(field.retrieveRelatedValue(FIELD_TYPE), valueObjects.stream());
 
     final String dataObjectName =
-            TemplateStandard.DATA_OBJECT.resolveClassname(valueObject.value);
+            DesignerTemplateStandard.DATA_OBJECT.resolveClassname(valueObject.value);
 
     final String fieldReferencePath =
             String.format("%s.%s", carrierReferencePath, field.value);

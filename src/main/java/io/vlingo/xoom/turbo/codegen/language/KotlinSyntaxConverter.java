@@ -12,9 +12,9 @@ import io.vlingo.xoom.turbo.codegen.CodeGenerationSetup;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FIELD_TYPE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.STATE_FIELD;
 import static io.vlingo.xoom.turbo.codegen.language.Language.KOTLIN;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.STATE_FIELD;
 
 public class KotlinSyntaxConverter {
 

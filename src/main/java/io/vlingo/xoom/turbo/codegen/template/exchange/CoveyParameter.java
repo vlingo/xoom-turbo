@@ -18,10 +18,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.EXCHANGE_ROLE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 
 public class CoveyParameter {
 

@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.ADAPTER_NAME;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.SOURCE_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.ADAPTER;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.ADAPTER;
 
 public class Adapter {
 

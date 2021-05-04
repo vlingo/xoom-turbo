@@ -14,7 +14,7 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateProcessingStep;
 
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.AGGREGATE;
 
 public class ModelGenerationStep extends TemplateProcessingStep {
 

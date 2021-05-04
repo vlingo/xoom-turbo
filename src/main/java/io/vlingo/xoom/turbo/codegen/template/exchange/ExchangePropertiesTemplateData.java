@@ -8,6 +8,7 @@
 package io.vlingo.xoom.turbo.codegen.template.exchange;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -17,7 +18,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.EXCHANGE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.EXCHANGE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 
 public class ExchangePropertiesTemplateData extends TemplateData {
@@ -49,7 +50,7 @@ public class ExchangePropertiesTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.EXCHANGE_PROPERTIES;
+    return DesignerTemplateStandard.EXCHANGE_PROPERTIES;
   }
 
 }

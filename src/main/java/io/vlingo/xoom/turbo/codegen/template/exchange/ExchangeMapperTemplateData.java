@@ -20,11 +20,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.EXCHANGE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROLE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.EXCHANGE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.ROLE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.EXCHANGE_MAPPER;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.EXCHANGE_MAPPER;
 import static io.vlingo.xoom.turbo.codegen.template.exchange.ExchangeRole.CONSUMER;
 import static io.vlingo.xoom.turbo.codegen.template.exchange.ExchangeRole.PRODUCER;
 

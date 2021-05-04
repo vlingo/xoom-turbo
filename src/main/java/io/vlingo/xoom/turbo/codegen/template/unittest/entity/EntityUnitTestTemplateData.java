@@ -11,11 +11,10 @@ import io.vlingo.xoom.symbio.BaseEntry;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.*;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.turbo.codegen.template.storage.PersistenceDetail;
@@ -32,10 +31,10 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.qualifiedNameOf;
 import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.AGGREGATE_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.*;
 import static java.util.stream.Collectors.toSet;
 
 public class EntityUnitTestTemplateData extends TemplateData {
@@ -151,7 +150,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.ENTITY_UNIT_TEST;
+    return DesignerTemplateStandard.ENTITY_UNIT_TEST;
   }
 
   @Override

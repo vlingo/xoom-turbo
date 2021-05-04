@@ -6,15 +6,15 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.formatting;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 
 public class DataObjectConstructor implements Formatters.Arguments {
 
@@ -38,7 +38,7 @@ public class DataObjectConstructor implements Formatters.Arguments {
   private String resolveFieldType(final CodeGenerationParameter field) {
     final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
     if (ValueObjectDetail.isValueObject(field)) {
-      return TemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
+      return DesignerTemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
     }
     return fieldType;
   }

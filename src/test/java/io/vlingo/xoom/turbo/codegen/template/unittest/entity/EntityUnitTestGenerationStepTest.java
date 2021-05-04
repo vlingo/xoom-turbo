@@ -7,31 +7,27 @@
 
 package io.vlingo.xoom.turbo.codegen.template.unittest.entity;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.ENTITY_UNIT_TEST;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.MOCK_DISPATCHER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.VALUE_OBJECT;
-
-import java.io.IOException;
-import java.nio.file.Paths;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.turbo.codegen.template.storage.StorageType;
 import io.vlingo.xoom.turbo.codegen.template.unittest.queries.QueriesUnitTestGenerationStep;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 
 public class EntityUnitTestGenerationStepTest {
 

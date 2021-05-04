@@ -8,15 +8,15 @@
 package io.vlingo.xoom.turbo.codegen.formatting;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.MethodScope;
 import io.vlingo.xoom.turbo.codegen.template.model.valueobject.ValueObjectDetail;
 
 import java.beans.Introspector;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 
 public class DataObjectConstructorInvocation implements Formatters.Arguments {
 
@@ -28,7 +28,7 @@ public class DataObjectConstructorInvocation implements Formatters.Arguments {
             .collect(Collectors.joining(", "));
   }
 
-  private Label resolveFieldLabel(final CodeGenerationParameter parent) {
+  private ParameterLabel resolveFieldLabel(final CodeGenerationParameter parent) {
     if (parent.isLabeled(AGGREGATE)) {
       return STATE_FIELD;
     }
@@ -48,10 +48,10 @@ public class DataObjectConstructorInvocation implements Formatters.Arguments {
   }
 
   private String resolveCarrierName(final CodeGenerationParameter carrier) {
-    if (carrier.isLabeled(Label.AGGREGATE)) {
-      return Introspector.decapitalize(TemplateStandard.AGGREGATE_STATE.resolveClassname(carrier.value));
+    if (carrier.isLabeled(AGGREGATE)) {
+      return Introspector.decapitalize(DesignerTemplateStandard.AGGREGATE_STATE.resolveClassname(carrier.value));
     }
-    if (carrier.isLabeled(Label.VALUE_OBJECT)) {
+    if (carrier.isLabeled(VALUE_OBJECT)) {
       return Introspector.decapitalize(carrier.value);
     }
     throw new IllegalArgumentException("Unable to resolve carrier name from " + carrier.label);

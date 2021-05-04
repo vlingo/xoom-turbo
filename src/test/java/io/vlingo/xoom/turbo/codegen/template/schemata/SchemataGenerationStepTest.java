@@ -11,6 +11,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.IOException;
 
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.exchange.CodeGenerationParametersBuilder;
 
 public class SchemataGenerationStepTest {
@@ -34,32 +35,32 @@ public class SchemataGenerationStepTest {
         new SchemataGenerationStep().process(context);
 
         final Content authorRatedSpecification =
-                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "AuthorRated");
+                context.findContent(DesignerTemplateStandard.SCHEMATA_SPECIFICATION, "AuthorRated");
 
         final Content authorBlockedSpecification =
-                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "AuthorBlocked");
+                context.findContent(DesignerTemplateStandard.SCHEMATA_SPECIFICATION, "AuthorBlocked");
 
         final Content bookSoldOutSpecification =
-                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "BookSoldOut");
+                context.findContent(DesignerTemplateStandard.SCHEMATA_SPECIFICATION, "BookSoldOut");
 
         final Content bookPurchasedSpecification =
-                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "BookPurchased");
+                context.findContent(DesignerTemplateStandard.SCHEMATA_SPECIFICATION, "BookPurchased");
 
         final Content nameSpecification =
-                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "Name");
+                context.findContent(DesignerTemplateStandard.SCHEMATA_SPECIFICATION, "Name");
 
         final Content rankSpecification =
-                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "Rank");
+                context.findContent(DesignerTemplateStandard.SCHEMATA_SPECIFICATION, "Rank");
 
         final Content classificationSpecification =
-                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "Classification");
+                context.findContent(DesignerTemplateStandard.SCHEMATA_SPECIFICATION, "Classification");
 
         final Content classifierSpecification =
-                context.findContent(TemplateStandard.SCHEMATA_SPECIFICATION, "Classifier");
+                context.findContent(DesignerTemplateStandard.SCHEMATA_SPECIFICATION, "Classifier");
 
         @SuppressWarnings("unused")
         final Content plugin =
-                context.findContent(TemplateStandard.SCHEMATA_PLUGIN, "pom");
+                context.findContent(DesignerTemplateStandard.SCHEMATA_PLUGIN, "pom");
 
         Assert.assertEquals(9, context.contents().size());
         Assert.assertTrue(authorRatedSpecification.contains(TextExpectation.onJava().read("author-rated-specification")));

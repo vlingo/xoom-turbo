@@ -11,13 +11,13 @@ import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.PACKAGE;
 import static java.util.stream.Collectors.toList;
 
 public class ExchangeGenerationStepTest {
@@ -38,28 +38,28 @@ public class ExchangeGenerationStepTest {
         Assert.assertEquals(19, context.contents().size());
 
         final Content exchangeBootstrap =
-                context.findContent(TemplateStandard.EXCHANGE_BOOTSTRAP, "ExchangeBootstrap");
+                context.findContent(DesignerTemplateStandard.EXCHANGE_BOOTSTRAP, "ExchangeBootstrap");
 
         final Content authorExchangeReceivers =
-                context.findContent(TemplateStandard.EXCHANGE_RECEIVER_HOLDER, "AuthorExchangeReceivers");
+                context.findContent(DesignerTemplateStandard.EXCHANGE_RECEIVER_HOLDER, "AuthorExchangeReceivers");
 
         final Content authorConsumerAdapter =
-                context.findContent(TemplateStandard.EXCHANGE_ADAPTER, "AuthorConsumerAdapter");
+                context.findContent(DesignerTemplateStandard.EXCHANGE_ADAPTER, "AuthorConsumerAdapter");
 
         final Content authorProducerAdapter =
-                context.findContent(TemplateStandard.EXCHANGE_ADAPTER, "AuthorProducerAdapter");
+                context.findContent(DesignerTemplateStandard.EXCHANGE_ADAPTER, "AuthorProducerAdapter");
 
         final Content authorDataMapper =
-                context.findContent(TemplateStandard.EXCHANGE_MAPPER, "AuthorDataMapper");
+                context.findContent(DesignerTemplateStandard.EXCHANGE_MAPPER, "AuthorDataMapper");
 
         final Content bookProducerAdapter =
-                context.findContent(TemplateStandard.EXCHANGE_ADAPTER, "BookProducerAdapter");
+                context.findContent(DesignerTemplateStandard.EXCHANGE_ADAPTER, "BookProducerAdapter");
 
         final Content domainEventMapper =
-                context.findContent(TemplateStandard.EXCHANGE_MAPPER, "DomainEventMapper");
+                context.findContent(DesignerTemplateStandard.EXCHANGE_MAPPER, "DomainEventMapper");
 
         final Content exchangeDispatcher =
-                context.findContent(TemplateStandard.EXCHANGE_DISPATCHER, "ExchangeDispatcher");
+                context.findContent(DesignerTemplateStandard.EXCHANGE_DISPATCHER, "ExchangeDispatcher");
 
         exchangeBootstrap.contains(TextExpectation.onJava().read("exchange-bootstrap"));
         authorExchangeReceivers.contains(TextExpectation.onJava().read("author-exchange-receivers"));

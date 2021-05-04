@@ -8,6 +8,7 @@
 package io.vlingo.xoom.turbo.codegen.content;
 
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import org.apache.commons.io.FilenameUtils;
 

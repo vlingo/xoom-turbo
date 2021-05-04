@@ -9,13 +9,12 @@ package io.vlingo.xoom.turbo.codegen.template.resource;
 
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.*;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
 
 import java.util.Collections;
@@ -26,9 +25,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.turbo.codegen.designer.Label.INTERNAL_ROUTE_HANDLER;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.INTERNAL_ROUTE_HANDLER;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.MODEL_PROTOCOL;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 
 public class RouteMethodTemplateData extends TemplateData {
@@ -76,7 +74,7 @@ public class RouteMethodTemplateData extends TemplateData {
 
     this.parameters =
             TemplateParameters.with(ROUTE_SIGNATURE, RouteDetail.resolveMethodSignature(routeSignatureParameter))
-                    .and(MODEL_ATTRIBUTE, resolveModelAttributeName(mainParameter, MODEL_PROTOCOL))
+                    .and(MODEL_ATTRIBUTE, resolveModelAttributeName(mainParameter, Label.MODEL_PROTOCOL))
                     .and(ROUTE_METHOD, routeSignatureParameter.retrieveRelatedValue(Label.ROUTE_METHOD))
                     .and(REQUIRE_ENTITY_LOADING, resolveEntityLoading(routeSignatureParameter))
                     .and(ADAPTER_HANDLER_INVOCATION, adapterHandlerInvocation)
@@ -92,7 +90,7 @@ public class RouteMethodTemplateData extends TemplateData {
     return Stream.of(retrieveIdTypeQualifiedName(routeSignatureParameter),
             routeSignatureParameter.retrieveRelatedValue(Label.BODY_TYPE),
             mainParameter.retrieveRelatedValue(Label.HANDLERS_CONFIG_NAME),
-            mainParameter.retrieveRelatedValue(MODEL_PROTOCOL),
+            mainParameter.retrieveRelatedValue(Label.MODEL_PROTOCOL),
             mainParameter.retrieveRelatedValue(Label.MODEL_ACTOR),
             mainParameter.retrieveRelatedValue(Label.MODEL_DATA))
             .filter(qualifiedName -> !qualifiedName.isEmpty())
@@ -147,7 +145,7 @@ public class RouteMethodTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.ROUTE_METHOD;
+    return DesignerTemplateStandard.ROUTE_METHOD;
   }
 
 }

@@ -10,7 +10,7 @@ import io.vlingo.xoom.turbo.codegen.template.storage.QueriesDetail;
 
 import java.util.function.BiFunction;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
 
 class TestResultAssignment {
 

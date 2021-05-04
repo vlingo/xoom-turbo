@@ -8,18 +8,18 @@
 package io.vlingo.xoom.turbo.codegen.template.autodispatch;
 
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.VALUE_OBJECT;
 import static java.util.stream.Collectors.toList;
 
 public class AutoDispatchMappingTemplateDataFactory {

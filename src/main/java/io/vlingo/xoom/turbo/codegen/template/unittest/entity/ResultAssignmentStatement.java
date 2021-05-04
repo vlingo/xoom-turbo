@@ -8,9 +8,9 @@
 package io.vlingo.xoom.turbo.codegen.template.unittest.entity;
 
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 
 import java.util.stream.Collectors;
 
@@ -19,7 +19,7 @@ public class ResultAssignmentStatement {
   public static String resolve(final CodeGenerationParameter aggregate,
                                final CodeGenerationParameter method) {
     final String aggregateState =
-            TemplateStandard.AGGREGATE_STATE.resolveClassname(aggregate.value);
+            DesignerTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregate.value);
 
     final String entityMethodInvocation =
             resolveEntityMethodInvocation(aggregate, method);

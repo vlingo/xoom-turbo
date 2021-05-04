@@ -15,14 +15,14 @@ import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NA
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.SOURCE_NAME;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORE_PROVIDER_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.ADAPTER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.ADAPTER;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.STORE_PROVIDER;
 import static io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.turbo.codegen.template.storage.Model.COMMAND;
 import static io.vlingo.xoom.turbo.codegen.template.storage.Model.DOMAIN;
@@ -55,7 +55,7 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnSourcedSingleModel() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", "xoomapp", contents(),
-                        JOURNAL, databaseTypes(), EVENT_BASED, false, false, false);
+                        JOURNAL, databaseTypes(), EVENT_BASED, false, false);
 
         //General Assert
 
@@ -107,7 +107,7 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnStatefulSingleModel() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", "xoomapp", contents(),
-                        StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, false, false);
+                        StorageType.STATE_STORE, databaseTypes(), EVENT_BASED, false, false);
 
         //General Assert
 
@@ -154,7 +154,7 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnStatefulCQRSModel() {
         final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", "xoomapp", contents(),
-                        StorageType.STATE_STORE, databaseTypesForCQRS(), ProjectionType.NONE, false, false, true);
+                        StorageType.STATE_STORE, databaseTypesForCQRS(), ProjectionType.NONE, false, true);
 
         //General Assert
 

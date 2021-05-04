@@ -11,7 +11,7 @@ import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationLocation;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.GENERATION_LOCATION;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.GENERATION_LOCATION;
 
 public interface FileLocationResolver {
 
@@ -23,7 +23,7 @@ public interface FileLocationResolver {
                     value -> CodeGenerationLocation.valueOf(value));
 
     if (location.isInternal()) {
-      throw new UnsupportedOperationException("Unable to resolve internal file location");
+      return "";
     }
 
     return new ExternalFileLocationResolver().resolve(context, templateData);

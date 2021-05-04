@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FIELD_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.VALUE_OBJECT_FIELD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FIELD_TYPE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.VALUE_OBJECT_FIELD;
 
 public class ValueObjectDependencyOrder {
 

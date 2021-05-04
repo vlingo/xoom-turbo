@@ -13,34 +13,15 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 
 public class ProjectionTemplateDataFactory {
 
-  private static ProjectionTemplateDataFactory instance;
-
   public static List<TemplateData> build(final CodeGenerationContext context) {
-    if (instance == null) {
-      instance = new ProjectionTemplateDataFactory();
-    }
-    return context.isInternalGeneration() ?
-            Arrays.asList(instance.handleInternalGeneration(context)) :
-            instance.handleExternalGeneration(context);
-  }
-
-  private TemplateData handleInternalGeneration(final CodeGenerationContext context) {
-    final List<Content> contents = context.contents();
-    final Stream<CodeGenerationParameter> projectionActors = context.parametersOf(PROJECTION_ACTOR);
-    final ProjectionType projectionType = context.parameterOf(PROJECTION_TYPE, ProjectionType::valueOf);
-    return ProjectionDispatcherProviderTemplateData.fromProjectionAnnotation(projectionType, projectionActors, contents);
-  }
-
-  private List<TemplateData> handleExternalGeneration(final CodeGenerationContext context) {
     final List<Content> contents = context.contents();
 
     final String basePackage = context.parameterOf(PACKAGE);

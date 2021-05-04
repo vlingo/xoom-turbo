@@ -8,6 +8,7 @@
 package io.vlingo.xoom.turbo.codegen.template.model.aggregate;
 
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
@@ -17,9 +18,9 @@ import io.vlingo.xoom.turbo.codegen.template.storage.StorageType;
 
 import java.util.List;
 
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Arguments.AGGREGATE_METHOD_INVOCATION;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
@@ -47,7 +48,7 @@ public class AggregateMethodTemplateData extends TemplateData {
                     .and(SOURCED_EVENTS, SourcedEvent.from(method.parent()))
                     .and(OPERATION_BASED, projectionType.isOperationBased())
                     .and(PROJECTION_SOURCE_TYPES_NAME, resolveProjectionSourceTypesName(projectionType))
-                    .and(STATE_NAME, TemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(AGGREGATE).value));
+                    .and(STATE_NAME, DesignerTemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(AGGREGATE).value));
   }
 
   private String resolveProjectionSourceTypesName(final ProjectionType projectionType) {
@@ -61,7 +62,7 @@ public class AggregateMethodTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.AGGREGATE_METHOD;
+    return DesignerTemplateStandard.AGGREGATE_METHOD;
   }
 
 }

@@ -6,14 +6,14 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.exchange;
 
+import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.FACTORY_METHOD;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.LANGUAGE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.FACTORY_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.LANGUAGE;
 
 public class CodeGenerationParametersBuilder {
 

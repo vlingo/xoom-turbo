@@ -12,12 +12,10 @@ import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
+import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
-import io.vlingo.xoom.turbo.codegen.template.storage.DatabaseType;
-import io.vlingo.xoom.turbo.codegen.template.storage.Model;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
@@ -26,11 +24,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static io.vlingo.xoom.turbo.codegen.CodeGenerationLocation.EXTERNAL;
-import static io.vlingo.xoom.turbo.codegen.CodeGenerationLocation.INTERNAL;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.storage.DatabaseType.IN_MEMORY;
 
 public class CodeGenerationContext {
 
@@ -48,7 +41,7 @@ public class CodeGenerationContext {
     return new CodeGenerationContext(filer, source);
   }
 
-  public static CodeGenerationContext with(final Map<Label, String> parameters) {
+  public static CodeGenerationContext with(final Map<ParameterLabel, String> parameters) {
     return new CodeGenerationContext().on(parameters);
   }
 
@@ -63,9 +56,7 @@ public class CodeGenerationContext {
   private CodeGenerationContext(final Filer filer, final Element source) {
     this.filer = filer;
     this.source = source;
-    this.parameters =
-            CodeGenerationParameters.from(GENERATION_LOCATION, filer == null ?
-                    EXTERNAL.name() : INTERNAL.name());
+    this.parameters = CodeGenerationParameters.empty();
   }
 
   @SuppressWarnings("rawtypes")
@@ -79,12 +70,12 @@ public class CodeGenerationContext {
     return this;
   }
 
-  public CodeGenerationContext with(final Label label, final String value) {
+  public CodeGenerationContext with(final ParameterLabel label, final String value) {
     on(CodeGenerationParameters.from(label, value));
     return this;
   }
 
-  public CodeGenerationContext on(final Map<Label, String> parameters) {
+  public CodeGenerationContext on(final Map<ParameterLabel, String> parameters) {
     this.parameters.addAll(parameters);
     return this;
   }
@@ -95,11 +86,11 @@ public class CodeGenerationContext {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T parameterOf(final Label label) {
+  public <T> T parameterOf(final ParameterLabel label) {
     return (T) parameterOf(label, value -> value);
   }
 
-  public <T> T parameterOf(final Label label, final Function<String, T> mapper) {
+  public <T> T parameterOf(final ParameterLabel label, final Function<String, T> mapper) {
     final String value = parameters.retrieveValue(label);
     return mapper.apply(value);
   }
@@ -135,15 +126,11 @@ public class CodeGenerationContext {
     return this;
   }
 
-  public boolean isInternalGeneration() {
-    return parameterOf(GENERATION_LOCATION, CodeGenerationLocation::valueOf).isInternal();
-  }
-
-  public Stream<CodeGenerationParameter> parametersOf(final Label label) {
+  public Stream<CodeGenerationParameter> parametersOf(final ParameterLabel label) {
     return parameters.retrieveAll(label);
   }
 
-  public boolean hasParameter(final Label label) {
+  public boolean hasParameter(final ParameterLabel label) {
     return this.parameterOf(label) != null &&
             !this.<String>parameterOf(label).trim().isEmpty();
   }
@@ -162,22 +149,7 @@ public class CodeGenerationContext {
   }
 
   public Language language() {
-    if (hasParameter(LANGUAGE)) {
-      return parameterOf(Label.LANGUAGE, Language::valueOf);
-    }
     return Language.findDefault();
   }
 
-  @SuppressWarnings("serial")
-  public Map<Model, DatabaseType> databases() {
-    if (parameterOf(CQRS, Boolean::valueOf)) {
-      return new HashMap<Model, DatabaseType>() {{
-        put(Model.COMMAND, parameterOf(COMMAND_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
-        put(Model.QUERY, parameterOf(QUERY_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
-      }};
-    }
-    return new HashMap<Model, DatabaseType>() {{
-      put(Model.DOMAIN, parameterOf(DATABASE, name -> DatabaseType.getOrDefault(name, IN_MEMORY)));
-    }};
-  }
 }

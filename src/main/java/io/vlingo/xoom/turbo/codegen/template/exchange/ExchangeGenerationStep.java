@@ -16,7 +16,7 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateProcessingStep;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 
 public class ExchangeGenerationStep extends TemplateProcessingStep {
 

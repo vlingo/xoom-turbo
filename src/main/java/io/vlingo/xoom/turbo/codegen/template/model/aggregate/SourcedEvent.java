@@ -11,8 +11,8 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.DOMAIN_EVENT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE;
 import static java.util.stream.Collectors.toList;
 
 public class SourcedEvent {

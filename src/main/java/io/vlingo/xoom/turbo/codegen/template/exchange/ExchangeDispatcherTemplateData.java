@@ -8,22 +8,21 @@ package io.vlingo.xoom.turbo.codegen.template.exchange;
 
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.codegen.template.*;
+import io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.EXCHANGE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ROLE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.EXCHANGE;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.ROLE;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PRODUCER_EXCHANGES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.DOMAIN_EVENT;
 import static java.util.stream.Collectors.toList;
 
 public class ExchangeDispatcherTemplateData extends TemplateData {
@@ -64,7 +63,7 @@ public class ExchangeDispatcherTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return TemplateStandard.EXCHANGE_DISPATCHER;
+    return DesignerTemplateStandard.EXCHANGE_DISPATCHER;
   }
 
   @Override

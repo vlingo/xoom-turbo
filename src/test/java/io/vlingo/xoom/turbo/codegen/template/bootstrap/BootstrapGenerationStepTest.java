@@ -7,38 +7,20 @@
 
 package io.vlingo.xoom.turbo.codegen.template.bootstrap;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.APPLICATION_NAME;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.BLOCKING_MESSAGING;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.CQRS;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.PACKAGE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.PROJECTION_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.STORAGE_TYPE;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.TARGET_FOLDER;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.USE_ANNOTATIONS;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.XOOM_INITIALIZER_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.BOOTSTRAP;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.EXCHANGE_BOOTSTRAP;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.REST_RESOURCE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.STORE_PROVIDER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.XOOM_INITIALIZER;
-
-import java.io.IOException;
-import java.nio.file.Paths;
-
-import javax.annotation.processing.Filer;
-import javax.lang.model.element.Element;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Mockito;
-
 import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 
 public class BootstrapGenerationStepTest {
 
@@ -72,25 +54,6 @@ public class BootstrapGenerationStepTest {
 
         Assert.assertEquals(7, context.contents().size());
         Assert.assertTrue(bootstrap.contains(TextExpectation.onJava().read("annotated-bootstrap")));
-    }
-
-
-    @Test
-    public void testThatXoomInitializerIsGenerated() throws IOException {
-        final CodeGenerationContext context =
-                CodeGenerationContext.using(Mockito.mock(Filer.class), Mockito.mock(Element.class))
-                        .with(PROJECTION_TYPE, ProjectionType.NONE.name())
-                        .with(XOOM_INITIALIZER_NAME, "AnnotatedBootstrap");
-
-        loadParameters(context, false);
-        loadContents(context);
-
-        new BootstrapGenerationStep().process(context);
-
-        final Content xoomInitializer = context.findContent(XOOM_INITIALIZER, "XoomInitializer");
-
-        Assert.assertEquals(7, context.contents().size());
-        Assert.assertTrue(xoomInitializer.contains(TextExpectation.onJava().read("xoom-initializer")));
     }
 
     private void loadParameters(final CodeGenerationContext context, final Boolean useAnnotation) {

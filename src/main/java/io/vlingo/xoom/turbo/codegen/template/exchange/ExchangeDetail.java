@@ -6,13 +6,13 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template.exchange;
 
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.model.aggregate.AggregateDetail;
 
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.MODEL_METHOD;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.MODEL_METHOD;
 
 public class ExchangeDetail {
 

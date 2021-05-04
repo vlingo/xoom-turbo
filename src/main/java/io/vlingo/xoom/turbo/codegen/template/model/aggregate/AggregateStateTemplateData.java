@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.turbo.codegen.designer.Label.STATE_FIELD;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 import static io.vlingo.xoom.turbo.codegen.formatting.Formatters.Fields.Style.*;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.STATE_FIELD;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.AGGREGATE_STATE;
 
 public class AggregateStateTemplateData extends TemplateData {
 

@@ -9,9 +9,9 @@ package io.vlingo.xoom.turbo.codegen.template.bootstrap;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.USE_ANNOTATIONS;
+import static io.vlingo.xoom.turbo.codegen.designer.Label.USE_ANNOTATIONS;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.REST_RESOURCE;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.REST_RESOURCE_PACKAGE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.REST_RESOURCE;
 
 public class AnnotatedBootstrapTemplateData extends BootstrapTemplateData {
 

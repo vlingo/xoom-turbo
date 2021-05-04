@@ -15,11 +15,14 @@ import io.vlingo.xoom.turbo.annotation.initializer.XoomInitializerParameterResol
 import io.vlingo.xoom.turbo.annotation.persistence.Persistence;
 import io.vlingo.xoom.turbo.annotation.persistence.PersistenceParameterResolver;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
+import io.vlingo.xoom.turbo.codegen.CodeGenerationLocation;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import java.util.*;
+
+import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.GENERATION_LOCATION;
 
 public class CodeGenerationContextLoader {
 
@@ -55,6 +58,7 @@ public class CodeGenerationContextLoader {
             .on(XoomInitializerParameterResolver.from(basePackage, bootstrapClass, environment).resolve())
             .on(AutoDispatchParameterResolver.from(autoDispatchResourceClasses, environment).resolve())
             .on(PersistenceParameterResolver.from(persistenceSetupClass, environment).resolve())
+            .with(GENERATION_LOCATION, CodeGenerationLocation.INTERNAL.name())
             .contents(resolveContentLoaders());
   }
 
