@@ -14,8 +14,8 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 
+import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.XOOM_INITIALIZER;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.XOOM_INITIALIZER;
 
 public class XoomInitializerParameterResolver {
 

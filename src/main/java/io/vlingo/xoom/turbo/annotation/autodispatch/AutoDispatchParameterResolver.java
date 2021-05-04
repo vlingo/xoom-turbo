@@ -24,7 +24,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
 import static javax.lang.model.element.Modifier.DEFAULT;
 
 public class AutoDispatchParameterResolver {
