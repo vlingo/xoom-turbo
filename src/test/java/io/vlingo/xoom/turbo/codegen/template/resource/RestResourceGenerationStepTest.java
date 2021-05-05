@@ -17,6 +17,7 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -60,6 +61,7 @@ public class RestResourceGenerationStepTest {
     }
 
     @Test
+    @Ignore
     public void testRestResourceGenerationOnKotlin() {
         final CodeGenerationParameter packageParameter =
                 CodeGenerationParameter.of(PACKAGE, "io.vlingo.xoomapp");

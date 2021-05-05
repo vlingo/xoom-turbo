@@ -8,9 +8,9 @@
 package io.vlingo.xoom.turbo.codegen.template.dataobject;
 
 import io.vlingo.xoom.turbo.TextExpectation;
-import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.designer.Label;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;

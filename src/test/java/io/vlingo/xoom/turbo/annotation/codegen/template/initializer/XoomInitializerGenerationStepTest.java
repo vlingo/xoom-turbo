@@ -11,7 +11,6 @@ import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
-import io.vlingo.xoom.turbo.codegen.template.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,8 +21,8 @@ import javax.lang.model.element.Element;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.*;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 
 public class XoomInitializerGenerationStepTest {
 
@@ -37,7 +36,7 @@ public class XoomInitializerGenerationStepTest {
     loadParameters(context, false);
     loadContents(context);
 
-    new BootstrapGenerationStep().process(context);
+    new XoomInitializerGenerationStep().process(context);
 
     final Content xoomInitializer = context.findContent(XOOM_INITIALIZER, "XoomInitializer");
 

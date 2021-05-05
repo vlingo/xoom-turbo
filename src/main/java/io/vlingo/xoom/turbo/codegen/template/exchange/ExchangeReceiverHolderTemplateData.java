@@ -22,11 +22,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.turbo.codegen.designer.Label.EXCHANGE;
 import static io.vlingo.xoom.turbo.codegen.designer.Label.ROLE;
-import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.AGGREGATE_PROTOCOL;
-import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.EXCHANGE_RECEIVER_HOLDER;
+import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 
 public class ExchangeReceiverHolderTemplateData extends TemplateData {

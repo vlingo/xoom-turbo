@@ -14,7 +14,6 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateProcessingStep;
 import java.util.List;
 
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
-import static io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel.*;
 
 public class StorageGenerationStep extends TemplateProcessingStep {
 

@@ -100,7 +100,7 @@ public class StorageGenerationStepTest {
   }
 
   @Test
-  public void testAnnotatedStoreGeneration() {
+  public void testAnnotatedStoreGeneration() throws IOException {
     final CodeGenerationContext context =
             CodeGenerationContext.empty().with(USE_ANNOTATIONS, "true");
 
@@ -109,24 +109,11 @@ public class StorageGenerationStepTest {
 
     new StorageGenerationStep().process(context);
 
-    Assert.assertEquals(18, context.contents().size());
-    Assert.assertEquals("PersistenceSetup", context.contents().get(17).retrieveName());
-    Assert.assertTrue(context.contents().get(17).contains("class PersistenceSetup"));
-    Assert.assertTrue(context.contents().get(17).contains("@Persistence(basePackage = \"io.vlingo\", storageType = StorageType.STATE_STORE, cqrs = true)"));
-    Assert.assertTrue(context.contents().get(17).contains("@Projections(value = {"));
-    Assert.assertTrue(context.contents().get(17).contains("@Projection(actor = AuthorProjectionActor.class, becauseOf = {}),"));
-    Assert.assertTrue(context.contents().get(17).contains("@Projection(actor = BookProjectionActor.class, becauseOf = {BookRented.class, BookPurchased.class})"));
-    Assert.assertTrue(context.contents().get(17).contains("@Adapters({"));
-    Assert.assertTrue(context.contents().get(17).contains("BookState.class,"));
-    Assert.assertTrue(context.contents().get(17).contains("AuthorState.class"));
-    Assert.assertFalse(context.contents().get(17).contains("AuthorState.class,"));
-    Assert.assertTrue(context.contents().get(17).contains("import io.vlingo.xoom.turbo.annotation.persistence.EnableQueries;"));
-    Assert.assertTrue(context.contents().get(17).contains("import io.vlingo.xoom.turbo.annotation.persistence.QueriesEntry;"));
-    Assert.assertTrue(context.contents().get(17).contains("import io.vlingo.xoom.turbo.annotation.persistence.DataObjects;"));
-    Assert.assertTrue(context.contents().get(17).contains("@EnableQueries({"));
-    Assert.assertTrue(context.contents().get(17).contains("@QueriesEntry(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)"));
-    Assert.assertTrue(context.contents().get(17).contains("@QueriesEntry(protocol = BookQueries.class, actor = BookQueriesActor.class)"));
-    Assert.assertTrue(context.contents().get(17).contains("@DataObjects({AuthorData.class, BookData.class})"));
+    final Content persistenceSetup =
+            context.findContent(PERSISTENCE_SETUP, "PersistenceSetup");
+
+    Assert.assertEquals(20, context.contents().size());
+    Assert.assertTrue(persistenceSetup.contains(TextExpectation.onJava().read("persistence-setup")));
   }
 
   private void loadProperties(final CodeGenerationContext context,

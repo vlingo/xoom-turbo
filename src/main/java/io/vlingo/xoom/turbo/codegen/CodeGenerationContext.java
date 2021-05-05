@@ -25,6 +25,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.GENERATION_LOCATION;
+
 public class CodeGenerationContext {
 
   private Filer filer;
@@ -50,13 +52,13 @@ public class CodeGenerationContext {
   }
 
   private CodeGenerationContext() {
-    this(null, null);
+    this.parameters = CodeGenerationParameters.from(GENERATION_LOCATION, CodeGenerationLocation.EXTERNAL);
   }
 
   private CodeGenerationContext(final Filer filer, final Element source) {
     this.filer = filer;
     this.source = source;
-    this.parameters = CodeGenerationParameters.empty();
+    this.parameters = CodeGenerationParameters.from(GENERATION_LOCATION, CodeGenerationLocation.INTERNAL);
   }
 
   @SuppressWarnings("rawtypes")

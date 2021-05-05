@@ -5,9 +5,10 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.turbo.codegen.template.autodispatch;
+package io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch;
 
 import io.vlingo.xoom.turbo.OperatingSystem;
+import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
@@ -16,15 +17,17 @@ import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 
+import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.STORE_PROVIDER;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.DesignerTemplateStandard.STORE_PROVIDER;
 
 public class AutoDispatchResourceHandlerGenerationStepTest {
 
     @Test
-    public void testThatAutoDispatchResourceHandlersAreGenerated() {
+    public void testThatAutoDispatchResourceHandlersAreGenerated() throws IOException {
         final CodeGenerationContext context =
                 CodeGenerationContext.with(loadParameters())
                         .addContent(STORE_PROVIDER,
@@ -35,23 +38,15 @@ public class AutoDispatchResourceHandlerGenerationStepTest {
 
         Assert.assertEquals(3, context.contents().size());
 
-        final Content authorResourceHandlerContent =
-                context.contents().stream().filter(content ->
-                        content.retrieveName().equals("AuthorResourceHandler")).findFirst().get();
+        final Content authorResourceHandler =
+                context.findContent(AUTO_DISPATCH_RESOURCE_HANDLER, "AuthorResourceHandler");
 
-        Assert.assertTrue(authorResourceHandlerContent.contains("import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;"));
-        Assert.assertTrue(authorResourceHandlerContent.contains(".andThenTo(author -> AuthorHandlers.changeAuthorNameHandler.handler.handle(author,authorData))"));
-        Assert.assertTrue(authorResourceHandlerContent.contains("return AuthorHandlers.queryByIdHandler.handler.handle(id, authorQueries)"));
-        Assert.assertTrue(authorResourceHandlerContent.contains("patch(\"/authors/{id}/name\")"));
-        Assert.assertTrue(authorResourceHandlerContent.contains("get(\"/authors/{id}\")"));
+        Assert.assertTrue(authorResourceHandler.contains(TextExpectation.onJava().read("author-dispatch-resource-handler")));
 
-        final Content bookResourceHandlerContent =
-                context.contents().stream().filter(content ->
-                        content.retrieveName().equals("BookResourceHandler")).findFirst().get();
+        final Content bookResourceHandler =
+                context.findContent(AUTO_DISPATCH_RESOURCE_HANDLER, "BookResourceHandler");
 
-        Assert.assertTrue(bookResourceHandlerContent.contains("import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;"));
-        Assert.assertTrue(bookResourceHandlerContent.contains("get(\"/books\")"));
-        Assert.assertTrue(bookResourceHandlerContent.contains("return BookHandlers.queryAllHandler.handler.handle($queries)"));
+        Assert.assertTrue(bookResourceHandler.contains(TextExpectation.onJava().read("book-dispatch-resource-handler")));
     }
 
     private CodeGenerationParameters loadParameters() {

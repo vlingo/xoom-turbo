@@ -18,7 +18,6 @@ public abstract class TemplateProcessingStep implements CodeGenerationStep {
   @Override
   public void process(final CodeGenerationContext context) {
     final Language language = resolveLanguage(context);
-    System.out.println("Processing " + this.getClass());
     language.resolvePreParametersProcessing(context.parameters());
     buildTemplatesData(context).forEach(templateData -> {
       language.resolvePostParametersProcessing(templateData.parameters());

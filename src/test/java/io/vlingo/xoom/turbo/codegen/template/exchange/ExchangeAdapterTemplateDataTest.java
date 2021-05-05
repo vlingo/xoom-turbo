@@ -56,5 +56,4 @@ public class ExchangeAdapterTemplateDataTest {
         Assert.assertTrue(bookProduceAdapterParameters.hasImport(IdentifiedDomainEvent.class.getCanonicalName()));
     }
 
-
 }

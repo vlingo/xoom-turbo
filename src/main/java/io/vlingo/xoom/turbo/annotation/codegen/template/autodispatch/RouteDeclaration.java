@@ -10,7 +10,6 @@ package io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch;
 import io.vlingo.xoom.http.resource.ResourceBuilder;
 import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.resource.PathFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;

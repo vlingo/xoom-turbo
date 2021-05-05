@@ -140,7 +140,6 @@ public enum AnnotationBasedTemplateStandard implements TemplateStandard {
 
   STORE_PROVIDER(parameters -> {
             final StorageType storageType = parameters.find(STORAGE_TYPE);
-            System.out.println("Olhar aqui " + storageType);
             if (parameters.<Model>find(MODEL).isQueryModel()) {
               return QUERY_MODEL_STORE_TEMPLATES.get(storageType);
             }
