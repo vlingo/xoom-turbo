@@ -34,6 +34,7 @@ public class CodeGenerationContext {
   private final CodeGenerationParameters parameters;
   private final List<Content> contents = new ArrayList<>();
   private final List<TemplateData> templatesData = new ArrayList<>();
+  private FileLocationResolver fileLocationResolver = (a, b) -> "";
 
   public static CodeGenerationContext empty() {
     return new CodeGenerationContext();
@@ -137,6 +138,11 @@ public class CodeGenerationContext {
             !this.<String>parameterOf(label).trim().isEmpty();
   }
 
+  public CodeGenerationContext fileLocationResolver(final FileLocationResolver fileLocationResolver) {
+    this.fileLocationResolver = fileLocationResolver;
+    return this;
+  }
+
   public Content findContent(final TemplateStandard standard, final String contentName) {
     return contents.stream().filter(content -> content.has(standard) && content.isNamed(contentName)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Unable to find content " + standard + " - " + contentName));
@@ -152,6 +158,10 @@ public class CodeGenerationContext {
 
   public Language language() {
     return Language.findDefault();
+  }
+
+  public FileLocationResolver fileLocationResolver() {
+    return this.fileLocationResolver;
   }
 
 }

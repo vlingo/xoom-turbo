@@ -7,7 +7,6 @@
 package io.vlingo.xoom.turbo.codegen.template;
 
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.file.FileLocationResolver;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 
 import java.io.File;
@@ -25,7 +24,7 @@ public class OutputFile {
   public OutputFile(final CodeGenerationContext context,
                     final TemplateData templateData,
                     final Language language) {
-    this(FileLocationResolver.from(context, templateData),
+    this(context.fileLocationResolver().resolve(context, templateData),
             language.formatFilename(templateData.filename()), templateData.parameters().find(OFFSET),
             templateData.isPlaceholder());
   }

@@ -7,19 +7,14 @@
 
 package io.vlingo.xoom.turbo.codegen.language;
 
-import freemarker.template.utility.StringUtil;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationSetup;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 
-import static io.vlingo.xoom.turbo.codegen.designer.Label.FIELD_TYPE;
-import static io.vlingo.xoom.turbo.codegen.designer.Label.STATE_FIELD;
-import static io.vlingo.xoom.turbo.codegen.language.Language.KOTLIN;
-
+//TODO: Move to xoom-designer
 public class KotlinSyntaxConverter {
 
   public static final void convertFieldTypes(final CodeGenerationParameters params) {
-    params.convertValuesSyntax(KOTLIN, STATE_FIELD, FIELD_TYPE, value -> StringUtil.capitalize(value));
+//    params.convertValuesSyntax(KOTLIN, STATE_FIELD, FIELD_TYPE, value -> StringUtil.capitalize(value));
   }
 
   public static final void convertImports(final TemplateParameters params) {
@@ -28,9 +23,9 @@ public class KotlinSyntaxConverter {
 
   protected static final String handleImportEntry(final String importEntry) {
     String resolvedImport = importEntry;
-    for (final String reservedWord : CodeGenerationSetup.KOTLIN_RESERVED_WORDS) {
-      resolvedImport = handleReservedWord(reservedWord, resolvedImport);
-    }
+//    for (final String reservedWord : CodeGenerationSetup.KOTLIN_RESERVED_WORDS) {
+//      resolvedImport = handleReservedWord(reservedWord, resolvedImport);
+//    }
     return resolvedImport;
   }
 

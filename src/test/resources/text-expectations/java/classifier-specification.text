@@ -1,4 +1,0 @@
-data Classifier {
-  version semanticVersion
-  string name
-}

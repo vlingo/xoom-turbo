@@ -8,8 +8,8 @@
 package io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch;
 
 import io.vlingo.xoom.turbo.OperatingSystem;
-import io.vlingo.xoom.turbo.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
+import io.vlingo.xoom.turbo.codegen.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;

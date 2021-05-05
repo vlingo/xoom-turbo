@@ -9,7 +9,6 @@ package io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch;
 
 import io.vlingo.xoom.http.Method;
 import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
-import io.vlingo.xoom.turbo.codegen.formatting.Formatters;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.util.Arrays;
@@ -56,26 +55,19 @@ public class RouteDetail {
     return route.retrieveRelatedValue(BODY_TYPE);
   }
 
-  public static boolean requireEntityLoad(final CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(ROUTE_SIGNATURE)
-            .filter(route -> route.hasAny(REQUIRE_ENTITY_LOADING))
-            .anyMatch(route -> route.retrieveRelatedValue(REQUIRE_ENTITY_LOADING, Boolean::valueOf));
-  }
-
-  public static boolean requireModelFactory(final CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(ROUTE_SIGNATURE)
-            .map(methodSignature -> AggregateDetail.methodWithName(aggregate, methodSignature.value))
-            .anyMatch(method -> method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf));
-  }
-
   public static String resolveMethodSignature(final CodeGenerationParameter routeSignature) {
     if (hasValidMethodSignature(routeSignature.value)) {
       return routeSignature.value;
     }
 
     if (routeSignature.retrieveRelatedValue(Label.ROUTE_METHOD, Method::from).isGET()) {
-      final String arguments =
-              Formatters.Arguments.SIGNATURE_DECLARATION.format(routeSignature);
+      final Stream<CodeGenerationParameter> parameters =
+              routeSignature.retrieveAllRelated(METHOD_PARAMETER);
+
+      final String arguments = parameters.map(field -> {
+        final String fieldType = FieldDetail.typeOf(field.parent(Label.AGGREGATE), field.value);
+        return String.format("final %s %s", fieldType, field.value);
+      }).collect(Collectors.joining(", "));
 
       return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, arguments);
     }
@@ -102,7 +94,4 @@ public class RouteDetail {
     return signature.contains("(") && signature.contains(")");
   }
 
-  public static boolean hasBody(final CodeGenerationParameter route) {
-    return !resolveBodyName(route).isEmpty();
-  }
 }

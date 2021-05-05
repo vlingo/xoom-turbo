@@ -7,11 +7,11 @@
 package io.vlingo.xoom.turbo.annotation.codegen.template.initializer;
 
 import io.vlingo.xoom.turbo.OperatingSystem;
-import io.vlingo.xoom.turbo.TextExpectation;
+import io.vlingo.xoom.turbo.annotation.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
+import io.vlingo.xoom.turbo.codegen.TextExpectation;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
-import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;

@@ -10,12 +10,7 @@ package io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch;
 import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
-
-import static io.vlingo.xoom.turbo.codegen.designer.Label.*;
 
 public class AggregateDetail {
 
