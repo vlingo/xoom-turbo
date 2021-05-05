@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.INTERNAL_ROUTE_HANDLER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.*;
 
 public class RouteMethodTemplateData extends TemplateData {
 

@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.STORE_PROVIDER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.*;
 import static java.util.stream.Collectors.toSet;
 
 public class StorageProviderTemplateData extends TemplateData {

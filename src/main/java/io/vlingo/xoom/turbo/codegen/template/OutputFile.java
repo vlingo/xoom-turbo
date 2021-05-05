@@ -6,13 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.codegen.template;
 
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.language.Language;
-
 import java.io.File;
 import java.nio.file.Paths;
-
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.OFFSET;
 
 public class OutputFile {
 
@@ -21,20 +16,12 @@ public class OutputFile {
   private final String offset;
   private final boolean placeholder;
 
-  public OutputFile(final CodeGenerationContext context,
-                    final TemplateData templateData,
-                    final Language language) {
-    this(context.fileLocationResolver().resolve(context, templateData),
-            language.formatFilename(templateData.filename()), templateData.parameters().find(OFFSET),
-            templateData.isPlaceholder());
-  }
-
   public OutputFile(final String absolutePath,
                     final String filename) {
     this(absolutePath, filename, "", false);
   }
 
-  private OutputFile(final String absolutePath,
+  public OutputFile(final String absolutePath,
                      final String filename,
                      final String offset,
                      final boolean placeholder) {

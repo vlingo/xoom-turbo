@@ -12,8 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.vlingo.xoom.turbo.codegen.template.Template.*;
-import static io.vlingo.xoom.turbo.codegen.template.Template.ENTRY_ADAPTER;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.Template.*;
 
 public class Configuration {
 

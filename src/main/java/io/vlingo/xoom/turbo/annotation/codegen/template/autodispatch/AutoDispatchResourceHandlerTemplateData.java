@@ -27,14 +27,14 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.*;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.HANDLERS_CONFIG_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.MODEL_ACTOR;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.MODEL_PROTOCOL;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERIES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.URI_ROOT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_AUTO_DISPATCH;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.HANDLERS_CONFIG_NAME;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.MODEL_ACTOR;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.MODEL_PROTOCOL;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.QUERIES;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.URI_ROOT;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.USE_AUTO_DISPATCH;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 

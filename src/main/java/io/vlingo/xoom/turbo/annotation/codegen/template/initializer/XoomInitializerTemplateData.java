@@ -8,13 +8,13 @@ package io.vlingo.xoom.turbo.annotation.codegen.template.initializer;
 
 import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
+import io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter;
 import io.vlingo.xoom.turbo.annotation.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.turbo.annotation.codegen.template.storage.StorageType;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
@@ -29,10 +29,10 @@ import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.BLOCKING_ME
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.PROJECTION_TYPE;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.STORAGE_TYPE;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.APPLICATION_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.REST_RESOURCES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.USE_ANNOTATIONS;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.APPLICATION_NAME;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.REST_RESOURCES;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.USE_ANNOTATIONS;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.*;
 
 public class XoomInitializerTemplateData extends TemplateData {
 

@@ -19,8 +19,8 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.PROJECTION;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_TO_DESCRIPTION;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.PROJECTION_TO_DESCRIPTION;
 import static java.util.stream.Collectors.toList;
 
 public class ProjectionDispatcherProviderTemplateData extends TemplateData {

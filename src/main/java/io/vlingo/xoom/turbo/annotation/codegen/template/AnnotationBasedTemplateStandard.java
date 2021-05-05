@@ -9,8 +9,6 @@ package io.vlingo.xoom.turbo.annotation.codegen.template;
 import io.vlingo.xoom.http.Method;
 import io.vlingo.xoom.turbo.annotation.codegen.template.storage.Model;
 import io.vlingo.xoom.turbo.annotation.codegen.template.storage.StorageType;
-import io.vlingo.xoom.turbo.codegen.template.Template;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
@@ -18,8 +16,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Configuration.*;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.*;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.storage.StorageType.STATE_STORE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 
 public enum AnnotationBasedTemplateStandard implements TemplateStandard {
 

@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.turbo.codegen.template;
 
+import io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.parameter.ImportParameter;
 
@@ -17,31 +18,32 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.IMPORTS;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.PACKAGE_NAME;
 
 public class TemplateParameters {
 
   private final Map<String, Object> parameters = new HashMap<>();
 
   private TemplateParameters() {
-    parameters.put(PRODUCTION_CODE.key, true);
+    parameters.put("PRODUCTION_CODE", true);
   }
 
   public static TemplateParameters empty() {
     return new TemplateParameters();
   }
 
-  public static TemplateParameters with(final TemplateParameter parameter, final Object value) {
-    return new TemplateParameters().and(parameter, value);
+  public static TemplateParameters with(final ParameterKey key, final Object value) {
+    return new TemplateParameters().and(key, value);
   }
 
-  public TemplateParameters and(final TemplateParameter parameter, final Object value) {
-    this.parameters.put(parameter.key, value);
+  public TemplateParameters and(final ParameterKey key, final Object value) {
+    this.parameters.put(key.value(), value);
     return this;
   }
 
-  public TemplateParameters andResolve(final TemplateParameter parameter, final Function<TemplateParameters, Object> resolver) {
-    this.parameters.put(parameter.key, resolver.apply(this));
+  public TemplateParameters andResolve(final ParameterKey key, final Function<TemplateParameters, Object> resolver) {
+    this.parameters.put(key.value(), resolver.apply(this));
     return this;
   }
 
@@ -89,33 +91,33 @@ public class TemplateParameters {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T find(final TemplateParameter parameter) {
-    return (T) this.parameters.get(parameter.key);
+  public <T> T find(final ParameterKey parameter) {
+    return (T) this.parameters.get(parameter.value());
   }
 
-  public <T> T find(final TemplateParameter parameter, final T defaultValue) {
-    if (!this.parameters.containsKey(parameter.key)) {
+  public <T> T find(final ParameterKey parameter, final T defaultValue) {
+    if (!this.parameters.containsKey(parameter.value())) {
       return defaultValue;
     }
     return find(parameter);
   }
 
-  private void remove(final TemplateParameter parameter) {
-    this.parameters.remove(parameter.key);
+  private void remove(final ParameterKey key) {
+    this.parameters.remove(key.value());
   }
 
   public Map<String, Object> map() {
     return parameters;
   }
 
-  public boolean has(final TemplateParameter parameter) {
-    return parameters.containsKey(parameter.key) &&
-            parameters.get(parameter.key) != null &&
-            !parameters.get(parameter.key).toString().trim().isEmpty();
+  public boolean has(final ParameterKey parameter) {
+    return parameters.containsKey(parameter.value()) &&
+            parameters.get(parameter.value()) != null &&
+            !parameters.get(parameter.value()).toString().trim().isEmpty();
   }
 
-  public boolean hasValue(final TemplateParameter parameter, final String value) {
-    return has(parameter) && this.parameters.get(parameter.key).equals(value);
+  public boolean hasValue(final ParameterKey parameter, final String value) {
+    return has(parameter) && this.parameters.get(parameter.value()).equals(value);
   }
 
   private boolean hasImports() {

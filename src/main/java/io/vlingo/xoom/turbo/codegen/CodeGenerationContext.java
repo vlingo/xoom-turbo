@@ -14,6 +14,7 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
 import io.vlingo.xoom.turbo.codegen.template.OutputFile;
+import io.vlingo.xoom.turbo.codegen.template.OutputFileInstantiator;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
@@ -34,7 +35,8 @@ public class CodeGenerationContext {
   private final CodeGenerationParameters parameters;
   private final List<Content> contents = new ArrayList<>();
   private final List<TemplateData> templatesData = new ArrayList<>();
-  private FileLocationResolver fileLocationResolver = (a, b) -> "";
+  private FileLocationResolver fileLocationResolver = (context, data) -> "";
+  private OutputFileInstantiator outputFileInstantiator = OutputFileInstantiator.defaultInstantiation();
 
   public static CodeGenerationContext empty() {
     return new CodeGenerationContext();
@@ -104,7 +106,8 @@ public class CodeGenerationContext {
   }
 
   public void registerTemplateProcessing(final Language language, final TemplateData templateData, final String text) {
-    this.addContent(templateData.standard(), new OutputFile(this, templateData, language), text);
+    final OutputFile outputFile = outputFileInstantiator.instantiate(this, templateData, language);
+    this.addContent(templateData.standard(), outputFile, text);
     this.templatesData.add(templateData);
   }
 
@@ -162,6 +165,11 @@ public class CodeGenerationContext {
 
   public FileLocationResolver fileLocationResolver() {
     return this.fileLocationResolver;
+  }
+
+  public CodeGenerationContext outputFileInstantiator(final OutputFileInstantiator outputFileInstantiator) {
+    this.outputFileInstantiator = outputFileInstantiator;
+    return this;
   }
 
 }
