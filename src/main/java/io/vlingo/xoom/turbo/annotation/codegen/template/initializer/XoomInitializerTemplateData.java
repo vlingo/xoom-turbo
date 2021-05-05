@@ -52,7 +52,6 @@ public class XoomInitializerTemplateData extends TemplateData {
     this.parameters = TemplateParameters.with(TemplateParameter.BLOCKING_MESSAGING, blockingMessaging)
             .and(APPLICATION_NAME, context.parameterOf(Label.APPLICATION_NAME)).and(PACKAGE_NAME, packageName)
             .and(PROVIDERS, StoreProvider.from(storageType, useCQRS, projectionType.isProjectionEnabled(), hasExchange))
-            .and(APPLICATION_NAME, context.parameterOf(Label.APPLICATION_NAME)).and(REST_RESOURCES, RestResource.from(contents))
             .and(USE_ANNOTATIONS, context.parameterOf(Label.USE_ANNOTATIONS, Boolean::valueOf))
             .andResolve(PROJECTION_DISPATCHER_PROVIDER_NAME, PROJECTION_DISPATCHER_PROVIDER::resolveClassname)
             .and(XOOM_INITIALIZER_CLASS, context.parameterOf(XOOM_INITIALIZER_NAME))
@@ -60,6 +59,7 @@ public class XoomInitializerTemplateData extends TemplateData {
             .and(TYPE_REGISTRIES, TypeRegistry.from(storageType, useCQRS))
             .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
             .and(CUSTOM_INITIALIZATION, customInitialization)
+            .and(REST_RESOURCES, RestResource.from(contents))
             .addImports(resolveImports(context));
   }
 
