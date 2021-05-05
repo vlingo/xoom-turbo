@@ -49,7 +49,7 @@ public class XoomInitializerTemplateData extends BootstrapTemplateData {
 
     final TemplateStandard[] dependencies =
             new TemplateStandard[]{STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER,
-                    REST_RESOURCE, AUTO_DISPATCH_RESOURCE_HANDLER, EXCHANGE_BOOTSTRAP};
+                    REST_RESOURCE, REST_UI_RESOURCE, AUTO_DISPATCH_RESOURCE_HANDLER, AUTO_DISPATCH_RESOURCE_UI_HANDLER, EXCHANGE_BOOTSTRAP};
 
     parameters().addImports(ContentQuery.findFullyQualifiedClassNames(contents, dependencies))
             .addImports(storageType.resolveTypeRegistryQualifiedNames(useCQRS));

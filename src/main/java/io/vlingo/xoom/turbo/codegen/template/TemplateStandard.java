@@ -53,6 +53,9 @@ public enum TemplateStandard {
   REST_RESOURCE(parameters -> Template.REST_RESOURCE.filename,
           (name, parameters) -> name + "Resource"),
 
+  REST_UI_RESOURCE(parameters -> Template.REST_UI_RESOURCE.filename,
+          (name, parameters) -> name + "Resource"),
+
   ROUTE_METHOD(parameters -> {
     final String httpMethod =
             parameters.find(TemplateParameter.ROUTE_METHOD);
@@ -69,6 +72,9 @@ public enum TemplateStandard {
   }, (name, parameters) -> name),
 
   AUTO_DISPATCH_RESOURCE_HANDLER(parameters -> Template.REST_RESOURCE.filename,
+          (name, parameters) -> name + "Handler"),
+
+  AUTO_DISPATCH_RESOURCE_UI_HANDLER(parameters -> Template.REST_UI_RESOURCE.filename,
           (name, parameters) -> name + "Handler"),
 
   AUTO_DISPATCH_MAPPING(parameters -> Template.AUTO_DISPATCH_MAPPING.filename,
