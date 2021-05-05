@@ -23,8 +23,7 @@ import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter
 
 public class TemplateParameters {
 
-  private final Map<String, Obj
-  ect> parameters = new HashMap<>();
+  private final Map<String, Object> parameters = new HashMap<>();
   public static final String PRODUCTION_CODE_KEY = "productionCode";
 
   private TemplateParameters() {
