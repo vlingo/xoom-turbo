@@ -17,14 +17,14 @@ import java.util.stream.Stream;
 
 public class CodeGenerationParameters {
 
-  private final Map<Label, Language> conversionEntries = new HashMap<>();
+  private final Map<ParameterLabel, Language> conversionEntries = new HashMap<>();
   private final List<CodeGenerationParameter> parameters = new ArrayList<>();
 
-  public static CodeGenerationParameters from(final Label label, final Object value) {
+  public static CodeGenerationParameters from(final ParameterLabel label, final Object value) {
     return from(label, value.toString());
   }
 
-  public static CodeGenerationParameters from(final Label label, final String value) {
+  public static CodeGenerationParameters from(final ParameterLabel label, final String value) {
     return from(CodeGenerationParameter.of(label, value));
   }
 
@@ -40,11 +40,11 @@ public class CodeGenerationParameters {
     this.parameters.addAll(parameters);
   }
 
-  public CodeGenerationParameters add(final Label label, final Object value) {
+  public CodeGenerationParameters add(final ParameterLabel label, final Object value) {
     return add(label, value.toString());
   }
 
-  public CodeGenerationParameters add(final Label label, final String value) {
+  public CodeGenerationParameters add(final ParameterLabel label, final String value) {
     return add(CodeGenerationParameter.of(label, value));
   }
 
@@ -53,8 +53,8 @@ public class CodeGenerationParameters {
     return this;
   }
 
-  public void addAll(final Map<Label, String> parameterEntries) {
-    final Function<Entry<Label, String>, CodeGenerationParameter> mapper =
+  public void addAll(final Map<ParameterLabel, String> parameterEntries) {
+    final Function<Entry<ParameterLabel, String>, CodeGenerationParameter> mapper =
             entry -> CodeGenerationParameter.of(entry.getKey(), entry.getValue());
 
     addAll(parameterEntries.entrySet().stream().map(mapper).collect(Collectors.toList()));
@@ -69,15 +69,15 @@ public class CodeGenerationParameters {
     return this;
   }
 
-  public String retrieveValue(final Label label) {
+  public String retrieveValue(final ParameterLabel label) {
     return retrieveOne(label).value;
   }
 
-  public <T> T retrieveValue(final Label label, final Function<String, T> mapper) {
+  public <T> T retrieveValue(final ParameterLabel label, final Function<String, T> mapper) {
     return mapper.apply(retrieveValue(label));
   }
 
-  public CodeGenerationParameter retrieveOne(final Label label) {
+  public CodeGenerationParameter retrieveOne(final ParameterLabel label) {
     return parameters.stream()
             .filter(param -> param.isLabeled(label)).findFirst()
             .orElse(CodeGenerationParameter.of(label, ""));
@@ -87,11 +87,11 @@ public class CodeGenerationParameters {
     return Collections.unmodifiableList(parameters);
   }
 
-  public Stream<CodeGenerationParameter> retrieveAll(final Label label) {
+  public Stream<CodeGenerationParameter> retrieveAll(final ParameterLabel label) {
     return retrieveAll(label, RetrievalLevel.SUPERFICIAL);
   }
 
-  public Stream<CodeGenerationParameter> retrieveAll(final Label label, final RetrievalLevel retrievalLevel) {
+  public Stream<CodeGenerationParameter> retrieveAll(final ParameterLabel label, final RetrievalLevel retrievalLevel) {
     if (RetrievalLevel.EXTENSIVE.equals(retrievalLevel)) {
       return performBulkRetrieval(label);
     }
@@ -103,8 +103,8 @@ public class CodeGenerationParameters {
   }
 
   public void convertValuesSyntax(final Language language,
-                                  final Label parentLabel,
-                                  final Label relatedLabel,
+                                  final ParameterLabel parentLabel,
+                                  final ParameterLabel relatedLabel,
                                   final Function<String, String> converter) {
     if (!isAlreadyConverted(language, relatedLabel)) {
       conversionEntries.remove(relatedLabel);
@@ -115,7 +115,7 @@ public class CodeGenerationParameters {
     }
   }
 
-  protected void applySyntaxConverter(final Label label, final Function<String, String> converter) {
+  protected void applySyntaxConverter(final ParameterLabel label, final Function<String, String> converter) {
     final List<CodeGenerationParameter> affectedParameters =
             parameters.stream().filter(param -> param.isLabeled(label))
                     .map(param -> param.formatValue(converter))
@@ -129,20 +129,20 @@ public class CodeGenerationParameters {
     parameters.addAll(nonAffectedParameters);
   }
 
-  private boolean isAlreadyConverted(final Language language, final Label label) {
+  private boolean isAlreadyConverted(final Language language, final ParameterLabel label) {
     if (conversionEntries.containsKey(label)) {
       return conversionEntries.get(label).equals(language);
     }
     return false;
   }
 
-  private Stream<CodeGenerationParameter> performBulkRetrieval(final Label label) {
+  private Stream<CodeGenerationParameter> performBulkRetrieval(final ParameterLabel label) {
     final List<CodeGenerationParameter> collected = new ArrayList<>();
     performBulkRetrieval(label, parameters.stream(), collected);
     return collected.stream();
   }
 
-  private void performBulkRetrieval(final Label label, final Stream<CodeGenerationParameter> source, final List<CodeGenerationParameter> collected) {
+  private void performBulkRetrieval(final ParameterLabel label, final Stream<CodeGenerationParameter> source, final List<CodeGenerationParameter> collected) {
     source.forEach(parameter -> {
       if (parameter.isLabeled(label)) {
         collected.add(parameter);

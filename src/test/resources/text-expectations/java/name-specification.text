@@ -1,5 +1,0 @@
-data Name {
-  version semanticVersion
-  string firstName
-  string lastName
-}

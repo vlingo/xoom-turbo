@@ -1,4 +1,0 @@
-event BookSoldOut {
-  version semanticVersion
-  vlingo:xoom:io.vlingo.xoomapp:Name:1.0.0 name
-}

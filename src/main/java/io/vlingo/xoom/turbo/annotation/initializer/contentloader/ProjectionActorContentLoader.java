@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateStandard.PROJECTION;
+import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.PROJECTION;
+
 
 public class ProjectionActorContentLoader extends TypeBasedContentLoader {
 

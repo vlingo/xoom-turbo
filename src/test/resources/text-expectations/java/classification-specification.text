@@ -1,5 +1,0 @@
-data Classification {
-  version semanticVersion
-  string label
-  vlingo:xoom:io.vlingo.xoomapp:Classifier:1.0.0 classifier
-}

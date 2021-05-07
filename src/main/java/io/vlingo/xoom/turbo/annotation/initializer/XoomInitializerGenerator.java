@@ -9,14 +9,14 @@ package io.vlingo.xoom.turbo.annotation.initializer;
 
 import io.vlingo.xoom.turbo.annotation.AnnotatedElements;
 import io.vlingo.xoom.turbo.annotation.ProcessingAnnotationException;
+import io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch.AutoDispatchResourceHandlerGenerationStep;
+import io.vlingo.xoom.turbo.annotation.codegen.template.initializer.XoomInitializerGenerationStep;
+import io.vlingo.xoom.turbo.annotation.codegen.template.projections.ProjectionDispatcherProviderGenerationStep;
+import io.vlingo.xoom.turbo.annotation.codegen.template.storage.StorageGenerationStep;
 import io.vlingo.xoom.turbo.annotation.initializer.contentloader.CodeGenerationContextLoader;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationException;
 import io.vlingo.xoom.turbo.codegen.content.ContentCreationStep;
-import io.vlingo.xoom.turbo.codegen.template.autodispatch.AutoDispatchResourceHandlerGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.bootstrap.BootstrapGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.storage.StorageGenerationStep;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import java.util.stream.Stream;
@@ -45,9 +45,9 @@ public class XoomInitializerGenerator {
               CodeGenerationContextLoader.from(environment.getFiler(), basePackage,
                       annotatedElements, environment);
 
-      Stream.of(new ProjectionGenerationStep(), new StorageGenerationStep(),
-              new AutoDispatchResourceHandlerGenerationStep(),
-              new BootstrapGenerationStep(), new ContentCreationStep())
+      Stream.of(new ProjectionDispatcherProviderGenerationStep(), new StorageGenerationStep(),
+              new AutoDispatchResourceHandlerGenerationStep(), new XoomInitializerGenerationStep(),
+              new ContentCreationStep())
               .filter(step -> step.shouldProcess(context)).forEach(step -> step.process(context));
     } catch (final CodeGenerationException exception) {
       throw new ProcessingAnnotationException(exception);
