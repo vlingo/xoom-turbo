@@ -8,6 +8,7 @@ package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.turbo.annotation.Context;
 import io.vlingo.xoom.turbo.annotation.PackageCollector;
+import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.persistence.Persistence;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
@@ -48,6 +49,6 @@ public class ExchangeBootstrapLoader extends TypeBasedContentLoader {
 
   @Override
   protected TemplateStandard standard() {
-    return TemplateStandard.EXCHANGE_BOOTSTRAP;
+    return AnnotationBasedTemplateStandard.EXCHANGE_BOOTSTRAP;
   }
 }

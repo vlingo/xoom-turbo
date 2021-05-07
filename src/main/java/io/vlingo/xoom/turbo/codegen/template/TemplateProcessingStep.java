@@ -13,8 +13,6 @@ import io.vlingo.xoom.turbo.codegen.language.Language;
 
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.LANGUAGE;
-
 public abstract class TemplateProcessingStep implements CodeGenerationStep {
 
   @Override
@@ -31,7 +29,7 @@ public abstract class TemplateProcessingStep implements CodeGenerationStep {
   protected abstract List<TemplateData> buildTemplatesData(final CodeGenerationContext context);
 
   protected Language resolveLanguage(final CodeGenerationContext context) {
-    return context.hasParameter(LANGUAGE) ? context.parameterOf(LANGUAGE, Language::valueOf) : Language.findDefault();
+    return Language.findDefault();
   }
 
 }

@@ -10,6 +10,7 @@ package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 import io.vlingo.xoom.lattice.model.sourcing.EventSourced;
 import io.vlingo.xoom.turbo.annotation.Context;
 import io.vlingo.xoom.turbo.annotation.PackageCollector;
+import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.persistence.Persistence;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
@@ -54,7 +55,7 @@ public class AggregateContentLoader extends TypeBasedContentLoader {
 
   @Override
   protected TemplateStandard standard() {
-    return TemplateStandard.AGGREGATE;
+    return AnnotationBasedTemplateStandard.AGGREGATE;
   }
 
 }

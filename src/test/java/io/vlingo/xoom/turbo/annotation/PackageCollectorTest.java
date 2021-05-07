@@ -24,12 +24,18 @@ public class PackageCollectorTest {
     final Set<String> packages =
             PackageCollector.from(projectPath, "io.vlingo.xoom.turbo.annotation").collectAll();
 
-    Assert.assertEquals(5, packages.size());
+    Assert.assertEquals(11, packages.size());
     Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation"));
-    Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.persistence"));
     Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.autodispatch"));
+    Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.codegen"));
+    Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.codegen.template"));
+    Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch"));
+    Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.codegen.template.initializer"));
+    Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.codegen.template.projections"));
+    Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.codegen.template.storage"));
     Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.initializer"));
     Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.initializer.contentloader"));
+    Assert.assertTrue(packages.contains("io.vlingo.xoom.turbo.annotation.persistence"));
   }
 
 }

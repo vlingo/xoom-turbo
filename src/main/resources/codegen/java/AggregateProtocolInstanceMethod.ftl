@@ -1,1 +1,0 @@
-Completes<${stateName}> ${methodName}(${methodParameters});

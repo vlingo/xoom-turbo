@@ -8,11 +8,14 @@
 package io.vlingo.xoom.turbo.codegen.language;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
+//TODO: Move to xoom-designer
 public class KotlinSyntaxConverterTest {
 
   @Test
+  @Ignore
   public void testThatImportSyntaxIsResolved() {
     Assert.assertEquals("io.vlingo.xoom.symbio.store.`object`.StateObject", KotlinSyntaxConverter.handleImportEntry("io.vlingo.xoom.symbio.store.object.StateObject"));
     Assert.assertEquals("`object`.fakePackage.`object`.Something", KotlinSyntaxConverter.handleImportEntry("object.fakePackage.object.Something"));
