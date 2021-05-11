@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.turbo.annotation.codegen.template.storage;
 
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
 
 import java.util.List;
 import java.util.function.Predicate;

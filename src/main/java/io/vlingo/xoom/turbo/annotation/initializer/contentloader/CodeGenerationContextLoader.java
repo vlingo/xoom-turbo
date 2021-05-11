@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.ContentLoader;
 import io.vlingo.xoom.turbo.annotation.AnnotatedElements;
 import io.vlingo.xoom.turbo.annotation.autodispatch.AutoDispatch;
 import io.vlingo.xoom.turbo.annotation.autodispatch.AutoDispatchParameterResolver;
@@ -14,7 +16,6 @@ import io.vlingo.xoom.turbo.annotation.initializer.Xoom;
 import io.vlingo.xoom.turbo.annotation.initializer.XoomInitializerParameterResolver;
 import io.vlingo.xoom.turbo.annotation.persistence.Persistence;
 import io.vlingo.xoom.turbo.annotation.persistence.PersistenceParameterResolver;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;

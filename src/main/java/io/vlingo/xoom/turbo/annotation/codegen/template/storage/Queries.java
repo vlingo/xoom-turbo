@@ -7,16 +7,17 @@
 package io.vlingo.xoom.turbo.annotation.codegen.template.storage;
 
 import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
-import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.codegen.template.ParameterKey.Defaults.PACKAGE_NAME;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.QUERIES;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.QUERIES_ACTOR;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.*;

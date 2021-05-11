@@ -14,9 +14,9 @@ import io.vlingo.xoom.turbo.annotation.codegen.template.initializer.XoomInitiali
 import io.vlingo.xoom.turbo.annotation.codegen.template.projections.ProjectionDispatcherProviderGenerationStep;
 import io.vlingo.xoom.turbo.annotation.codegen.template.storage.StorageGenerationStep;
 import io.vlingo.xoom.turbo.annotation.initializer.contentloader.CodeGenerationContextLoader;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationException;
-import io.vlingo.xoom.turbo.codegen.content.ContentCreationStep;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationException;
+import io.vlingo.xoom.codegen.content.ContentCreationStep;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import java.util.stream.Stream;

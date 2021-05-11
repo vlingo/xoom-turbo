@@ -9,8 +9,8 @@ package io.vlingo.xoom.turbo.annotation.persistence;
 
 import io.vlingo.xoom.turbo.annotation.TypeRetriever;
 import io.vlingo.xoom.turbo.annotation.codegen.template.storage.StorageType;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Name;

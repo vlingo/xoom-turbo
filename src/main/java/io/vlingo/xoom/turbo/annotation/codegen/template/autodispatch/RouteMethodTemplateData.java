@@ -9,11 +9,11 @@ package io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch;
 
 import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
-import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.Collections;
 import java.util.List;

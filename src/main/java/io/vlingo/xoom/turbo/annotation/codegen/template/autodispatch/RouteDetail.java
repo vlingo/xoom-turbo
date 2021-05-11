@@ -9,7 +9,7 @@ package io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch;
 
 import io.vlingo.xoom.http.Method;
 import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 
 import java.util.Arrays;
 import java.util.List;

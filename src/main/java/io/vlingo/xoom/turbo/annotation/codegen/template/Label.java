@@ -6,7 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.annotation.codegen.template;
 
-import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
+import io.vlingo.xoom.codegen.parameter.ParameterLabel;
 
 public enum Label implements ParameterLabel {
 
@@ -29,7 +29,6 @@ public enum Label implements ParameterLabel {
   SOURCE("source"),
   BLOCKING_MESSAGING("blocking.messaging"),
   XOOM_INITIALIZER_NAME("xoom.initialization.classname"),
-  GENERATION_LOCATION("generation.location"),
   AUTO_DISPATCH_NAME("autoDispatchName"),
   HANDLERS_CONFIG_NAME("handlersConfigName"),
   MODEL_PROTOCOL("modelProtocol"),
