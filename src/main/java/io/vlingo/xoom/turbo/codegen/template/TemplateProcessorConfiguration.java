@@ -7,6 +7,7 @@
 package io.vlingo.xoom.turbo.codegen.template;
 
 import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.TemplateExceptionHandler;
 
 import java.util.Locale;
@@ -27,11 +28,14 @@ public class TemplateProcessorConfiguration {
   }
 
   private TemplateProcessorConfiguration() {
+    DefaultObjectWrapper objectWrapper = new DefaultObjectWrapper(DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
+    objectWrapper.setExposeFields(true);
     this.configuration = new Configuration(DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
     configuration.setClassForTemplateLoading(TemplateProcessor.class, "/");
     configuration.setDefaultEncoding("UTF-8");
     configuration.setLocale(Locale.US);
     configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+    configuration.setObjectWrapper(objectWrapper);
   }
 
 }
