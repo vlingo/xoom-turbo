@@ -12,6 +12,10 @@ import io.vlingo.xoom.http.resource.StaticFilesConfiguration;
 import io.vlingo.xoom.http.resource.feed.FeedConfiguration;
 import io.vlingo.xoom.http.resource.sse.SseConfiguration;
 import io.vlingo.xoom.lattice.grid.Grid;
+import org.apache.commons.lang3.StringUtils;
+
+import static io.vlingo.xoom.turbo.ApplicationProperty.NODE_NAME_ARG;
+import static io.vlingo.xoom.turbo.ApplicationProperty.PORT_ARG;
 
 public interface XoomInitializationAware {
 
@@ -45,24 +49,22 @@ public interface XoomInitializationAware {
   }
 
   default Configuration configureServer(final Grid grid, final String[] args) {
-    final int port = resolveServerPort(grid);
-    return Configuration.define().withPort(port);
-  }
-
-  default int resolveServerPort(final Grid grid) {
-    final int port = Boot.serverPort();
-    grid.world().defaultLogger().info("Server running on " + port);
-    return port;
+    final Configuration configuration = Configuration.define();
+    final String portArgument = ApplicationProperty.readValue(PORT_ARG, args);
+    if(portArgument != null) {
+      if(!StringUtils.isNumeric(portArgument)) {
+        throw new IllegalArgumentException("The given server port is not valid");
+      }
+      configuration.withPort(Integer.valueOf(portArgument));
+    } else {
+      configuration.withPort(Boot.serverPort());
+    }
+    grid.world().defaultLogger().info("Server running on " + configuration.port());
+    return configuration;
   }
 
   default String parseNodeName(final String[] args) {
-    if (args.length == 0) {
-      return null;
-    } else if (args.length > 1) {
-      System.out.println("Too many arguments; provide node name only.");
-      System.exit(1);
-    }
-    return args[0];
+    return ApplicationProperty.readValue(NODE_NAME_ARG, args);
   }
 
   default Properties clusterProperties() {

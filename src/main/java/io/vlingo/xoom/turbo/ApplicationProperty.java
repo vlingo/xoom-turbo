@@ -15,8 +15,16 @@ import java.util.stream.Stream;
 
 public class ApplicationProperty {
 
+  public static final String PORT_ARG = "-Dport=";
+  public static final String NODE_NAME_ARG = "-Dnode=";
   private static final String XOOM_PREFIX = "VLINGO_XOOM";
   private static final String COMBINATION_PATTERN = "%s.%s";
+
+  public static String readValue(final String key, final String[] args) {
+    return Stream.of(args).filter(arg -> arg.startsWith(key))
+            .map(arg -> arg.substring(arg.indexOf("=") + 1))
+            .findFirst().orElse(null);
+  }
 
   public static String readValue(final String key, final Properties properties) {
     final String propertiesValue = retrieveFromProperties(key, properties);
