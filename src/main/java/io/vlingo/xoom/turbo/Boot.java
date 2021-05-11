@@ -35,11 +35,7 @@ public class Boot {
     }
 
     resolvedNodeName = resolveNodeName(nodeName);
-
-    final Configuration configuration = Configuration.define();
-    final Grid grid = Grid.start(worldName, configuration, clusterProperties, resolvedNodeName);
-
-    return grid;
+    return Grid.start(worldName, Configuration.define(), clusterProperties, resolvedNodeName);
   }
 
   public static int serverPort() {
