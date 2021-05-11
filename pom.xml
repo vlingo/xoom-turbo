@@ -1,9 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo.xoom</groupId>
   <artifactId>xoom-turbo</artifactId>
   <version>1.7.8-SNAPSHOT</version>
-  <description>The VLINGO XOOM Xoom provides a JVM microframework for the VLINGO XOOM Platform that helps in building high-performance reactive microservices.</description>
+  <description>The VLINGO XOOM Xoom provides a JVM microframework for the VLINGO XOOM Platform that helps in building
+    high-performance reactive microservices.
+  </description>
   <name>xoom-turbo</name>
   <url>https://github.com/vlingo/xoom-turbo</url>
   <licenses>
@@ -236,8 +240,12 @@
     <repository>
       <id>ossrh-snapshots</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-      <releases><enabled>false</enabled></releases>
-      <snapshots><enabled>true</enabled></snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
 
@@ -263,8 +271,10 @@
               <buildArgs>
                 --shared -H:DashboardDump=${project.name} -H:+DashboardAll -H:+DashboardJson
                 -H:+DashboardPretty
-                --initialize-at-run-time=io.netty --allow-incomplete-classpath
-      </buildArgs>
+                --initialize-at-run-time=io.netty
+                --initialize-at-run-time=io.vlingo.xoom.common.identity.IdentityGeneratorType
+                --allow-incomplete-classpath
+              </buildArgs>
             </configuration>
           </plugin>
         </plugins>
