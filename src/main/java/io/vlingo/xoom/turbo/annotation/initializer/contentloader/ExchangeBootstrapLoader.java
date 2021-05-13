@@ -10,7 +10,7 @@ import io.vlingo.xoom.turbo.annotation.Context;
 import io.vlingo.xoom.turbo.annotation.PackageCollector;
 import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.persistence.Persistence;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
 
 import javax.annotation.processing.ProcessingEnvironment;

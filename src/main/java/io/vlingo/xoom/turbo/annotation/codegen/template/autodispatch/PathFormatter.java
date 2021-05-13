@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch;
 
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.ROUTE_PATH;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.URI_ROOT;

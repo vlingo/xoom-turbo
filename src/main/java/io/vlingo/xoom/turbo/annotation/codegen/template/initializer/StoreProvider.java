@@ -9,7 +9,7 @@ package io.vlingo.xoom.turbo.annotation.codegen.template.initializer;
 
 import io.vlingo.xoom.turbo.annotation.codegen.template.storage.Model;
 import io.vlingo.xoom.turbo.annotation.codegen.template.storage.StorageType;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
 
 import java.util.Collections;
 import java.util.List;

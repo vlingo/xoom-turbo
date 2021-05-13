@@ -9,7 +9,7 @@ package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
 import io.vlingo.xoom.turbo.annotation.persistence.Adapters;
 import io.vlingo.xoom.turbo.annotation.persistence.Persistence;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;

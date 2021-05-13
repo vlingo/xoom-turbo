@@ -7,17 +7,15 @@
 
 package io.vlingo.xoom.turbo.annotation.codegen.template;
 
-import io.vlingo.xoom.turbo.codegen.template.ParameterKey;
+import io.vlingo.xoom.codegen.template.ParameterKey;
 
 public enum TemplateParameter implements ParameterKey {
 
-  PACKAGE_NAME("packageName"),
   APPLICATION_NAME("appName"),
   AUTO_DISPATCH_MAPPING_NAME("autoDispatchMappingName"),
   AGGREGATES("aggregates"),
   BLOCKING_MESSAGING("blockingMessaging"),
   STATE_DATA_OBJECT_NAME("dataName"),
-  IMPORTS("imports"),
   CUSTOM_INITIALIZATION("customInitialization"),
   ADAPTERS("adapters"),
   STORE_PROVIDER_NAME("storeProviderName"),

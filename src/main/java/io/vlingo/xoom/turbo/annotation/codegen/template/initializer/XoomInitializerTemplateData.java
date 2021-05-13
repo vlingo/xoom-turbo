@@ -6,17 +6,17 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.annotation.codegen.template.initializer;
 
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.codegen.template.Label;
 import io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter;
 import io.vlingo.xoom.turbo.annotation.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.turbo.annotation.codegen.template.storage.StorageType;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,13 +24,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.template.ParameterKey.Defaults.PACKAGE_NAME;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.*;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.BLOCKING_MESSAGING;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.PROJECTION_TYPE;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.STORAGE_TYPE;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.APPLICATION_NAME;
-import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.REST_RESOURCES;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.USE_ANNOTATIONS;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.*;
 

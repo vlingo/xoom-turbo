@@ -7,16 +7,16 @@
 
 package io.vlingo.xoom.turbo.annotation.codegen.template.storage;
 
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
-import io.vlingo.xoom.turbo.codegen.parameter.ImportParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.codegen.template.ParameterKey.Defaults.PACKAGE_NAME;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.ADAPTER;
 import static io.vlingo.xoom.turbo.annotation.codegen.template.TemplateParameter.*;
 
@@ -54,10 +54,10 @@ public class AdapterTemplateData extends TemplateData {
             ContentQuery.findFullyQualifiedClassName(sourceClassStandard, sourceClassName, contents);
 
     return TemplateParameters.with(PACKAGE_NAME, packageName)
-            .and(IMPORTS, ImportParameter.of(sourceQualifiedClassName))
             .and(SOURCE_NAME, sourceClassName)
             .and(ADAPTER_NAME, ADAPTER.resolveClassname(sourceClassName))
-            .and(STORAGE_TYPE, storageType);
+            .and(STORAGE_TYPE, storageType)
+            .addImport(sourceQualifiedClassName);
   }
 
   @Override

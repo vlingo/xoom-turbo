@@ -7,15 +7,15 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.List;
 
-public abstract class TypeBasedContentLoader extends ContentLoader<List<TypeElement>> {
+public abstract class TypeBasedContentLoader extends AnnotationBasedContentLoader<List<TypeElement>> {
 
   protected TypeBasedContentLoader(final Element annotatedClass,
                                    final ProcessingEnvironment environment) {

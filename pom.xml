@@ -56,6 +56,12 @@
     </dependency>
     <dependency>
       <groupId>io.vlingo.xoom</groupId>
+      <artifactId>xoom-codegen</artifactId>
+      <version>1.7.8-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.vlingo.xoom</groupId>
       <artifactId>xoom-symbio</artifactId>
       <version>1.7.8-SNAPSHOT</version>
       <scope>compile</scope>
@@ -83,11 +89,6 @@
       <artifactId>auto-service</artifactId>
       <version>1.0-rc5</version>
       <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.freemarker</groupId>
-      <artifactId>freemarker</artifactId>
-      <version>2.3.30</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
