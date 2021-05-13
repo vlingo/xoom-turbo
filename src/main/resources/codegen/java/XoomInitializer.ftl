@@ -19,6 +19,7 @@ import java.lang.Integer;
 import java.lang.String;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,9 +74,13 @@ public class XoomInitializer implements XoomInitializationAware {
               </#if>
           </#list>
     );
+    final SinglePageApplicationConfiguration spaConf = initializer.singlePageApplicationResource();
+    final Collection<? extends Resource<?>> spaResources = spaConf != null
+          ? Collections.singleton(new SinglePageApplicationResource(spaConf.rootPath(), spaConf.contextPath()).routes())
+          : Collections.emptySet();
 
     final Resource[] resources =
-            Stream.of(sseResources, feedResources, staticResources, restResources)
+            Stream.of(sseResources, feedResources, staticResources, restResources, spaResources)
                     .flatMap(Collection::stream).collect(Collectors.toList())
                     .toArray(new Resource<?>[]{});
 
