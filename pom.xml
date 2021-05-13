@@ -96,6 +96,17 @@
       <version>2.5</version>
     </dependency>
     <dependency>
+      <groupId>io.vlingo.xoom</groupId>
+      <artifactId>xoom-build-plugins</artifactId>
+      <version>1.7.8-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>62.1</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.1</version>
@@ -111,17 +122,6 @@
       <groupId>com.wix</groupId>
       <artifactId>wix-embedded-mysql</artifactId>
       <version>4.2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>io.vlingo.xoom</groupId>
-      <artifactId>xoom-build-plugins</artifactId>
-      <version>1.7.8-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.ibm.icu</groupId>
-      <artifactId>icu4j</artifactId>
-      <version>62.1</version>
     </dependency>
   </dependencies>
   <build>
