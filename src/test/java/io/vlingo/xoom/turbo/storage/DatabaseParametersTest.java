@@ -7,28 +7,36 @@
 
 package io.vlingo.xoom.turbo.storage;
 
+import io.vlingo.xoom.turbo.ComponentRegistry;
+import io.vlingo.xoom.turbo.EnvironmentVariables.EnvironmentVariablesRetriever;
+import io.vlingo.xoom.turbo.MockEnvironmentVariables;
 import io.vlingo.xoom.turbo.actors.Settings;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Properties;
 
 public class DatabaseParametersTest {
 
     @Test
-    public void testDomainParametersLoad() {
+    public void testThatDomainParametersAreLoaded() {
         final DatabaseParameters parameters = new DatabaseParameters(Model.DOMAIN, Settings.properties());
         Assert.assertEquals("IN_MEMORY", parameters.database);
         Assert.assertTrue(parameters.autoCreate);
     }
 
     @Test
-    public void testCommandParametersLoad() {
+    public void testThatCommandParametersAreLoaded() {
         final DatabaseParameters parameters = new DatabaseParameters(Model.COMMAND, Settings.properties());
         Assert.assertEquals("IN_MEMORY", parameters.database);
         Assert.assertTrue(parameters.autoCreate);
     }
 
     @Test
-    public void testQueryParametersLoad() {
+    public void testThatQueryParametersAreLoaded() {
         final DatabaseParameters parameters = new DatabaseParameters(Model.QUERY, Settings.properties(), true);
         Assert.assertEquals("MYSQL", parameters.database);
         Assert.assertEquals("STORAGE_TEST", parameters.name);
@@ -41,4 +49,38 @@ public class DatabaseParametersTest {
         Assert.assertTrue(parameters.autoCreate);
     }
 
+    @Test
+    public void testQueryParametersAreLoadedEnvVars() {
+        final DatabaseParameters parameters = new DatabaseParameters(Model.QUERY, new Properties(), true);
+        Assert.assertEquals("MYSQL", parameters.database);
+        Assert.assertEquals("12F", parameters.name);
+        Assert.assertEquals("jdbc:mysql://localhost:9001/", parameters.url);
+        Assert.assertEquals("com.mysql.cj.jdbc.Driver", parameters.driver);
+        Assert.assertEquals("12FDB", parameters.username);
+        Assert.assertEquals("vlingo12F", parameters.password);
+        Assert.assertEquals("FTI", parameters.originator);
+        Assert.assertEquals("2", parameters.attempts);
+        Assert.assertTrue(parameters.autoCreate);
+    }
+
+    @Before
+    public void setUp() {
+        ComponentRegistry.register(EnvironmentVariablesRetriever.class, mockEnvironmentVariables);
+    }
+
+    @After
+    public void clear() {
+        ComponentRegistry.clear();
+    }
+
+    private final MockEnvironmentVariables mockEnvironmentVariables = new MockEnvironmentVariables(new HashMap<String, String>(){{
+        put("VLINGO_XOOM_QUERY_DATABASE", "MYSQL");
+        put("VLINGO_XOOM_QUERY_DATABASE_NAME", "12F");
+        put("VLINGO_XOOM_QUERY_DATABASE_URL", "jdbc:mysql://localhost:9001/");
+        put("VLINGO_XOOM_QUERY_DATABASE_DRIVER", "com.mysql.cj.jdbc.Driver");
+        put("VLINGO_XOOM_QUERY_DATABASE_USERNAME", "12FDB");
+        put("VLINGO_XOOM_QUERY_DATABASE_PASSWORD", "vlingo12F");
+        put("VLINGO_XOOM_QUERY_DATABASE_ORIGINATOR", "FTI");
+        put("VLINGO_XOOM_QUERY_DATABASE_CONNECTION_ATTEMPTS", "2");
+    }});
 }

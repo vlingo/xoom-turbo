@@ -53,11 +53,11 @@ public class ApplicationProperty {
     final String envKey =
             resolveEnvironmentVariable(key);
 
-    if (!System.getenv().containsKey(envKey)) {
+    if (!EnvironmentVariables.containsKey(envKey)) {
       return null;
     }
 
-    final String value = System.getenv(envKey);
+    final String value = EnvironmentVariables.retrieve(envKey);
 
     if (value == null || value.trim().isEmpty()) {
       return null;
@@ -67,7 +67,7 @@ public class ApplicationProperty {
   }
 
   private static String resolveEnvironmentVariable(final String key) {
-    return String.format(COMBINATION_PATTERN, XOOM_PREFIX, key).replace("\\.", "_");
+    return String.format(COMBINATION_PATTERN, XOOM_PREFIX, key).replaceAll("\\.", "_").toUpperCase();
   }
 
 }
