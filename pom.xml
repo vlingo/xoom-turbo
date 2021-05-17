@@ -1,13 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo.xoom</groupId>
   <artifactId>xoom-turbo</artifactId>
   <version>1.7.8-SNAPSHOT</version>
-  <description>The VLINGO XOOM Xoom provides a JVM microframework for the VLINGO XOOM Platform that helps in building
-    high-performance reactive microservices.
-  </description>
+  <description>The VLINGO XOOM Xoom provides a JVM microframework for the VLINGO XOOM Platform that helps in building high-performance reactive microservices.</description>
   <name>xoom-turbo</name>
   <url>https://github.com/vlingo/xoom-turbo</url>
   <licenses>
@@ -39,7 +35,6 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <graalvm.version>21.1.0</graalvm.version>
   </properties>
   <dependencies>
     <dependency>
@@ -85,6 +80,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>io.vlingo.xoom</groupId>
+      <artifactId>xoom-build-plugins</artifactId>
+      <version>1.7.8-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>com.google.auto.service</groupId>
       <artifactId>auto-service</artifactId>
       <version>1.0-rc5</version>
@@ -99,6 +100,11 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.7</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>62.1</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -116,23 +122,6 @@
       <groupId>com.wix</groupId>
       <artifactId>wix-embedded-mysql</artifactId>
       <version>4.2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>io.vlingo.xoom</groupId>
-      <artifactId>xoom-build-plugins</artifactId>
-      <version>1.7.8-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.ibm.icu</groupId>
-      <artifactId>icu4j</artifactId>
-      <version>62.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.graalvm.sdk</groupId>
-      <artifactId>graal-sdk</artifactId>
-      <version>${graalvm.version}</version>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
@@ -241,12 +230,8 @@
     <repository>
       <id>ossrh-snapshots</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
     </repository>
   </repositories>
 
