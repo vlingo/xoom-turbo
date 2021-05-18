@@ -49,4 +49,8 @@ public class Settings {
   public static Properties properties() {
     return PROPERTIES;
   }
+
+  public static void clear() {
+    PROPERTIES.clear();
+  }
 }
