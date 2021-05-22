@@ -7,16 +7,16 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer;
 
-import io.vlingo.xoom.turbo.annotation.AnnotatedElements;
-import io.vlingo.xoom.turbo.annotation.ProcessingAnnotationException;
-import io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch.AutoDispatchResourceHandlerGenerationStep;
-import io.vlingo.xoom.turbo.annotation.codegen.template.initializer.XoomInitializerGenerationStep;
-import io.vlingo.xoom.turbo.annotation.codegen.template.projections.ProjectionDispatcherProviderGenerationStep;
-import io.vlingo.xoom.turbo.annotation.codegen.template.storage.StorageGenerationStep;
-import io.vlingo.xoom.turbo.annotation.initializer.contentloader.CodeGenerationContextLoader;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationException;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
+import io.vlingo.xoom.turbo.annotation.AnnotatedElements;
+import io.vlingo.xoom.turbo.annotation.ProcessingAnnotationException;
+import io.vlingo.xoom.turbo.annotation.codegen.autodispatch.AutoDispatchResourceHandlerGenerationStep;
+import io.vlingo.xoom.turbo.annotation.codegen.initializer.XoomInitializerGenerationStep;
+import io.vlingo.xoom.turbo.annotation.codegen.projections.ProjectionDispatcherProviderGenerationStep;
+import io.vlingo.xoom.turbo.annotation.codegen.storage.StorageGenerationStep;
+import io.vlingo.xoom.turbo.annotation.initializer.contentloader.CodeGenerationContextLoader;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import java.util.stream.Stream;

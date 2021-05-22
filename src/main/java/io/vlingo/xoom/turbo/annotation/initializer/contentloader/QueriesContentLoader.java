@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
+import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.turbo.annotation.persistence.EnableQueries;
 import io.vlingo.xoom.turbo.annotation.persistence.QueriesEntry;
-import io.vlingo.xoom.codegen.CodeGenerationContext;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
@@ -21,7 +21,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.QUERIES_ACTOR;
+import static io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard.QUERIES_ACTOR;
 
 
 public class QueriesContentLoader extends AnnotationBasedContentLoader<Map<TypeElement, TypeElement>> {
