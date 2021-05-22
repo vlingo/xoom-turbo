@@ -7,15 +7,15 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer;
 
-import io.vlingo.xoom.turbo.XoomInitializationAware;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.turbo.XoomInitializationAware;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 
-import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.XOOM_INITIALIZER;
-import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
+import static io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard.XOOM_INITIALIZER;
+import static io.vlingo.xoom.turbo.annotation.codegen.Label.*;
 
 public class XoomInitializerParameterResolver {
 

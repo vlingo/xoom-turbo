@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.turbo.annotation.persistence.Adapters;
 import io.vlingo.xoom.turbo.annotation.persistence.Persistence;
-import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
@@ -17,8 +17,8 @@ import javax.lang.model.element.TypeElement;
 import java.util.Collections;
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.AGGREGATE_STATE;
-import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard.AGGREGATE_STATE;
+import static io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard.DOMAIN_EVENT;
 
 
 public class AdapterEntriesContentLoader extends TypeBasedContentLoader {

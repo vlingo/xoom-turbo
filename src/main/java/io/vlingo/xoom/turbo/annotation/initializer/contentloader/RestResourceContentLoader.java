@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
-import io.vlingo.xoom.http.resource.DynamicResourceHandler;
-import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
-import io.vlingo.xoom.turbo.annotation.initializer.ResourceHandlers;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.http.resource.DynamicResourceHandler;
+import io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard;
+import io.vlingo.xoom.turbo.annotation.initializer.ResourceHandlers;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;

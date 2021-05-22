@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.turbo.annotation.autodispatch;
 
-import io.vlingo.xoom.turbo.annotation.TypeRetriever;
-import io.vlingo.xoom.turbo.annotation.codegen.template.autodispatch.PathFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.turbo.annotation.TypeRetriever;
+import io.vlingo.xoom.turbo.annotation.codegen.autodispatch.PathFormatter;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
@@ -24,7 +24,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.annotation.codegen.template.Label.*;
+import static io.vlingo.xoom.turbo.annotation.codegen.Label.*;
 import static javax.lang.model.element.Modifier.DEFAULT;
 
 public class AutoDispatchParameterResolver {

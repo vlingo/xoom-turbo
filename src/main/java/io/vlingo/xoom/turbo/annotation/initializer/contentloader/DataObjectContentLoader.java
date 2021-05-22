@@ -6,9 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
-import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
-import io.vlingo.xoom.turbo.annotation.persistence.DataObjects;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard;
+import io.vlingo.xoom.turbo.annotation.persistence.DataObjects;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
