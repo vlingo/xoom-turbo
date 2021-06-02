@@ -6,17 +6,18 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.turbo;
 
+import static io.vlingo.xoom.turbo.ApplicationProperty.NODE_NAME_ARG;
+import static io.vlingo.xoom.turbo.ApplicationProperty.PORT_ARG;
+
+import org.apache.commons.lang3.StringUtils;
+
 import io.vlingo.xoom.cluster.model.Properties;
-import io.vlingo.xoom.http.resource.*;
+import io.vlingo.xoom.http.resource.Configuration;
+import io.vlingo.xoom.http.resource.SinglePageApplicationConfiguration;
+import io.vlingo.xoom.http.resource.StaticFilesConfiguration;
 import io.vlingo.xoom.http.resource.feed.FeedConfiguration;
 import io.vlingo.xoom.http.resource.sse.SseConfiguration;
 import io.vlingo.xoom.lattice.grid.Grid;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Optional;
-
-import static io.vlingo.xoom.turbo.ApplicationProperty.NODE_NAME_ARG;
-import static io.vlingo.xoom.turbo.ApplicationProperty.PORT_ARG;
 
 public interface XoomInitializationAware {
 
@@ -73,6 +74,6 @@ public interface XoomInitializationAware {
   }
 
   default Properties clusterProperties() {
-    return null;
+    return Properties.openQuietly();
   }
 }
