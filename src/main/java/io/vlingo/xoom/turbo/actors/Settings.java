@@ -15,6 +15,7 @@ import java.util.Properties;
 
 public class Settings {
 
+  private static final int DEFAULT_PORT = 18080;
   private static final Properties PROPERTIES = new Properties();
   private static final String PROPERTIES_FILENAME = "/xoom-turbo.properties";
   private static final Map<Object, Object> DEFAULT_DATABASE_PROPERTIES = new HashMap<Object, Object>() {
@@ -48,6 +49,13 @@ public class Settings {
 
   public static Properties properties() {
     return PROPERTIES;
+  }
+
+  public static int serverPort() {
+    final String serverPort =
+            Settings.properties().getOrDefault("xoom.http.server.port", DEFAULT_PORT).toString();
+
+    return Integer.valueOf(serverPort);
   }
 
   public static void clear() {

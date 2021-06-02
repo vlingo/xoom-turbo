@@ -11,12 +11,12 @@ import io.vlingo.xoom.actors.Configuration;
 import io.vlingo.xoom.cluster.model.Properties;
 import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.lattice.grid.GridClusterProperties;
+import io.vlingo.xoom.turbo.actors.Settings;
 
 public class Boot {
 
   private static String resolvedNodeName;
   private static Properties clusterProperties;
-  private static final int defaultPort = 18080;
 
   public static Grid start(final String worldName) throws Exception {
     return start(worldName, null);
@@ -39,7 +39,7 @@ public class Boot {
   }
 
   public static int serverPort() {
-    return clusterProperties.getInteger(resolvedNodeName, "server.port", defaultPort);
+    return Settings.serverPort();
   }
 
   private static String resolveNodeName(final String nodeName) {
