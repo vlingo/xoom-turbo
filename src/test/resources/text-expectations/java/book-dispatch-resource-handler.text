@@ -2,6 +2,7 @@ package io.vlingo.xoomapp.resources;
 
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.turbo.annotation.autodispatch.Handler;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.http.ContentType;
 import io.vlingo.xoom.http.Response;
@@ -29,7 +30,7 @@ public class BookResourceHandler extends DynamicResourceHandler implements BookR
       super(grid.world().stage());
       this.$stage = grid;
       this.$logger = super.logger();
-      this.$queries = QueryModelStateStoreProvider.instance().bookQueries;
+      this.$queries = ComponentRegistry.withType(QueryModelStateStoreProvider.class).bookQueries;
   }
 
   public Completes<Response> queryBooks() {

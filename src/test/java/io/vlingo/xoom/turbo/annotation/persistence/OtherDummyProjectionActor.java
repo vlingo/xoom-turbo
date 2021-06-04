@@ -8,12 +8,13 @@
 package io.vlingo.xoom.turbo.annotation.persistence;
 
 import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.annotation.initializer.infrastructure.persistence.QueryModelStateStoreProvider;
 import io.vlingo.xoom.turbo.annotation.model.OtherDummyState;
 
 public class OtherDummyProjectionActor extends StateStoreProjectionActor<OtherDummyState> {
 
     public OtherDummyProjectionActor() {
-        super(QueryModelStateStoreProvider.instance().store);
+        super(ComponentRegistry.withType(QueryModelStateStoreProvider.class).store);
     }
 }

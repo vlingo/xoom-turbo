@@ -4,6 +4,7 @@ import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoom.actors.Address;
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.turbo.annotation.autodispatch.Handler;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.http.ContentType;
 import io.vlingo.xoom.http.Response;
@@ -34,7 +35,7 @@ public class AuthorResourceHandler extends DynamicResourceHandler implements Aut
       super(grid.world().stage());
       this.$stage = grid;
       this.$logger = super.logger();
-      this.$queries = QueryModelStateStoreProvider.instance().authorQueries;
+      this.$queries = ComponentRegistry.withType(QueryModelStateStoreProvider.class).authorQueries;
   }
 
   public Completes<Response> changeAuthorName(final String id, final AuthorData authorData) {
