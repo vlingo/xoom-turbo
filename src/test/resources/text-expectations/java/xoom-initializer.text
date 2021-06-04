@@ -5,6 +5,7 @@ import io.vlingo.xoom.cluster.model.Properties;
 import io.vlingo.xoom.http.resource.*;
 import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.turbo.Boot;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.XoomInitializationAware;
 import io.vlingo.xoom.turbo.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;
 
@@ -42,9 +43,11 @@ public class XoomInitializer implements XoomInitializationAware {
 
     final Configuration serverConfiguration = initializer.configureServer(grid, args);
 
-    final io.vlingo.xoom.turbo.exchange.ExchangeInitializer exchangeInitializer = new io.vlingo.xoomapp.infrastructure.exchange.ExchangeBootstrap();
-    exchangeInitializer.init(grid);
+    final io.vlingo.xoom.turbo.exchange.ExchangeInitializer exchangeInitializer =
+      ComponentRegistry.has(io.vlingo.xoom.turbo.exchange.ExchangeInitializer.class) ?
+      ComponentRegistry.withType(io.vlingo.xoom.turbo.exchange.ExchangeInitializer.class) : io.vlingo.xoomapp.infrastructure.exchange.ExchangeBootstrap();
 
+    exchangeInitializer.init(grid);
     final StatefulTypeRegistry statefulTypeRegistry = new StatefulTypeRegistry(grid.world());
     QueryModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry);
     CommandModelStateStoreProvider.using(grid.world().stage(), statefulTypeRegistry, exchangeInitializer.dispatcher());

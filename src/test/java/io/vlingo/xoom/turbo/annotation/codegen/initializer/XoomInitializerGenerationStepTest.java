@@ -26,7 +26,7 @@ import java.nio.file.Paths;
 public class XoomInitializerGenerationStepTest {
 
   @Test
-  public void testThatXoomInitializerIsGenerated() throws IOException {
+  public void testThatXoomInitializerIsGenerated() {
     final CodeGenerationContext context =
             CodeGenerationContext.using(Mockito.mock(Filer.class), Mockito.mock(Element.class))
                     .with(Label.PROJECTION_TYPE, ProjectionType.NONE.name())

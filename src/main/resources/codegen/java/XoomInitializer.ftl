@@ -5,6 +5,7 @@ import io.vlingo.xoom.cluster.model.Properties;
 import io.vlingo.xoom.http.resource.*;
 import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.turbo.Boot;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.XoomInitializationAware;
 <#if blockingMessaging>
 import io.vlingo.xoom.turbo.scooter.plugin.mailbox.blocking.BlockingMailboxPlugin;
@@ -47,9 +48,11 @@ public class XoomInitializer implements XoomInitializationAware {
     final Configuration serverConfiguration = initializer.configureServer(grid, args);
 
     <#if exchangeBootstrapName?has_content>
-    final io.vlingo.xoom.turbo.exchange.ExchangeInitializer exchangeInitializer = new ${exchangeBootstrapName}();
-    exchangeInitializer.init(grid);
+    final io.vlingo.xoom.turbo.exchange.ExchangeInitializer exchangeInitializer =
+      ComponentRegistry.has(io.vlingo.xoom.turbo.exchange.ExchangeInitializer.class) ?
+      ComponentRegistry.withType(io.vlingo.xoom.turbo.exchange.ExchangeInitializer.class) : ${exchangeBootstrapName}();
 
+    exchangeInitializer.init(grid);
     </#if>
     <#list registries as registry>
     final ${registry.className} ${registry.objectName} = new ${registry.className}(grid.world());
