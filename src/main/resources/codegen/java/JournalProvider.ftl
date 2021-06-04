@@ -27,10 +27,6 @@ import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
 public class ${storeProviderName}  {
   public final Journal<String> journal;
 
-  public static ${storeProviderName}  instance() {
-    return instance;
-  }
-
   public static ${storeProviderName} using(final Stage stage, final SourcedTypeRegistry registry) {
     return using(stage, registry, new NoOpDispatcher());
  }
