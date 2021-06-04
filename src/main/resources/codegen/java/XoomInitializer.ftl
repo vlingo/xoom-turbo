@@ -114,8 +114,10 @@ public class XoomInitializer implements XoomInitializationAware {
     return instance;
   }
 
-  public Grid grid() {
-    return grid;
+  public void terminateWorld() {
+    if(grid !=null &&  grid.world() != null) {
+      grid.world().terminate();
+    }
   }
 
   public Server server() {
