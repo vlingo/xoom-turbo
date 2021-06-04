@@ -50,7 +50,7 @@ public class XoomInitializer implements XoomInitializationAware {
     <#if exchangeBootstrapName?has_content>
     final io.vlingo.xoom.turbo.exchange.ExchangeInitializer exchangeInitializer =
       ComponentRegistry.has(io.vlingo.xoom.turbo.exchange.ExchangeInitializer.class) ?
-      ComponentRegistry.withType(io.vlingo.xoom.turbo.exchange.ExchangeInitializer.class) : ${exchangeBootstrapName}();
+      ComponentRegistry.withType(io.vlingo.xoom.turbo.exchange.ExchangeInitializer.class) : new ${exchangeBootstrapName}();
 
     exchangeInitializer.init(grid);
     </#if>

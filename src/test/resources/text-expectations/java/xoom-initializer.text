@@ -45,7 +45,7 @@ public class XoomInitializer implements XoomInitializationAware {
 
     final io.vlingo.xoom.turbo.exchange.ExchangeInitializer exchangeInitializer =
       ComponentRegistry.has(io.vlingo.xoom.turbo.exchange.ExchangeInitializer.class) ?
-      ComponentRegistry.withType(io.vlingo.xoom.turbo.exchange.ExchangeInitializer.class) : io.vlingo.xoomapp.infrastructure.exchange.ExchangeBootstrap();
+      ComponentRegistry.withType(io.vlingo.xoom.turbo.exchange.ExchangeInitializer.class) : new io.vlingo.xoomapp.infrastructure.exchange.ExchangeBootstrap();
 
     exchangeInitializer.init(grid);
     final StatefulTypeRegistry statefulTypeRegistry = new StatefulTypeRegistry(grid.world());
