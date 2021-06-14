@@ -19,10 +19,10 @@ import static io.vlingo.xoom.turbo.annotation.initializer.resources.DummyHandler
 import static io.vlingo.xoom.turbo.annotation.initializer.resources.DummyHandlers.CHANGE_NAME;
 
 @Model(protocol = Dummy.class, actor = DummyEntity.class, data = DummyData.class)
-@AutoDispatch(path = "/dummies", handlers = DummyHandlers.class)
+@AutoDispatch(path = "/dummies/", handlers = DummyHandlers.class)
 public interface DummyModelResource {
 
-   @Route(method = PUT, path = "/{dummyId}/name", handler = CHANGE_NAME)
+   @Route(method = PUT, path = "/{dummyId}/name/", handler = CHANGE_NAME)
    @ResponseAdapter(handler = ADAPT_STATE)
     Completes<Response> changeDummyName(@Id String dummyId, @Body DummyData dummyData);
 

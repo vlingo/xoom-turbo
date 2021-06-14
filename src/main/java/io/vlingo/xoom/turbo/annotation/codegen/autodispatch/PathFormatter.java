@@ -19,28 +19,13 @@ public class PathFormatter {
     return formatAbsoluteRoutePath(uriRoot, routePath);
   }
 
-  public static String formatRelativeRoutePath(final CodeGenerationParameter routeParameter) {
-    final String routePath = routeParameter.retrieveRelatedValue(Label.ROUTE_PATH);
-    if (routePath.isEmpty() || removeSurplusesSlashes(routePath).equals("/")) {
-      return "";
-    }
-    if (routePath.endsWith("/")) {
-      return routePath.substring(0, routePath.length() - 1);
-    }
-    return routePath;
-  }
-
-  public static String formatRootPath(final String uriRoot) {
-    return removeSurplusesSlashes(String.format("/%s", uriRoot));
-  }
-
   public static String formatAbsoluteRoutePath(final String rootPath, final String routePath) {
     if (routePath.isEmpty() || routePath.equals("/")) {
       return rootPath;
     } else if (!routePath.startsWith(rootPath)) {
       return prependRootPath(rootPath, routePath);
     } else {
-      return routePath;
+      return removeSurplusesSlashes(routePath);
     }
   }
 
@@ -52,6 +37,9 @@ public class PathFormatter {
     String cleanPath = path;
     while (cleanPath.contains("//")) {
       cleanPath = cleanPath.replaceAll("//", "/");
+    }
+    if (cleanPath.length() > 1 && cleanPath.endsWith("/")) {
+      return cleanPath.substring(0, cleanPath.length() - 1);
     }
     return cleanPath;
   }
