@@ -8,6 +8,7 @@
 package io.vlingo.xoom.turbo.storage;
 
 import io.vlingo.xoom.actors.Stage;
+import io.vlingo.xoom.symbio.store.StorageException;
 import io.vlingo.xoom.symbio.store.common.jdbc.Configuration;
 import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
@@ -41,18 +42,22 @@ public interface StoreActorBuilder {
                     final StorageType storageType,
                     final Properties properties,
                     final boolean autoDatabaseCreation) {
-    final Configuration configuration =
-            new DatabaseParameters(model, properties, autoDatabaseCreation)
-                    .mapToConfiguration();
+    try {
+      final Configuration configuration =
+              new DatabaseParameters(model, properties, autoDatabaseCreation)
+                      .mapToConfiguration();
 
-    final DatabaseType databaseType =
-            DatabaseType.retrieveFromConfiguration(configuration);
+      final DatabaseType databaseType =
+              DatabaseType.retrieveFromConfiguration(configuration);
 
-    final Predicate<StoreActorBuilder> filter =
-            resolver -> resolver.support(storageType, databaseType);
+      final Predicate<StoreActorBuilder> filter =
+              resolver -> resolver.support(storageType, databaseType);
 
-    return BUILDERS.stream().filter(filter).findFirst().get()
-            .build(stage, dispatcher, configuration);
+      return BUILDERS.stream().filter(filter).findFirst().get()
+              .build(stage, dispatcher, configuration);
+    } catch (final StorageException exception) {
+      return storageType.resolveNoOpStore(stage);
+    }
   }
 
   @SuppressWarnings("rawtypes")
