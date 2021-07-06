@@ -7,6 +7,16 @@
 
 package io.vlingo.xoom.turbo.annotation.initializer.contentloader;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.TypeElement;
+
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.ContentLoader;
 import io.vlingo.xoom.turbo.annotation.AnnotatedElements;
@@ -16,11 +26,6 @@ import io.vlingo.xoom.turbo.annotation.initializer.Xoom;
 import io.vlingo.xoom.turbo.annotation.initializer.XoomInitializerParameterResolver;
 import io.vlingo.xoom.turbo.annotation.persistence.Persistence;
 import io.vlingo.xoom.turbo.annotation.persistence.PersistenceParameterResolver;
-
-import javax.annotation.processing.Filer;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.TypeElement;
-import java.util.*;
 
 public class CodeGenerationContextLoader {
 
@@ -59,7 +64,6 @@ public class CodeGenerationContextLoader {
             .contents(resolveContentLoaders());
   }
 
-  @SuppressWarnings("rawtypes")
   private List<ContentLoader> resolveContentLoaders() {
     if (bootstrapClass == null) {
       return Collections.emptyList();

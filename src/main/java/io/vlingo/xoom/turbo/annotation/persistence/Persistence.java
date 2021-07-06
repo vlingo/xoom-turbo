@@ -38,6 +38,7 @@ public @interface Persistence {
       return equals(OBJECT_STORE);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T resolveNoOpStore(final Stage stage) {
       final Stage local = stage.world().stage();
       switch (this) {

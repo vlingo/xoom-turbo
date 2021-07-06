@@ -7,7 +7,14 @@
 
 package io.vlingo.xoom.turbo.stepflow;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,7 +28,6 @@ public abstract class State<T extends State> {
   private UUID version;
   private String name;
 
-  @SuppressWarnings("unchecked")
   public State() {
     setName(this.getName());
     if (name == null) throw new RuntimeException("A state must override getName() for "
@@ -48,7 +54,6 @@ public abstract class State<T extends State> {
 
   public abstract TransitionHandler[] getTransitionHandlers();
 
-  @SuppressWarnings("unchecked")
   public Map<String, Set<String>> getMap() {
     Map<String, Set<String>> result = new HashMap<>();
 
