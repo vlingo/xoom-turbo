@@ -21,7 +21,7 @@ Docs: https://docs.vlingo.io/xoom-turbo
 
 ```gradle
 dependencies {
-    compile 'io.vlingo.xoom:xoom-turbo:1.8.1'
+    compile 'io.vlingo.xoom:xoom-turbo:1.8.3'
 }
 ```
 
