@@ -13,7 +13,7 @@ Docs: https://docs.vlingo.io/xoom-turbo
     <dependency>
       <groupId>io.vlingo.xoom</groupId>
       <artifactId>xoom-turbo</artifactId>
-      <version>1.8.1</version>
+      <version>1.8.3</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
