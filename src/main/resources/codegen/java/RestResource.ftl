@@ -18,9 +18,11 @@ import io.vlingo.xoom.http.ResponseHeader;
 import io.vlingo.xoom.http.resource.Resource;
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
 import io.vlingo.xoom.lattice.grid.Grid;
+<#if imports?has_content>
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
+</#if>
 
 import static io.vlingo.xoom.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.xoom.http.Response.Status.*;
@@ -63,7 +65,7 @@ public class ${resourceName} extends DynamicResourceHandler {
   </#list>
   @Override
   public Resource<?> routes() {
-  <#if routeDeclarations?has_content && routeDeclarations?size == 0>
+  <#if !routeDeclarations?has_content || routeDeclarations?size == 0>
      return resource("${resourceName}" /*Add Request Handlers here as a second parameter*/);
   <#else>
      return resource("${resourceName}",
