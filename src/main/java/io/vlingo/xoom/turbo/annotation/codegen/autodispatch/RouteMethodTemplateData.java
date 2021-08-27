@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.codegen.Label;
 
@@ -34,22 +35,25 @@ public class RouteMethodTemplateData extends TemplateData {
 
   public static List<TemplateData> from(final CodeGenerationParameter autoDispatchParameter,
                                         final TemplateParameters parentParameters) {
+    final CodeElementFormatter codeElementFormatter =
+            ComponentRegistry.withType(CodeElementFormatter.class);
+
     final Predicate<CodeGenerationParameter> filter =
             parameter -> !parameter.retrieveRelatedValue(INTERNAL_ROUTE_HANDLER, Boolean::valueOf);
 
     final Function<CodeGenerationParameter, RouteMethodTemplateData> mapper =
-            routeSignatureParameter -> new RouteMethodTemplateData(autoDispatchParameter,
-                    routeSignatureParameter, parentParameters);
+            routeSignatureParameter -> new RouteMethodTemplateData(codeElementFormatter,
+                    autoDispatchParameter, routeSignatureParameter, parentParameters);
 
     return autoDispatchParameter.retrieveAllRelated(Label.ROUTE_SIGNATURE)
             .filter(filter).map(mapper).collect(Collectors.toList());
   }
 
-  private RouteMethodTemplateData(final CodeGenerationParameter mainParameter,
+  private RouteMethodTemplateData(final CodeElementFormatter codeElementFormatter,
+                                  final CodeGenerationParameter mainParameter,
                                   final CodeGenerationParameter routeSignatureParameter,
                                   final TemplateParameters parentParameters) {
-    final AutoDispatchHandlerInvocationResolver invocationResolver =
-            new AutoDispatchHandlerInvocationResolver();
+    final AutoDispatchHandlerInvocationResolver invocationResolver = new AutoDispatchHandlerInvocationResolver();
 
     final String routeHandlerInvocation =
             invocationResolver.resolveRouteHandlerInvocation(mainParameter, routeSignatureParameter);
@@ -59,7 +63,7 @@ public class RouteMethodTemplateData extends TemplateData {
 
     this.parameters =
             TemplateParameters.with(ROUTE_SIGNATURE, RouteDetail.resolveMethodSignature(routeSignatureParameter))
-                    .and(MODEL_ATTRIBUTE, resolveModelAttributeName(mainParameter, Label.MODEL_PROTOCOL))
+                    .and(MODEL_ATTRIBUTE, resolveModelAttributeName(codeElementFormatter, mainParameter, Label.MODEL_PROTOCOL))
                     .and(ROUTE_METHOD, routeSignatureParameter.retrieveRelatedValue(Label.ROUTE_METHOD))
                     .and(REQUIRE_ENTITY_LOADING, resolveEntityLoading(routeSignatureParameter))
                     .and(ADAPTER_HANDLER_INVOCATION, adapterHandlerInvocation)
@@ -100,13 +104,14 @@ public class RouteMethodTemplateData extends TemplateData {
     return idType.contains(".") ? "" : idType;
   }
 
-  private String resolveModelAttributeName(final CodeGenerationParameter mainParameter,
+  private String resolveModelAttributeName(final CodeElementFormatter codeElementFormatter,
+                                           final CodeGenerationParameter mainParameter,
                                            final Label protocolLabel) {
     if (mainParameter.isLabeled(Label.AGGREGATE)) {
-      return CodeElementFormatter.simpleNameToAttribute(mainParameter.value);
+      return codeElementFormatter.simpleNameToAttribute(mainParameter.value);
     }
     final String qualifiedName = mainParameter.retrieveRelatedValue(protocolLabel);
-    return CodeElementFormatter.qualifiedNameToAttribute(qualifiedName);
+    return codeElementFormatter.qualifiedNameToAttribute(qualifiedName);
   }
 
   @Override

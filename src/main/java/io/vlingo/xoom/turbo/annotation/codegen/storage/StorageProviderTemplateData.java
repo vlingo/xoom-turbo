@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.ParameterKey.Defaults.PACKAGE_NAME;
+import static io.vlingo.xoom.turbo.ComponentRegistry.withType;
 import static java.util.stream.Collectors.toSet;
 
 public class StorageProviderTemplateData extends TemplateData {
@@ -66,12 +67,14 @@ public class StorageProviderTemplateData extends TemplateData {
 
     final Set<String> imports = resolveImports(model, storageType, contents, queries);
 
+    final CodeElementFormatter codeElementFormatter = withType(CodeElementFormatter.class);
+
     return TemplateParameters.with(TemplateParameter.STORAGE_TYPE, storageType).and(TemplateParameter.PROJECTION_TYPE, projectionType)
             .and(TemplateParameter.MODEL, model).and(PACKAGE_NAME, packageName).and(TemplateParameter.ADAPTERS, Adapter.from(templatesData))
             .and(TemplateParameter.REQUIRE_ADAPTERS, storageType.requireAdapters(model)).and(TemplateParameter.QUERIES, queries)
             .and(TemplateParameter.USE_PROJECTIONS, projectionType.isProjectionEnabled())
             .and(TemplateParameter.AGGREGATES, ContentQuery.findClassNames(AnnotationBasedTemplateStandard.AGGREGATE, contents))
-            .and(TemplateParameter.PERSISTENT_TYPES, persistentTypes.map(CodeElementFormatter::simpleNameOf).collect(toSet()))
+            .and(TemplateParameter.PERSISTENT_TYPES, persistentTypes.map(codeElementFormatter::simpleNameOf).collect(toSet()))
             .andResolve(TemplateParameter.STORE_PROVIDER_NAME, params -> AnnotationBasedTemplateStandard.STORE_PROVIDER.resolveClassname(params))
             .addImports(imports);
   }
@@ -87,7 +90,7 @@ public class StorageProviderTemplateData extends TemplateData {
             storageType.findPersistentQualifiedTypes(model, contents);
 
     final Set<String> queriesQualifiedNames = queries.stream()
-            .flatMap(param -> param.getQualifiedNames().stream())
+            .flatMap(param -> param.qualifiedNames.stream())
             .collect(toSet());
 
     final Set<String> aggregateActorQualifiedNames = storageType.isSourced() ?

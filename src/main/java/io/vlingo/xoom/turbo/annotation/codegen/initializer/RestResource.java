@@ -10,6 +10,7 @@ package io.vlingo.xoom.turbo.annotation.codegen.initializer;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard;
 
 import java.util.Iterator;
@@ -26,21 +27,25 @@ public class RestResource {
   private final boolean last;
 
   public static List<RestResource> from(final List<Content> contents) {
+    final CodeElementFormatter formatter =
+            ComponentRegistry.withType(CodeElementFormatter.class);
+
     final Set<String> classNames =
             ContentQuery.findClassNames(contents, AnnotationBasedTemplateStandard.REST_RESOURCE, AnnotationBasedTemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER);
 
     final Iterator<String> iterator = classNames.iterator();
 
     return IntStream.range(0, classNames.size()).mapToObj(index ->
-            new RestResource(iterator.next(), index,
+            new RestResource(formatter, iterator.next(), index,
                     classNames.size())).collect(toList());
   }
 
-  private RestResource(final String restResourceName,
+  private RestResource(final CodeElementFormatter formatter,
+                       final String restResourceName,
                        final int resourceIndex,
                        final int numberOfResources) {
     this.className = restResourceName;
-    this.objectName = CodeElementFormatter.simpleNameToAttribute(restResourceName);
+    this.objectName = formatter.simpleNameToAttribute(restResourceName);
     this.last = resourceIndex == numberOfResources - 1;
   }
 

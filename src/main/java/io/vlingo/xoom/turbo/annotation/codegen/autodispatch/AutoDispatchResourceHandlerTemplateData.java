@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.codegen.Label;
 import io.vlingo.xoom.turbo.annotation.codegen.TemplateParameter;
@@ -37,15 +38,19 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
   private final TemplateParameters parameters;
 
   public static List<TemplateData> from(final CodeGenerationContext context) {
+    final CodeElementFormatter codeElementFormatter =
+            ComponentRegistry.withType(CodeElementFormatter.class);
+
     return context.parametersOf(Label.AUTO_DISPATCH_NAME)
-            .map(param -> new AutoDispatchResourceHandlerTemplateData(context, param))
+            .map(param -> new AutoDispatchResourceHandlerTemplateData(codeElementFormatter, context, param))
             .collect(toList());
   }
 
   @SuppressWarnings("unchecked")
-  private AutoDispatchResourceHandlerTemplateData(final CodeGenerationContext context,
+  private AutoDispatchResourceHandlerTemplateData(final CodeElementFormatter codeElementFormatter,
+                                                  final CodeGenerationContext context,
                                                   final CodeGenerationParameter autoDispatchParameter) {
-    this.restResourceName = CodeElementFormatter.simpleNameOf(autoDispatchParameter.value);
+    this.restResourceName = codeElementFormatter.simpleNameOf(autoDispatchParameter.value);
 
     final TemplateParameters queryStoreProviderParameters =
             TemplateParameters.with(TemplateParameter.STORAGE_TYPE, StorageType.STATE_STORE).and(TemplateParameter.MODEL, Model.QUERY);
@@ -54,10 +59,10 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
             AnnotationBasedTemplateStandard.STORE_PROVIDER.resolveClassname(queryStoreProviderParameters);
 
     final String aggregateProtocolClassName =
-            CodeElementFormatter.simpleNameOf(autoDispatchParameter.retrieveRelatedValue(Label.MODEL_PROTOCOL));
+            codeElementFormatter.simpleNameOf(autoDispatchParameter.retrieveRelatedValue(Label.MODEL_PROTOCOL));
 
     this.parameters =
-            TemplateParameters.with(PACKAGE_NAME, CodeElementFormatter.packageOf(autoDispatchParameter.value))
+            TemplateParameters.with(PACKAGE_NAME, codeElementFormatter.packageOf(autoDispatchParameter.value))
                     .and(TemplateParameter.QUERIES, Queries.from(autoDispatchParameter))
                     .and(TemplateParameter.STATE_NAME, AnnotationBasedTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregateProtocolClassName))
                     .and(TemplateParameter.REST_RESOURCE_NAME, standard().resolveClassname(restResourceName))

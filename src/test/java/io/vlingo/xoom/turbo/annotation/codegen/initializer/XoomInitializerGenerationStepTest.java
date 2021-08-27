@@ -8,20 +8,25 @@ package io.vlingo.xoom.turbo.annotation.codegen.initializer;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.codegen.template.OutputFile;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.codegen.Label;
 import io.vlingo.xoom.turbo.annotation.codegen.projections.ProjectionType;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
-import java.io.IOException;
 import java.nio.file.Paths;
+
+import static io.vlingo.xoom.codegen.dialect.Dialect.JAVA;
 
 public class XoomInitializerGenerationStepTest {
 
@@ -57,6 +62,11 @@ public class XoomInitializerGenerationStepTest {
     context.addContent(AnnotationBasedTemplateStandard.STORE_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "QueryModelStateStoreProvider.java"), QUERY_MODEL_STORE_PROVIDER_CONTENT);
     context.addContent(AnnotationBasedTemplateStandard.EXCHANGE_BOOTSTRAP, new OutputFile(EXCHANGE_PACKAGE_PATH, "ExchangeBootstrap.java"), EXCHANGE_BOOTSTRAP_CONTENT);
     context.addContent(AnnotationBasedTemplateStandard.PROJECTION_DISPATCHER_PROVIDER, new OutputFile(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java"), PROJECTION_DISPATCHER_PROVIDER_CONTENT);
+  }
+
+  @Before
+  public void registerFormatter() {
+    ComponentRegistry.register(CodeElementFormatter.class, CodeElementFormatter.with(JAVA, ReservedWordsHandler.usingSuffix("_")));
   }
 
   private static final String HOME_DIRECTORY = OperatingSystem.detect().isWindows() ? "D:\\projects" : "/home";

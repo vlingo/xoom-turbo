@@ -7,6 +7,10 @@
 
 package io.vlingo.xoom.turbo.annotation;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
+import io.vlingo.xoom.turbo.ComponentRegistry;
+
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -17,6 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.dialect.Dialect.JAVA;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 public abstract class AnnotationProcessor extends AbstractProcessor {
@@ -27,6 +32,7 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
   public synchronized void init(final ProcessingEnvironment environment) {
     super.init(environment);
     this.environment = environment;
+    ComponentRegistry.register(CodeElementFormatter.class, CodeElementFormatter.with(JAVA, ReservedWordsHandler.usingSuffix("_")));
   }
 
   @Override
@@ -45,17 +51,6 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
 
     return true;
   }
-
-//    @SuppressWarnings({ "rawtypes", "unchecked" })
-//    private Map<Class, Set<Element>> filterAnnotatedElements(final RoundEnvironment environment) {
-//        final Function<Class, SimpleEntry<Class, Set<Element>>> mapper =
-//                annotationClass ->
-//                        new SimpleEntry<Class, Set<Element>>(
-//                                annotationClass, environment.getElementsAnnotatedWith(annotationClass));
-//
-//        return supportedAnnotationClasses().map(mapper)
-//                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-//    }
 
   protected abstract void generate(final AnnotatedElements annotatedElements);
 

@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.codegen.template.ParameterKey.Defaults.PACKAGE_NAME;
+import static io.vlingo.xoom.turbo.ComponentRegistry.withType;
 import static io.vlingo.xoom.turbo.annotation.codegen.TemplateParameter.QUERIES_ACTOR_NAME;
 import static io.vlingo.xoom.turbo.annotation.codegen.TemplateParameter.QUERIES_NAME;
 
@@ -26,10 +27,10 @@ public class Queries {
 
   private static final String QUALIFIED_NAME_PATTERN = "%s.%s";
 
-  private final String protocolName;
-  private final String actorName;
-  private final String attributeName;
-  private final Set<String> qualifiedNames = new HashSet<>();
+  public final String protocolName;
+  public final String actorName;
+  public final String attributeName;
+  public final Set<String> qualifiedNames = new HashSet<>();
 
   public static List<Queries> from(final Boolean useCQRS,
                                    final List<Content> contents,
@@ -92,8 +93,8 @@ public class Queries {
 
   private Queries(final String protocolQualifiedName,
                   final String actorQualifiedName) {
-    this(CodeElementFormatter.packageOf(protocolQualifiedName), CodeElementFormatter.simpleNameOf(protocolQualifiedName),
-            CodeElementFormatter.packageOf(actorQualifiedName), CodeElementFormatter.simpleNameOf(actorQualifiedName));
+    this(withType(CodeElementFormatter.class).packageOf(protocolQualifiedName), withType(CodeElementFormatter.class).simpleNameOf(protocolQualifiedName),
+            withType(CodeElementFormatter.class).packageOf(actorQualifiedName), withType(CodeElementFormatter.class).simpleNameOf(actorQualifiedName));
   }
 
   private Queries(final String protocolPackageName,
@@ -102,29 +103,13 @@ public class Queries {
                   final String actorName) {
     this.actorName = actorName;
     this.protocolName = protocolName;
-    this.attributeName = CodeElementFormatter.simpleNameToAttribute(protocolName);
+    this.attributeName = withType(CodeElementFormatter.class).simpleNameToAttribute(protocolName);
 
     if (!isEmpty()) {
       this.qualifiedNames.addAll(
               Arrays.asList(String.format(QUALIFIED_NAME_PATTERN, protocolPackageName, protocolName),
                       String.format(QUALIFIED_NAME_PATTERN, actorPackageName, actorName)));
     }
-  }
-
-  public String getProtocolName() {
-    return protocolName;
-  }
-
-  public String getActorName() {
-    return actorName;
-  }
-
-  public String getAttributeName() {
-    return attributeName;
-  }
-
-  public Set<String> getQualifiedNames() {
-    return qualifiedNames;
   }
 
   public boolean isEmpty() {
