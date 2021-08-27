@@ -70,11 +70,7 @@ public class XoomInitializer implements XoomInitializationAware {
     final Collection<Resource<?>> staticResources = Loader.resourcesFrom(initializer.staticFilesConfiguration()).values();
     final Collection<Resource<?>> restResources = Arrays.asList(
           <#list restResources as restResource>
-              <#if restResource.last>
-              ${restResource.objectName}.routes()
-              <#else>
-              ${restResource.objectName}.routes(),
-              </#if>
+              ${restResource.objectName}.routes()<#if restResource?has_next>,</#if>
           </#list>
     );
     final SinglePageApplicationConfiguration spaConf = initializer.singlePageApplicationResource();
