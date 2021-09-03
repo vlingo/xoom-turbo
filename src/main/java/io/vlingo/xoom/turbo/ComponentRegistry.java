@@ -32,7 +32,7 @@ public class ComponentRegistry {
   }
 
   public static boolean has(final Class<?> componentClass) {
-    return COMPONENTS.containsKey(componentClass.getCanonicalName());
+    return has(componentClass.getCanonicalName());
   }
 
   public static boolean has(final String componentName) {
