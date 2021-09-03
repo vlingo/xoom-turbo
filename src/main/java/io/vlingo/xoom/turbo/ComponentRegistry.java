@@ -35,6 +35,10 @@ public class ComponentRegistry {
     return COMPONENTS.containsKey(componentClass.getCanonicalName());
   }
 
+  public static boolean has(final String componentName) {
+    return COMPONENTS.containsKey(componentName);
+  }
+
   public static void clear() {
     COMPONENTS.clear();
   }
