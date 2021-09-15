@@ -2,6 +2,7 @@ package ${packageName};
 
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.cluster.model.Properties;
+import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.http.resource.*;
 import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.turbo.Boot;
@@ -110,6 +111,11 @@ public class XoomInitializer implements XoomInitializationAware {
     return instance;
   }
 
+
+  public Server server() {
+    return server;
+  }
+
   public void terminateWorld() {
     if(grid !=null &&  grid.world() != null) {
       grid.world().terminate();
@@ -117,15 +123,7 @@ public class XoomInitializer implements XoomInitializationAware {
     }
   }
 
-  public Server server() {
-    return server;
-  }
-
-  public void stopServer() throws Exception {
-    if (instance == null) {
-      throw new IllegalStateException("${appName} server not running");
-    }
-    instance.server.stop();
-    instance.grid.world().terminate();
+  public Completes<Boolean> stopServer() throws Exception {
+    return instance.server.shutDown();
   }
 }
