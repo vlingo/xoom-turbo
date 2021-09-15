@@ -111,7 +111,6 @@ public class XoomInitializer implements XoomInitializationAware {
     return instance;
   }
 
-
   public Server server() {
     return server;
   }

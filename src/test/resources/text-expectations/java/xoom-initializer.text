@@ -100,13 +100,6 @@ public class XoomInitializer implements XoomInitializationAware {
     return instance;
   }
 
-  public void terminateWorld() {
-    if(grid !=null &&  grid.world() != null) {
-      grid.world().terminate();
-      instance = null;
-    }
-  }
-
   public Server server() {
     return server;
   }
