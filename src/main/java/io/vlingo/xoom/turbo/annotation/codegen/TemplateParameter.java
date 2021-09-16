@@ -44,6 +44,7 @@ public enum TemplateParameter implements ParameterKey {
   USE_ANNOTATIONS("useAnnotations"),
   USE_AUTO_DISPATCH("useAutoDispatch"),
   MODEL("model"),
+  LOCATION_PATH("locationPath"),
   URI_ROOT("uriRoot"),
   VALUE_OBJECT_INITIALIZERS("valueObjectInitializers"),
   MODEL_ACTOR("modelActor"),

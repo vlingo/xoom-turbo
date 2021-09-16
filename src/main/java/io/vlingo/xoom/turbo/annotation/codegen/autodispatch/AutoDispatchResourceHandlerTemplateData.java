@@ -52,6 +52,9 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                                                   final CodeGenerationParameter autoDispatchParameter) {
     this.restResourceName = codeElementFormatter.simpleNameOf(autoDispatchParameter.value);
 
+    final String uriRoot =
+            autoDispatchParameter.retrieveRelatedValue(Label.URI_ROOT);
+
     final TemplateParameters queryStoreProviderParameters =
             TemplateParameters.with(TemplateParameter.STORAGE_TYPE, StorageType.STATE_STORE).and(TemplateParameter.MODEL, Model.QUERY);
 
@@ -63,10 +66,10 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
 
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, codeElementFormatter.packageOf(autoDispatchParameter.value))
-                    .and(TemplateParameter.QUERIES, Queries.from(autoDispatchParameter))
+                    .and(TemplateParameter.QUERIES, Queries.from(autoDispatchParameter)).and(TemplateParameter.URI_ROOT, uriRoot)
                     .and(TemplateParameter.STATE_NAME, AnnotationBasedTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregateProtocolClassName))
                     .and(TemplateParameter.REST_RESOURCE_NAME, standard().resolveClassname(restResourceName))
-                    .and(TemplateParameter.URI_ROOT, autoDispatchParameter.retrieveRelatedValue(Label.URI_ROOT))
+                    .and(TemplateParameter.LOCATION_PATH, PathFormatter.addTrailingSlash(uriRoot))
                     .and(TemplateParameter.ROUTE_DECLARATIONS, RouteDeclaration.from(autoDispatchParameter))
                     .and(TemplateParameter.MODEL_PROTOCOL, autoDispatchParameter.retrieveRelatedValue(Label.MODEL_PROTOCOL))
                     .and(TemplateParameter.MODEL_ACTOR, autoDispatchParameter.retrieveRelatedValue(Label.MODEL_ACTOR))

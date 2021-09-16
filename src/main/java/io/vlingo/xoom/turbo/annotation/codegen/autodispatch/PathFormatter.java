@@ -13,6 +13,10 @@ import io.vlingo.xoom.turbo.annotation.codegen.Label;
 
 public class PathFormatter {
 
+  public static String addTrailingSlash(final String routePath) {
+    return removeSurplusesSlashes(routePath) + "/";
+  }
+
   public static String formatAbsoluteRoutePath(final CodeGenerationParameter routeParameter) {
     final String routePath = routeParameter.retrieveRelatedValue(Label.ROUTE_PATH);
     final String uriRoot = routeParameter.parent().retrieveRelatedValue(Label.URI_ROOT);
