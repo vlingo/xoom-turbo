@@ -31,4 +31,19 @@ public class ComponentRegistryTest {
     Assert.assertEquals(Boolean.TRUE, ComponentRegistry.withType(Boolean.class));
   }
 
+  @Test
+  public void testThatComponentsAreUnregistered() {
+    ComponentRegistry.register("appName", "xoom-app");
+    ComponentRegistry.register(Boolean.class, Boolean.TRUE);
+
+    Assert.assertTrue(ComponentRegistry.has("appName"));
+    Assert.assertTrue(ComponentRegistry.has(Boolean.class));
+
+    ComponentRegistry.unregister("appName");
+    ComponentRegistry.unregister(Boolean.class);
+
+    Assert.assertFalse(ComponentRegistry.has("appName"));
+    Assert.assertFalse(ComponentRegistry.has(Boolean.class));
+  }
+
 }

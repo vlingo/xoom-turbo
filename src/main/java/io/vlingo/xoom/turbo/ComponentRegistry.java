@@ -13,22 +13,22 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class ComponentRegistry {
 
-  private static final Map<String, Object> COMPONENTS = new HashMap<>();
+  private static final Map<String, Object> components = new HashMap<>();
 
   public static void register(final Class<?> componentClass, final Object componentInstance) {
-    COMPONENTS.put(componentClass.getCanonicalName(), componentInstance);
+    components.put(componentClass.getCanonicalName(), componentInstance);
   }
 
   public static void register(final String componentName, final Object componentInstance) {
-    COMPONENTS.put(componentName, componentInstance);
+    components.put(componentName, componentInstance);
   }
 
   public static <T> T withType(final Class<T> componentClass) {
-    return (T) withName(componentClass.getCanonicalName());
+    return withName(componentClass.getCanonicalName());
   }
 
   public static <T> T withName(final String name) {
-    return (T) COMPONENTS.get(name);
+    return (T) components.get(name);
   }
 
   public static boolean has(final Class<?> componentClass) {
@@ -36,11 +36,19 @@ public class ComponentRegistry {
   }
 
   public static boolean has(final String componentName) {
-    return COMPONENTS.containsKey(componentName);
+    return components.containsKey(componentName);
+  }
+
+  public static void unregister(final Class<?> componentClass) {
+    unregister(componentClass.getCanonicalName());
+  }
+
+  public static void unregister(final String componentName) {
+    components.remove(componentName);
   }
 
   public static void clear() {
-    COMPONENTS.clear();
+    components.clear();
   }
 
 }
