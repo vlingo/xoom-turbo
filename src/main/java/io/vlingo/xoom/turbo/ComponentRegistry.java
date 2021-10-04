@@ -9,6 +9,7 @@ package io.vlingo.xoom.turbo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @SuppressWarnings("unchecked")
 public class ComponentRegistry {
@@ -39,12 +40,12 @@ public class ComponentRegistry {
     return components.containsKey(componentName);
   }
 
-  public static void unregister(final Class<?> componentClass) {
-    unregister(componentClass.getCanonicalName());
+  public static void unregister(final String ...componentNames) {
+    Stream.of(componentNames).forEach(components::remove);
   }
 
-  public static void unregister(final String componentName) {
-    components.remove(componentName);
+  public static void unregister(final Class<?> ...componentClasses) {
+    Stream.of(componentClasses).map(Class::getCanonicalName).forEach(ComponentRegistry::unregister);
   }
 
   public static void clear() {
