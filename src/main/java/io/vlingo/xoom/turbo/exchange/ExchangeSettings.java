@@ -25,12 +25,16 @@ public class ExchangeSettings {
           Arrays.asList("exchange.%s.hostname", "exchange.%s.username",
                   "exchange.%s.password", "exchange.%s.port", "exchange.%s.virtual.host");
 
-  private final String exchangeName;
+  public final String exchangeName;
   private final List<String> keys;
   private final List<ExchangeSettingsItem> parameters;
 
   public static List<ExchangeSettings> all() {
     return ALL_EXCHANGE_PARAMETERS;
+  }
+
+  public static ExchangeSettings one() {
+    return ALL_EXCHANGE_PARAMETERS.stream().findFirst().orElseThrow(() -> new IllegalArgumentException("None exchange settings found"));
   }
 
   public static ExchangeSettings of(final String exchangeName) {
