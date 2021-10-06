@@ -15,33 +15,34 @@ import org.junit.Test;
 
 public class ExchangeSettingsTest {
 
-    @Test
-    public void testThatConnectionSettingsAreMapped() {
-        final ConnectionSettings firstSettings =
-                ExchangeSettings.of("first").mapToConnection();
+  @Test
+  public void testThatSettingsIsLoaded() {
+    Assert.assertEquals("first", ExchangeSettings.loadOne(Settings.properties()).exchangeName);
+  }
 
-        Assert.assertEquals("first-exchange", firstSettings.hostName);
-        Assert.assertEquals("vlingo01", firstSettings.username);
-        Assert.assertEquals("xoom-pass01", firstSettings.password);
-        Assert.assertEquals("virtual-first-exchange", firstSettings.virtualHost);
-        Assert.assertEquals(1000, firstSettings.port);
+  @Test
+  public void testThatConnectionSettingsAreMapped() {
+    ExchangeSettings.load(Settings.properties());
 
-        final ConnectionSettings secondSettings =
-                ExchangeSettings.of("second").mapToConnection();
+    final ConnectionSettings firstSettings =
+            ExchangeSettings.of("first").mapToConnection();
 
-        Assert.assertEquals("second-exchange", secondSettings.hostName);
-        Assert.assertEquals("vlingo02", secondSettings.username);
-        Assert.assertEquals("xoom-pass02", secondSettings.password);
-        Assert.assertEquals("virtual-second-exchange", secondSettings.virtualHost);
-        Assert.assertEquals(1001, secondSettings.port);
+    Assert.assertEquals("first-exchange", firstSettings.hostName);
+    Assert.assertEquals("vlingo01", firstSettings.username);
+    Assert.assertEquals("xoom-pass01", firstSettings.password);
+    Assert.assertEquals("virtual-first-exchange", firstSettings.virtualHost);
+    Assert.assertEquals(1000, firstSettings.port);
 
-        Assert.assertEquals(2, ExchangeSettings.all().size());
-    }
+    final ConnectionSettings secondSettings =
+            ExchangeSettings.of("second").mapToConnection();
 
-    @Before
-    public void loadParameters() {
-        ExchangeSettings.load(Settings.properties());
-    }
+    Assert.assertEquals("second-exchange", secondSettings.hostName);
+    Assert.assertEquals("vlingo02", secondSettings.username);
+    Assert.assertEquals("xoom-pass02", secondSettings.password);
+    Assert.assertEquals("virtual-second-exchange", secondSettings.virtualHost);
+    Assert.assertEquals(1001, secondSettings.port);
 
+    Assert.assertEquals(2, ExchangeSettings.all().size());
+  }
 
 }

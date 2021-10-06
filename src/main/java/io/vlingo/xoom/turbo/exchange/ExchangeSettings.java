@@ -33,13 +33,13 @@ public class ExchangeSettings {
     return ALL_EXCHANGE_PARAMETERS;
   }
 
-  public static ExchangeSettings one() {
-    return ALL_EXCHANGE_PARAMETERS.stream().findFirst().orElseThrow(() -> new IllegalArgumentException("None exchange settings found"));
-  }
-
   public static ExchangeSettings of(final String exchangeName) {
     return ALL_EXCHANGE_PARAMETERS.stream().filter(params -> params.hasName(exchangeName))
             .findFirst().orElseThrow(() -> new IllegalArgumentException("Exchange with name " + exchangeName + " not found"));
+  }
+
+  public static ExchangeSettings loadOne(final Properties properties) {
+    return load(properties).stream().findFirst().orElseThrow(() -> new IllegalArgumentException("Exchange settings not found"));
   }
 
   public static List<ExchangeSettings> load(final Properties properties) {
