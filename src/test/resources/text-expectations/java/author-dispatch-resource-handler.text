@@ -42,7 +42,7 @@ public class AuthorResourceHandler extends DynamicResourceHandler implements Aut
     return resolve(authorId)
             .andThenTo(author -> AuthorHandlers.changeAuthorNameHandler.handler.handle(author,authorData))
             .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorHandlers.adaptStateHandler.handler.handle(state)))))
-            .otherwise(noGreeting -> Response.of(NotFound))
+            .otherwise(arg -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 

@@ -5,6 +5,6 @@ public Completes<Response> ${routeSignature} {
     return resolve(${idName})
             .andThenTo(${modelAttribute} -> ${routeHandlerInvocation})
             .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(${adapterHandlerInvocation}))))
-            .otherwise(noGreeting -> Response.of(NotFound))
+            .otherwise(arg -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
