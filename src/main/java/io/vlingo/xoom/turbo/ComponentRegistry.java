@@ -14,14 +14,17 @@ import java.util.stream.Stream;
 @SuppressWarnings("unchecked")
 public class ComponentRegistry {
 
-  private static final Map<String, Object> components = new HashMap<>();
+  private final Map<String, Object> components = new HashMap<>();
+  private static final ComponentRegistry instance = new ComponentRegistry();
 
-  public static void register(final Class<?> componentClass, final Object componentInstance) {
-    components.put(componentClass.getCanonicalName(), componentInstance);
+  public static ComponentRegistry register(final Class<?> componentClass, final Object componentInstance) {
+    instance.components.put(componentClass.getCanonicalName(), componentInstance);
+    return instance;
   }
 
-  public static void register(final String componentName, final Object componentInstance) {
-    components.put(componentName, componentInstance);
+  public static ComponentRegistry register(final String componentName, final Object componentInstance) {
+    instance.components.put(componentName, componentInstance);
+    return instance;
   }
 
   public static <T> T withType(final Class<T> componentClass) {
@@ -29,7 +32,7 @@ public class ComponentRegistry {
   }
 
   public static <T> T withName(final String name) {
-    return (T) components.get(name);
+    return (T) instance.components.get(name);
   }
 
   public static boolean has(final Class<?> componentClass) {
@@ -37,19 +40,19 @@ public class ComponentRegistry {
   }
 
   public static boolean has(final String componentName) {
-    return components.containsKey(componentName);
+    return instance.components.containsKey(componentName);
   }
 
-  public static void unregister(final String ...componentNames) {
-    Stream.of(componentNames).forEach(components::remove);
+  public static void unregister(final String... componentNames) {
+    Stream.of(componentNames).forEach(instance.components::remove);
   }
 
-  public static void unregister(final Class<?> ...componentClasses) {
+  public static void unregister(final Class<?>... componentClasses) {
     Stream.of(componentClasses).map(Class::getCanonicalName).forEach(ComponentRegistry::unregister);
   }
 
   public static void clear() {
-    components.clear();
+    instance.components.clear();
   }
-
 }
+
