@@ -46,7 +46,7 @@ public class XoomInitializer implements XoomInitializationAware {
 
     initializer.onInit(grid);
 
-    final Configuration serverConfiguration = initializer.configureServer(grid, args);
+    final io.vlingo.xoom.http.resource.Configuration serverConfiguration = initializer.configureServer(grid, args);
 
     <#if exchangeBootstrapName?has_content>
     final io.vlingo.xoom.turbo.exchange.ExchangeInitializer exchangeInitializer =
