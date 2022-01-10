@@ -36,6 +36,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <graalvm.version>21.1.0</graalvm.version>
+    <testcontainers.version>1.16.2</testcontainers.version>
   </properties>
   <dependencies>
     <dependency>
@@ -125,6 +126,30 @@
       <version>4.2.0</version>
     </dependency>
     <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mysql</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>5.10.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna-platform</artifactId>
+      <version>5.10.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.graalvm.sdk</groupId>
       <artifactId>graal-sdk</artifactId>
       <version>${graalvm.version}</version>
@@ -197,35 +222,6 @@
                   <version>${project.version}</version>
                 </path>
               </annotationProcessorPaths>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>db-start</id>
-            <phase>test-compile</phase>
-            <goals>
-              <goal>java</goal>
-            </goals>
-            <configuration>
-              <mainClass>io.vlingo.xoom.turbo.storage.EmbeddedDatabaseInitializer</mainClass>
-              <cleanupDaemonThreads>false</cleanupDaemonThreads>
-            </configuration>
-          </execution>
-          <execution>
-            <id>db-close</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>java</goal>
-            </goals>
-            <configuration>
-              <mainClass>io.vlingo.xoom.turbo.storage.EmbeddedDatabaseStopper</mainClass>
-              <cleanupDaemonThreads>false</cleanupDaemonThreads>
             </configuration>
           </execution>
         </executions>
