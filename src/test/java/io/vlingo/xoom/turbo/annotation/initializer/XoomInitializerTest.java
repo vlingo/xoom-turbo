@@ -11,10 +11,12 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.net.URL;
 
+import io.vlingo.xoom.turbo.testcontainers.SharedMySQLContainer;
 import org.junit.After;
 import org.junit.Test;
 
 public class XoomInitializerTest {
+    private SharedMySQLContainer mysqlContainer = SharedMySQLContainer.getInstance();
 
     @Test
     public void testInitialization() throws Exception {
