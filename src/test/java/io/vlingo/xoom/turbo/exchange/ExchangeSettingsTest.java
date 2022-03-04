@@ -10,7 +10,6 @@ package io.vlingo.xoom.turbo.exchange;
 import io.vlingo.xoom.lattice.exchange.ConnectionSettings;
 import io.vlingo.xoom.turbo.actors.Settings;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 public class ExchangeSettingsTest {
