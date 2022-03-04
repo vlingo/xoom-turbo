@@ -73,7 +73,10 @@ public class DatabaseParametersTest {
         ComponentRegistry.clear();
     }
 
-    private final MockEnvironmentVariables mockEnvironmentVariables = new MockEnvironmentVariables(new HashMap<String, String>(){{
+    private final MockEnvironmentVariables mockEnvironmentVariables = new MockEnvironmentVariables(new HashMap<String, String>(){
+      private static final long serialVersionUID = 1L;
+
+      {
         put("VLINGO_XOOM_QUERY_DATABASE", "MYSQL");
         put("VLINGO_XOOM_QUERY_DATABASE_NAME", "12F");
         put("VLINGO_XOOM_QUERY_DATABASE_URL", "jdbc:mysql://localhost:9001/");
