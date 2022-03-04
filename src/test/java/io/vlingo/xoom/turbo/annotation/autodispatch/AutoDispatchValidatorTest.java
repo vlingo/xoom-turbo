@@ -73,6 +73,7 @@ public class AutoDispatchValidatorTest {
     }
 
     @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testQueryWithoutModelValidator() {
         final AnnotatedElements annotatedElements = mock(AnnotatedElements.class);
         final Element rootElement = mock(Element.class);
@@ -89,6 +90,7 @@ public class AutoDispatchValidatorTest {
     }
 
     @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testBodyForRouteValidator() {
         final AnnotatedElements annotatedElements = mock(AnnotatedElements.class);
         final ExecutableElement enclosedElement = mock(ExecutableElement.class);
@@ -127,6 +129,7 @@ public class AutoDispatchValidatorTest {
     }
 
     @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testModelWithoutQueryValidator() {
         final AnnotatedElements annotatedElements = mock(AnnotatedElements.class);
         final Element rootElement = mock(Element.class);
@@ -143,6 +146,7 @@ public class AutoDispatchValidatorTest {
     }
 
     @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testRouteWithoutResponseValidator() {
         final AnnotatedElements annotatedElements = mock(AnnotatedElements.class);
         final Element rootElement = mock(Element.class);
@@ -161,6 +165,7 @@ public class AutoDispatchValidatorTest {
     }
 
     @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testHandlerWithoutValidMethodValidator() {
         final AnnotatedElements annotatedElements = mock(AnnotatedElements.class);
         final Element rootElement = mock(Element.class);
