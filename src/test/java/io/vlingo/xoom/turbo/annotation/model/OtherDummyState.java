@@ -9,6 +9,7 @@ package io.vlingo.xoom.turbo.annotation.model;
 import io.vlingo.xoom.symbio.store.object.StateObject;
 
 public class OtherDummyState extends StateObject {
+    private static final long serialVersionUID = 1L;
 
     public final String name;
 

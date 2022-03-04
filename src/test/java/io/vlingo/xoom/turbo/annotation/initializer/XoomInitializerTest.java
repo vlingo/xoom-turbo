@@ -16,6 +16,7 @@ import org.junit.After;
 import org.junit.Test;
 
 public class XoomInitializerTest {
+    @SuppressWarnings("unused")
     private SharedMySQLContainer mysqlContainer = SharedMySQLContainer.getInstance();
 
     @Test
