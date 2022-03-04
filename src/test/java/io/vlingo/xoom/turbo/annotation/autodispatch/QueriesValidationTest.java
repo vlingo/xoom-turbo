@@ -28,6 +28,7 @@ public class QueriesValidationTest {
                 Queries.class, annotatedElements);
     }
 
+    @SuppressWarnings("unused")
     private Queries createQueriesAnnotation() {
         return new Queries() {
             @Override
