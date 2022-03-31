@@ -13,6 +13,11 @@ import io.vlingo.xoom.http.Method;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.annotation.codegen.Label;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class AutoDispatchHandlerInvocationResolver {
 
   private static final String QUERIES_PARAMETER = "$queries";
@@ -32,11 +37,40 @@ public class AutoDispatchHandlerInvocationResolver {
     final Method httpMethod =
             routeSignatureParameter.retrieveRelatedValue(Label.ROUTE_METHOD, Method::from);
 
-    final String defaultParameter = httpMethod.isGET() ? QUERIES_PARAMETER : DEFAULT_FACTORY_METHOD_PARAMETER;
+    final String compositeIdParameter = compositeIdParameterFrom(routeSignatureParameter);
+
+    String queriesParameters = QUERIES_PARAMETER;
+    if(!compositeIdParameter.isEmpty())
+      queriesParameters += String.format(", %s", compositeIdParameter);
+    final String defaultParameter = httpMethod.isGET() ? queriesParameters : DEFAULT_FACTORY_METHOD_PARAMETER;
 
     return resolve(Label.ROUTE_HANDLER_INVOCATION, Label.USE_CUSTOM_ROUTE_HANDLER_PARAM, defaultParameter, parentParameter, routeSignatureParameter);
   }
 
+  private static String compositeIdParameterFrom(CodeGenerationParameter routeSignature) {
+    String routePath = routeSignature.retrieveRelatedValue(Label.ROUTE_PATH);
+    if(!routePath.startsWith(routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT))) {
+      routePath = routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
+    }
+    final String compositeId = String.join(", ", extractCompositeIdFrom(routePath));
+
+    return !compositeId.isEmpty()? compositeId : "";
+  }
+
+  private static List<String> extractCompositeIdFrom(String routePath) {
+    final List<String> result = new ArrayList<>();
+
+    final String regex = "\\{(.*?)\\}";
+
+    final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+    final Matcher matcher = pattern.matcher(routePath);
+
+    while (matcher.find()) {
+      result.add(matcher.group(1));
+    }
+
+    return result;
+  }
   public String resolveAdapterHandlerInvocation(final CodeGenerationParameter parentParameter,
                                                 final CodeGenerationParameter routeSignatureParameter) {
     return resolve(Label.ADAPTER_HANDLER_INVOCATION, Label.USE_CUSTOM_ADAPTER_HANDLER_PARAM, DEFAULT_ADAPTER_PARAMETER, parentParameter, routeSignatureParameter);

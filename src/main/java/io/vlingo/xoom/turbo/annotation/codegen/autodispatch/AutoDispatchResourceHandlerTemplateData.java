@@ -78,6 +78,7 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                     .and(TemplateParameter.AUTO_DISPATCH_MAPPING_NAME, restResourceName).and(TemplateParameter.USE_AUTO_DISPATCH, true)
                     .and(TemplateParameter.STATE_DATA_OBJECT_NAME, AnnotationBasedTemplateStandard.DATA_OBJECT.resolveClassname(aggregateProtocolClassName))
                     .and(TemplateParameter.USE_CQRS, context.parameterOf(Label.CQRS, Boolean::valueOf))
+                    .and(TemplateParameter.COMPOSITE_ID, "")
                     .addImports(resolveImports(context, autoDispatchParameter, queryStoreProviderName));
 
     this.dependOn(RouteMethodTemplateData.from(autoDispatchParameter, parameters));

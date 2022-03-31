@@ -1,0 +1,73 @@
+package io.vlingo.xoomapp.resources;
+
+import io.vlingo.xoom.actors.Logger;
+import io.vlingo.xoom.turbo.annotation.autodispatch.Handler;
+import io.vlingo.xoom.turbo.ComponentRegistry;
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.http.ContentType;
+import io.vlingo.xoom.http.Response;
+import io.vlingo.xoom.http.ResponseHeader;
+import io.vlingo.xoom.http.resource.Resource;
+import io.vlingo.xoom.http.resource.DynamicResourceHandler;
+import io.vlingo.xoom.lattice.grid.Grid;
+import io.vlingo.xoomapp.infrastructure.persistence.BookQueries;
+import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;
+
+import static io.vlingo.xoom.common.serialization.JsonSerialization.serialized;
+import static io.vlingo.xoom.http.Response.Status.*;
+import static io.vlingo.xoom.http.ResponseHeader.Location;
+import static io.vlingo.xoom.http.resource.ResourceBuilder.resource;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-turbo/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
+ */
+public class BookResourceHandler extends DynamicResourceHandler implements BookResource {
+  private final Grid $stage;
+  private final Logger $logger;
+  private final BookQueries $queries;
+
+  public BookResourceHandler(final Grid grid) {
+      super(grid.world().stage());
+      this.$stage = grid;
+      this.$logger = super.logger();
+      this.$queries = ComponentRegistry.withType(QueryModelStateStoreProvider.class).bookQueries;
+  }
+
+  public Completes<Response> queryBooks(final String authorId) {
+    return BookHandlers.queryAllHandler.handler.handle($queries, authorId)
+            .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
+            .otherwise(arg -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> queryBookOf(final String authorId, final String id) {
+    return BookHandlers.queryByIdHandler.handler.handle($queries, authorId, id)
+            .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
+            .otherwise(arg -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  @Override
+  public Resource<?> routes() {
+     return resource("BookResourceHandler",
+        io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors/{authorId}/books")
+            .param(String.class)
+            .handle(this::queryBooks),
+        io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors/{authorId}/books/{id}")
+            .param(String.class)
+            .param(String.class)
+            .handle(this::queryBookOf)
+     );
+  }
+
+  @Override
+  protected ContentType contentType() {
+    return ContentType.of("application/json", "charset=UTF-8");
+  }
+
+  private String location(final String id) {
+    return "/authors/{authorId}/books/" + id;
+  }
+
+
+}

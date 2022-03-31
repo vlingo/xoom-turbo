@@ -56,7 +56,8 @@ public enum TemplateParameter implements ParameterKey {
   XOOM_INITIALIZER_CLASS("xoomInitializerClass"),
   PROJECTION_DISPATCHER_PROVIDER_NAME("projectionDispatcherProviderName"),
   PROVIDERS("providers"),
-  EXCHANGE_BOOTSTRAP_NAME("exchangeBootstrapName");
+  EXCHANGE_BOOTSTRAP_NAME("exchangeBootstrapName"),
+  COMPOSITE_ID("compositeId");
 
   public final String key;
 
