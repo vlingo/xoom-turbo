@@ -36,6 +36,7 @@ import static java.util.stream.Collectors.toSet;
 
 public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
 
+  public static final String COMPOSITE_ID_DECLARATION_PATTERN = "final String";
   private final String restResourceName;
   private final TemplateParameters parameters;
 
@@ -91,7 +92,8 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
 
     final List<String> compositeIdFields = extractCompositeIdFrom(routePath)
         .stream()
-        .map(field -> "final String " + field).collect(toList());
+        .map(field -> String.format("%s %s", COMPOSITE_ID_DECLARATION_PATTERN, field))
+        .collect(toList());
 
     if(compositeIdFields.isEmpty())
       return "";

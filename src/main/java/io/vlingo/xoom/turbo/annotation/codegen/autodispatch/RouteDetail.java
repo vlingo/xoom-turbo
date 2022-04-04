@@ -29,6 +29,8 @@ public class RouteDetail {
   private static final String METHOD_PARAMETER_PATTERN = "final %s %s";
   private static final String METHOD_SIGNATURE_PATTERN = "%s(%s)";
   private static final List<Method> BODY_SUPPORTED_HTTP_METHODS = Arrays.asList(POST, PUT, PATCH);
+  public static final String FIELD_DECLARATION_PATTERN = "final %s %s";
+  public static final String COMPOSITE_ID_TYPE = "String";
 
   public static String resolveBodyName(final CodeGenerationParameter route) {
     final Method httpMethod = route.retrieveRelatedValue(ROUTE_METHOD, Method::from);
@@ -69,7 +71,7 @@ public class RouteDetail {
 
       final String arguments = parameters.map(field -> {
         final String fieldType = FieldDetail.typeOf(field.parent(Label.AGGREGATE), field.value);
-        return String.format("final %s %s", fieldType, field.value);
+        return String.format(FIELD_DECLARATION_PATTERN, fieldType, field.value);
       }).collect(Collectors.joining(", "));
 
       final String compositeIdParameter = String.join(",", compositeIdParameterFrom(routeSignature));
@@ -105,7 +107,7 @@ public class RouteDetail {
     final List<String> compositeIds = extractCompositeIdFrom(routePath);
 
     return compositeIds.stream()
-            .map( compositeId -> String.format(METHOD_PARAMETER_PATTERN, "String", compositeId))
+            .map(compositeId -> String.format(METHOD_PARAMETER_PATTERN, COMPOSITE_ID_TYPE, compositeId))
             .collect(Collectors.toList());
   }
 

@@ -42,6 +42,7 @@ public class AutoDispatchHandlerInvocationResolver {
     String queriesParameters = QUERIES_PARAMETER;
     if(!compositeIdParameter.isEmpty())
       queriesParameters += String.format(", %s", compositeIdParameter);
+
     final String defaultParameter = httpMethod.isGET() ? queriesParameters : DEFAULT_FACTORY_METHOD_PARAMETER;
 
     return resolve(Label.ROUTE_HANDLER_INVOCATION, Label.USE_CUSTOM_ROUTE_HANDLER_PARAM, defaultParameter, parentParameter, routeSignatureParameter);
@@ -71,6 +72,7 @@ public class AutoDispatchHandlerInvocationResolver {
 
     return result;
   }
+
   public String resolveAdapterHandlerInvocation(final CodeGenerationParameter parentParameter,
                                                 final CodeGenerationParameter routeSignatureParameter) {
     return resolve(Label.ADAPTER_HANDLER_INVOCATION, Label.USE_CUSTOM_ADAPTER_HANDLER_PARAM, DEFAULT_ADAPTER_PARAMETER, parentParameter, routeSignatureParameter);
