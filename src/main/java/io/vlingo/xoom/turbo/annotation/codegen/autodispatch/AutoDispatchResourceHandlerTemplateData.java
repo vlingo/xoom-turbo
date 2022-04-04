@@ -36,7 +36,7 @@ import static java.util.stream.Collectors.toSet;
 
 public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
 
-  public static final String COMPOSITE_ID_DECLARATION_PATTERN = "final String";
+  private static final String COMPOSITE_ID_DECLARATION_PATTERN = "final String";
   private final String restResourceName;
   private final TemplateParameters parameters;
 

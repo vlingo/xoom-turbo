@@ -29,8 +29,8 @@ public class RouteDetail {
   private static final String METHOD_PARAMETER_PATTERN = "final %s %s";
   private static final String METHOD_SIGNATURE_PATTERN = "%s(%s)";
   private static final List<Method> BODY_SUPPORTED_HTTP_METHODS = Arrays.asList(POST, PUT, PATCH);
-  public static final String FIELD_DECLARATION_PATTERN = "final %s %s";
-  public static final String COMPOSITE_ID_TYPE = "String";
+  private static final String FIELD_DECLARATION_PATTERN = "final %s %s";
+  private static final String COMPOSITE_ID_TYPE = "String";
 
   public static String resolveBodyName(final CodeGenerationParameter route) {
     final Method httpMethod = route.retrieveRelatedValue(ROUTE_METHOD, Method::from);
