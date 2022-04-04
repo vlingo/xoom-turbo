@@ -29,6 +29,8 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.template.ParameterKey.Defaults.PACKAGE_NAME;
+import static io.vlingo.xoom.turbo.annotation.codegen.TemplateParameter.COMPOSITE_ID;
+import static io.vlingo.xoom.turbo.annotation.codegen.autodispatch.RouteDetail.extractCompositeIdFrom;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -78,10 +80,23 @@ public class AutoDispatchResourceHandlerTemplateData extends TemplateData {
                     .and(TemplateParameter.AUTO_DISPATCH_MAPPING_NAME, restResourceName).and(TemplateParameter.USE_AUTO_DISPATCH, true)
                     .and(TemplateParameter.STATE_DATA_OBJECT_NAME, AnnotationBasedTemplateStandard.DATA_OBJECT.resolveClassname(aggregateProtocolClassName))
                     .and(TemplateParameter.USE_CQRS, context.parameterOf(Label.CQRS, Boolean::valueOf))
-                    .and(TemplateParameter.COMPOSITE_ID, "")
+                    .and(COMPOSITE_ID, resolveCompositeIdFields(autoDispatchParameter))
                     .addImports(resolveImports(context, autoDispatchParameter, queryStoreProviderName));
 
     this.dependOn(RouteMethodTemplateData.from(autoDispatchParameter, parameters));
+  }
+
+  private String resolveCompositeIdFields(CodeGenerationParameter autoDispatchParameter) {
+    final String routePath = autoDispatchParameter.retrieveRelatedValue(Label.URI_ROOT);
+
+    final List<String> compositeIdFields = extractCompositeIdFrom(routePath)
+        .stream()
+        .map(field -> "final String " + field).collect(toList());
+
+    if(compositeIdFields.isEmpty())
+      return "";
+
+    return String.format("%s, ", String.join(", ", compositeIdFields));
   }
 
   private Set<String> resolveImports(final CodeGenerationContext context,

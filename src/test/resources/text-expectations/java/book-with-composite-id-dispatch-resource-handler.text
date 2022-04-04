@@ -11,6 +11,7 @@ import io.vlingo.xoom.http.resource.Resource;
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
 import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoomapp.infrastructure.persistence.BookQueries;
+import io.vlingo.xoomapp.infrastructure.BookData;
 import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;
 
 import static io.vlingo.xoom.common.serialization.JsonSerialization.serialized;
@@ -40,6 +41,13 @@ public class BookResourceHandler extends DynamicResourceHandler implements BookR
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
+  public Completes<Response> create(final String authorId, final BookData bookData) {
+    return BookHandlers.createHandler.handler.handle(authorId, bookData)
+      .andThenTo(state -> Completes.withSuccess(entityResponseOf(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(authorId, state.id))), serialized()))
+      .otherwise(arg -> Response.of(NotFound))
+      .recoverFrom(e -> Response.of(InternalServerError, e.getMessage())));
+  }
+
   public Completes<Response> queryBookOf(final String authorId, final String id) {
     return BookHandlers.queryByIdHandler.handler.handle($queries, authorId, id)
             .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
@@ -53,6 +61,10 @@ public class BookResourceHandler extends DynamicResourceHandler implements BookR
         io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors/{authorId}/books")
             .param(String.class)
             .handle(this::queryBooks),
+        io.vlingo.xoom.http.resource.ResourceBuilder.post("/authors/{authorId}/books")
+            .param(String.class)
+            .body(io.vlingo.xoomapp.infrastructure.BookData.class)
+            .handle(this::create),
         io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors/{authorId}/books/{id}")
             .param(String.class)
             .param(String.class)
@@ -65,8 +77,8 @@ public class BookResourceHandler extends DynamicResourceHandler implements BookR
     return ContentType.of("application/json", "charset=UTF-8");
   }
 
-  private String location(final String id) {
-    return "/authors/{authorId}/books/" + id;
+  private String location(final String authorId, final String id) {
+    return "/authors/" + authorId + "/books/" + id;
   }
 
 
