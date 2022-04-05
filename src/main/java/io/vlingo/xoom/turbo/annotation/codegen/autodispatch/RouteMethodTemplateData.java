@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.turbo.annotation.codegen.Label.INTERNAL_ROUTE_HANDLER;
 import static io.vlingo.xoom.turbo.annotation.codegen.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.annotation.codegen.autodispatch.RouteDetail.extractCompositeIdFrom;
 
 public class RouteMethodTemplateData extends TemplateData {
 
@@ -71,19 +70,9 @@ public class RouteMethodTemplateData extends TemplateData {
                     .and(VALUE_OBJECT_INITIALIZERS, Collections.emptyList())
                     .and(ROUTE_HANDLER_INVOCATION, routeHandlerInvocation)
                     .and(ID_NAME, resolveIdName(routeSignatureParameter))
-                    .and(COMPOSITE_ID, resolveCompositeIdFields(routeSignatureParameter));
+                    .and(COMPOSITE_ID, RouteDetail.resolveCompositeIdFields(routeSignatureParameter));
 
     parentParameters.addImports(resolveImports(mainParameter, routeSignatureParameter));
-  }
-
-  private String resolveCompositeIdFields(CodeGenerationParameter routeSignatureParameter) {
-    String routePath = routeSignatureParameter.retrieveRelatedValue(Label.ROUTE_PATH);
-    if(!routePath.startsWith(routeSignatureParameter.parent().retrieveRelatedValue(Label.URI_ROOT))) {
-      routePath = routeSignatureParameter.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
-    }
-    final String compositeId = String.join(",", extractCompositeIdFrom(routePath));
-
-    return !compositeId.isEmpty() && !compositeId.equals("id")? compositeId + ", " : "";
   }
 
   private Set<String> resolveImports(final CodeGenerationParameter mainParameter,

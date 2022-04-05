@@ -128,6 +128,16 @@ public class RouteDetail {
     return result;
   }
 
+  public static String resolveCompositeIdFields(CodeGenerationParameter routeSignature) {
+    String routePath = routeSignature.retrieveRelatedValue(Label.ROUTE_PATH);
+    if(!routePath.startsWith(routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT))) {
+      routePath = routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
+    }
+    final String compositeId = String.join(",", extractCompositeIdFrom(routePath));
+
+    return !compositeId.isEmpty() && !compositeId.equals("id")? compositeId + ", " : "";
+  }
+
   private static String formatParameters(Stream<String> arguments) {
     return arguments
             .distinct()
