@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
@@ -48,7 +49,7 @@ public class AutoDispatchResourceHandlerWithCompositeIdGenerationStepTest {
 
     final Content bookResourceHandler =
             context.findContent(AnnotationBasedTemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER, "BookResourceHandler");
-
+    System.err.println(((TextBasedContent) bookResourceHandler).text);
     Assert.assertTrue(bookResourceHandler.contains(TextExpectation.onJava().read("book-with-composite-id-dispatch-resource-handler")));
   }
 

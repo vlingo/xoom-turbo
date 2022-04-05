@@ -100,10 +100,7 @@ public class RouteDetail {
   }
 
   private static List<String> compositeIdParameterFrom(CodeGenerationParameter routeSignature) {
-    String routePath = routeSignature.retrieveRelatedValue(Label.ROUTE_PATH);
-    if(!routePath.startsWith(routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT))) {
-      routePath = routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
-    }
+    String routePath = resolveRoutePathFrom(routeSignature);
     final List<String> compositeIds = extractCompositeIdFrom(routePath);
 
     return compositeIds.stream()
@@ -112,6 +109,26 @@ public class RouteDetail {
   }
 
   public static List<String> extractCompositeIdFrom(String routePath) {
+    return extractAllPathVariablesFrom(routePath)
+        .stream().filter(pathVar -> !pathVar.equals("id"))
+        .collect(Collectors.toList());
+  }
+
+  public static String resolveCompositeIdFields(CodeGenerationParameter routeSignature) {
+    String routePath = resolveRoutePathFrom(routeSignature);
+    final String compositeId = String.join(",", extractCompositeIdFrom(routePath));
+
+    return !compositeId.isEmpty() && !compositeId.equals("id")? compositeId + ", " : "";
+  }
+
+  public static String resolveCompositeIdParameterFrom(CodeGenerationParameter routeSignature) {
+    String routePath = resolveRoutePathFrom(routeSignature);
+    final String compositeId = String.join(", ", extractAllPathVariablesFrom(routePath));
+
+    return !compositeId.isEmpty()? compositeId : "";
+  }
+
+  private static List<String> extractAllPathVariablesFrom(String routePath) {
     final List<String> result = new ArrayList<>();
 
     final String regex = "\\{(.*?)\\}";
@@ -120,22 +137,18 @@ public class RouteDetail {
     final Matcher matcher = pattern.matcher(routePath);
 
     while (matcher.find()) {
-      final String match = matcher.group(1);
-      if(!match.equals("id"))
-        result.add(match);
+      result.add(matcher.group(1));
     }
 
     return result;
   }
 
-  public static String resolveCompositeIdFields(CodeGenerationParameter routeSignature) {
+  private static String resolveRoutePathFrom(CodeGenerationParameter routeSignature) {
     String routePath = routeSignature.retrieveRelatedValue(Label.ROUTE_PATH);
     if(!routePath.startsWith(routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT))) {
       routePath = routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
     }
-    final String compositeId = String.join(",", extractCompositeIdFrom(routePath));
-
-    return !compositeId.isEmpty() && !compositeId.equals("id")? compositeId + ", " : "";
+    return routePath;
   }
 
   private static String formatParameters(Stream<String> arguments) {
