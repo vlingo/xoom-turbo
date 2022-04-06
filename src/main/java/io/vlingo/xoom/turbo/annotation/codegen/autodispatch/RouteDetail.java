@@ -29,7 +29,6 @@ public class RouteDetail {
   private static final String METHOD_PARAMETER_PATTERN = "final %s %s";
   private static final String METHOD_SIGNATURE_PATTERN = "%s(%s)";
   private static final List<Method> BODY_SUPPORTED_HTTP_METHODS = Arrays.asList(POST, PUT, PATCH);
-  private static final String FIELD_DECLARATION_PATTERN = "final %s %s";
   private static final String COMPOSITE_ID_TYPE = "String";
 
   public static String resolveBodyName(final CodeGenerationParameter route) {
@@ -71,7 +70,7 @@ public class RouteDetail {
 
       final String arguments = parameters.map(field -> {
         final String fieldType = FieldDetail.typeOf(field.parent(Label.AGGREGATE), field.value);
-        return String.format(FIELD_DECLARATION_PATTERN, fieldType, field.value);
+        return String.format(METHOD_PARAMETER_PATTERN, fieldType, field.value);
       }).collect(Collectors.joining(", "));
 
       final String compositeIdParameter = String.join(",", compositeIdParameterFrom(routeSignature));
