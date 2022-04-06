@@ -18,6 +18,7 @@ import io.vlingo.xoom.turbo.annotation.codegen.Label;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -69,7 +70,8 @@ public class RouteMethodTemplateData extends TemplateData {
                     .and(ADAPTER_HANDLER_INVOCATION, adapterHandlerInvocation)
                     .and(VALUE_OBJECT_INITIALIZERS, Collections.emptyList())
                     .and(ROUTE_HANDLER_INVOCATION, routeHandlerInvocation)
-                    .and(ID_NAME, resolveIdName(routeSignatureParameter));
+                    .and(ID_NAME, resolveIdName(routeSignatureParameter))
+                    .and(COMPOSITE_ID, RouteDetail.resolveCompositeIdFields(routeSignatureParameter));
 
     parentParameters.addImports(resolveImports(mainParameter, routeSignatureParameter));
   }
@@ -87,16 +89,29 @@ public class RouteMethodTemplateData extends TemplateData {
   }
 
   private Boolean resolveEntityLoading(final CodeGenerationParameter routeSignatureParameter) {
-    return routeSignatureParameter.hasAny(Label.ID) ||
+    return (routeSignatureParameter.hasAny(Label.ID) && routeSignatureParameter.retrieveAllRelated(Label.ID).anyMatch(this::idIsNotCompositeId)) ||
             (routeSignatureParameter.hasAny(Label.REQUIRE_ENTITY_LOADING) &&
                     routeSignatureParameter.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf));
+  }
+
+  private boolean idIsNotCompositeId(CodeGenerationParameter idParameter) {
+    return !idParameter.parent().retrieveRelatedValue(Label.ROUTE_PATH).isEmpty() &&
+        !RouteDetail.extractCompositeIdFrom(idParameter.parent().retrieveRelatedValue(Label.ROUTE_PATH))
+            .contains(idParameter.value);
   }
 
   private String resolveIdName(final CodeGenerationParameter routeSignatureParameter) {
     if (!routeSignatureParameter.hasAny(Label.ID)) {
       return DEFAULT_ID_NAME;
     }
-    return routeSignatureParameter.retrieveRelatedValue(Label.ID);
+
+    Optional<CodeGenerationParameter> id = routeSignatureParameter.retrieveAllRelated(Label.ID)
+        .filter(this::idIsNotCompositeId)
+        .findFirst();
+    if(id.isPresent())
+      return id.get().value;
+
+    return DEFAULT_ID_NAME;
   }
 
   private String retrieveIdTypeQualifiedName(final CodeGenerationParameter routeSignatureParameter) {

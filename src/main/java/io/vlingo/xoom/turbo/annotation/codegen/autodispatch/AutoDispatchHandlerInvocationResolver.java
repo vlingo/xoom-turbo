@@ -32,7 +32,13 @@ public class AutoDispatchHandlerInvocationResolver {
     final Method httpMethod =
             routeSignatureParameter.retrieveRelatedValue(Label.ROUTE_METHOD, Method::from);
 
-    final String defaultParameter = httpMethod.isGET() ? QUERIES_PARAMETER : DEFAULT_FACTORY_METHOD_PARAMETER;
+    final String compositeIdParameter = RouteDetail.resolveCompositeIdParameterFrom(routeSignatureParameter);
+
+    String queriesParameters = QUERIES_PARAMETER;
+    if(!compositeIdParameter.isEmpty())
+      queriesParameters += String.format(", %s", compositeIdParameter);
+
+    final String defaultParameter = httpMethod.isGET() ? queriesParameters : DEFAULT_FACTORY_METHOD_PARAMETER;
 
     return resolve(Label.ROUTE_HANDLER_INVOCATION, Label.USE_CUSTOM_ROUTE_HANDLER_PARAM, defaultParameter, parentParameter, routeSignatureParameter);
   }

@@ -96,8 +96,8 @@ public class ${resourceName} extends DynamicResourceHandler {
     return ContentType.of("application/json", "charset=UTF-8");
   }
 
-  private String location(final String id) {
-    return "${locationPath}" + id;
+  private String location(${compositeId}final String id) {
+    return "${locationPath?replace("{", "\" + ")?replace("}", " + \"")}" + id;
   }
 
   <#if modelProtocol?has_content>

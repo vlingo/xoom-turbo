@@ -27,15 +27,15 @@ public interface DummyResource {
     @ResponseAdapter(handler = ADAPT_STATE)
     Completes<Response> defineDummy(@Body DummyData dummyData);
 
-    @Route(method = PATCH, path = "/{dummyId}/name", handler = CHANGE_NAME)
+    @Route(method = PATCH, path = "/{id}/name", handler = CHANGE_NAME)
     @ResponseAdapter(handler = ADAPT_STATE)
-    Completes<Response> changeDummyName(@Id String dummyId, @Body DummyData dummyData);
+    Completes<Response> changeDummyName(@Id String id, @Body DummyData dummyData);
 
     @Route(method = GET, handler= QUERY_ALL)
     Completes<Response> queryDummies();
 
-    @Route(method = GET, path = "/{dummyId}")
-    default Completes<Response> queryById(@Id String dummyId) {
+    @Route(method = GET, path = "/{id}")
+    default Completes<Response> queryById(@Id String id) {
         return Completes.withSuccess(Response.of(Response.Status.Ok, "[{}]"));
     }
 
