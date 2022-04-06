@@ -11,7 +11,6 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
@@ -49,7 +48,7 @@ public class AutoDispatchResourceHandlerWithCompositeIdGenerationStepTest {
 
     final Content bookResourceHandler =
             context.findContent(AnnotationBasedTemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER, "BookResourceHandler");
-    System.err.println(((TextBasedContent) bookResourceHandler).text);
+
     Assert.assertTrue(bookResourceHandler.contains(TextExpectation.onJava().read("book-with-composite-id-dispatch-resource-handler")));
   }
 
@@ -101,6 +100,8 @@ public class AutoDispatchResourceHandlerWithCompositeIdGenerationStepTest {
             .relate(Label.USE_CUSTOM_ROUTE_HANDLER_PARAM, "true")
             .relate(Label.ROUTE_PATH, "")
             .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ID, "authorId")
+            .relate(Label.ID_TYPE, "java.lang.String")
             .relate(Label.BODY, "bookData")
             .relate(Label.BODY_TYPE, "io.vlingo.xoomapp.infrastructure.BookData")
             .relate(Label.ADAPTER_HANDLER_INVOCATION, "adaptStateHandler.handler.handle")
