@@ -36,7 +36,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <graalvm.version>21.1.0</graalvm.version>
-    <testcontainers.version>1.16.2</testcontainers.version>
+    <testcontainers.version>1.17.2</testcontainers.version>
   </properties>
   <dependencies>
     <dependency>
