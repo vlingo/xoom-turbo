@@ -44,7 +44,7 @@ public class Boot {
 
   private static String resolveNodeName(final String nodeName) {
     if (nodeName == null || nodeName.isEmpty()) {
-      return clusterProperties.seedNodes().get(0);
+      return clusterProperties.nodes().get(0);
     }
     return nodeName;
   }
