@@ -14,16 +14,40 @@ import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 import io.vlingo.xoom.symbio.store.journal.Journal;
 import io.vlingo.xoom.symbio.store.state.StateStore;
 
-public interface RuntimeComponentProvider {
+/**
+ * Accessors for common infrastructure adapters.
+ */
+public interface CommonAdapters {
 
+  /**
+   * Answer the registered {@code Dispatcher} of {@code Dispatchable} type instances.
+   * @return {@code Dispatcher<? extends Dispatchable>}
+   */
   @SuppressWarnings("rawtypes")
   Dispatcher<? extends Dispatchable> dispatchableDispatcher();
 
-  Journal<String> journal();
+  /**
+   * Answer the registered {@code Journal<T>} where {@code T} is a parameter type.
+   * @param <T> the type that the Journal persists
+   * @return {@code Journal<T>}
+   */
+  <T> Journal<T> journal();
 
+  /**
+   * Answer the registered {@code ProjectionDispatcher}.
+   * @return ProjectionDispatcher
+   */
   ProjectionDispatcher projectionDispatcher();
 
+  /**
+   * Answer the registered {@code StateStore} for the CQRS query/read model.
+   * @return ProjectionDispatcher
+   */
   StateStore queryModelStateStore();
 
+  /**
+   * Answer the registered XOOM HTTP {@code Server}.
+   * @return Server
+   */
   Server server();
 }
