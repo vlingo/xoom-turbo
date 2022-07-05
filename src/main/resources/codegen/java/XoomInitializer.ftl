@@ -29,6 +29,7 @@ public class XoomInitializer implements XoomInitializationAware {
 
   private final Grid grid;
   private final Server server;
+  private final int serverPort;
   private static XoomInitializer instance;
 
   private XoomInitializer(final String[] args) throws Exception {
@@ -84,15 +85,16 @@ public class XoomInitializer implements XoomInitializationAware {
                     .flatMap(Collection::stream).collect(Collectors.toList())
                     .toArray(new Resource<?>[]{});
 
+    this.serverPort = serverConfiguration.port();
 
-    server = Server.startWith(grid.world().stage(), Resources.are(resources), serverConfiguration.filters(), serverConfiguration.port(), serverConfiguration.sizing(), serverConfiguration.timing());
+    server = Server.startWith(grid.world().stage(), Resources.are(resources), serverConfiguration.filters(), this.serverPort, serverConfiguration.sizing(), serverConfiguration.timing());
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-         if (instance != null) {
-        instance.server.stop();
-        System.out.println("=========================");
-        System.out.println("Stopping ${appName}.");
-        System.out.println("=========================");
+        if (instance != null) {
+            instance.server.stop();
+            System.out.println("=========================");
+            System.out.println("Stopping ${appName}.");
+            System.out.println("=========================");
         }
     }));
   }
@@ -113,6 +115,10 @@ public class XoomInitializer implements XoomInitializationAware {
 
   public Server server() {
     return server;
+  }
+
+  public int serverPort() {
+    return serverPort;
   }
 
   public void terminateWorld() {
