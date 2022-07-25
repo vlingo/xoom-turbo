@@ -29,22 +29,27 @@ public class Boot {
   }
 
   public static Grid start(final String worldName, final String localNodeProperties, final Properties customProperties) throws Exception {
+    final StaticClusterConfiguration staticConfiguration = GridClusterProperties.oneNode();
     if (customProperties == null) {
       System.out.println("Unable to find xoom-cluster.properties. Using default grid cluster settings.");
-      StaticClusterConfiguration staticConfiguration = GridClusterProperties.oneNode();
       clusterProperties = staticConfiguration.properties;
       nodeProperties = staticConfiguration.propertiesOf(0);
     } else {
-      if (localNodeProperties == null || localNodeProperties.isEmpty()) {
-        // not allowed because 'cluster.seeds' have to correlate with 'localNodeProperties'
-        throw new IllegalArgumentException("'localNodeProperties' is mandatory when 'customProperties' is provided!");
+      if (customProperties.singleNode()) {
+        clusterProperties = customProperties;
+        nodeProperties = staticConfiguration.propertiesOf(0);
+      } else {
+        if (localNodeProperties == null || localNodeProperties.isEmpty()) {
+          // not allowed because 'cluster.seeds' (single node) have to correlate with 'localNodeProperties'
+          throw new IllegalArgumentException("'localNodeProperties' is mandatory when 'customProperties' is provided!");
+        }
+
+        // validate
+        NodeProperties.from(localNodeProperties);
+
+        clusterProperties = customProperties;
+        nodeProperties = localNodeProperties;
       }
-
-      // validate
-      NodeProperties.from(localNodeProperties);
-
-      clusterProperties = customProperties;
-      nodeProperties = localNodeProperties;
     }
 
     return Grid.start(worldName, Configuration.define(), clusterProperties, nodeProperties);
