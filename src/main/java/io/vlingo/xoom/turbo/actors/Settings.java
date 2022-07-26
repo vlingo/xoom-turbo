@@ -55,7 +55,7 @@ public class Settings {
     final String serverPort =
             Settings.properties().getOrDefault("xoom.http.server.port", DEFAULT_PORT).toString();
 
-    return Integer.valueOf(serverPort);
+    return Integer.parseInt(serverPort);
   }
 
   public static void clear() {
